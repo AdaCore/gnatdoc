@@ -20,7 +20,9 @@ with Libadalang.Common;               use Libadalang.Common;
 with Langkit_Support.Slocs;           use Langkit_Support.Slocs;
 with Langkit_Support.Text;            use Langkit_Support.Text;
 
+with VSS.Characters;                  use VSS.Characters;
 with VSS.Strings;                     use VSS.Strings;
+with VSS.Strings.Character_Iterators; use VSS.Strings.Character_Iterators;
 with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
 
 package body GNATdoc.Comments.Extractor is
@@ -248,6 +250,94 @@ package body GNATdoc.Comments.Extractor is
                end loop;
             end;
          end if;
+
+         --  Postprocess extracted text, for each group of lines, separated
+         --  by empty line by remove of two minus signs and common leading
+         --  whitespaces
+
+         for Section of Result.Sections loop
+            declare
+               First_Line : Positive := 1;
+               Last_Line  : Natural  := 0;
+               Indent     : Character_Count;
+
+            begin
+               loop
+                  for J in First_Line .. Section.Text.Length loop
+                     exit when Section.Text (J).Is_Empty;
+
+                     Last_Line := J;
+                  end loop;
+
+                  --  Compute common indentation level
+
+                  Indent := Character_Count'Last;
+
+                  for J in First_Line .. Last_Line loop
+                     declare
+                        Line     : constant Virtual_String :=
+                          Section.Text (J);
+                        Iterator : Character_Iterator :=
+                          Line.Before_First_Character;
+                        Success  : Boolean;
+
+                     begin
+                        --  Skip '--'
+
+                        Success := Iterator.Forward;
+                        pragma Assert
+                          (Success and then Iterator.Element = '-');
+
+                        Success := Iterator.Forward;
+                        pragma Assert
+                          (Success and then Iterator.Element = '-');
+
+                        --  Lookup for first non-whitespace character
+
+                        while Iterator.Forward loop
+                           exit when Iterator.Element /= ' ';
+                        end loop;
+
+                        if Iterator.Is_Valid then
+                           Indent :=
+                             Character_Index'Min
+                               (Indent, Iterator.Character_Index - 1);
+                        end if;
+                     end;
+                  end loop;
+
+                  --  Remove common indentation segment
+
+                  for J in First_Line .. Last_Line loop
+                     declare
+                        Line     : constant Virtual_String :=
+                          Section.Text (J);
+                        Iterator : Character_Iterator :=
+                          Line.At_First_Character;
+                        Success  : Boolean;
+
+                     begin
+                        if Line.Character_Length > Indent then
+                           for J in 1 .. Indent loop
+                              Success := Iterator.Forward;
+                           end loop;
+
+                           Section.Text.Replace
+                             (J,
+                              Line.Slice (Iterator, Line.At_Last_Character));
+
+                        else
+                           Section.Text.Replace (J, Empty_Virtual_String);
+                        end if;
+                     end;
+                  end loop;
+
+                  First_Line := Last_Line + 2;
+
+                  exit when Last_Line = Section.Text.Length;
+               end loop;
+            end;
+         end loop;
       end return;
    end Extract;
 
