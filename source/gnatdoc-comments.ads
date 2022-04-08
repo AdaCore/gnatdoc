@@ -28,7 +28,15 @@ package GNATdoc.Comments is
 
    type Structured_Comment_Access is access all Structured_Comment'Class;
 
-   type Section_Kind is (Raw, Breif, Description, Parameter, Returns);
+   type Section_Kind is
+     (Raw,                --  Raw text of the documentation, extracted from
+      --                      comments
+      Breif,              --  Breif description of the entity
+      --                      ??? not supported
+      Description,        --  Full description of the entity
+      Parameter,          --  Description of the parameter
+      Returns,            --  Description of the return value
+      Raised_Exception);  --  Description of the raised exception
 
    type Section is tagged limited private;
 
@@ -46,10 +54,10 @@ private
 
       --  Members below are used by comment extractor only.
 
-      Exact_Start_Line : Langkit_Support.Slocs.Line_Number;
-      Exact_End_Line   : Langkit_Support.Slocs.Line_Number;
-      Group_Start_Line : Langkit_Support.Slocs.Line_Number;
-      Group_End_Line   : Langkit_Support.Slocs.Line_Number;
+      Exact_Start_Line : Langkit_Support.Slocs.Line_Number := 0;
+      Exact_End_Line   : Langkit_Support.Slocs.Line_Number := 0;
+      Group_Start_Line : Langkit_Support.Slocs.Line_Number := 0;
+      Group_End_Line   : Langkit_Support.Slocs.Line_Number := 0;
       --  First and last lines that may contain comments for the documentation
       --  of the given parameter. Exact range is for given parameter only,
       --  but group documentation is for few grouped parameters. Exact range

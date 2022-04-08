@@ -18,17 +18,24 @@
 with Libadalang.Analysis;             use Libadalang.Analysis;
 with Libadalang.Common;               use Libadalang.Common;
 with Langkit_Support.Slocs;           use Langkit_Support.Slocs;
+with Langkit_Support.Symbols;         use Langkit_Support.Symbols;
 with Langkit_Support.Text;            use Langkit_Support.Text;
 
 with VSS.Characters;                  use VSS.Characters;
+with VSS.Regular_Expressions;         use VSS.Regular_Expressions;
 with VSS.Strings;                     use VSS.Strings;
 with VSS.Strings.Character_Iterators; use VSS.Strings.Character_Iterators;
 with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
 
 package body GNATdoc.Comments.Extractor is
 
-   Ada_New_Line_Function : constant Line_Terminator_Set :=
+   Ada_New_Line_Function             : constant Line_Terminator_Set :=
      (CR | LF | CRLF => True, others => False);
+
+   Ada_Identifier_Expression         : constant Virtual_String :=
+     "(?:\p{L}|\p{Nl})(?:\p{L}|\p{Nl}|\p{Mn}|\p{Mc}|\p{Nd}|\p{Pc})*";
+   Ada_Optional_Separator_Expression : constant Virtual_String :=
+     "(?:\p{Zs}|\p{Cf})*";
 
    function Line_Count (Item : Text_Type) return Natural;
    --  Returns number of lines occupied by given segment of the text.
@@ -338,6 +345,145 @@ package body GNATdoc.Comments.Extractor is
                end loop;
             end;
          end loop;
+
+         --  Process raw documentation for subprogram, fill sections and create
+         --  description section.
+
+         declare
+            Tag_Matcher       : constant Regular_Expression :=
+              To_Regular_Expression
+                (Ada_Optional_Separator_Expression
+                 & "@(param|return|exception)"
+                 & Ada_Optional_Separator_Expression);
+            Parameter_Matcher : constant Regular_Expression :=
+              To_Regular_Expression
+                ("(" & Ada_Identifier_Expression & ")"
+                   & Ada_Optional_Separator_Expression);
+            Match             : Regular_Expression_Match;
+            Current_Section   : Section_Access;
+            Kind              : Section_Kind;
+            Name              : Virtual_String;
+            Tail_First        : Character_Iterator;
+            Success           : Boolean;
+            Line_Tail         : Virtual_String;
+            Skip_Line         : Boolean;
+
+         begin
+            pragma Assert (Tag_Matcher.Is_Valid);
+            pragma Assert (Parameter_Matcher.Is_Valid);
+
+            --  Create "Description" section
+
+            Current_Section :=
+              new Section'(Kind => Description, others => <>);
+            Result.Sections.Append (Current_Section);
+
+            --  Process raw text
+
+            for Line of Raw_Section.Text loop
+               Skip_Line := False;
+
+               Match := Tag_Matcher.Match (Line);
+
+               if Match.Has_Match then
+                  Tail_First.Set_At (Match.Last_Marker);
+                  Success := Tail_First.Forward;
+
+                  if not Success then
+                     goto Default;
+                  end if;
+
+                  Line_Tail :=
+                    Line.Slice (Tail_First, Line.At_Last_Character);
+
+                  if Match.Captured (1) = "param" then
+                     Kind := Parameter;
+
+                  elsif Match.Captured (1) = "return" then
+                     raise Program_Error;
+
+                  elsif Match.Captured (1) = "exception" then
+                     Kind := Raised_Exception;
+
+                  else
+                     raise Program_Error;
+                  end if;
+
+                  if Kind in Parameter | Raised_Exception then
+                     --  Lookup for name of the parameter/exception. Convert
+                     --  found name to canonical form.
+
+                     --  Match := Parameter_Matcher.Match (Line, Tail_First);
+                     --  ??? Not implemented
+
+                     Match := Parameter_Matcher.Match (Line_Tail);
+
+                     if not Match.Has_Match then
+                        goto Default;
+                     end if;
+
+                     Name :=
+                       To_Virtual_String
+                        (Fold_Case
+                          (To_Wide_Wide_String (Match.Captured (1))).Symbol);
+
+                     Tail_First.Set_At (Match.Last_Marker);
+                     Success := Tail_First.Forward;
+                     Line_Tail :=
+                       Line_Tail.Slice
+                         (Tail_First, Line_Tail.At_Last_Character);
+
+                  else
+                     Name.Clear;
+                  end if;
+
+                  declare
+                     Found : Boolean := False;
+
+                  begin
+                     for Section of Result.Sections loop
+                        if Section.Kind = Kind and Section.Name = Name then
+                           Current_Section := Section;
+                           Found := True;
+
+                           exit;
+                        end if;
+                     end loop;
+
+                     if not Found then
+                        if Kind = Raised_Exception then
+                           Current_Section :=
+                             new Section'
+                               (Kind   => Raised_Exception,
+                                Name   => Name,
+                                others => <>);
+                           Result.Sections.Append (Current_Section);
+
+                        else
+                           goto Default;
+                        end if;
+
+                     else
+                        if not Current_Section.Text.Is_Empty then
+                           Current_Section.Text.Append (Empty_Virtual_String);
+                        end if;
+                     end if;
+                  end;
+
+                  Skip_Line := True;
+
+                  if not Line_Tail.Is_Empty then
+                     Current_Section.Text.Append (Line_Tail);
+                  end if;
+               end if;
+
+               <<Default>>
+
+               if not Skip_Line then
+                  Current_Section.Text.Append (Line);
+               end if;
+            end loop;
+         end;
       end return;
    end Extract;
 
