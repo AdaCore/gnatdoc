@@ -26,13 +26,16 @@ package GNATdoc.Comments is
 
    type Structured_Comment is tagged limited private;
 
-   type Structured_Comment_Access is access all Structured_Comment;
+   type Structured_Comment_Access is access all Structured_Comment'Class;
 
    type Section_Kind is (Raw, Breif, Description, Parameter, Returns);
 
    type Section is tagged limited private;
 
    type Section_Access is access all Section'Class;
+
+   procedure Free (Item : in out Structured_Comment_Access);
+   --  Deallocate memory occupied by structured comment.
 
 private
 
