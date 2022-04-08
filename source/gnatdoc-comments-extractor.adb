@@ -302,10 +302,11 @@ package body GNATdoc.Comments.Extractor is
                         --  Lookup for first non-whitespace character
 
                         while Iterator.Forward loop
-                           exit when Iterator.Element /= ' ';
+                           exit when Get_General_Category (Iterator.Element)
+                                       not in Space_Separator | Format;
                         end loop;
 
-                        if Iterator.Is_Valid then
+                        if Iterator.Has_Element then
                            Indent :=
                              Character_Index'Min
                                (Indent, Iterator.Character_Index - 1);
