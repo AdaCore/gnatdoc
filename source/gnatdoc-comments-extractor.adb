@@ -485,6 +485,16 @@ package body GNATdoc.Comments.Extractor is
                end if;
             end loop;
          end;
+
+         --  Remove empty lines at the end of text of all sections
+
+         for Section of Result.Sections loop
+            while not Section.Text.Is_Empty
+              and then Section.Text.Last_Element.Is_Empty
+            loop
+               Section.Text.Delete_Last;
+            end loop;
+         end loop;
       end return;
    end Extract;
 
