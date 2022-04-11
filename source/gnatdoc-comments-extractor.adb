@@ -133,7 +133,7 @@ package body GNATdoc.Comments.Extractor is
          Raw_Section :=
            new Section'
              (Kind             => Raw,
-              Name             => <>,
+              Symbol           => <>,
               Text             => <>,
               Exact_Start_Line =>
                 (if Params_Node = No_Params
@@ -177,6 +177,8 @@ package body GNATdoc.Comments.Extractor is
                           new Section'
                             (Kind             => Parameter,
                              Name             =>
+                               To_Virtual_String (Text (Id.Token_Start)),
+                             Symbol           =>
                                To_Virtual_String (Id.F_Name.P_Canonical_Text),
                              Text             => <>,
                              Exact_Start_Line => Location.Start_Line,
@@ -366,6 +368,7 @@ package body GNATdoc.Comments.Extractor is
             Current_Section   : Section_Access;
             Kind              : Section_Kind;
             Name              : Virtual_String;
+            Symbol            : Virtual_String;
             Line_Tail         : Virtual_String;
             Skip_Line         : Boolean;
 
@@ -415,15 +418,16 @@ package body GNATdoc.Comments.Extractor is
                         goto Default;
                      end if;
 
-                     Name :=
+                     Name := Match.Captured (1);
+                     Symbol :=
                        To_Virtual_String
-                        (Fold_Case
-                          (To_Wide_Wide_String (Match.Captured (1))).Symbol);
+                        (Fold_Case (To_Wide_Wide_String (Name)).Symbol);
 
                      Line_Tail := Line_Tail.Tail_After (Match.Last_Marker);
 
                   else
                      Name.Clear;
+                     Symbol.Clear;
                   end if;
 
                   declare
@@ -431,7 +435,7 @@ package body GNATdoc.Comments.Extractor is
 
                   begin
                      for Section of Result.Sections loop
-                        if Section.Kind = Kind and Section.Name = Name then
+                        if Section.Kind = Kind and Section.Symbol = Symbol then
                            Current_Section := Section;
                            Found := True;
 
@@ -445,6 +449,7 @@ package body GNATdoc.Comments.Extractor is
                              new Section'
                                (Kind   => Raised_Exception,
                                 Name   => Name,
+                                Symbol => Symbol,
                                 others => <>);
                            Result.Sections.Append (Current_Section);
 

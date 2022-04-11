@@ -50,6 +50,9 @@ private
    type Section is tagged limited record
       Kind             : Section_Kind;
       Name             : VSS.Strings.Virtual_String;
+      --  Name of the section (parameter/exception).
+      Symbol           : VSS.Strings.Virtual_String;
+      --  Name in canonical form.
       Text             : VSS.String_Vectors.Virtual_String_Vector;
 
       --  Members below are used by comment extractor only.
