@@ -112,15 +112,17 @@ package body GNATdoc.Comments.Extractor is
          --  declaration block to enable advanced parameter group
          --  processing.
 
-         for Token of Node.F_Subp_Spec.F_Subp_Params.Token_Range loop
-            if Kind (Data (Token)) = Ada_Whitespace then
-               if Line_Count (Text (Token)) > 2 then
-                  Advanced_Groups := True;
+         if Params_Node /= No_Params then
+            for Token of Params_Node.Token_Range loop
+               if Kind (Data (Token)) = Ada_Whitespace then
+                  if Line_Count (Text (Token)) > 2 then
+                     Advanced_Groups := True;
 
-                  exit;
+                     exit;
+                  end if;
                end if;
-            end if;
-         end loop;
+            end loop;
+         end if;
 
          --  Create "raw" section to collect all documentation for subprogram,
          --  exact range is used to fill comments after the end of the
@@ -148,49 +150,51 @@ package body GNATdoc.Comments.Extractor is
          --  Create sections of structured comment for parameters, compute
          --  line range to extract comments of each parameter.
 
-         for Parameters_Group of Params_Node.F_Params loop
-            declare
-               Location : constant
-                 Langkit_Support.Slocs.Source_Location_Range :=
-                   Parameters_Group.Sloc_Range;
+         if Params_Node /= No_Params then
+            for Parameters_Group of Params_Node.F_Params loop
+               declare
+                  Location                                    : constant
+                    Langkit_Support.Slocs.Source_Location_Range :=
+                      Parameters_Group.Sloc_Range;
 
-            begin
-               if Group_Start_Line /= 0
-                 and then New_Advanced_Group (Parameters_Group)
-               then
-                  Group_End_Line := Location.Start_Line - 1;
+               begin
+                  if Group_Start_Line /= 0
+                    and then New_Advanced_Group (Parameters_Group)
+                  then
+                     Group_End_Line := Location.Start_Line - 1;
 
-                  for Parameter of Previous_Group loop
-                     Parameter.Group_Start_Line := Group_Start_Line;
-                     Parameter.Group_End_Line   := Group_End_Line;
+                     for Parameter of Previous_Group loop
+                        Parameter.Group_Start_Line := Group_Start_Line;
+                        Parameter.Group_End_Line   := Group_End_Line;
+                     end loop;
+
+                     Previous_Group.Clear;
+                  end if;
+
+                  for Id of Parameters_Group.F_Ids loop
+                     declare
+                        Parameter_Section : constant not null Section_Access :=
+                          new Section'
+                            (Kind             => Parameter,
+                             Name             =>
+                               To_Virtual_String (Id.F_Name.P_Canonical_Text),
+                             Text             => <>,
+                             Exact_Start_Line => Location.Start_Line,
+                             Exact_End_Line   => Location.End_Line,
+                             Group_Start_Line => 0,
+                             Group_End_Line   => 0);
+
+                     begin
+                        Result.Sections.Append (Parameter_Section);
+                        Previous_Group.Append (Parameter_Section);
+                     end;
                   end loop;
 
-                  Previous_Group.Clear;
-               end if;
-
-               for Id of Parameters_Group.F_Ids loop
-                  declare
-                     Parameter_Section : constant not null Section_Access :=
-                       new Section'
-                         (Kind             => Parameter,
-                          Name             =>
-                            To_Virtual_String (Id.F_Name.P_Canonical_Text),
-                          Text             => <>,
-                          Exact_Start_Line => Location.Start_Line,
-                          Exact_End_Line   => Location.End_Line,
-                          Group_Start_Line => 0,
-                          Group_End_Line   => 0);
-
-                  begin
-                     Result.Sections.Append (Parameter_Section);
-                     Previous_Group.Append (Parameter_Section);
-                  end;
-               end loop;
-
-               Group_Start_Line := Location.End_Line + 1;
-               Group_End_Line   := 0;
-            end;
-         end loop;
+                  Group_Start_Line := Location.End_Line + 1;
+                  Group_End_Line   := 0;
+               end;
+            end loop;
+         end if;
 
          --  Parse comments inside the subprogram declaration and fill
          --  text of raw and parameters sections.
