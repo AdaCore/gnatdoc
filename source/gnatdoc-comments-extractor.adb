@@ -330,9 +330,7 @@ package body GNATdoc.Comments.Extractor is
                               Success := Iterator.Forward;
                            end loop;
 
-                           Section.Text.Replace
-                             (J,
-                              Line.Slice (Iterator, Line.At_Last_Character));
+                           Section.Text.Replace (J, Line.Tail_From (Iterator));
 
                         else
                            Section.Text.Replace (J, Empty_Virtual_String);
@@ -364,8 +362,6 @@ package body GNATdoc.Comments.Extractor is
             Current_Section   : Section_Access;
             Kind              : Section_Kind;
             Name              : Virtual_String;
-            Tail_First        : Character_Iterator;
-            Success           : Boolean;
             Line_Tail         : Virtual_String;
             Skip_Line         : Boolean;
 
@@ -387,16 +383,6 @@ package body GNATdoc.Comments.Extractor is
                Match := Tag_Matcher.Match (Line);
 
                if Match.Has_Match then
-                  Tail_First.Set_At (Match.Last_Marker);
-                  Success := Tail_First.Forward;
-
-                  if not Success then
-                     goto Default;
-                  end if;
-
-                  Line_Tail :=
-                    Line.Slice (Tail_First, Line.At_Last_Character);
-
                   if Match.Captured (1) = "param" then
                      Kind := Parameter;
 
@@ -409,6 +395,8 @@ package body GNATdoc.Comments.Extractor is
                   else
                      raise Program_Error;
                   end if;
+
+                  Line_Tail := Line.Tail_After (Match.Last_Marker);
 
                   if Kind in Parameter | Raised_Exception then
                      --  Lookup for name of the parameter/exception. Convert
@@ -428,11 +416,7 @@ package body GNATdoc.Comments.Extractor is
                         (Fold_Case
                           (To_Wide_Wide_String (Match.Captured (1))).Symbol);
 
-                     Tail_First.Set_At (Match.Last_Marker);
-                     Success := Tail_First.Forward;
-                     Line_Tail :=
-                       Line_Tail.Slice
-                         (Tail_First, Line_Tail.At_Last_Character);
+                     Line_Tail := Line_Tail.Tail_After (Match.Last_Marker);
 
                   else
                      Name.Clear;
