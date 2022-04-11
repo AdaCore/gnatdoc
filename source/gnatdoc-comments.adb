@@ -19,6 +19,10 @@ with Ada.Unchecked_Deallocation;
 
 package body GNATdoc.Comments is
 
+   ----------
+   -- Free --
+   ----------
+
    procedure Free (Item : in out Structured_Comment_Access) is
 
       procedure Free is
@@ -36,5 +40,24 @@ package body GNATdoc.Comments is
          Free (Item);
       end if;
    end Free;
+
+   -----------------------
+   -- Has_Documentation --
+   -----------------------
+
+   function Has_Documentation
+     (Self : Structured_Comment'Class) return Boolean is
+   begin
+      for Section of Self.Sections loop
+         if Section.Kind
+              in Description | Parameter | Returns | Raised_Exception
+           and then not Section.Text.Is_Empty
+         then
+            return True;
+         end if;
+      end loop;
+
+      return False;
+   end Has_Documentation;
 
 end GNATdoc.Comments;

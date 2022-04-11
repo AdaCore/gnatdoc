@@ -42,6 +42,10 @@ package GNATdoc.Comments is
 
    type Section_Access is access all Section'Class;
 
+   function Has_Documentation
+     (Self : Structured_Comment'Class) return Boolean;
+   --  Return True when structured comment contains documentation
+
    procedure Free (Item : in out Structured_Comment_Access);
    --  Deallocate memory occupied by structured comment.
 

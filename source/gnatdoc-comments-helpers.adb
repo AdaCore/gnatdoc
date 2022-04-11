@@ -33,58 +33,60 @@ package body GNATdoc.Comments.Helpers is
       First_Exception : Boolean := True;
 
    begin
-      for Section of Self.Sections loop
-         if Section.Kind = Description then
-            Text := Section.Text;
-         end if;
-      end loop;
-
-      --  Append parameters
-
-      for Section of Self.Sections loop
-         if Section.Kind = Parameter then
-            if First_Parameter then
-               Text.Append (Empty_Virtual_String);
-               First_Parameter := False;
+      if Self.Has_Documentation then
+         for Section of Self.Sections loop
+            if Section.Kind = Description then
+               Text := Section.Text;
             end if;
+         end loop;
 
-            Text.Append ("@param " & Section.Name);
+         --  Append parameters
 
-            for L of Section.Text loop
-               Text.Append ("  " & L);
-            end loop;
-         end if;
-      end loop;
+         for Section of Self.Sections loop
+            if Section.Kind = Parameter then
+               if First_Parameter then
+                  Text.Append (Empty_Virtual_String);
+                  First_Parameter := False;
+               end if;
 
-      --  Append return
+               Text.Append ("@param " & Section.Name);
 
-      for Section of Self.Sections loop
-         if Section.Kind = Returns then
-            Text.Append (Empty_Virtual_String);
-            Text.Append ("@return");
-
-            for L of Section.Text loop
-               Text.Append ("  " & L);
-            end loop;
-         end if;
-      end loop;
-
-      --  Append exceptions
-
-      for Section of Self.Sections loop
-         if Section.Kind = Raised_Exception then
-            if First_Exception then
-               Text.Append (Empty_Virtual_String);
-               First_Exception := False;
+               for L of Section.Text loop
+                  Text.Append ("  " & L);
+               end loop;
             end if;
+         end loop;
 
-            Text.Append ("@exception " & Section.Name);
+         --  Append return
 
-            for L of Section.Text loop
-               Text.Append ("  " & L);
-            end loop;
-         end if;
-      end loop;
+         for Section of Self.Sections loop
+            if Section.Kind = Returns then
+               Text.Append (Empty_Virtual_String);
+               Text.Append ("@return");
+
+               for L of Section.Text loop
+                  Text.Append ("  " & L);
+               end loop;
+            end if;
+         end loop;
+
+         --  Append exceptions
+
+         for Section of Self.Sections loop
+            if Section.Kind = Raised_Exception then
+               if First_Exception then
+                  Text.Append (Empty_Virtual_String);
+                  First_Exception := False;
+               end if;
+
+               Text.Append ("@exception " & Section.Name);
+
+               for L of Section.Text loop
+                  Text.Append ("  " & L);
+               end loop;
+            end if;
+         end loop;
+      end if;
 
       return Text.Join_Lines (Terminator);
    end Get_Subprogram_Description;
