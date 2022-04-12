@@ -98,6 +98,7 @@ package body GNATdoc.Comments.Extractor is
       Aspects_Node : constant Aspect_Spec := Decl_Node.F_Aspects;
       Spec_Node    : constant Subp_Spec   := Decl_Node.F_Subp_Spec;
       Params_Node  : constant Params      := Spec_Node.F_Subp_Params;
+      Returns_Node : constant Type_Expr   := Spec_Node.F_Subp_Returns;
 
       Previous_Group   : Section_Vectors.Vector;
       Group_Start_Line : Line_Number := 0;
@@ -153,7 +154,7 @@ package body GNATdoc.Comments.Extractor is
          if Params_Node /= No_Params then
             for Parameters_Group of Params_Node.F_Params loop
                declare
-                  Location                                    : constant
+                  Location : constant
                     Langkit_Support.Slocs.Source_Location_Range :=
                       Parameters_Group.Sloc_Range;
 
@@ -198,8 +199,47 @@ package body GNATdoc.Comments.Extractor is
             end loop;
          end if;
 
+         --  Create section of the structured comment for the return value of
+         --  the function.
+
+         if Returns_Node /= No_Type_Expr then
+            declare
+               Location        :
+                 Langkit_Support.Slocs.Source_Location_Range :=
+                   Returns_Node.Sloc_Range;
+               Returns_Section : constant not null Section_Access :=
+                 new Section'
+                   (Kind             => Returns,
+                    Name             => <>,
+                    Symbol           => <>,
+                    Text             => <>,
+                    Exact_Start_Line => Location.Start_Line,
+                    Exact_End_Line   => Location.End_Line,
+                    Group_Start_Line => 0,
+                    Group_End_Line   => 0);
+               Token           : Token_Reference := Returns_Node.Token_Start;
+
+            begin
+               --  "return" keyword may be located at previous line, include
+               --  this line into the exact range of the return value
+
+               while Token /= No_Token loop
+                  if Kind (Data (Token)) = Ada_Return then
+                     Location := Sloc_Range (Data (Token));
+                     Returns_Section.Exact_Start_Line := Location.Start_Line;
+
+                     exit;
+                  end if;
+
+                  Token := Previous (Token);
+               end loop;
+
+               Result.Sections.Append (Returns_Section);
+            end;
+         end if;
+
          --  Parse comments inside the subprogram declaration and fill
-         --  text of raw and parameters sections.
+         --  text of raw, parameters and returns sections.
 
          declare
             Location : Source_Location_Range;
@@ -210,7 +250,7 @@ package body GNATdoc.Comments.Extractor is
 
                if Kind (Data (Token)) = Ada_Comment then
                   for Section of Result.Sections loop
-                     if Section.Kind in Raw | Parameter
+                     if Section.Kind in Raw | Parameter | Returns
                        and then
                          (Location.Start_Line
                             in Section.Exact_Start_Line
@@ -394,7 +434,7 @@ package body GNATdoc.Comments.Extractor is
                      Kind := Parameter;
 
                   elsif Match.Captured (1) = "return" then
-                     raise Program_Error;
+                     Kind := Returns;
 
                   elsif Match.Captured (1) = "exception" then
                      Kind := Raised_Exception;
