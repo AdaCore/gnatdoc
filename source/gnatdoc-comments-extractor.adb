@@ -280,6 +280,14 @@ package body GNATdoc.Comments.Extractor is
          if Raw_Section.Text.Is_Empty then
             declare
                Token : Token_Reference := Decl_Node.Token_End;
+               Start : constant Line_Number :=
+                 Sloc_Range (Data (Token)).Start_Line
+                   + (if Params_Node = No_Params
+                           and Returns_Node = No_Type_Expr then 0 else 1);
+               --  Start line of the documentation, for parameterless procedure
+               --  it starts at the last line of the subprogram specification,
+               --  otherwise last line of the subprogram specification is
+               --  reserved for description of the parameter/return value.
 
             begin
                Token := Next (Token);
@@ -289,8 +297,10 @@ package body GNATdoc.Comments.Extractor is
 
                   case Kind (Data (Token)) is
                      when Ada_Comment =>
-                        Raw_Section.Text.Append
-                          (To_Virtual_String (Text (Token)));
+                        if Sloc_Range (Data (Token)).Start_Line >= Start then
+                           Raw_Section.Text.Append
+                             (To_Virtual_String (Text (Token)));
+                        end if;
 
                      when Ada_Whitespace =>
                         exit when Line_Count (Text (Token)) > 2;
