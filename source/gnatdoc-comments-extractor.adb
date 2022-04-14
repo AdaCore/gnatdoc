@@ -66,6 +66,63 @@ package body GNATdoc.Comments.Extractor is
         (Parameters : Param_Spec'Class) return Boolean;
       --  Whether to start new group of parameters.
 
+      --------------------------------
+      -- Intermediate_Section_Range --
+      --------------------------------
+
+      procedure Intermediate_Section_Range
+        (Subp_Spec_Node : Subp_Spec'Class;
+         Params_Node    : Params'Class;
+         Returns_Node   : Type_Expr'Class;
+         Aspects_Node   : Aspect_Spec'Class;
+         Start_Line     : out Line_Number;
+         End_Line       : out Line_Number);
+      --  Range of the "intermediate" section for subprogram.
+
+      --------------------------------
+      -- Intermediate_Section_Range --
+      --------------------------------
+
+      procedure Intermediate_Section_Range
+        (Subp_Spec_Node : Subp_Spec'Class;
+         Params_Node    : Params'Class;
+         Returns_Node   : Type_Expr'Class;
+         Aspects_Node   : Aspect_Spec'Class;
+         Start_Line     : out Line_Number;
+         End_Line       : out Line_Number) is
+      begin
+         if Returns_Node /= No_Type_Expr then
+            --  For any functions, intermediate section starts after the
+            --  return type of the function.
+
+            Start_Line := Returns_Node.Sloc_Range.End_Line + 1;
+
+         elsif Params_Node /= No_Params then
+            --  For procedures with parameters, intermediate section starts
+            --  after the parameters.
+
+            Start_Line := Params_Node.Sloc_Range.End_Line + 1;
+
+         else
+            --  For parameterless procedures, intermadiate section starts
+            --  after the procedure's name identifier.
+
+            Start_Line := Subp_Spec_Node.F_Subp_Name.Sloc_Range.Start_Line;
+         end if;
+
+         if Aspects_Node /= No_Aspect_Spec then
+            --  When subprogram has aspects, intermediate section ends before
+            --  the first aspect.
+
+            End_Line :=
+              Aspects_Node.F_Aspect_Assocs.First_Child.Sloc_Range.Start_Line
+                - 1;
+
+         else
+            End_Line := 0;
+         end if;
+      end Intermediate_Section_Range;
+
       ------------------------
       -- New_Advanced_Group --
       ------------------------
@@ -136,16 +193,14 @@ package body GNATdoc.Comments.Extractor is
              (Kind             => Raw,
               Symbol           => <>,
               Text             => <>,
-              Exact_Start_Line =>
-                (if Params_Node = No_Params
-                 then Spec_Node.F_Subp_Name.Sloc_Range.Start_Line
-                 else Params_Node.Sloc_Range.End_Line + 1),
-              Exact_End_Line   =>
-                (if Aspects_Node = No_Aspect_Spec
-                 then 0
-                 else Aspects_Node.F_Aspect_Assocs.First_Child.Sloc_Range
-                 .Start_Line - 1),
               others           => <>);
+         Intermediate_Section_Range
+           (Spec_Node,
+            Params_Node,
+            Returns_Node,
+            Aspects_Node,
+            Raw_Section.Exact_Start_Line,
+            Raw_Section.Exact_End_Line);
          Result.Sections.Append (Raw_Section);
 
          --  Create sections of structured comment for parameters, compute
