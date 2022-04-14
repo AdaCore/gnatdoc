@@ -19,11 +19,20 @@ with Libadalang.Analysis;
 
 package GNATdoc.Comments.Extractor is
 
+   type Documentation_Style is
+     (GNAT,      --  Advanced GNAT style of the documentation comments
+      Leading);  --  Simple leading style of the documentation comments
+
    type Extractor_Options is record
-      Leading_Documentation : Boolean := False;
-      --  Use leading comments to build documentation instead of trailing
-      --  comments.
-      --  ??? Not implemented
+      Style    : Documentation_Style := GNAT;
+      --  Style of the documentation comments.
+
+      Fallback : Boolean             := False;
+      --  Control wheather to attempt to extract documentation using simple
+      --  "opposite" style (leading comments for GNAT style and trailing
+      --  comments for Leading style).
+      --
+      --  This option is intended to be used by IDE.
    end record;
 
    function Extract

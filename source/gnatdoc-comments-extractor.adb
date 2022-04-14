@@ -157,10 +157,12 @@ package body GNATdoc.Comments.Extractor is
       Params_Node  : constant Params      := Spec_Node.F_Subp_Params;
       Returns_Node : constant Type_Expr   := Spec_Node.F_Subp_Returns;
 
-      Previous_Group   : Section_Vectors.Vector;
-      Group_Start_Line : Line_Number := 0;
-      Group_End_Line   : Line_Number := 0;
-      Raw_Section      : Section_Access;
+      Previous_Group       : Section_Vectors.Vector;
+      Group_Start_Line     : Line_Number := 0;
+      Group_End_Line       : Line_Number := 0;
+      Leading_Section      : Section_Access;
+      Intermediate_Section : Section_Access;
+      Trailing_Section     : Section_Access;
 
    begin
       return Result : constant not null Structured_Comment_Access :=
@@ -168,18 +170,20 @@ package body GNATdoc.Comments.Extractor is
       do
          --  Check whether empty lines are present inside parameter
          --  declaration block to enable advanced parameter group
-         --  processing.
+         --  processing in GNAT style.
 
-         if Params_Node /= No_Params then
-            for Token of Params_Node.Token_Range loop
-               if Kind (Data (Token)) = Ada_Whitespace then
-                  if Line_Count (Text (Token)) > 2 then
-                     Advanced_Groups := True;
+         if Options.Style = GNAT then
+            if Params_Node /= No_Params then
+               for Token of Params_Node.Token_Range loop
+                  if Kind (Data (Token)) = Ada_Whitespace then
+                     if Line_Count (Text (Token)) > 2 then
+                        Advanced_Groups := True;
 
-                     exit;
+                        exit;
+                     end if;
                   end if;
-               end if;
-            end loop;
+               end loop;
+            end if;
          end if;
 
          --  Create "raw" section to collect all documentation for subprogram,
@@ -188,10 +192,11 @@ package body GNATdoc.Comments.Extractor is
          --  association, thus, location of the "when" keyword is not
          --  significant.
 
-         Raw_Section :=
+         Intermediate_Section :=
            new Section'
              (Kind             => Raw,
-              Symbol           => <>,
+              Symbol           => "<<INTERMEDIATE>>",
+              Name             => <>,
               Text             => <>,
               others           => <>);
          Intermediate_Section_Range
@@ -199,9 +204,9 @@ package body GNATdoc.Comments.Extractor is
             Params_Node,
             Returns_Node,
             Aspects_Node,
-            Raw_Section.Exact_Start_Line,
-            Raw_Section.Exact_End_Line);
-         Result.Sections.Append (Raw_Section);
+            Intermediate_Section.Exact_Start_Line,
+            Intermediate_Section.Exact_End_Line);
+         Result.Sections.Append (Intermediate_Section);
 
          --  Create sections of structured comment for parameters, compute
          --  line range to extract comments of each parameter.
@@ -329,45 +334,87 @@ package body GNATdoc.Comments.Extractor is
             end loop;
          end;
 
-         --  Process tokens after the subprogram declaration when subprogram
-         --  documentataion was not found inside subprogram declaration.
+         --  Process tokens before the subprogram declaration.
 
-         if Raw_Section.Text.Is_Empty then
-            declare
-               Token : Token_Reference := Decl_Node.Token_End;
-               Start : constant Line_Number :=
-                 Sloc_Range (Data (Token)).Start_Line
-                   + (if Params_Node = No_Params
-                           and Returns_Node = No_Type_Expr then 0 else 1);
-               --  Start line of the documentation, for parameterless procedure
-               --  it starts at the last line of the subprogram specification,
-               --  otherwise last line of the subprogram specification is
-               --  reserved for description of the parameter/return value.
+         Leading_Section :=
+           new Section'
+             (Kind             => Raw,
+              Symbol           => "<<LEADING>>",
+              Name             => <>,
+              Text             => <>,
+              others           => <>);
+         Result.Sections.Append (Leading_Section);
 
-            begin
+         declare
+            Token : Token_Reference := Decl_Node.Token_Start;
+
+         begin
+            Token := Previous (Token);
+
+            loop
+               exit when Token = No_Token;
+
+               case Kind (Data (Token)) is
+                  when Ada_Comment =>
+                     Leading_Section.Text.Prepend
+                       (To_Virtual_String (Text (Token)));
+
+                  when Ada_Whitespace =>
+                     exit when Line_Count (Text (Token)) > 2;
+
+                  when others =>
+                     exit;
+               end case;
+
+               Token := Previous (Token);
+            end loop;
+         end;
+
+         --  Process tokens after the subprogram declaration.
+
+         Trailing_Section :=
+           new Section'
+             (Kind             => Raw,
+              Symbol           => "<<TRAILING>>",
+              Name             => <>,
+              Text             => <>,
+              others           => <>);
+         Result.Sections.Append (Trailing_Section);
+
+         declare
+            Token : Token_Reference := Decl_Node.Token_End;
+            Start : constant Line_Number :=
+              Sloc_Range (Data (Token)).Start_Line
+                + (if Params_Node = No_Params
+                     and Returns_Node = No_Type_Expr then 0 else 1);
+            --  Start line of the documentation, for parameterless procedure
+            --  it starts at the last line of the subprogram specification,
+            --  otherwise last line of the subprogram specification is
+            --  reserved for description of the parameter/return value.
+
+         begin
+            Token := Next (Token);
+
+            loop
+               exit when Token = No_Token;
+
+               case Kind (Data (Token)) is
+                  when Ada_Comment =>
+                     if Sloc_Range (Data (Token)).Start_Line >= Start then
+                        Trailing_Section.Text.Append
+                          (To_Virtual_String (Text (Token)));
+                     end if;
+
+                  when Ada_Whitespace =>
+                     exit when Line_Count (Text (Token)) > 2;
+
+                  when others =>
+                     exit;
+               end case;
+
                Token := Next (Token);
-
-               loop
-                  exit when Token = No_Token;
-
-                  case Kind (Data (Token)) is
-                     when Ada_Comment =>
-                        if Sloc_Range (Data (Token)).Start_Line >= Start then
-                           Raw_Section.Text.Append
-                             (To_Virtual_String (Text (Token)));
-                        end if;
-
-                     when Ada_Whitespace =>
-                        exit when Line_Count (Text (Token)) > 2;
-
-                     when others =>
-                        exit;
-                  end case;
-
-                  Token := Next (Token);
-               end loop;
-            end;
-         end if;
+            end loop;
+         end;
 
          --  Postprocess extracted text, for each group of lines, separated
          --  by empty line by remove of two minus signs and common leading
@@ -470,6 +517,7 @@ package body GNATdoc.Comments.Extractor is
                 ("(" & Ada_Identifier_Expression & ")"
                    & Ada_Optional_Separator_Expression);
             Match             : Regular_Expression_Match;
+            Raw_Section       : Section_Access;
             Current_Section   : Section_Access;
             Kind              : Section_Kind;
             Name              : Virtual_String;
@@ -486,6 +534,39 @@ package body GNATdoc.Comments.Extractor is
             Current_Section :=
               new Section'(Kind => Description, others => <>);
             Result.Sections.Append (Current_Section);
+
+            --  Select most appropriate section depending from the style and
+            --  fallback.
+
+            case Options.Style is
+               when GNAT =>
+                  if not Intermediate_Section.Text.Is_Empty then
+                     Raw_Section := Intermediate_Section;
+
+                  elsif not Trailing_Section.Text.Is_Empty then
+                     Raw_Section := Trailing_Section;
+
+                  elsif Options.Fallback then
+                     Raw_Section := Leading_Section;
+
+                  else
+                     return;
+                  end if;
+
+               when Leading =>
+                  if not Leading_Section.Text.Is_Empty then
+                     Raw_Section := Leading_Section;
+
+                  elsif not Intermediate_Section.Text.Is_Empty then
+                     Raw_Section := Intermediate_Section;
+
+                  elsif Options.Fallback  then
+                     Raw_Section := Trailing_Section;
+
+                  else
+                     return;
+                  end if;
+            end case;
 
             --  Process raw text
 
