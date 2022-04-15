@@ -321,6 +321,15 @@ package body GNATdoc.Comments.Extractor is
                   Token := Previous (Token);
                end loop;
 
+               if Options.Style = Leading then
+                  --  In leading style, set attitional range to lookup
+                  --  comments.
+
+                  Returns_Section.Group_Start_Line := Group_Start_Line;
+                  Returns_Section.Group_End_Line :=
+                    Returns_Section.Exact_Start_Line - 1;
+               end if;
+
                Result.Sections.Append (Returns_Section);
             end;
          end if;
