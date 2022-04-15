@@ -40,6 +40,14 @@ package body GNATdoc.Comments.Extractor is
    function Line_Count (Item : Text_Type) return Natural;
    --  Returns number of lines occupied by given segment of the text.
 
+   function Extract_Subprogram_Documentation
+     (Decl_Node      : Libadalang.Analysis.Basic_Decl'Class;
+      Subp_Spec_Node : Subp_Spec'Class;
+      Aspects_Node   : Aspect_Spec'Class;
+      Options        : Extractor_Options)
+      return not null Structured_Comment_Access;
+   --  Extracts subprogram's documentation.
+
    ----------------
    -- Line_Count --
    ----------------
@@ -57,8 +65,41 @@ package body GNATdoc.Comments.Extractor is
    -------------
 
    function Extract
-     (Node    : Libadalang.Analysis.Subp_Decl'Class;
-      Options : Extractor_Options) return not null Structured_Comment_Access
+     (Node    : Libadalang.Analysis.Basic_Decl'Class;
+      Options : Extractor_Options) return not null Structured_Comment_Access is
+   begin
+      case Node.Kind is
+         when Ada_Abstract_Subp_Decl | Ada_Subp_Decl =>
+            return
+              Extract_Subprogram_Documentation
+                (Decl_Node      => Node,
+                 Subp_Spec_Node => Node.As_Classic_Subp_Decl.F_Subp_Spec,
+                 Aspects_Node   => Node.F_Aspects,
+                 Options        => Options);
+
+         when Ada_Null_Subp_Decl =>
+            return
+              Extract_Subprogram_Documentation
+                (Decl_Node      => Node,
+                 Subp_Spec_Node => Node.As_Base_Subp_Body.F_Subp_Spec,
+                 Aspects_Node   => Node.F_Aspects,
+                 Options        => Options);
+
+         when others =>
+            return null;
+      end case;
+   end Extract;
+
+   --------------------------------------
+   -- Extract_Subprogram_Documentation --
+   --------------------------------------
+
+   function Extract_Subprogram_Documentation
+     (Decl_Node      : Libadalang.Analysis.Basic_Decl'Class;
+      Subp_Spec_Node : Subp_Spec'Class;
+      Aspects_Node   : Aspect_Spec'Class;
+      Options        : Extractor_Options)
+      return not null Structured_Comment_Access
    is
       Advanced_Groups : Boolean := False;
 
@@ -151,11 +192,8 @@ package body GNATdoc.Comments.Extractor is
          return False;
       end New_Advanced_Group;
 
-      Decl_Node    : constant Subp_Decl   := Node.As_Subp_Decl;
-      Aspects_Node : constant Aspect_Spec := Decl_Node.F_Aspects;
-      Spec_Node    : constant Subp_Spec   := Decl_Node.F_Subp_Spec;
-      Params_Node  : constant Params      := Spec_Node.F_Subp_Params;
-      Returns_Node : constant Type_Expr   := Spec_Node.F_Subp_Returns;
+      Params_Node  : constant Params    := Subp_Spec_Node.F_Subp_Params;
+      Returns_Node : constant Type_Expr := Subp_Spec_Node.F_Subp_Returns;
 
       Previous_Group       : Section_Vectors.Vector;
       Group_Start_Line     : Line_Number := 0;
@@ -200,7 +238,7 @@ package body GNATdoc.Comments.Extractor is
               Text             => <>,
               others           => <>);
          Intermediate_Section_Range
-           (Spec_Node,
+           (Subp_Spec_Node,
             Params_Node,
             Returns_Node,
             Aspects_Node,
@@ -216,7 +254,7 @@ package body GNATdoc.Comments.Extractor is
             --  started on the next line after subprogram's name.
 
             Group_Start_Line :=
-              Spec_Node.F_Subp_Name.Sloc_Range.End_Line + 1;
+              Subp_Spec_Node.F_Subp_Name.Sloc_Range.End_Line + 1;
          end if;
 
          if Params_Node /= No_Params then
@@ -341,7 +379,7 @@ package body GNATdoc.Comments.Extractor is
             Location : Source_Location_Range;
 
          begin
-            for Token of Node.Token_Range loop
+            for Token of Decl_Node.Token_Range loop
                Location := Sloc_Range (Data (Token));
 
                if Kind (Data (Token)) = Ada_Comment then
@@ -707,6 +745,6 @@ package body GNATdoc.Comments.Extractor is
             end loop;
          end loop;
       end return;
-   end Extract;
+   end Extract_Subprogram_Documentation;
 
 end GNATdoc.Comments.Extractor;

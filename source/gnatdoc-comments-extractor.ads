@@ -16,8 +16,11 @@
 ------------------------------------------------------------------------------
 
 with Libadalang.Analysis;
+with Libadalang.Common;
 
 package GNATdoc.Comments.Extractor is
+
+   use all type Libadalang.Common.Ada_Node_Kind_Type;
 
    type Documentation_Style is
      (GNAT,      --  Advanced GNAT style of the documentation comments
@@ -36,7 +39,11 @@ package GNATdoc.Comments.Extractor is
    end record;
 
    function Extract
-     (Node    : Libadalang.Analysis.Subp_Decl'Class;
-      Options : Extractor_Options) return not null Structured_Comment_Access;
+     (Node    : Libadalang.Analysis.Basic_Decl'Class;
+      Options : Extractor_Options) return not null Structured_Comment_Access
+     with Pre => Node.Kind in Ada_Subp_Decl
+                   | Ada_Null_Subp_Decl
+                   | Ada_Abstract_Subp_Decl;
+   --  Extract documentation for subprograms.
 
 end GNATdoc.Comments.Extractor;
