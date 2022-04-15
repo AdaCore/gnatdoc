@@ -211,6 +211,14 @@ package body GNATdoc.Comments.Extractor is
          --  Create sections of structured comment for parameters, compute
          --  line range to extract comments of each parameter.
 
+         if Options.Style = Leading then
+            --  In leading style, additional comment for the first parameter
+            --  started on the next line after subprogram's name.
+
+            Group_Start_Line :=
+              Spec_Node.F_Subp_Name.Sloc_Range.End_Line + 1;
+         end if;
+
          if Params_Node /= No_Params then
             for Parameters_Group of Params_Node.F_Params loop
                declare
@@ -219,18 +227,28 @@ package body GNATdoc.Comments.Extractor is
                       Parameters_Group.Sloc_Range;
 
                begin
-                  if Group_Start_Line /= 0
-                    and then New_Advanced_Group (Parameters_Group)
-                  then
-                     Group_End_Line := Location.Start_Line - 1;
+                  case Options.Style is
+                     when GNAT =>
+                        if Group_Start_Line /= 0
+                          and then New_Advanced_Group (Parameters_Group)
+                        then
+                           Group_End_Line := Location.Start_Line - 1;
 
-                     for Parameter of Previous_Group loop
-                        Parameter.Group_Start_Line := Group_Start_Line;
-                        Parameter.Group_End_Line   := Group_End_Line;
-                     end loop;
+                           for Parameter of Previous_Group loop
+                              Parameter.Group_Start_Line := Group_Start_Line;
+                              Parameter.Group_End_Line   := Group_End_Line;
+                           end loop;
 
-                     Previous_Group.Clear;
-                  end if;
+                           Previous_Group.Clear;
+                        end if;
+
+                     when Leading =>
+                        --  In leading style, additional comment for the
+                        --  parameter ends on previous line.
+
+                        Group_End_Line :=
+                          Parameters_Group.Sloc_Range.Start_Line - 1;
+                  end case;
 
                   for Id of Parameters_Group.F_Ids loop
                      declare
@@ -250,6 +268,15 @@ package body GNATdoc.Comments.Extractor is
                      begin
                         Result.Sections.Append (Parameter_Section);
                         Previous_Group.Append (Parameter_Section);
+
+                        if Options.Style = Leading then
+                           --  In leading style, set range to lookup
+                           --  additional comments for the parameters.
+
+                           Parameter_Section.Group_Start_Line :=
+                             Group_Start_Line;
+                           Parameter_Section.Group_End_Line := Group_End_Line;
+                        end if;
                      end;
                   end loop;
 
