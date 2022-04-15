@@ -385,9 +385,9 @@ package body GNATdoc.Comments.Extractor is
             Token : Token_Reference := Decl_Node.Token_Start;
 
          begin
-            Token := Previous (Token);
-
             loop
+               Token := Previous (Token);
+
                exit when Token = No_Token;
 
                case Kind (Data (Token)) is
@@ -401,8 +401,6 @@ package body GNATdoc.Comments.Extractor is
                   when others =>
                      exit;
                end case;
-
-               Token := Previous (Token);
             end loop;
          end;
 
@@ -429,9 +427,9 @@ package body GNATdoc.Comments.Extractor is
             --  reserved for description of the parameter/return value.
 
          begin
-            Token := Next (Token);
-
             loop
+               Token := Next (Token);
+
                exit when Token = No_Token;
 
                case Kind (Data (Token)) is
@@ -447,8 +445,6 @@ package body GNATdoc.Comments.Extractor is
                   when others =>
                      exit;
                end case;
-
-               Token := Next (Token);
             end loop;
          end;
 
