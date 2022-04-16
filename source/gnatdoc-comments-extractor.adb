@@ -43,6 +43,7 @@ package body GNATdoc.Comments.Extractor is
    function Extract_Subprogram_Documentation
      (Decl_Node      : Libadalang.Analysis.Basic_Decl'Class;
       Subp_Spec_Node : Subp_Spec'Class;
+      Expr_Node      : Expr'Class;
       Aspects_Node   : Aspect_Spec'Class;
       Options        : Extractor_Options)
       return not null Structured_Comment_Access;
@@ -74,6 +75,16 @@ package body GNATdoc.Comments.Extractor is
               Extract_Subprogram_Documentation
                 (Decl_Node      => Node,
                  Subp_Spec_Node => Node.As_Classic_Subp_Decl.F_Subp_Spec,
+                 Expr_Node      => No_Expr,
+                 Aspects_Node   => Node.F_Aspects,
+                 Options        => Options);
+
+         when Ada_Expr_Function =>
+            return
+              Extract_Subprogram_Documentation
+                (Decl_Node      => Node,
+                 Subp_Spec_Node => Node.As_Base_Subp_Body.F_Subp_Spec,
+                 Expr_Node      => Node.As_Expr_Function.F_Expr,
                  Aspects_Node   => Node.F_Aspects,
                  Options        => Options);
 
@@ -82,11 +93,12 @@ package body GNATdoc.Comments.Extractor is
               Extract_Subprogram_Documentation
                 (Decl_Node      => Node,
                  Subp_Spec_Node => Node.As_Base_Subp_Body.F_Subp_Spec,
+                 Expr_Node      => No_Expr,
                  Aspects_Node   => Node.F_Aspects,
                  Options        => Options);
 
          when others =>
-            return null;
+            raise Program_Error;
       end case;
    end Extract;
 
@@ -97,6 +109,7 @@ package body GNATdoc.Comments.Extractor is
    function Extract_Subprogram_Documentation
      (Decl_Node      : Libadalang.Analysis.Basic_Decl'Class;
       Subp_Spec_Node : Subp_Spec'Class;
+      Expr_Node      : Expr'Class;
       Aspects_Node   : Aspect_Spec'Class;
       Options        : Extractor_Options)
       return not null Structured_Comment_Access
@@ -112,12 +125,15 @@ package body GNATdoc.Comments.Extractor is
       --------------------------------
 
       procedure Intermediate_Section_Range
-        (Subp_Spec_Node : Subp_Spec'Class;
-         Params_Node    : Params'Class;
-         Returns_Node   : Type_Expr'Class;
-         Aspects_Node   : Aspect_Spec'Class;
-         Start_Line     : out Line_Number;
-         End_Line       : out Line_Number);
+        (Subp_Spec_Node   : Subp_Spec'Class;
+         Params_Node      : Params'Class;
+         Returns_Node     : Type_Expr'Class;
+         Expr_Node        : Expr'Class;
+         Aspects_Node     : Aspect_Spec'Class;
+         Upper_Start_Line : out Line_Number;
+         Upper_End_Line   : out Line_Number;
+         Lower_Start_Line : out Line_Number;
+         Lower_End_Line   : out Line_Number);
       --  Range of the "intermediate" section for subprogram.
 
       --------------------------------
@@ -125,42 +141,62 @@ package body GNATdoc.Comments.Extractor is
       --------------------------------
 
       procedure Intermediate_Section_Range
-        (Subp_Spec_Node : Subp_Spec'Class;
-         Params_Node    : Params'Class;
-         Returns_Node   : Type_Expr'Class;
-         Aspects_Node   : Aspect_Spec'Class;
-         Start_Line     : out Line_Number;
-         End_Line       : out Line_Number) is
+        (Subp_Spec_Node   : Subp_Spec'Class;
+         Params_Node      : Params'Class;
+         Returns_Node     : Type_Expr'Class;
+         Expr_Node        : Expr'Class;
+         Aspects_Node     : Aspect_Spec'Class;
+         Upper_Start_Line : out Line_Number;
+         Upper_End_Line   : out Line_Number;
+         Lower_Start_Line : out Line_Number;
+         Lower_End_Line   : out Line_Number) is
       begin
          if Returns_Node /= No_Type_Expr then
             --  For any functions, intermediate section starts after the
             --  return type of the function.
 
-            Start_Line := Returns_Node.Sloc_Range.End_Line + 1;
+            Upper_Start_Line := Returns_Node.Sloc_Range.End_Line + 1;
 
          elsif Params_Node /= No_Params then
             --  For procedures with parameters, intermediate section starts
             --  after the parameters.
 
-            Start_Line := Params_Node.Sloc_Range.End_Line + 1;
+            Upper_Start_Line := Params_Node.Sloc_Range.End_Line + 1;
 
          else
             --  For parameterless procedures, intermadiate section starts
             --  after the procedure's name identifier.
 
-            Start_Line := Subp_Spec_Node.F_Subp_Name.Sloc_Range.Start_Line;
+            Upper_Start_Line :=
+              Subp_Spec_Node.F_Subp_Name.Sloc_Range.Start_Line;
          end if;
 
          if Aspects_Node /= No_Aspect_Spec then
             --  When subprogram has aspects, intermediate section ends before
             --  the first aspect.
 
-            End_Line :=
+            Upper_End_Line :=
               Aspects_Node.F_Aspect_Assocs.First_Child.Sloc_Range.Start_Line
                 - 1;
 
          else
-            End_Line := 0;
+            Upper_End_Line := 0;
+         end if;
+
+         if Expr_Node /= No_Expr then
+            --  When function has expression, initialize lower intermediate
+            --  section to be text between expression function and aspects.
+
+            Lower_Start_Line := Expr_Node.Sloc_Range.End_Line + 1;
+            Lower_End_Line := Upper_End_Line;
+
+            --  ... and limit upper section till expression.
+
+            Upper_End_Line := Expr_Node.Sloc_Range.Start_Line - 1;
+
+         else
+            Lower_Start_Line := 0;
+            Lower_End_Line   := 0;
          end if;
       end Intermediate_Section_Range;
 
@@ -195,12 +231,13 @@ package body GNATdoc.Comments.Extractor is
       Params_Node  : constant Params    := Subp_Spec_Node.F_Subp_Params;
       Returns_Node : constant Type_Expr := Subp_Spec_Node.F_Subp_Returns;
 
-      Previous_Group       : Section_Vectors.Vector;
-      Group_Start_Line     : Line_Number := 0;
-      Group_End_Line       : Line_Number := 0;
-      Leading_Section      : Section_Access;
-      Intermediate_Section : Section_Access;
-      Trailing_Section     : Section_Access;
+      Previous_Group             : Section_Vectors.Vector;
+      Group_Start_Line           : Line_Number := 0;
+      Group_End_Line             : Line_Number := 0;
+      Leading_Section            : Section_Access;
+      Intermediate_Upper_Section : Section_Access;
+      Intermediate_Lower_Section : Section_Access;
+      Trailing_Section           : Section_Access;
 
    begin
       return Result : constant not null Structured_Comment_Access :=
@@ -230,10 +267,17 @@ package body GNATdoc.Comments.Extractor is
          --  association, thus, location of the "when" keyword is not
          --  significant.
 
-         Intermediate_Section :=
+         Intermediate_Upper_Section :=
            new Section'
              (Kind             => Raw,
-              Symbol           => "<<INTERMEDIATE>>",
+              Symbol           => "<<INTERMEDIATE UPPER>>",
+              Name             => <>,
+              Text             => <>,
+              others           => <>);
+         Intermediate_Lower_Section :=
+           new Section'
+             (Kind             => Raw,
+              Symbol           => "<<INTERMEDIATE LOWER>>",
               Name             => <>,
               Text             => <>,
               others           => <>);
@@ -241,10 +285,14 @@ package body GNATdoc.Comments.Extractor is
            (Subp_Spec_Node,
             Params_Node,
             Returns_Node,
+            Expr_Node,
             Aspects_Node,
-            Intermediate_Section.Exact_Start_Line,
-            Intermediate_Section.Exact_End_Line);
-         Result.Sections.Append (Intermediate_Section);
+            Intermediate_Upper_Section.Exact_Start_Line,
+            Intermediate_Upper_Section.Exact_End_Line,
+            Intermediate_Lower_Section.Exact_Start_Line,
+            Intermediate_Lower_Section.Exact_End_Line);
+         Result.Sections.Append (Intermediate_Upper_Section);
+         Result.Sections.Append (Intermediate_Lower_Section);
 
          --  Create sections of structured comment for parameters, compute
          --  line range to extract comments of each parameter.
@@ -610,13 +658,18 @@ package body GNATdoc.Comments.Extractor is
 
             case Options.Style is
                when GNAT =>
-                  if not Intermediate_Section.Text.Is_Empty then
-                     Raw_Section := Intermediate_Section;
+                  if not Intermediate_Upper_Section.Text.Is_Empty then
+                     Raw_Section := Intermediate_Upper_Section;
+
+                  elsif not Intermediate_Lower_Section.Text.Is_Empty then
+                     Raw_Section := Intermediate_Lower_Section;
 
                   elsif not Trailing_Section.Text.Is_Empty then
                      Raw_Section := Trailing_Section;
 
-                  elsif Options.Fallback then
+                  elsif Options.Fallback
+                    and not Leading_Section.Text.Is_Empty
+                  then
                      Raw_Section := Leading_Section;
 
                   else
@@ -627,11 +680,19 @@ package body GNATdoc.Comments.Extractor is
                   if not Leading_Section.Text.Is_Empty then
                      Raw_Section := Leading_Section;
 
-                  elsif not Intermediate_Section.Text.Is_Empty then
-                     Raw_Section := Intermediate_Section;
+                  elsif Options.Fallback then
+                     if Intermediate_Upper_Section.Text.Is_Empty then
+                        Raw_Section := Intermediate_Upper_Section;
 
-                  elsif Options.Fallback  then
-                     Raw_Section := Trailing_Section;
+                     elsif not Intermediate_Lower_Section.Text.Is_Empty then
+                        Raw_Section := Intermediate_Lower_Section;
+
+                     elsif not Trailing_Section.Text.Is_Empty then
+                        Raw_Section := Trailing_Section;
+
+                     else
+                        return;
+                     end if;
 
                   else
                      return;
