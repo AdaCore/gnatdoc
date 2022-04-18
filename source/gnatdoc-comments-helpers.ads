@@ -34,4 +34,15 @@ package GNATdoc.Comments.Helpers is
    --
    --  Convenience function for ALS.
 
+   function Get_Subprogram_Parameter_Description
+     (Self       : Structured_Comment'Class;
+      Symbol     : VSS.Strings.Virtual_String;
+      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
+      return VSS.Strings.Virtual_String;
+   --  Return text of the description subprogram as single string using given
+   --  line terminator. Text includes description of the subprogram,
+   --  description of the parameters, return value and raised exceptions.
+   --
+   --  Convenience function for ALS.
+
 end GNATdoc.Comments.Helpers;

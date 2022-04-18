@@ -91,4 +91,26 @@ package body GNATdoc.Comments.Helpers is
       return Text.Join_Lines (Terminator);
    end Get_Subprogram_Description;
 
+   ------------------------------------------
+   -- Get_Subprogram_Parameter_Description --
+   ------------------------------------------
+
+   function Get_Subprogram_Parameter_Description
+     (Self       : Structured_Comment'Class;
+      Symbol     : VSS.Strings.Virtual_String;
+      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
+      return VSS.Strings.Virtual_String
+   is
+      Text : VSS.String_Vectors.Virtual_String_Vector;
+
+   begin
+      for Section of Self.Sections loop
+         if Section.Kind = Parameter and Section.Symbol = Symbol then
+            Text := Section.Text;
+         end if;
+      end loop;
+
+      return Text.Join_Lines (Terminator);
+   end Get_Subprogram_Parameter_Description;
+
 end GNATdoc.Comments.Helpers;
