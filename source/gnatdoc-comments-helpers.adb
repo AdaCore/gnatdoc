@@ -88,7 +88,7 @@ package body GNATdoc.Comments.Helpers is
          end loop;
       end if;
 
-      return Text.Join_Lines (Terminator);
+      return Text.Join_Lines (Terminator, False);
    end Get_Subprogram_Description;
 
    ------------------------------------------
@@ -110,7 +110,7 @@ package body GNATdoc.Comments.Helpers is
          end if;
       end loop;
 
-      return Text.Join_Lines (Terminator);
+      return Text.Join_Lines (Terminator, False);
    end Get_Subprogram_Parameter_Description;
 
    ----------------------------
