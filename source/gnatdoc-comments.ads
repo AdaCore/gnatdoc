@@ -31,6 +31,7 @@ package GNATdoc.Comments is
    type Section_Kind is
      (Raw,                --  Raw text of the documentation, extracted from
       --                      comments
+      Snippet,            --  Code snippet
       Breif,              --  Breif description of the entity
       --                      ??? not supported
       Description,        --  Full description of the entity
