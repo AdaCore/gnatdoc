@@ -83,6 +83,12 @@ package body GNATdoc.Comments.Extractor is
    --  @param Leading_Section     Leading raw text
    --  @param Trailing_Section    Trailing raw text.
 
+   procedure Fill_Code_Snippet
+     (Node          : Ada_Node'Class;
+      Documentation : in out Structured_Comment'Class);
+   --  Extract code snippet of declaration, remove all comments from it,
+   --  and create code snippet section of the structured comment.
+
    function Is_Ada_Separator (Item : Virtual_Character) return Boolean;
    --  Return True when given character is Ada's separator.
    --
@@ -490,89 +496,7 @@ package body GNATdoc.Comments.Extractor is
          --  Extract code snippet of declaration and remove all comments from
          --  it.
 
-         declare
-            Snippet_Section : Section_Access;
-            Text            : Virtual_String_Vector;
-
-         begin
-            Text :=
-              To_Virtual_String
-                (Subp_Spec_Node.Text).Split_Lines (Ada_New_Line_Function);
-
-            --  Indent first line correctly.
-
-            declare
-               Line : Virtual_String := Text (1);
-
-            begin
-               for J in 2 .. Subp_Spec_Node.Sloc_Range.Start_Column loop
-                  Line.Prepend (' ');
-               end loop;
-
-               Text.Replace (1, Line);
-            end;
-
-            --  Remove comments
-
-            declare
-               Line_Offset : constant Line_Number :=
-                 Subp_Spec_Node.Sloc_Range.Start_Line - 1;
-               Token      : Token_Reference := Subp_Spec_Node.Token_End;
-
-            begin
-               loop
-                  Token := Previous (Token);
-
-                  exit when Token = Subp_Spec_Node.Token_Start;
-
-                  if Kind (Data (Token)) = Ada_Comment then
-                     declare
-                        Location : constant Source_Location_Range :=
-                          Sloc_Range (Data (Token));
-                        Index    : constant Positive :=
-                          Positive (Location.Start_Line - Line_Offset);
-                        Line     : Virtual_String := Text (Index);
-                        Iterator : Character_Iterator :=
-                          Line.After_Last_Character;
-
-                     begin
-                        --  Move iterator till first character before the
-                        --  comment's start column.
-
-                        while Iterator.Backward loop
-                           exit when
-                             Iterator.Character_Index
-                               < Character_Index (Location.Start_Column);
-                        end loop;
-
-                        --  Rewind all whitespaces before the comment
-
-                        while Iterator.Backward loop
-                           exit when not Is_Ada_Separator (Iterator.Element);
-                        end loop;
-
-                        --  Remove comment and spaces before it from the line,
-                        --  or remove whole line if after remove of the
-                        --  comment's text it contains whitespaces only.
-
-                        if Iterator.Has_Element then
-                           Line :=
-                             Line.Slice (Line.At_First_Character, Iterator);
-                           Text.Replace (Index, Line);
-
-                        else
-                           Text.Delete (Index);
-                        end if;
-                     end;
-                  end if;
-               end loop;
-            end;
-
-            Snippet_Section :=
-              new Section'
-                (Kind => Snippet, Symbol => "ada", Text => Text, others => <>);
-            Result.Sections.Append (Snippet_Section);
-         end;
+         Fill_Code_Snippet (Subp_Spec_Node, Result.all);
 
          --  Postprocess extracted text, for each group of lines, separated
          --  by empty line by remove of two minus signs and common leading
@@ -848,6 +772,95 @@ package body GNATdoc.Comments.Extractor is
          end loop;
       end return;
    end Extract_Subprogram_Documentation;
+
+   -----------------------
+   -- Fill_Code_Snippet --
+   -----------------------
+
+   procedure Fill_Code_Snippet
+     (Node          : Ada_Node'Class;
+      Documentation : in out Structured_Comment'Class)
+   is
+      Snippet_Section : Section_Access;
+      Text            : Virtual_String_Vector;
+
+   begin
+      Text :=
+        To_Virtual_String (Node.Text).Split_Lines (Ada_New_Line_Function);
+
+      --  Indent first line correctly.
+
+      declare
+         Line : Virtual_String := Text (1);
+
+      begin
+         for J in 2 .. Node.Sloc_Range.Start_Column loop
+            Line.Prepend (' ');
+         end loop;
+
+         Text.Replace (1, Line);
+      end;
+
+      --  Remove comments
+
+      declare
+         Line_Offset : constant Line_Number := Node.Sloc_Range.Start_Line - 1;
+         Token       : Token_Reference      := Node.Token_End;
+
+      begin
+         loop
+            Token := Previous (Token);
+
+            exit when Token = Node.Token_Start;
+
+            if Kind (Data (Token)) = Ada_Comment then
+               declare
+                  Location : constant Source_Location_Range :=
+                    Sloc_Range (Data (Token));
+                  Index    : constant Positive :=
+                    Positive (Location.Start_Line - Line_Offset);
+                  Line     : Virtual_String := Text (Index);
+                  Iterator : Character_Iterator :=
+                    Line.After_Last_Character;
+
+               begin
+                  --  Move iterator till first character before the
+                  --  comment's start column.
+
+                  while Iterator.Backward loop
+                     exit when
+                       Iterator.Character_Index
+                         < Character_Index (Location.Start_Column);
+                  end loop;
+
+                  --  Rewind all whitespaces before the comment
+
+                  while Iterator.Backward loop
+                     exit when not Is_Ada_Separator (Iterator.Element);
+                  end loop;
+
+                  --  Remove comment and spaces before it from the line,
+                  --  or remove whole line if after remove of the
+                  --  comment's text it contains whitespaces only.
+
+                  if Iterator.Has_Element then
+                     Line :=
+                       Line.Slice (Line.At_First_Character, Iterator);
+                     Text.Replace (Index, Line);
+
+                  else
+                     Text.Delete (Index);
+                  end if;
+               end;
+            end if;
+         end loop;
+      end;
+
+      Snippet_Section :=
+        new Section'
+          (Kind => Snippet, Symbol => "ada", Text => Text, others => <>);
+      Documentation.Sections.Append (Snippet_Section);
+   end Fill_Code_Snippet;
 
    -----------------------------
    -- Fill_Structured_Comment --
