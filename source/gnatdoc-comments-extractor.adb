@@ -56,6 +56,33 @@ package body GNATdoc.Comments.Extractor is
    --  @param Aspects_Node    List of aspects
    --  @param Options         Documentataion extraction options
 
+   procedure Fill_Structured_Comment
+     (Decl_Node        : Basic_Decl'Class;
+      Advanced_Groups  : Boolean;
+      Last_Section     : Section_Access;
+      Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
+      Documentation    : in out Structured_Comment'Class;
+      Leading_Section  : out not null Section_Access;
+      Trailing_Section : out not null Section_Access);
+   --  Extract comments' text from the given declaration and fill sections
+   --  of the provided structured comment. Also, creates raw sections for
+   --  the leading and trailing comments and extract them into these sections.
+   --
+   --  @param Decl_Node           Whole declaration.
+   --  @param Advanced_Groups
+   --    Advanced processing of the groups: empty line is added at the and
+   --    of the section's text when it is not empty and processing of the
+   --    group comment is started.
+   --  @param Last_Section
+   --    Last section inside the declaration. If there are some comments after
+   --    the declaration and its indentation is equal of deeper than the value
+   --    of the Minimum_Indent parameter, this section is filled by these
+   --    comments.
+   --  @param Minimum_Indent      Minimum indentation to fill last section.
+   --  @param Documentation       Structured comment to fill.
+   --  @param Leading_Section     Leading raw text
+   --  @param Trailing_Section    Trailing raw text.
+
    function Is_Ada_Separator (Item : Virtual_Character) return Boolean;
    --  Return True when given character is Ada's separator.
    --
@@ -245,12 +272,14 @@ package body GNATdoc.Comments.Extractor is
       Returns_Node : constant Type_Expr := Subp_Spec_Node.F_Subp_Returns;
 
       Previous_Group             : Section_Vectors.Vector;
-      Group_Start_Line           : Line_Number := 0;
-      Group_End_Line             : Line_Number := 0;
+      Group_Start_Line           : Line_Number   := 0;
+      Group_End_Line             : Line_Number   := 0;
       Leading_Section            : Section_Access;
       Intermediate_Upper_Section : Section_Access;
       Intermediate_Lower_Section : Section_Access;
       Trailing_Section           : Section_Access;
+      Last_Section               : Section_Access;
+      Minimum_Indent             : Column_Number := 0;
 
    begin
       return Result : constant not null Structured_Comment_Access :=
@@ -376,6 +405,13 @@ package body GNATdoc.Comments.Extractor is
                              Group_Start_Line;
                            Parameter_Section.Group_End_Line := Group_End_Line;
                         end if;
+
+                        --  Remember section of the last parameter and its
+                        --  indentation for extracting of the comment from
+                        --  the last line of the declaration.
+
+                        Last_Section   := Parameter_Section;
+                        Minimum_Indent := Location.Start_Column;
                      end;
                   end loop;
 
@@ -413,6 +449,7 @@ package body GNATdoc.Comments.Extractor is
                   if Kind (Data (Token)) = Ada_Return then
                      Location := Sloc_Range (Data (Token));
                      Returns_Section.Exact_Start_Line := Location.Start_Line;
+                     Minimum_Indent := Location.Start_Column;
 
                      exit;
                   end if;
@@ -430,122 +467,25 @@ package body GNATdoc.Comments.Extractor is
                end if;
 
                Result.Sections.Append (Returns_Section);
+
+               --  Remember section of the return statement for extracting of
+               --  the comment from the last line of the declaration.
+
+               Last_Section   := Returns_Section;
             end;
          end if;
 
          --  Parse comments inside the subprogram declaration and fill
          --  text of raw, parameters and returns sections.
 
-         declare
-            Location : Source_Location_Range;
-
-         begin
-            for Token of Decl_Node.Token_Range loop
-               Location := Sloc_Range (Data (Token));
-
-               if Kind (Data (Token)) = Ada_Comment then
-                  for Section of Result.Sections loop
-                     if Section.Kind in Raw | Parameter | Returns
-                       and then
-                         (Location.Start_Line
-                            in Section.Exact_Start_Line
-                                 .. Section.Exact_End_Line
-                          or Location.Start_Line
-                               in Section.Group_Start_Line
-                                    .. Section.Group_End_Line)
-
-                     then
-                        if Advanced_Groups
-                          and Location.Start_Line = Section.Group_Start_Line
-                          and not Section.Text.Is_Empty
-                        then
-                           Section.Text.Append (Empty_Virtual_String);
-                        end if;
-
-                        Section.Text.Append (To_Virtual_String (Text (Token)));
-                     end if;
-                  end loop;
-               end if;
-            end loop;
-         end;
-
-         --  Process tokens before the subprogram declaration.
-
-         Leading_Section :=
-           new Section'
-             (Kind             => Raw,
-              Symbol           => "<<LEADING>>",
-              Name             => <>,
-              Text             => <>,
-              others           => <>);
-         Result.Sections.Append (Leading_Section);
-
-         declare
-            Token : Token_Reference := Decl_Node.Token_Start;
-
-         begin
-            loop
-               Token := Previous (Token);
-
-               exit when Token = No_Token;
-
-               case Kind (Data (Token)) is
-                  when Ada_Comment =>
-                     Leading_Section.Text.Prepend
-                       (To_Virtual_String (Text (Token)));
-
-                  when Ada_Whitespace =>
-                     exit when Line_Count (Text (Token)) > 2;
-
-                  when others =>
-                     exit;
-               end case;
-            end loop;
-         end;
-
-         --  Process tokens after the subprogram declaration.
-
-         Trailing_Section :=
-           new Section'
-             (Kind             => Raw,
-              Symbol           => "<<TRAILING>>",
-              Name             => <>,
-              Text             => <>,
-              others           => <>);
-         Result.Sections.Append (Trailing_Section);
-
-         declare
-            Token : Token_Reference := Decl_Node.Token_End;
-            Start : constant Line_Number :=
-              Sloc_Range (Data (Token)).Start_Line
-                + (if Params_Node = No_Params
-                     and Returns_Node = No_Type_Expr then 0 else 1);
-            --  Start line of the documentation, for parameterless procedure
-            --  it starts at the last line of the subprogram specification,
-            --  otherwise last line of the subprogram specification is
-            --  reserved for description of the parameter/return value.
-
-         begin
-            loop
-               Token := Next (Token);
-
-               exit when Token = No_Token;
-
-               case Kind (Data (Token)) is
-                  when Ada_Comment =>
-                     if Sloc_Range (Data (Token)).Start_Line >= Start then
-                        Trailing_Section.Text.Append
-                          (To_Virtual_String (Text (Token)));
-                     end if;
-
-                  when Ada_Whitespace =>
-                     exit when Line_Count (Text (Token)) > 2;
-
-                  when others =>
-                     exit;
-               end case;
-            end loop;
-         end;
+         Fill_Structured_Comment
+           (Decl_Node        => Decl_Node,
+            Advanced_Groups  => Advanced_Groups,
+            Last_Section     => Last_Section,
+            Minimum_Indent   => Minimum_Indent,
+            Documentation    => Result.all,
+            Leading_Section  => Leading_Section,
+            Trailing_Section => Trailing_Section);
 
          --  Extract code snippet of declaration and remove all comments from
          --  it.
@@ -908,6 +848,150 @@ package body GNATdoc.Comments.Extractor is
          end loop;
       end return;
    end Extract_Subprogram_Documentation;
+
+   -----------------------------
+   -- Fill_Structured_Comment --
+   -----------------------------
+
+   procedure Fill_Structured_Comment
+     (Decl_Node        : Basic_Decl'Class;
+      Advanced_Groups  : Boolean;
+      Last_Section     : Section_Access;
+      Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
+      Documentation    : in out Structured_Comment'Class;
+      Leading_Section  : out not null Section_Access;
+      Trailing_Section : out not null Section_Access)
+   is
+      Node_Location : constant Source_Location_Range :=
+        Decl_Node.Sloc_Range;
+      Location      : Source_Location_Range;
+
+   begin
+      --  Extract comments inside the declaration and fill text of raw,
+      --  parameters, returns, and literals sections.
+
+      declare
+         Token : Token_Reference := Decl_Node.Token_Start;
+
+      begin
+         while Token /= No_Token and Token /= Decl_Node.Token_End loop
+            Location := Sloc_Range (Data (Token));
+
+            if Kind (Data (Token)) = Ada_Comment then
+               for Section of Documentation.Sections loop
+                  if Section.Kind in Raw | Parameter | Returns
+                    and then
+                      (Location.Start_Line
+                         in Section.Exact_Start_Line
+                              .. Section.Exact_End_Line
+                       or Location.Start_Line
+                            in Section.Group_Start_Line
+                                 .. Section.Group_End_Line)
+
+                  then
+                     if Advanced_Groups
+                       and Location.Start_Line = Section.Group_Start_Line
+                       and not Section.Text.Is_Empty
+                     then
+                        Section.Text.Append (Empty_Virtual_String);
+                     end if;
+
+                     Section.Text.Append (To_Virtual_String (Text (Token)));
+                  end if;
+               end loop;
+            end if;
+
+            Token := Next (Token);
+         end loop;
+      end;
+
+      --  Create leading section and process tokens before the declaration
+      --  node.
+
+      Leading_Section :=
+        new Section'
+          (Kind             => Raw,
+           Symbol           => "<<LEADING>>",
+           Name             => <>,
+           Text             => <>,
+           others           => <>);
+      Documentation.Sections.Append (Leading_Section);
+
+      declare
+         Token : Token_Reference := Decl_Node.Token_Start;
+
+      begin
+         loop
+            Token := Previous (Token);
+
+            exit when Token = No_Token;
+
+            case Kind (Data (Token)) is
+               when Ada_Comment =>
+                  Leading_Section.Text.Prepend
+                    (To_Virtual_String (Text (Token)));
+
+               when Ada_Whitespace =>
+                  exit when Line_Count (Text (Token)) > 2;
+
+               when others =>
+                  exit;
+            end case;
+         end loop;
+      end;
+
+      --  Create trailing section and process tokens after the declaration
+      --  node.
+
+      Trailing_Section :=
+        new Section'
+          (Kind             => Raw,
+           Symbol           => "<<TRAILING>>",
+           Name             => <>,
+           Text             => <>,
+           others           => <>);
+      Documentation.Sections.Append (Trailing_Section);
+
+      declare
+         Token   : Token_Reference := Decl_Node.Token_End;
+         In_Last : Boolean := Last_Section /= null;
+
+      begin
+         loop
+            Token := Next (Token);
+
+            exit when Token = No_Token;
+
+            case Kind (Data (Token)) is
+               when Ada_Comment =>
+                  if In_Last then
+                     if Sloc_Range (Data (Token)).Start_Column
+                          >= Minimum_Indent
+                     then
+                        Last_Section.Text.Append
+                          (To_Virtual_String (Text (Token)));
+
+                        goto Done;
+
+                     else
+                        In_Last := False;
+                     end if;
+                  end if;
+
+                  Trailing_Section.Text.Append
+                    (To_Virtual_String (Text (Token)));
+
+                  <<Done>>
+
+               when Ada_Whitespace =>
+                  exit when Line_Count (Text (Token)) > 2;
+
+               when others =>
+                  exit;
+            end case;
+         end loop;
+      end;
+   end Fill_Structured_Comment;
 
    ----------------------
    -- Is_Ada_Separator --
