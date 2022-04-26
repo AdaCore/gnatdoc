@@ -59,4 +59,14 @@ package GNATdoc.Comments.Helpers is
    --
    --  Convenience function for ALS.
 
+   function Get_Enumeration_Literal_Description
+     (Self       : Structured_Comment'Class;
+      Symbol     : VSS.Strings.Virtual_String;
+      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
+      return VSS.Strings.Virtual_String;
+   --  Return text of the description of enumeration literal as single string
+   --  using given line terminator.
+   --
+   --  Convenience function for ALS.
+
 end GNATdoc.Comments.Helpers;
