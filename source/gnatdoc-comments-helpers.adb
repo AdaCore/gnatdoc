@@ -192,7 +192,11 @@ package body GNATdoc.Comments.Helpers is
    begin
       for Section of Self.Sections loop
          if Section.Kind = Parameter and Section.Symbol = Symbol then
-            Text := Section.Text;
+            Text.Append ("@param " & Section.Name);
+
+            for Line of Section.Text loop
+               Text.Append ("  " & Line);
+            end loop;
          end if;
       end loop;
 
