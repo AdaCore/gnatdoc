@@ -62,6 +62,13 @@ package body GNATdoc.Comments.Extractor is
    --  @param Aspects_Node    List of aspects
    --  @param Options         Documentataion extraction options
 
+   function Extract_Type
+     (Node    : Libadalang.Analysis.Type_Decl'Class;
+      Options : Extractor_Options) return not null Structured_Comment_Access
+     with Pre => Node.Kind = Ada_Type_Decl
+                   and then Node.F_Type_Def.Kind = Ada_Enum_Type_Def;
+   --  Extract documentation for type declaration.
+
    procedure Fill_Structured_Comment
      (Decl_Node        : Basic_Decl'Class;
       Advanced_Groups  : Boolean;
@@ -164,6 +171,9 @@ package body GNATdoc.Comments.Extractor is
                  Expr_Node      => No_Expr,
                  Aspects_Node   => Node.F_Aspects,
                  Options        => Options);
+
+         when Ada_Type_Decl =>
+            return Extract_Type (Node.As_Type_Decl, Options);
 
          when others =>
             raise Program_Error;
