@@ -38,9 +38,9 @@ package body GNATdoc.Comments.Extractor is
      (CR | LF | CRLF => True, others => False);
 
    Ada_Identifier_Expression         : constant Virtual_String :=
-     "(?:\p{L}|\p{Nl})(?:\p{L}|\p{Nl}|\p{Mn}|\p{Mc}|\p{Nd}|\p{Pc})*";
+     "[\p{L}\p{Nl}][\p{L}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}]*";
    Ada_Optional_Separator_Expression : constant Virtual_String :=
-     "(?:\p{Zs}|\p{Cf})*";
+     "[\p{Zs}\p{Cf}]*";
 
    function Line_Count (Item : Text_Type) return Natural;
    --  Returns number of lines occupied by given segment of the text.
