@@ -89,6 +89,12 @@ package body GNATdoc.Comments.Extractor is
    --  Extract code snippet of declaration, remove all comments from it,
    --  and create code snippet section of the structured comment.
 
+   procedure Remove_Comment_Start_And_Indentation
+      (Documentation : in out Structured_Comment'Class);
+   --  Postprocess extracted text, for each group of lines, separated by empty
+   --  line, by remove of two minus signs and common leading whitespaces. For
+   --  code snippet remove common leading whitespaces only.
+
    function Is_Ada_Separator (Item : Virtual_Character) return Boolean;
    --  Return True when given character is Ada's separator.
    --
@@ -502,89 +508,7 @@ package body GNATdoc.Comments.Extractor is
          --  by empty line by remove of two minus signs and common leading
          --  whitespaces
 
-         for Section of Result.Sections loop
-            declare
-               First_Line : Positive := 1;
-               Last_Line  : Natural  := 0;
-               Indent     : Character_Count;
-
-            begin
-               loop
-                  for J in First_Line .. Section.Text.Length loop
-                     exit when Section.Text (J).Is_Empty;
-
-                     Last_Line := J;
-                  end loop;
-
-                  --  Compute common indentation level
-
-                  Indent := Character_Count'Last;
-
-                  for J in First_Line .. Last_Line loop
-                     declare
-                        Line     : constant Virtual_String :=
-                          Section.Text (J);
-                        Iterator : Character_Iterator :=
-                          Line.Before_First_Character;
-                        Success  : Boolean;
-
-                     begin
-                        if Section.Kind /= Snippet then
-                           --  Skip '--' from all sections, but snippet.
-
-                           Success := Iterator.Forward;
-                           pragma Assert
-                             (Success and then Iterator.Element = '-');
-
-                           Success := Iterator.Forward;
-                           pragma Assert
-                             (Success and then Iterator.Element = '-');
-                        end if;
-
-                        --  Lookup for first non-whitespace character
-
-                        while Iterator.Forward loop
-                           exit when not Is_Ada_Separator (Iterator.Element);
-                        end loop;
-
-                        if Iterator.Has_Element then
-                           Indent :=
-                             Character_Index'Min
-                               (Indent, Iterator.Character_Index - 1);
-                        end if;
-                     end;
-                  end loop;
-
-                  --  Remove common indentation segment
-
-                  for J in First_Line .. Last_Line loop
-                     declare
-                        Line     : constant Virtual_String :=
-                          Section.Text (J);
-                        Iterator : Character_Iterator :=
-                          Line.At_First_Character;
-                        Success  : Boolean;
-
-                     begin
-                        if Line.Character_Length > Indent then
-                           for J in 1 .. Indent loop
-                              Success := Iterator.Forward;
-                           end loop;
-
-                           Section.Text.Replace (J, Line.Tail_From (Iterator));
-
-                        else
-                           Section.Text.Replace (J, Empty_Virtual_String);
-                        end if;
-                     end;
-                  end loop;
-
-                  First_Line := Last_Line + 2;
-
-                  exit when Last_Line = Section.Text.Length;
-               end loop;
-            end;
-         end loop;
+         Remove_Comment_Start_And_Indentation (Result.all);
 
          --  Process raw documentation for subprogram, fill sections and create
          --  description section.
@@ -1014,5 +938,97 @@ package body GNATdoc.Comments.Extractor is
    begin
       return Get_General_Category (Item) in Space_Separator | Format;
    end Is_Ada_Separator;
+
+   ------------------------------------------
+   -- Remove_Comment_Start_And_Indentation --
+   ------------------------------------------
+
+   procedure Remove_Comment_Start_And_Indentation
+      (Documentation : in out Structured_Comment'Class) is
+   begin
+      for Section of Documentation.Sections loop
+         declare
+            First_Line : Positive := 1;
+            Last_Line  : Natural  := 0;
+            Indent     : Character_Count;
+
+         begin
+            loop
+               for J in First_Line .. Section.Text.Length loop
+                  exit when Section.Text (J).Is_Empty;
+
+                  Last_Line := J;
+               end loop;
+
+               --  Compute common indentation level
+
+               Indent := Character_Count'Last;
+
+               for J in First_Line .. Last_Line loop
+                  declare
+                     Line     : constant Virtual_String :=
+                       Section.Text (J);
+                     Iterator : Character_Iterator :=
+                       Line.Before_First_Character;
+                     Success  : Boolean;
+
+                  begin
+                     if Section.Kind /= Snippet then
+                        --  Skip '--' from all sections, but snippet.
+
+                        Success := Iterator.Forward;
+                        pragma Assert
+                          (Success and then Iterator.Element = '-');
+
+                        Success := Iterator.Forward;
+                        pragma Assert
+                          (Success and then Iterator.Element = '-');
+                     end if;
+
+                     --  Lookup for first non-whitespace character
+
+                     while Iterator.Forward loop
+                        exit when not Is_Ada_Separator (Iterator.Element);
+                     end loop;
+
+                     if Iterator.Has_Element then
+                        Indent :=
+                          Character_Index'Min
+                            (Indent, Iterator.Character_Index - 1);
+                     end if;
+                  end;
+               end loop;
+
+               --  Remove common indentation segment
+
+               for J in First_Line .. Last_Line loop
+                  declare
+                     Line     : constant Virtual_String :=
+                       Section.Text (J);
+                     Iterator : Character_Iterator :=
+                       Line.At_First_Character;
+                     Success  : Boolean;
+
+                  begin
+                     if Line.Character_Length > Indent then
+                        for J in 1 .. Indent loop
+                           Success := Iterator.Forward;
+                        end loop;
+
+                        Section.Text.Replace (J, Line.Tail_From (Iterator));
+
+                     else
+                        Section.Text.Replace (J, Empty_Virtual_String);
+                     end if;
+                  end;
+               end loop;
+
+               First_Line := Last_Line + 2;
+
+               exit when Last_Line = Section.Text.Length;
+            end loop;
+         end;
+      end loop;
+   end Remove_Comment_Start_And_Indentation;
 
 end GNATdoc.Comments.Extractor;
