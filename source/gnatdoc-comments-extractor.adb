@@ -30,6 +30,10 @@ with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
 
 package body GNATdoc.Comments.Extractor is
 
+   type Section_Tag is (Param_Tag, Return_Tag, Exception_Tag);
+
+   type Section_Tag_Flags is array (Section_Tag) of Boolean with Pack;
+
    Ada_New_Line_Function             : constant Line_Terminator_Set :=
      (CR | LF | CRLF => True, others => False);
 
@@ -94,6 +98,16 @@ package body GNATdoc.Comments.Extractor is
    --  Postprocess extracted text, for each group of lines, separated by empty
    --  line, by remove of two minus signs and common leading whitespaces. For
    --  code snippet remove common leading whitespaces only.
+
+   procedure Parse_Raw_Section
+     (Raw_Section   : Section_Access;
+      Allowed_Tags  : Section_Tag_Flags;
+      Documentation : in out Structured_Comment'Class);
+   --  Process raw documentation, fill sections and create description section.
+   --
+   --  @param Raw_Section    Raw section to process
+   --  @param Allowed_Tags   Set of section tags to be processed
+   --  @param Documentation  Structured comment to fill
 
    function Is_Ada_Separator (Item : Virtual_Character) return Boolean;
    --  Return True when given character is Ada's separator.
@@ -514,34 +528,9 @@ package body GNATdoc.Comments.Extractor is
          --  description section.
 
          declare
-            Tag_Matcher       : constant Regular_Expression :=
-              To_Regular_Expression
-                (Ada_Optional_Separator_Expression
-                 & "@(param|return|exception)"
-                 & Ada_Optional_Separator_Expression);
-            Parameter_Matcher : constant Regular_Expression :=
-              To_Regular_Expression
-                ("(" & Ada_Identifier_Expression & ")"
-                   & Ada_Optional_Separator_Expression);
-            Match             : Regular_Expression_Match;
-            Raw_Section       : Section_Access;
-            Current_Section   : Section_Access;
-            Kind              : Section_Kind;
-            Name              : Virtual_String;
-            Symbol            : Virtual_String;
-            Line_Tail         : Virtual_String;
-            Skip_Line         : Boolean;
+            Raw_Section : Section_Access;
 
          begin
-            pragma Assert (Tag_Matcher.Is_Valid);
-            pragma Assert (Parameter_Matcher.Is_Valid);
-
-            --  Create "Description" section
-
-            Current_Section :=
-              new Section'(Kind => Description, others => <>);
-            Result.Sections.Append (Current_Section);
-
             --  Select most appropriate section depending from the style and
             --  fallback.
 
@@ -560,9 +549,6 @@ package body GNATdoc.Comments.Extractor is
                     and not Leading_Section.Text.Is_Empty
                   then
                      Raw_Section := Leading_Section;
-
-                  else
-                     return;
                   end if;
 
                when Leading =>
@@ -578,122 +564,16 @@ package body GNATdoc.Comments.Extractor is
 
                      elsif not Trailing_Section.Text.Is_Empty then
                         Raw_Section := Trailing_Section;
-
-                     else
-                        return;
                      end if;
-
-                  else
-                     return;
                   end if;
             end case;
 
-            --  Process raw text
-
-            for Line of Raw_Section.Text loop
-               Skip_Line := False;
-
-               Match := Tag_Matcher.Match (Line);
-
-               if Match.Has_Match then
-                  if Match.Captured (1) = "param" then
-                     Kind := Parameter;
-
-                  elsif Match.Captured (1) = "return" then
-                     Kind := Returns;
-
-                  elsif Match.Captured (1) = "exception" then
-                     Kind := Raised_Exception;
-
-                  else
-                     raise Program_Error;
-                  end if;
-
-                  Line_Tail := Line.Tail_After (Match.Last_Marker);
-
-                  if Kind in Parameter | Raised_Exception then
-                     --  Lookup for name of the parameter/exception. Convert
-                     --  found name to canonical form.
-
-                     --  Match := Parameter_Matcher.Match (Line, Tail_First);
-                     --  ??? Not implemented
-
-                     Match := Parameter_Matcher.Match (Line_Tail);
-
-                     if not Match.Has_Match then
-                        goto Default;
-                     end if;
-
-                     Name := Match.Captured (1);
-                     Symbol :=
-                       To_Virtual_String
-                        (Fold_Case (To_Wide_Wide_String (Name)).Symbol);
-
-                     Line_Tail := Line_Tail.Tail_After (Match.Last_Marker);
-
-                  else
-                     Name.Clear;
-                     Symbol.Clear;
-                  end if;
-
-                  declare
-                     Found : Boolean := False;
-
-                  begin
-                     for Section of Result.Sections loop
-                        if Section.Kind = Kind and Section.Symbol = Symbol then
-                           Current_Section := Section;
-                           Found := True;
-
-                           exit;
-                        end if;
-                     end loop;
-
-                     if not Found then
-                        if Kind = Raised_Exception then
-                           Current_Section :=
-                             new Section'
-                               (Kind   => Raised_Exception,
-                                Name   => Name,
-                                Symbol => Symbol,
-                                others => <>);
-                           Result.Sections.Append (Current_Section);
-
-                        else
-                           goto Default;
-                        end if;
-
-                     else
-                        if not Current_Section.Text.Is_Empty then
-                           Current_Section.Text.Append (Empty_Virtual_String);
-                        end if;
-                     end if;
-                  end;
-
-                  Skip_Line := True;
-
-                  if not Line_Tail.Is_Empty then
-                     Current_Section.Text.Append (Line_Tail);
-                  end if;
-               end if;
-
-               <<Default>>
-
-               if not Skip_Line then
-                  Current_Section.Text.Append (Line);
-               end if;
-            end loop;
+            Parse_Raw_Section
+              (Raw_Section,
+               (Param_Tag | Return_Tag | Exception_Tag => True,
+                others                                 => False),
+               Result.all);
          end;
-
-         --  Remove empty lines at the end of text of all sections
-
-         for Section of Result.Sections loop
-            while not Section.Text.Is_Empty
-              and then Section.Text.Last_Element.Is_Empty
-            loop
-               Section.Text.Delete_Last;
-            end loop;
-         end loop;
       end return;
    end Extract_Subprogram_Documentation;
 
@@ -938,6 +818,164 @@ package body GNATdoc.Comments.Extractor is
    begin
       return Get_General_Category (Item) in Space_Separator | Format;
    end Is_Ada_Separator;
+
+   -----------------------
+   -- Parse_Raw_Section --
+   -----------------------
+
+   procedure Parse_Raw_Section
+     (Raw_Section   : Section_Access;
+      Allowed_Tags  : Section_Tag_Flags;
+      Documentation : in out Structured_Comment'Class)
+   is
+      Tag_Matcher       : constant Regular_Expression :=
+        To_Regular_Expression
+          (Ada_Optional_Separator_Expression
+           & "@(param|return|exception)"
+           & Ada_Optional_Separator_Expression);
+      Parameter_Matcher : constant Regular_Expression :=
+        To_Regular_Expression
+          ("(" & Ada_Identifier_Expression & ")"
+           & Ada_Optional_Separator_Expression);
+
+      Match             : Regular_Expression_Match;
+      Current_Section   : Section_Access;
+      Kind              : Section_Kind;
+      Tag               : Section_Tag;
+      Name              : Virtual_String;
+      Symbol            : Virtual_String;
+      Line_Tail         : Virtual_String;
+      Skip_Line         : Boolean;
+
+   begin
+      pragma Assert (Tag_Matcher.Is_Valid);
+      pragma Assert (Parameter_Matcher.Is_Valid);
+
+      --  Create "Description" section
+
+      Current_Section :=
+        new Section'(Kind => Description, others => <>);
+      Documentation.Sections.Append (Current_Section);
+
+      --  Return when there is no raw section to parse
+
+      if Raw_Section = null then
+         return;
+      end if;
+
+      --  Process raw text
+
+      for Line of Raw_Section.Text loop
+         Skip_Line := False;
+
+         Match := Tag_Matcher.Match (Line);
+
+         if Match.Has_Match then
+            if Match.Captured (1) = "param" then
+               Tag  := Param_Tag;
+               Kind := Parameter;
+
+            elsif Match.Captured (1) = "return" then
+               Tag  := Return_Tag;
+               Kind := Returns;
+
+            elsif Match.Captured (1) = "exception" then
+               Tag  := Exception_Tag;
+               Kind := Raised_Exception;
+
+            else
+               raise Program_Error;
+            end if;
+
+            if not Allowed_Tags (Tag) then
+               goto Default;
+            end if;
+
+            Line_Tail := Line.Tail_After (Match.Last_Marker);
+
+            if Kind in Parameter | Raised_Exception then
+               --  Lookup for name of the parameter/exception. Convert
+               --  found name to canonical form.
+
+               --  Match := Parameter_Matcher.Match (Line, Tail_First);
+               --  ??? Not implemented
+
+               Match := Parameter_Matcher.Match (Line_Tail);
+
+               if not Match.Has_Match then
+                  goto Default;
+               end if;
+
+               Name := Match.Captured (1);
+               Symbol :=
+                 To_Virtual_String
+                   (Fold_Case (To_Wide_Wide_String (Name)).Symbol);
+
+               Line_Tail := Line_Tail.Tail_After (Match.Last_Marker);
+
+            else
+               Name.Clear;
+               Symbol.Clear;
+            end if;
+
+            declare
+               Found : Boolean := False;
+
+            begin
+               for Section of Documentation.Sections loop
+                  if Section.Kind = Kind and Section.Symbol = Symbol then
+                     Current_Section := Section;
+                     Found := True;
+
+                     exit;
+                  end if;
+               end loop;
+
+               if not Found then
+                  if Kind = Raised_Exception then
+                     Current_Section :=
+                       new Section'
+                         (Kind   => Raised_Exception,
+                          Name   => Name,
+                          Symbol => Symbol,
+                          others => <>);
+                     Documentation.Sections.Append (Current_Section);
+
+                  else
+                     goto Default;
+                  end if;
+
+               else
+                  if not Current_Section.Text.Is_Empty then
+                     Current_Section.Text.Append (Empty_Virtual_String);
+                  end if;
+               end if;
+            end;
+
+            Skip_Line := True;
+
+            if not Line_Tail.Is_Empty then
+               Current_Section.Text.Append (Line_Tail);
+            end if;
+         end if;
+
+         <<Default>>
+
+         if not Skip_Line then
+            Current_Section.Text.Append (Line);
+         end if;
+      end loop;
+
+      --  Remove empty lines at the end of text of all sections
+
+      for Section of Documentation.Sections loop
+         while not Section.Text.Is_Empty
+           and then Section.Text.Last_Element.Is_Empty
+         loop
+            Section.Text.Delete_Last;
+         end loop;
+      end loop;
+   end Parse_Raw_Section;
 
    ------------------------------------------
    -- Remove_Comment_Start_And_Indentation --
