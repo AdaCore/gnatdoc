@@ -20,6 +20,14 @@ with VSS.Strings;
 
 package GNATdoc.Comments.Helpers is
 
+   function Get_Ada_Code_Snippet
+     (Self : Structured_Comment'Class)
+      return VSS.String_Vectors.Virtual_String_Vector;
+   --  Return text of the subprogram specification as single string using
+   --  given line terminator.
+   --
+   --  Convenience function for ALS.
+
    function Get_Subprogram_Description
      (Self       : Structured_Comment'Class;
       Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
@@ -27,14 +35,6 @@ package GNATdoc.Comments.Helpers is
    --  Return text of the description subprogram as single string using given
    --  line terminator. Text includes description of the subprogram,
    --  description of the parameters, return value and raised exceptions.
-   --
-   --  Convenience function for ALS.
-
-   function Get_Subprogram_Snippet
-     (Self : Structured_Comment'Class)
-      return VSS.String_Vectors.Virtual_String_Vector;
-   --  Return text of the subprogram specification as single string using
-   --  given line terminator.
    --
    --  Convenience function for ALS.
 

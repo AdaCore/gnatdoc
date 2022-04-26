@@ -19,6 +19,23 @@ package body GNATdoc.Comments.Helpers is
 
    use VSS.Strings;
 
+   --------------------------
+   -- Get_Ada_Code_Snippet --
+   --------------------------
+
+   function Get_Ada_Code_Snippet
+     (Self : Structured_Comment'Class)
+      return VSS.String_Vectors.Virtual_String_Vector is
+   begin
+      for Section of Self.Sections loop
+         if Section.Kind = Snippet and Section.Symbol = "ada" then
+            return Section.Text;
+         end if;
+      end loop;
+
+      return VSS.String_Vectors.Empty_Virtual_String_Vector;
+   end Get_Ada_Code_Snippet;
+
    --------------------------------------
    -- Get_Enumeration_Type_Description --
    --------------------------------------
@@ -153,22 +170,5 @@ package body GNATdoc.Comments.Helpers is
 
       return Text.Join_Lines (Terminator, False);
    end Get_Subprogram_Parameter_Description;
-
-   ----------------------------
-   -- Get_Subprogram_Snippet --
-   ----------------------------
-
-   function Get_Subprogram_Snippet
-     (Self : Structured_Comment'Class)
-      return VSS.String_Vectors.Virtual_String_Vector is
-   begin
-      for Section of Self.Sections loop
-         if Section.Kind = Snippet and Section.Symbol = "ada" then
-            return Section.Text;
-         end if;
-      end loop;
-
-      return VSS.String_Vectors.Empty_Virtual_String_Vector;
-   end Get_Subprogram_Snippet;
 
 end GNATdoc.Comments.Helpers;
