@@ -29,15 +29,16 @@ package GNATdoc.Comments is
    type Structured_Comment_Access is access all Structured_Comment'Class;
 
    type Section_Kind is
-     (Raw,                --  Raw text of the documentation, extracted from
-      --                      comments
-      Snippet,            --  Code snippet
-      Breif,              --  Breif description of the entity
-      --                      ??? not supported
-      Description,        --  Full description of the entity
-      Parameter,          --  Description of the parameter
-      Returns,            --  Description of the return value
-      Raised_Exception);  --  Description of the raised exception
+     (Raw,                  --  Raw text of the documentation, extracted from
+      --                        comments
+      Snippet,              --  Code snippet
+      Breif,                --  Breif description of the entity
+      --                        ??? not supported
+      Description,          --  Full description of the entity
+      Enumeration_Literal,  --  Literal of the enumeration type
+      Parameter,            --  Description of the parameter
+      Returns,              --  Description of the return value
+      Raised_Exception);    --  Description of the raised exception
 
    type Section is tagged limited private;
 

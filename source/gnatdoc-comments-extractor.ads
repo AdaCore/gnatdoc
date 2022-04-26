@@ -47,4 +47,11 @@ package GNATdoc.Comments.Extractor is
                             | Ada_Null_Subp_Decl;
    --  Extract documentation for subprograms.
 
+   function Extract_Type
+     (Node    : Libadalang.Analysis.Type_Decl'Class;
+      Options : Extractor_Options) return not null Structured_Comment_Access
+     with Pre => Node.Kind = Ada_Type_Decl
+                   and then Node.F_Type_Def.Kind = Ada_Enum_Type_Def;
+   --  Extract documentation for type declaration.
+
 end GNATdoc.Comments.Extractor;

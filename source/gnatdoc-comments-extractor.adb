@@ -30,7 +30,7 @@ with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
 
 package body GNATdoc.Comments.Extractor is
 
-   type Section_Tag is (Param_Tag, Return_Tag, Exception_Tag);
+   type Section_Tag is (Param_Tag, Return_Tag, Exception_Tag, Enum_Tag);
 
    type Section_Tag_Flags is array (Section_Tag) of Boolean with Pack;
 
@@ -39,6 +39,8 @@ package body GNATdoc.Comments.Extractor is
 
    Ada_Identifier_Expression         : constant Virtual_String :=
      "[\p{L}\p{Nl}][\p{L}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}]*";
+   Ada_Character_Literal_Expression  : constant Virtual_String :=
+     "'[\p{L}\p{M}\p{N}\p{P}\p{S}\p{Z}\p{Cn}]'";
    Ada_Optional_Separator_Expression : constant Virtual_String :=
      "[\p{Zs}\p{Cf}]*";
 
@@ -167,6 +169,119 @@ package body GNATdoc.Comments.Extractor is
             raise Program_Error;
       end case;
    end Extract;
+
+   ------------------
+   -- Extract_Type --
+   ------------------
+
+   function Extract_Type
+     (Node    : Libadalang.Analysis.Type_Decl'Class;
+      Options : Extractor_Options) return not null Structured_Comment_Access
+   is
+      Type_Def_Node  : constant Type_Def'Class := Node.F_Type_Def;
+      Last_Section   : Section_Access;
+      Minimum_Indent : Column_Number           := 0;
+
+   begin
+      declare
+         Enum_Node        : constant Enum_Type_Def :=
+           Type_Def_Node.As_Enum_Type_Def;
+         Leading_Section  : Section_Access;
+         Trailing_Section : Section_Access;
+
+      begin
+         return Result : constant not null Structured_Comment_Access :=
+           new Structured_Comment
+         do
+            for Literal of Enum_Node.F_Enum_Literals loop
+               declare
+                  Literal_Name_Node : constant Name := Literal.F_Name.F_Name;
+                  Location          : constant Source_Location_Range :=
+                    Literal.Sloc_Range;
+                  Literal_Section   : constant not null Section_Access :=
+                    new Section'
+                      (Kind             => Enumeration_Literal,
+                       Name             =>
+                         To_Virtual_String
+                           (Text (Literal_Name_Node.Token_Start)),
+                       Symbol           =>
+                         To_Virtual_String
+                           ((if Literal_Name_Node.Kind = Ada_Char_Literal
+                              then To_Unbounded_Text
+                                     (Text (Literal_Name_Node.Token_Start))
+                              else Literal_Name_Node.P_Canonical_Text)),
+                       --  LAL: P_Canonical_Text do case conversion which
+                       --  makes lowercase and uppercase character literals
+                       --  undistingushable.
+                       Exact_Start_Line => Location.Start_Line,
+                       Exact_End_Line   => Location.End_Line,
+                       Group_Start_Line => Location.End_Line + 1,
+                       others => <>);
+
+               begin
+                  Result.Sections.Append (Literal_Section);
+
+                  if Last_Section /= null then
+                     Last_Section.Group_End_Line := Location.Start_Line - 1;
+                  end if;
+
+                  --  Remember last section and its minimum indentation level.
+
+                  Last_Section   := Literal_Section;
+                  Minimum_Indent := Location.Start_Column;
+               end;
+            end loop;
+
+            Fill_Structured_Comment
+              (Decl_Node          => Node,
+               Advanced_Groups    => False,
+               Last_Section       => Last_Section,
+               Minimum_Indent     => Minimum_Indent,
+               Documentation      => Result.all,
+               Leading_Section    => Leading_Section,
+               Trailing_Section   => Trailing_Section);
+
+            Fill_Code_Snippet (Node, Result.all);
+
+            Remove_Comment_Start_And_Indentation (Result.all);
+
+            declare
+               Raw_Section : Section_Access;
+
+            begin
+               --  Select most appropriate section depending from the style and
+               --  fallback.
+
+               case Options.Style is
+                  when GNAT =>
+                     if not Trailing_Section.Text.Is_Empty then
+                        Raw_Section := Trailing_Section;
+
+                     elsif Options.Fallback
+                       and not Leading_Section.Text.Is_Empty
+                     then
+                        Raw_Section := Leading_Section;
+                     end if;
+
+                  when Leading =>
+                     if not Leading_Section.Text.Is_Empty then
+                        Raw_Section := Leading_Section;
+
+                     elsif Options.Fallback
+                       and not Trailing_Section.Text.Is_Empty
+                     then
+                        Raw_Section := Trailing_Section;
+                     end if;
+               end case;
+
+               Parse_Raw_Section
+                 (Raw_Section,
+                  (Enum_Tag => True, others => False),
+                  Result.all);
+            end;
+         end return;
+      end;
+   end Extract_Type;
 
    --------------------------------------
    -- Extract_Subprogram_Documentation --
@@ -416,8 +531,7 @@ package body GNATdoc.Comments.Extractor is
                              Text             => <>,
                              Exact_Start_Line => Location.Start_Line,
                              Exact_End_Line   => Location.End_Line,
-                             Group_Start_Line => 0,
-                             Group_End_Line   => 0);
+                             others           => <>);
 
                      begin
                         Result.Sections.Append (Parameter_Section);
@@ -463,8 +577,7 @@ package body GNATdoc.Comments.Extractor is
                     Text             => <>,
                     Exact_Start_Line => Location.Start_Line,
                     Exact_End_Line   => Location.End_Line,
-                    Group_Start_Line => 0,
-                    Group_End_Line   => 0);
+                    others           => <>);
                Token           : Token_Reference := Returns_Node.Token_Start;
 
             begin
@@ -696,7 +809,8 @@ package body GNATdoc.Comments.Extractor is
 
             if Kind (Data (Token)) = Ada_Comment then
                for Section of Documentation.Sections loop
-                  if Section.Kind in Raw | Parameter | Returns
+                  if Section.Kind
+                       in Raw | Parameter | Returns | Enumeration_Literal
                     and then
                       (Location.Start_Line
                          in Section.Exact_Start_Line
@@ -831,11 +945,12 @@ package body GNATdoc.Comments.Extractor is
       Tag_Matcher       : constant Regular_Expression :=
         To_Regular_Expression
           (Ada_Optional_Separator_Expression
-           & "@(param|return|exception)"
+           & "@(param|return|exception|enum)"
            & Ada_Optional_Separator_Expression);
       Parameter_Matcher : constant Regular_Expression :=
         To_Regular_Expression
-          ("(" & Ada_Identifier_Expression & ")"
+          ("((?:" & Ada_Identifier_Expression
+           & "|" & Ada_Character_Literal_Expression & "))"
            & Ada_Optional_Separator_Expression);
 
       Match             : Regular_Expression_Match;
@@ -883,6 +998,10 @@ package body GNATdoc.Comments.Extractor is
                Tag  := Exception_Tag;
                Kind := Raised_Exception;
 
+            elsif Match.Captured (1) = "enum" then
+               Tag  := Enum_Tag;
+               Kind := Enumeration_Literal;
+
             else
                raise Program_Error;
             end if;
@@ -893,7 +1012,7 @@ package body GNATdoc.Comments.Extractor is
 
             Line_Tail := Line.Tail_After (Match.Last_Marker);
 
-            if Kind in Parameter | Raised_Exception then
+            if Kind in Parameter | Raised_Exception | Enumeration_Literal then
                --  Lookup for name of the parameter/exception. Convert
                --  found name to canonical form.
 
@@ -907,9 +1026,15 @@ package body GNATdoc.Comments.Extractor is
                end if;
 
                Name := Match.Captured (1);
+
+               --  Compute symbol name. For character literals it is equal to
+               --  name, for identifiers it is canonicalized name.
+
                Symbol :=
-                 To_Virtual_String
-                   (Fold_Case (To_Wide_Wide_String (Name)).Symbol);
+                 (if Name.Starts_With ("'")
+                  then Name
+                  else To_Virtual_String
+                    (Fold_Case (To_Wide_Wide_String (Name)).Symbol));
 
                Line_Tail := Line_Tail.Tail_After (Match.Last_Marker);
 
