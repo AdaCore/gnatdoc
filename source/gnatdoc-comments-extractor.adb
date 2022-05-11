@@ -190,109 +190,105 @@ package body GNATdoc.Comments.Extractor is
      (Node    : Libadalang.Analysis.Type_Decl'Class;
       Options : Extractor_Options) return not null Structured_Comment_Access
    is
-      Type_Def_Node  : constant Type_Def'Class := Node.F_Type_Def;
-      Last_Section   : Section_Access;
-      Minimum_Indent : Column_Number           := 0;
+      Type_Def_Node    : constant Type_Def'Class := Node.F_Type_Def;
+      Enum_Node        : constant Enum_Type_Def'Class :=
+        Type_Def_Node.As_Enum_Type_Def;
+      Last_Section     : Section_Access;
+      Minimum_Indent   : Column_Number           := 0;
+      Leading_Section  : Section_Access;
+      Trailing_Section : Section_Access;
 
    begin
-      declare
-         Enum_Node        : constant Enum_Type_Def :=
-           Type_Def_Node.As_Enum_Type_Def;
-         Leading_Section  : Section_Access;
-         Trailing_Section : Section_Access;
-
-      begin
-         return Result : constant not null Structured_Comment_Access :=
-           new Structured_Comment
-         do
-            for Literal of Enum_Node.F_Enum_Literals loop
-               declare
-                  Literal_Name_Node : constant Name := Literal.F_Name.F_Name;
-                  Location          : constant Source_Location_Range :=
-                    Literal.Sloc_Range;
-                  Literal_Section   : constant not null Section_Access :=
-                    new Section'
-                      (Kind             => Enumeration_Literal,
-                       Name             =>
-                         To_Virtual_String
-                           (Text (Literal_Name_Node.Token_Start)),
-                       Symbol           =>
-                         To_Virtual_String
-                           ((if Literal_Name_Node.Kind = Ada_Char_Literal
-                              then To_Unbounded_Text
-                                     (Text (Literal_Name_Node.Token_Start))
-                              else Literal_Name_Node.P_Canonical_Text)),
-                       --  LAL: P_Canonical_Text do case conversion which
-                       --  makes lowercase and uppercase character literals
-                       --  undistingushable.
-                       Exact_Start_Line => Location.Start_Line,
-                       Exact_End_Line   => Location.End_Line,
-                       Group_Start_Line => Location.End_Line + 1,
-                       others => <>);
-
-               begin
-                  Result.Sections.Append (Literal_Section);
-
-                  if Last_Section /= null then
-                     Last_Section.Group_End_Line := Location.Start_Line - 1;
-                  end if;
-
-                  --  Remember last section and its minimum indentation level.
-
-                  Last_Section   := Literal_Section;
-                  Minimum_Indent := Location.Start_Column;
-               end;
-            end loop;
-
-            Fill_Structured_Comment
-              (Decl_Node          => Node,
-               Advanced_Groups    => False,
-               Last_Section       => Last_Section,
-               Minimum_Indent     => Minimum_Indent,
-               Documentation      => Result.all,
-               Leading_Section    => Leading_Section,
-               Trailing_Section   => Trailing_Section);
-
-            Fill_Code_Snippet (Node, Result.all);
-
-            Remove_Comment_Start_And_Indentation (Result.all);
-
+      return Result : constant not null Structured_Comment_Access :=
+        new Structured_Comment
+      do
+         for Literal of Enum_Node.F_Enum_Literals loop
             declare
-               Raw_Section : Section_Access;
+               Literal_Name_Node : constant Name := Literal.F_Name.F_Name;
+               Location          : constant Source_Location_Range :=
+                 Literal.Sloc_Range;
+               Literal_Section   : constant not null Section_Access :=
+                 new Section'
+                   (Kind             => Enumeration_Literal,
+                    Name             =>
+                      To_Virtual_String
+                        (Text (Literal_Name_Node.Token_Start)),
+                    Symbol           =>
+                      To_Virtual_String
+                        ((if Literal_Name_Node.Kind = Ada_Char_Literal
+                         then To_Unbounded_Text
+                           (Text (Literal_Name_Node.Token_Start))
+                         else Literal_Name_Node.P_Canonical_Text)),
+                    --  LAL: P_Canonical_Text do case conversion which
+                    --  makes lowercase and uppercase character literals
+                    --  undistingushable.
+                    Exact_Start_Line => Location.Start_Line,
+                    Exact_End_Line   => Location.End_Line,
+                    Group_Start_Line => Location.End_Line + 1,
+                    others           => <>);
 
             begin
-               --  Select most appropriate section depending from the style and
-               --  fallback.
+               Result.Sections.Append (Literal_Section);
 
-               case Options.Style is
-                  when GNAT =>
-                     if not Trailing_Section.Text.Is_Empty then
-                        Raw_Section := Trailing_Section;
+               if Last_Section /= null then
+                  Last_Section.Group_End_Line := Location.Start_Line - 1;
+               end if;
 
-                     elsif Options.Fallback
-                       and not Leading_Section.Text.Is_Empty
-                     then
-                        Raw_Section := Leading_Section;
-                     end if;
+               --  Remember last section and its minimum indentation level.
 
-                  when Leading =>
-                     if not Leading_Section.Text.Is_Empty then
-                        Raw_Section := Leading_Section;
-
-                     elsif Options.Fallback
-                       and not Trailing_Section.Text.Is_Empty
-                     then
-                        Raw_Section := Trailing_Section;
-                     end if;
-               end case;
-
-               Parse_Raw_Section
-                 (Raw_Section,
-                  (Enum_Tag => True, others => False),
-                  Result.all);
+               Last_Section   := Literal_Section;
+               Minimum_Indent := Location.Start_Column;
             end;
-         end return;
-      end;
+         end loop;
+
+         Fill_Structured_Comment
+           (Decl_Node          => Node,
+            Advanced_Groups    => False,
+            Last_Section       => Last_Section,
+            Minimum_Indent     => Minimum_Indent,
+            Documentation      => Result.all,
+            Leading_Section    => Leading_Section,
+            Trailing_Section   => Trailing_Section);
+
+         Fill_Code_Snippet (Node, Result.all);
+
+         Remove_Comment_Start_And_Indentation (Result.all);
+
+         declare
+            Raw_Section : Section_Access;
+
+         begin
+            --  Select most appropriate section depending from the style and
+            --  fallback.
+
+            case Options.Style is
+               when GNAT =>
+                  if not Trailing_Section.Text.Is_Empty then
+                     Raw_Section := Trailing_Section;
+
+                  elsif Options.Fallback
+                    and not Leading_Section.Text.Is_Empty
+                  then
+                     Raw_Section := Leading_Section;
+                  end if;
+
+               when Leading =>
+                  if not Leading_Section.Text.Is_Empty then
+                     Raw_Section := Leading_Section;
+
+                  elsif Options.Fallback
+                    and not Trailing_Section.Text.Is_Empty
+                  then
+                     Raw_Section := Trailing_Section;
+                  end if;
+            end case;
+
+            Parse_Raw_Section
+              (Raw_Section,
+               (Enum_Tag => True, others => False),
+               Result.all);
+         end;
+      end return;
    end Extract_Enumeration_Type_Documentation;
 
    --------------------------------------
