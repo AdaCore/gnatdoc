@@ -62,6 +62,7 @@ private
 
    procedure Process_Defining_Name
      (Self : in out Abstract_Components_Builder'Class;
+      Kind : GNATdoc.Comments.Section_Kind;
       Node : Libadalang.Analysis.Defining_Name'Class);
 
 end GNATdoc.Comments.Builders;

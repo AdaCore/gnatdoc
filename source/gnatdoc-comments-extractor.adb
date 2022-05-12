@@ -28,6 +28,7 @@ with VSS.Strings;                     use VSS.Strings;
 with VSS.Strings.Character_Iterators; use VSS.Strings.Character_Iterators;
 with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
 
+with GNATdoc.Comments.Builders.Enumerations;
 with GNATdoc.Comments.Builders.Subprograms;
 
 package body GNATdoc.Comments.Extractor is
@@ -192,60 +193,31 @@ package body GNATdoc.Comments.Extractor is
      (Node    : Libadalang.Analysis.Type_Decl'Class;
       Options : Extractor_Options) return not null Structured_Comment_Access
    is
-      Type_Def_Node    : constant Type_Def'Class := Node.F_Type_Def;
-      Enum_Node        : constant Enum_Type_Def'Class :=
-        Type_Def_Node.As_Enum_Type_Def;
-      Last_Section     : Section_Access;
-      Minimum_Indent   : Column_Number           := 0;
-      Leading_Section  : Section_Access;
-      Trailing_Section : Section_Access;
+      Enum_Node         : constant Enum_Type_Def'Class :=
+        Node.F_Type_Def.As_Enum_Type_Def;
+      Advanced_Groups   : Boolean;
+      Last_Section      : Section_Access;
+      Minimum_Indent    : Column_Number;
+      Leading_Section   : Section_Access;
+      Trailing_Section  : Section_Access;
+      Component_Builder :
+        GNATdoc.Comments.Builders.Enumerations.Enumeration_Components_Builder;
 
    begin
       return Result : constant not null Structured_Comment_Access :=
         new Structured_Comment
       do
-         for Literal of Enum_Node.F_Enum_Literals loop
-            declare
-               Literal_Name_Node : constant Name := Literal.F_Name.F_Name;
-               Location          : constant Source_Location_Range :=
-                 Literal.Sloc_Range;
-               Literal_Section   : constant not null Section_Access :=
-                 new Section'
-                   (Kind             => Enumeration_Literal,
-                    Name             =>
-                      To_Virtual_String
-                        (Text (Literal_Name_Node.Token_Start)),
-                    Symbol           =>
-                      To_Virtual_String
-                        ((if Literal_Name_Node.Kind = Ada_Char_Literal
-                         then To_Unbounded_Text
-                           (Text (Literal_Name_Node.Token_Start))
-                         else Literal_Name_Node.P_Canonical_Text)),
-                    --  LAL: P_Canonical_Text do case conversion which
-                    --  makes lowercase and uppercase character literals
-                    --  undistingushable.
-                    Exact_Start_Line => Location.Start_Line,
-                    Exact_End_Line   => Location.End_Line,
-                    Group_Start_Line => Location.End_Line + 1,
-                    others           => <>);
-
-            begin
-               Result.Sections.Append (Literal_Section);
-
-               if Last_Section /= null then
-                  Last_Section.Group_End_Line := Location.Start_Line - 1;
-               end if;
-
-               --  Remember last section and its minimum indentation level.
-
-               Last_Section   := Literal_Section;
-               Minimum_Indent := Location.Start_Column;
-            end;
-         end loop;
+         Component_Builder.Build
+           (Result,
+            Options,
+            Enum_Node,
+            Advanced_Groups,
+            Last_Section,
+            Minimum_Indent);
 
          Fill_Structured_Comment
            (Decl_Node          => Node,
-            Advanced_Groups    => False,
+            Advanced_Groups    => Advanced_Groups,
             Last_Section       => Last_Section,
             Minimum_Indent     => Minimum_Indent,
             Documentation      => Result.all,

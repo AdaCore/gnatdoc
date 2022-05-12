@@ -59,7 +59,7 @@ package body GNATdoc.Comments.Builders.Subprograms is
             Self.Process_Component_Declaration (Parameter_Specification);
 
             for Name of Parameter_Specification.F_Ids loop
-               Self.Process_Defining_Name (Name);
+               Self.Process_Defining_Name (Parameter, Name);
             end loop;
          end loop;
       end if;
