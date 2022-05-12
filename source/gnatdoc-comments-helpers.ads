@@ -69,4 +69,14 @@ package GNATdoc.Comments.Helpers is
    --
    --  Convenience function for ALS.
 
+   function Get_Record_Type_Description
+     (Self       : Structured_Comment'Class;
+      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
+      return VSS.Strings.Virtual_String;
+   --  Return text of the description record type as single string using given
+   --  line terminator. Text includes description of the record type, and
+   --  description of the discriminants and members.
+   --
+   --  Convenience function for ALS.
+
 end GNATdoc.Comments.Helpers;

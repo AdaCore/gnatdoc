@@ -105,6 +105,47 @@ package body GNATdoc.Comments.Helpers is
       return Text.Join_Lines (Terminator, False);
    end Get_Enumeration_Type_Description;
 
+   ---------------------------------
+   -- Get_Record_Type_Description --
+   ---------------------------------
+
+   function Get_Record_Type_Description
+     (Self       : Structured_Comment'Class;
+      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
+      return VSS.Strings.Virtual_String
+   is
+      Text          : VSS.String_Vectors.Virtual_String_Vector;
+      First_Literal : Boolean := True;
+
+   begin
+      if Self.Has_Documentation then
+         for Section of Self.Sections loop
+            if Section.Kind = Description then
+               Text := Section.Text;
+            end if;
+         end loop;
+
+         --  Append members
+
+         for Section of Self.Sections loop
+            if Section.Kind = Member then
+               if First_Literal then
+                  Text.Append (Empty_Virtual_String);
+                  First_Literal := False;
+               end if;
+
+               Text.Append ("@member " & Section.Name);
+
+               for L of Section.Text loop
+                  Text.Append ("  " & L);
+               end loop;
+            end if;
+         end loop;
+      end if;
+
+      return Text.Join_Lines (Terminator, False);
+   end Get_Record_Type_Description;
+
    --------------------------------
    -- Get_Subprogram_Description --
    --------------------------------
