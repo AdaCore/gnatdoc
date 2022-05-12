@@ -29,11 +29,13 @@ with VSS.Strings.Character_Iterators; use VSS.Strings.Character_Iterators;
 with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Builders.Enumerations;
+with GNATdoc.Comments.Builders.Records;
 with GNATdoc.Comments.Builders.Subprograms;
 
 package body GNATdoc.Comments.Extractor is
 
-   type Section_Tag is (Param_Tag, Return_Tag, Exception_Tag, Enum_Tag);
+   type Section_Tag is
+     (Param_Tag, Return_Tag, Exception_Tag, Enum_Tag, Member_Tag);
 
    type Section_Tag_Flags is array (Section_Tag) of Boolean with Pack;
 
@@ -71,6 +73,13 @@ package body GNATdoc.Comments.Extractor is
      with Pre => Node.Kind = Ada_Type_Decl
                    and then Node.F_Type_Def.Kind = Ada_Enum_Type_Def;
    --  Extract documentation for type declaration.
+
+   function Extract_Record_Type_Documentation
+     (Node    : Libadalang.Analysis.Type_Decl'Class;
+      Options : Extractor_Options) return not null Structured_Comment_Access
+     with Pre => Node.Kind = Ada_Type_Decl
+                   and then Node.F_Type_Def.Kind = Ada_Record_Type_Def;
+   --  Extract documentation for record type declaration.
 
    procedure Fill_Structured_Comment
      (Decl_Node        : Basic_Decl'Class;
@@ -176,9 +185,20 @@ package body GNATdoc.Comments.Extractor is
                  Options        => Options);
 
          when Ada_Type_Decl =>
-            return
-              Extract_Enumeration_Type_Documentation
-                (Node.As_Type_Decl, Options);
+            case Node.As_Type_Decl.F_Type_Def.Kind is
+               when Ada_Enum_Type_Def =>
+                  return
+                    Extract_Enumeration_Type_Documentation
+                      (Node.As_Type_Decl, Options);
+
+               when Ada_Record_Type_Def =>
+                  return
+                    Extract_Record_Type_Documentation
+                      (Node.As_Type_Decl, Options);
+
+               when others =>
+                  raise Program_Error;
+            end case;
 
          when others =>
             raise Program_Error;
@@ -264,6 +284,84 @@ package body GNATdoc.Comments.Extractor is
          end;
       end return;
    end Extract_Enumeration_Type_Documentation;
+
+   ---------------------------------------
+   -- Extract_Record_Type_Documentation --
+   ---------------------------------------
+
+   function Extract_Record_Type_Documentation
+     (Node    : Libadalang.Analysis.Type_Decl'Class;
+      Options : Extractor_Options) return not null Structured_Comment_Access
+   is
+      Advanced_Groups   : Boolean;
+      Last_Section      : Section_Access;
+      Minimum_Indent    : Column_Number;
+      Leading_Section   : Section_Access;
+      Trailing_Section  : Section_Access;
+      Component_Builder :
+        GNATdoc.Comments.Builders.Records.Record_Components_Builder;
+
+   begin
+      return Result : constant not null Structured_Comment_Access :=
+        new Structured_Comment
+      do
+         Component_Builder.Build
+           (Result,
+            Options,
+            Node,
+            Advanced_Groups,
+            Last_Section,
+            Minimum_Indent);
+
+         Fill_Structured_Comment
+           (Decl_Node          => Node,
+            Advanced_Groups    => Advanced_Groups,
+            Last_Section       => Last_Section,
+            Minimum_Indent     => Minimum_Indent,
+            Documentation      => Result.all,
+            Leading_Section    => Leading_Section,
+            Trailing_Section   => Trailing_Section);
+
+         Fill_Code_Snippet (Node, Result.all);
+
+         Remove_Comment_Start_And_Indentation (Result.all);
+
+         declare
+            Raw_Section : Section_Access;
+
+         begin
+            --  Select most appropriate section depending from the style and
+            --  fallback.
+
+            case Options.Style is
+               when GNAT =>
+                  if not Trailing_Section.Text.Is_Empty then
+                     Raw_Section := Trailing_Section;
+
+                  elsif Options.Fallback
+                    and not Leading_Section.Text.Is_Empty
+                  then
+                     Raw_Section := Leading_Section;
+                  end if;
+
+               when Leading =>
+                  if not Leading_Section.Text.Is_Empty then
+                     Raw_Section := Leading_Section;
+
+                  elsif Options.Fallback
+                    and not Trailing_Section.Text.Is_Empty
+                  then
+                     Raw_Section := Trailing_Section;
+                  end if;
+            end case;
+
+            Parse_Raw_Section
+              (Raw_Section,
+               (Member_Tag => True, others => False),
+               Result.all);
+         end;
+      end return;
+   end Extract_Record_Type_Documentation;
 
    --------------------------------------
    -- Extract_Subprogram_Documentation --
@@ -610,7 +708,8 @@ package body GNATdoc.Comments.Extractor is
             if Kind (Data (Token)) = Ada_Comment then
                for Section of Documentation.Sections loop
                   if Section.Kind
-                       in Raw | Parameter | Returns | Enumeration_Literal
+                       in Raw | Enumeration_Literal | Member
+                            | Parameter | Returns
                     and then
                       (Location.Start_Line
                          in Section.Exact_Start_Line
@@ -745,7 +844,7 @@ package body GNATdoc.Comments.Extractor is
       Tag_Matcher       : constant Regular_Expression :=
         To_Regular_Expression
           (Ada_Optional_Separator_Expression
-           & "@(param|return|exception|enum)"
+           & "@(param|return|exception|enum|member)"
            & Ada_Optional_Separator_Expression);
       Parameter_Matcher : constant Regular_Expression :=
         To_Regular_Expression
@@ -802,6 +901,10 @@ package body GNATdoc.Comments.Extractor is
                Tag  := Enum_Tag;
                Kind := Enumeration_Literal;
 
+            elsif Match.Captured (1) = "member" then
+               Tag  := Member_Tag;
+               Kind := Member;
+
             else
                raise Program_Error;
             end if;
@@ -812,7 +915,9 @@ package body GNATdoc.Comments.Extractor is
 
             Line_Tail := Line.Tail_After (Match.Last_Marker);
 
-            if Kind in Parameter | Raised_Exception | Enumeration_Literal then
+            if Kind
+                 in Parameter | Raised_Exception | Enumeration_Literal | Member
+            then
                --  Lookup for name of the parameter/exception. Convert
                --  found name to canonical form.
 
