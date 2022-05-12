@@ -28,6 +28,8 @@ with VSS.Strings;                     use VSS.Strings;
 with VSS.Strings.Character_Iterators; use VSS.Strings.Character_Iterators;
 with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
 
+with GNATdoc.Comments.Builders.Subprograms;
+
 package body GNATdoc.Comments.Extractor is
 
    type Section_Tag is (Param_Tag, Return_Tag, Exception_Tag, Enum_Tag);
@@ -303,11 +305,6 @@ package body GNATdoc.Comments.Extractor is
       Options        : Extractor_Options)
       return not null Structured_Comment_Access
    is
-      Advanced_Groups : Boolean := False;
-
-      function New_Advanced_Group
-        (Parameters : Param_Spec'Class) return Boolean;
-      --  Whether to start new group of parameters.
 
       --------------------------------
       -- Intermediate_Section_Range --
@@ -389,69 +386,20 @@ package body GNATdoc.Comments.Extractor is
          end if;
       end Intermediate_Section_Range;
 
-      ------------------------
-      -- New_Advanced_Group --
-      ------------------------
-
-      function New_Advanced_Group
-        (Parameters : Param_Spec'Class) return Boolean
-      is
-         Token : Token_Reference := Parameters.Token_Start;
-
-      begin
-         if not Advanced_Groups then
-            return True;
-         end if;
-
-         Token := Previous (Token);
-
-         --  Start new advanced group when whitespace contains at least one
-         --  blank line
-
-         if Kind (Data (Token)) = Ada_Whitespace then
-            if Line_Count (Text (Token)) > 2 then
-               return True;
-            end if;
-         end if;
-
-         return False;
-      end New_Advanced_Group;
-
-      Params_Node  : constant Params    := Subp_Spec_Node.F_Subp_Params;
-      Returns_Node : constant Type_Expr := Subp_Spec_Node.F_Subp_Returns;
-
-      Previous_Group             : Section_Vectors.Vector;
-      Group_Start_Line           : Line_Number   := 0;
-      Group_End_Line             : Line_Number   := 0;
       Leading_Section            : Section_Access;
       Intermediate_Upper_Section : Section_Access;
       Intermediate_Lower_Section : Section_Access;
       Trailing_Section           : Section_Access;
+      Advanced_Groups            : Boolean;
       Last_Section               : Section_Access;
-      Minimum_Indent             : Column_Number := 0;
+      Minimum_Indent             : Column_Number;
+      Components_Builder         :
+        GNATdoc.Comments.Builders.Subprograms.Subprogram_Components_Builder;
 
    begin
       return Result : constant not null Structured_Comment_Access :=
         new Structured_Comment
       do
-         --  Check whether empty lines are present inside parameter
-         --  declaration block to enable advanced parameter group
-         --  processing in GNAT style.
-
-         if Options.Style = GNAT then
-            if Params_Node /= No_Params then
-               for Token of Params_Node.Token_Range loop
-                  if Kind (Data (Token)) = Ada_Whitespace then
-                     if Line_Count (Text (Token)) > 2 then
-                        Advanced_Groups := True;
-
-                        exit;
-                     end if;
-                  end if;
-               end loop;
-            end if;
-         end if;
-
          --  Create "raw" section to collect all documentation for subprogram,
          --  exact range is used to fill comments after the end of the
          --  subprogram specification and before the name of the first aspect
@@ -474,8 +422,8 @@ package body GNATdoc.Comments.Extractor is
               others           => <>);
          Intermediate_Section_Range
            (Subp_Spec_Node,
-            Params_Node,
-            Returns_Node,
+            Subp_Spec_Node.F_Subp_Params,
+            Subp_Spec_Node.F_Subp_Returns,
             Expr_Node,
             Aspects_Node,
             Intermediate_Upper_Section.Exact_Start_Line,
@@ -485,142 +433,14 @@ package body GNATdoc.Comments.Extractor is
          Result.Sections.Append (Intermediate_Upper_Section);
          Result.Sections.Append (Intermediate_Lower_Section);
 
-         --  Create sections of structured comment for parameters, compute
-         --  line range to extract comments of each parameter.
+         --  Create sections for parameters and return value.
 
-         if Options.Style = Leading then
-            --  In leading style, additional comment for the first parameter
-            --  started on the next line after subprogram's name.
-
-            Group_Start_Line :=
-              Subp_Spec_Node.F_Subp_Name.Sloc_Range.End_Line + 1;
-         end if;
-
-         if Params_Node /= No_Params then
-            for Parameters_Group of Params_Node.F_Params loop
-               declare
-                  Location : constant
-                    Langkit_Support.Slocs.Source_Location_Range :=
-                      Parameters_Group.Sloc_Range;
-
-               begin
-                  case Options.Style is
-                     when GNAT =>
-                        if Group_Start_Line /= 0
-                          and then New_Advanced_Group (Parameters_Group)
-                        then
-                           Group_End_Line := Location.Start_Line - 1;
-
-                           for Parameter of Previous_Group loop
-                              Parameter.Group_Start_Line := Group_Start_Line;
-                              Parameter.Group_End_Line   := Group_End_Line;
-                           end loop;
-
-                           Previous_Group.Clear;
-                        end if;
-
-                     when Leading =>
-                        --  In leading style, additional comment for the
-                        --  parameter ends on previous line.
-
-                        Group_End_Line :=
-                          Parameters_Group.Sloc_Range.Start_Line - 1;
-                  end case;
-
-                  for Id of Parameters_Group.F_Ids loop
-                     declare
-                        Parameter_Section : constant not null Section_Access :=
-                          new Section'
-                            (Kind             => Parameter,
-                             Name             =>
-                               To_Virtual_String (Text (Id.Token_Start)),
-                             Symbol           =>
-                               To_Virtual_String (Id.F_Name.P_Canonical_Text),
-                             Text             => <>,
-                             Exact_Start_Line => Location.Start_Line,
-                             Exact_End_Line   => Location.End_Line,
-                             others           => <>);
-
-                     begin
-                        Result.Sections.Append (Parameter_Section);
-                        Previous_Group.Append (Parameter_Section);
-
-                        if Options.Style = Leading then
-                           --  In leading style, set range to lookup
-                           --  additional comments for the parameters.
-
-                           Parameter_Section.Group_Start_Line :=
-                             Group_Start_Line;
-                           Parameter_Section.Group_End_Line := Group_End_Line;
-                        end if;
-
-                        --  Remember section of the last parameter and its
-                        --  indentation for extracting of the comment from
-                        --  the last line of the declaration.
-
-                        Last_Section   := Parameter_Section;
-                        Minimum_Indent := Location.Start_Column;
-                     end;
-                  end loop;
-
-                  Group_Start_Line := Location.End_Line + 1;
-                  Group_End_Line   := 0;
-               end;
-            end loop;
-         end if;
-
-         --  Create section of the structured comment for the return value of
-         --  the function.
-
-         if Returns_Node /= No_Type_Expr then
-            declare
-               Location        :
-                 Langkit_Support.Slocs.Source_Location_Range :=
-                   Returns_Node.Sloc_Range;
-               Returns_Section : constant not null Section_Access :=
-                 new Section'
-                   (Kind             => Returns,
-                    Name             => <>,
-                    Symbol           => <>,
-                    Text             => <>,
-                    Exact_Start_Line => Location.Start_Line,
-                    Exact_End_Line   => Location.End_Line,
-                    others           => <>);
-               Token           : Token_Reference := Returns_Node.Token_Start;
-
-            begin
-               --  "return" keyword may be located at previous line, include
-               --  this line into the exact range of the return value
-
-               while Token /= No_Token loop
-                  if Kind (Data (Token)) = Ada_Return then
-                     Location := Sloc_Range (Data (Token));
-                     Returns_Section.Exact_Start_Line := Location.Start_Line;
-                     Minimum_Indent := Location.Start_Column;
-
-                     exit;
-                  end if;
-
-                  Token := Previous (Token);
-               end loop;
-
-               if Options.Style = Leading then
-                  --  In leading style, set attitional range to lookup
-                  --  comments.
-
-                  Returns_Section.Group_Start_Line := Group_Start_Line;
-                  Returns_Section.Group_End_Line :=
-                    Returns_Section.Exact_Start_Line - 1;
-               end if;
-
-               Result.Sections.Append (Returns_Section);
-
-               --  Remember section of the return statement for extracting of
-               --  the comment from the last line of the declaration.
-
-               Last_Section   := Returns_Section;
-            end;
-         end if;
+         Components_Builder.Build
+           (Result, Options,
+            Subp_Spec_Node,
+            Advanced_Groups,
+            Last_Section,
+            Minimum_Indent);
 
          --  Parse comments inside the subprogram declaration and fill
          --  text of raw, parameters and returns sections.
