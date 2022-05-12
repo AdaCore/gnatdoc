@@ -669,6 +669,14 @@ package body GNATdoc.Comments.Extractor is
                end;
             end if;
          end loop;
+
+         --  Remove all empty lines
+
+         for Index in reverse 1 .. Text.Length loop
+            if Text (Index).Is_Empty then
+               Text.Delete (Index);
+            end if;
+         end loop;
       end;
 
       Snippet_Section :=
