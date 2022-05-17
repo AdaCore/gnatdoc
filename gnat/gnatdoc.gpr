@@ -16,6 +16,8 @@
 ------------------------------------------------------------------------------
 
 with "libgnatdoc";
+with "gpr2";
+with "gpr_unit_provider";
 
 project GNATdoc is
 

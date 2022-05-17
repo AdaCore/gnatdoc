@@ -17,16 +17,14 @@
 
 with Libadalang.Analysis;
 
-with VSS.Application;
+with VSS.Strings;
 
-with GNATdoc.Projects;
+package GNATdoc.Projects is
 
-procedure GNATdoc.Driver is
+   procedure Initialize (File_Name : VSS.Strings.Virtual_String);
 
-   procedure Process
-     (Unit : Libadalang.Analysis.Compilation_Unit'Class) is null;
+   procedure Process_Compilation_Units
+     (Handler : not null access procedure
+        (Node : Libadalang.Analysis.Compilation_Unit'Class));
 
-begin
-   GNATdoc.Projects.Initialize (VSS.Application.Arguments.Element (1));
-   GNATdoc.Projects.Process_Compilation_Units (Process'Access);
-end GNATdoc.Driver;
+end GNATdoc.Projects;
