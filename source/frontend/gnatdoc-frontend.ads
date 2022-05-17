@@ -15,14 +15,11 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.Application;
+with Libadalang.Analysis;
 
-with GNATdoc.Frontend;
-with GNATdoc.Projects;
+package GNATdoc.Frontend is
 
-procedure GNATdoc.Driver is
-begin
-   GNATdoc.Projects.Initialize (VSS.Application.Arguments.Element (1));
-   GNATdoc.Projects.Process_Compilation_Units
-     (GNATdoc.Frontend.Process_Compilation_Unit'Access);
-end GNATdoc.Driver;
+   procedure Process_Compilation_Unit
+     (Unit : Libadalang.Analysis.Compilation_Unit'Class);
+
+end GNATdoc.Frontend;

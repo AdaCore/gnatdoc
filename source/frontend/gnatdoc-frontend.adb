@@ -15,14 +15,37 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.Application;
+with Ada.Text_IO;
 
-with GNATdoc.Frontend;
-with GNATdoc.Projects;
+with Libadalang.Common;
 
-procedure GNATdoc.Driver is
-begin
-   GNATdoc.Projects.Initialize (VSS.Application.Arguments.Element (1));
-   GNATdoc.Projects.Process_Compilation_Units
-     (GNATdoc.Frontend.Process_Compilation_Unit'Access);
-end GNATdoc.Driver;
+package body GNATdoc.Frontend is
+
+   use Libadalang.Analysis;
+   use Libadalang.Common;
+
+   ------------------------------
+   -- Process_Compilation_Unit --
+   ------------------------------
+
+   procedure Process_Compilation_Unit
+     (Unit : Libadalang.Analysis.Compilation_Unit'Class)
+   is
+      function Process_Node (Node : Ada_Node'Class) return Visit_Status;
+
+      ------------------
+      -- Process_Node --
+      ------------------
+
+      function Process_Node (Node : Ada_Node'Class) return Visit_Status is
+      begin
+         Ada.Text_IO.Put_Line (Image (Node));
+
+         return Over;
+      end Process_Node;
+
+   begin
+      Unit.Traverse (Process_Node'Access);
+   end Process_Compilation_Unit;
+
+end GNATdoc.Frontend;
