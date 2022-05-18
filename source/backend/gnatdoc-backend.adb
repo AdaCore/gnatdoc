@@ -15,16 +15,15 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.Application;
+package body GNATdoc.Backend is
 
-with GNATdoc.Backend;
-with GNATdoc.Frontend;
-with GNATdoc.Projects;
+   --------------
+   -- Generate --
+   --------------
 
-procedure GNATdoc.Driver is
-begin
-   GNATdoc.Projects.Initialize (VSS.Application.Arguments.Element (1));
-   GNATdoc.Projects.Process_Compilation_Units
-     (GNATdoc.Frontend.Process_Compilation_Unit'Access);
-   GNATdoc.Backend.Generate;
-end GNATdoc.Driver;
+   procedure Generate is
+   begin
+      null;
+   end Generate;
+
+end GNATdoc.Backend;
