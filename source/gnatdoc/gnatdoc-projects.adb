@@ -77,21 +77,23 @@ package body GNATdoc.Projects is
 
    begin
       for File of Sources loop
-         declare
-            Unit     : Libadalang.Analysis.Analysis_Unit :=
-              LAL_Context.Get_From_File (String (File.Path_Name.Name));
-            Iterator : Libadalang.Iterators.Traverse_Iterator'Class :=
-              Libadalang.Iterators.Find
-                (Unit.Root,
-                 Libadalang.Iterators.Kind_Is
-                   (Libadalang.Common.Ada_Compilation_Unit));
-            Node     : Libadalang.Analysis.Ada_Node;
+         if File.Is_Ada then
+            declare
+               Unit     : Libadalang.Analysis.Analysis_Unit :=
+                 LAL_Context.Get_From_File (String (File.Path_Name.Name));
+               Iterator : Libadalang.Iterators.Traverse_Iterator'Class :=
+                 Libadalang.Iterators.Find
+                   (Unit.Root,
+                    Libadalang.Iterators.Kind_Is
+                      (Libadalang.Common.Ada_Compilation_Unit));
+               Node     : Libadalang.Analysis.Ada_Node;
 
-         begin
-            while Iterator.Next (Node) loop
-               Handler (Node.As_Compilation_Unit);
-            end loop;
-         end;
+            begin
+               while Iterator.Next (Node) loop
+                  Handler (Node.As_Compilation_Unit);
+               end loop;
+            end;
+         end if;
       end loop;
    end Process_Compilation_Units;
 
