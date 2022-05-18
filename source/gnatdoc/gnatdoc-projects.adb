@@ -15,6 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with Ada.Text_IO;
+
 with Libadalang.Common;
 with Libadalang.Iterators;
 with Libadalang.GPR2_Provider;
@@ -37,12 +39,23 @@ package body GNATdoc.Projects is
 
    procedure Initialize (File_Name : VSS.Strings.Virtual_String) is
    begin
-      Project_Tree.Load_Autoconf
-        (GPR2.Path_Name.Create_File
-           (GPR2.Filename_Type
-             (VSS.Strings.Conversions.To_UTF_8_String
-                (File_Name))),
-         Project_Context);
+      begin
+         Project_Tree.Load_Autoconf
+           (GPR2.Path_Name.Create_File
+              (GPR2.Filename_Type
+                   (VSS.Strings.Conversions.To_UTF_8_String
+                        (File_Name))),
+            Project_Context);
+
+      exception
+         when GPR2.Project_Error =>
+            for Message of Project_Tree.Log_Messages.all loop
+               Ada.Text_IO.Put_Line
+                 (Ada.Text_IO.Standard_Error, Message.Format);
+            end loop;
+
+            raise;
+      end;
 
       LAL_Context :=
         Libadalang.Analysis.Create_Context
