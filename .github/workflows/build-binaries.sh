@@ -46,3 +46,5 @@ make -C subprojects/gpr setup prefix=$prefix \
  ${DEBUG:+BUILD=debug} build-lib-static install-lib-static
 
 make
+
+tar cfz gnatdoc-$RUNNER_OS.tar.gz bin share
