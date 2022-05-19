@@ -15,21 +15,33 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with Libadalang.Analysis;
+package body GNATdoc.Entities is
 
-package GNATdoc.Frontend is
+   ---------
+   -- "<" --
+   ---------
 
-   type Frontend_Options is record
-      Generate_Private : Boolean := False;
-      --  Generate documentation for private entities.
+   function "<"
+     (Left  : Entity_Information_Access;
+      Right : Entity_Information_Access) return Boolean
+   is
+      use type VSS.Strings.Virtual_String;
 
-      Generate_Body    : Boolean := False;
-      --  Generate documentation for package bodies.
-   end record;
+   begin
+      return Left.Signature < Right.Signature;
+   end "<";
 
-   Options : Frontend_Options := (others => <>);
+   ------------------
+   -- All_Entities --
+   ------------------
 
-   procedure Process_Compilation_Unit
-     (Unit : Libadalang.Analysis.Compilation_Unit'Class);
+   function All_Entities
+     (Self : Entity_Information) return Entity_Information_Sets.Set is
+   begin
+      return Result : Entity_Information_Sets.Set do
+         Result.Union (Self.Packages);
+         Result.Union (Self.Subprograms);
+      end return;
+   end All_Entities;
 
-end GNATdoc.Frontend;
+end GNATdoc.Entities;
