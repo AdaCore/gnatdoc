@@ -121,32 +121,24 @@ package body GNATdoc.Comments.Builders is
    begin
       Self.Location := Node.Sloc_Range;
 
-      if Self.Next_Start_Line /= 0 then
-         Self.Group_Start_Line := Self.Next_Start_Line;
-         Self.Group_End_Line   := 0;
-      end if;
-
       case Self.Style is
          when GNAT =>
-            if Self.Group_Start_Line /= 0 and then New_Group then
-               Self.Group_End_Line := Self.Location.Start_Line - 1;
-
-               for Item of Self.Previous_Group loop
-                  Item.Group_Start_Line := Self.Group_Start_Line;
-                  Item.Group_End_Line   := Self.Group_End_Line;
-               end loop;
-
-               Self.Previous_Group.Clear;
+            if New_Group then
+               Self.Restart_Component_Group (Self.Location.Start_Line);
             end if;
 
          when Leading =>
             --  In leading style, additional comment for the parameter ends
             --  on previous line.
 
+            if Self.Next_Start_Line /= 0 then
+               Self.Group_Start_Line := Self.Next_Start_Line;
+            end if;
+
             Self.Group_End_Line := Self.Location.Start_Line - 1;
       end case;
 
-      Self.Next_Start_Line := Self.Location.Start_Line + 1;
+      Self.Next_Start_Line := Self.Location.End_Line + 1;
    end Process_Component_Declaration;
 
    ---------------------------
@@ -194,5 +186,33 @@ package body GNATdoc.Comments.Builders is
       Self.Last_Section   := New_Section;
       Self.Minimum_Indent := Self.Location.Start_Column;
    end Process_Defining_Name;
+
+   -----------------------------
+   -- Restart_Component_Group --
+   -----------------------------
+
+   procedure Restart_Component_Group
+     (Self       : in out Abstract_Components_Builder'Class;
+      Start_Line : Langkit_Support.Slocs.Line_Number) is
+   begin
+      case Self.Style is
+         when GNAT =>
+            if Self.Next_Start_Line /= 0 then
+               for Item of Self.Previous_Group loop
+                  Item.Group_Start_Line := Self.Next_Start_Line;
+                  Item.Group_End_Line   := Start_Line - 1;
+               end loop;
+
+               Self.Previous_Group.Clear;
+               Self.Group_Start_Line := 0;
+               Self.Group_End_Line   := 0;
+            end if;
+
+         when Leading =>
+            null;
+      end case;
+
+      Self.Next_Start_Line := 0;
+   end Restart_Component_Group;
 
 end GNATdoc.Comments.Builders;

@@ -44,13 +44,22 @@ package body GNATdoc.Comments.Builders.Records is
       function Process (Node : Ada_Node'Class) return Visit_Status is
       begin
          case Node.Kind is
-            when Ada_Component_List | Ada_Ada_Node_List | Ada_Variant_List =>
+            when Ada_Component_List | Ada_Variant_Part | Ada_Variant =>
+               --  Restart group of components at the beginning of the
+               --   - Ada_Component_List - to complete group of discriminants
+               --   - Ada_Variant_Part - to complete group of components before
+               --     the start of variants
+               --   - Ada_Variant - to complete group of components before
+               --     the start of components of the next alternative
+
+               Self.Restart_Component_Group (Node.Sloc_Range.Start_Line);
+
                return Into;
 
-            when Ada_Variant_Part =>
+            when Ada_Ada_Node_List | Ada_Variant_List =>
                return Into;
 
-            when Ada_Variant | Ada_Alternatives_List | Ada_Others_Designator =>
+            when Ada_Alternatives_List | Ada_Others_Designator =>
                return Into;
 
             when Ada_Null_Component_Decl | Ada_Identifier | Ada_Dotted_Name =>

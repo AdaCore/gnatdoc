@@ -48,6 +48,10 @@ private
       Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
 
       Next_Start_Line  : Langkit_Support.Slocs.Line_Number;
+      --  First line after currently processed component. For GNAT style it is
+      --  used as starting line of the secondary documentation of the
+      --  component. For Leading style it is used as first line of secondary
+      --  documentation for the next component.
    end record;
 
    procedure Initialize
@@ -64,5 +68,9 @@ private
      (Self : in out Abstract_Components_Builder'Class;
       Kind : GNATdoc.Comments.Section_Kind;
       Node : Libadalang.Analysis.Defining_Name'Class);
+
+   procedure Restart_Component_Group
+     (Self       : in out Abstract_Components_Builder'Class;
+      Start_Line : Langkit_Support.Slocs.Line_Number);
 
 end GNATdoc.Comments.Builders;
