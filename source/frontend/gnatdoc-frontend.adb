@@ -39,8 +39,8 @@ package body GNATdoc.Frontend is
      (Node      : Package_Body'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
-   procedure Process_Subp_Decl
-     (Node      : Subp_Decl'Class;
+   procedure Process_Classic_Subp_Decl
+     (Node      : Classic_Subp_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
    procedure Process_Subp_Body
@@ -92,12 +92,13 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Subp_Decl =>
-               Process_Subp_Decl (Node.As_Subp_Decl, Enclosing);
+               Process_Classic_Subp_Decl (Node.As_Subp_Decl, Enclosing);
 
                return Over;
 
             when Ada_Abstract_Subp_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Classic_Subp_Decl
+                 (Node.As_Abstract_Subp_Decl, Enclosing);
 
                return Over;
 
@@ -211,6 +212,32 @@ package body GNATdoc.Frontend is
       end if;
    end Process_Children;
 
+   -------------------------------
+   -- Process_Classic_Subp_Decl --
+   -------------------------------
+
+   procedure Process_Classic_Subp_Decl
+     (Node      : Classic_Subp_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           =>
+             To_Virtual_String (Node.F_Subp_Spec.F_Subp_Name.Text),
+           Qualified_Name =>
+             To_Virtual_String
+               (Node.F_Subp_Spec.F_Subp_Name.P_Fully_Qualified_Name),
+           Signature      =>
+             To_Virtual_String
+               (Node.F_Subp_Spec.F_Subp_Name.P_Unique_Identifying_Name) & "$",
+           Documentation  => Extract (Node, (others => <>)),
+           Packages       => <>,
+           Subprograms    => <>);
+
+   begin
+      Enclosing.Subprograms.Insert (Entity);
+   end Process_Classic_Subp_Decl;
+
    ------------------------------
    -- Process_Compilation_Unit --
    ------------------------------
@@ -247,7 +274,7 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Subp_Decl =>
-               Process_Subp_Decl
+               Process_Classic_Subp_Decl
                  (Node.As_Subp_Decl,
                   GNATdoc.Entities.Global_Entities'Access);
 
@@ -369,31 +396,5 @@ package body GNATdoc.Frontend is
    begin
       Enclosing.Subprograms.Insert (Entity);
    end Process_Subp_Body;
-
-   -----------------------
-   -- Process_Subp_Decl --
-   -----------------------
-
-   procedure Process_Subp_Decl
-     (Node      : Subp_Decl'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
-   is
-      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Name           =>
-             To_Virtual_String (Node.F_Subp_Spec.F_Subp_Name.Text),
-           Qualified_Name =>
-             To_Virtual_String
-               (Node.F_Subp_Spec.F_Subp_Name.P_Fully_Qualified_Name),
-           Signature      =>
-             To_Virtual_String
-               (Node.F_Subp_Spec.F_Subp_Name.P_Unique_Identifying_Name) & "$",
-           Documentation  => Extract (Node, (others => <>)),
-           Packages       => <>,
-           Subprograms    => <>);
-
-   begin
-      Enclosing.Subprograms.Insert (Entity);
-   end Process_Subp_Decl;
 
 end GNATdoc.Frontend;
