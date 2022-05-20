@@ -50,7 +50,7 @@ package body GNATdoc.Comments is
    begin
       for Section of Self.Sections loop
          if Section.Kind
-              in Description | Parameter | Returns | Raised_Exception
+              in Description | Parameter | Returns | Raised_Exception | Member
            and then not Section.Text.Is_Empty
          then
             return True;
