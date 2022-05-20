@@ -83,6 +83,21 @@ package body GNATdoc.Backend is
       Write (File, "<h1>" & To_UTF_8_String (Entity.Qualified_Name) & "</h1>");
       Write (File, "<h2>Entities</h2>");
 
+      if not Entity.Record_Types.Is_Empty then
+         Write (File, "<h3>Record Types</h3>");
+         Write (File, "<ul>");
+
+         for T of Entity.Record_Types loop
+            Write
+              (File,
+               "<li><a href='#"
+               & Digest (To_UTF_8_String (T.Signature)) & "'>"
+               & To_UTF_8_String (T.Name) & "</a></li>");
+         end loop;
+
+         Write (File, "</ul>");
+      end if;
+
       if not Entity.Subprograms.Is_Empty then
          Write (File, "<h3>Subprograms</h3>");
          Write (File, "<ul>");
@@ -97,6 +112,33 @@ package body GNATdoc.Backend is
 
          Write (File, "</ul>");
       end if;
+
+      for T of Entity.Record_Types loop
+         Write
+           (File,
+               "<h4 id='"
+               & Digest (To_UTF_8_String (T.Signature)) & "'>"
+               & To_UTF_8_String (T.Name) & "</h4>");
+
+         if T.Documentation /= null then
+            Write (File, "<pre class='ada-code-snippet'>");
+
+            for Line of Get_Ada_Code_Snippet (T.Documentation.all) loop
+               Write (File, To_UTF_8_String (Line) & ASCII.LF);
+            end loop;
+
+            Write (File, "</pre>");
+
+            Write (File, "<pre>");
+
+            Write
+              (File,
+               To_UTF_8_String
+                 (Get_Record_Type_Description (T.Documentation.all)));
+
+            Write (File, "</pre>");
+         end if;
+      end loop;
 
       for S of Entity.Subprograms loop
          Write

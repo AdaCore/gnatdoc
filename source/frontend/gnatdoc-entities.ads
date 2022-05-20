@@ -47,19 +47,21 @@ package GNATdoc.Entities is
       --  Package_Instantiations
       --  Subprogram_Instantiations
 
+      Record_Types   :  Entity_Information_Sets.Set;
+
       --  Access_Types      : EInfo_List.Vector;
       --  CPP_Classes       : EInfo_List.Vector;
       --  CPP_Constructors  : EInfo_List.Vector;
       --  Generic_Formals   : EInfo_List.Vector;
       --  Interface_Types   : EInfo_List.Vector;
       --  Methods           : EInfo_List.Vector;
-      --  Pkgs              : aliased EInfo_List.Vector;
+      --  Pkgs              : EInfo_List.Vector;
       --  --  Ordinary and generic packages.
       --  Pkgs_Instances    : EInfo_List.Vector;
       --  --  Generic packages instantiations.
-      --  Record_Types      : EInfo_List.Vector;
+      --  Record_Types      : EInfo_List.Vector;  +++
       --  Simple_Types      : EInfo_List.Vector;
-      --  Subprgs           : aliased EInfo_List.Vector;
+      --  Subprgs           : EInfo_List.Vector;
       --  --  Ordinary subprograms.
       --  Subprgs_Instances : EInfo_List.Vector;
       --  --  Generic subprograms instantiations.

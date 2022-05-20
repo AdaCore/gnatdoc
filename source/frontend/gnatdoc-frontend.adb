@@ -47,11 +47,18 @@ package body GNATdoc.Frontend is
      (Node      : Subp_Body'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Record_Type_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Children
      (Parent    : Ada_Node'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
    --  Process children nodes, filter out important nodes, and dispatch to
    --  corresponding documentation extraction and entity creation subprograms.
+
+   Extract_Options : GNATdoc.Comments.Extractor.Extractor_Options :=
+     (GNAT, False);
 
    ----------------------
    -- Process_Children --
@@ -72,7 +79,25 @@ package body GNATdoc.Frontend is
       begin
          case Node.Kind is
             when Ada_Type_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               case Node.As_Type_Decl.F_Type_Def.Kind is
+                  when Ada_Private_Type_Def =>
+                     --  Private_Type_Def nodes are ignored when documentation
+                     --  of declarations in private part are generated.
+
+                     if not Options.Generate_Private then
+                        Ada.Text_IO.Put_Line
+                          (Image (Node) & " => "
+                           & Image (Node.As_Type_Decl.F_Type_Def));
+                     end if;
+
+                  when Ada_Record_Type_Def =>
+                     Process_Record_Type_Def (Node.As_Type_Decl, Enclosing);
+
+                  when others =>
+                     Ada.Text_IO.Put_Line
+                       (Image (Node) & " => "
+                        & Image (Node.As_Type_Decl.F_Type_Def));
+               end case;
 
                return Over;
 
@@ -230,9 +255,10 @@ package body GNATdoc.Frontend is
            Signature      =>
              To_Virtual_String
                (Node.F_Subp_Spec.F_Subp_Name.P_Unique_Identifying_Name) & "$",
-           Documentation  => Extract (Node, (others => <>)),
+           Documentation  => Extract (Node, Extract_Options),
            Packages       => <>,
-           Subprograms    => <>);
+           Subprograms    => <>,
+           Record_Types   => <>);
 
    begin
       Enclosing.Subprograms.Insert (Entity);
@@ -333,7 +359,8 @@ package body GNATdoc.Frontend is
                (Node.F_Package_Name.P_Unique_Identifying_Name) & "$",
            Documentation  => null,
            Packages       => <>,
-           Subprograms    => <>);
+           Subprograms    => <>,
+           Record_Types   => <>);
 
    begin
       Enclosing.Packages.Insert (Entity);
@@ -364,12 +391,39 @@ package body GNATdoc.Frontend is
                (Node.F_Package_Name.P_Unique_Identifying_Name) & "$$",
            Documentation  => null,
            Packages       => <>,
-           Subprograms    => <>);
+           Subprograms    => <>,
+           Record_Types   => <>);
 
    begin
       Enclosing.Packages.Insert (Entity);
       Process_Children (Node.F_Decls, Entity);
    end Process_Package_Body;
+
+   -----------------------------
+   -- Process_Record_Type_Def --
+   -----------------------------
+
+   procedure Process_Record_Type_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Node.F_Name.Text),
+           Qualified_Name =>
+             To_Virtual_String
+               (Node.F_Name.P_Fully_Qualified_Name),
+           Signature      =>
+             To_Virtual_String
+               (Node.F_Name.P_Unique_Identifying_Name),
+           Documentation  => Extract (Node, Extract_Options),
+           Packages       => <>,
+           Subprograms    => <>,
+           Record_Types   => <>);
+
+   begin
+      Enclosing.Record_Types.Insert (Entity);
+   end Process_Record_Type_Def;
 
    -----------------------
    -- Process_Subp_Body --
@@ -391,7 +445,8 @@ package body GNATdoc.Frontend is
                (Node.F_Subp_Spec.F_Subp_Name.P_Unique_Identifying_Name) & "$$",
            Documentation  => null,
            Packages       => <>,
-           Subprograms    => <>);
+           Subprograms    => <>,
+           Record_Types   => <>);
 
    begin
       Enclosing.Subprograms.Insert (Entity);
