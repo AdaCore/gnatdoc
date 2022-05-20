@@ -49,9 +49,6 @@ package body GNATdoc.Comments.Extractor is
    Ada_Optional_Separator_Expression : constant Virtual_String :=
      "[\p{Zs}\p{Cf}]*";
 
-   function Line_Count (Item : Text_Type) return Natural;
-   --  Returns number of lines occupied by given segment of the text.
-
    function Extract_Subprogram_Documentation
      (Decl_Node      : Libadalang.Analysis.Basic_Decl'Class;
       Subp_Spec_Node : Subp_Spec'Class;
@@ -135,18 +132,6 @@ package body GNATdoc.Comments.Extractor is
    --
    --  @param Item Character to be classified
    --  @return Whether given character is Ada's separator or not
-
-   ----------------
-   -- Line_Count --
-   ----------------
-
-   function Line_Count (Item : Text_Type) return Natural is
-      Lines : constant VSS.String_Vectors.Virtual_String_Vector :=
-        To_Virtual_String (Item).Split_Lines (Ada_New_Line_Function);
-
-   begin
-      return Lines.Length;
-   end Line_Count;
 
    -------------
    -- Extract --
@@ -770,7 +755,13 @@ package body GNATdoc.Comments.Extractor is
                     (To_Virtual_String (Text (Token)));
 
                when Ada_Whitespace =>
-                  exit when Line_Count (Text (Token)) > 2;
+                  declare
+                     Location : constant Source_Location_Range :=
+                       Sloc_Range (Data (Token));
+
+                  begin
+                     exit when Location.End_Line - Location.Start_Line > 1;
+                  end;
 
                when others =>
                   exit;
@@ -822,7 +813,13 @@ package body GNATdoc.Comments.Extractor is
                   <<Done>>
 
                when Ada_Whitespace =>
-                  exit when Line_Count (Text (Token)) > 2;
+                  declare
+                     Location : constant Source_Location_Range :=
+                       Sloc_Range (Data (Token));
+
+                  begin
+                     exit when Location.End_Line - Location.Start_Line > 1;
+                  end;
 
                when others =>
                   exit;
