@@ -741,7 +741,7 @@ package body GNATdoc.Comments.Extractor is
       Documentation.Sections.Append (Leading_Section);
 
       declare
-         Token : Token_Reference := Decl_Node.Token_Start;
+         Token   : Token_Reference := Decl_Node.Token_Start;
 
       begin
          loop
@@ -782,10 +782,30 @@ package body GNATdoc.Comments.Extractor is
       Documentation.Sections.Append (Trailing_Section);
 
       declare
-         Token   : Token_Reference := Decl_Node.Token_End;
-         In_Last : Boolean := Last_Section /= null;
+         Current_Node : Ada_Node := Decl_Node.As_Ada_Node;
+         Next_Node    : Ada_Node;
+         Token        : Token_Reference;
+         In_Last      : Boolean := Last_Section /= null;
 
       begin
+         --  Skip till the last sibling not separated from the given
+         --  declaration node by the empty line. It is case of pragmas
+         --  and representation clauses after declaration but before
+         --  documentation comments.
+
+         loop
+            Next_Node := Current_Node.Next_Sibling;
+
+            exit when
+              Next_Node.Is_Null
+                or else Current_Node.Sloc_Range.End_Line
+                          /= Next_Node.Sloc_Range.Start_Line - 1;
+
+            Current_Node := Next_Node;
+         end loop;
+
+         Token := Current_Node.Token_End;
+
          loop
             Token := Next (Token);
 
