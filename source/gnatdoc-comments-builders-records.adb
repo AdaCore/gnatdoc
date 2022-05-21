@@ -15,6 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with Ada.Text_IO; use Ada.Text_IO;
+
 with Libadalang.Common;
 
 package body GNATdoc.Comments.Builders.Records is
@@ -62,7 +64,9 @@ package body GNATdoc.Comments.Builders.Records is
             when Ada_Alternatives_List | Ada_Others_Designator =>
                return Into;
 
-            when Ada_Null_Component_Decl | Ada_Identifier | Ada_Dotted_Name =>
+            when Ada_Null_Component_Decl | Ada_Identifier | Ada_Dotted_Name
+               | Ada_Int_Literal
+               =>
                return Over;
 
             when Ada_Known_Discriminant_Part | Ada_Discriminant_Spec_List =>
@@ -87,6 +91,8 @@ package body GNATdoc.Comments.Builders.Records is
                return Over;
 
             when others =>
+               Put_Line (Image (Node));
+
                raise Program_Error with Ada_Node_Kind_Type'Image (Node.Kind);
          end case;
       end Process;
