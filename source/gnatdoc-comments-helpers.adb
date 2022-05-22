@@ -62,75 +62,6 @@ package body GNATdoc.Comments.Helpers is
       return VSS.String_Vectors.Empty_Virtual_String_Vector;
    end Get_Ada_Code_Snippet;
 
-   -----------------------------------------
-   -- Get_Enumeration_Literal_Description --
-   -----------------------------------------
-
-   function Get_Enumeration_Literal_Description
-     (Self       : Structured_Comment'Class;
-      Symbol     : VSS.Strings.Virtual_String;
-      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
-      return VSS.Strings.Virtual_String
-   is
-      Text : VSS.String_Vectors.Virtual_String_Vector;
-
-   begin
-      for Section of Self.Sections loop
-         if Section.Kind = Enumeration_Literal
-           and Section.Symbol = Symbol
-         then
-            Text.Append ("@enum " & Section.Name);
-
-            for Line of Section.Text loop
-               Text.Append ("  " & Line);
-            end loop;
-         end if;
-      end loop;
-
-      return Text.Join_Lines (Terminator, False);
-   end Get_Enumeration_Literal_Description;
-
-   --------------------------------------
-   -- Get_Enumeration_Type_Description --
-   --------------------------------------
-
-   function Get_Enumeration_Type_Description
-     (Self       : Structured_Comment'Class;
-      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
-      return VSS.Strings.Virtual_String
-   is
-      Text          : VSS.String_Vectors.Virtual_String_Vector;
-      First_Literal : Boolean := True;
-
-   begin
-      if Self.Has_Documentation then
-         for Section of Self.Sections loop
-            if Section.Kind = Description then
-               Text := Section.Text;
-            end if;
-         end loop;
-
-         --  Append enumeration literals
-
-         for Section of Self.Sections loop
-            if Section.Kind = Enumeration_Literal then
-               if First_Literal then
-                  Text.Append (Empty_Virtual_String);
-                  First_Literal := False;
-               end if;
-
-               Text.Append ("@enum " & Section.Name);
-
-               for L of Section.Text loop
-                  Text.Append ("  " & L);
-               end loop;
-            end if;
-         end loop;
-      end if;
-
-      return Text.Join_Lines (Terminator, False);
-   end Get_Enumeration_Type_Description;
-
    --------------------------------
    -- Get_Plain_Text_Description --
    --------------------------------
@@ -178,7 +109,7 @@ package body GNATdoc.Comments.Helpers is
      (Documentation : Structured_Comment)
       return VSS.String_Vectors.Virtual_String_Vector
    is
-      Text          : VSS.String_Vectors.Virtual_String_Vector;
+      Text : VSS.String_Vectors.Virtual_String_Vector;
 
    begin
       if Documentation.Has_Documentation then
@@ -335,28 +266,17 @@ package body GNATdoc.Comments.Helpers is
             and then Decl.As_Type_Decl.F_Type_Def.Kind = Ada_Record_Type_Def)
       then
          Decl_To_Extract := Decl;
-         --  GNATdoc.Comments.Extractor.Extract (Decl, Options, Extracted);
-         --  Documentation := Get_Plain_Text_Description (Extracted);
 
       elsif Decl.Kind = Ada_Param_Spec
         and then Decl.P_Parent_Basic_Decl.Kind in Ada_Subp_Decl
       then
          Decl_To_Extract := Decl.P_Parent_Basic_Decl;
          Name_To_Extract := Name.As_Defining_Name;
-         --  Is_Component := True;
-         --  GNATdoc.Comments.Extractor.Extract
-         --    (Decl.P_Parent_Basic_Decl, Options, Extracted);
-         --  Documentation :=
-         --    Get_Plain_Text_Description (Extracted, Name);
 
       elsif Decl.Kind = Ada_Enum_Literal_Decl then
          Decl_To_Extract :=
            Decl.As_Enum_Literal_Decl.P_Enum_Type.As_Basic_Decl;
          Name_To_Extract := Name.As_Defining_Name;
-         --  GNATdoc.Comments.Extractor.Extract
-         --    (Decl.As_Enum_Literal_Decl.P_Enum_Type, Options, Extracted);
-         --  Documentation :=
-         --    Get_Plain_Text_Description (Extracted, Name);
 
       elsif Decl.Kind in Ada_Discriminant_Spec | Ada_Component_Decl
         and then Decl.P_Parent_Basic_Decl.Kind = Ada_Type_Decl
@@ -365,10 +285,6 @@ package body GNATdoc.Comments.Helpers is
       then
          Decl_To_Extract := Decl.P_Parent_Basic_Decl;
          Name_To_Extract := Name.As_Defining_Name;
-         --  GNATdoc.Comments.Extractor.Extract
-         --    (Decl.P_Parent_Basic_Decl, Options, Extracted);
-         --  Documentation :=
-         --    Get_Plain_Text_Description (Extracted, Name);
       end if;
 
       if not Decl_To_Extract.Is_Null then
@@ -386,34 +302,6 @@ package body GNATdoc.Comments.Helpers is
          Code_Snippet  := Get_Ada_Code_Snippet (Extracted);
       end if;
    end Get_Plain_Text_Documentation;
-
-   -----------------------------------
-   -- Get_Record_Member_Description --
-   -----------------------------------
-
-   function Get_Record_Member_Description
-     (Self       : Structured_Comment'Class;
-      Symbol     : VSS.Strings.Virtual_String;
-      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
-      return VSS.Strings.Virtual_String
-   is
-      Text : VSS.String_Vectors.Virtual_String_Vector;
-
-   begin
-      for Section of Self.Sections loop
-         if Section.Kind = Member
-           and Section.Symbol = Symbol
-         then
-            Text.Append ("@member " & Section.Name);
-
-            for Line of Section.Text loop
-               Text.Append ("  " & Line);
-            end loop;
-         end if;
-      end loop;
-
-      return Text.Join_Lines (Terminator, False);
-   end Get_Record_Member_Description;
 
    ---------------------------------
    -- Get_Record_Type_Description --
@@ -527,31 +415,5 @@ package body GNATdoc.Comments.Helpers is
 
       return Text.Join_Lines (Terminator, False);
    end Get_Subprogram_Description;
-
-   ------------------------------------------
-   -- Get_Subprogram_Parameter_Description --
-   ------------------------------------------
-
-   function Get_Subprogram_Parameter_Description
-     (Self       : Structured_Comment'Class;
-      Symbol     : VSS.Strings.Virtual_String;
-      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
-      return VSS.Strings.Virtual_String
-   is
-      Text : VSS.String_Vectors.Virtual_String_Vector;
-
-   begin
-      for Section of Self.Sections loop
-         if Section.Kind = Parameter and Section.Symbol = Symbol then
-            Text.Append ("@param " & Section.Name);
-
-            for Line of Section.Text loop
-               Text.Append ("  " & Line);
-            end loop;
-         end if;
-      end loop;
-
-      return Text.Join_Lines (Terminator, False);
-   end Get_Subprogram_Parameter_Description;
 
 end GNATdoc.Comments.Helpers;

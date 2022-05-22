@@ -39,8 +39,6 @@ package GNATdoc.Comments.Helpers is
       return VSS.String_Vectors.Virtual_String_Vector;
    --  Return text of the subprogram specification as single string using
    --  given line terminator.
-   --
-   --  Convenience function for ALS.
 
    function Get_Subprogram_Description
      (Self       : Structured_Comment'Class;
@@ -49,39 +47,6 @@ package GNATdoc.Comments.Helpers is
    --  Return text of the description subprogram as single string using given
    --  line terminator. Text includes description of the subprogram,
    --  description of the parameters, return value and raised exceptions.
-   --
-   --  Convenience function for ALS.
-
-   function Get_Subprogram_Parameter_Description
-     (Self       : Structured_Comment'Class;
-      Symbol     : VSS.Strings.Virtual_String;
-      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
-      return VSS.Strings.Virtual_String;
-   --  Return text of the description subprogram as single string using given
-   --  line terminator. Text includes description of the subprogram,
-   --  description of the parameters, return value and raised exceptions.
-   --
-   --  Convenience function for ALS.
-
-   function Get_Enumeration_Type_Description
-     (Self       : Structured_Comment'Class;
-      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
-      return VSS.Strings.Virtual_String;
-   --  Return text of the description of the enumeration type as single string
-   --  using given line terminator. Text includes description of the
-   --  enumeration type, and description of enumeration literals.
-   --
-   --  Convenience function for ALS.
-
-   function Get_Enumeration_Literal_Description
-     (Self       : Structured_Comment'Class;
-      Symbol     : VSS.Strings.Virtual_String;
-      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
-      return VSS.Strings.Virtual_String;
-   --  Return text of the description of enumeration literal as single string
-   --  using given line terminator.
-   --
-   --  Convenience function for ALS.
 
    function Get_Record_Type_Description
      (Self       : Structured_Comment'Class;
@@ -90,17 +55,5 @@ package GNATdoc.Comments.Helpers is
    --  Return text of the description record type as single string using given
    --  line terminator. Text includes description of the record type, and
    --  description of the discriminants and members.
-   --
-   --  Convenience function for ALS.
-
-   function Get_Record_Member_Description
-     (Self       : Structured_Comment'Class;
-      Symbol     : VSS.Strings.Virtual_String;
-      Terminator : VSS.Strings.Line_Terminator := VSS.Strings.LF)
-      return VSS.Strings.Virtual_String;
-   --  Return text of the description of record member (discriminant or
-   --  component) as single string using given line terminator.
-   --
-   --  Convenience function for ALS.
 
 end GNATdoc.Comments.Helpers;
