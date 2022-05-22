@@ -49,13 +49,13 @@ package body GNATdoc.Comments.Extractor is
    Ada_Optional_Separator_Expression : constant Virtual_String :=
      "[\p{Zs}\p{Cf}]*";
 
-   function Extract_Subprogram_Documentation
+   procedure Extract_Subprogram_Documentation
      (Decl_Node      : Libadalang.Analysis.Basic_Decl'Class;
       Subp_Spec_Node : Subp_Spec'Class;
       Expr_Node      : Expr'Class;
       Aspects_Node   : Aspect_Spec'Class;
-      Options        : Extractor_Options)
-      return not null Structured_Comment_Access;
+      Options        : Extractor_Options;
+      Documentation  : out Structured_Comment'Class);
    --  Extracts subprogram's documentation.
    --
    --  @param Decl_Node       Whole declaration
@@ -64,16 +64,18 @@ package body GNATdoc.Comments.Extractor is
    --  @param Aspects_Node    List of aspects
    --  @param Options         Documentataion extraction options
 
-   function Extract_Enumeration_Type_Documentation
-     (Node    : Libadalang.Analysis.Type_Decl'Class;
-      Options : Extractor_Options) return not null Structured_Comment_Access
+   procedure Extract_Enumeration_Type_Documentation
+     (Node          : Libadalang.Analysis.Type_Decl'Class;
+      Options       : Extractor_Options;
+      Documentation : out Structured_Comment'Class)
      with Pre => Node.Kind = Ada_Type_Decl
                    and then Node.F_Type_Def.Kind = Ada_Enum_Type_Def;
    --  Extract documentation for type declaration.
 
-   function Extract_Record_Type_Documentation
-     (Node    : Libadalang.Analysis.Type_Decl'Class;
-      Options : Extractor_Options) return not null Structured_Comment_Access
+   procedure Extract_Record_Type_Documentation
+     (Node          : Libadalang.Analysis.Type_Decl'Class;
+      Options       : Extractor_Options;
+      Documentation : out Structured_Comment'Class)
      with Pre => Node.Kind = Ada_Type_Decl
                    and then Node.F_Type_Def.Kind = Ada_Record_Type_Def;
    --  Extract documentation for record type declaration.
@@ -137,49 +139,48 @@ package body GNATdoc.Comments.Extractor is
    -- Extract --
    -------------
 
-   function Extract
-     (Node    : Libadalang.Analysis.Basic_Decl'Class;
-      Options : Extractor_Options) return not null Structured_Comment_Access is
+   procedure Extract
+     (Node          : Libadalang.Analysis.Basic_Decl'Class;
+      Options       : Extractor_Options;
+      Documentation : out Structured_Comment'Class) is
    begin
       case Node.Kind is
          when Ada_Abstract_Subp_Decl | Ada_Subp_Decl =>
-            return
-              Extract_Subprogram_Documentation
-                (Decl_Node      => Node,
-                 Subp_Spec_Node => Node.As_Classic_Subp_Decl.F_Subp_Spec,
-                 Expr_Node      => No_Expr,
-                 Aspects_Node   => Node.F_Aspects,
-                 Options        => Options);
+            Extract_Subprogram_Documentation
+              (Decl_Node      => Node,
+               Subp_Spec_Node => Node.As_Classic_Subp_Decl.F_Subp_Spec,
+               Expr_Node      => No_Expr,
+               Aspects_Node   => Node.F_Aspects,
+               Options        => Options,
+               Documentation  => Documentation);
 
          when Ada_Expr_Function =>
-            return
-              Extract_Subprogram_Documentation
-                (Decl_Node      => Node,
-                 Subp_Spec_Node => Node.As_Base_Subp_Body.F_Subp_Spec,
-                 Expr_Node      => Node.As_Expr_Function.F_Expr,
-                 Aspects_Node   => Node.F_Aspects,
-                 Options        => Options);
+            Extract_Subprogram_Documentation
+              (Decl_Node      => Node,
+               Subp_Spec_Node => Node.As_Base_Subp_Body.F_Subp_Spec,
+               Expr_Node      => Node.As_Expr_Function.F_Expr,
+               Aspects_Node   => Node.F_Aspects,
+               Options        => Options,
+               Documentation  => Documentation);
 
          when Ada_Null_Subp_Decl =>
-            return
-              Extract_Subprogram_Documentation
-                (Decl_Node      => Node,
-                 Subp_Spec_Node => Node.As_Base_Subp_Body.F_Subp_Spec,
-                 Expr_Node      => No_Expr,
-                 Aspects_Node   => Node.F_Aspects,
-                 Options        => Options);
+            Extract_Subprogram_Documentation
+              (Decl_Node      => Node,
+               Subp_Spec_Node => Node.As_Base_Subp_Body.F_Subp_Spec,
+               Expr_Node      => No_Expr,
+               Aspects_Node   => Node.F_Aspects,
+               Options        => Options,
+               Documentation  => Documentation);
 
          when Ada_Type_Decl =>
             case Node.As_Type_Decl.F_Type_Def.Kind is
                when Ada_Enum_Type_Def =>
-                  return
-                    Extract_Enumeration_Type_Documentation
-                      (Node.As_Type_Decl, Options);
+                  Extract_Enumeration_Type_Documentation
+                    (Node.As_Type_Decl, Options, Documentation);
 
                when Ada_Record_Type_Def =>
-                  return
-                    Extract_Record_Type_Documentation
-                      (Node.As_Type_Decl, Options);
+                  Extract_Record_Type_Documentation
+                    (Node.As_Type_Decl, Options, Documentation);
 
                when others =>
                   raise Program_Error;
@@ -190,13 +191,42 @@ package body GNATdoc.Comments.Extractor is
       end case;
    end Extract;
 
+   -------------
+   -- Extract --
+   -------------
+
+   function Extract
+     (Node    : Libadalang.Analysis.Basic_Decl'Class;
+      Options : Extractor_Options) return not null Structured_Comment_Access is
+   begin
+      return Result : not null Structured_Comment_Access :=
+        new Structured_Comment
+      do
+         Extract (Node, Options, Result.all);
+      end return;
+   end Extract;
+
+   -------------
+   -- Extract --
+   -------------
+
+   function Extract
+     (Node    : Libadalang.Analysis.Basic_Decl'Class;
+      Options : Extractor_Options) return Structured_Comment is
+   begin
+      return Result : Structured_Comment do
+         Extract (Node, Options, Result);
+      end return;
+   end Extract;
+
    --------------------------------------------
    -- Extract_Enumeration_Type_Documentation --
    --------------------------------------------
 
-   function Extract_Enumeration_Type_Documentation
-     (Node    : Libadalang.Analysis.Type_Decl'Class;
-      Options : Extractor_Options) return not null Structured_Comment_Access
+   procedure Extract_Enumeration_Type_Documentation
+     (Node          : Libadalang.Analysis.Type_Decl'Class;
+      Options       : Extractor_Options;
+      Documentation : out Structured_Comment'Class)
    is
       Enum_Node         : constant Enum_Type_Def'Class :=
         Node.F_Type_Def.As_Enum_Type_Def;
@@ -209,74 +239,71 @@ package body GNATdoc.Comments.Extractor is
         GNATdoc.Comments.Builders.Enumerations.Enumeration_Components_Builder;
 
    begin
-      return Result : constant not null Structured_Comment_Access :=
-        new Structured_Comment
-      do
-         Component_Builder.Build
-           (Result,
-            Options,
-            Enum_Node,
-            Advanced_Groups,
-            Last_Section,
-            Minimum_Indent);
+      Component_Builder.Build
+        (Documentation'Unchecked_Access,
+         Options,
+         Enum_Node,
+         Advanced_Groups,
+         Last_Section,
+         Minimum_Indent);
 
-         Fill_Structured_Comment
-           (Decl_Node          => Node,
-            Advanced_Groups    => Advanced_Groups,
-            Last_Section       => Last_Section,
-            Minimum_Indent     => Minimum_Indent,
-            Documentation      => Result.all,
-            Leading_Section    => Leading_Section,
-            Trailing_Section   => Trailing_Section);
+      Fill_Structured_Comment
+        (Decl_Node          => Node,
+         Advanced_Groups    => Advanced_Groups,
+         Last_Section       => Last_Section,
+         Minimum_Indent     => Minimum_Indent,
+         Documentation      => Documentation,
+         Leading_Section    => Leading_Section,
+         Trailing_Section   => Trailing_Section);
 
-         Fill_Code_Snippet (Node, Result.all);
+      Fill_Code_Snippet (Node, Documentation);
 
-         Remove_Comment_Start_And_Indentation (Result.all);
+      Remove_Comment_Start_And_Indentation (Documentation);
 
-         declare
-            Raw_Section : Section_Access;
+      declare
+         Raw_Section : Section_Access;
 
-         begin
-            --  Select most appropriate section depending from the style and
-            --  fallback.
+      begin
+         --  Select most appropriate section depending from the style and
+         --  fallback.
 
-            case Options.Style is
-               when GNAT =>
-                  if not Trailing_Section.Text.Is_Empty then
-                     Raw_Section := Trailing_Section;
+         case Options.Style is
+            when GNAT =>
+               if not Trailing_Section.Text.Is_Empty then
+                  Raw_Section := Trailing_Section;
 
-                  elsif Options.Fallback
-                    and not Leading_Section.Text.Is_Empty
-                  then
-                     Raw_Section := Leading_Section;
-                  end if;
+               elsif Options.Fallback
+                 and not Leading_Section.Text.Is_Empty
+               then
+                  Raw_Section := Leading_Section;
+               end if;
 
-               when Leading =>
-                  if not Leading_Section.Text.Is_Empty then
-                     Raw_Section := Leading_Section;
+            when Leading =>
+               if not Leading_Section.Text.Is_Empty then
+                  Raw_Section := Leading_Section;
 
-                  elsif Options.Fallback
-                    and not Trailing_Section.Text.Is_Empty
-                  then
-                     Raw_Section := Trailing_Section;
-                  end if;
-            end case;
+               elsif Options.Fallback
+                 and not Trailing_Section.Text.Is_Empty
+               then
+                  Raw_Section := Trailing_Section;
+               end if;
+         end case;
 
-            Parse_Raw_Section
-              (Raw_Section,
-               (Enum_Tag => True, others => False),
-               Result.all);
-         end;
-      end return;
+         Parse_Raw_Section
+           (Raw_Section,
+            (Enum_Tag => True, others => False),
+            Documentation);
+      end;
    end Extract_Enumeration_Type_Documentation;
 
    ---------------------------------------
    -- Extract_Record_Type_Documentation --
    ---------------------------------------
 
-   function Extract_Record_Type_Documentation
-     (Node    : Libadalang.Analysis.Type_Decl'Class;
-      Options : Extractor_Options) return not null Structured_Comment_Access
+   procedure Extract_Record_Type_Documentation
+     (Node          : Libadalang.Analysis.Type_Decl'Class;
+      Options       : Extractor_Options;
+      Documentation : out Structured_Comment'Class)
    is
       Advanced_Groups   : Boolean;
       Last_Section      : Section_Access;
@@ -287,78 +314,74 @@ package body GNATdoc.Comments.Extractor is
         GNATdoc.Comments.Builders.Records.Record_Components_Builder;
 
    begin
-      return Result : constant not null Structured_Comment_Access :=
-        new Structured_Comment
-      do
-         Component_Builder.Build
-           (Result,
-            Options,
-            Node,
-            Advanced_Groups,
-            Last_Section,
-            Minimum_Indent);
+      Component_Builder.Build
+        (Documentation'Unchecked_Access,
+         Options,
+         Node,
+         Advanced_Groups,
+         Last_Section,
+         Minimum_Indent);
 
-         Fill_Structured_Comment
-           (Decl_Node          => Node,
-            Advanced_Groups    => Advanced_Groups,
-            Last_Section       => Last_Section,
-            Minimum_Indent     => Minimum_Indent,
-            Documentation      => Result.all,
-            Leading_Section    => Leading_Section,
-            Trailing_Section   => Trailing_Section);
+      Fill_Structured_Comment
+        (Decl_Node          => Node,
+         Advanced_Groups    => Advanced_Groups,
+         Last_Section       => Last_Section,
+         Minimum_Indent     => Minimum_Indent,
+         Documentation      => Documentation,
+         Leading_Section    => Leading_Section,
+         Trailing_Section   => Trailing_Section);
 
-         Fill_Code_Snippet (Node, Result.all);
+      Fill_Code_Snippet (Node, Documentation);
 
-         Remove_Comment_Start_And_Indentation (Result.all);
+      Remove_Comment_Start_And_Indentation (Documentation);
 
-         declare
-            Raw_Section : Section_Access;
+      declare
+         Raw_Section : Section_Access;
 
-         begin
-            --  Select most appropriate section depending from the style and
-            --  fallback.
+      begin
+         --  Select most appropriate section depending from the style and
+         --  fallback.
 
-            case Options.Style is
-               when GNAT =>
-                  if not Trailing_Section.Text.Is_Empty then
-                     Raw_Section := Trailing_Section;
+         case Options.Style is
+            when GNAT =>
+               if not Trailing_Section.Text.Is_Empty then
+                  Raw_Section := Trailing_Section;
 
-                  elsif Options.Fallback
-                    and not Leading_Section.Text.Is_Empty
-                  then
-                     Raw_Section := Leading_Section;
-                  end if;
+               elsif Options.Fallback
+                 and not Leading_Section.Text.Is_Empty
+               then
+                  Raw_Section := Leading_Section;
+               end if;
 
-               when Leading =>
-                  if not Leading_Section.Text.Is_Empty then
-                     Raw_Section := Leading_Section;
+            when Leading =>
+               if not Leading_Section.Text.Is_Empty then
+                  Raw_Section := Leading_Section;
 
-                  elsif Options.Fallback
-                    and not Trailing_Section.Text.Is_Empty
-                  then
-                     Raw_Section := Trailing_Section;
-                  end if;
-            end case;
+               elsif Options.Fallback
+                 and not Trailing_Section.Text.Is_Empty
+               then
+                  Raw_Section := Trailing_Section;
+               end if;
+         end case;
 
-            Parse_Raw_Section
-              (Raw_Section,
-               (Member_Tag => True, others => False),
-               Result.all);
-         end;
-      end return;
+         Parse_Raw_Section
+           (Raw_Section,
+            (Member_Tag => True, others => False),
+            Documentation);
+      end;
    end Extract_Record_Type_Documentation;
 
    --------------------------------------
    -- Extract_Subprogram_Documentation --
    --------------------------------------
 
-   function Extract_Subprogram_Documentation
+   procedure Extract_Subprogram_Documentation
      (Decl_Node      : Libadalang.Analysis.Basic_Decl'Class;
       Subp_Spec_Node : Subp_Spec'Class;
       Expr_Node      : Expr'Class;
       Aspects_Node   : Aspect_Spec'Class;
-      Options        : Extractor_Options)
-      return not null Structured_Comment_Access
+      Options        : Extractor_Options;
+      Documentation  : out Structured_Comment'Class)
    is
 
       --------------------------------
@@ -452,87 +475,105 @@ package body GNATdoc.Comments.Extractor is
         GNATdoc.Comments.Builders.Subprograms.Subprogram_Components_Builder;
 
    begin
-      return Result : constant not null Structured_Comment_Access :=
-        new Structured_Comment
-      do
-         --  Create "raw" section to collect all documentation for subprogram,
-         --  exact range is used to fill comments after the end of the
-         --  subprogram specification and before the name of the first aspect
-         --  association, thus, location of the "when" keyword is not
-         --  significant.
+      --  Create "raw" section to collect all documentation for subprogram,
+      --  exact range is used to fill comments after the end of the
+      --  subprogram specification and before the name of the first aspect
+      --  association, thus, location of the "when" keyword is not
+      --  significant.
 
-         Intermediate_Upper_Section :=
-           new Section'
-             (Kind             => Raw,
-              Symbol           => "<<INTERMEDIATE UPPER>>",
-              Name             => <>,
-              Text             => <>,
-              others           => <>);
-         Intermediate_Lower_Section :=
-           new Section'
-             (Kind             => Raw,
-              Symbol           => "<<INTERMEDIATE LOWER>>",
-              Name             => <>,
-              Text             => <>,
-              others           => <>);
-         Intermediate_Section_Range
-           (Subp_Spec_Node,
-            Subp_Spec_Node.F_Subp_Params,
-            Subp_Spec_Node.F_Subp_Returns,
-            Expr_Node,
-            Aspects_Node,
-            Intermediate_Upper_Section.Exact_Start_Line,
-            Intermediate_Upper_Section.Exact_End_Line,
-            Intermediate_Lower_Section.Exact_Start_Line,
-            Intermediate_Lower_Section.Exact_End_Line);
-         Result.Sections.Append (Intermediate_Upper_Section);
-         Result.Sections.Append (Intermediate_Lower_Section);
+      Intermediate_Upper_Section :=
+        new Section'
+          (Kind   => Raw,
+           Symbol => "<<INTERMEDIATE UPPER>>",
+           Name   => <>,
+           Text   => <>,
+           others => <>);
+      Intermediate_Lower_Section :=
+        new Section'
+          (Kind   => Raw,
+           Symbol => "<<INTERMEDIATE LOWER>>",
+           Name   => <>,
+           Text   => <>,
+           others => <>);
+      Intermediate_Section_Range
+        (Subp_Spec_Node,
+         Subp_Spec_Node.F_Subp_Params,
+         Subp_Spec_Node.F_Subp_Returns,
+         Expr_Node,
+         Aspects_Node,
+         Intermediate_Upper_Section.Exact_Start_Line,
+         Intermediate_Upper_Section.Exact_End_Line,
+         Intermediate_Lower_Section.Exact_Start_Line,
+         Intermediate_Lower_Section.Exact_End_Line);
+      Documentation.Sections.Append (Intermediate_Upper_Section);
+      Documentation.Sections.Append (Intermediate_Lower_Section);
 
-         --  Create sections for parameters and return value.
+      --  Create sections for parameters and return value.
 
-         Components_Builder.Build
-           (Result, Options,
-            Subp_Spec_Node,
-            Advanced_Groups,
-            Last_Section,
-            Minimum_Indent);
+      Components_Builder.Build
+        (Documentation'Unchecked_Access,
+         Options,
+         Subp_Spec_Node,
+         Advanced_Groups,
+         Last_Section,
+         Minimum_Indent);
 
-         --  Parse comments inside the subprogram declaration and fill
-         --  text of raw, parameters and returns sections.
+      --  Parse comments inside the subprogram declaration and fill
+      --  text of raw, parameters and returns sections.
 
-         Fill_Structured_Comment
-           (Decl_Node        => Decl_Node,
-            Advanced_Groups  => Advanced_Groups,
-            Last_Section     => Last_Section,
-            Minimum_Indent   => Minimum_Indent,
-            Documentation    => Result.all,
-            Leading_Section  => Leading_Section,
-            Trailing_Section => Trailing_Section);
+      Fill_Structured_Comment
+        (Decl_Node        => Decl_Node,
+         Advanced_Groups  => Advanced_Groups,
+         Last_Section     => Last_Section,
+         Minimum_Indent   => Minimum_Indent,
+         Documentation    => Documentation,
+         Leading_Section  => Leading_Section,
+         Trailing_Section => Trailing_Section);
 
-         --  Extract code snippet of declaration and remove all comments from
-         --  it.
+      --  Extract code snippet of declaration and remove all comments from
+      --  it.
 
-         Fill_Code_Snippet (Subp_Spec_Node, Result.all);
+      Fill_Code_Snippet (Subp_Spec_Node, Documentation);
 
-         --  Postprocess extracted text, for each group of lines, separated
-         --  by empty line by remove of two minus signs and common leading
-         --  whitespaces
+      --  Postprocess extracted text, for each group of lines, separated
+      --  by empty line by remove of two minus signs and common leading
+      --  whitespaces
 
-         Remove_Comment_Start_And_Indentation (Result.all);
+      Remove_Comment_Start_And_Indentation (Documentation);
 
-         --  Process raw documentation for subprogram, fill sections and create
-         --  description section.
+      --  Process raw documentation for subprogram, fill sections and create
+      --  description section.
 
-         declare
-            Raw_Section : Section_Access;
+      declare
+         Raw_Section : Section_Access;
 
-         begin
-            --  Select most appropriate section depending from the style and
-            --  fallback.
+      begin
+         --  Select most appropriate section depending from the style and
+         --  fallback.
 
-            case Options.Style is
-               when GNAT =>
-                  if not Intermediate_Upper_Section.Text.Is_Empty then
+         case Options.Style is
+            when GNAT =>
+               if not Intermediate_Upper_Section.Text.Is_Empty then
+                  Raw_Section := Intermediate_Upper_Section;
+
+               elsif not Intermediate_Lower_Section.Text.Is_Empty then
+                  Raw_Section := Intermediate_Lower_Section;
+
+               elsif not Trailing_Section.Text.Is_Empty then
+                  Raw_Section := Trailing_Section;
+
+               elsif Options.Fallback
+                 and not Leading_Section.Text.Is_Empty
+               then
+                  Raw_Section := Leading_Section;
+               end if;
+
+            when Leading =>
+               if not Leading_Section.Text.Is_Empty then
+                  Raw_Section := Leading_Section;
+
+               elsif Options.Fallback then
+                  if Intermediate_Upper_Section.Text.Is_Empty then
                      Raw_Section := Intermediate_Upper_Section;
 
                   elsif not Intermediate_Lower_Section.Text.Is_Empty then
@@ -540,37 +581,16 @@ package body GNATdoc.Comments.Extractor is
 
                   elsif not Trailing_Section.Text.Is_Empty then
                      Raw_Section := Trailing_Section;
-
-                  elsif Options.Fallback
-                    and not Leading_Section.Text.Is_Empty
-                  then
-                     Raw_Section := Leading_Section;
                   end if;
+               end if;
+         end case;
 
-               when Leading =>
-                  if not Leading_Section.Text.Is_Empty then
-                     Raw_Section := Leading_Section;
-
-                  elsif Options.Fallback then
-                     if Intermediate_Upper_Section.Text.Is_Empty then
-                        Raw_Section := Intermediate_Upper_Section;
-
-                     elsif not Intermediate_Lower_Section.Text.Is_Empty then
-                        Raw_Section := Intermediate_Lower_Section;
-
-                     elsif not Trailing_Section.Text.Is_Empty then
-                        Raw_Section := Trailing_Section;
-                     end if;
-                  end if;
-            end case;
-
-            Parse_Raw_Section
-              (Raw_Section,
-               (Param_Tag | Return_Tag | Exception_Tag => True,
-                others                                 => False),
-               Result.all);
-         end;
-      end return;
+         Parse_Raw_Section
+           (Raw_Section,
+            (Param_Tag | Return_Tag | Exception_Tag => True,
+             others                                 => False),
+            Documentation);
+      end;
    end Extract_Subprogram_Documentation;
 
    -----------------------

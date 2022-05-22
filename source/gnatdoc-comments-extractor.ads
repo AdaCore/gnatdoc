@@ -51,4 +51,31 @@ package GNATdoc.Comments.Extractor is
                           in Ada_Enum_Type_Def | Ada_Record_Type_Def);
    --  Extract documentation for supported kinds of nodes.
 
+   procedure Extract
+     (Node          : Libadalang.Analysis.Basic_Decl'Class;
+      Options       : Extractor_Options;
+      Documentation : out Structured_Comment'Class)
+     with Pre =>
+       Node.Kind in Ada_Abstract_Subp_Decl
+                      | Ada_Expr_Function
+                      | Ada_Subp_Decl
+                      | Ada_Null_Subp_Decl
+         or (Node.Kind = Ada_Type_Decl
+               and then Node.As_Type_Decl.F_Type_Def.Kind
+                          in Ada_Enum_Type_Def | Ada_Record_Type_Def);
+   --  Extract documentation for supported kinds of nodes.
+
+   function Extract
+     (Node    : Libadalang.Analysis.Basic_Decl'Class;
+      Options : Extractor_Options) return Structured_Comment
+     with Pre =>
+       Node.Kind in Ada_Abstract_Subp_Decl
+                      | Ada_Expr_Function
+                      | Ada_Subp_Decl
+                      | Ada_Null_Subp_Decl
+         or (Node.Kind = Ada_Type_Decl
+               and then Node.As_Type_Decl.F_Type_Def.Kind
+                          in Ada_Enum_Type_Def | Ada_Record_Type_Def);
+   --  Extract documentation for supported kinds of nodes.
+
 end GNATdoc.Comments.Extractor;

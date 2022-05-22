@@ -38,7 +38,7 @@ package GNATdoc.Entities is
       Name           : VSS.Strings.Virtual_String;
       Qualified_Name : VSS.Strings.Virtual_String;
       Signature      : VSS.Strings.Virtual_String;
-      Documentation  : GNATdoc.Comments.Structured_Comment_Access;
+      Documentation  : GNATdoc.Comments.Structured_Comment;
 
       Packages       : Entity_Information_Sets.Set;
       Subprograms    : Entity_Information_Sets.Set;

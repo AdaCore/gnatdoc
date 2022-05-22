@@ -16,6 +16,7 @@
 ------------------------------------------------------------------------------
 
 private with Ada.Containers.Vectors;
+private with Ada.Finalization;
 
 private with Langkit_Support.Slocs;
 
@@ -78,8 +79,11 @@ private
    package Section_Vectors is
      new Ada.Containers.Vectors (Positive, Section_Access);
 
-   type Structured_Comment is tagged limited record
+   type Structured_Comment is
+     new Ada.Finalization.Limited_Controlled with record
       Sections : Section_Vectors.Vector;
    end record;
+
+   overriding procedure Finalize (Self : in out Structured_Comment);
 
 end GNATdoc.Comments;

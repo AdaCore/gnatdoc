@@ -120,10 +120,10 @@ package body GNATdoc.Backend is
                & Digest (To_UTF_8_String (T.Signature)) & "'>"
                & To_UTF_8_String (T.Name) & "</h4>");
 
-         if T.Documentation /= null then
+         if T.Documentation.Has_Documentation then
             Write (File, "<pre class='ada-code-snippet'>");
 
-            for Line of Get_Ada_Code_Snippet (T.Documentation.all) loop
+            for Line of Get_Ada_Code_Snippet (T.Documentation) loop
                Write (File, To_UTF_8_String (Line) & ASCII.LF);
             end loop;
 
@@ -134,7 +134,7 @@ package body GNATdoc.Backend is
             Write
               (File,
                To_UTF_8_String
-                 (Get_Record_Type_Description (T.Documentation.all)));
+                 (Get_Record_Type_Description (T.Documentation)));
 
             Write (File, "</pre>");
          end if;
@@ -147,10 +147,10 @@ package body GNATdoc.Backend is
                & Digest (To_UTF_8_String (S.Signature)) & "'>"
                & To_UTF_8_String (S.Name) & "</h4>");
 
-         if S.Documentation /= null then
+         if S.Documentation.Has_Documentation then
             Write (File, "<pre class='ada-code-snippet'>");
 
-            for Line of Get_Ada_Code_Snippet (S.Documentation.all) loop
+            for Line of Get_Ada_Code_Snippet (S.Documentation) loop
                Write (File, To_UTF_8_String (Line) & ASCII.LF);
             end loop;
 
@@ -161,7 +161,7 @@ package body GNATdoc.Backend is
             Write
               (File,
                To_UTF_8_String
-                 (Get_Subprogram_Description (S.Documentation.all)));
+                 (Get_Subprogram_Description (S.Documentation)));
             --  for Line of Get_Subprogram_Description (S.Documentation.all) loop
                --  Write (File, ASCII.LF & To_UTF_8_String (Line));
             --  end loop;

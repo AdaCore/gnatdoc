@@ -357,7 +357,7 @@ package body GNATdoc.Frontend is
            Signature      =>
              To_Virtual_String
                (Node.F_Package_Name.P_Unique_Identifying_Name) & "$",
-           Documentation  => null,
+           Documentation  => <>,
            Packages       => <>,
            Subprograms    => <>,
            Record_Types   => <>);
@@ -389,7 +389,7 @@ package body GNATdoc.Frontend is
            Signature      =>
              To_Virtual_String
                (Node.F_Package_Name.P_Unique_Identifying_Name) & "$$",
-           Documentation  => null,
+           Documentation  => <>,
            Packages       => <>,
            Subprograms    => <>,
            Record_Types   => <>);
@@ -443,7 +443,7 @@ package body GNATdoc.Frontend is
            Signature      =>
              To_Virtual_String
                (Node.F_Subp_Spec.F_Subp_Name.P_Unique_Identifying_Name) & "$$",
-           Documentation  => null,
+           Documentation  => <>,
            Packages       => <>,
            Subprograms    => <>,
            Record_Types   => <>);
