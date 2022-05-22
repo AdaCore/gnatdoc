@@ -29,13 +29,13 @@ package body GNATdoc.Comments.Builders.Subprograms is
    procedure Build
      (Self            : in out Subprogram_Components_Builder;
       Documentation   : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options         : GNATdoc.Comments.Extractor.Extractor_Options;
+      Options         : GNATdoc.Comments.Options.Extractor_Options;
       Node            : Libadalang.Analysis.Subp_Spec'Class;
       Advanced_Groups : out Boolean;
       Last_Section    : out GNATdoc.Comments.Section_Access;
       Minimum_Indent  : out Langkit_Support.Slocs.Column_Number)
    is
-      use all type GNATdoc.Comments.Extractor.Documentation_Style;
+      use all type GNATdoc.Comments.Options.Documentation_Style;
       use type Langkit_Support.Slocs.Line_Number;
 
       Params_Node  : constant Params    := Node.F_Subp_Params;

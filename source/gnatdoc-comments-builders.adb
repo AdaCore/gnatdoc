@@ -25,7 +25,7 @@ with Libadalang.Common;       use Libadalang.Common;
 
 package body GNATdoc.Comments.Builders is
 
-   use all type GNATdoc.Comments.Extractor.Documentation_Style;
+   use all type GNATdoc.Comments.Options.Documentation_Style;
 
    ----------------
    -- Initialize --
@@ -34,7 +34,7 @@ package body GNATdoc.Comments.Builders is
    procedure Initialize
      (Self          : in out Abstract_Components_Builder'Class;
       Documentation : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options       : GNATdoc.Comments.Extractor.Extractor_Options;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
       Node          : Libadalang.Analysis.Ada_Node'Class) is
    begin
       Self.Style            := Options.Style;

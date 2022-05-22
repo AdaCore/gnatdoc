@@ -25,7 +25,7 @@ package GNATdoc.Comments.Builders.Enumerations is
    procedure Build
      (Self            : in out Enumeration_Components_Builder;
       Documentation   : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options         : GNATdoc.Comments.Extractor.Extractor_Options;
+      Options         : GNATdoc.Comments.Options.Extractor_Options;
       Node            : Libadalang.Analysis.Enum_Type_Def'Class;
       Advanced_Groups : out Boolean;
       Last_Section    : out GNATdoc.Comments.Section_Access;

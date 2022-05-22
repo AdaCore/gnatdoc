@@ -22,11 +22,13 @@ with Libadalang.Common;
 with VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Extractor;
+with GNATdoc.Comments.Options;
 with GNATdoc.Entities;
 
 package body GNATdoc.Frontend is
 
    use GNATdoc.Comments.Extractor;
+   use GNATdoc.Comments.Options;
    use Libadalang.Analysis;
    use Libadalang.Common;
    use VSS.Strings;
@@ -57,7 +59,7 @@ package body GNATdoc.Frontend is
    --  Process children nodes, filter out important nodes, and dispatch to
    --  corresponding documentation extraction and entity creation subprograms.
 
-   Extract_Options : GNATdoc.Comments.Extractor.Extractor_Options :=
+   Extract_Options : GNATdoc.Comments.Options.Extractor_Options :=
      (GNAT, False);
 
    ----------------------

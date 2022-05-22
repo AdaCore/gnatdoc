@@ -18,7 +18,7 @@
 private with Langkit_Support.Slocs;
 private with Libadalang.Analysis;
 
-private with GNATdoc.Comments.Extractor;
+private with GNATdoc.Comments.Options;
 
 private package GNATdoc.Comments.Builders is
 
@@ -30,7 +30,7 @@ private
      new Ada.Containers.Vectors (Positive, Section_Access);
 
    type Abstract_Components_Builder is abstract tagged limited record
-      Style            : GNATdoc.Comments.Extractor.Documentation_Style;
+      Style            : GNATdoc.Comments.Options.Documentation_Style;
 
       Documentation    : GNATdoc.Comments.Structured_Comment_Access;
       --  Documentation to fill.
@@ -57,7 +57,7 @@ private
    procedure Initialize
      (Self          : in out Abstract_Components_Builder'Class;
       Documentation : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options       : GNATdoc.Comments.Extractor.Extractor_Options;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
       Node          : Libadalang.Analysis.Ada_Node'Class);
 
    procedure Process_Component_Declaration

@@ -18,29 +18,16 @@
 with Libadalang.Analysis;
 with Libadalang.Common;
 
+with GNATdoc.Comments.Options;
+
 package GNATdoc.Comments.Extractor is
 
    use all type Libadalang.Common.Ada_Node_Kind_Type;
 
-   type Documentation_Style is
-     (GNAT,      --  Advanced GNAT style of the documentation comments
-      Leading);  --  Simple leading style of the documentation comments
-
-   type Extractor_Options is record
-      Style    : Documentation_Style := GNAT;
-      --  Style of the documentation comments.
-
-      Fallback : Boolean             := False;
-      --  Control wheather to attempt to extract documentation using simple
-      --  "opposite" style (leading comments for GNAT style and trailing
-      --  comments for Leading style).
-      --
-      --  This option is intended to be used by IDE.
-   end record;
-
    function Extract
      (Node    : Libadalang.Analysis.Basic_Decl'Class;
-      Options : Extractor_Options) return not null Structured_Comment_Access
+      Options : GNATdoc.Comments.Options.Extractor_Options)
+      return not null Structured_Comment_Access
      with Pre =>
        Node.Kind in Ada_Abstract_Subp_Decl
                       | Ada_Expr_Function
@@ -53,7 +40,7 @@ package GNATdoc.Comments.Extractor is
 
    procedure Extract
      (Node          : Libadalang.Analysis.Basic_Decl'Class;
-      Options       : Extractor_Options;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class)
      with Pre =>
        Node.Kind in Ada_Abstract_Subp_Decl
@@ -67,7 +54,8 @@ package GNATdoc.Comments.Extractor is
 
    function Extract
      (Node    : Libadalang.Analysis.Basic_Decl'Class;
-      Options : Extractor_Options) return Structured_Comment
+      Options : GNATdoc.Comments.Options.Extractor_Options)
+      return Structured_Comment
      with Pre =>
        Node.Kind in Ada_Abstract_Subp_Decl
                       | Ada_Expr_Function

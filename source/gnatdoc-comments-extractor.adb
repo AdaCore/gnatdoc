@@ -34,6 +34,8 @@ with GNATdoc.Comments.Builders.Subprograms;
 
 package body GNATdoc.Comments.Extractor is
 
+   use all type GNATdoc.Comments.Options.Documentation_Style;
+
    type Section_Tag is
      (Param_Tag, Return_Tag, Exception_Tag, Enum_Tag, Member_Tag);
 
@@ -54,7 +56,7 @@ package body GNATdoc.Comments.Extractor is
       Subp_Spec_Node : Subp_Spec'Class;
       Expr_Node      : Expr'Class;
       Aspects_Node   : Aspect_Spec'Class;
-      Options        : Extractor_Options;
+      Options        : GNATdoc.Comments.Options.Extractor_Options;
       Documentation  : out Structured_Comment'Class);
    --  Extracts subprogram's documentation.
    --
@@ -66,7 +68,7 @@ package body GNATdoc.Comments.Extractor is
 
    procedure Extract_Enumeration_Type_Documentation
      (Node          : Libadalang.Analysis.Type_Decl'Class;
-      Options       : Extractor_Options;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class)
      with Pre => Node.Kind = Ada_Type_Decl
                    and then Node.F_Type_Def.Kind = Ada_Enum_Type_Def;
@@ -74,7 +76,7 @@ package body GNATdoc.Comments.Extractor is
 
    procedure Extract_Record_Type_Documentation
      (Node          : Libadalang.Analysis.Type_Decl'Class;
-      Options       : Extractor_Options;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class)
      with Pre => Node.Kind = Ada_Type_Decl
                    and then Node.F_Type_Def.Kind = Ada_Record_Type_Def;
@@ -141,7 +143,7 @@ package body GNATdoc.Comments.Extractor is
 
    procedure Extract
      (Node          : Libadalang.Analysis.Basic_Decl'Class;
-      Options       : Extractor_Options;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class) is
    begin
       case Node.Kind is
@@ -197,7 +199,8 @@ package body GNATdoc.Comments.Extractor is
 
    function Extract
      (Node    : Libadalang.Analysis.Basic_Decl'Class;
-      Options : Extractor_Options) return not null Structured_Comment_Access is
+      Options : GNATdoc.Comments.Options.Extractor_Options)
+      return not null Structured_Comment_Access is
    begin
       return Result : not null Structured_Comment_Access :=
         new Structured_Comment
@@ -212,7 +215,8 @@ package body GNATdoc.Comments.Extractor is
 
    function Extract
      (Node    : Libadalang.Analysis.Basic_Decl'Class;
-      Options : Extractor_Options) return Structured_Comment is
+      Options : GNATdoc.Comments.Options.Extractor_Options)
+      return Structured_Comment is
    begin
       return Result : Structured_Comment do
          Extract (Node, Options, Result);
@@ -225,7 +229,7 @@ package body GNATdoc.Comments.Extractor is
 
    procedure Extract_Enumeration_Type_Documentation
      (Node          : Libadalang.Analysis.Type_Decl'Class;
-      Options       : Extractor_Options;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class)
    is
       Enum_Node         : constant Enum_Type_Def'Class :=
@@ -302,7 +306,7 @@ package body GNATdoc.Comments.Extractor is
 
    procedure Extract_Record_Type_Documentation
      (Node          : Libadalang.Analysis.Type_Decl'Class;
-      Options       : Extractor_Options;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class)
    is
       Advanced_Groups   : Boolean;
@@ -380,7 +384,7 @@ package body GNATdoc.Comments.Extractor is
       Subp_Spec_Node : Subp_Spec'Class;
       Expr_Node      : Expr'Class;
       Aspects_Node   : Aspect_Spec'Class;
-      Options        : Extractor_Options;
+      Options        : GNATdoc.Comments.Options.Extractor_Options;
       Documentation  : out Structured_Comment'Class)
    is
 

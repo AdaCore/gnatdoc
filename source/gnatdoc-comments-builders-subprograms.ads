@@ -25,7 +25,7 @@ package GNATdoc.Comments.Builders.Subprograms is
    procedure Build
      (Self            : in out Subprogram_Components_Builder;
       Documentation   : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options         : GNATdoc.Comments.Extractor.Extractor_Options;
+      Options         : GNATdoc.Comments.Options.Extractor_Options;
       Node            : Libadalang.Analysis.Subp_Spec'Class;
       Advanced_Groups : out Boolean;
       Last_Section    : out GNATdoc.Comments.Section_Access;

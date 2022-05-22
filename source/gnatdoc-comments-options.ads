@@ -15,25 +15,22 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with Libadalang.Analysis;
+package GNATdoc.Comments.Options is
 
-package GNATdoc.Comments.Builders.Records is
+   type Documentation_Style is
+     (GNAT,      --  Advanced GNAT style of the documentation comments
+      Leading);  --  Simple leading style of the documentation comments
 
-   type Record_Components_Builder is
-     new Abstract_Components_Builder with private;
+   type Extractor_Options is record
+      Style    : Documentation_Style := GNAT;
+      --  Style of the documentation comments.
 
-   procedure Build
-     (Self            : in out Record_Components_Builder;
-      Documentation   : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options         : GNATdoc.Comments.Options.Extractor_Options;
-      Node            : Libadalang.Analysis.Type_Decl'Class;
-      Advanced_Groups : out Boolean;
-      Last_Section    : out GNATdoc.Comments.Section_Access;
-      Minimum_Indent  : out Langkit_Support.Slocs.Column_Number);
+      Fallback : Boolean             := False;
+      --  Control wheather to attempt to extract documentation using simple
+      --  "opposite" style (leading comments for GNAT style and trailing
+      --  comments for Leading style).
+      --
+      --  This option is intended to be used by IDE.
+   end record;
 
-private
-
-   type Record_Components_Builder is
-     new Abstract_Components_Builder with null record;
-
-end GNATdoc.Comments.Builders.Records;
+end GNATdoc.Comments.Options;
