@@ -98,6 +98,36 @@ package body GNATdoc.Backend is
          Write (File, "</ul>");
       end if;
 
+      if not Entity.Constants.Is_Empty then
+         Write (File, "<h3>Constants</h3>");
+         Write (File, "<ul>");
+
+         for T of Entity.Constants loop
+            Write
+              (File,
+               "<li><a href='#"
+               & Digest (To_UTF_8_String (T.Signature)) & "'>"
+               & To_UTF_8_String (T.Name) & "</a></li>");
+         end loop;
+
+         Write (File, "</ul>");
+      end if;
+
+      if not Entity.Variables.Is_Empty then
+         Write (File, "<h3>Variables</h3>");
+         Write (File, "<ul>");
+
+         for T of Entity.Constants loop
+            Write
+              (File,
+               "<li><a href='#"
+               & Digest (To_UTF_8_String (T.Signature)) & "'>"
+               & To_UTF_8_String (T.Name) & "</a></li>");
+         end loop;
+
+         Write (File, "</ul>");
+      end if;
+
       if not Entity.Subprograms.Is_Empty then
          Write (File, "<h3>Subprograms</h3>");
          Write (File, "<ul>");
@@ -135,6 +165,62 @@ package body GNATdoc.Backend is
               (File,
                To_UTF_8_String
                  (Get_Record_Type_Description (T.Documentation)));
+
+            Write (File, "</pre>");
+         end if;
+      end loop;
+
+      for T of Entity.Constants loop
+         Write
+           (File,
+               "<h4 id='"
+               & Digest (To_UTF_8_String (T.Signature)) & "'>"
+               & To_UTF_8_String (T.Name) & "</h4>");
+
+         Write (File, "<pre class='ada-code-snippet'>");
+
+         for Line of Get_Ada_Code_Snippet (T.Documentation) loop
+            Write (File, To_UTF_8_String (Line) & ASCII.LF);
+         end loop;
+
+         Write (File, "</pre>");
+
+         if T.Documentation.Has_Documentation then
+            Write (File, "<pre>");
+
+            Write
+              (File,
+               To_UTF_8_String
+                 (Get_Plain_Text_Description
+                      (T.Documentation).Join_Lines (VSS.Strings.LF)));
+
+            Write (File, "</pre>");
+         end if;
+      end loop;
+
+      for T of Entity.Variables loop
+         Write
+           (File,
+               "<h4 id='"
+               & Digest (To_UTF_8_String (T.Signature)) & "'>"
+               & To_UTF_8_String (T.Name) & "</h4>");
+
+         Write (File, "<pre class='ada-code-snippet'>");
+
+         for Line of Get_Ada_Code_Snippet (T.Documentation) loop
+            Write (File, To_UTF_8_String (Line) & ASCII.LF);
+         end loop;
+
+         Write (File, "</pre>");
+
+         if T.Documentation.Has_Documentation then
+            Write (File, "<pre>");
+
+            Write
+              (File,
+               To_UTF_8_String
+                 (Get_Plain_Text_Description
+                      (T.Documentation).Join_Lines (VSS.Strings.LF)));
 
             Write (File, "</pre>");
          end if;

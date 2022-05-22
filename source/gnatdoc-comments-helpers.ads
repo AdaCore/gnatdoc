@@ -56,4 +56,9 @@ package GNATdoc.Comments.Helpers is
    --  line terminator. Text includes description of the record type, and
    --  description of the discriminants and members.
 
+   function Get_Plain_Text_Description
+     (Documentation : Structured_Comment)
+      return VSS.String_Vectors.Virtual_String_Vector;
+   --  Return description as plain text.
+
 end GNATdoc.Comments.Helpers;

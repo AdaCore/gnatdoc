@@ -30,11 +30,6 @@ package body GNATdoc.Comments.Helpers is
    use VSS.String_Vectors;
 
    function Get_Plain_Text_Description
-     (Documentation : Structured_Comment)
-      return VSS.String_Vectors.Virtual_String_Vector;
-   --  Return description as plain text.
-
-   function Get_Plain_Text_Description
      (Section : not null Section_Access)
       return VSS.String_Vectors.Virtual_String_Vector;
    --  Return description as plain text.
@@ -260,6 +255,7 @@ package body GNATdoc.Comments.Helpers is
                     | Ada_Expr_Function
                     | Ada_Null_Subp_Decl
                     | Ada_Subp_Decl
+                    | Ada_Object_Decl
             or (Decl.Kind = Ada_Type_Decl
                 and then Decl.As_Type_Decl.F_Type_Def.Kind = Ada_Enum_Type_Def)
         or (Decl.Kind = Ada_Type_Decl

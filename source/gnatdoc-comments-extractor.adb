@@ -82,6 +82,13 @@ package body GNATdoc.Comments.Extractor is
                    and then Node.F_Type_Def.Kind = Ada_Record_Type_Def;
    --  Extract documentation for record type declaration.
 
+   procedure Extract_Object_Documentation
+     (Node          : Libadalang.Analysis.Object_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : out Structured_Comment'Class)
+     with Pre => Node.Kind = Ada_Object_Decl;
+   --  Extract documentation for object (constant or variable) declaration.
+
    procedure Fill_Structured_Comment
      (Decl_Node        : Basic_Decl'Class;
       Advanced_Groups  : Boolean;
@@ -187,6 +194,10 @@ package body GNATdoc.Comments.Extractor is
                when others =>
                   raise Program_Error;
             end case;
+
+         when Ada_Object_Decl =>
+            Extract_Object_Documentation
+              (Node.As_Object_Decl, Options, Documentation);
 
          when others =>
             raise Program_Error;
@@ -299,6 +310,65 @@ package body GNATdoc.Comments.Extractor is
             Documentation);
       end;
    end Extract_Enumeration_Type_Documentation;
+
+   ----------------------------------
+   -- Extract_Object_Documentation --
+   ----------------------------------
+
+   procedure Extract_Object_Documentation
+     (Node          : Libadalang.Analysis.Object_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : out Structured_Comment'Class)
+   is
+      Leading_Section   : Section_Access;
+      Trailing_Section  : Section_Access;
+
+   begin
+      Fill_Structured_Comment
+        (Decl_Node          => Node,
+         Advanced_Groups    => False,
+         Last_Section       => null,
+         Minimum_Indent     => 0,
+         Documentation      => Documentation,
+         Leading_Section    => Leading_Section,
+         Trailing_Section   => Trailing_Section);
+
+      Fill_Code_Snippet (Node, Documentation);
+
+      Remove_Comment_Start_And_Indentation (Documentation);
+
+      declare
+         Raw_Section : Section_Access;
+
+      begin
+         --  Select most appropriate section depending from the style and
+         --  fallback.
+
+         case Options.Style is
+            when GNAT =>
+               if not Trailing_Section.Text.Is_Empty then
+                  Raw_Section := Trailing_Section;
+
+               elsif Options.Fallback
+                 and not Leading_Section.Text.Is_Empty
+               then
+                  Raw_Section := Leading_Section;
+               end if;
+
+            when Leading =>
+               if not Leading_Section.Text.Is_Empty then
+                  Raw_Section := Leading_Section;
+
+               elsif Options.Fallback
+                 and not Trailing_Section.Text.Is_Empty
+               then
+                  Raw_Section := Trailing_Section;
+               end if;
+         end case;
+
+         Parse_Raw_Section (Raw_Section, (others => False), Documentation);
+      end;
+   end Extract_Object_Documentation;
 
    ---------------------------------------
    -- Extract_Record_Type_Documentation --

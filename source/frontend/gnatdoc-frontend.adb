@@ -53,6 +53,10 @@ package body GNATdoc.Frontend is
      (Node      : Type_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Object_Decl
+     (Node      : Object_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Children
      (Parent    : Ada_Node'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -170,7 +174,18 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Object_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               --  Constant in package specifications may be declared twice:
+               --  first time in the public part and second time in the private
+               --  part. When documentation is generated for private part of
+               --  the package constant declarations that has completion in the
+               --  private part are ignored.
+
+               if not Node.As_Object_Decl.F_Has_Constant
+                 or not Options.Generate_Private
+                 or Node.As_Object_Decl.P_Private_Part_Decl.Is_Null
+               then
+                  Process_Object_Decl (Node.As_Object_Decl, Enclosing);
+               end if;
 
                return Over;
 
@@ -260,7 +275,9 @@ package body GNATdoc.Frontend is
            Documentation  => Extract (Node, Extract_Options),
            Packages       => <>,
            Subprograms    => <>,
-           Record_Types   => <>);
+           Record_Types   => <>,
+           Constants      => <>,
+           Variables      => <>);
 
    begin
       Enclosing.Subprograms.Insert (Entity);
@@ -341,6 +358,43 @@ package body GNATdoc.Frontend is
       Unit.F_Body.Traverse (Process_Node'Access);
    end Process_Compilation_Unit;
 
+   -------------------------
+   -- Process_Object_Decl --
+   -------------------------
+
+   procedure Process_Object_Decl
+     (Node      : Object_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access) is
+   begin
+      for Name of Node.F_Ids loop
+         declare
+            Entity : constant not null
+              GNATdoc.Entities.Entity_Information_Access :=
+                new GNATdoc.Entities.Entity_Information'
+                  (Name           =>
+                     To_Virtual_String (Name.F_Name.Text),
+                   Qualified_Name =>
+                     To_Virtual_String (Name.P_Fully_Qualified_Name),
+                   Signature      =>
+                     To_Virtual_String (Name.P_Unique_Identifying_Name),
+                   Documentation  => Extract (Node, Extract_Options),
+                   Packages       => <>,
+                   Subprograms    => <>,
+                   Record_Types   => <>,
+                   Constants      => <>,
+                   Variables      => <>);
+
+         begin
+            if Node.F_Has_Constant then
+               Enclosing.Constants.Insert (Entity);
+
+            else
+               Enclosing.Variables.Insert (Entity);
+            end if;
+         end;
+      end loop;
+   end Process_Object_Decl;
+
    --------------------------
    -- Process_Package_Decl --
    --------------------------
@@ -362,7 +416,9 @@ package body GNATdoc.Frontend is
            Documentation  => <>,
            Packages       => <>,
            Subprograms    => <>,
-           Record_Types   => <>);
+           Record_Types   => <>,
+           Constants      => <>,
+           Variables      => <>);
 
    begin
       Enclosing.Packages.Insert (Entity);
@@ -394,7 +450,9 @@ package body GNATdoc.Frontend is
            Documentation  => <>,
            Packages       => <>,
            Subprograms    => <>,
-           Record_Types   => <>);
+           Record_Types   => <>,
+           Constants      => <>,
+           Variables      => <>);
 
    begin
       Enclosing.Packages.Insert (Entity);
@@ -421,7 +479,9 @@ package body GNATdoc.Frontend is
            Documentation  => Extract (Node, Extract_Options),
            Packages       => <>,
            Subprograms    => <>,
-           Record_Types   => <>);
+           Record_Types   => <>,
+           Constants      => <>,
+           Variables      => <>);
 
    begin
       Enclosing.Record_Types.Insert (Entity);
@@ -448,7 +508,9 @@ package body GNATdoc.Frontend is
            Documentation  => <>,
            Packages       => <>,
            Subprograms    => <>,
-           Record_Types   => <>);
+           Record_Types   => <>,
+           Constants      => <>,
+           Variables      => <>);
 
    begin
       Enclosing.Subprograms.Insert (Entity);
