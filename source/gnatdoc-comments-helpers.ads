@@ -18,7 +18,21 @@
 with VSS.String_Vectors;
 with VSS.Strings;
 
+with Libadalang.Analysis;
+
+with GNATdoc.Comments.Options;
+
 package GNATdoc.Comments.Helpers is
+
+   procedure Get_Plain_Text_Documentation
+     (Name          : Libadalang.Analysis.Defining_Name'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Code_Snippet  : out VSS.String_Vectors.Virtual_String_Vector;
+      Documentation : out VSS.String_Vectors.Virtual_String_Vector);
+   --  Return code snippet and documentation for the given node in plain text
+   --  format.
+   --
+   --  Convenience function for ALS.
 
    function Get_Ada_Code_Snippet
      (Self : Structured_Comment'Class)

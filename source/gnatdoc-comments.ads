@@ -55,6 +55,9 @@ package GNATdoc.Comments is
 
 private
 
+   subtype Component is Section_Kind
+     range Enumeration_Literal .. Raised_Exception;
+
    type Section is tagged limited record
       Kind             : Section_Kind;
       Name             : VSS.Strings.Virtual_String;

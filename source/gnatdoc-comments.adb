@@ -59,8 +59,7 @@ package body GNATdoc.Comments is
      (Self : Structured_Comment'Class) return Boolean is
    begin
       for Section of Self.Sections loop
-         if Section.Kind
-              in Description | Parameter | Returns | Raised_Exception | Member
+         if Section.Kind in Description | Component
            and then not Section.Text.Is_Empty
          then
             return True;
