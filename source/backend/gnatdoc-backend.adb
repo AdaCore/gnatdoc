@@ -87,6 +87,21 @@ package body GNATdoc.Backend is
       Write (File, "<h1>" & To_UTF_8_String (Entity.Qualified_Name) & "</h1>");
       Write (File, "<h2>Entities</h2>");
 
+      if not Entity.Simple_Types.Is_Empty then
+         Write (File, "<h3>Simple Types</h3>");
+         Write (File, "<ul>");
+
+         for T of Entity.Simple_Types loop
+            Write
+              (File,
+               "<li><a href='#"
+               & Digest (To_UTF_8_String (T.Signature)) & "'>"
+               & To_UTF_8_String (T.Name) & "</a></li>");
+         end loop;
+
+         Write (File, "</ul>");
+      end if;
+
       if not Entity.Record_Types.Is_Empty then
          Write (File, "<h3>Record Types</h3>");
          Write (File, "<ul>");
@@ -147,8 +162,8 @@ package body GNATdoc.Backend is
          Write (File, "</ul>");
       end if;
 
-      for T of Entity.Record_Types.Union
-        (Entity.Constants.Union (Entity.Variables.Union (Entity.Subprograms)))
+      for T of Entity.Simple_Types.Union (Entity.Record_Types.Union
+        (Entity.Constants.Union (Entity.Variables.Union (Entity.Subprograms))))
       loop
          Write
            (File,

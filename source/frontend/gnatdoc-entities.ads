@@ -47,6 +47,7 @@ package GNATdoc.Entities is
       --  Package_Instantiations
       --  Subprogram_Instantiations
 
+      Simple_Types   :  Entity_Information_Sets.Set;
       Record_Types   :  Entity_Information_Sets.Set;
       Constants      :  Entity_Information_Sets.Set;
       Variables      :  Entity_Information_Sets.Set;
@@ -62,7 +63,7 @@ package GNATdoc.Entities is
       --  Pkgs_Instances    : EInfo_List.Vector;
       --  --  Generic packages instantiations.
       --  Record_Types      : EInfo_List.Vector;  +++
-      --  Simple_Types      : EInfo_List.Vector;
+      --  Simple_Types      : EInfo_List.Vector;  +++
       --  Subprgs           : EInfo_List.Vector;
       --  --  Ordinary subprograms.
       --  Subprgs_Instances : EInfo_List.Vector;

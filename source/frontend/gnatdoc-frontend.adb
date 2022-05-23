@@ -49,6 +49,10 @@ package body GNATdoc.Frontend is
      (Node      : Subp_Body'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Enum_Type_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Record_Type_Def
      (Node      : Type_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -98,6 +102,9 @@ package body GNATdoc.Frontend is
 
                   when Ada_Record_Type_Def =>
                      Process_Record_Type_Def (Node.As_Type_Decl, Enclosing);
+
+                  when Ada_Enum_Type_Def =>
+                     Process_Enum_Type_Def (Node.As_Type_Decl, Enclosing);
 
                   when others =>
                      Ada.Text_IO.Put_Line
@@ -273,11 +280,7 @@ package body GNATdoc.Frontend is
              To_Virtual_String
                (Node.F_Subp_Spec.F_Subp_Name.P_Unique_Identifying_Name) & "$",
            Documentation  => Extract (Node, Extract_Options),
-           Packages       => <>,
-           Subprograms    => <>,
-           Record_Types   => <>,
-           Constants      => <>,
-           Variables      => <>);
+           others         => <>);
 
    begin
       Enclosing.Subprograms.Insert (Entity);
@@ -358,6 +361,30 @@ package body GNATdoc.Frontend is
       Unit.F_Body.Traverse (Process_Node'Access);
    end Process_Compilation_Unit;
 
+   ---------------------------
+   -- Process_Enum_Type_Def --
+   ---------------------------
+
+   procedure Process_Enum_Type_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Node.F_Name.Text),
+           Qualified_Name =>
+             To_Virtual_String
+               (Node.F_Name.P_Fully_Qualified_Name),
+           Signature      =>
+             To_Virtual_String
+               (Node.F_Name.P_Unique_Identifying_Name),
+           Documentation  => Extract (Node, Extract_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Simple_Types.Insert (Entity);
+   end Process_Enum_Type_Def;
+
    -------------------------
    -- Process_Object_Decl --
    -------------------------
@@ -378,11 +405,7 @@ package body GNATdoc.Frontend is
                    Signature      =>
                      To_Virtual_String (Name.P_Unique_Identifying_Name),
                    Documentation  => Extract (Node, Extract_Options),
-                   Packages       => <>,
-                   Subprograms    => <>,
-                   Record_Types   => <>,
-                   Constants      => <>,
-                   Variables      => <>);
+                   others         => <>);
 
          begin
             if Node.F_Has_Constant then
@@ -414,11 +437,7 @@ package body GNATdoc.Frontend is
              To_Virtual_String
                (Node.F_Package_Name.P_Unique_Identifying_Name) & "$",
            Documentation  => <>,
-           Packages       => <>,
-           Subprograms    => <>,
-           Record_Types   => <>,
-           Constants      => <>,
-           Variables      => <>);
+           others         => <>);
 
    begin
       Enclosing.Packages.Insert (Entity);
@@ -448,11 +467,7 @@ package body GNATdoc.Frontend is
              To_Virtual_String
                (Node.F_Package_Name.P_Unique_Identifying_Name) & "$$",
            Documentation  => <>,
-           Packages       => <>,
-           Subprograms    => <>,
-           Record_Types   => <>,
-           Constants      => <>,
-           Variables      => <>);
+           others         => <>);
 
    begin
       Enclosing.Packages.Insert (Entity);
@@ -477,11 +492,7 @@ package body GNATdoc.Frontend is
              To_Virtual_String
                (Node.F_Name.P_Unique_Identifying_Name),
            Documentation  => Extract (Node, Extract_Options),
-           Packages       => <>,
-           Subprograms    => <>,
-           Record_Types   => <>,
-           Constants      => <>,
-           Variables      => <>);
+           others         => <>);
 
    begin
       Enclosing.Record_Types.Insert (Entity);
@@ -506,11 +517,7 @@ package body GNATdoc.Frontend is
              To_Virtual_String
                (Node.F_Subp_Spec.F_Subp_Name.P_Unique_Identifying_Name) & "$$",
            Documentation  => <>,
-           Packages       => <>,
-           Subprograms    => <>,
-           Record_Types   => <>,
-           Constants      => <>,
-           Variables      => <>);
+           others         => <>);
 
    begin
       Enclosing.Subprograms.Insert (Entity);
