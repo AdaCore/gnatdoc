@@ -46,6 +46,9 @@ package body GNATdoc.Backend is
       Entity : not null Entity_Information_Access;
       Indent : Natural);
 
+   procedure Generate_Entity_Documentation_Page
+     (Entity : not null Entity_Information_Access);
+
    ----------
    -- Dump --
    ----------
@@ -61,8 +64,9 @@ package body GNATdoc.Backend is
       end loop;
    end Dump;
 
-   procedure Generate_Entity_Documentation_Page
-     (Entity : not null Entity_Information_Access);
+   ----------------------------------------
+   -- Generate_Entity_Documentation_Page --
+   ----------------------------------------
 
    procedure Generate_Entity_Documentation_Page
      (Entity : not null Entity_Information_Access)
@@ -143,34 +147,9 @@ package body GNATdoc.Backend is
          Write (File, "</ul>");
       end if;
 
-      for T of Entity.Record_Types loop
-         Write
-           (File,
-               "<h4 id='"
-               & Digest (To_UTF_8_String (T.Signature)) & "'>"
-               & To_UTF_8_String (T.Name) & "</h4>");
-
-         if T.Documentation.Has_Documentation then
-            Write (File, "<pre class='ada-code-snippet'>");
-
-            for Line of Get_Ada_Code_Snippet (T.Documentation) loop
-               Write (File, To_UTF_8_String (Line) & ASCII.LF);
-            end loop;
-
-            Write (File, "</pre>");
-
-            Write (File, "<pre>");
-
-            Write
-              (File,
-               To_UTF_8_String
-                 (Get_Record_Type_Description (T.Documentation)));
-
-            Write (File, "</pre>");
-         end if;
-      end loop;
-
-      for T of Entity.Constants loop
+      for T of Entity.Record_Types.Union
+        (Entity.Constants.Union (Entity.Variables.Union (Entity.Subprograms)))
+      loop
          Write
            (File,
                "<h4 id='"
@@ -193,64 +172,6 @@ package body GNATdoc.Backend is
                To_UTF_8_String
                  (Get_Plain_Text_Description
                       (T.Documentation).Join_Lines (VSS.Strings.LF)));
-
-            Write (File, "</pre>");
-         end if;
-      end loop;
-
-      for T of Entity.Variables loop
-         Write
-           (File,
-               "<h4 id='"
-               & Digest (To_UTF_8_String (T.Signature)) & "'>"
-               & To_UTF_8_String (T.Name) & "</h4>");
-
-         Write (File, "<pre class='ada-code-snippet'>");
-
-         for Line of Get_Ada_Code_Snippet (T.Documentation) loop
-            Write (File, To_UTF_8_String (Line) & ASCII.LF);
-         end loop;
-
-         Write (File, "</pre>");
-
-         if T.Documentation.Has_Documentation then
-            Write (File, "<pre>");
-
-            Write
-              (File,
-               To_UTF_8_String
-                 (Get_Plain_Text_Description
-                      (T.Documentation).Join_Lines (VSS.Strings.LF)));
-
-            Write (File, "</pre>");
-         end if;
-      end loop;
-
-      for S of Entity.Subprograms loop
-         Write
-           (File,
-               "<h4 id='"
-               & Digest (To_UTF_8_String (S.Signature)) & "'>"
-               & To_UTF_8_String (S.Name) & "</h4>");
-
-         if S.Documentation.Has_Documentation then
-            Write (File, "<pre class='ada-code-snippet'>");
-
-            for Line of Get_Ada_Code_Snippet (S.Documentation) loop
-               Write (File, To_UTF_8_String (Line) & ASCII.LF);
-            end loop;
-
-            Write (File, "</pre>");
-
-            Write (File, "<pre>");
-
-            Write
-              (File,
-               To_UTF_8_String
-                 (Get_Subprogram_Description (S.Documentation)));
-            --  for Line of Get_Subprogram_Description (S.Documentation.all) loop
-               --  Write (File, ASCII.LF & To_UTF_8_String (Line));
-            --  end loop;
 
             Write (File, "</pre>");
          end if;
