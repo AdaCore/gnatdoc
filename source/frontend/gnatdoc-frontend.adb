@@ -62,6 +62,10 @@ package body GNATdoc.Frontend is
      (Node      : Type_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Type_Access_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Subtype_Decl
      (Node      : Subtype_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -142,6 +146,9 @@ package body GNATdoc.Frontend is
 
                   when Ada_Mod_Int_Type_Def =>
                      Process_Mod_Int_Type_Def (Node.As_Type_Decl, Enclosing);
+
+                  when Ada_Type_Access_Def =>
+                     Process_Type_Access_Def (Node.As_Type_Decl, Enclosing);
 
                   when others =>
                      Ada.Text_IO.Put_Line
@@ -582,5 +589,29 @@ package body GNATdoc.Frontend is
    begin
       Enclosing.Subtypes.Insert (Entity);
    end Process_Subtype_Decl;
+
+   -----------------------------
+   -- Process_Type_Access_Def --
+   -----------------------------
+
+   procedure Process_Type_Access_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Node.F_Name.Text),
+           Qualified_Name =>
+             To_Virtual_String
+               (Node.F_Name.P_Fully_Qualified_Name),
+           Signature      =>
+             To_Virtual_String
+               (Node.F_Name.P_Unique_Identifying_Name),
+           Documentation  => Extract (Node, Extract_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Access_Types.Insert (Entity);
+   end Process_Type_Access_Def;
 
 end GNATdoc.Frontend;

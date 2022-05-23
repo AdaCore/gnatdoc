@@ -49,6 +49,7 @@ package GNATdoc.Entities is
 
       Simple_Types   : Entity_Information_Sets.Set;
       Record_Types   : Entity_Information_Sets.Set;
+      Access_Types   : Entity_Information_Sets.Set;
       Subtypes       : Entity_Information_Sets.Set;
       Constants      : Entity_Information_Sets.Set;
       Variables      : Entity_Information_Sets.Set;

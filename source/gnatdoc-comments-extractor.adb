@@ -88,7 +88,8 @@ package body GNATdoc.Comments.Extractor is
       Documentation : out Structured_Comment'Class)
      with Pre => Node.Kind in Ada_Object_Decl | Ada_Subtype_Decl
      or (Node.Kind = Ada_Type_Decl
-           and then Node.As_Type_Decl.F_Type_Def.Kind = Ada_Mod_Int_Type_Def);
+         and then Node.As_Type_Decl.F_Type_Def.Kind in Ada_Mod_Int_Type_Def
+                    | Ada_Type_Access_Def);
    --  Extract documentation for simple declaration (declarations that doesn't
    --  contains components).
 
@@ -205,6 +206,10 @@ package body GNATdoc.Comments.Extractor is
 
                when Ada_Record_Type_Def =>
                   Extract_Record_Type_Documentation
+                    (Node.As_Type_Decl, Options, Documentation);
+
+               when Ada_Type_Access_Def =>
+                  Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl, Options, Documentation);
 
                when others =>
