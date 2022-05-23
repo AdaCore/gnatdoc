@@ -117,15 +117,17 @@ package body GNATdoc.Backend is
 
       Generate_TOC ("Simple Types", Entity.Simple_Types);
       Generate_TOC ("Record Types", Entity.Record_Types);
+      Generate_TOC ("Subtypes", Entity.Subtypes);
       Generate_TOC ("Constants", Entity.Constants);
       Generate_TOC ("Variables", Entity.Variables);
       Generate_TOC ("Subprograms", Entity.Subprograms);
 
       for T of Entity.Simple_Types.Union
         (Entity.Record_Types.Union
-           (Entity.Constants.Union
-                (Entity.Variables.Union
-                     (Entity.Subprograms))))
+           (Entity.Subtypes.Union
+                (Entity.Constants.Union
+                     (Entity.Variables.Union
+                        (Entity.Subprograms)))))
       loop
          Write
            (File,

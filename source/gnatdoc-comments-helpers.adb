@@ -254,8 +254,9 @@ package body GNATdoc.Comments.Helpers is
       if Decl.Kind in Ada_Abstract_Subp_Decl
                     | Ada_Expr_Function
                     | Ada_Null_Subp_Decl
-                    | Ada_Subp_Decl
                     | Ada_Object_Decl
+                    | Ada_Subp_Decl
+                    | Ada_Subtype_Decl
         or (Decl.Kind = Ada_Type_Decl
             and then Decl.As_Type_Decl.F_Type_Def.Kind = Ada_Enum_Type_Def)
         or (Decl.Kind = Ada_Type_Decl

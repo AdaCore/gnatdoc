@@ -35,6 +35,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Object_Decl
                       | Ada_Subp_Body
                       | Ada_Subp_Decl
+                      | Ada_Subtype_Decl
          or (Node.Kind = Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
                           in Ada_Enum_Type_Def | Ada_Record_Type_Def
@@ -52,6 +53,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Object_Decl
                       | Ada_Subp_Body
                       | Ada_Subp_Decl
+                      | Ada_Subtype_Decl
          or (Node.Kind = Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
                           in Ada_Enum_Type_Def | Ada_Record_Type_Def
@@ -69,6 +71,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Object_Decl
                       | Ada_Subp_Body
                       | Ada_Subp_Decl
+                      | Ada_Subtype_Decl
          or (Node.Kind = Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
                           in Ada_Enum_Type_Def | Ada_Record_Type_Def

@@ -62,6 +62,10 @@ package body GNATdoc.Frontend is
      (Node      : Type_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Subtype_Decl
+     (Node      : Subtype_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Object_Decl
      (Node      : Object_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -148,7 +152,7 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Subtype_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Subtype_Decl (Node.As_Subtype_Decl, Enclosing);
 
                return Over;
 
@@ -554,5 +558,29 @@ package body GNATdoc.Frontend is
    begin
       Enclosing.Record_Types.Insert (Entity);
    end Process_Record_Type_Def;
+
+   --------------------------
+   -- Process_Subtype_Decl --
+   --------------------------
+
+   procedure Process_Subtype_Decl
+     (Node      : Subtype_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Node.F_Name.Text),
+           Qualified_Name =>
+             To_Virtual_String
+               (Node.F_Name.P_Fully_Qualified_Name),
+           Signature      =>
+             To_Virtual_String
+               (Node.F_Name.P_Unique_Identifying_Name),
+           Documentation  => Extract (Node, Extract_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Subtypes.Insert (Entity);
+   end Process_Subtype_Decl;
 
 end GNATdoc.Frontend;

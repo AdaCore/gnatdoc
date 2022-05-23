@@ -86,7 +86,7 @@ package body GNATdoc.Comments.Extractor is
      (Node          : Libadalang.Analysis.Basic_Decl'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class)
-     with Pre => Node.Kind = Ada_Object_Decl
+     with Pre => Node.Kind in Ada_Object_Decl | Ada_Subtype_Decl
      or (Node.Kind = Ada_Type_Decl
            and then Node.As_Type_Decl.F_Type_Def.Kind = Ada_Mod_Int_Type_Def);
    --  Extract documentation for simple declaration (declarations that doesn't
@@ -210,6 +210,10 @@ package body GNATdoc.Comments.Extractor is
                when others =>
                   raise Program_Error;
             end case;
+
+         when Ada_Subtype_Decl =>
+            Extract_Simple_Declaration_Documentation
+              (Node.As_Subtype_Decl, Options, Documentation);
 
          when Ada_Object_Decl =>
             Extract_Simple_Declaration_Documentation
