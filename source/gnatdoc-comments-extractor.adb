@@ -78,8 +78,13 @@ package body GNATdoc.Comments.Extractor is
      (Node          : Libadalang.Analysis.Type_Decl'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class)
-     with Pre => Node.Kind = Ada_Type_Decl
-                   and then Node.F_Type_Def.Kind = Ada_Record_Type_Def;
+     with Pre =>
+       (Node.Kind = Ada_Type_Decl
+        and then Node.F_Type_Def.Kind = Ada_Record_Type_Def)
+       or (Node.Kind = Ada_Type_Decl
+           and then Node.F_Type_Def.Kind = Ada_Derived_Type_Def
+           and then not Node.F_Type_Def.As_Derived_Type_Def
+                          .F_Record_Extension.Is_Null);
    --  Extract documentation for record type declaration.
 
    procedure Extract_Simple_Declaration_Documentation
@@ -89,7 +94,12 @@ package body GNATdoc.Comments.Extractor is
      with Pre => Node.Kind in Ada_Object_Decl | Ada_Subtype_Decl
      or (Node.Kind = Ada_Type_Decl
          and then Node.As_Type_Decl.F_Type_Def.Kind in Ada_Mod_Int_Type_Def
-                    | Ada_Type_Access_Def);
+                    | Ada_Private_Type_Def
+                    | Ada_Type_Access_Def)
+     or (Node.Kind = Ada_Type_Decl
+         and then Node.As_Type_Decl.F_Type_Def.Kind = Ada_Derived_Type_Def
+         and then Node.As_Type_Decl.F_Type_Def.As_Derived_Type_Def
+                    .F_Record_Extension.Is_Null);
    --  Extract documentation for simple declaration (declarations that doesn't
    --  contains components).
 
@@ -208,9 +218,25 @@ package body GNATdoc.Comments.Extractor is
                   Extract_Record_Type_Documentation
                     (Node.As_Type_Decl, Options, Documentation);
 
+               when Ada_Private_Type_Def =>
+                  Extract_Simple_Declaration_Documentation
+                    (Node.As_Type_Decl, Options, Documentation);
+
                when Ada_Type_Access_Def =>
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl, Options, Documentation);
+
+               when Ada_Derived_Type_Def =>
+                  if Node.As_Type_Decl.F_Type_Def.As_Derived_Type_Def
+                       .F_Record_Extension.Is_Null
+                  then
+                     Extract_Simple_Declaration_Documentation
+                       (Node.As_Type_Decl, Options, Documentation);
+
+                  else
+                     Extract_Record_Type_Documentation
+                       (Node.As_Type_Decl, Options, Documentation);
+                  end if;
 
                when others =>
                   raise Program_Error;

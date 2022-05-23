@@ -62,6 +62,14 @@ package body GNATdoc.Frontend is
      (Node      : Type_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Private_Type_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
+   procedure Process_Derived_Type_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Type_Access_Def
      (Node      : Type_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -133,9 +141,8 @@ package body GNATdoc.Frontend is
                      --  of declarations in private part are generated.
 
                      if not Options.Generate_Private then
-                        Ada.Text_IO.Put_Line
-                          (Image (Node) & " => "
-                           & Image (Node.As_Type_Decl.F_Type_Def));
+                        Process_Private_Type_Def
+                          (Node.As_Type_Decl, Enclosing);
                      end if;
 
                   when Ada_Record_Type_Def =>
@@ -159,9 +166,8 @@ package body GNATdoc.Frontend is
                        or else not Node.As_Type_Decl.F_Type_Def
                                      .As_Derived_Type_Def.F_Has_With_Private
                      then
-                        Ada.Text_IO.Put_Line
-                          (Image (Node) & " => "
-                           & Image (Node.As_Type_Decl.F_Type_Def));
+                        Process_Derived_Type_Def
+                          (Node.As_Type_Decl, Enclosing);
                      end if;
 
                   when others =>
@@ -419,6 +425,37 @@ package body GNATdoc.Frontend is
       Unit.F_Body.Traverse (Process_Node'Access);
    end Process_Compilation_Unit;
 
+   ------------------------------
+   -- Process_Derived_Type_Def --
+   ------------------------------
+
+   procedure Process_Derived_Type_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Node.F_Name.Text),
+           Qualified_Name =>
+             To_Virtual_String
+               (Node.F_Name.P_Fully_Qualified_Name),
+           Signature      =>
+             To_Virtual_String
+               (Node.F_Name.P_Unique_Identifying_Name),
+           Documentation  => Extract (Node, Extract_Options),
+           others         => <>);
+
+   begin
+      if Node.F_Type_Def.As_Derived_Type_Def.F_Has_With_Private
+        or not Node.F_Type_Def.As_Derived_Type_Def.F_Record_Extension.Is_Null
+      then
+         Enclosing.Tagged_Types.Insert (Entity);
+
+      else
+         Enclosing.Simple_Types.Insert (Entity);
+      end if;
+   end Process_Derived_Type_Def;
+
    ---------------------------
    -- Process_Enum_Type_Def --
    ---------------------------
@@ -555,6 +592,35 @@ package body GNATdoc.Frontend is
       Enclosing.Packages.Insert (Entity);
       Process_Children (Node.F_Decls, Entity);
    end Process_Package_Body;
+
+   ------------------------------
+   -- Process_Private_Type_Def --
+   ------------------------------
+
+   procedure Process_Private_Type_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Node.F_Name.Text),
+           Qualified_Name =>
+             To_Virtual_String
+               (Node.F_Name.P_Fully_Qualified_Name),
+           Signature      =>
+             To_Virtual_String
+               (Node.F_Name.P_Unique_Identifying_Name),
+           Documentation  => Extract (Node, Extract_Options),
+           others         => <>);
+
+   begin
+      if Node.F_Type_Def.As_Private_Type_Def.F_Has_Tagged then
+         Enclosing.Tagged_Types.Insert (Entity);
+
+      else
+         Enclosing.Simple_Types.Insert (Entity);
+      end if;
+   end Process_Private_Type_Def;
 
    -----------------------------
    -- Process_Record_Type_Def --

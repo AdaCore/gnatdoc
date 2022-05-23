@@ -38,8 +38,10 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Subtype_Decl
          or (Node.Kind = Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
-                          in Ada_Enum_Type_Def
+                          in Ada_Derived_Type_Def
+                               | Ada_Enum_Type_Def
                                | Ada_Mod_Int_Type_Def
+                               | Ada_Private_Type_Def
                                | Ada_Record_Type_Def
                                | Ada_Type_Access_Def);
    --  Extract documentation for supported kinds of nodes.
@@ -58,8 +60,10 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Subtype_Decl
          or (Node.Kind = Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
-                          in Ada_Enum_Type_Def
+                          in Ada_Derived_Type_Def
+                               | Ada_Enum_Type_Def
                                | Ada_Mod_Int_Type_Def
+                               | Ada_Private_Type_Def
                                | Ada_Record_Type_Def
                                | Ada_Type_Access_Def);
    --  Extract documentation for supported kinds of nodes.
@@ -78,8 +82,10 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Subtype_Decl
          or (Node.Kind = Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
-                          in Ada_Enum_Type_Def
+                          in Ada_Derived_Type_Def
+                               | Ada_Enum_Type_Def
                                | Ada_Mod_Int_Type_Def
+                               | Ada_Private_Type_Def
                                | Ada_Record_Type_Def
                                | Ada_Type_Access_Def);
    --  Extract documentation for supported kinds of nodes.

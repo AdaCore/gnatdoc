@@ -99,7 +99,10 @@ package body GNATdoc.Comments.Builders.Records is
 
       Discriminants : constant Discriminant_Part := Node.F_Discriminants;
       Components    : constant Component_List    :=
-        Node.F_Type_Def.As_Record_Type_Def.F_Record_Def.F_Components;
+        (if Node.F_Type_Def.Kind = Ada_Record_Type_Def
+         then Node.F_Type_Def.As_Record_Type_Def.F_Record_Def.F_Components
+         else Node.F_Type_Def.As_Derived_Type_Def
+                .F_Record_Extension.F_Components);
 
    begin
       Self.Initialize (Documentation, Options, Node);
