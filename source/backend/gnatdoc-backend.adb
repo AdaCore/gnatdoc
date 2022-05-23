@@ -75,6 +75,34 @@ package body GNATdoc.Backend is
       File : Writable_File :=
         Create (Filesystem_String (Name)).Write_File;
 
+      procedure Generate_TOC
+        (Title : String;
+         Set   : Entity_Information_Sets.Set);
+
+      ------------------
+      -- Generate_TOC --
+      ------------------
+
+      procedure Generate_TOC
+        (Title : String;
+         Set   : Entity_Information_Sets.Set) is
+      begin
+         if not Set.Is_Empty then
+            Write (File, "<h3>" & Title & "</h3>");
+            Write (File, "<ul>");
+
+            for Item of Set loop
+               Write
+                 (File,
+                  "<li><a href='#"
+                  & Digest (To_UTF_8_String (Item.Signature)) & "'>"
+                  & To_UTF_8_String (Item.Name) & "</a></li>");
+            end loop;
+
+            Write (File, "</ul>");
+         end if;
+      end Generate_TOC;
+
    begin
       Write (File, "<!DOCTYPE html>");
 
@@ -87,83 +115,17 @@ package body GNATdoc.Backend is
       Write (File, "<h1>" & To_UTF_8_String (Entity.Qualified_Name) & "</h1>");
       Write (File, "<h2>Entities</h2>");
 
-      if not Entity.Simple_Types.Is_Empty then
-         Write (File, "<h3>Simple Types</h3>");
-         Write (File, "<ul>");
+      Generate_TOC ("Simple Types", Entity.Simple_Types);
+      Generate_TOC ("Record Types", Entity.Record_Types);
+      Generate_TOC ("Constants", Entity.Constants);
+      Generate_TOC ("Variables", Entity.Variables);
+      Generate_TOC ("Subprograms", Entity.Subprograms);
 
-         for T of Entity.Simple_Types loop
-            Write
-              (File,
-               "<li><a href='#"
-               & Digest (To_UTF_8_String (T.Signature)) & "'>"
-               & To_UTF_8_String (T.Name) & "</a></li>");
-         end loop;
-
-         Write (File, "</ul>");
-      end if;
-
-      if not Entity.Record_Types.Is_Empty then
-         Write (File, "<h3>Record Types</h3>");
-         Write (File, "<ul>");
-
-         for T of Entity.Record_Types loop
-            Write
-              (File,
-               "<li><a href='#"
-               & Digest (To_UTF_8_String (T.Signature)) & "'>"
-               & To_UTF_8_String (T.Name) & "</a></li>");
-         end loop;
-
-         Write (File, "</ul>");
-      end if;
-
-      if not Entity.Constants.Is_Empty then
-         Write (File, "<h3>Constants</h3>");
-         Write (File, "<ul>");
-
-         for T of Entity.Constants loop
-            Write
-              (File,
-               "<li><a href='#"
-               & Digest (To_UTF_8_String (T.Signature)) & "'>"
-               & To_UTF_8_String (T.Name) & "</a></li>");
-         end loop;
-
-         Write (File, "</ul>");
-      end if;
-
-      if not Entity.Variables.Is_Empty then
-         Write (File, "<h3>Variables</h3>");
-         Write (File, "<ul>");
-
-         for T of Entity.Constants loop
-            Write
-              (File,
-               "<li><a href='#"
-               & Digest (To_UTF_8_String (T.Signature)) & "'>"
-               & To_UTF_8_String (T.Name) & "</a></li>");
-         end loop;
-
-         Write (File, "</ul>");
-      end if;
-
-      if not Entity.Subprograms.Is_Empty then
-         Write (File, "<h3>Subprograms</h3>");
-         Write (File, "<ul>");
-
-         for S of Entity.Subprograms loop
-            Write
-              (File,
-               "<li><a href='#"
-               & Digest (To_UTF_8_String (S.Signature)) & "'>"
-               & To_UTF_8_String (S.Name) & "</a></li>");
-         end loop;
-
-         Write (File, "</ul>");
-      end if;
-
-      for T of Entity.Simple_Types.Union (Entity.Record_Types.Union
-        (Entity.Constants.Union (Entity.Variables.Union (Entity.Subprograms))))
+      for T of Entity.Simple_Types.Union
+        (Entity.Record_Types.Union
+           (Entity.Constants.Union
+                (Entity.Variables.Union
+                     (Entity.Subprograms))))
       loop
          Write
            (File,
