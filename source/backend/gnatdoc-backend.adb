@@ -15,9 +15,6 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with Ada.Wide_Wide_Text_IO;
-with Ada.Strings.Wide_Wide_Fixed;
-
 with GNAT.SHA256;
 with GNATCOLL.VFS;
 
@@ -28,41 +25,63 @@ with VSS.Strings.Conversions;
 
 package body GNATdoc.Backend is
 
-   use Ada.Strings.Wide_Wide_Fixed;
-   use Ada.Wide_Wide_Text_IO;
    use GNAT.SHA256;
    use GNATCOLL.VFS;
-   use GNATdoc.Comments;
    use GNATdoc.Comments.Helpers;
    use GNATdoc.Entities;
    use VSS.Strings.Conversions;
 
-   procedure Dump
-     (Entity : not null Entity_Information_Access;
-      Indent : Natural);
-
-   procedure Dump
-     (File   : in out Writable_File;
-      Entity : not null Entity_Information_Access;
-      Indent : Natural);
-
    procedure Generate_Entity_Documentation_Page
      (Entity : not null Entity_Information_Access);
 
-   ----------
-   -- Dump --
-   ----------
+   --------------
+   -- Generate --
+   --------------
 
-   procedure Dump
-     (Entity : not null Entity_Information_Access;
-      Indent : Natural) is
+   procedure Generate is
+      Index_File     : constant Virtual_File := Create ("index.html");
+      Index_Entities : Entity_Information_Sets.Set;
+
    begin
-      --  Put_Line ((Indent * "  ") & To_Wide_Wide_String (Entity.Signature));
+      Index_Entities.Union (TOC_Entities.Packages);
+      Index_Entities.Union (TOC_Entities.Subprograms);
 
-      for Child of All_Entities (Entity.all) loop
-         Dump (Child, Indent + 1);
-      end loop;
-   end Dump;
+      declare
+         File : Writable_File := Index_File.Write_File;
+
+      begin
+         Write (File, "<!DOCTYPE html>");
+
+         Write (File, "<html class='main'>");
+         Write (File, "<head>");
+         Write (File, "<link rel='stylesheet' href='gnatdoc.css'>");
+         Write (File, "</head>");
+         Write (File, "<body class='main'>");
+         Write (File, "<div class='side-navigation'>");
+         Write (File, "<ul>");
+
+         for Item of Index_Entities loop
+            Write
+              (File,
+               "<li><a href='"
+               & Digest (To_UTF_8_String (Item.Signature))
+               & ".html' target='document-content'>"
+               & To_UTF_8_String (Item.Qualified_Name) & "</a></li>");
+
+            Generate_Entity_Documentation_Page (Item);
+         end loop;
+
+         Write (File, "</ul>");
+         Write (File, "</div>");
+         Write (File, "<div class='document-content'>");
+         Write (File, "<iframe name='document-content'/>");
+         Write (File, "</div>");
+         Write (File, "</body>");
+         Write (File, "</html>");
+
+         Close (File);
+      end;
+   end Generate;
 
    ----------------------------------------
    -- Generate_Entity_Documentation_Page --
@@ -161,69 +180,5 @@ package body GNATdoc.Backend is
 
       Close (File);
    end Generate_Entity_Documentation_Page;
-
-   ----------
-   -- Dump --
-   ----------
-
-   procedure Dump
-     (File   : in out Writable_File;
-      Entity : not null Entity_Information_Access;
-      Indent : Natural) is
-   begin
-      if not Entity.Signature.Is_Empty then
-         Write
-           (File,
-            "<li><a href='"
-            & Digest (To_UTF_8_String (Entity.Signature))
-            & ".html' target='document-content'>"
-            & To_UTF_8_String (Entity.Qualified_Name) & "</a></li>");
-      end if;
-
-      Write (File, "<ul>");
-      for Child of Entity.Packages loop
-      --  for Child of All_Entities (Entity.all) loop
-         Dump (File, Child, Indent + 1);
-      end loop;
-      Write (File, "</ul>");
-
-      Generate_Entity_Documentation_Page (Entity);
-   end Dump;
-
-   --------------
-   -- Generate --
-   --------------
-
-   procedure Generate is
-      File : Virtual_File := Create ("index.html");
-
-   begin
-      Dump (Global_Entities'Access, 0);
-
-      declare
-         W : Writable_File := File.Write_File;
-
-      begin
-         Write (W, "<!DOCTYPE html>");
-
-         Write (W, "<html class='main'>");
-         Write (W, "<head>");
-         Write (W, "<link rel='stylesheet' href='gnatdoc.css'>");
-         Write (W, "</head>");
-         Write (W, "<body class='main'>");
-         Write (W, "<div class='side-navigation'>");
-         --  Write (W, "<ul>");
-         Dump (W, Global_Entities'Access, 0);
-         --  Write (W, "</ul>");
-         Write (W, "</div>");
-         Write (W, "<div class='document-content'>");
-         Write (W, "<iframe name='document-content'/>");
-         Write (W, "</div>");
-         Write (W, "</body>");
-         Write (W, "</html>");
-
-         Close (W);
-      end;
-   end Generate;
 
 end GNATdoc.Backend;

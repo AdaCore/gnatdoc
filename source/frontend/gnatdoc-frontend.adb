@@ -33,6 +33,8 @@ package body GNATdoc.Frontend is
    use Libadalang.Common;
    use VSS.Strings;
 
+   use type  GNATdoc.Entities.Entity_Information_Access;
+
    procedure Process_Package_Decl
      (Node      : Package_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -43,11 +45,13 @@ package body GNATdoc.Frontend is
 
    procedure Process_Classic_Subp_Decl
      (Node      : Classic_Subp_Decl'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Global    : GNATdoc.Entities.Entity_Information_Access);
 
    procedure Process_Base_Subp_Body
      (Node      : Base_Subp_Body'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Global    : GNATdoc.Entities.Entity_Information_Access);
    --  Process subprogram body: Subp_Body, Null_Subp_Decl.
 
    procedure Process_Enum_Type_Def
@@ -97,7 +101,8 @@ package body GNATdoc.Frontend is
 
    procedure Process_Base_Subp_Body
      (Node      : Base_Subp_Body'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Global    : GNATdoc.Entities.Entity_Information_Access)
    is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
@@ -114,6 +119,10 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Subprograms.Insert (Entity);
+
+      if Global /= null then
+         Global.Subprograms.Insert (Entity);
+      end if;
    end Process_Base_Subp_Body;
 
    ----------------------
@@ -194,28 +203,29 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Subp_Decl =>
-               Process_Classic_Subp_Decl (Node.As_Subp_Decl, Enclosing);
+               Process_Classic_Subp_Decl (Node.As_Subp_Decl, Enclosing, null);
 
                return Over;
 
             when Ada_Abstract_Subp_Decl =>
                Process_Classic_Subp_Decl
-                 (Node.As_Abstract_Subp_Decl, Enclosing);
+                 (Node.As_Abstract_Subp_Decl, Enclosing, null);
 
                return Over;
 
             when Ada_Null_Subp_Decl =>
-               Process_Base_Subp_Body (Node.As_Null_Subp_Decl, Enclosing);
+               Process_Base_Subp_Body
+                 (Node.As_Null_Subp_Decl, Enclosing, null);
 
                return Over;
 
             when Ada_Subp_Body =>
-               Process_Base_Subp_Body (Node.As_Subp_Body, Enclosing);
+               Process_Base_Subp_Body (Node.As_Subp_Body, Enclosing, null);
 
                return Over;
 
             when Ada_Expr_Function =>
-               Process_Base_Subp_Body (Node.As_Expr_Function, Enclosing);
+               Process_Base_Subp_Body (Node.As_Expr_Function, Enclosing, null);
 
                return Over;
 
@@ -331,7 +341,8 @@ package body GNATdoc.Frontend is
 
    procedure Process_Classic_Subp_Decl
      (Node      : Classic_Subp_Decl'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Global    : GNATdoc.Entities.Entity_Information_Access)
    is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
@@ -348,6 +359,10 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Subprograms.Insert (Entity);
+
+      if Global /= null then
+         Global.Subprograms.Insert (Entity);
+      end if;
    end Process_Classic_Subp_Decl;
 
    ------------------------------
@@ -388,7 +403,8 @@ package body GNATdoc.Frontend is
             when Ada_Subp_Decl =>
                Process_Classic_Subp_Decl
                  (Node.As_Subp_Decl,
-                  GNATdoc.Entities.Global_Entities'Access);
+                  GNATdoc.Entities.Global_Entities'Access,
+                  GNATdoc.Entities.TOC_Entities'Access);
 
                return Over;
 
@@ -399,7 +415,8 @@ package body GNATdoc.Frontend is
 
                Process_Base_Subp_Body
                  (Node.As_Subp_Body,
-                  GNATdoc.Entities.Global_Entities'Access);
+                  GNATdoc.Entities.Global_Entities'Access,
+                  GNATdoc.Entities.TOC_Entities'Access);
 
                return Over;
 
@@ -560,6 +577,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Packages.Insert (Entity);
+      GNATdoc.Entities.TOC_Entities.Packages.Insert (Entity);
       Process_Children (Node.F_Public_Part, Entity);
 
       if Options.Generate_Private then
@@ -590,6 +608,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Packages.Insert (Entity);
+      GNATdoc.Entities.TOC_Entities.Packages.Insert (Entity);
       Process_Children (Node.F_Decls, Entity);
    end Process_Package_Body;
 

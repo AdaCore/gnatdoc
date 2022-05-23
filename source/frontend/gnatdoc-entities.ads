@@ -80,6 +80,7 @@ package GNATdoc.Entities is
    end record;
 
    Global_Entities : aliased Entity_Information;
+   TOC_Entities    : aliased Entity_Information;
 
    function All_Entities
      (Self : Entity_Information) return Entity_Information_Sets.Set;
