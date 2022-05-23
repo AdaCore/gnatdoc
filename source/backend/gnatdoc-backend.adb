@@ -71,9 +71,11 @@ package body GNATdoc.Backend is
    procedure Generate_Entity_Documentation_Page
      (Entity : not null Entity_Information_Access)
    is
-      Name : String := Digest (To_UTF_8_String (Entity.Signature)) & ".html";
-      File : Writable_File :=
+      Name       : constant String :=
+        Digest (To_UTF_8_String (Entity.Signature)) & ".html";
+      File       : Writable_File :=
         Create (Filesystem_String (Name)).Write_File;
+      All_Nested : Entity_Information_Sets.Set;
 
       procedure Generate_TOC
         (Title : String;
@@ -88,6 +90,8 @@ package body GNATdoc.Backend is
          Set   : Entity_Information_Sets.Set) is
       begin
          if not Set.Is_Empty then
+            All_Nested.Union (Set);
+
             Write (File, "<h3>" & Title & "</h3>");
             Write (File, "<ul>");
 
@@ -122,35 +126,29 @@ package body GNATdoc.Backend is
       Generate_TOC ("Variables", Entity.Variables);
       Generate_TOC ("Subprograms", Entity.Subprograms);
 
-      for T of Entity.Simple_Types.Union
-        (Entity.Record_Types.Union
-           (Entity.Subtypes.Union
-                (Entity.Constants.Union
-                     (Entity.Variables.Union
-                        (Entity.Subprograms)))))
-      loop
+      for Item of All_Nested loop
          Write
            (File,
                "<h4 id='"
-               & Digest (To_UTF_8_String (T.Signature)) & "'>"
-               & To_UTF_8_String (T.Name) & "</h4>");
+               & Digest (To_UTF_8_String (Item.Signature)) & "'>"
+               & To_UTF_8_String (Item.Name) & "</h4>");
 
          Write (File, "<pre class='ada-code-snippet'>");
 
-         for Line of Get_Ada_Code_Snippet (T.Documentation) loop
+         for Line of Get_Ada_Code_Snippet (Item.Documentation) loop
             Write (File, To_UTF_8_String (Line) & ASCII.LF);
          end loop;
 
          Write (File, "</pre>");
 
-         if T.Documentation.Has_Documentation then
+         if Item.Documentation.Has_Documentation then
             Write (File, "<pre>");
 
             Write
               (File,
                To_UTF_8_String
                  (Get_Plain_Text_Description
-                      (T.Documentation).Join_Lines (VSS.Strings.LF)));
+                      (Item.Documentation).Join_Lines (VSS.Strings.LF)));
 
             Write (File, "</pre>");
          end if;
