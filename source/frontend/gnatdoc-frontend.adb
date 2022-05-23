@@ -150,6 +150,20 @@ package body GNATdoc.Frontend is
                   when Ada_Type_Access_Def =>
                      Process_Type_Access_Def (Node.As_Type_Decl, Enclosing);
 
+                  when Ada_Derived_Type_Def =>
+                     --  Derived types with private part are ignored when
+                     --  documentation for declarations in private part are
+                     --  generated.
+
+                     if not Options.Generate_Private
+                       or else not Node.As_Type_Decl.F_Type_Def
+                                     .As_Derived_Type_Def.F_Has_With_Private
+                     then
+                        Ada.Text_IO.Put_Line
+                          (Image (Node) & " => "
+                           & Image (Node.As_Type_Decl.F_Type_Def));
+                     end if;
+
                   when others =>
                      Ada.Text_IO.Put_Line
                        (Image (Node) & " => "
