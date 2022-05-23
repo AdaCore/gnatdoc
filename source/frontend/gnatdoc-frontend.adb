@@ -409,14 +409,20 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Subp_Body =>
-               --  ??? Check whether Options.Generate_Body is disabled and
-               --  there is spec available. Or define other convention to
-               --  process "subprogram body as compilation unit".
+               --  Process subprogram body when documentation for bodies is
+               --  not generated and subprogram doesn't have subprogram
+               --  specification unit, to include it in the list of the all
+               --  units.
 
-               Process_Base_Subp_Body
-                 (Node.As_Subp_Body,
-                  GNATdoc.Entities.Global_Entities'Access,
-                  GNATdoc.Entities.TOC_Entities'Access);
+               if Options.Generate_Body
+                 or Node.As_Subp_Body.F_Subp_Spec
+                      .F_Subp_Name.P_Previous_Part.Is_Null
+               then
+                  Process_Base_Subp_Body
+                    (Node.As_Subp_Body,
+                     GNATdoc.Entities.Global_Entities'Access,
+                     GNATdoc.Entities.TOC_Entities'Access);
+               end if;
 
                return Over;
 
