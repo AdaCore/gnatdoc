@@ -45,9 +45,10 @@ package body GNATdoc.Frontend is
      (Node      : Classic_Subp_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
-   procedure Process_Subp_Body
-     (Node      : Subp_Body'Class;
+   procedure Process_Base_Subp_Body
+     (Node      : Base_Subp_Body'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+   --  Process subprogram body: Subp_Body, Null_Subp_Decl.
 
    procedure Process_Enum_Type_Def
      (Node      : Type_Decl'Class;
@@ -73,6 +74,31 @@ package body GNATdoc.Frontend is
 
    Extract_Options : GNATdoc.Comments.Options.Extractor_Options :=
      (GNAT, False);
+
+   ----------------------------
+   -- Process_Base_Subp_Body --
+   ----------------------------
+
+   procedure Process_Base_Subp_Body
+     (Node      : Base_Subp_Body'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           =>
+             To_Virtual_String (Node.F_Subp_Spec.F_Subp_Name.Text),
+           Qualified_Name =>
+             To_Virtual_String
+               (Node.F_Subp_Spec.F_Subp_Name.P_Fully_Qualified_Name),
+           Signature      =>
+             To_Virtual_String
+               (Node.F_Subp_Spec.F_Subp_Name.P_Unique_Identifying_Name) & "$$",
+           Documentation  => Extract (Node, Extract_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Subprograms.Insert (Entity);
+   end Process_Base_Subp_Body;
 
    ----------------------
    -- Process_Children --
@@ -148,17 +174,17 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Null_Subp_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Base_Subp_Body (Node.As_Null_Subp_Decl, Enclosing);
 
                return Over;
 
             when Ada_Subp_Body =>
-               Process_Subp_Body (Node.As_Subp_Body, Enclosing);
+               Process_Base_Subp_Body (Node.As_Subp_Body, Enclosing);
 
                return Over;
 
             when Ada_Expr_Function =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Base_Subp_Body (Node.As_Expr_Function, Enclosing);
 
                return Over;
 
@@ -340,7 +366,7 @@ package body GNATdoc.Frontend is
                --  there is spec available. Or define other convention to
                --  process "subprogram body as compilation unit".
 
-               Process_Subp_Body
+               Process_Base_Subp_Body
                  (Node.As_Subp_Body,
                   GNATdoc.Entities.Global_Entities'Access);
 
@@ -528,30 +554,5 @@ package body GNATdoc.Frontend is
    begin
       Enclosing.Record_Types.Insert (Entity);
    end Process_Record_Type_Def;
-
-   -----------------------
-   -- Process_Subp_Body --
-   -----------------------
-
-   procedure Process_Subp_Body
-     (Node      : Subp_Body'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
-   is
-      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Name           =>
-             To_Virtual_String (Node.F_Subp_Spec.F_Subp_Name.Text),
-           Qualified_Name =>
-             To_Virtual_String
-               (Node.F_Subp_Spec.F_Subp_Name.P_Fully_Qualified_Name),
-           Signature      =>
-             To_Virtual_String
-               (Node.F_Subp_Spec.F_Subp_Name.P_Unique_Identifying_Name) & "$$",
-           Documentation  => <>,
-           others         => <>);
-
-   begin
-      Enclosing.Subprograms.Insert (Entity);
-   end Process_Subp_Body;
 
 end GNATdoc.Frontend;

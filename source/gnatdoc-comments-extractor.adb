@@ -184,6 +184,15 @@ package body GNATdoc.Comments.Extractor is
                Options        => Options,
                Documentation  => Documentation);
 
+         when Ada_Subp_Body =>
+            Extract_Subprogram_Documentation
+              (Decl_Node      => Node,
+               Subp_Spec_Node => Node.As_Base_Subp_Body.F_Subp_Spec,
+               Expr_Node      => No_Expr,
+               Aspects_Node   => No_Aspect_Spec,
+               Options        => Options,
+               Documentation  => Documentation);
+
          when Ada_Type_Decl =>
             case Node.As_Type_Decl.F_Type_Def.Kind is
                when Ada_Enum_Type_Def =>
