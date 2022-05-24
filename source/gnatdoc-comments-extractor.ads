@@ -40,6 +40,7 @@ package GNATdoc.Comments.Extractor is
                and then Node.As_Type_Decl.F_Type_Def.Kind
                           in Ada_Derived_Type_Def
                                | Ada_Enum_Type_Def
+                               | Ada_Interface_Type_Def
                                | Ada_Mod_Int_Type_Def
                                | Ada_Private_Type_Def
                                | Ada_Record_Type_Def
@@ -63,6 +64,7 @@ package GNATdoc.Comments.Extractor is
                and then Node.As_Type_Decl.F_Type_Def.Kind
                           in Ada_Derived_Type_Def
                                | Ada_Enum_Type_Def
+                               | Ada_Interface_Type_Def
                                | Ada_Mod_Int_Type_Def
                                | Ada_Private_Type_Def
                                | Ada_Record_Type_Def
@@ -86,6 +88,7 @@ package GNATdoc.Comments.Extractor is
                and then Node.As_Type_Decl.F_Type_Def.Kind
                           in Ada_Derived_Type_Def
                                | Ada_Enum_Type_Def
+                               | Ada_Interface_Type_Def
                                | Ada_Mod_Int_Type_Def
                                | Ada_Private_Type_Def
                                | Ada_Record_Type_Def

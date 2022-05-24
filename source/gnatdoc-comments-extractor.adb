@@ -93,7 +93,8 @@ package body GNATdoc.Comments.Extractor is
       Documentation : out Structured_Comment'Class)
      with Pre => Node.Kind in Ada_Object_Decl | Ada_Subtype_Decl
      or (Node.Kind = Ada_Type_Decl
-         and then Node.As_Type_Decl.F_Type_Def.Kind in Ada_Mod_Int_Type_Def
+         and then Node.As_Type_Decl.F_Type_Def.Kind in Ada_Interface_Type_Def
+                    | Ada_Mod_Int_Type_Def
                     | Ada_Private_Type_Def
                     | Ada_Signed_Int_Type_Def
                     | Ada_Type_Access_Def)
@@ -238,6 +239,10 @@ package body GNATdoc.Comments.Extractor is
                      Extract_Record_Type_Documentation
                        (Node.As_Type_Decl, Options, Documentation);
                   end if;
+
+               when Ada_Interface_Type_Def =>
+                  Extract_Simple_Declaration_Documentation
+                    (Node.As_Type_Decl, Options, Documentation);
 
                when others =>
                   raise Program_Error;
