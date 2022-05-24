@@ -263,6 +263,7 @@ package body GNATdoc.Comments.Helpers is
                       | Ada_Mod_Int_Type_Def
                       | Ada_Private_Type_Def
                       | Ada_Record_Type_Def
+                      | Ada_Signed_Int_Type_Def
                       | Ada_Type_Access_Def)
       then
          Decl_To_Extract := Decl;

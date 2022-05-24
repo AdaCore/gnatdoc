@@ -95,6 +95,7 @@ package body GNATdoc.Comments.Extractor is
      or (Node.Kind = Ada_Type_Decl
          and then Node.As_Type_Decl.F_Type_Def.Kind in Ada_Mod_Int_Type_Def
                     | Ada_Private_Type_Def
+                    | Ada_Signed_Int_Type_Def
                     | Ada_Type_Access_Def)
      or (Node.Kind = Ada_Type_Decl
          and then Node.As_Type_Decl.F_Type_Def.Kind = Ada_Derived_Type_Def
@@ -210,7 +211,7 @@ package body GNATdoc.Comments.Extractor is
                   Extract_Enumeration_Type_Documentation
                     (Node.As_Type_Decl, Options, Documentation);
 
-               when Ada_Mod_Int_Type_Def =>
+               when Ada_Mod_Int_Type_Def | Ada_Signed_Int_Type_Def =>
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl, Options, Documentation);
 

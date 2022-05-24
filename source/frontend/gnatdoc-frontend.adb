@@ -54,13 +54,11 @@ package body GNATdoc.Frontend is
       Global    : GNATdoc.Entities.Entity_Information_Access);
    --  Process subprogram body: Subp_Body, Null_Subp_Decl.
 
-   procedure Process_Enum_Type_Def
+   procedure Process_Simple_Type_Def
      (Node      : Type_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
-
-   procedure Process_Mod_Int_Type_Def
-     (Node      : Type_Decl'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+   --  Process simple data types: Enum_Type_Def, Mod_Int_Type_Def,
+   --  Signed_Int_Type_Def
 
    procedure Process_Record_Type_Def
      (Node      : Type_Decl'Class;
@@ -157,11 +155,11 @@ package body GNATdoc.Frontend is
                   when Ada_Record_Type_Def =>
                      Process_Record_Type_Def (Node.As_Type_Decl, Enclosing);
 
-                  when Ada_Enum_Type_Def =>
-                     Process_Enum_Type_Def (Node.As_Type_Decl, Enclosing);
-
-                  when Ada_Mod_Int_Type_Def =>
-                     Process_Mod_Int_Type_Def (Node.As_Type_Decl, Enclosing);
+                  when Ada_Enum_Type_Def
+                     | Ada_Mod_Int_Type_Def
+                     | Ada_Signed_Int_Type_Def
+                     =>
+                     Process_Simple_Type_Def (Node.As_Type_Decl, Enclosing);
 
                   when Ada_Type_Access_Def =>
                      Process_Type_Access_Def (Node.As_Type_Decl, Enclosing);
@@ -479,54 +477,6 @@ package body GNATdoc.Frontend is
       end if;
    end Process_Derived_Type_Def;
 
-   ---------------------------
-   -- Process_Enum_Type_Def --
-   ---------------------------
-
-   procedure Process_Enum_Type_Def
-     (Node      : Type_Decl'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
-   is
-      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Node.F_Name.Text),
-           Qualified_Name =>
-             To_Virtual_String
-               (Node.F_Name.P_Fully_Qualified_Name),
-           Signature      =>
-             To_Virtual_String
-               (Node.F_Name.P_Unique_Identifying_Name),
-           Documentation  => Extract (Node, Extract_Options),
-           others         => <>);
-
-   begin
-      Enclosing.Simple_Types.Insert (Entity);
-   end Process_Enum_Type_Def;
-
-   ------------------------------
-   -- Process_Mod_Int_Type_Def --
-   ------------------------------
-
-   procedure Process_Mod_Int_Type_Def
-     (Node      : Type_Decl'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
-   is
-      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Node.F_Name.Text),
-           Qualified_Name =>
-             To_Virtual_String
-               (Node.F_Name.P_Fully_Qualified_Name),
-           Signature      =>
-             To_Virtual_String
-               (Node.F_Name.P_Unique_Identifying_Name),
-           Documentation  => Extract (Node, Extract_Options),
-           others         => <>);
-
-   begin
-      Enclosing.Simple_Types.Insert (Entity);
-   end Process_Mod_Int_Type_Def;
-
    -------------------------
    -- Process_Object_Decl --
    -------------------------
@@ -670,6 +620,30 @@ package body GNATdoc.Frontend is
    begin
       Enclosing.Record_Types.Insert (Entity);
    end Process_Record_Type_Def;
+
+   -----------------------------
+   -- Process_Simple_Type_Def --
+   -----------------------------
+
+   procedure Process_Simple_Type_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Node.F_Name.Text),
+           Qualified_Name =>
+             To_Virtual_String
+               (Node.F_Name.P_Fully_Qualified_Name),
+           Signature      =>
+             To_Virtual_String
+               (Node.F_Name.P_Unique_Identifying_Name),
+           Documentation  => Extract (Node, Extract_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Simple_Types.Insert (Entity);
+   end Process_Simple_Type_Def;
 
    --------------------------
    -- Process_Subtype_Decl --

@@ -43,6 +43,7 @@ package GNATdoc.Comments.Extractor is
                                | Ada_Mod_Int_Type_Def
                                | Ada_Private_Type_Def
                                | Ada_Record_Type_Def
+                               | Ada_Signed_Int_Type_Def
                                | Ada_Type_Access_Def);
    --  Extract documentation for supported kinds of nodes.
 
@@ -65,6 +66,7 @@ package GNATdoc.Comments.Extractor is
                                | Ada_Mod_Int_Type_Def
                                | Ada_Private_Type_Def
                                | Ada_Record_Type_Def
+                               | Ada_Signed_Int_Type_Def
                                | Ada_Type_Access_Def);
    --  Extract documentation for supported kinds of nodes.
 
@@ -87,6 +89,7 @@ package GNATdoc.Comments.Extractor is
                                | Ada_Mod_Int_Type_Def
                                | Ada_Private_Type_Def
                                | Ada_Record_Type_Def
+                               | Ada_Signed_Int_Type_Def
                                | Ada_Type_Access_Def);
    --  Extract documentation for supported kinds of nodes.
 
