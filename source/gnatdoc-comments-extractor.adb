@@ -91,7 +91,10 @@ package body GNATdoc.Comments.Extractor is
      (Node          : Libadalang.Analysis.Basic_Decl'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class)
-     with Pre => Node.Kind in Ada_Object_Decl | Ada_Subtype_Decl
+     with Pre => Node.Kind in Ada_Generic_Package_Instantiation
+                   | Ada_Generic_Subp_Instantiation
+                   | Ada_Object_Decl
+                   | Ada_Subtype_Decl
      or (Node.Kind = Ada_Type_Decl
          and then Node.As_Type_Decl.F_Type_Def.Kind in Ada_Array_Type_Def
                     | Ada_Interface_Type_Def
@@ -206,6 +209,14 @@ package body GNATdoc.Comments.Extractor is
                Aspects_Node   => No_Aspect_Spec,
                Options        => Options,
                Documentation  => Documentation);
+
+         when Ada_Generic_Package_Instantiation =>
+            Extract_Simple_Declaration_Documentation
+              (Node.As_Generic_Package_Instantiation, Options, Documentation);
+
+         when Ada_Generic_Subp_Instantiation =>
+            Extract_Simple_Declaration_Documentation
+              (Node.As_Generic_Subp_Instantiation, Options, Documentation);
 
          when Ada_Type_Decl =>
             case Node.As_Type_Decl.F_Type_Def.Kind is

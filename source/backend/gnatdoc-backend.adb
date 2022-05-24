@@ -148,6 +148,7 @@ package body GNATdoc.Backend is
       Generate_TOC ("Constants", Entity.Constants);
       Generate_TOC ("Variables", Entity.Variables);
       Generate_TOC ("Subprograms", Entity.Subprograms);
+      Generate_TOC ("Generic Instantiations", Entity.Generic_Instantiations);
 
       for Item of All_Nested loop
          Write

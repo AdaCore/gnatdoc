@@ -92,6 +92,13 @@ package body GNATdoc.Frontend is
      (Node      : Object_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Generic_Instantiation
+     (Node      : Generic_Instantiation'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Global    : GNATdoc.Entities.Entity_Information_Access);
+   --  Process geenric instantiations: Generic_Package_Instantiation and
+   --  Generic_Subp_Instantiation.
+
    procedure Process_Children
      (Parent    : Ada_Node'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -271,12 +278,14 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Generic_Package_Instantiation =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Generic_Instantiation
+                 (Node.As_Generic_Package_Instantiation, Enclosing, null);
 
                return Over;
 
             when Ada_Generic_Subp_Instantiation =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Generic_Instantiation
+                 (Node.As_Generic_Subp_Instantiation, Enclosing, null);
 
                return Over;
 
@@ -514,6 +523,43 @@ package body GNATdoc.Frontend is
          Enclosing.Simple_Types.Insert (Entity);
       end if;
    end Process_Derived_Type_Def;
+
+   -----------------------------------
+   -- Process_Generic_Instantiation --
+   -----------------------------------
+
+   procedure Process_Generic_Instantiation
+     (Node      : Generic_Instantiation'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Global    : GNATdoc.Entities.Entity_Information_Access)
+   is
+      Name      : constant Defining_Name :=
+        (if Node.Kind = Ada_Generic_Package_Instantiation
+         then Node.As_Generic_Package_Instantiation.F_Name
+         else Node.As_Generic_Subp_Instantiation.F_Subp_Name);
+      Signature : constant Virtual_String :=
+        (if Node.Kind = Ada_Generic_Package_Instantiation
+         then To_Virtual_String (Name.P_Unique_Identifying_Name)
+         else To_Virtual_String
+                (Name.P_Unique_Identifying_Name & Name.Full_Sloc_Image));
+      --  ??? LAL: bug in P_Unique_Identifying_Name for generic subprogram
+      --  instantiations
+
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Name.Text),
+           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
+           Signature      => Signature,
+           Documentation  => Extract (Node, Extract_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Generic_Instantiations.Insert (Entity);
+
+      if Global /= null then
+         Global.Generic_Instantiations.Insert (Entity);
+      end if;
+   end Process_Generic_Instantiation;
 
    --------------------------------
    -- Process_Interface_Type_Def --

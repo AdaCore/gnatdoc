@@ -35,27 +35,28 @@ package GNATdoc.Entities is
      new Ada.Containers.Ordered_Sets (Entity_Information_Access);
 
    type Entity_Information is record
-      Name            : VSS.Strings.Virtual_String;
-      Qualified_Name  : VSS.Strings.Virtual_String;
-      Signature       : VSS.Strings.Virtual_String;
-      Documentation   : GNATdoc.Comments.Structured_Comment;
+      Name                   : VSS.Strings.Virtual_String;
+      Qualified_Name         : VSS.Strings.Virtual_String;
+      Signature              : VSS.Strings.Virtual_String;
+      Documentation          : GNATdoc.Comments.Structured_Comment;
 
-      Packages        : Entity_Information_Sets.Set;
-      Subprograms     : Entity_Information_Sets.Set;
+      Packages               : Entity_Information_Sets.Set;
+      Subprograms            : Entity_Information_Sets.Set;
+      Generic_Instantiations : Entity_Information_Sets.Set;
       --  Generic_Packages
       --  Generic_Subprograms
       --  Package_Instantiations
       --  Subprogram_Instantiations
 
-      Simple_Types    : Entity_Information_Sets.Set;
-      Array_Types     : Entity_Information_Sets.Set;
-      Record_Types    : Entity_Information_Sets.Set;
-      Interface_Types : Entity_Information_Sets.Set;
-      Tagged_Types    : Entity_Information_Sets.Set;
-      Access_Types    : Entity_Information_Sets.Set;
-      Subtypes        : Entity_Information_Sets.Set;
-      Constants       : Entity_Information_Sets.Set;
-      Variables       : Entity_Information_Sets.Set;
+      Simple_Types           : Entity_Information_Sets.Set;
+      Array_Types            : Entity_Information_Sets.Set;
+      Record_Types           : Entity_Information_Sets.Set;
+      Interface_Types        : Entity_Information_Sets.Set;
+      Tagged_Types           : Entity_Information_Sets.Set;
+      Access_Types           : Entity_Information_Sets.Set;
+      Subtypes               : Entity_Information_Sets.Set;
+      Constants              : Entity_Information_Sets.Set;
+      Variables              : Entity_Information_Sets.Set;
 
       --  Access_Types      : EInfo_List.Vector;  +++
       --  CPP_Classes       : EInfo_List.Vector;  ---
@@ -65,13 +66,13 @@ package GNATdoc.Entities is
       --  Methods           : EInfo_List.Vector;  ???
       --  Pkgs              : EInfo_List.Vector;  +++
       --  --  Ordinary and generic packages.
-      --  Pkgs_Instances    : EInfo_List.Vector;
+      --  Pkgs_Instances    : EInfo_List.Vector;  +++
       --  --  Generic packages instantiations.
       --  Record_Types      : EInfo_List.Vector;  +++
       --  Simple_Types      : EInfo_List.Vector;  +++
       --  Subprgs           : EInfo_List.Vector;  +++
       --  --  Ordinary subprograms.
-      --  Subprgs_Instances : EInfo_List.Vector;
+      --  Subprgs_Instances : EInfo_List.Vector;  +++
       --  --  Generic subprograms instantiations.
       --  Tagged_Types      : EInfo_List.Vector;  +++
       --  Variables         : EInfo_List.Vector;  +++

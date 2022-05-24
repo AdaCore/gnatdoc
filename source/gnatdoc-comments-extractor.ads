@@ -31,6 +31,8 @@ package GNATdoc.Comments.Extractor is
      with Pre =>
        Node.Kind in Ada_Abstract_Subp_Decl
                       | Ada_Expr_Function
+                      | Ada_Generic_Package_Instantiation
+                      | Ada_Generic_Subp_Instantiation
                       | Ada_Null_Subp_Decl
                       | Ada_Object_Decl
                       | Ada_Subp_Body
@@ -56,6 +58,8 @@ package GNATdoc.Comments.Extractor is
      with Pre =>
        Node.Kind in Ada_Abstract_Subp_Decl
                       | Ada_Expr_Function
+                      | Ada_Generic_Package_Instantiation
+                      | Ada_Generic_Subp_Instantiation
                       | Ada_Null_Subp_Decl
                       | Ada_Object_Decl
                       | Ada_Subp_Body
@@ -81,6 +85,8 @@ package GNATdoc.Comments.Extractor is
      with Pre =>
        Node.Kind in Ada_Abstract_Subp_Decl
                       | Ada_Expr_Function
+                      | Ada_Generic_Package_Instantiation
+                      | Ada_Generic_Subp_Instantiation
                       | Ada_Null_Subp_Decl
                       | Ada_Object_Decl
                       | Ada_Subp_Body
