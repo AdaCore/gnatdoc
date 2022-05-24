@@ -139,6 +139,7 @@ package body GNATdoc.Backend is
       Write (File, "<h2>Entities</h2>");
 
       Generate_TOC ("Simple Types", Entity.Simple_Types);
+      Generate_TOC ("Array Types", Entity.Array_Types);
       Generate_TOC ("Record Types", Entity.Record_Types);
       Generate_TOC ("Interface Types", Entity.Interface_Types);
       Generate_TOC ("Tagged Types", Entity.Tagged_Types);

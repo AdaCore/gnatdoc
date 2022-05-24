@@ -60,6 +60,10 @@ package body GNATdoc.Frontend is
    --  Process simple data types: Enum_Type_Def, Mod_Int_Type_Def,
    --  Signed_Int_Type_Def
 
+   procedure Process_Array_Type_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Record_Type_Def
      (Node      : Type_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -96,6 +100,30 @@ package body GNATdoc.Frontend is
 
    Extract_Options : GNATdoc.Comments.Options.Extractor_Options :=
      (GNAT, False);
+
+   ----------------------------
+   -- Process_Array_Type_Def --
+   ----------------------------
+
+   procedure Process_Array_Type_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Node.F_Name.Text),
+           Qualified_Name =>
+             To_Virtual_String
+               (Node.F_Name.P_Fully_Qualified_Name),
+           Signature      =>
+             To_Virtual_String
+               (Node.F_Name.P_Unique_Identifying_Name),
+           Documentation  => Extract (Node, Extract_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Array_Types.Insert (Entity);
+   end Process_Array_Type_Def;
 
    ----------------------------
    -- Process_Base_Subp_Body --
@@ -183,6 +211,9 @@ package body GNATdoc.Frontend is
 
                   when Ada_Interface_Type_Def =>
                      Process_Interface_Type_Def (Node.As_Type_Decl, Enclosing);
+
+                  when Ada_Array_Type_Def =>
+                     Process_Array_Type_Def (Node.As_Type_Decl, Enclosing);
 
                   when others =>
                      Ada.Text_IO.Put_Line

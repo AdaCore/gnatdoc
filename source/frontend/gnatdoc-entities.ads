@@ -48,6 +48,7 @@ package GNATdoc.Entities is
       --  Subprogram_Instantiations
 
       Simple_Types    : Entity_Information_Sets.Set;
+      Array_Types     : Entity_Information_Sets.Set;
       Record_Types    : Entity_Information_Sets.Set;
       Interface_Types : Entity_Information_Sets.Set;
       Tagged_Types    : Entity_Information_Sets.Set;

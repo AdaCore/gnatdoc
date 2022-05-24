@@ -93,7 +93,8 @@ package body GNATdoc.Comments.Extractor is
       Documentation : out Structured_Comment'Class)
      with Pre => Node.Kind in Ada_Object_Decl | Ada_Subtype_Decl
      or (Node.Kind = Ada_Type_Decl
-         and then Node.As_Type_Decl.F_Type_Def.Kind in Ada_Interface_Type_Def
+         and then Node.As_Type_Decl.F_Type_Def.Kind in Ada_Array_Type_Def
+                    | Ada_Interface_Type_Def
                     | Ada_Mod_Int_Type_Def
                     | Ada_Private_Type_Def
                     | Ada_Signed_Int_Type_Def
@@ -208,24 +209,12 @@ package body GNATdoc.Comments.Extractor is
 
          when Ada_Type_Decl =>
             case Node.As_Type_Decl.F_Type_Def.Kind is
+               when Ada_Array_Type_Def =>
+                  Extract_Simple_Declaration_Documentation
+                    (Node.As_Type_Decl, Options, Documentation);
+
                when Ada_Enum_Type_Def =>
                   Extract_Enumeration_Type_Documentation
-                    (Node.As_Type_Decl, Options, Documentation);
-
-               when Ada_Mod_Int_Type_Def | Ada_Signed_Int_Type_Def =>
-                  Extract_Simple_Declaration_Documentation
-                    (Node.As_Type_Decl, Options, Documentation);
-
-               when Ada_Record_Type_Def =>
-                  Extract_Record_Type_Documentation
-                    (Node.As_Type_Decl, Options, Documentation);
-
-               when Ada_Private_Type_Def =>
-                  Extract_Simple_Declaration_Documentation
-                    (Node.As_Type_Decl, Options, Documentation);
-
-               when Ada_Type_Access_Def =>
-                  Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl, Options, Documentation);
 
                when Ada_Derived_Type_Def =>
@@ -241,6 +230,22 @@ package body GNATdoc.Comments.Extractor is
                   end if;
 
                when Ada_Interface_Type_Def =>
+                  Extract_Simple_Declaration_Documentation
+                    (Node.As_Type_Decl, Options, Documentation);
+
+               when Ada_Mod_Int_Type_Def | Ada_Signed_Int_Type_Def =>
+                  Extract_Simple_Declaration_Documentation
+                    (Node.As_Type_Decl, Options, Documentation);
+
+               when Ada_Record_Type_Def =>
+                  Extract_Record_Type_Documentation
+                    (Node.As_Type_Decl, Options, Documentation);
+
+               when Ada_Private_Type_Def =>
+                  Extract_Simple_Declaration_Documentation
+                    (Node.As_Type_Decl, Options, Documentation);
+
+               when Ada_Type_Access_Def =>
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl, Options, Documentation);
 
