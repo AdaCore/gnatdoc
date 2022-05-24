@@ -95,6 +95,7 @@ package body GNATdoc.Comments.Extractor is
                    | Ada_Generic_Subp_Instantiation
                    | Ada_Number_Decl
                    | Ada_Object_Decl
+                   | Ada_Package_Renaming_Decl
                    | Ada_Subtype_Decl
      or (Node.Kind = Ada_Type_Decl
          and then Node.As_Type_Decl.F_Type_Def.Kind in Ada_Array_Type_Def
@@ -218,6 +219,10 @@ package body GNATdoc.Comments.Extractor is
          when Ada_Generic_Subp_Instantiation =>
             Extract_Simple_Declaration_Documentation
               (Node.As_Generic_Subp_Instantiation, Options, Documentation);
+
+         when Ada_Package_Renaming_Decl =>
+            Extract_Simple_Declaration_Documentation
+              (Node.As_Package_Renaming_Decl, Options, Documentation);
 
          when Ada_Type_Decl =>
             case Node.As_Type_Decl.F_Type_Def.Kind is

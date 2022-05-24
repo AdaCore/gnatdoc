@@ -103,6 +103,11 @@ package body GNATdoc.Frontend is
    --  Process geenric instantiations: Generic_Package_Instantiation and
    --  Generic_Subp_Instantiation.
 
+   procedure Process_Package_Renaming_Decl
+     (Node      : Package_Renaming_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Global    : GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Children
      (Parent    : Ada_Node'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -476,7 +481,10 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Package_Renaming_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Package_Renaming_Decl
+                 (Node.As_Package_Renaming_Decl,
+                  GNATdoc.Entities.Global_Entities'Access,
+                  GNATdoc.Entities.TOC_Entities'Access);
 
                return Over;
 
@@ -707,6 +715,33 @@ package body GNATdoc.Frontend is
       GNATdoc.Entities.TOC_Entities.Packages.Insert (Entity);
       Process_Children (Node.F_Decls, Entity);
    end Process_Package_Body;
+
+   -----------------------------------
+   -- Process_Package_Renaming_Decl --
+   -----------------------------------
+
+   procedure Process_Package_Renaming_Decl
+     (Node      : Package_Renaming_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Global    : GNATdoc.Entities.Entity_Information_Access)
+   is
+      Name   : constant Defining_Name := Node.F_Name;
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Name.Text),
+           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
+           Signature      =>
+             To_Virtual_String (Name.P_Unique_Identifying_Name),
+           Documentation  => Extract (Node, Extract_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Renamings.Insert (Entity);
+
+      if Global /= null then
+         Global.Renamings.Insert (Entity);
+      end if;
+   end Process_Package_Renaming_Decl;
 
    ------------------------------
    -- Process_Private_Type_Def --
