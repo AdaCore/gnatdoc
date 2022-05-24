@@ -166,7 +166,7 @@ package body GNATdoc.Frontend is
    begin
       Enclosing.Subprograms.Insert (Entity);
 
-      if Global /= null then
+      if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Subprograms.Insert (Entity);
       end if;
    end Process_Base_Subp_Body;
@@ -414,7 +414,7 @@ package body GNATdoc.Frontend is
    begin
       Enclosing.Subprograms.Insert (Entity);
 
-      if Global /= null then
+      if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Subprograms.Insert (Entity);
       end if;
    end Process_Classic_Subp_Decl;
@@ -440,16 +440,14 @@ package body GNATdoc.Frontend is
 
             when Ada_Package_Decl =>
                Process_Package_Decl
-                 (Node.As_Package_Decl,
-                  GNATdoc.Entities.Global_Entities'Access);
+                 (Node.As_Package_Decl, GNATdoc.Entities.Globals'Access);
 
                return Over;
 
             when Ada_Package_Body =>
                if Options.Generate_Body then
                   Process_Package_Body
-                    (Node.As_Package_Body,
-                     GNATdoc.Entities.Global_Entities'Access);
+                    (Node.As_Package_Body, GNATdoc.Entities.Globals'Access);
                end if;
 
                return Over;
@@ -457,8 +455,8 @@ package body GNATdoc.Frontend is
             when Ada_Subp_Decl =>
                Process_Classic_Subp_Decl
                  (Node.As_Subp_Decl,
-                  GNATdoc.Entities.Global_Entities'Access,
-                  GNATdoc.Entities.TOC_Entities'Access);
+                  GNATdoc.Entities.Globals'Access,
+                  GNATdoc.Entities.Globals'Access);
 
                return Over;
 
@@ -474,8 +472,8 @@ package body GNATdoc.Frontend is
                then
                   Process_Base_Subp_Body
                     (Node.As_Subp_Body,
-                     GNATdoc.Entities.Global_Entities'Access,
-                     GNATdoc.Entities.TOC_Entities'Access);
+                     GNATdoc.Entities.Globals'Access,
+                     GNATdoc.Entities.Globals'Access);
                end if;
 
                return Over;
@@ -483,8 +481,8 @@ package body GNATdoc.Frontend is
             when Ada_Package_Renaming_Decl =>
                Process_Package_Renaming_Decl
                  (Node.As_Package_Renaming_Decl,
-                  GNATdoc.Entities.Global_Entities'Access,
-                  GNATdoc.Entities.TOC_Entities'Access);
+                  GNATdoc.Entities.Globals'Access,
+                  GNATdoc.Entities.Globals'Access);
 
                return Over;
 
@@ -568,7 +566,7 @@ package body GNATdoc.Frontend is
    begin
       Enclosing.Generic_Instantiations.Insert (Entity);
 
-      if Global /= null then
+      if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Generic_Instantiations.Insert (Entity);
       end if;
    end Process_Generic_Instantiation;
@@ -681,7 +679,11 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Packages.Insert (Entity);
-      GNATdoc.Entities.TOC_Entities.Packages.Insert (Entity);
+
+      if GNATdoc.Entities.Globals'Access /= Enclosing then
+         GNATdoc.Entities.Globals.Packages.Insert (Entity);
+      end if;
+
       Process_Children (Node.F_Public_Part, Entity);
 
       if Options.Generate_Private then
@@ -712,7 +714,11 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Packages.Insert (Entity);
-      GNATdoc.Entities.TOC_Entities.Packages.Insert (Entity);
+
+      if GNATdoc.Entities.Globals'Access /= Enclosing then
+         GNATdoc.Entities.Globals.Packages.Insert (Entity);
+      end if;
+
       Process_Children (Node.F_Decls, Entity);
    end Process_Package_Body;
 
@@ -738,7 +744,7 @@ package body GNATdoc.Frontend is
    begin
       Enclosing.Renamings.Insert (Entity);
 
-      if Global /= null then
+      if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Renamings.Insert (Entity);
       end if;
    end Process_Package_Renaming_Decl;

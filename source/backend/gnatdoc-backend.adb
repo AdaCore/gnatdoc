@@ -43,9 +43,9 @@ package body GNATdoc.Backend is
       Index_Entities : Entity_Information_Sets.Set;
 
    begin
-      Index_Entities.Union (TOC_Entities.Packages);
-      Index_Entities.Union (TOC_Entities.Subprograms);
-      Index_Entities.Union (TOC_Entities.Renamings);
+      Index_Entities.Union (Globals.Packages);
+      Index_Entities.Union (Globals.Subprograms);
+      Index_Entities.Union (Globals.Renamings);
 
       declare
          File : Writable_File := Index_File.Write_File;

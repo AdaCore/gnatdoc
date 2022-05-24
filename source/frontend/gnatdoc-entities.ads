@@ -83,8 +83,10 @@ package GNATdoc.Entities is
 
    end record;
 
-   Global_Entities : aliased Entity_Information;
-   TOC_Entities    : aliased Entity_Information;
+   Globals : aliased Entity_Information;
+   --  Set of all compilation units (including packages, subprograms,
+   --  renamings, generics and instantiations) and all nested packages
+   --  and generic packages.
 
    function All_Entities
      (Self : Entity_Information) return Entity_Information_Sets.Set;
