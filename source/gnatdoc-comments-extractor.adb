@@ -878,7 +878,7 @@ package body GNATdoc.Comments.Extractor is
             if Kind (Data (Token)) = Ada_Comment then
                for Section of Documentation.Sections loop
                   if Section.Kind
-                       in Raw | Enumeration_Literal | Member
+                       in Raw | Enumeration_Literal | Field
                             | Parameter | Returns
                     and then
                       (Location.Start_Line
@@ -1046,7 +1046,7 @@ package body GNATdoc.Comments.Extractor is
       Tag_Matcher       : constant Regular_Expression :=
         To_Regular_Expression
           (Ada_Optional_Separator_Expression
-           & "@(param|return|exception|enum|member)"
+           & "@(param|return|exception|enum|field)"
            & Ada_Optional_Separator_Expression);
       Parameter_Matcher : constant Regular_Expression :=
         To_Regular_Expression
@@ -1103,9 +1103,9 @@ package body GNATdoc.Comments.Extractor is
                Tag  := Enum_Tag;
                Kind := Enumeration_Literal;
 
-            elsif Match.Captured (1) = "member" then
+            elsif Match.Captured (1) = "field" then
                Tag  := Member_Tag;
-               Kind := Member;
+               Kind := Field;
 
             else
                raise Program_Error;
@@ -1118,7 +1118,7 @@ package body GNATdoc.Comments.Extractor is
             Line_Tail := Line.Tail_After (Match.Last_Marker);
 
             if Kind
-                 in Parameter | Raised_Exception | Enumeration_Literal | Member
+                 in Parameter | Raised_Exception | Enumeration_Literal | Field
             then
                --  Lookup for name of the parameter/exception. Convert
                --  found name to canonical form.

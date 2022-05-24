@@ -72,8 +72,8 @@ package body GNATdoc.Comments.Helpers is
          when Enumeration_Literal =>
             Text.Append ("@enum " & Section.Name);
 
-         when Member =>
-            Text.Append ("@member " & Section.Name);
+         when Field =>
+            Text.Append ("@field " & Section.Name);
 
          when Parameter =>
             Text.Append ("@param " & Section.Name);
@@ -134,14 +134,14 @@ package body GNATdoc.Comments.Helpers is
             end loop;
          end;
 
-         --  Process members
+         --  Process fields
 
          declare
             First_Entry : Boolean := True;
 
          begin
             for Section of Documentation.Sections loop
-               if Section.Kind = Member then
+               if Section.Kind = Field then
                   if First_Entry then
                      Text.Append (Empty_Virtual_String);
                      First_Entry := False;

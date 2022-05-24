@@ -76,7 +76,7 @@ package body GNATdoc.Comments.Builders.Records is
                Self.Process_Component_Declaration (Node.As_Component_Decl);
 
                for Name of Node.As_Component_Decl.F_Ids loop
-                  Self.Process_Defining_Name (Member, Name);
+                  Self.Process_Defining_Name (Field, Name);
                end loop;
 
                return Over;
@@ -85,7 +85,7 @@ package body GNATdoc.Comments.Builders.Records is
                Self.Process_Component_Declaration (Node.As_Discriminant_Spec);
 
                for Name of Node.As_Discriminant_Spec.F_Ids loop
-                  Self.Process_Defining_Name (Member, Name);
+                  Self.Process_Defining_Name (Field, Name);
                end loop;
 
                return Over;

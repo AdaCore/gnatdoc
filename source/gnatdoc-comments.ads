@@ -37,7 +37,7 @@ package GNATdoc.Comments is
       --                        ??? not supported
       Description,          --  Full description of the entity
       Enumeration_Literal,  --  Literal of the enumeration type
-      Member,               --  Record member of discriminant
+      Field,                --  Record component of discriminant
       Parameter,            --  Description of the parameter
       Returns,              --  Description of the return value
       Raised_Exception);    --  Description of the raised exception
