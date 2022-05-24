@@ -50,6 +50,9 @@ package GNATdoc.Comments is
      (Self : Structured_Comment'Class) return Boolean;
    --  Return True when structured comment contains documentation
 
+   function Is_Private (Self : Structured_Comment'Class) return Boolean;
+   --  Return True when entity is marked by @private tag
+
    procedure Free (Item : in out Structured_Comment_Access);
    --  Deallocate memory occupied by structured comment.
 
@@ -84,7 +87,8 @@ private
 
    type Structured_Comment is
      new Ada.Finalization.Limited_Controlled with record
-      Sections : Section_Vectors.Vector;
+      Sections   : Section_Vectors.Vector;
+      Is_Private : Boolean := False;
    end record;
 
    overriding procedure Finalize (Self : in out Structured_Comment);

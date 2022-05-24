@@ -62,14 +62,16 @@ package body GNATdoc.Backend is
          Write (File, "<ul>");
 
          for Item of Index_Entities loop
-            Write
-              (File,
-               "<li><a href='"
-               & Digest (To_UTF_8_String (Item.Signature))
-               & ".html' target='document-content'>"
-               & To_UTF_8_String (Item.Qualified_Name) & "</a></li>");
+            if not Item.Documentation.Is_Private then
+               Write
+                 (File,
+                  "<li><a href='"
+                  & Digest (To_UTF_8_String (Item.Signature))
+                  & ".html' target='document-content'>"
+                  & To_UTF_8_String (Item.Qualified_Name) & "</a></li>");
 
-            Generate_Entity_Documentation_Page (Item);
+               Generate_Entity_Documentation_Page (Item);
+            end if;
          end loop;
 
          Write (File, "</ul>");

@@ -69,4 +69,13 @@ package body GNATdoc.Comments is
       return False;
    end Has_Documentation;
 
+   ----------------
+   -- Is_Private --
+   ----------------
+
+   function Is_Private (Self : Structured_Comment'Class) return Boolean is
+   begin
+      return Self.Is_Private;
+   end Is_Private;
+
 end GNATdoc.Comments;

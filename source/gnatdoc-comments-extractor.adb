@@ -37,7 +37,12 @@ package body GNATdoc.Comments.Extractor is
    use all type GNATdoc.Comments.Options.Documentation_Style;
 
    type Section_Tag is
-     (Param_Tag, Return_Tag, Exception_Tag, Enum_Tag, Member_Tag);
+     (Param_Tag,
+      Return_Tag,
+      Exception_Tag,
+      Enum_Tag,
+      Member_Tag,
+      Private_Tag);
 
    type Section_Tag_Flags is array (Section_Tag) of Boolean with Pack;
 
@@ -682,7 +687,10 @@ package body GNATdoc.Comments.Extractor is
             Raw_Section := Header_Section;
          end if;
 
-         Parse_Raw_Section (Raw_Section, (others => False), Documentation);
+         Parse_Raw_Section
+           (Raw_Section,
+            (Private_Tag => True, others => False),
+            Documentation);
       end;
    end Extract_Package_Decl_Documentation;
 
@@ -1338,7 +1346,7 @@ package body GNATdoc.Comments.Extractor is
       Tag_Matcher       : constant Regular_Expression :=
         To_Regular_Expression
           (Ada_Optional_Separator_Expression
-           & "@(param|return|exception|enum|field)"
+           & "@(param|return|exception|enum|field|private)"
            & Ada_Optional_Separator_Expression);
       Parameter_Matcher : constant Regular_Expression :=
         To_Regular_Expression
@@ -1399,6 +1407,9 @@ package body GNATdoc.Comments.Extractor is
                Tag  := Member_Tag;
                Kind := Field;
 
+            elsif Match.Captured (1) = "private" then
+               Tag  := Private_Tag;
+
             else
                raise Program_Error;
             end if;
@@ -1409,7 +1420,12 @@ package body GNATdoc.Comments.Extractor is
 
             Line_Tail := Line.Tail_After (Match.Last_Marker);
 
-            if Kind
+            if Tag = Private_Tag then
+               Documentation.Is_Private := True;
+
+               goto Skip;
+
+            elsif Kind
                  in Parameter | Raised_Exception | Enumeration_Literal | Field
             then
                --  Lookup for name of the parameter/exception. Convert
@@ -1475,6 +1491,8 @@ package body GNATdoc.Comments.Extractor is
                   end if;
                end if;
             end;
+
+            <<Skip>>
 
             Skip_Line := True;
 
