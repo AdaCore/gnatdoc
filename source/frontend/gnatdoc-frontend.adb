@@ -92,6 +92,10 @@ package body GNATdoc.Frontend is
      (Node      : Object_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Number_Decl
+     (Node      : Number_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Generic_Instantiation
      (Node      : Generic_Instantiation'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
@@ -316,7 +320,7 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Number_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Number_Decl (Node.As_Number_Decl, Enclosing);
 
                return Over;
 
@@ -584,6 +588,34 @@ package body GNATdoc.Frontend is
    begin
       Enclosing.Interface_Types.Insert (Entity);
    end Process_Interface_Type_Def;
+
+   -------------------------
+   -- Process_Number_Decl --
+   -------------------------
+
+   procedure Process_Number_Decl
+     (Node      : Number_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access) is
+   begin
+      for Name of Node.F_Ids loop
+         declare
+            Entity : constant not null
+              GNATdoc.Entities.Entity_Information_Access :=
+                new GNATdoc.Entities.Entity_Information'
+                  (Name           =>
+                     To_Virtual_String (Name.F_Name.Text),
+                   Qualified_Name =>
+                     To_Virtual_String (Name.P_Fully_Qualified_Name),
+                   Signature      =>
+                     To_Virtual_String (Name.P_Unique_Identifying_Name),
+                   Documentation  => Extract (Node, Extract_Options),
+                   others         => <>);
+
+         begin
+            Enclosing.Constants.Insert (Entity);
+         end;
+      end loop;
+   end Process_Number_Decl;
 
    -------------------------
    -- Process_Object_Decl --

@@ -93,6 +93,7 @@ package body GNATdoc.Comments.Extractor is
       Documentation : out Structured_Comment'Class)
      with Pre => Node.Kind in Ada_Generic_Package_Instantiation
                    | Ada_Generic_Subp_Instantiation
+                   | Ada_Number_Decl
                    | Ada_Object_Decl
                    | Ada_Subtype_Decl
      or (Node.Kind = Ada_Type_Decl
@@ -271,6 +272,10 @@ package body GNATdoc.Comments.Extractor is
          when Ada_Object_Decl =>
             Extract_Simple_Declaration_Documentation
               (Node.As_Object_Decl, Options, Documentation);
+
+         when Ada_Number_Decl =>
+            Extract_Simple_Declaration_Documentation
+              (Node.As_Number_Decl, Options, Documentation);
 
          when others =>
             raise Program_Error;

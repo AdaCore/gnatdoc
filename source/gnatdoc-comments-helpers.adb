@@ -255,6 +255,7 @@ package body GNATdoc.Comments.Helpers is
                     | Ada_Expr_Function
                     | Ada_Generic_Package_Instantiation
                     | Ada_Null_Subp_Decl
+                    | Ada_Number_Decl
                     | Ada_Object_Decl
                     | Ada_Subp_Decl
                     | Ada_Subtype_Decl
