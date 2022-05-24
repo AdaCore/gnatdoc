@@ -36,6 +36,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Null_Subp_Decl
                       | Ada_Number_Decl
                       | Ada_Object_Decl
+                      | Ada_Package_Decl
                       | Ada_Package_Renaming_Decl
                       | Ada_Subp_Body
                       | Ada_Subp_Decl
@@ -65,6 +66,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Null_Subp_Decl
                       | Ada_Number_Decl
                       | Ada_Object_Decl
+                      | Ada_Package_Decl
                       | Ada_Package_Renaming_Decl
                       | Ada_Subp_Body
                       | Ada_Subp_Decl
@@ -94,6 +96,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Null_Subp_Decl
                       | Ada_Number_Decl
                       | Ada_Object_Decl
+                      | Ada_Package_Decl
                       | Ada_Package_Renaming_Decl
                       | Ada_Subp_Body
                       | Ada_Subp_Decl

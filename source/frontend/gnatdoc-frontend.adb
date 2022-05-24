@@ -674,7 +674,7 @@ package body GNATdoc.Frontend is
            Signature      =>
              To_Virtual_String
                (Node.F_Package_Name.P_Unique_Identifying_Name) & "$",
-           Documentation  => <>,
+           Documentation  => Extract (Node, Extract_Options),
            others         => <>);
 
    begin

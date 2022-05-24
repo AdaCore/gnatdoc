@@ -51,6 +51,11 @@ package body GNATdoc.Comments.Extractor is
    Ada_Optional_Separator_Expression : constant Virtual_String :=
      "[\p{Zs}\p{Cf}]*";
 
+   procedure Extract_Package_Decl_Documentation
+     (Node          : Libadalang.Analysis.Package_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : out Structured_Comment'Class);
+
    procedure Extract_Subprogram_Documentation
      (Decl_Node      : Libadalang.Analysis.Basic_Decl'Class;
       Subp_Spec_Node : Subp_Spec'Class;
@@ -176,6 +181,10 @@ package body GNATdoc.Comments.Extractor is
       Documentation : out Structured_Comment'Class) is
    begin
       case Node.Kind is
+         when Ada_Package_Decl =>
+            Extract_Package_Decl_Documentation
+              (Node.As_Package_Decl, Options, Documentation);
+
          when Ada_Abstract_Subp_Decl | Ada_Subp_Decl =>
             Extract_Subprogram_Documentation
               (Decl_Node      => Node,
@@ -393,6 +402,289 @@ package body GNATdoc.Comments.Extractor is
             Documentation);
       end;
    end Extract_Enumeration_Type_Documentation;
+
+   ----------------------------------------
+   -- Extract_Package_Decl_Documentation --
+   ----------------------------------------
+
+   procedure Extract_Package_Decl_Documentation
+     (Node          : Libadalang.Analysis.Package_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : out Structured_Comment'Class)
+   is
+      Prelude                    : Ada_Node_List;
+      Header_Section             : Section_Access;
+      Leading_Section            : Section_Access;
+      Intermediate_Upper_Section : Section_Access;
+      Intermediate_Lower_Section : Section_Access;
+      Last_Pragma_Or_Use         : Ada_Node;
+
+   begin
+      Leading_Section :=
+        new Section'
+          (Kind             => Raw,
+           Symbol           => "<<LEADING>>",
+           Name             => <>,
+           Text             => <>,
+           others           => <>);
+      Documentation.Sections.Append (Leading_Section);
+
+      --  Header section: before context clauses of compilation unit
+
+      if Node.P_Is_Compilation_Unit_Root then
+         Prelude := Node.P_Enclosing_Compilation_Unit.F_Prelude;
+
+         if Prelude.Sloc_Range.Start_Line = Prelude.Sloc_Range.End_Line
+           and Prelude.Sloc_Range.Start_Column = Prelude.Sloc_Range.End_Column
+         then
+            Prelude := No_Ada_Node_List;
+         end if;
+
+         if not Prelude.Is_Null then
+            Header_Section :=
+              new Section'
+                (Kind             => Raw,
+                 Symbol           => "<<HEADER>>",
+                 Name             => <>,
+                 Text             => <>,
+                 others           => <>);
+            Documentation.Sections.Append (Header_Section);
+
+            --  Going from the line before the first line of prelude to find
+            --  an empty line and append all text till the next empty line to
+            --  the header section.
+
+            declare
+               Token : Token_Reference := Prelude.Token_Start;
+               Found : Boolean         := False;
+
+            begin
+               loop
+                  Token := Previous (Token);
+
+                  exit when Token = No_Token;
+
+                  case Kind (Data (Token)) is
+                     when Ada_Comment =>
+                        if Found then
+                           Header_Section.Text.Prepend
+                             (To_Virtual_String (Text (Token)));
+                        end if;
+
+                     when Ada_Whitespace =>
+                        declare
+                           Location : constant Source_Location_Range :=
+                             Sloc_Range (Data (Token));
+
+                        begin
+                           if Location.End_Line - Location.Start_Line > 1 then
+                              exit when Found;
+
+                              Found := True;
+                           end if;
+                        end;
+
+                     when others =>
+                        --  No tokens of other kinds are possible.
+
+                        raise Program_Error;
+                  end case;
+               end loop;
+            end;
+         end if;
+      end if;
+
+      --  Leading section: before the package declaration and after context
+      --  clauses of the compilation unit
+
+      if not Node.P_Is_Compilation_Unit_Root or Prelude.Is_Null then
+         declare
+            Token : Token_Reference := Node.Token_Start;
+            Found : Boolean         := False;
+
+         begin
+            loop
+               Token := Previous (Token);
+
+               exit when Token = No_Token;
+
+               case Kind (Data (Token)) is
+                  when Ada_Comment =>
+                     if Found then
+                        Leading_Section.Text.Prepend
+                          (To_Virtual_String (Text (Token)));
+                     end if;
+
+                  when Ada_Whitespace =>
+                     declare
+                        Location : constant Source_Location_Range :=
+                          Sloc_Range (Data (Token));
+
+                     begin
+                        if Location.End_Line - Location.Start_Line > 1 then
+                           exit when Found;
+
+                           Found := True;
+                        end if;
+                     end;
+
+                  when others =>
+                     --  Leading section must be separated from the context
+                     --  clauses by the empty line, thus any other tokens
+                     --  cleanup accumulated text.
+
+                     Leading_Section.Text.Clear;
+
+                     exit;
+               end case;
+            end loop;
+         end;
+      end if;
+
+      --  Looukp last use clause or pragma declarations at the beginning of the
+      --  public part of the package.
+
+      for N of Node.F_Public_Part.F_Decls loop
+         case N.Kind is
+            when Ada_Pragma_Node | Ada_Use_Clause =>
+               Last_Pragma_Or_Use := N.As_Ada_Node;
+
+            when others =>
+               exit;
+         end case;
+      end loop;
+
+      --  Upper intermediate section: after 'is' and before any declarations.
+
+      Intermediate_Upper_Section :=
+        new Section'
+          (Kind             => Raw,
+           Symbol           => "<<INTERMEDIATE UPPER>>",
+           Name             => <>,
+           Text             => <>,
+           others           => <>);
+      Documentation.Sections.Append (Intermediate_Upper_Section);
+
+      declare
+         Token : Token_Reference := Node.Token_Start;
+         Found : Boolean := False;
+
+      begin
+         --  Lookup 'is' in the package declaration
+
+         loop
+            Token := Next (Token);
+
+            exit when
+              Token = No_Token or else Kind (Data (Token)) = Ada_Is;
+         end loop;
+
+         loop
+            Token := Next (Token);
+
+            exit when Token = No_Token;
+
+            case Kind (Data (Token)) is
+               when Ada_Comment =>
+                  Found := True;
+                  Intermediate_Upper_Section.Text.Append
+                    (To_Virtual_String (Text (Token)));
+
+               when Ada_Whitespace =>
+                  declare
+                     Location : constant Source_Location_Range :=
+                       Sloc_Range (Data (Token));
+
+                  begin
+                     if Location.End_Line - Location.Start_Line > 1 then
+                        exit when Found;
+
+                        Found := True;
+                     end if;
+                  end;
+
+               when others =>
+                  exit;
+            end case;
+         end loop;
+      end;
+
+      --  Lower intermediate section: after 'is' and before any declarations.
+
+      if not Last_Pragma_Or_Use.Is_Null then
+         Intermediate_Lower_Section :=
+           new Section'
+             (Kind             => Raw,
+              Symbol           => "<<INTERMEDIATE LOWER>>",
+              Name             => <>,
+              Text             => <>,
+              others           => <>);
+         Documentation.Sections.Append (Intermediate_Lower_Section);
+
+         declare
+            Token : Token_Reference := Last_Pragma_Or_Use.Token_End;
+            Found : Boolean := False;
+
+         begin
+            loop
+               Token := Next (Token);
+
+               exit when Token = No_Token;
+
+               case Kind (Data (Token)) is
+                  when Ada_Comment =>
+                     Found := True;
+                     Intermediate_Lower_Section.Text.Append
+                       (To_Virtual_String (Text (Token)));
+
+                  when Ada_Whitespace =>
+                     declare
+                        Location : constant Source_Location_Range :=
+                          Sloc_Range (Data (Token));
+
+                     begin
+                        if Location.End_Line - Location.Start_Line > 1 then
+                           exit when Found;
+
+                           Found := True;
+                        end if;
+                     end;
+
+                  when others =>
+                     exit;
+               end case;
+            end loop;
+         end;
+      end if;
+
+      Remove_Comment_Start_And_Indentation (Documentation);
+
+      declare
+         Raw_Section : Section_Access;
+
+      begin
+         --  Select most appropriate section.
+
+         if not Intermediate_Upper_Section.Text.Is_Empty then
+            Raw_Section := Intermediate_Upper_Section;
+
+         elsif Intermediate_Lower_Section /= null
+           and then not Intermediate_Lower_Section.Text.Is_Empty
+         then
+            Raw_Section := Intermediate_Lower_Section;
+
+         elsif not Leading_Section.Text.Is_Empty then
+            Raw_Section := Leading_Section;
+
+         elsif Header_Section /= null
+           and then not Header_Section.Text.Is_Empty
+         then
+            Raw_Section := Header_Section;
+         end if;
+
+         Parse_Raw_Section (Raw_Section, (others => False), Documentation);
+      end;
+   end Extract_Package_Decl_Documentation;
 
    ---------------------------------------
    -- Extract_Record_Type_Documentation --

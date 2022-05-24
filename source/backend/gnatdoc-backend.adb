@@ -151,6 +151,16 @@ package body GNATdoc.Backend is
       Generate_TOC ("Subprograms", Entity.Subprograms);
       Generate_TOC ("Generic Instantiations", Entity.Generic_Instantiations);
 
+      Write (File, "<h2>Description</h2>");
+
+      Write (File, "<pre>");
+      Write
+        (File,
+         To_UTF_8_String
+           (Get_Plain_Text_Description
+                (Entity.Documentation).Join_Lines (VSS.Strings.LF)));
+      Write (File, "</pre>");
+
       for Item of All_Nested loop
          Write
            (File,
