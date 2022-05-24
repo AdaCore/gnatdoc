@@ -32,8 +32,8 @@ iframe
 
 .content
 {
-  width: 1024px;
-  margin: 0 auto
+  max-width: 1024px;
+  margin: 0 auto;
 }
 
 .ada-code-snippet
@@ -42,4 +42,5 @@ iframe
   border-radius: 4px;
   background-color: #FCFCFC;
   padding: 4px 6px;
+  overflow: auto;
 }
