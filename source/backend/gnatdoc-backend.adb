@@ -20,6 +20,7 @@ with GNATCOLL.VFS;
 
 with GNATdoc.Comments.Helpers;
 with GNATdoc.Entities;
+with GNATdoc.Options;
 
 with VSS.Strings.Conversions;
 
@@ -33,6 +34,12 @@ package body GNATdoc.Backend is
 
    procedure Generate_Entity_Documentation_Page
      (Entity : not null Entity_Information_Access);
+
+   function Is_Private_Entity
+     (Entity : not null Entity_Information_Access) return Boolean;
+   --  Return True when given entity is private package, or explicitly marked
+   --  as private entity, or enclosed by the private package, or enclosed by
+   --  the entity marked as private entity.
 
    --------------
    -- Generate --
@@ -62,7 +69,7 @@ package body GNATdoc.Backend is
          Write (File, "<ul>");
 
          for Item of Index_Entities loop
-            if not Item.Documentation.Is_Private then
+            if not Is_Private_Entity (Item) then
                Write
                  (File,
                   "<li><a href='"
@@ -196,5 +203,19 @@ package body GNATdoc.Backend is
 
       Close (File);
    end Generate_Entity_Documentation_Page;
+
+   -----------------------
+   -- Is_Private_Entity --
+   -----------------------
+
+   function Is_Private_Entity
+     (Entity : not null Entity_Information_Access) return Boolean is
+   begin
+      return
+        (Entity.Is_Private and not Options.Options.Generate_Private)
+        or Entity.Documentation.Is_Private
+        or (not Entity.Enclosing.Is_Empty
+              and then Is_Private_Entity (To_Entity (Entity.Enclosing)));
+   end Is_Private_Entity;
 
 end GNATdoc.Backend;

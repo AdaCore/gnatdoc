@@ -15,9 +15,10 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with Ada.Containers.Hashed_Maps;
 with Ada.Containers.Ordered_Sets;
 
-with VSS.Strings;
+with VSS.Strings.Hash;
 
 with GNATdoc.Comments;
 
@@ -34,11 +35,23 @@ package GNATdoc.Entities is
    package Entity_Information_Sets is
      new Ada.Containers.Ordered_Sets (Entity_Information_Access);
 
+   package Entity_Information_Maps is
+     new Ada.Containers.Hashed_Maps
+       (VSS.Strings.Virtual_String,
+        Entity_Information_Access,
+        VSS.Strings.Hash,
+        VSS.Strings."=");
+
    type Entity_Information is record
       Name                   : VSS.Strings.Virtual_String;
       Qualified_Name         : VSS.Strings.Virtual_String;
       Signature              : VSS.Strings.Virtual_String;
       Documentation          : GNATdoc.Comments.Structured_Comment;
+
+      Enclosing              : VSS.Strings.Virtual_String;
+      --  Signature of the enclosing entity.
+      Is_Private             : Boolean := False;
+      --  Private entities are excluded from the documentartion.
 
       Packages               : Entity_Information_Sets.Set;
       Subprograms            : Entity_Information_Sets.Set;
@@ -83,10 +96,13 @@ package GNATdoc.Entities is
 
    end record;
 
-   Globals : aliased Entity_Information;
+   Globals   : aliased Entity_Information;
    --  Set of all compilation units (including packages, subprograms,
    --  renamings, generics and instantiations) and all nested packages
    --  and generic packages.
+
+   To_Entity : Entity_Information_Maps.Map;
+   --  Map to lookup entity's information by entity's signature.
 
    function All_Entities
      (Self : Entity_Information) return Entity_Information_Sets.Set;
