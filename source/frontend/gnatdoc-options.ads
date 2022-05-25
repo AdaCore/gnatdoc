@@ -15,11 +15,16 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with Libadalang.Analysis;
+package GNATdoc.Options is
 
-package GNATdoc.Frontend is
+   type Frontend_Options is record
+      Generate_Private : Boolean := False;
+      --  Generate documentation for private entities.
 
-   procedure Process_Compilation_Unit
-     (Unit : Libadalang.Analysis.Compilation_Unit'Class);
+      Generate_Body    : Boolean := False;
+      --  Generate documentation for package bodies.
+   end record;
 
-end GNATdoc.Frontend;
+   Options : Frontend_Options := (others => <>);
+
+end GNATdoc.Options;

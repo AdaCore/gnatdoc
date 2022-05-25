@@ -24,6 +24,7 @@ with VSS.Strings.Conversions;
 with GNATdoc.Comments.Extractor;
 with GNATdoc.Comments.Options;
 with GNATdoc.Entities;
+with GNATdoc.Options;
 
 package body GNATdoc.Frontend is
 
@@ -195,7 +196,7 @@ package body GNATdoc.Frontend is
                      --  Private_Type_Def nodes are ignored when documentation
                      --  of declarations in private part are generated.
 
-                     if not Options.Generate_Private then
+                     if not Options.Options.Generate_Private then
                         Process_Private_Type_Def
                           (Node.As_Type_Decl, Enclosing);
                      end if;
@@ -217,7 +218,7 @@ package body GNATdoc.Frontend is
                      --  documentation for declarations in private part are
                      --  generated.
 
-                     if not Options.Generate_Private
+                     if not Options.Options.Generate_Private
                        or else not Node.As_Type_Decl.F_Type_Def
                                      .As_Derived_Type_Def.F_Has_With_Private
                      then
@@ -316,7 +317,7 @@ package body GNATdoc.Frontend is
                --  private part are ignored.
 
                if not Node.As_Object_Decl.F_Has_Constant
-                 or not Options.Generate_Private
+                 or not Options.Options.Generate_Private
                  or Node.As_Object_Decl.P_Private_Part_Decl.Is_Null
                then
                   Process_Object_Decl (Node.As_Object_Decl, Enclosing);
@@ -445,7 +446,7 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Package_Body =>
-               if Options.Generate_Body then
+               if Options.Options.Generate_Body then
                   Process_Package_Body
                     (Node.As_Package_Body, GNATdoc.Entities.Globals'Access);
                end if;
@@ -466,7 +467,7 @@ package body GNATdoc.Frontend is
                --  specification unit, to include it in the list of the all
                --  units.
 
-               if Options.Generate_Body
+               if Options.Options.Generate_Body
                  or Node.As_Subp_Body.F_Subp_Spec
                       .F_Subp_Name.P_Previous_Part.Is_Null
                then
@@ -686,7 +687,7 @@ package body GNATdoc.Frontend is
 
       Process_Children (Node.F_Public_Part, Entity);
 
-      if Options.Generate_Private then
+      if Options.Options.Generate_Private then
          Process_Children (Node.F_Private_Part, Entity);
       end if;
    end Process_Package_Decl;
