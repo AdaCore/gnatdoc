@@ -262,7 +262,8 @@ package body GNATdoc.Comments.Helpers is
                     | Ada_Subp_Decl
                     | Ada_Subtype_Decl
         or (Decl.Kind = Ada_Type_Decl
-            and then Decl.As_Type_Decl.F_Type_Def.Kind in Ada_Array_Type_Def
+            and then Decl.As_Type_Decl.F_Type_Def.Kind in Ada_Access_To_Subp_Def
+                      | Ada_Array_Type_Def
                       | Ada_Derived_Type_Def
                       | Ada_Enum_Type_Def
                       | Ada_Interface_Type_Def

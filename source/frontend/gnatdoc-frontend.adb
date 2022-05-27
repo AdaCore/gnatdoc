@@ -82,7 +82,7 @@ package body GNATdoc.Frontend is
      (Node      : Type_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
-   procedure Process_Type_Access_Def
+   procedure Process_Access_Type_Def
      (Node      : Type_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
@@ -121,6 +121,27 @@ package body GNATdoc.Frontend is
 
    function Signature (Name : Defining_Name'Class) return Virtual_String;
    --  Computes unique signature of the given entity.
+
+   -----------------------------
+   -- Process_Access_Type_Def --
+   -----------------------------
+
+   procedure Process_Access_Type_Def
+     (Node      : Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Name   : constant Defining_Name := Node.F_Name;
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Name.Text),
+           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
+           Signature      => Signature (Name),
+           Documentation  => Extract (Node, Extract_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Access_Types.Insert (Entity);
+   end Process_Access_Type_Def;
 
    ----------------------------
    -- Process_Array_Type_Def --
@@ -207,8 +228,8 @@ package body GNATdoc.Frontend is
                      =>
                      Process_Simple_Type_Def (Node.As_Type_Decl, Enclosing);
 
-                  when Ada_Type_Access_Def =>
-                     Process_Type_Access_Def (Node.As_Type_Decl, Enclosing);
+                  when Ada_Type_Access_Def | Ada_Access_To_Subp_Def =>
+                     Process_Access_Type_Def (Node.As_Type_Decl, Enclosing);
 
                   when Ada_Derived_Type_Def =>
                      --  Derived types with private part are ignored when
@@ -814,27 +835,6 @@ package body GNATdoc.Frontend is
    begin
       Enclosing.Subtypes.Insert (Entity);
    end Process_Subtype_Decl;
-
-   -----------------------------
-   -- Process_Type_Access_Def --
-   -----------------------------
-
-   procedure Process_Type_Access_Def
-     (Node      : Type_Decl'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
-   is
-      Name   : constant Defining_Name := Node.F_Name;
-      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Documentation  => Extract (Node, Extract_Options),
-           others         => <>);
-
-   begin
-      Enclosing.Access_Types.Insert (Entity);
-   end Process_Type_Access_Def;
 
    ---------------
    -- Signature --

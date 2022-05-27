@@ -280,6 +280,17 @@ package body GNATdoc.Comments.Extractor is
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl, Options, Documentation);
 
+               when Ada_Access_To_Subp_Def =>
+                  Extract_Subprogram_Documentation
+                    (Decl_Node      => Node,
+                     Subp_Spec_Node =>
+                        Node.As_Type_Decl.F_Type_Def
+                          .As_Access_To_Subp_Def.F_Subp_Spec,
+                     Expr_Node      => No_Expr,
+                     Aspects_Node   => No_Aspect_Spec,
+                     Options        => Options,
+                     Documentation  => Documentation);
+
                when others =>
                   raise Program_Error;
             end case;
@@ -884,12 +895,18 @@ package body GNATdoc.Comments.Extractor is
 
             Upper_Start_Line := Params_Node.Sloc_Range.End_Line + 1;
 
-         else
+         elsif not Subp_Spec_Node.F_Subp_Name.Is_Null then
             --  For parameterless procedures, intermadiate section starts
             --  after the procedure's name identifier.
 
             Upper_Start_Line :=
               Subp_Spec_Node.F_Subp_Name.Sloc_Range.Start_Line;
+
+         else
+            --  For access to subprogram, intermediate section starts after
+            --  the beginning of declaration.
+
+            Upper_Start_Line := Subp_Spec_Node.Sloc_Range.Start_Line + 1;
          end if;
 
          if Aspects_Node /= No_Aspect_Spec then
@@ -990,7 +1007,11 @@ package body GNATdoc.Comments.Extractor is
       --  Extract code snippet of declaration and remove all comments from
       --  it.
 
-      Fill_Code_Snippet (Subp_Spec_Node, Documentation);
+      Fill_Code_Snippet
+        ((if Decl_Node.Kind = Ada_Type_Decl  --  Access to subprogram type
+            then Decl_Node
+            else Subp_Spec_Node),
+         Documentation);
 
       --  Postprocess extracted text, for each group of lines, separated
       --  by empty line by remove of two minus signs and common leading

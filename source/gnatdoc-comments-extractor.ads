@@ -43,7 +43,8 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Subtype_Decl
          or (Node.Kind = Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
-                          in Ada_Array_Type_Def
+                          in Ada_Access_To_Subp_Def
+                               | Ada_Array_Type_Def
                                | Ada_Derived_Type_Def
                                | Ada_Enum_Type_Def
                                | Ada_Interface_Type_Def
@@ -73,7 +74,8 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Subtype_Decl
          or (Node.Kind = Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
-                          in Ada_Array_Type_Def
+                          in Ada_Access_To_Subp_Def
+                               | Ada_Array_Type_Def
                                | Ada_Derived_Type_Def
                                | Ada_Enum_Type_Def
                                | Ada_Interface_Type_Def
@@ -103,7 +105,8 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Subtype_Decl
          or (Node.Kind = Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
-                          in Ada_Array_Type_Def
+                          in Ada_Access_To_Subp_Def
+                               | Ada_Array_Type_Def
                                | Ada_Derived_Type_Def
                                | Ada_Enum_Type_Def
                                | Ada_Interface_Type_Def
