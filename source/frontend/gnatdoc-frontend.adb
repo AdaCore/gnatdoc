@@ -370,7 +370,7 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Package_Body =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Package_Body (Node.As_Package_Body, Enclosing);
 
                return Over;
 
