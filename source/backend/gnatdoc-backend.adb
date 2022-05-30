@@ -52,7 +52,7 @@ package body GNATdoc.Backend is
    begin
       Index_Entities.Union (Globals.Packages);
       Index_Entities.Union (Globals.Subprograms);
-      Index_Entities.Union (Globals.Renamings);
+      Index_Entities.Union (Globals.Package_Renamings);
 
       declare
          File : Writable_File := Index_File.Write_File;

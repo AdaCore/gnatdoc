@@ -741,10 +741,10 @@ package body GNATdoc.Frontend is
            others         => <>);
 
    begin
-      Enclosing.Renamings.Insert (Entity);
+      Enclosing.Package_Renamings.Insert (Entity);
 
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
-         Global.Renamings.Insert (Entity);
+         Global.Package_Renamings.Insert (Entity);
       end if;
    end Process_Package_Renaming_Decl;
 
