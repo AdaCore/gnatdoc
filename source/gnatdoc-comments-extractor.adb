@@ -238,6 +238,15 @@ package body GNATdoc.Comments.Extractor is
             Extract_Simple_Declaration_Documentation
               (Node.As_Package_Renaming_Decl, Options, Documentation);
 
+         when Ada_Subp_Renaming_Decl =>
+            Extract_Subprogram_Documentation
+              (Decl_Node      => Node,
+               Subp_Spec_Node => Node.As_Subp_Renaming_Decl.F_Subp_Spec,
+               Expr_Node      => No_Expr,
+               Aspects_Node   => No_Aspect_Spec,
+               Options        => Options,
+               Documentation  => Documentation);
+
          when Ada_Type_Decl =>
             case Node.As_Type_Decl.F_Type_Def.Kind is
                when Ada_Array_Type_Def =>

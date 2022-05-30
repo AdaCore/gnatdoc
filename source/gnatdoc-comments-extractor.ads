@@ -40,6 +40,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Package_Renaming_Decl
                       | Ada_Subp_Body
                       | Ada_Subp_Decl
+                      | Ada_Subp_Renaming_Decl
                       | Ada_Subtype_Decl
          or (Node.Kind = Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
@@ -71,6 +72,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Package_Renaming_Decl
                       | Ada_Subp_Body
                       | Ada_Subp_Decl
+                      | Ada_Subp_Renaming_Decl
                       | Ada_Subtype_Decl
          or (Node.Kind = Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
@@ -102,6 +104,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Package_Renaming_Decl
                       | Ada_Subp_Body
                       | Ada_Subp_Decl
+                      | Ada_Subp_Renaming_Decl
                       | Ada_Subtype_Decl
          or (Node.Kind = Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind

@@ -318,7 +318,8 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Subp_Renaming_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Base_Subp_Body
+                 (Node.As_Subp_Renaming_Decl, Enclosing, null);
 
                return Over;
 
@@ -850,7 +851,9 @@ package body GNATdoc.Frontend is
         To_Virtual_String (Name.P_Unique_Identifying_Name)
       do
          case Name.P_Basic_Decl.Kind is
-            when Ada_Package_Body | Ada_Subp_Body | Ada_Expr_Function =>
+            when Ada_Package_Body | Ada_Subp_Body | Ada_Expr_Function
+               | Ada_Subp_Renaming_Decl
+            =>
                Result.Append ('$');
 
             when Ada_Generic_Subp_Instantiation =>
@@ -870,7 +873,9 @@ package body GNATdoc.Frontend is
             when others =>
                Ada.Text_IO.Put_Line
                  (Image (Name) & ": signature of "
-                  & Image (Name.P_Basic_Decl));
+                  & Image (Name.P_Basic_Decl)
+                  & " => " & VSS.Strings.Conversions.To_UTF_8_String (Result));
+
          end case;
       end return;
    end Signature;
