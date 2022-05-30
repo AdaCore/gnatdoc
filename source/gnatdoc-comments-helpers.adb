@@ -69,6 +69,9 @@ package body GNATdoc.Comments.Helpers is
 
    begin
       case Section.Kind is
+         when Formal =>
+            Text.Append ("@formal " & Section.Name);
+
          when Enumeration_Literal =>
             Text.Append ("@enum " & Section.Name);
 
@@ -115,6 +118,24 @@ package body GNATdoc.Comments.Helpers is
                Text := Section.Text;
             end if;
          end loop;
+
+         --  Process generic formal parameters
+
+         declare
+            First_Entry : Boolean := True;
+
+         begin
+            for Section of Documentation.Sections loop
+               if Section.Kind = Formal then
+                  if First_Entry then
+                     Text.Append (Empty_Virtual_String);
+                     First_Entry := False;
+                  end if;
+
+                  Text.Append (Get_Plain_Text_Description (Section));
+               end if;
+            end loop;
+         end;
 
          --  Process enumeration literals
 
@@ -253,6 +274,7 @@ package body GNATdoc.Comments.Helpers is
    begin
       if Decl.Kind in Ada_Abstract_Subp_Decl
                     | Ada_Expr_Function
+                    | Ada_Generic_Package_Decl
                     | Ada_Generic_Package_Instantiation
                     | Ada_Null_Subp_Decl
                     | Ada_Number_Decl

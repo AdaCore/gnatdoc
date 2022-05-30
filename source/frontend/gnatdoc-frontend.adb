@@ -98,6 +98,10 @@ package body GNATdoc.Frontend is
      (Node      : Number_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Generic_Package_Decl
+     (Node      : Generic_Package_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Generic_Instantiation
      (Node      : Generic_Instantiation'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
@@ -305,6 +309,12 @@ package body GNATdoc.Frontend is
 
                return Over;
 
+            when Ada_Generic_Package_Decl =>
+               Process_Generic_Package_Decl
+                 (Node.As_Generic_Package_Decl, Enclosing);
+
+               return Over;
+
             when Ada_Generic_Package_Instantiation =>
                Process_Generic_Instantiation
                  (Node.As_Generic_Package_Instantiation, Enclosing, null);
@@ -369,11 +379,6 @@ package body GNATdoc.Frontend is
                  (Node.As_Package_Body_Stub.P_Next_Part_For_Decl
                     .As_Package_Body,
                   Enclosing);
-
-               return Over;
-
-            when Ada_Generic_Package_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
 
                return Over;
 
@@ -508,6 +513,18 @@ package body GNATdoc.Frontend is
 
                return Over;
 
+            when Ada_Generic_Package_Decl =>
+               Process_Generic_Package_Decl
+                 (Node.As_Generic_Package_Decl,
+                  GNATdoc.Entities.Globals'Access);
+
+               return Over;
+
+            when Ada_Generic_Package_Instantiation =>
+               Ada.Text_IO.Put_Line (Image (Node));
+
+               return Over;
+
             when others =>
                Ada.Text_IO.Put_Line (Image (Node));
 
@@ -575,6 +592,43 @@ package body GNATdoc.Frontend is
          Global.Generic_Instantiations.Insert (Entity);
       end if;
    end Process_Generic_Instantiation;
+
+   ----------------------------------
+   -- Process_Generic_Package_Decl --
+   ----------------------------------
+
+   procedure Process_Generic_Package_Decl
+     (Node      : Generic_Package_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Name   : constant Defining_Name := Node.F_Package_Decl.F_Package_Name;
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Name.F_Name.Text),
+           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
+           Signature      => Signature (Name),
+           Enclosing      =>
+             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
+           Is_Private     =>
+             (Node.Parent.Kind = Ada_Library_Item
+                and then Node.Parent.As_Library_Item.F_Has_Private),
+           Documentation  => Extract (Node, Extract_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Packages.Insert (Entity);
+      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+
+      if GNATdoc.Entities.Globals'Access /= Enclosing then
+         GNATdoc.Entities.Globals.Packages.Insert (Entity);
+      end if;
+
+      Process_Children (Node.F_Package_Decl.F_Public_Part, Entity);
+
+      if Options.Options.Generate_Private then
+         Process_Children (Node.F_Package_Decl.F_Private_Part, Entity);
+      end if;
+   end Process_Generic_Package_Decl;
 
    --------------------------------
    -- Process_Interface_Type_Def --
@@ -699,14 +753,22 @@ package body GNATdoc.Frontend is
      (Node      : Package_Body'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
    is
-      Name   : constant Defining_Name := Node.F_Package_Name;
-      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+      Name      : constant Defining_Name := Node.F_Package_Name;
+      Canonical : constant Basic_Decl := Node.P_Canonical_Part;
+      Entity    : constant not null
+        GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
           (Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
-             Signature (Node.P_Canonical_Part.As_Package_Decl.F_Package_Name),
+             Signature
+               ((case Canonical.Kind is
+                   when Ada_Package_Decl             =>
+                     Canonical.As_Package_Decl.F_Package_Name,
+                   when Ada_Generic_Package_Internal =>
+                     Canonical.As_Generic_Package_Internal.F_Package_Name,
+                   when others                       => raise Program_Error)),
            Documentation  => <>,
            others         => <>);
 
@@ -864,6 +926,7 @@ package body GNATdoc.Frontend is
             when Ada_Package_Decl | Ada_Type_Decl | Ada_Abstract_Subp_Decl
                | Ada_Subp_Decl | Ada_Null_Subp_Decl
                | Ada_Generic_Package_Instantiation
+               | Ada_Generic_Package_Internal
                | Ada_Object_Decl
                | Ada_Number_Decl
                | Ada_Subtype_Decl

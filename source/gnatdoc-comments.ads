@@ -36,6 +36,7 @@ package GNATdoc.Comments is
       Breif,                --  Breif description of the entity
       --                        ??? not supported
       Description,          --  Full description of the entity
+      Formal,               --  Formal parameter of the generic entity
       Enumeration_Literal,  --  Literal of the enumeration type
       Field,                --  Record component of discriminant
       Parameter,            --  Description of the parameter
@@ -58,8 +59,7 @@ package GNATdoc.Comments is
 
 private
 
-   subtype Component is Section_Kind
-     range Enumeration_Literal .. Raised_Exception;
+   subtype Component is Section_Kind range Formal .. Raised_Exception;
 
    type Section is tagged limited record
       Kind             : Section_Kind;

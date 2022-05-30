@@ -29,6 +29,7 @@ with VSS.Strings.Character_Iterators; use VSS.Strings.Character_Iterators;
 with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Builders.Enumerations;
+with GNATdoc.Comments.Builders.Generics;
 with GNATdoc.Comments.Builders.Records;
 with GNATdoc.Comments.Builders.Subprograms;
 
@@ -42,6 +43,7 @@ package body GNATdoc.Comments.Extractor is
       Exception_Tag,
       Enum_Tag,
       Member_Tag,
+      Formal_Tag,
       Private_Tag);
 
    type Section_Tag_Flags is array (Section_Tag) of Boolean with Pack;
@@ -56,8 +58,16 @@ package body GNATdoc.Comments.Extractor is
    Ada_Optional_Separator_Expression : constant Virtual_String :=
      "[\p{Zs}\p{Cf}]*";
 
-   procedure Extract_Package_Decl_Documentation
-     (Node          : Libadalang.Analysis.Package_Decl'Class;
+   procedure Extract_Base_Package_Decl_Documentation
+     (Basic_Decl_Node        : Libadalang.Analysis.Basic_Decl'Class;
+      Base_Package_Decl_Node : Libadalang.Analysis.Base_Package_Decl'Class;
+      Options                : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation          : in out Structured_Comment'Class);
+   --  Common code to extract documentation for ordinary and generic package
+   --  declarations.
+
+   procedure Extract_Generic_Package_Decl_Documentation
+     (Node          : Libadalang.Analysis.Generic_Package_Decl'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class);
 
@@ -122,13 +132,9 @@ package body GNATdoc.Comments.Extractor is
    --  contains components).
 
    procedure Fill_Structured_Comment
-     (Decl_Node        : Basic_Decl'Class;
-      Advanced_Groups  : Boolean;
-      Last_Section     : Section_Access;
-      Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
-      Documentation    : in out Structured_Comment'Class;
-      Leading_Section  : out not null Section_Access;
-      Trailing_Section : out not null Section_Access);
+     (Decl_Node       : Basic_Decl'Class;
+      Advanced_Groups : Boolean;
+      Documentation   : in out Structured_Comment'Class);
    --  Extract comments' text from the given declaration and fill sections
    --  of the provided structured comment. Also, creates raw sections for
    --  the leading and trailing comments and extract them into these sections.
@@ -138,6 +144,19 @@ package body GNATdoc.Comments.Extractor is
    --    Advanced processing of the groups: empty line is added at the and
    --    of the section's text when it is not empty and processing of the
    --    group comment is started.
+   --  @param Documentation       Structured comment to fill.
+
+   procedure Extract_General_Leading_Trailing_Documentation
+     (Decl_Node        : Basic_Decl'Class;
+      Last_Section     : Section_Access;
+      Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
+      Documentation    : in out Structured_Comment'Class;
+      Leading_Section  : out not null Section_Access;
+      Trailing_Section : out not null Section_Access);
+   --  Extract leading and trailing documentation follow general rules (there
+   --  are few exceptions from this rules, like ordinary and generic package
+   --  declarations).
+   --
    --  @param Last_Section
    --    Last section inside the declaration. If there are some comments after
    --    the declaration and its indentation is equal of deeper than the value
@@ -187,8 +206,11 @@ package body GNATdoc.Comments.Extractor is
    begin
       case Node.Kind is
          when Ada_Package_Decl =>
-            Extract_Package_Decl_Documentation
-              (Node.As_Package_Decl, Options, Documentation);
+            Extract_Base_Package_Decl_Documentation
+              (Basic_Decl_Node        => Node.As_Package_Decl,
+               Base_Package_Decl_Node => Node.As_Package_Decl,
+               Options                => Options,
+               Documentation          => Documentation);
 
          when Ada_Abstract_Subp_Decl | Ada_Subp_Decl =>
             Extract_Subprogram_Documentation
@@ -225,6 +247,10 @@ package body GNATdoc.Comments.Extractor is
                Aspects_Node   => No_Aspect_Spec,
                Options        => Options,
                Documentation  => Documentation);
+
+         when Ada_Generic_Package_Decl =>
+            Extract_Generic_Package_Decl_Documentation
+              (Node.As_Generic_Package_Decl, Options, Documentation);
 
          when Ada_Generic_Package_Instantiation =>
             Extract_Simple_Declaration_Documentation
@@ -351,91 +377,15 @@ package body GNATdoc.Comments.Extractor is
       end return;
    end Extract;
 
-   --------------------------------------------
-   -- Extract_Enumeration_Type_Documentation --
-   --------------------------------------------
+   ---------------------------------------------
+   -- Extract_Base_Package_Decl_Documentation --
+   ---------------------------------------------
 
-   procedure Extract_Enumeration_Type_Documentation
-     (Node          : Libadalang.Analysis.Type_Decl'Class;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Documentation : out Structured_Comment'Class)
-   is
-      Enum_Node         : constant Enum_Type_Def'Class :=
-        Node.F_Type_Def.As_Enum_Type_Def;
-      Advanced_Groups   : Boolean;
-      Last_Section      : Section_Access;
-      Minimum_Indent    : Column_Number;
-      Leading_Section   : Section_Access;
-      Trailing_Section  : Section_Access;
-      Component_Builder :
-        GNATdoc.Comments.Builders.Enumerations.Enumeration_Components_Builder;
-
-   begin
-      Component_Builder.Build
-        (Documentation'Unchecked_Access,
-         Options,
-         Enum_Node,
-         Advanced_Groups,
-         Last_Section,
-         Minimum_Indent);
-
-      Fill_Structured_Comment
-        (Decl_Node          => Node,
-         Advanced_Groups    => Advanced_Groups,
-         Last_Section       => Last_Section,
-         Minimum_Indent     => Minimum_Indent,
-         Documentation      => Documentation,
-         Leading_Section    => Leading_Section,
-         Trailing_Section   => Trailing_Section);
-
-      Fill_Code_Snippet (Node, Documentation);
-
-      Remove_Comment_Start_And_Indentation (Documentation);
-
-      declare
-         Raw_Section : Section_Access;
-
-      begin
-         --  Select most appropriate section depending from the style and
-         --  fallback.
-
-         case Options.Style is
-            when GNAT =>
-               if not Trailing_Section.Text.Is_Empty then
-                  Raw_Section := Trailing_Section;
-
-               elsif Options.Fallback
-                 and not Leading_Section.Text.Is_Empty
-               then
-                  Raw_Section := Leading_Section;
-               end if;
-
-            when Leading =>
-               if not Leading_Section.Text.Is_Empty then
-                  Raw_Section := Leading_Section;
-
-               elsif Options.Fallback
-                 and not Trailing_Section.Text.Is_Empty
-               then
-                  Raw_Section := Trailing_Section;
-               end if;
-         end case;
-
-         Parse_Raw_Section
-           (Raw_Section,
-            (Enum_Tag => True, others => False),
-            Documentation);
-      end;
-   end Extract_Enumeration_Type_Documentation;
-
-   ----------------------------------------
-   -- Extract_Package_Decl_Documentation --
-   ----------------------------------------
-
-   procedure Extract_Package_Decl_Documentation
-     (Node          : Libadalang.Analysis.Package_Decl'Class;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Documentation : out Structured_Comment'Class)
+   procedure Extract_Base_Package_Decl_Documentation
+     (Basic_Decl_Node        : Libadalang.Analysis.Basic_Decl'Class;
+      Base_Package_Decl_Node : Libadalang.Analysis.Base_Package_Decl'Class;
+      Options                : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation          : in out Structured_Comment'Class)
    is
       Prelude                    : Ada_Node_List;
       Header_Section             : Section_Access;
@@ -456,8 +406,8 @@ package body GNATdoc.Comments.Extractor is
 
       --  Header section: before context clauses of compilation unit
 
-      if Node.P_Is_Compilation_Unit_Root then
-         Prelude := Node.P_Enclosing_Compilation_Unit.F_Prelude;
+      if Basic_Decl_Node.P_Is_Compilation_Unit_Root then
+         Prelude := Basic_Decl_Node.P_Enclosing_Compilation_Unit.F_Prelude;
 
          if Prelude.Sloc_Range.Start_Line = Prelude.Sloc_Range.End_Line
            and Prelude.Sloc_Range.Start_Column = Prelude.Sloc_Range.End_Column
@@ -522,9 +472,9 @@ package body GNATdoc.Comments.Extractor is
       --  Leading section: before the package declaration and after context
       --  clauses of the compilation unit
 
-      if not Node.P_Is_Compilation_Unit_Root or Prelude.Is_Null then
+      if not Basic_Decl_Node.P_Is_Compilation_Unit_Root or Prelude.Is_Null then
          declare
-            Token : Token_Reference := Node.Token_Start;
+            Token : Token_Reference := Basic_Decl_Node.Token_Start;
             Found : Boolean         := False;
 
          begin
@@ -569,7 +519,7 @@ package body GNATdoc.Comments.Extractor is
       --  Looukp last use clause or pragma declarations at the beginning of the
       --  public part of the package.
 
-      for N of Node.F_Public_Part.F_Decls loop
+      for N of Base_Package_Decl_Node.F_Public_Part.F_Decls loop
          case N.Kind is
             when Ada_Pragma_Node | Ada_Use_Clause =>
                Last_Pragma_Or_Use := N.As_Ada_Node;
@@ -591,7 +541,7 @@ package body GNATdoc.Comments.Extractor is
       Documentation.Sections.Append (Intermediate_Upper_Section);
 
       declare
-         Token : Token_Reference := Node.Token_Start;
+         Token : Token_Reference := Base_Package_Decl_Node.Token_Start;
          Found : Boolean := False;
 
       begin
@@ -709,10 +659,252 @@ package body GNATdoc.Comments.Extractor is
 
          Parse_Raw_Section
            (Raw_Section,
-            (Private_Tag => True, others => False),
+            (Private_Tag => True,
+             Formal_Tag  => Basic_Decl_Node /= Base_Package_Decl_Node,
+             others      => False),
             Documentation);
       end;
-   end Extract_Package_Decl_Documentation;
+   end Extract_Base_Package_Decl_Documentation;
+
+   --------------------------------------------
+   -- Extract_Enumeration_Type_Documentation --
+   --------------------------------------------
+
+   procedure Extract_Enumeration_Type_Documentation
+     (Node          : Libadalang.Analysis.Type_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : out Structured_Comment'Class)
+   is
+      Enum_Node         : constant Enum_Type_Def'Class :=
+        Node.F_Type_Def.As_Enum_Type_Def;
+      Advanced_Groups   : Boolean;
+      Last_Section      : Section_Access;
+      Minimum_Indent    : Column_Number;
+      Leading_Section   : Section_Access;
+      Trailing_Section  : Section_Access;
+      Component_Builder :
+        GNATdoc.Comments.Builders.Enumerations.Enumeration_Components_Builder;
+
+   begin
+      Component_Builder.Build
+        (Documentation'Unchecked_Access,
+         Options,
+         Enum_Node,
+         Advanced_Groups,
+         Last_Section,
+         Minimum_Indent);
+
+      Fill_Structured_Comment
+        (Decl_Node       => Node,
+         Advanced_Groups => Advanced_Groups,
+         Documentation   => Documentation);
+
+      Extract_General_Leading_Trailing_Documentation
+        (Decl_Node        => Node,
+         Last_Section     => Last_Section,
+         Minimum_Indent   => Minimum_Indent,
+         Documentation    => Documentation,
+         Leading_Section  => Leading_Section,
+         Trailing_Section => Trailing_Section);
+
+      Fill_Code_Snippet (Node, Documentation);
+
+      Remove_Comment_Start_And_Indentation (Documentation);
+
+      declare
+         Raw_Section : Section_Access;
+
+      begin
+         --  Select most appropriate section depending from the style and
+         --  fallback.
+
+         case Options.Style is
+            when GNAT =>
+               if not Trailing_Section.Text.Is_Empty then
+                  Raw_Section := Trailing_Section;
+
+               elsif Options.Fallback
+                 and not Leading_Section.Text.Is_Empty
+               then
+                  Raw_Section := Leading_Section;
+               end if;
+
+            when Leading =>
+               if not Leading_Section.Text.Is_Empty then
+                  Raw_Section := Leading_Section;
+
+               elsif Options.Fallback
+                 and not Trailing_Section.Text.Is_Empty
+               then
+                  Raw_Section := Trailing_Section;
+               end if;
+         end case;
+
+         Parse_Raw_Section
+           (Raw_Section,
+            (Enum_Tag => True, others => False),
+            Documentation);
+      end;
+   end Extract_Enumeration_Type_Documentation;
+
+   ----------------------------------------------------
+   -- Extract_General_Leading_Trailing_Documentation --
+   ----------------------------------------------------
+
+   procedure Extract_General_Leading_Trailing_Documentation
+     (Decl_Node        : Basic_Decl'Class;
+      Last_Section     : Section_Access;
+      Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
+      Documentation    : in out Structured_Comment'Class;
+      Leading_Section  : out not null Section_Access;
+      Trailing_Section : out not null Section_Access) is
+   begin
+      Leading_Section :=
+        new Section'
+          (Kind             => Raw,
+           Symbol           => "<<LEADING>>",
+           Name             => <>,
+           Text             => <>,
+           others           => <>);
+      Documentation.Sections.Append (Leading_Section);
+
+      declare
+         Token   : Token_Reference := Decl_Node.Token_Start;
+
+      begin
+         loop
+            Token := Previous (Token);
+
+            exit when Token = No_Token;
+
+            case Kind (Data (Token)) is
+               when Ada_Comment =>
+                  Leading_Section.Text.Prepend
+                    (To_Virtual_String (Text (Token)));
+
+               when Ada_Whitespace =>
+                  declare
+                     Location : constant Source_Location_Range :=
+                       Sloc_Range (Data (Token));
+
+                  begin
+                     exit when Location.End_Line - Location.Start_Line > 1;
+                  end;
+
+               when others =>
+                  exit;
+            end case;
+         end loop;
+      end;
+
+      --  Create trailing section and process tokens after the declaration
+      --  node.
+
+      Trailing_Section :=
+        new Section'
+          (Kind             => Raw,
+           Symbol           => "<<TRAILING>>",
+           Name             => <>,
+           Text             => <>,
+           others           => <>);
+      Documentation.Sections.Append (Trailing_Section);
+
+      declare
+         Current_Node : Ada_Node := Decl_Node.As_Ada_Node;
+         Next_Node    : Ada_Node;
+         Token        : Token_Reference;
+         In_Last      : Boolean := Last_Section /= null;
+
+      begin
+         --  Skip till the last sibling not separated from the given
+         --  declaration node by the empty line. It is case of pragmas
+         --  and representation clauses after declaration but before
+         --  documentation comments.
+
+         loop
+            Next_Node := Current_Node.Next_Sibling;
+
+            exit when
+              Next_Node.Is_Null
+                or else Current_Node.Sloc_Range.End_Line
+                          /= Next_Node.Sloc_Range.Start_Line - 1;
+
+            Current_Node := Next_Node;
+         end loop;
+
+         Token := Current_Node.Token_End;
+
+         loop
+            Token := Next (Token);
+
+            exit when Token = No_Token;
+
+            case Kind (Data (Token)) is
+               when Ada_Comment =>
+                  if In_Last then
+                     if Sloc_Range (Data (Token)).Start_Column
+                          >= Minimum_Indent
+                     then
+                        Last_Section.Text.Append
+                          (To_Virtual_String (Text (Token)));
+
+                        goto Done;
+
+                     else
+                        In_Last := False;
+                     end if;
+                  end if;
+
+                  Trailing_Section.Text.Append
+                    (To_Virtual_String (Text (Token)));
+
+                  <<Done>>
+
+               when Ada_Whitespace =>
+                  declare
+                     Location : constant Source_Location_Range :=
+                       Sloc_Range (Data (Token));
+
+                  begin
+                     exit when Location.End_Line - Location.Start_Line > 1;
+                  end;
+
+               when others =>
+                  exit;
+            end case;
+         end loop;
+      end;
+   end Extract_General_Leading_Trailing_Documentation;
+
+   ------------------------------------------------
+   -- Extract_Generic_Package_Decl_Documentation --
+   ------------------------------------------------
+
+   procedure Extract_Generic_Package_Decl_Documentation
+     (Node          : Libadalang.Analysis.Generic_Package_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : out Structured_Comment'Class)
+   is
+      Component_Builder :
+        GNATdoc.Comments.Builders.Generics.Generic_Components_Builder;
+
+   begin
+      Component_Builder.Build
+        (Documentation'Unchecked_Access,
+         Options,
+         Node.F_Formal_Part,
+         Node.F_Package_Decl);
+
+      Fill_Structured_Comment
+        (Decl_Node       => Node,
+         Advanced_Groups => False,
+         Documentation   => Documentation);
+
+      --  Fill_Code_Snippet (Node, Documentation);
+
+      Extract_Base_Package_Decl_Documentation
+        (Node, Node.F_Package_Decl, Options, Documentation);
+   end Extract_Generic_Package_Decl_Documentation;
 
    ---------------------------------------
    -- Extract_Record_Type_Documentation --
@@ -741,13 +933,17 @@ package body GNATdoc.Comments.Extractor is
          Minimum_Indent);
 
       Fill_Structured_Comment
-        (Decl_Node          => Node,
-         Advanced_Groups    => Advanced_Groups,
-         Last_Section       => Last_Section,
-         Minimum_Indent     => Minimum_Indent,
-         Documentation      => Documentation,
-         Leading_Section    => Leading_Section,
-         Trailing_Section   => Trailing_Section);
+        (Decl_Node       => Node,
+         Advanced_Groups => Advanced_Groups,
+         Documentation   => Documentation);
+
+      Extract_General_Leading_Trailing_Documentation
+        (Decl_Node        => Node,
+         Last_Section     => Last_Section,
+         Minimum_Indent   => Minimum_Indent,
+         Documentation    => Documentation,
+         Leading_Section  => Leading_Section,
+         Trailing_Section => Trailing_Section);
 
       Fill_Code_Snippet (Node, Documentation);
 
@@ -803,13 +999,17 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Fill_Structured_Comment
-        (Decl_Node          => Node,
-         Advanced_Groups    => False,
-         Last_Section       => null,
-         Minimum_Indent     => 0,
-         Documentation      => Documentation,
-         Leading_Section    => Leading_Section,
-         Trailing_Section   => Trailing_Section);
+        (Decl_Node       => Node,
+         Advanced_Groups => False,
+         Documentation   => Documentation);
+
+      Extract_General_Leading_Trailing_Documentation
+        (Decl_Node        => Node,
+         Last_Section     => null,
+         Minimum_Indent   => 0,
+         Documentation    => Documentation,
+         Leading_Section  => Leading_Section,
+         Trailing_Section => Trailing_Section);
 
       Fill_Code_Snippet (Node, Documentation);
 
@@ -1005,8 +1205,12 @@ package body GNATdoc.Comments.Extractor is
       --  text of raw, parameters and returns sections.
 
       Fill_Structured_Comment
+        (Decl_Node       => Decl_Node,
+         Advanced_Groups => Advanced_Groups,
+         Documentation   => Documentation);
+
+      Extract_General_Leading_Trailing_Documentation
         (Decl_Node        => Decl_Node,
-         Advanced_Groups  => Advanced_Groups,
          Last_Section     => Last_Section,
          Minimum_Indent   => Minimum_Indent,
          Documentation    => Documentation,
@@ -1182,13 +1386,9 @@ package body GNATdoc.Comments.Extractor is
    -----------------------------
 
    procedure Fill_Structured_Comment
-     (Decl_Node        : Basic_Decl'Class;
-      Advanced_Groups  : Boolean;
-      Last_Section     : Section_Access;
-      Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
-      Documentation    : in out Structured_Comment'Class;
-      Leading_Section  : out not null Section_Access;
-      Trailing_Section : out not null Section_Access)
+     (Decl_Node       : Basic_Decl'Class;
+      Advanced_Groups : Boolean;
+      Documentation   : in out Structured_Comment'Class)
    is
       Node_Location : constant Source_Location_Range :=
         Decl_Node.Sloc_Range;
@@ -1209,7 +1409,7 @@ package body GNATdoc.Comments.Extractor is
                for Section of Documentation.Sections loop
                   if Section.Kind
                        in Raw | Enumeration_Literal | Field
-                            | Parameter | Returns
+                            | Parameter | Returns | Formal
                     and then
                       (Location.Start_Line
                          in Section.Exact_Start_Line
@@ -1232,125 +1432,6 @@ package body GNATdoc.Comments.Extractor is
             end if;
 
             Token := Next (Token);
-         end loop;
-      end;
-
-      --  Create leading section and process tokens before the declaration
-      --  node.
-
-      Leading_Section :=
-        new Section'
-          (Kind             => Raw,
-           Symbol           => "<<LEADING>>",
-           Name             => <>,
-           Text             => <>,
-           others           => <>);
-      Documentation.Sections.Append (Leading_Section);
-
-      declare
-         Token   : Token_Reference := Decl_Node.Token_Start;
-
-      begin
-         loop
-            Token := Previous (Token);
-
-            exit when Token = No_Token;
-
-            case Kind (Data (Token)) is
-               when Ada_Comment =>
-                  Leading_Section.Text.Prepend
-                    (To_Virtual_String (Text (Token)));
-
-               when Ada_Whitespace =>
-                  declare
-                     Location : constant Source_Location_Range :=
-                       Sloc_Range (Data (Token));
-
-                  begin
-                     exit when Location.End_Line - Location.Start_Line > 1;
-                  end;
-
-               when others =>
-                  exit;
-            end case;
-         end loop;
-      end;
-
-      --  Create trailing section and process tokens after the declaration
-      --  node.
-
-      Trailing_Section :=
-        new Section'
-          (Kind             => Raw,
-           Symbol           => "<<TRAILING>>",
-           Name             => <>,
-           Text             => <>,
-           others           => <>);
-      Documentation.Sections.Append (Trailing_Section);
-
-      declare
-         Current_Node : Ada_Node := Decl_Node.As_Ada_Node;
-         Next_Node    : Ada_Node;
-         Token        : Token_Reference;
-         In_Last      : Boolean := Last_Section /= null;
-
-      begin
-         --  Skip till the last sibling not separated from the given
-         --  declaration node by the empty line. It is case of pragmas
-         --  and representation clauses after declaration but before
-         --  documentation comments.
-
-         loop
-            Next_Node := Current_Node.Next_Sibling;
-
-            exit when
-              Next_Node.Is_Null
-                or else Current_Node.Sloc_Range.End_Line
-                          /= Next_Node.Sloc_Range.Start_Line - 1;
-
-            Current_Node := Next_Node;
-         end loop;
-
-         Token := Current_Node.Token_End;
-
-         loop
-            Token := Next (Token);
-
-            exit when Token = No_Token;
-
-            case Kind (Data (Token)) is
-               when Ada_Comment =>
-                  if In_Last then
-                     if Sloc_Range (Data (Token)).Start_Column
-                          >= Minimum_Indent
-                     then
-                        Last_Section.Text.Append
-                          (To_Virtual_String (Text (Token)));
-
-                        goto Done;
-
-                     else
-                        In_Last := False;
-                     end if;
-                  end if;
-
-                  Trailing_Section.Text.Append
-                    (To_Virtual_String (Text (Token)));
-
-                  <<Done>>
-
-               when Ada_Whitespace =>
-                  declare
-                     Location : constant Source_Location_Range :=
-                       Sloc_Range (Data (Token));
-
-                  begin
-                     exit when Location.End_Line - Location.Start_Line > 1;
-                  end;
-
-               when others =>
-                  exit;
-            end case;
          end loop;
       end;
    end Fill_Structured_Comment;
@@ -1376,7 +1457,7 @@ package body GNATdoc.Comments.Extractor is
       Tag_Matcher       : constant Regular_Expression :=
         To_Regular_Expression
           (Ada_Optional_Separator_Expression
-           & "@(param|return|exception|enum|field|private)"
+           & "@(param|return|exception|enum|field|formal|private)"
            & Ada_Optional_Separator_Expression);
       Parameter_Matcher : constant Regular_Expression :=
         To_Regular_Expression
@@ -1435,6 +1516,10 @@ package body GNATdoc.Comments.Extractor is
 
             elsif Match.Captured (1) = "field" then
                Tag  := Member_Tag;
+               Kind := Field;
+
+            elsif Match.Captured (1) = "formal" then
+               Tag  := Formal_Tag;
                Kind := Field;
 
             elsif Match.Captured (1) = "private" then
