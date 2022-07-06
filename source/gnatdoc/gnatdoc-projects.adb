@@ -47,6 +47,8 @@ package body GNATdoc.Projects is
                         (File_Name))),
             Project_Context);
 
+         Project_Tree.Update_Sources (With_Runtime => True);
+
       exception
          when GPR2.Project_Error =>
             for Message of Project_Tree.Log_Messages.all loop
