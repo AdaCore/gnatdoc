@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html class='main' xmlns="http://www.w3.org/1999/xhtml" xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <head>
+    <link rel='stylesheet' href='gnatdoc.css'/>
+  </head>
+  <body class='main'>
+    <div class='side-navigation'>
+      <ul>
+        <li tal:repeat='item gnatdoc/toc'>
+          <a href='error.html' target='document-content' tal:content='item/title' tal:attributes='href item/href'/>
+        </li>
+      </ul>
+    </div>
+    <div class='document-content'>
+      <iframe name='document-content'/>
+    </div>
+  </body>
+</html>

@@ -15,28 +15,34 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with "gpr2";
-with "gpr_unit_provider";
-with "libgnatdoc";
-with "vss_xml_xmlada";
-with "vss_xml_templates";
+with GNATCOLL.VFS;
 
-project GNATdoc is
+private with VSS.Characters;
+private with VSS.Strings.Converters.Encoders;
+with VSS.Text_Streams;
 
-   for Object_Dir use "../.objs";
-   for Source_Dirs use
-     ("../source/backend",
-      "../source/frontend",
-      "../source/gnatdoc");
-   for Exec_Dir use "../bin";
-   for Main use ("gnatdoc-driver.adb");
+package Streams is
 
-   package Compiler is
-      for Switches ("Ada") use ("-g", "-gnatygO", "-gnata");
-   end Compiler;
+   type Output_Text_Stream is
+     limited new VSS.Text_Streams.Output_Text_Stream with private;
 
-   package Builder is
-      for Executable ("gnatdoc-driver.adb") use "gnatdoc4";
-   end Builder;
+   procedure Open
+     (Self : in out Output_Text_Stream'Class;
+      File : GNATCOLL.VFS.Virtual_File);
 
-end GNATdoc;
+   procedure Close (Self : in out Output_Text_Stream'Class);
+
+private
+
+   type Output_Text_Stream is
+     limited new VSS.Text_Streams.Output_Text_Stream with record
+      Encoder  : VSS.Strings.Converters.Encoders.Virtual_String_Encoder;
+      Writable : GNATCOLL.VFS.Writable_File;
+   end record;
+
+   overriding procedure Put
+     (Self    : in out Output_Text_Stream;
+      Item    : VSS.Characters.Virtual_Character;
+      Success : in out Boolean);
+
+end Streams;

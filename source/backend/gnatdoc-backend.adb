@@ -15,14 +15,28 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+pragma Warnings (Off);
+pragma Ada_2020;
+pragma Ada_2022;
+pragma Warnings (On);
+
 with GNAT.SHA256;
 with GNATCOLL.VFS;
+
+with Input_Sources.File;
 
 with GNATdoc.Comments.Helpers;
 with GNATdoc.Entities;
 with GNATdoc.Options;
 
+with VSS.HTML.Writers;
 with VSS.Strings.Conversions;
+with VSS.String_Vectors;
+with VSS.XML.Templates.Proxies;
+with VSS.XML.Templates.Values;
+with VSS.XML.XmlAda_Readers;
+
+with Streams;
 
 package body GNATdoc.Backend is
 
@@ -41,56 +55,190 @@ package body GNATdoc.Backend is
    --  as private entity, or enclosed by the private package, or enclosed by
    --  the entity marked as private entity.
 
+   package Proxies is
+
+      type TOC_Proxy is limited
+        new VSS.XML.Templates.Proxies.Abstract_Iterable_Proxy with record
+         Index_Entities : Entity_Information_Sets.Set;
+      end record;
+
+      overriding function Iterator
+        (Self : in out TOC_Proxy)
+         return VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator'Class;
+
+   end Proxies;
+
+   -------------
+   -- Proxies --
+   -------------
+
+   package body Proxies is
+
+      use type VSS.String_Vectors.Virtual_String_Vector;
+
+      type TOC_Proxy_Access is access all TOC_Proxy;
+
+      type TOC_Iterator is
+      limited new VSS.XML.Templates.Proxies.Abstract_Proxy
+        and VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator
+        and VSS.XML.Templates.Proxies.Abstract_Content_Proxy
+        and VSS.XML.Templates.Proxies.Abstract_Value_Proxy
+      with record
+         TOC      : TOC_Proxy_Access;
+         Position : Entity_Information_Sets.Cursor;
+      end record;
+
+      overriding function Next (Self : in out TOC_Iterator) return Boolean;
+
+      overriding function Content
+        (Self : TOC_Iterator;
+         Path : VSS.String_Vectors.Virtual_String_Vector)
+         return VSS.Strings.Virtual_String;
+
+      overriding function Value
+        (Self : TOC_Iterator;
+         Path : VSS.String_Vectors.Virtual_String_Vector)
+         return VSS.XML.Templates.Values.Value;
+
+      -------------
+      -- Content --
+      -------------
+
+      overriding function Content
+        (Self : TOC_Iterator;
+         Path : VSS.String_Vectors.Virtual_String_Vector)
+         return VSS.Strings.Virtual_String is
+      begin
+         if Path = ["title"] then
+            return Entity_Information_Sets.Element (Self.Position).Name;
+
+         else
+            return "Hello!";
+         end if;
+      end Content;
+
+      --------------
+      -- Iterator --
+      --------------
+
+      overriding function Iterator
+        (Self : in out TOC_Proxy)
+         return VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator'Class is
+      begin
+         return TOC_Iterator'(TOC => Self'Unchecked_Access, Position => <>);
+      end Iterator;
+
+      ----------
+      -- Next --
+      ----------
+
+      overriding function Next (Self : in out TOC_Iterator) return Boolean is
+      begin
+         if Entity_Information_Sets.Has_Element (Self.Position) then
+            Entity_Information_Sets.Next (Self.Position);
+
+         else
+            Self.Position :=
+              Entity_Information_Sets.First (Self.TOC.Index_Entities);
+         end if;
+
+         return Entity_Information_Sets.Has_Element (Self.Position);
+      end Next;
+
+      -----------
+      -- Value --
+      -----------
+
+      overriding function Value
+        (Self : TOC_Iterator;
+         Path : VSS.String_Vectors.Virtual_String_Vector)
+         return VSS.XML.Templates.Values.Value
+      is
+         use type VSS.Strings.Virtual_String;
+
+      begin
+         if Path = ["href"] then
+            return
+              (Kind         => VSS.XML.Templates.Values.String,
+               String_Value =>
+                 To_Virtual_String
+                   (Digest
+                        (To_UTF_8_String
+                           (Entity_Information_Sets.Element
+                              (Self.Position).Signature)))
+               & ".html");
+         end if;
+
+         return (Kind => VSS.XML.Templates.Values.Error);
+      end Value;
+
+   end Proxies;
+
    --------------
    -- Generate --
    --------------
 
    procedure Generate is
-      Index_File     : constant Virtual_File := Create ("index.html");
       Index_Entities : Entity_Information_Sets.Set;
 
    begin
-      Index_Entities.Union (Globals.Packages);
-      Index_Entities.Union (Globals.Subprograms);
-      Index_Entities.Union (Globals.Package_Renamings);
+      for Item of Globals.Packages loop
+         if not Is_Private_Entity (Item) then
+            Index_Entities.Insert (Item);
+         end if;
+      end loop;
+
+      for Item of Globals.Subprograms loop
+         if not Is_Private_Entity (Item) then
+            Index_Entities.Insert (Item);
+         end if;
+      end loop;
+
+      for Item of Globals.Package_Renamings loop
+         if not Is_Private_Entity (Item) then
+            Index_Entities.Insert (Item);
+         end if;
+      end loop;
 
       declare
-         File : Writable_File := Index_File.Write_File;
+         Input  : Input_Sources.File.File_Input;
+         Reader : VSS.XML.XmlAda_Readers.XmlAda_Reader;
+         Filter : aliased VSS.XML.Templates.XML_Template_Processor;
+         Writer : aliased VSS.HTML.Writers.HTML5_Writer;
+         Output : aliased Streams.Output_Text_Stream;
 
       begin
-         Write (File, "<!DOCTYPE html>");
+         --  Open input and output files.
 
-         Write (File, "<html class='main'>");
-         Write (File, "<head>");
-         Write (File, "<link rel='stylesheet' href='gnatdoc.css'>");
-         Write (File, "</head>");
-         Write (File, "<body class='main'>");
-         Write (File, "<div class='side-navigation'>");
-         Write (File, "<ul>");
+         Input_Sources.File.Open
+           ("../share/gnatdoc/html/template/index.xhtml", Input);
+         Output.Open (GNATCOLL.VFS.Create ("index.html"));
 
-         for Item of Index_Entities loop
-            if not Is_Private_Entity (Item) then
-               Write
-                 (File,
-                  "<li><a href='"
-                  & Digest (To_UTF_8_String (Item.Signature))
-                  & ".html' target='document-content'>"
-                  & To_UTF_8_String (Item.Qualified_Name) & "</a></li>");
+         --  Connect components
 
-               Generate_Entity_Documentation_Page (Item);
-            end if;
-         end loop;
+         Writer.Set_Output_Stream (Output'Unchecked_Access);
+         Filter.Set_Content_Handler (Writer'Unchecked_Access);
+         Reader.Set_Content_Handler (Filter'Unchecked_Access);
 
-         Write (File, "</ul>");
-         Write (File, "</div>");
-         Write (File, "<div class='document-content'>");
-         Write (File, "<iframe name='document-content'/>");
-         Write (File, "</div>");
-         Write (File, "</body>");
-         Write (File, "</html>");
+         --  Bind information
 
-         Close (File);
+         Filter.Bind
+           (["gnatdoc", "toc"],
+            new Proxies.TOC_Proxy'(Index_Entities => Index_Entities));
+
+         --  Process template
+
+         Reader.Parse (Input);
+
+         --  Close input and output files.
+
+         Input.Close;
+         Output.Close;
       end;
+
+      for Item of Index_Entities loop
+         Generate_Entity_Documentation_Page (Item);
+      end loop;
    end Generate;
 
    ----------------------------------------

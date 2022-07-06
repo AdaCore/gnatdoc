@@ -15,28 +15,48 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with "gpr2";
-with "gpr_unit_provider";
-with "libgnatdoc";
-with "vss_xml_xmlada";
-with "vss_xml_templates";
+with Ada.Streams;
 
-project GNATdoc is
+with VSS.Stream_Element_Vectors.Conversions;
 
-   for Object_Dir use "../.objs";
-   for Source_Dirs use
-     ("../source/backend",
-      "../source/frontend",
-      "../source/gnatdoc");
-   for Exec_Dir use "../bin";
-   for Main use ("gnatdoc-driver.adb");
+package body Streams is
 
-   package Compiler is
-      for Switches ("Ada") use ("-g", "-gnatygO", "-gnata");
-   end Compiler;
+   -----------
+   -- Close --
+   -----------
 
-   package Builder is
-      for Executable ("gnatdoc-driver.adb") use "gnatdoc4";
-   end Builder;
+   procedure Close (Self : in out Output_Text_Stream'Class) is
+   begin
+      GNATCOLL.VFS.Close (Self.Writable);
+   end Close;
 
-end GNATdoc;
+   ----------
+   -- Open --
+   ----------
+
+   procedure Open
+     (Self : in out Output_Text_Stream'Class;
+      File : GNATCOLL.VFS.Virtual_File) is
+   begin
+      Self.Encoder.Initialize ("utf-8");
+      Self.Writable := File.Write_File;
+   end Open;
+
+   ---------
+   -- Put --
+   ---------
+
+   overriding procedure Put
+     (Self    : in out Output_Text_Stream;
+      Item    : VSS.Characters.Virtual_Character;
+      Success : in out Boolean)
+   is
+      Data : constant String :=
+        VSS.Stream_Element_Vectors.Conversions.Unchecked_To_String
+          (Self.Encoder.Encode (Item));
+
+   begin
+      GNATCOLL.VFS.Write (Self.Writable, Data);
+   end Put;
+
+end Streams;
