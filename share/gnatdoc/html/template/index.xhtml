@@ -7,7 +7,7 @@
     <div class='side-navigation'>
       <ul>
         <li tal:repeat='item gnatdoc/toc'>
-          <a href='error.html' target='document-content' tal:content='item/title' tal:attributes='href item/href'/>
+          <a href='error.html' target='document-content' tal:content='item/qualified_name' tal:attributes='href item/full_href'/>
         </li>
       </ul>
     </div>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html class='main' xmlns="http://www.w3.org/1999/xhtml" xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <head>
+    <link rel='stylesheet' href='gnatdoc.css'/>
+  </head>
+  <body class='content'>
+    <h1 tal:content='gnatdoc/entity/qualified_name'>Entity Name</h1>
+    <h2>Entities</h2>
+
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/simple_types">
+      <h3>Simple Types</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/simple_types'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/array_types">
+      <h3>Array Types</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/array_types'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/record_types">
+      <h3>Record Types</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/record_types'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/interface_types">
+      <h3>Interface Types</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/interface_types'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/tagged_types">
+      <h3>Tagged Types</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/tagged_types'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/access_types">
+      <h3>Access Types</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/access_types'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/subtypes">
+      <h3>Subtypes</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/subtypes'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/constants">
+      <h3>Constants</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/constants'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/variables">
+      <h3>Variables</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/variables'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/subprograms">
+      <h3>Subprograms</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/subprograms'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/generic_instantiations">
+      <h3>Generic Instantiations</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/generic_instantiations'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
+    <h2>Description</h2>
+    <pre tal:content='gnatdoc/entity/description'></pre>
+
+    <div tal:omit-tag="" tal:repeat="item gnatdoc/entity/all">
+      <h4 tal:content='item/name' tal:attributes='id item/id'>Entity Name</h4>
+      <pre class='ada-code-snippet' tal:content='item/code'>Source code of the entity declaration</pre>
+      <pre tal:content='item/description'>Description of the entity</pre>
+    </div>
+  </body>
+</html>

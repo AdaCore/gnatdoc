@@ -32,6 +32,7 @@ with GNATdoc.Options;
 with VSS.HTML.Writers;
 with VSS.Strings.Conversions;
 with VSS.String_Vectors;
+with VSS.XML.Templates.Processors;
 with VSS.XML.Templates.Proxies;
 with VSS.XML.Templates.Values;
 with VSS.XML.XmlAda_Readers;
@@ -57,14 +58,29 @@ package body GNATdoc.Backend is
 
    package Proxies is
 
-      type TOC_Proxy is limited
+      type Entity_Information_Set_Proxy is limited
         new VSS.XML.Templates.Proxies.Abstract_Iterable_Proxy with record
-         Index_Entities : Entity_Information_Sets.Set;
+         Index_Entities : not null access Entity_Information_Sets.Set;
       end record;
 
       overriding function Iterator
-        (Self : in out TOC_Proxy)
+        (Self : in out Entity_Information_Set_Proxy)
          return VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator'Class;
+
+      overriding function Is_Empty
+        (Self : Entity_Information_Set_Proxy) return Boolean;
+
+      type Entity_Information_Proxy is limited
+        new VSS.XML.Templates.Proxies.Abstract_Composite_Proxy
+      with record
+         Entity : Entity_Information_Access;
+         Nested : aliased Entity_Information_Sets.Set;
+      end record;
+
+      overriding function Component
+        (Self : in out Entity_Information_Proxy;
+         Name : VSS.Strings.Virtual_String)
+         return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
 
    end Proxies;
 
@@ -75,57 +91,201 @@ package body GNATdoc.Backend is
    package body Proxies is
 
       use type VSS.String_Vectors.Virtual_String_Vector;
+      use type VSS.Strings.Virtual_String;
 
-      type TOC_Proxy_Access is access all TOC_Proxy;
+      type Entity_Information_Set_Proxy_Access is
+        access all Entity_Information_Set_Proxy;
 
       type TOC_Iterator is
       limited new VSS.XML.Templates.Proxies.Abstract_Proxy
         and VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator
-        and VSS.XML.Templates.Proxies.Abstract_Content_Proxy
         and VSS.XML.Templates.Proxies.Abstract_Value_Proxy
       with record
-         TOC      : TOC_Proxy_Access;
+         Entities : not null access Entity_Information_Sets.Set;
          Position : Entity_Information_Sets.Cursor;
       end record;
 
       overriding function Next (Self : in out TOC_Iterator) return Boolean;
 
-      overriding function Content
-        (Self : TOC_Iterator;
-         Path : VSS.String_Vectors.Virtual_String_Vector)
-         return VSS.Strings.Virtual_String;
+      overriding function Element
+        (Self : in out TOC_Iterator)
+         return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
 
       overriding function Value
         (Self : TOC_Iterator;
          Path : VSS.String_Vectors.Virtual_String_Vector)
          return VSS.XML.Templates.Values.Value;
 
+      function Digest
+        (Item : VSS.Strings.Virtual_String) return VSS.Strings.Virtual_String;
+
+      type String_Proxy is
+        limited new VSS.XML.Templates.Proxies.Abstract_Content_Proxy with
+      record
+         Content : VSS.Strings.Virtual_String;
+      end record;
+
+      overriding function Content
+        (Self : String_Proxy) return VSS.Strings.Virtual_String;
+
+      ---------------
+      -- Component --
+      ---------------
+
+      overriding function Component
+        (Self : in out Entity_Information_Proxy;
+         Name : VSS.Strings.Virtual_String)
+         return VSS.XML.Templates.Proxies.Abstract_Proxy'Class is
+      begin
+         if Name = "all" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Nested'Unchecked_Access);
+
+         elsif Name = "simple_types" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Simple_Types'Unchecked_Access);
+
+         elsif Name = "array_types" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Array_Types'Unchecked_Access);
+
+         elsif Name = "record_types" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Record_Types'Unchecked_Access);
+
+         elsif Name = "interface_types" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities =>
+                   Self.Entity.Interface_Types'Unchecked_Access);
+
+         elsif Name = "tagged_types" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Tagged_Types'Unchecked_Access);
+
+         elsif Name = "access_types" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Access_Types'Unchecked_Access);
+
+         elsif Name = "subtypes" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Subtypes'Unchecked_Access);
+
+         elsif Name = "constants" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Constants'Unchecked_Access);
+
+         elsif Name = "variables" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Variables'Unchecked_Access);
+
+         elsif Name = "subprograms" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Subprograms'Unchecked_Access);
+
+         elsif Name = "generic_instantiations" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities =>
+                   Self.Entity.Generic_Instantiations'Unchecked_Access);
+
+         elsif Name = "name" then
+            return String_Proxy'(Content => Self.Entity.Name);
+
+         elsif Name = "qualified_name" then
+            return String_Proxy'(Content => Self.Entity.Qualified_Name);
+
+         elsif Name = "code" then
+            return
+              String_Proxy'
+                (Content =>
+                   GNATdoc.Comments.Helpers.Get_Ada_Code_Snippet
+                     (Self.Entity.Documentation).Join_Lines (VSS.Strings.LF));
+
+         elsif Name = "description" then
+            return
+              String_Proxy'
+                (Content =>
+                   GNATdoc.Comments.Helpers.Get_Plain_Text_Description
+                     (Self.Entity.Documentation).Join_Lines (VSS.Strings.LF));
+
+         --  elsif Name = "all" then
+         --     return
+         --       Entity_Information_Set_Proxy'
+         --         (Index_Entities =>
+         --            Self.Entity.Generic_Instantiations'Unchecked_Access);
+
+         else
+            return
+              VSS.XML.Templates.Proxies.Error_Proxy'
+                (Message => "unknown component '" & Name & "'");
+         end if;
+      end Component;
+
+      -------------
+      -- Element --
+      -------------
+
+      overriding function Element
+        (Self : in out TOC_Iterator)
+         return VSS.XML.Templates.Proxies.Abstract_Proxy'Class is
+      begin
+         return
+           Entity_Information_Proxy'
+             (Entity => Entity_Information_Sets.Element (Self.Position),
+              Nested => <>);
+      end Element;
+
       -------------
       -- Content --
       -------------
 
       overriding function Content
-        (Self : TOC_Iterator;
-         Path : VSS.String_Vectors.Virtual_String_Vector)
+        (Self : String_Proxy) return VSS.Strings.Virtual_String is
+      begin
+         return Self.Content;
+      end Content;
+
+      ------------
+      -- Digest --
+      ------------
+
+      function Digest
+        (Item : VSS.Strings.Virtual_String)
          return VSS.Strings.Virtual_String is
       begin
-         if Path = ["title"] then
-            return Entity_Information_Sets.Element (Self.Position).Name;
+         return To_Virtual_String (Digest (To_UTF_8_String (Item)));
+      end Digest;
 
-         else
-            return "Hello!";
-         end if;
-      end Content;
+      --------------
+      -- Is_Empty --
+      --------------
+
+      overriding function Is_Empty
+        (Self : Entity_Information_Set_Proxy) return Boolean is
+      begin
+         return Self.Index_Entities.Is_Empty;
+      end Is_Empty;
 
       --------------
       -- Iterator --
       --------------
 
       overriding function Iterator
-        (Self : in out TOC_Proxy)
+        (Self : in out Entity_Information_Set_Proxy)
          return VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator'Class is
       begin
-         return TOC_Iterator'(TOC => Self'Unchecked_Access, Position => <>);
+         return TOC_Iterator'(Entities => Self.Index_Entities, Position => <>);
       end Iterator;
 
       ----------
@@ -139,7 +299,7 @@ package body GNATdoc.Backend is
 
          else
             Self.Position :=
-              Entity_Information_Sets.First (Self.TOC.Index_Entities);
+              Entity_Information_Sets.First (Self.Entities.all);
          end if;
 
          return Entity_Information_Sets.Has_Element (Self.Position);
@@ -157,19 +317,43 @@ package body GNATdoc.Backend is
          use type VSS.Strings.Virtual_String;
 
       begin
-         if Path = ["href"] then
+         if Path = ["id"] then
             return
               (Kind         => VSS.XML.Templates.Values.String,
                String_Value =>
-                 To_Virtual_String
-                   (Digest
-                        (To_UTF_8_String
-                           (Entity_Information_Sets.Element
-                              (Self.Position).Signature)))
+                 Digest
+                   (Entity_Information_Sets.Element
+                        (Self.Position).Signature));
+
+         elsif Path = ["full_href"] then
+            return
+              (Kind         => VSS.XML.Templates.Values.String,
+               String_Value =>
+                 Digest
+                   (Entity_Information_Sets.Element (Self.Position).Signature)
                & ".html");
+
+         elsif Path = ["local_href"] then
+            return
+              (Kind         => VSS.XML.Templates.Values.String,
+               String_Value =>
+                 "#"
+                    & Digest
+                        (Entity_Information_Sets.Element
+                           (Self.Position).Signature));
+
+         elsif Path = ["local_id"] then
+            return
+              (Kind         => VSS.XML.Templates.Values.String,
+               String_Value =>
+                 Digest
+                   (Entity_Information_Sets.Element
+                        (Self.Position).Signature));
          end if;
 
-         return (Kind => VSS.XML.Templates.Values.Error);
+         return
+           (Kind    => VSS.XML.Templates.Values.Error,
+            Message => "unknown value '" & Path.Join ('/') & "'");
       end Value;
 
    end Proxies;
@@ -179,7 +363,7 @@ package body GNATdoc.Backend is
    --------------
 
    procedure Generate is
-      Index_Entities : Entity_Information_Sets.Set;
+      Index_Entities : aliased Entity_Information_Sets.Set;
 
    begin
       for Item of Globals.Packages loop
@@ -203,7 +387,7 @@ package body GNATdoc.Backend is
       declare
          Input  : Input_Sources.File.File_Input;
          Reader : VSS.XML.XmlAda_Readers.XmlAda_Reader;
-         Filter : aliased VSS.XML.Templates.XML_Template_Processor;
+         Filter : aliased VSS.XML.Templates.Processors.XML_Template_Processor;
          Writer : aliased VSS.HTML.Writers.HTML5_Writer;
          Output : aliased Streams.Output_Text_Stream;
 
@@ -224,7 +408,8 @@ package body GNATdoc.Backend is
 
          Filter.Bind
            (["gnatdoc", "toc"],
-            new Proxies.TOC_Proxy'(Index_Entities => Index_Entities));
+            new Proxies.Entity_Information_Set_Proxy'
+              (Index_Entities => Index_Entities'Unchecked_Access));
 
          --  Process template
 
@@ -285,71 +470,55 @@ package body GNATdoc.Backend is
       end Generate_TOC;
 
    begin
-      Write (File, "<!DOCTYPE html>");
+      declare
+         Input  : Input_Sources.File.File_Input;
+         Reader : VSS.XML.XmlAda_Readers.XmlAda_Reader;
+         Filter : aliased VSS.XML.Templates.Processors.XML_Template_Processor;
+         Writer : aliased VSS.HTML.Writers.HTML5_Writer;
+         Output : aliased Streams.Output_Text_Stream;
+         Nested : Entity_Information_Sets.Set;
 
-      Write (File, "<html>");
-      Write (File, "<head>");
-      Write (File, "<link rel='stylesheet' href='gnatdoc.css'>");
-      Write (File, "</head>");
-      Write (File, "<body class='content'>");
+      begin
+         Nested.Union (Entity.Simple_Types);
+         Nested.Union (Entity.Array_Types);
+         Nested.Union (Entity.Record_Types);
+         Nested.Union (Entity.Interface_Types);
+         Nested.Union (Entity.Tagged_Types);
+         Nested.Union (Entity.Access_Types);
+         Nested.Union (Entity.Subtypes);
+         Nested.Union (Entity.Constants);
+         Nested.Union (Entity.Variables);
+         Nested.Union (Entity.Subprograms);
+         Nested.Union (Entity.Generic_Instantiations);
 
-      Write (File, "<h1>" & To_UTF_8_String (Entity.Qualified_Name) & "</h1>");
-      Write (File, "<h2>Entities</h2>");
+         --  Open input and output files.
 
-      Generate_TOC ("Simple Types", Entity.Simple_Types);
-      Generate_TOC ("Array Types", Entity.Array_Types);
-      Generate_TOC ("Record Types", Entity.Record_Types);
-      Generate_TOC ("Interface Types", Entity.Interface_Types);
-      Generate_TOC ("Tagged Types", Entity.Tagged_Types);
-      Generate_TOC ("Access Types", Entity.Access_Types);
-      Generate_TOC ("Subtypes", Entity.Subtypes);
-      Generate_TOC ("Constants", Entity.Constants);
-      Generate_TOC ("Variables", Entity.Variables);
-      Generate_TOC ("Subprograms", Entity.Subprograms);
-      Generate_TOC ("Generic Instantiations", Entity.Generic_Instantiations);
+         Input_Sources.File.Open
+           ("../share/gnatdoc/html/template/doc.xhtml", Input);
+         Output.Open (GNATCOLL.VFS.Create (Filesystem_String (Name)));
 
-      Write (File, "<h2>Description</h2>");
+         --  Connect components
 
-      Write (File, "<pre>");
-      Write
-        (File,
-         To_UTF_8_String
-           (Get_Plain_Text_Description
-                (Entity.Documentation).Join_Lines (VSS.Strings.LF)));
-      Write (File, "</pre>");
+         Writer.Set_Output_Stream (Output'Unchecked_Access);
+         Filter.Set_Content_Handler (Writer'Unchecked_Access);
+         Reader.Set_Content_Handler (Filter'Unchecked_Access);
 
-      for Item of All_Nested loop
-         Write
-           (File,
-               "<h4 id='"
-               & Digest (To_UTF_8_String (Item.Signature)) & "'>"
-               & To_UTF_8_String (Item.Name) & "</h4>");
+         --  Bind information
 
-         Write (File, "<pre class='ada-code-snippet'>");
+         Filter.Bind
+           (["gnatdoc", "entity"],
+            new Proxies.Entity_Information_Proxy'
+              (Entity => Entity, Nested => Nested));
 
-         for Line of Get_Ada_Code_Snippet (Item.Documentation) loop
-            Write (File, To_UTF_8_String (Line) & ASCII.LF);
-         end loop;
+         --  Process template
 
-         Write (File, "</pre>");
+         Reader.Parse (Input);
 
-         if Item.Documentation.Has_Documentation then
-            Write (File, "<pre>");
+         --  Close input and output files.
 
-            Write
-              (File,
-               To_UTF_8_String
-                 (Get_Plain_Text_Description
-                      (Item.Documentation).Join_Lines (VSS.Strings.LF)));
-
-            Write (File, "</pre>");
-         end if;
-      end loop;
-
-      Write (File, "</body>");
-      Write (File, "</html>");
-
-      Close (File);
+         Input.Close;
+         Output.Close;
+      end;
    end Generate_Entity_Documentation_Page;
 
    -----------------------

@@ -54,8 +54,8 @@ package GNATdoc.Entities is
       --  Private entities are excluded from the documentartion.
 
       Packages               : Entity_Information_Sets.Set;
-      Subprograms            : Entity_Information_Sets.Set;
-      Generic_Instantiations : Entity_Information_Sets.Set;
+      Subprograms            : aliased Entity_Information_Sets.Set;
+      Generic_Instantiations : aliased Entity_Information_Sets.Set;
       --  Generic_Packages
       --  Generic_Subprograms
       --  Package_Instantiations
@@ -64,19 +64,17 @@ package GNATdoc.Entities is
       --  Renamings of the packages. Renamings of the subprograms is in
       --  the Subprograms field.
 
-      Simple_Types           : Entity_Information_Sets.Set;
-      Array_Types            : Entity_Information_Sets.Set;
-      Record_Types           : Entity_Information_Sets.Set;
-      Interface_Types        : Entity_Information_Sets.Set;
-      Tagged_Types           : Entity_Information_Sets.Set;
-      Access_Types           : Entity_Information_Sets.Set;
-      Subtypes               : Entity_Information_Sets.Set;
-      Constants              : Entity_Information_Sets.Set;
-      Variables              : Entity_Information_Sets.Set;
+      Simple_Types           : aliased Entity_Information_Sets.Set;
+      Array_Types            : aliased Entity_Information_Sets.Set;
+      Record_Types           : aliased Entity_Information_Sets.Set;
+      Interface_Types        : aliased Entity_Information_Sets.Set;
+      Tagged_Types           : aliased Entity_Information_Sets.Set;
+      Access_Types           : aliased Entity_Information_Sets.Set;
+      Subtypes               : aliased Entity_Information_Sets.Set;
+      Constants              : aliased Entity_Information_Sets.Set;
+      Variables              : aliased Entity_Information_Sets.Set;
 
       --  Access_Types      : EInfo_List.Vector;  +++
-      --  CPP_Classes       : EInfo_List.Vector;  ---
-      --  CPP_Constructors  : EInfo_List.Vector;  ---
       --  Generic_Formals   : EInfo_List.Vector;
       --  Interface_Types   : EInfo_List.Vector;  +++
       --  Methods           : EInfo_List.Vector;  ???
