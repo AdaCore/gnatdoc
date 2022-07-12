@@ -48,7 +48,8 @@ package body GNATdoc.Backend.HTML is
    use VSS.Strings.Conversions;
 
    procedure Generate_Entity_Documentation_Page
-     (Entity : not null Entity_Information_Access);
+     (Self   : in out HTML_Backend'Class;
+      Entity : not null Entity_Information_Access);
 
    function Is_Private_Entity
      (Entity : not null Entity_Information_Access) return Boolean;
@@ -379,8 +380,12 @@ package body GNATdoc.Backend.HTML is
          --  Open input and output files.
 
          Input_Sources.File.Open
-           ("../share/gnatdoc/html/template/index.xhtml", Input);
-         Output.Open (GNATCOLL.VFS.Create ("index.html"));
+           (String
+              (Self.Lookup_Resource_File
+                   (["template", "index.xhtml"]).Full_Name.all),
+            Input);
+         Output.Open
+           (GNATCOLL.VFS.Create_From_Dir (Self.Output_Root, "index.html"));
 
          --  Connect components
 
@@ -406,7 +411,7 @@ package body GNATdoc.Backend.HTML is
       end;
 
       for Item of Index_Entities loop
-         Generate_Entity_Documentation_Page (Item);
+         Self.Generate_Entity_Documentation_Page (Item);
       end loop;
    end Generate;
 
@@ -415,43 +420,14 @@ package body GNATdoc.Backend.HTML is
    ----------------------------------------
 
    procedure Generate_Entity_Documentation_Page
-     (Entity : not null Entity_Information_Access)
+     (Self   : in out HTML_Backend'Class;
+      Entity : not null Entity_Information_Access)
    is
       Name       : constant String :=
         Digest (To_UTF_8_String (Entity.Signature)) & ".html";
       File       : Writable_File :=
         Create (Filesystem_String (Name)).Write_File;
       All_Nested : Entity_Information_Sets.Set;
-
-      procedure Generate_TOC
-        (Title : String;
-         Set   : Entity_Information_Sets.Set);
-
-      ------------------
-      -- Generate_TOC --
-      ------------------
-
-      procedure Generate_TOC
-        (Title : String;
-         Set   : Entity_Information_Sets.Set) is
-      begin
-         if not Set.Is_Empty then
-            All_Nested.Union (Set);
-
-            Write (File, "<h3>" & Title & "</h3>");
-            Write (File, "<ul>");
-
-            for Item of Set loop
-               Write
-                 (File,
-                  "<li><a href='#"
-                  & Digest (To_UTF_8_String (Item.Signature)) & "'>"
-                  & To_UTF_8_String (Item.Name) & "</a></li>");
-            end loop;
-
-            Write (File, "</ul>");
-         end if;
-      end Generate_TOC;
 
    begin
       declare
@@ -478,8 +454,13 @@ package body GNATdoc.Backend.HTML is
          --  Open input and output files.
 
          Input_Sources.File.Open
-           ("../share/gnatdoc/html/template/doc.xhtml", Input);
-         Output.Open (GNATCOLL.VFS.Create (Filesystem_String (Name)));
+           (String
+              (Self.Lookup_Resource_File
+                   (["template", "doc.xhtml"]).Full_Name.all),
+            Input);
+         Output.Open
+           (GNATCOLL.VFS.Create_From_Dir
+              (Self.Output_Root, Filesystem_String (Name)));
 
          --  Connect components
 
@@ -505,6 +486,36 @@ package body GNATdoc.Backend.HTML is
       end;
    end Generate_Entity_Documentation_Page;
 
+   ----------------
+   -- Initialize --
+   ----------------
+
+   overriding procedure Initialize (Self : in out HTML_Backend) is
+
+      procedure Copy_Static (Root : GNATCOLL.VFS.Virtual_File);
+
+      -----------------
+      -- Copy_Static --
+      -----------------
+
+      procedure Copy_Static (Root : GNATCOLL.VFS.Virtual_File) is
+         Source  : GNATCOLL.VFS.Virtual_File;
+         Success : Boolean;
+
+      begin
+         if Root /= GNATCOLL.VFS.No_File then
+            Source := Root / "static";
+            Source.Copy (Self.Output_Root.Full_Name.all, Success);
+         end if;
+      end Copy_Static;
+
+   begin
+      Abstract_Backend (Self).Initialize;
+
+      Copy_Static (Self.System_Resources_Root);
+      Copy_Static (Self.Project_Resources_Root);
+   end Initialize;
+
    -----------------------
    -- Is_Private_Entity --
    -----------------------
@@ -518,5 +529,15 @@ package body GNATdoc.Backend.HTML is
         or (not Entity.Enclosing.Is_Empty
               and then Is_Private_Entity (To_Entity (Entity.Enclosing)));
    end Is_Private_Entity;
+
+   ----------
+   -- Name --
+   ----------
+
+   overriding function Name
+     (Self : in out HTML_Backend) return VSS.Strings.Virtual_String is
+   begin
+      return "html";
+   end Name;
 
 end GNATdoc.Backend.HTML;

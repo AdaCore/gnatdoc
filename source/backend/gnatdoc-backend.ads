@@ -15,20 +15,39 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-package GNATdoc.Backend is
+private with GNATCOLL.VFS;
 
-   pragma Pure;
+with VSS.Strings;
+private with VSS.String_Vectors;
+
+package GNATdoc.Backend is
 
    type Abstract_Backend is abstract tagged limited private;
 
-   procedure Initialize (Self : in out Abstract_Backend) is null;
+   procedure Initialize (Self : in out Abstract_Backend);
+
+   function Name
+     (Self : in out Abstract_Backend)
+      return VSS.Strings.Virtual_String is abstract;
 
    procedure Generate (Self : in out Abstract_Backend) is abstract;
 
 private
 
    type Abstract_Backend is abstract tagged limited record
-      null;
+      System_Resources_Root  : GNATCOLL.VFS.Virtual_File;
+      --  Root directory for system resources. This directory includes
+      --  subdirectory for given backend.
+      Project_Resources_Root : GNATCOLL.VFS.Virtual_File;
+      --  Root directory for project resources. This directory includes
+      --  subdirectory for given backend.
+      Output_Root            : GNATCOLL.VFS.Virtual_File;
+      --  Root directory for output
    end record;
+
+   function Lookup_Resource_File
+     (Self : Abstract_Backend;
+      Path : VSS.String_Vectors.Virtual_String_Vector)
+      return GNATCOLL.VFS.Virtual_File;
 
 end GNATdoc.Backend;

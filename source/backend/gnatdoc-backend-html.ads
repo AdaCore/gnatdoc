@@ -23,6 +23,11 @@ private
 
    type HTML_Backend is new Abstract_Backend with null record;
 
+   overriding function Name
+     (Self : in out HTML_Backend) return VSS.Strings.Virtual_String;
+
+   overriding procedure Initialize (Self : in out HTML_Backend);
+
    overriding procedure Generate (Self : in out HTML_Backend);
 
 end GNATdoc.Backend.HTML;
