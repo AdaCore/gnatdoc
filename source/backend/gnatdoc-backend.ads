@@ -19,4 +19,16 @@ package GNATdoc.Backend is
 
    pragma Pure;
 
+   type Abstract_Backend is abstract tagged limited private;
+
+   procedure Initialize (Self : in out Abstract_Backend) is null;
+
+   procedure Generate (Self : in out Abstract_Backend) is abstract;
+
+private
+
+   type Abstract_Backend is abstract tagged limited record
+      null;
+   end record;
+
 end GNATdoc.Backend;

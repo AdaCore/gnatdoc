@@ -22,9 +22,13 @@ with GNATdoc.Frontend;
 with GNATdoc.Projects;
 
 procedure GNATdoc.Driver is
+   Backend : GNATdoc.Backend.HTML.HTML_Backend;
+
 begin
    GNATdoc.Projects.Initialize (VSS.Application.Arguments.Element (1));
+   Backend.Initialize;
+
    GNATdoc.Projects.Process_Compilation_Units
      (GNATdoc.Frontend.Process_Compilation_Unit'Access);
-   GNATdoc.Backend.HTML.Generate;
+   Backend.Generate;
 end GNATdoc.Driver;

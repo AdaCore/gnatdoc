@@ -17,6 +17,12 @@
 
 package GNATdoc.Backend.HTML is
 
-   procedure Generate;
+   type HTML_Backend is new Abstract_Backend with private;
+
+private
+
+   type HTML_Backend is new Abstract_Backend with null record;
+
+   overriding procedure Generate (Self : in out HTML_Backend);
 
 end GNATdoc.Backend.HTML;

@@ -346,7 +346,7 @@ package body GNATdoc.Backend.HTML is
    -- Generate --
    --------------
 
-   procedure Generate is
+   overriding procedure Generate (Self : in out HTML_Backend) is
       Index_Entities : aliased Entity_Information_Sets.Set;
 
    begin
