@@ -15,8 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-package GNATdoc.Backend is
+package GNATdoc.Backend.HTML is
 
-   pragma Pure;
+   procedure Generate;
 
-end GNATdoc.Backend;
+end GNATdoc.Backend.HTML;

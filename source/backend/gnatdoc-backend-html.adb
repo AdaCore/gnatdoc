@@ -39,7 +39,7 @@ with GNATdoc.Entities;
 with GNATdoc.Options;
 with Streams;
 
-package body GNATdoc.Backend is
+package body GNATdoc.Backend.HTML is
 
    use GNAT.SHA256;
    use GNATCOLL.VFS;
@@ -519,4 +519,4 @@ package body GNATdoc.Backend is
               and then Is_Private_Entity (To_Entity (Entity.Enclosing)));
    end Is_Private_Entity;
 
-end GNATdoc.Backend;
+end GNATdoc.Backend.HTML;

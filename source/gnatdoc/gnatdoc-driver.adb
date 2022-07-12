@@ -17,7 +17,7 @@
 
 with VSS.Application;
 
-with GNATdoc.Backend;
+with GNATdoc.Backend.HTML;
 with GNATdoc.Frontend;
 with GNATdoc.Projects;
 
@@ -26,5 +26,5 @@ begin
    GNATdoc.Projects.Initialize (VSS.Application.Arguments.Element (1));
    GNATdoc.Projects.Process_Compilation_Units
      (GNATdoc.Frontend.Process_Compilation_Unit'Access);
-   GNATdoc.Backend.Generate;
+   GNATdoc.Backend.HTML.Generate;
 end GNATdoc.Driver;
