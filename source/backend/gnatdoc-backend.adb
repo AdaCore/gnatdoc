@@ -25,18 +25,18 @@ with GNATCOLL.VFS;
 
 with Input_Sources.File;
 
-with GNATdoc.Comments.Helpers;
-with GNATdoc.Entities;
-with GNATdoc.Options;
-
 with VSS.HTML.Writers;
 with VSS.Strings.Conversions;
 with VSS.String_Vectors;
 with VSS.XML.Templates.Processors;
-with VSS.XML.Templates.Proxies;
+with VSS.XML.Templates.Proxies.Strings;
 with VSS.XML.Templates.Values;
 with VSS.XML.XmlAda_Readers;
 
+with GNATdoc.Comments.Helpers;
+with GNATdoc.Comments.Proxies;
+with GNATdoc.Entities;
+with GNATdoc.Options;
 with Streams;
 
 package body GNATdoc.Backend is
@@ -119,15 +119,6 @@ package body GNATdoc.Backend is
       function Digest
         (Item : VSS.Strings.Virtual_String) return VSS.Strings.Virtual_String;
 
-      type String_Proxy is
-        limited new VSS.XML.Templates.Proxies.Abstract_Content_Proxy with
-      record
-         Content : VSS.Strings.Virtual_String;
-      end record;
-
-      overriding function Content
-        (Self : String_Proxy) return VSS.Strings.Virtual_String;
-
       ---------------
       -- Component --
       ---------------
@@ -200,30 +191,33 @@ package body GNATdoc.Backend is
                    Self.Entity.Generic_Instantiations'Unchecked_Access);
 
          elsif Name = "name" then
-            return String_Proxy'(Content => Self.Entity.Name);
+            return
+              VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
+                (Content => Self.Entity.Name);
 
          elsif Name = "qualified_name" then
-            return String_Proxy'(Content => Self.Entity.Qualified_Name);
+            return
+              VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
+                (Content => Self.Entity.Qualified_Name);
 
          elsif Name = "code" then
             return
-              String_Proxy'
+              VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
                 (Content =>
                    GNATdoc.Comments.Helpers.Get_Ada_Code_Snippet
                      (Self.Entity.Documentation).Join_Lines (VSS.Strings.LF));
 
          elsif Name = "description" then
             return
-              String_Proxy'
+              VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
                 (Content =>
                    GNATdoc.Comments.Helpers.Get_Plain_Text_Description
                      (Self.Entity.Documentation).Join_Lines (VSS.Strings.LF));
 
-         --  elsif Name = "all" then
-         --     return
-         --       Entity_Information_Set_Proxy'
-         --         (Index_Entities =>
-         --            Self.Entity.Generic_Instantiations'Unchecked_Access);
+         elsif Name = "documentation" then
+            return
+              GNATdoc.Comments.Proxies.Structured_Comment_Proxy'
+                (Documentation => Self.Entity.Documentation'Unchecked_Access);
 
          else
             return
@@ -245,16 +239,6 @@ package body GNATdoc.Backend is
              (Entity => Entity_Information_Sets.Element (Self.Position),
               Nested => <>);
       end Element;
-
-      -------------
-      -- Content --
-      -------------
-
-      overriding function Content
-        (Self : String_Proxy) return VSS.Strings.Virtual_String is
-      begin
-         return Self.Content;
-      end Content;
 
       ------------
       -- Digest --
