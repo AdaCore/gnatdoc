@@ -302,38 +302,41 @@ package body GNATdoc.Backend.HTML is
          use type VSS.Strings.Virtual_String;
 
       begin
-         if Path = ["id"] then
-            return
-              (Kind         => VSS.XML.Templates.Values.String,
-               String_Value =>
-                 Digest
-                   (Entity_Information_Sets.Element
-                        (Self.Position).Signature));
-
-         elsif Path = ["full_href"] then
-            return
-              (Kind         => VSS.XML.Templates.Values.String,
-               String_Value =>
-                 Digest
-                   (Entity_Information_Sets.Element (Self.Position).Signature)
-               & ".html");
-
-         elsif Path = ["local_href"] then
-            return
-              (Kind         => VSS.XML.Templates.Values.String,
-               String_Value =>
-                 "#"
-                    & Digest
-                        (Entity_Information_Sets.Element
+         if Path.Length = 1 then
+            if Path (1) = "id" then
+               return
+                 (Kind         => VSS.XML.Templates.Values.String,
+                  String_Value =>
+                    Digest
+                      (Entity_Information_Sets.Element
                            (Self.Position).Signature));
 
-         elsif Path = ["local_id"] then
-            return
-              (Kind         => VSS.XML.Templates.Values.String,
-               String_Value =>
-                 Digest
-                   (Entity_Information_Sets.Element
-                        (Self.Position).Signature));
+            elsif Path (1) = "full_href" then
+               return
+                 (Kind         => VSS.XML.Templates.Values.String,
+                  String_Value =>
+                    Digest
+                      (Entity_Information_Sets.Element
+                           (Self.Position).Signature)
+                  & ".html");
+
+            elsif Path (1) = "local_href" then
+               return
+                 (Kind         => VSS.XML.Templates.Values.String,
+                  String_Value =>
+                    "#"
+                  & Digest
+                    (Entity_Information_Sets.Element
+                         (Self.Position).Signature));
+
+            elsif Path (1) = "local_id" then
+               return
+                 (Kind         => VSS.XML.Templates.Values.String,
+                  String_Value =>
+                    Digest
+                      (Entity_Information_Sets.Element
+                           (Self.Position).Signature));
+            end if;
          end if;
 
          return
