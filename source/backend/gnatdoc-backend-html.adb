@@ -98,9 +98,8 @@ package body GNATdoc.Backend.HTML is
         access all Entity_Information_Set_Proxy;
 
       type TOC_Iterator is
-      limited new VSS.XML.Templates.Proxies.Abstract_Proxy
-        and VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator
-        and VSS.XML.Templates.Proxies.Abstract_Value_Proxy
+        limited new VSS.XML.Templates.Proxies.Abstract_Proxy
+          and VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator
       with record
          Entities : not null access Entity_Information_Sets.Set;
          Position : Entity_Information_Sets.Cursor;
@@ -111,11 +110,6 @@ package body GNATdoc.Backend.HTML is
       overriding function Element
         (Self : in out TOC_Iterator)
          return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
-
-      overriding function Value
-        (Self : TOC_Iterator;
-         Path : VSS.String_Vectors.Virtual_String_Vector)
-         return VSS.XML.Templates.Values.Value;
 
       function Digest
         (Item : VSS.Strings.Virtual_String) return VSS.Strings.Virtual_String;
@@ -194,24 +188,24 @@ package body GNATdoc.Backend.HTML is
          elsif Name = "name" then
             return
               VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
-                (Content => Self.Entity.Name);
+                (Text => Self.Entity.Name);
 
          elsif Name = "qualified_name" then
             return
               VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
-                (Content => Self.Entity.Qualified_Name);
+                (Text => Self.Entity.Qualified_Name);
 
          elsif Name = "code" then
             return
               VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
-                (Content =>
+                (Text =>
                    GNATdoc.Comments.Helpers.Get_Ada_Code_Snippet
                      (Self.Entity.Documentation).Join_Lines (VSS.Strings.LF));
 
          elsif Name = "description" then
             return
               VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
-                (Content =>
+                (Text =>
                    GNATdoc.Comments.Helpers.Get_Plain_Text_Description
                      (Self.Entity.Documentation).Join_Lines (VSS.Strings.LF));
 
@@ -219,6 +213,21 @@ package body GNATdoc.Backend.HTML is
             return
               GNATdoc.Comments.Proxies.Structured_Comment_Proxy'
                 (Documentation => Self.Entity.Documentation'Unchecked_Access);
+
+         elsif Name = "id" then
+            return
+              VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
+                (Text => Digest (Self.Entity.Signature));
+
+         elsif Name = "full_href" then
+            return
+              VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
+                (Text => Digest (Self.Entity.Signature) & ".html");
+
+         elsif Name = "local_href" then
+            return
+              VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
+                (Text => "#" & Digest (Self.Entity.Signature));
 
          else
             return
@@ -289,60 +298,6 @@ package body GNATdoc.Backend.HTML is
 
          return Entity_Information_Sets.Has_Element (Self.Position);
       end Next;
-
-      -----------
-      -- Value --
-      -----------
-
-      overriding function Value
-        (Self : TOC_Iterator;
-         Path : VSS.String_Vectors.Virtual_String_Vector)
-         return VSS.XML.Templates.Values.Value
-      is
-         use type VSS.Strings.Virtual_String;
-
-      begin
-         if Path.Length = 1 then
-            if Path (1) = "id" then
-               return
-                 (Kind         => VSS.XML.Templates.Values.String,
-                  String_Value =>
-                    Digest
-                      (Entity_Information_Sets.Element
-                           (Self.Position).Signature));
-
-            elsif Path (1) = "full_href" then
-               return
-                 (Kind         => VSS.XML.Templates.Values.String,
-                  String_Value =>
-                    Digest
-                      (Entity_Information_Sets.Element
-                           (Self.Position).Signature)
-                  & ".html");
-
-            elsif Path (1) = "local_href" then
-               return
-                 (Kind         => VSS.XML.Templates.Values.String,
-                  String_Value =>
-                    "#"
-                  & Digest
-                    (Entity_Information_Sets.Element
-                         (Self.Position).Signature));
-
-            elsif Path (1) = "local_id" then
-               return
-                 (Kind         => VSS.XML.Templates.Values.String,
-                  String_Value =>
-                    Digest
-                      (Entity_Information_Sets.Element
-                           (Self.Position).Signature));
-            end if;
-         end if;
-
-         return
-           (Kind    => VSS.XML.Templates.Values.Error,
-            Message => "unknown value '" & Path.Join ('/') & "'");
-      end Value;
 
    end Proxies;
 

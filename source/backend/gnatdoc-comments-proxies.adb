@@ -110,7 +110,7 @@ package body GNATdoc.Comments.Proxies is
 
             return
               VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
-                (Content => Text.Join_Lines (VSS.Strings.LF));
+                (Text => Text.Join_Lines (VSS.Strings.LF));
          end;
 
       elsif Name = "enumeration_literals" then
@@ -154,12 +154,12 @@ package body GNATdoc.Comments.Proxies is
       if Name = "name" then
          return
            VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
-             (Content => Self.Section.Name);
+             (Text => Self.Section.Name);
 
       elsif Name = "description" then
          return
            VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
-             (Content => Self.Section.Text.Join_Lines (VSS.Strings.LF));
+             (Text => Self.Section.Text.Join_Lines (VSS.Strings.LF));
 
       else
          return
