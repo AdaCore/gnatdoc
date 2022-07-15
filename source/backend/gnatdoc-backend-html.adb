@@ -202,13 +202,6 @@ package body GNATdoc.Backend.HTML is
                    GNATdoc.Comments.Helpers.Get_Ada_Code_Snippet
                      (Self.Entity.Documentation).Join_Lines (VSS.Strings.LF));
 
-         elsif Name = "description" then
-            return
-              VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
-                (Text =>
-                   GNATdoc.Comments.Helpers.Get_Plain_Text_Description
-                     (Self.Entity.Documentation).Join_Lines (VSS.Strings.LF));
-
          elsif Name = "documentation" then
             return
               GNATdoc.Comments.Proxies.Structured_Comment_Proxy'

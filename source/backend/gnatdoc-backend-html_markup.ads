@@ -15,29 +15,13 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with "gpr2";
-with "gpr_unit_provider";
-with "libgnatdoc";
-with "markdown";
-with "vss_xml_xmlada";
-with "vss_xml_templates";
+with VSS.String_Vectors;
+with VSS.XML.Event_Vectors;
 
-project GNATdoc is
+package GNATdoc.Backend.HTML_Markup is
 
-   for Object_Dir use "../.objs";
-   for Source_Dirs use
-     ("../source/backend",
-      "../source/frontend",
-      "../source/gnatdoc");
-   for Exec_Dir use "../bin";
-   for Main use ("gnatdoc-driver.adb");
+   function Build_Markup
+     (Text : VSS.String_Vectors.Virtual_String_Vector)
+      return VSS.XML.Event_Vectors.Vector;
 
-   package Compiler is
-      for Switches ("Ada") use ("-g", "-gnatygO", "-gnata");
-   end Compiler;
-
-   package Builder is
-      for Executable ("gnatdoc-driver.adb") use "gnatdoc4";
-   end Builder;
-
-end GNATdoc;
+end GNATdoc.Backend.HTML_Markup;
