@@ -111,7 +111,7 @@
 
     <div tal:omit-tag='' tal:repeat='item gnatdoc/entity/all'>
       <h4 tal:content='item/name' tal:attributes='id item/id'>Entity Name</h4>
-      <pre class='ada-code-snippet' tal:content='item/code'>Source code of the entity declaration</pre>
+      <pre class='ada-code-snippet'><code xml:space='preserve' tal:content='item/code'>Source code of the entity declaration</code></pre>
       <div tal:omit-tag='' tal:content='structure item/documentation/description'>Description of the entity</div>
 
       <div tal:omit-tag='' tal:condition='item/documentation/enumeration_literals'>
