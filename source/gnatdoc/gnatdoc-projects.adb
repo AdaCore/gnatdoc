@@ -23,6 +23,7 @@ with Libadalang.GPR2_Provider;
 
 with GPR2.Context;
 with GPR2.Path_Name;
+with GPR2.Project.Attribute;
 with GPR2.Project.Attribute_Index;
 with GPR2.Project.Source.Set;
 with GPR2.Project.Tree;
@@ -89,42 +90,45 @@ package body GNATdoc.Projects is
    is
       use type GNATCOLL.VFS.Virtual_File;
 
-      Index : constant GPR2.Project.Attribute_Index.Object :=
+      Index       : constant GPR2.Project.Attribute_Index.Object :=
         GPR2.Project.Attribute_Index.Create
           (VSS.Strings.Conversions.To_UTF_8_String (Backend_Name));
-      --  Value : GPR2.Project.Attribute.Object;
+      Backend_Dir : constant GNATCOLL.VFS.Filesystem_String :=
+        GNATCOLL.VFS.Filesystem_String
+          (VSS.Strings.Conversions.To_UTF_8_String (Backend_Name));
 
    begin
-      if Project_Tree.Root_Project.Has_Attribute
-        (Output_Dir_Attribute,
-         Documentation_Package,
-         Index)
-      then
-         return
-           GNATCOLL.VFS.Create_From_Base
-             (GNATCOLL.VFS.Filesystem_String
-                (Project_Tree.Root_Project.Attribute
+      return Result : GNATCOLL.VFS.Virtual_File :=
+        Project_Tree.Root_Project.Object_Directory.Virtual_File
+          / "gnatdoc" / Backend_Dir
+      do
+         if Project_Tree.Root_Project.Has_Attribute
+           (Output_Dir_Attribute,
+            Documentation_Package,
+            Index)
+         then
+            declare
+               Attribute : constant GPR2.Project.Attribute.Object :=
+                 Project_Tree.Root_Project.Attribute
                    (Output_Dir_Attribute,
                     Documentation_Package,
-                    Index).Value.Text),
-              Project_Tree.Root_Project.Dir_Name.Virtual_File.Full_Name.all);
-      end if;
+                    Index);
 
-      if Project_Tree.Root_Project.Has_Attribute
-        (Output_Dir_Attribute,
-         Documentation_Package)
-      then
-         return
-           GNATCOLL.VFS.Create_From_Base
-             (GNATCOLL.VFS.Filesystem_String
-                (Project_Tree.Root_Project.Attribute
-                   (Output_Dir_Attribute,
-                    Documentation_Package).Value.Text),
-              Project_Tree.Root_Project.Dir_Name.Virtual_File.Full_Name.all);
-      end if;
+            begin
+               Result :=
+                 GNATCOLL.VFS.Create_From_Base
+                   (GNATCOLL.VFS.Filesystem_String (Attribute.Value.Text),
+                    Project_Tree.Root_Project.Dir_Name.Virtual_File
+                      .Full_Name.all);
 
-      return
-        Project_Tree.Root_Project.Object_Directory.Virtual_File / "gnatdoc";
+               if Attribute.Index.Text
+                 /= VSS.Strings.Conversions.To_UTF_8_String (Backend_Name)
+               then
+                  Result := Result / Backend_Dir;
+               end if;
+            end;
+         end if;
+      end return;
    end Output_Directory;
 
    -------------------------------

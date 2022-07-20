@@ -36,6 +36,8 @@ package GNATdoc.Projects is
    --  from the
    --   - value of Documentation'Output_Directory attribute for given backend
    --   - value of Documentation'Output_Directory attribute for any backend
-   --   - value of Project'Object_Dir with 'gnatdoc' subdirectory
+   --     with backend's name subdirectory
+   --   - value of Project'Object_Dir with 'gnatdoc' and backend's name
+   --     subdirectories.
 
 end GNATdoc.Projects;
