@@ -15,6 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with Ada.Containers.Hashed_Sets;
+with Ada.Strings.Hash;
 with Ada.Text_IO;
 
 with Libadalang.Common;
@@ -36,16 +38,26 @@ package body GNATdoc.Projects is
 
    use type GNATCOLL.VFS.Virtual_File;
 
-   Documentation_Package    : constant GPR2.Package_Id :=
+   Documentation_Package           : constant GPR2.Package_Id :=
      GPR2."+" ("documentation");
-   Output_Dir_Attribute     : constant GPR2.Attribute_Id :=
+   Output_Dir_Attribute            : constant GPR2.Attribute_Id :=
      GPR2."+" ("output_dir");
-   Resources_Dir_Attribute  : constant GPR2.Attribute_Id :=
+   Resources_Dir_Attribute         : constant GPR2.Attribute_Id :=
      GPR2."+" ("resources_dir");
+   Exclude_Project_Files_Attribute : constant GPR2.Attribute_Id :=
+     GPR2."+" ("exclude_project_files");
 
-   Project_Context : GPR2.Context.Object;
-   Project_Tree    : GPR2.Project.Tree.Object;
-   LAL_Context     : Libadalang.Analysis.Analysis_Context;
+   function Hash
+     (Item : GNATCOLL.VFS.Virtual_File) return Ada.Containers.Hash_Type;
+
+   package Virtual_File_Sets is
+     new Ada.Containers.Hashed_Sets
+       (GNATCOLL.VFS.Virtual_File, Hash, GNATCOLL.VFS."=");
+
+   Project_Context       : GPR2.Context.Object;
+   Project_Tree          : GPR2.Project.Tree.Object;
+   Exclude_Project_Files : Virtual_File_Sets.Set;
+   LAL_Context           : Libadalang.Analysis.Analysis_Context;
 
    procedure Register_Attributes;
 
@@ -96,6 +108,16 @@ package body GNATdoc.Projects is
       end return;
    end Custom_Resources_Directory;
 
+   ----------
+   -- Hash --
+   ----------
+
+   function Hash
+     (Item : GNATCOLL.VFS.Virtual_File) return Ada.Containers.Hash_Type is
+   begin
+      return Ada.Strings.Hash (Item.Display_Full_Name);
+   end Hash;
+
    ----------------
    -- Initialize --
    ----------------
@@ -103,6 +125,8 @@ package body GNATdoc.Projects is
    procedure Initialize (File_Name : VSS.Strings.Virtual_String) is
    begin
       Register_Attributes;
+
+      --  Load project file
 
       begin
          Project_Tree.Load_Autoconf
@@ -124,11 +148,35 @@ package body GNATdoc.Projects is
             raise;
       end;
 
+      --  Create Libadalang context and unit provider
+
       LAL_Context :=
         Libadalang.Analysis.Create_Context
           (Unit_Provider =>
              Libadalang.GPR2_Provider.Create_Project_Unit_Provider
                (Project_Tree));
+
+      --  Setup list of excluded project files
+
+      if Project_Tree.Root_Project.Has_Attribute
+        (Exclude_Project_Files_Attribute, Documentation_Package)
+      then
+         declare
+            Attribute : constant GPR2.Project.Attribute.Object :=
+              Project_Tree.Root_Project.Attribute
+                (Exclude_Project_Files_Attribute, Documentation_Package);
+            Base_Dir  : constant GNATCOLL.VFS.Filesystem_String :=
+              Project_Tree.Root_Project.Dir_Name.Virtual_File.Full_Name.all;
+
+         begin
+            for Item of Attribute.Values loop
+               Exclude_Project_Files.Insert
+                 (GNATCOLL.VFS.Create_From_Base
+                    (GNATCOLL.VFS.Filesystem_String (Item.Text),
+                     Base_Dir));
+            end loop;
+         end;
+      end if;
    end Initialize;
 
    ----------------------
@@ -186,29 +234,33 @@ package body GNATdoc.Projects is
 
    procedure Process_Compilation_Units
      (Handler : not null access procedure
-        (Node : Libadalang.Analysis.Compilation_Unit'Class))
-   is
-      Sources : GPR2.Project.Source.Set.Object
-        := Project_Tree.Root_Project.Sources;
-
+        (Node : Libadalang.Analysis.Compilation_Unit'Class)) is
    begin
-      for File of Sources loop
-         if File.Is_Ada then
-            declare
-               Unit     : Libadalang.Analysis.Analysis_Unit :=
-                 LAL_Context.Get_From_File (String (File.Path_Name.Name));
-               Iterator : Libadalang.Iterators.Traverse_Iterator'Class :=
-                 Libadalang.Iterators.Find
-                   (Unit.Root,
-                    Libadalang.Iterators.Kind_Is
-                      (Libadalang.Common.Ada_Compilation_Unit));
-               Node     : Libadalang.Analysis.Ada_Node;
+      for View of Project_Tree loop
+         if not View.Is_Externally_Built
+           and then not Exclude_Project_Files.Contains
+                          (View.Path_Name.Virtual_File)
+         then
+            for Source of View.Sources loop
+               if Source.Is_Ada then
+                  declare
+                     Unit     : Libadalang.Analysis.Analysis_Unit :=
+                       LAL_Context.Get_From_File
+                         (String (Source.Path_Name.Name));
+                     Iterator : Libadalang.Iterators.Traverse_Iterator'Class :=
+                       Libadalang.Iterators.Find
+                         (Unit.Root,
+                          Libadalang.Iterators.Kind_Is
+                            (Libadalang.Common.Ada_Compilation_Unit));
+                     Node     : Libadalang.Analysis.Ada_Node;
 
-            begin
-               while Iterator.Next (Node) loop
-                  Handler (Node.As_Compilation_Unit);
-               end loop;
-            end;
+                  begin
+                     while Iterator.Next (Node) loop
+                        Handler (Node.As_Compilation_Unit);
+                     end loop;
+                  end;
+               end if;
+            end loop;
          end if;
       end loop;
    end Process_Compilation_Units;
@@ -227,7 +279,7 @@ package body GNATdoc.Projects is
            GPR2.Project.Registry.Attribute.Create
              (Output_Dir_Attribute, Documentation_Package),
          Index_Type           => GPR2.Project.Registry.Attribute.String_Index,
-         Value => GPR2.Project.Registry.Attribute.Single,
+         Value                => GPR2.Project.Registry.Attribute.Single,
          Value_Case_Sensitive => True,
          Is_Allowed_In        => GPR2.Project.Registry.Attribute.Everywhere,
          Index_Optional       => True);
@@ -237,10 +289,19 @@ package body GNATdoc.Projects is
            GPR2.Project.Registry.Attribute.Create
              (Resources_Dir_Attribute, Documentation_Package),
          Index_Type           => GPR2.Project.Registry.Attribute.String_Index,
-         Value => GPR2.Project.Registry.Attribute.Single,
+         Value                => GPR2.Project.Registry.Attribute.Single,
          Value_Case_Sensitive => True,
          Is_Allowed_In        => GPR2.Project.Registry.Attribute.Everywhere,
          Index_Optional       => True);
+
+      GPR2.Project.Registry.Attribute.Add
+        (Name                 =>
+           GPR2.Project.Registry.Attribute.Create
+             (Exclude_Project_Files_Attribute, Documentation_Package),
+         Index_Type           => GPR2.Project.Registry.Attribute.No_Index,
+         Value                => GPR2.Project.Registry.Attribute.List,
+         Value_Case_Sensitive => True,
+         Is_Allowed_In        => GPR2.Project.Registry.Attribute.Everywhere);
    end Register_Attributes;
 
 end GNATdoc.Projects;
