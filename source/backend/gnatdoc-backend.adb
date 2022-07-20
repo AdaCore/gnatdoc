@@ -42,6 +42,8 @@ package body GNATdoc.Backend is
         Exe_Path.Dir.Get_Parent / "share" / "gnatdoc"
           / GNATCOLL.VFS.Filesystem_String
               (VSS.Strings.Conversions.To_UTF_8_String (Name));
+      Self.Project_Resources_Root :=
+        GNATdoc.Projects.Custom_Resources_Directory (Name);
 
       Self.Output_Root := GNATdoc.Projects.Output_Directory (Name);
 

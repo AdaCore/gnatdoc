@@ -34,16 +34,67 @@ with VSS.Strings.Conversions;
 
 package body GNATdoc.Projects is
 
-   Documentation_Package : constant GPR2.Package_Id :=
+   use type GNATCOLL.VFS.Virtual_File;
+
+   Documentation_Package    : constant GPR2.Package_Id :=
      GPR2."+" ("documentation");
-   Output_Dir_Attribute  : constant GPR2.Attribute_Id :=
+   Output_Dir_Attribute     : constant GPR2.Attribute_Id :=
      GPR2."+" ("output_dir");
+   Resources_Dir_Attribute  : constant GPR2.Attribute_Id :=
+     GPR2."+" ("resources_dir");
 
    Project_Context : GPR2.Context.Object;
    Project_Tree    : GPR2.Project.Tree.Object;
    LAL_Context     : Libadalang.Analysis.Analysis_Context;
 
    procedure Register_Attributes;
+
+   --------------------------------
+   -- Custom_Resources_Directory --
+   --------------------------------
+
+   function Custom_Resources_Directory
+     (Backend_Name : VSS.Strings.Virtual_String)
+      return GNATCOLL.VFS.Virtual_File
+   is
+      Index       : constant GPR2.Project.Attribute_Index.Object :=
+        GPR2.Project.Attribute_Index.Create
+          (VSS.Strings.Conversions.To_UTF_8_String (Backend_Name));
+      Backend_Dir : constant GNATCOLL.VFS.Filesystem_String :=
+        GNATCOLL.VFS.Filesystem_String
+          (VSS.Strings.Conversions.To_UTF_8_String (Backend_Name));
+
+   begin
+      return Result : GNATCOLL.VFS.Virtual_File := GNATCOLL.VFS.No_File do
+         if Project_Tree.Root_Project.Has_Attribute
+           (Resources_Dir_Attribute,
+            Documentation_Package,
+            Index)
+         then
+            declare
+               Attribute : constant GPR2.Project.Attribute.Object :=
+                 Project_Tree.Root_Project.Attribute
+                   (Resources_Dir_Attribute,
+                    Documentation_Package,
+                    Index);
+
+            begin
+               Result :=
+                 GNATCOLL.VFS.Create_From_Base
+                   (GNATCOLL.VFS.Filesystem_String
+                      (Attribute.Value.Text),
+                    Project_Tree.Root_Project.Dir_Name.Virtual_File
+                      .Full_Name.all);
+
+               if Attribute.Index.Text
+                 /= VSS.Strings.Conversions.To_UTF_8_String (Backend_Name)
+               then
+                  Result := Result / Backend_Dir;
+               end if;
+            end;
+         end if;
+      end return;
+   end Custom_Resources_Directory;
 
    ----------------
    -- Initialize --
@@ -88,8 +139,6 @@ package body GNATdoc.Projects is
      (Backend_Name : VSS.Strings.Virtual_String)
       return GNATCOLL.VFS.Virtual_File
    is
-      use type GNATCOLL.VFS.Virtual_File;
-
       Index       : constant GPR2.Project.Attribute_Index.Object :=
         GPR2.Project.Attribute_Index.Create
           (VSS.Strings.Conversions.To_UTF_8_String (Backend_Name));
@@ -177,6 +226,16 @@ package body GNATdoc.Projects is
         (Name                 =>
            GPR2.Project.Registry.Attribute.Create
              (Output_Dir_Attribute, Documentation_Package),
+         Index_Type           => GPR2.Project.Registry.Attribute.String_Index,
+         Value => GPR2.Project.Registry.Attribute.Single,
+         Value_Case_Sensitive => True,
+         Is_Allowed_In        => GPR2.Project.Registry.Attribute.Everywhere,
+         Index_Optional       => True);
+
+      GPR2.Project.Registry.Attribute.Add
+        (Name                 =>
+           GPR2.Project.Registry.Attribute.Create
+             (Resources_Dir_Attribute, Documentation_Package),
          Index_Type           => GPR2.Project.Registry.Attribute.String_Index,
          Value => GPR2.Project.Registry.Attribute.Single,
          Value_Case_Sensitive => True,

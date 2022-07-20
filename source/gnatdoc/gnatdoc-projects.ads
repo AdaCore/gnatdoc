@@ -40,4 +40,9 @@ package GNATdoc.Projects is
    --   - value of Project'Object_Dir with 'gnatdoc' and backend's name
    --     subdirectories.
 
+   function Custom_Resources_Directory
+     (Backend_Name : VSS.Strings.Virtual_String)
+      return GNATCOLL.VFS.Virtual_File;
+   --  Return custom resources directory if specified.
+
 end GNATdoc.Projects;
