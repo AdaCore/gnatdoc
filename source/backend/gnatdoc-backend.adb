@@ -18,6 +18,8 @@
 with VSS.Application;
 with VSS.Strings.Conversions;
 
+with GNATdoc.Projects;
+
 package body GNATdoc.Backend is
 
    use type GNATCOLL.VFS.Virtual_File;
@@ -27,7 +29,9 @@ package body GNATdoc.Backend is
    ----------------
 
    procedure Initialize (Self : in out Abstract_Backend) is
-      Exe_Path : GNATCOLL.VFS.Virtual_File :=
+      Name     : constant VSS.Strings.Virtual_String :=
+        Abstract_Backend'Class (Self).Name;
+      Exe_Path : constant GNATCOLL.VFS.Virtual_File :=
         GNATCOLL.VFS.Create
           (GNATCOLL.VFS.Filesystem_String
              (VSS.Strings.Conversions.To_UTF_8_String
@@ -37,11 +41,9 @@ package body GNATdoc.Backend is
       Self.System_Resources_Root :=
         Exe_Path.Dir.Get_Parent / "share" / "gnatdoc"
           / GNATCOLL.VFS.Filesystem_String
-              (VSS.Strings.Conversions.To_UTF_8_String
-                 (Abstract_Backend'Class (Self).Name));
+              (VSS.Strings.Conversions.To_UTF_8_String (Name));
 
-      Self.Output_Root :=
-        GNATCOLL.VFS.Get_Current_Dir / "gnatdoc";
+      Self.Output_Root := GNATdoc.Projects.Output_Directory (Name);
 
       --  Create output directory if not exists
 

@@ -20,18 +20,29 @@ with Ada.Text_IO;
 with Libadalang.Common;
 with Libadalang.Iterators;
 with Libadalang.GPR2_Provider;
+
 with GPR2.Context;
 with GPR2.Path_Name;
+with GPR2.Project.Attribute_Index;
 with GPR2.Project.Source.Set;
 with GPR2.Project.Tree;
+with GPR2.Project.Registry.Attribute;
+with GPR2.Project.Registry.Pack;
 
 with VSS.Strings.Conversions;
 
 package body GNATdoc.Projects is
 
+   Documentation_Package : constant GPR2.Package_Id :=
+     GPR2."+" ("documentation");
+   Output_Dir_Attribute  : constant GPR2.Attribute_Id :=
+     GPR2."+" ("output_dir");
+
    Project_Context : GPR2.Context.Object;
    Project_Tree    : GPR2.Project.Tree.Object;
    LAL_Context     : Libadalang.Analysis.Analysis_Context;
+
+   procedure Register_Attributes;
 
    ----------------
    -- Initialize --
@@ -39,6 +50,8 @@ package body GNATdoc.Projects is
 
    procedure Initialize (File_Name : VSS.Strings.Virtual_String) is
    begin
+      Register_Attributes;
+
       begin
          Project_Tree.Load_Autoconf
            (GPR2.Path_Name.Create_File
@@ -65,6 +78,54 @@ package body GNATdoc.Projects is
              Libadalang.GPR2_Provider.Create_Project_Unit_Provider
                (Project_Tree));
    end Initialize;
+
+   ----------------------
+   -- Output_Directory --
+   ----------------------
+
+   function Output_Directory
+     (Backend_Name : VSS.Strings.Virtual_String)
+      return GNATCOLL.VFS.Virtual_File
+   is
+      use type GNATCOLL.VFS.Virtual_File;
+
+      Index : constant GPR2.Project.Attribute_Index.Object :=
+        GPR2.Project.Attribute_Index.Create
+          (VSS.Strings.Conversions.To_UTF_8_String (Backend_Name));
+      --  Value : GPR2.Project.Attribute.Object;
+
+   begin
+      if Project_Tree.Root_Project.Has_Attribute
+        (Output_Dir_Attribute,
+         Documentation_Package,
+         Index)
+      then
+         return
+           GNATCOLL.VFS.Create_From_Base
+             (GNATCOLL.VFS.Filesystem_String
+                (Project_Tree.Root_Project.Attribute
+                   (Output_Dir_Attribute,
+                    Documentation_Package,
+                    Index).Value.Text),
+              Project_Tree.Root_Project.Dir_Name.Virtual_File.Full_Name.all);
+      end if;
+
+      if Project_Tree.Root_Project.Has_Attribute
+        (Output_Dir_Attribute,
+         Documentation_Package)
+      then
+         return
+           GNATCOLL.VFS.Create_From_Base
+             (GNATCOLL.VFS.Filesystem_String
+                (Project_Tree.Root_Project.Attribute
+                   (Output_Dir_Attribute,
+                    Documentation_Package).Value.Text),
+              Project_Tree.Root_Project.Dir_Name.Virtual_File.Full_Name.all);
+      end if;
+
+      return
+        Project_Tree.Root_Project.Object_Directory.Virtual_File / "gnatdoc";
+   end Output_Directory;
 
    -------------------------------
    -- Process_Compilation_Units --
@@ -98,5 +159,25 @@ package body GNATdoc.Projects is
          end if;
       end loop;
    end Process_Compilation_Units;
+
+   -------------------------
+   -- Register_Attributes --
+   -------------------------
+
+   procedure Register_Attributes is
+   begin
+      GPR2.Project.Registry.Pack.Add
+        (Documentation_Package, GPR2.Project.Registry.Pack.Everywhere);
+
+      GPR2.Project.Registry.Attribute.Add
+        (Name                 =>
+           GPR2.Project.Registry.Attribute.Create
+             (Output_Dir_Attribute, Documentation_Package),
+         Index_Type           => GPR2.Project.Registry.Attribute.String_Index,
+         Value => GPR2.Project.Registry.Attribute.Single,
+         Value_Case_Sensitive => True,
+         Is_Allowed_In        => GPR2.Project.Registry.Attribute.Everywhere,
+         Index_Optional       => True);
+   end Register_Attributes;
 
 end GNATdoc.Projects;

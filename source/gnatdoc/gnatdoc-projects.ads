@@ -15,6 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with GNATCOLL.VFS;
+
 with Libadalang.Analysis;
 
 with VSS.Strings;
@@ -26,5 +28,14 @@ package GNATdoc.Projects is
    procedure Process_Compilation_Units
      (Handler : not null access procedure
         (Node : Libadalang.Analysis.Compilation_Unit'Class));
+
+   function Output_Directory
+     (Backend_Name : VSS.Strings.Virtual_String)
+      return GNATCOLL.VFS.Virtual_File;
+   --  Return output directory to generate documentation. It is computed
+   --  from the
+   --   - value of Documentation'Output_Directory attribute for given backend
+   --   - value of Documentation'Output_Directory attribute for any backend
+   --   - value of Project'Object_Dir with 'gnatdoc' subdirectory
 
 end GNATdoc.Projects;
