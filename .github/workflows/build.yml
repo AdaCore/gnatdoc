@@ -38,6 +38,11 @@ jobs:
         with:
           repository: AdaCore/VSS
           path: subprojects/VSS
+      - name: Get Markdown
+        uses: actions/checkout@v2
+        with:
+          repository: AdaCore/markdown
+          path: subprojects/markdown
       - name: Get Langkit
         uses: actions/checkout@v2
         with:

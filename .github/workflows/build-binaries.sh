@@ -11,6 +11,7 @@ fi
 
 export GPR_PROJECT_PATH=$prefix/share/gpr:\
 $PWD/subprojects/VSS/gnat:\
+$PWD/subprojects/markdown/gnat:\
 $PWD/subprojects/gpr-unit-provider
 
 export CPATH=/usr/local/include:/mingw64/include
