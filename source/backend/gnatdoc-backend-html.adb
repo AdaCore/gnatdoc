@@ -326,14 +326,16 @@ package body GNATdoc.Backend.HTML is
          Filter : aliased VSS.XML.Templates.Processors.XML_Template_Processor;
          Writer : aliased VSS.HTML.Writers.HTML5_Writer;
          Output : aliased Streams.Output_Text_Stream;
+         Path   : VSS.String_Vectors.Virtual_String_Vector;
 
       begin
          --  Open input and output files.
 
+         Path.Clear;
+         Path.Append ("template");
+         Path.Append ("index.xhtml");
          Input_Sources.File.Open
-           (String
-              (Self.Lookup_Resource_File
-                   (["template", "index.xhtml"]).Full_Name.all),
+           (String (Self.Lookup_Resource_File (Path).Full_Name.all),
             Input);
          Output.Open
            (GNATCOLL.VFS.Create_From_Dir (Self.Output_Root, "index.html"));
@@ -346,8 +348,11 @@ package body GNATdoc.Backend.HTML is
 
          --  Bind information
 
+         Path.Clear;
+         Path.Append ("gnatdoc");
+         Path.Append ("toc");
          Filter.Bind
-           (["gnatdoc", "toc"],
+           (Path,
             new Proxies.Entity_Information_Set_Proxy'
               (Index_Entities => Index_Entities'Unchecked_Access));
 
@@ -388,6 +393,7 @@ package body GNATdoc.Backend.HTML is
          Writer : aliased VSS.HTML.Writers.HTML5_Writer;
          Output : aliased Streams.Output_Text_Stream;
          Nested : Entity_Information_Sets.Set;
+         Path   : VSS.String_Vectors.Virtual_String_Vector;
 
       begin
          Nested.Union (Entity.Simple_Types);
@@ -404,10 +410,11 @@ package body GNATdoc.Backend.HTML is
 
          --  Open input and output files.
 
+         Path.Clear;
+         Path.Append ("template");
+         Path.Append ("doc.xhtml");
          Input_Sources.File.Open
-           (String
-              (Self.Lookup_Resource_File
-                   (["template", "doc.xhtml"]).Full_Name.all),
+           (String (Self.Lookup_Resource_File (Path).Full_Name.all),
             Input);
          Output.Open
            (GNATCOLL.VFS.Create_From_Dir
@@ -421,8 +428,11 @@ package body GNATdoc.Backend.HTML is
 
          --  Bind information
 
+         Path.Clear;
+         Path.Append ("gnatdoc");
+         Path.Append ("entity");
          Filter.Bind
-           (["gnatdoc", "entity"],
+           (Path,
             new Proxies.Entity_Information_Proxy'
               (Entity => Entity, Nested => Nested));
 
