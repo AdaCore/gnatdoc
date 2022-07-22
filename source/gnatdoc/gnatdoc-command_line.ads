@@ -15,20 +15,14 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATdoc.Command_Line;
-with GNATdoc.Backend.HTML;
-with GNATdoc.Frontend;
-with GNATdoc.Projects;
+with VSS.Strings;
 
-procedure GNATdoc.Driver is
-   Backend : GNATdoc.Backend.HTML.HTML_Backend;
+package GNATdoc.Command_Line is
 
-begin
-   GNATdoc.Command_Line.Process;
-   GNATdoc.Projects.Initialize (GNATdoc.Command_Line.Project_File);
-   Backend.Initialize;
+   procedure Process;
+   --  Process command line
 
-   GNATdoc.Projects.Process_Compilation_Units
-     (GNATdoc.Frontend.Process_Compilation_Unit'Access);
-   Backend.Generate;
-end GNATdoc.Driver;
+   function Project_File return VSS.Strings.Virtual_String;
+   --  Return path to the project file.
+
+end GNATdoc.Command_Line;
