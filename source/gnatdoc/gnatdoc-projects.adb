@@ -38,14 +38,14 @@ package body GNATdoc.Projects is
 
    use type GNATCOLL.VFS.Virtual_File;
 
-   Documentation_Package           : constant GPR2.Package_Id :=
+   Documentation_Package            : constant GPR2.Package_Id :=
      GPR2."+" ("documentation");
-   Output_Dir_Attribute            : constant GPR2.Attribute_Id :=
+   Output_Dir_Attribute             : constant GPR2.Attribute_Id :=
      GPR2."+" ("output_dir");
-   Resources_Dir_Attribute         : constant GPR2.Attribute_Id :=
+   Resources_Dir_Attribute          : constant GPR2.Attribute_Id :=
      GPR2."+" ("resources_dir");
-   Exclude_Project_Files_Attribute : constant GPR2.Attribute_Id :=
-     GPR2."+" ("exclude_project_files");
+   Excluded_Project_Files_Attribute : constant GPR2.Attribute_Id :=
+     GPR2."+" ("excluded_project_files");
 
    function Hash
      (Item : GNATCOLL.VFS.Virtual_File) return Ada.Containers.Hash_Type;
@@ -159,12 +159,12 @@ package body GNATdoc.Projects is
       --  Setup list of excluded project files
 
       if Project_Tree.Root_Project.Has_Attribute
-        (Exclude_Project_Files_Attribute, Documentation_Package)
+        (Excluded_Project_Files_Attribute, Documentation_Package)
       then
          declare
             Attribute : constant GPR2.Project.Attribute.Object :=
               Project_Tree.Root_Project.Attribute
-                (Exclude_Project_Files_Attribute, Documentation_Package);
+                (Excluded_Project_Files_Attribute, Documentation_Package);
             Base_Dir  : constant GNATCOLL.VFS.Filesystem_String :=
               Project_Tree.Root_Project.Dir_Name.Virtual_File.Full_Name.all;
 
@@ -297,7 +297,7 @@ package body GNATdoc.Projects is
       GPR2.Project.Registry.Attribute.Add
         (Name                 =>
            GPR2.Project.Registry.Attribute.Create
-             (Exclude_Project_Files_Attribute, Documentation_Package),
+             (Excluded_Project_Files_Attribute, Documentation_Package),
          Index_Type           => GPR2.Project.Registry.Attribute.No_Index,
          Value                => GPR2.Project.Registry.Attribute.List,
          Value_Case_Sensitive => True,
