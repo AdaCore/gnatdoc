@@ -1,4 +1,16 @@
 
+html
+{
+  font-family: sans-serif;
+  font-size: 14px;
+  line-height: 1.15;
+}
+
+body
+{
+  margin: 0;
+}
+
 html.main
 {
   height: 100%;
@@ -8,13 +20,31 @@ body.main
 {
   display: flex;
   height: 100%;
-  margin: 0;
   overflow: hidden;
 }
 
 .side-navigation
 {
   overflow: scroll;
+  border-right: 1px solid #bfbfbf;
+  padding: .5rem 1rem;
+  background-color: #f5f5f5;
+}
+
+.side-navigation > ul
+{
+  padding: 0;
+  list-style-type: none;
+}
+
+.side-navigation > ul > li
+{
+  display: block;
+}
+
+.side-navigation > ul > li > a
+{
+  text-decoration-line: none;
 }
 
 .document-content
@@ -39,8 +69,9 @@ iframe
 .ada-code-snippet
 {
   border: 1px solid #D5D5D5;
-  border-radius: 4px;
+  border-radius: .3rem;
   background-color: #FCFCFC;
-  padding: 4px 6px;
+  margin: .5rem 1rem 1rem;
+  padding: .25rem .4rem;
   overflow: auto;
 }
