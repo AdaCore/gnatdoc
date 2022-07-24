@@ -23,7 +23,8 @@ with VSS.Strings;
 
 package GNATdoc.Projects is
 
-   procedure Initialize (File_Name : VSS.Strings.Virtual_String);
+   procedure Initialize;
+   --  Initialize project support, load and process project tree.
 
    procedure Process_Compilation_Units
      (Handler : not null access procedure

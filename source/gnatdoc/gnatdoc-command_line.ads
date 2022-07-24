@@ -15,14 +15,19 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with GPR2.Context;
+
 with VSS.Strings;
 
 package GNATdoc.Command_Line is
 
-   procedure Process;
+   procedure Initialize;
    --  Process command line
 
    function Project_File return VSS.Strings.Virtual_String;
    --  Return path to the project file.
+
+   function Project_Context return GPR2.Context.Object;
+   --  Return prject context.
 
 end GNATdoc.Command_Line;

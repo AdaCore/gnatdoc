@@ -34,6 +34,8 @@ with GPR2.Project.Registry.Pack;
 
 with VSS.Strings.Conversions;
 
+with GNATdoc.Command_Line;
+
 package body GNATdoc.Projects is
 
    use type GNATCOLL.VFS.Virtual_File;
@@ -54,7 +56,6 @@ package body GNATdoc.Projects is
      new Ada.Containers.Hashed_Sets
        (GNATCOLL.VFS.Virtual_File, Hash, GNATCOLL.VFS."=");
 
-   Project_Context       : GPR2.Context.Object;
    Project_Tree          : GPR2.Project.Tree.Object;
    Exclude_Project_Files : Virtual_File_Sets.Set;
    LAL_Context           : Libadalang.Analysis.Analysis_Context;
@@ -122,7 +123,7 @@ package body GNATdoc.Projects is
    -- Initialize --
    ----------------
 
-   procedure Initialize (File_Name : VSS.Strings.Virtual_String) is
+   procedure Initialize is
    begin
       Register_Attributes;
 
@@ -133,8 +134,8 @@ package body GNATdoc.Projects is
            (GPR2.Path_Name.Create_File
               (GPR2.Filename_Type
                    (VSS.Strings.Conversions.To_UTF_8_String
-                        (File_Name))),
-            Project_Context);
+                        (GNATdoc.Command_Line.Project_File))),
+            GNATdoc.Command_Line.Project_Context);
 
          Project_Tree.Update_Sources (With_Runtime => True);
 

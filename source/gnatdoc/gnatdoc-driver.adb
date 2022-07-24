@@ -24,8 +24,8 @@ procedure GNATdoc.Driver is
    Backend : GNATdoc.Backend.HTML.HTML_Backend;
 
 begin
-   GNATdoc.Command_Line.Process;
-   GNATdoc.Projects.Initialize (GNATdoc.Command_Line.Project_File);
+   GNATdoc.Command_Line.Initialize;
+   GNATdoc.Projects.Initialize;
    Backend.Initialize;
 
    GNATdoc.Projects.Process_Compilation_Units

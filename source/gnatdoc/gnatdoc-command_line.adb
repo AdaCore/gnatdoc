@@ -17,6 +17,7 @@
 
 with VSS.Command_Line;
 with VSS.String_Vectors;
+with VSS.Strings.Conversions;
 
 package body GNATdoc.Command_Line is
 
@@ -26,20 +27,29 @@ package body GNATdoc.Command_Line is
       Value_Name  => "project_file",
       Description => "Project file to process");
 
+   Scenario_Option : constant VSS.Command_Line.Name_Value_Option :=
+     (Short_Name  => "X",
+      Long_Name   => <>,
+      Name_Name   => "variable",
+      Value_Name  => "value",
+      Description => "Set scenario variable");
+
    Positional_Project_Option : constant VSS.Command_Line.Positional_Option :=
      (Name        => "project_file",
       Description => "Project file to process");
 
-   Project_File_Argument : VSS.Strings.Virtual_String;
+   Project_File_Argument     : VSS.Strings.Virtual_String;
+   Project_Context_Arguments : GPR2.Context.Object;
 
-   -------------
-   -- Process --
-   -------------
+   ----------------
+   -- Initialize --
+   ----------------
 
-   procedure Process is
+   procedure Initialize is
       Positional : VSS.String_Vectors.Virtual_String_Vector;
 
    begin
+      VSS.Command_Line.Add_Option (Scenario_Option);
       VSS.Command_Line.Add_Option (Project_Option);
       VSS.Command_Line.Add_Option (Positional_Project_Option);
 
@@ -63,7 +73,27 @@ package body GNATdoc.Command_Line is
          VSS.Command_Line.Report_Error
            ("more than one project files specified");
       end if;
-   end Process;
+
+      for NV of VSS.Command_Line.Values (Scenario_Option) loop
+         if NV.Name.Is_Empty then
+            VSS.Command_Line.Report_Error
+              ("scenario name can't be empty");
+         end if;
+
+         Project_Context_Arguments.Insert
+           (GPR2.Name_Type (VSS.Strings.Conversions.To_UTF_8_String (NV.Name)),
+            VSS.Strings.Conversions.To_UTF_8_String (NV.Value));
+      end loop;
+   end Initialize;
+
+   ---------------------
+   -- Project_Context --
+   ---------------------
+
+   function Project_Context return GPR2.Context.Object is
+   begin
+      return Project_Context_Arguments;
+   end Project_Context;
 
    ------------------
    -- Project_File --
