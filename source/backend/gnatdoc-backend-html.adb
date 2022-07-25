@@ -485,7 +485,8 @@ package body GNATdoc.Backend.HTML is
      (Entity : not null Entity_Information_Access) return Boolean is
    begin
       return
-        (Entity.Is_Private and not Options.Options.Generate_Private)
+        (Entity.Is_Private
+           and not GNATdoc.Options.Frontend_Options.Generate_Private)
         or Entity.Documentation.Is_Private
         or (not Entity.Enclosing.Is_Empty
               and then Is_Private_Entity (To_Entity (Entity.Enclosing)));

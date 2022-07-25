@@ -16,20 +16,14 @@
 ------------------------------------------------------------------------------
 
 with GNATdoc.Comments.Options;
+with GNATdoc.Frontend.Options;
 
 package GNATdoc.Options is
 
-   type Frontend_Options is record
-      Generate_Private : Boolean := False;
-      --  Generate documentation for private entities.
-
-      Generate_Body    : Boolean := False;
-      --  Generate documentation for package bodies.
-   end record;
-
-   Options : Frontend_Options := (others => <>);
-
    Extractor_Options : GNATdoc.Comments.Options.Extractor_Options :=
      (GNATdoc.Comments.Options.GNAT, False);
+
+   Frontend_Options  : GNATdoc.Frontend.Options.Frontend_Options :=
+     (others => <>);
 
 end GNATdoc.Options;

@@ -24,6 +24,12 @@ with GNATdoc.Options;
 
 package body GNATdoc.Command_Line is
 
+   Generate_Option : constant VSS.Command_Line.Value_Option :=
+     (Short_Name  => <>,
+      Long_Name   => "generate",
+      Value_Name  => "part",
+      Description => "Part of code to generate documentation");
+
    Project_Option : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => "P",
       Long_Name   => "project",
@@ -60,6 +66,7 @@ package body GNATdoc.Command_Line is
       Positional : VSS.String_Vectors.Virtual_String_Vector;
 
    begin
+      VSS.Command_Line.Add_Option (Generate_Option);
       VSS.Command_Line.Add_Option (Project_Option);
       VSS.Command_Line.Add_Option (Style_Option);
       VSS.Command_Line.Add_Option (Scenario_Option);
@@ -119,6 +126,27 @@ package body GNATdoc.Command_Line is
 
          else
             VSS.Command_Line.Report_Error ("unsupported style");
+         end if;
+      end if;
+
+      --  Check and select which parts of the code should be included into
+      --  generated documentation.
+
+      if VSS.Command_Line.Is_Specified (Generate_Option) then
+         if VSS.Command_Line.Value (Generate_Option) = "public" then
+            GNATdoc.Options.Frontend_Options.Generate_Private := False;
+            GNATdoc.Options.Frontend_Options.Generate_Body    := False;
+
+         elsif VSS.Command_Line.Value (Generate_Option) = "private" then
+            GNATdoc.Options.Frontend_Options.Generate_Private := True;
+            GNATdoc.Options.Frontend_Options.Generate_Body    := False;
+
+         elsif VSS.Command_Line.Value (Generate_Option) = "body" then
+            GNATdoc.Options.Frontend_Options.Generate_Private := True;
+            GNATdoc.Options.Frontend_Options.Generate_Body    := True;
+
+         else
+            VSS.Command_Line.Report_Error ("unsupported part of the code");
          end if;
       end if;
    end Initialize;
