@@ -15,6 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with GNATdoc.Comments.Options;
+
 package GNATdoc.Options is
 
    type Frontend_Options is record
@@ -26,5 +28,8 @@ package GNATdoc.Options is
    end record;
 
    Options : Frontend_Options := (others => <>);
+
+   Extractor_Options : GNATdoc.Comments.Options.Extractor_Options :=
+     (GNATdoc.Comments.Options.GNAT, False);
 
 end GNATdoc.Options;

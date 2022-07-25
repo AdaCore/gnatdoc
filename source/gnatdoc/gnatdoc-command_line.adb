@@ -19,6 +19,9 @@ with VSS.Command_Line;
 with VSS.String_Vectors;
 with VSS.Strings.Conversions;
 
+with GNATdoc.Comments.Options;
+with GNATdoc.Options;
+
 package body GNATdoc.Command_Line is
 
    Project_Option : constant VSS.Command_Line.Value_Option :=
@@ -34,6 +37,12 @@ package body GNATdoc.Command_Line is
       Value_Name  => "value",
       Description => "Set scenario variable");
 
+   Style_Option    : constant VSS.Command_Line.Value_Option :=
+     (Short_Name  => <>,
+      Long_Name   => "style",
+      Value_Name  => "style",
+      Description => "Use given style of documentation");
+
    Positional_Project_Option : constant VSS.Command_Line.Positional_Option :=
      (Name        => "project_file",
       Description => "Project file to process");
@@ -46,15 +55,21 @@ package body GNATdoc.Command_Line is
    ----------------
 
    procedure Initialize is
+      use type VSS.Strings.Virtual_String;
+
       Positional : VSS.String_Vectors.Virtual_String_Vector;
 
    begin
-      VSS.Command_Line.Add_Option (Scenario_Option);
       VSS.Command_Line.Add_Option (Project_Option);
+      VSS.Command_Line.Add_Option (Style_Option);
+      VSS.Command_Line.Add_Option (Scenario_Option);
       VSS.Command_Line.Add_Option (Positional_Project_Option);
 
       VSS.Command_Line.Process;
       Positional := VSS.Command_Line.Positional_Arguments;
+
+      --  Extract name of the project file from the option or positional
+      --  argument.
 
       if VSS.Command_Line.Is_Specified (Project_Option) then
          Project_File_Argument := VSS.Command_Line.Value (Project_Option);
@@ -74,6 +89,8 @@ package body GNATdoc.Command_Line is
            ("more than one project files specified");
       end if;
 
+      --  Create context to process project file
+
       for NV of VSS.Command_Line.Values (Scenario_Option) loop
          if NV.Name.Is_Empty then
             VSS.Command_Line.Report_Error
@@ -84,6 +101,26 @@ package body GNATdoc.Command_Line is
            (GPR2.Name_Type (VSS.Strings.Conversions.To_UTF_8_String (NV.Name)),
             VSS.Strings.Conversions.To_UTF_8_String (NV.Value));
       end loop;
+
+      --  Check and select style of the comments.
+
+      if VSS.Command_Line.Is_Specified (Style_Option) then
+         if VSS.Command_Line.Value (Style_Option) = "leading" then
+            GNATdoc.Options.Extractor_Options.Style :=
+              GNATdoc.Comments.Options.Leading;
+
+         elsif VSS.Command_Line.Value (Style_Option) = "trailing" then
+            GNATdoc.Options.Extractor_Options.Style :=
+              GNATdoc.Comments.Options.GNAT;
+
+         elsif VSS.Command_Line.Value (Style_Option) = "gnat" then
+            GNATdoc.Options.Extractor_Options.Style :=
+              GNATdoc.Comments.Options.GNAT;
+
+         else
+            VSS.Command_Line.Report_Error ("unsupported style");
+         end if;
+      end if;
    end Initialize;
 
    ---------------------
