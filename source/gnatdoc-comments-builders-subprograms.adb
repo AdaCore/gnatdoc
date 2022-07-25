@@ -45,10 +45,18 @@ package body GNATdoc.Comments.Builders.Subprograms is
       Self.Initialize (Documentation, Options, Node);
 
       if Self.Style = Leading then
-         --  In leading style, additional comment for the first parameter
-         --  started on the next line after subprogram's name.
+         if not Node.F_Subp_Name.Is_Null then
+            --  In leading style, additional comment for the first parameter
+            --  started on the next line after subprogram's name if present...
 
-         Self.Group_Start_Line := Node.F_Subp_Name.Sloc_Range.End_Line + 1;
+            Self.Group_Start_Line := Node.F_Subp_Name.Sloc_Range.End_Line + 1;
+
+         else
+            --  ... or at the first line of the subprogram specification of
+            --  access to subprogram type.
+
+            Self.Group_Start_Line := Node.Sloc_Range.Start_Line;
+         end if;
       end if;
 
       --  Create sections of structured comment for parameters, compute
