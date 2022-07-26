@@ -32,6 +32,7 @@ with GPR2.Project.Tree;
 with GPR2.Project.Registry.Attribute;
 with GPR2.Project.Registry.Pack;
 
+with VSS.Command_Line;
 with VSS.Strings.Conversions;
 
 with GNATdoc.Command_Line;
@@ -166,15 +167,25 @@ package body GNATdoc.Projects is
             Attribute : constant GPR2.Project.Attribute.Object :=
               Project_Tree.Root_Project.Attribute
                 (Excluded_Project_Files_Attribute, Documentation_Package);
-            Base_Dir  : constant GNATCOLL.VFS.Filesystem_String :=
-              Project_Tree.Root_Project.Dir_Name.Virtual_File.Full_Name.all;
 
          begin
             for Item of Attribute.Values loop
+               if Item.Text'Length = 0 then
+                  VSS.Command_Line.Report_Error
+                    ("empty name of the project file");
+               end if;
+
+               if Project_Tree.Get_File
+                    (GPR2.Filename_Type
+                       (Item.Text)).Virtual_File = GNATCOLL.VFS.No_File
+               then
+                  VSS.Command_Line.Report_Error
+                    ("unable to resolve project file path");
+               end if;
+
                Exclude_Project_Files.Insert
-                 (GNATCOLL.VFS.Create_From_Base
-                    (GNATCOLL.VFS.Filesystem_String (Item.Text),
-                     Base_Dir));
+                 (Project_Tree.Get_File
+                    (GPR2.Filename_Type (Item.Text)).Virtual_File);
             end loop;
          end;
       end if;
