@@ -72,7 +72,7 @@ jobs:
       - name: Get GNAT toolchain with alire
         uses: alire-project/setup-alire@v1
         with:
-          toolchain: gnat_native^11 gprbuild^21
+          toolchain: gnat_native^12 gprbuild^22
           toolchain_dir: ./cached_gnat
       - name: Build (Windows)
         if: ${{ runner.os == 'Windows' }}
