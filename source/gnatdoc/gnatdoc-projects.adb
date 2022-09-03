@@ -41,14 +41,20 @@ package body GNATdoc.Projects is
 
    use type GNATCOLL.VFS.Virtual_File;
 
-   Documentation_Package            : constant GPR2.Package_Id :=
+   Documentation_Package                : constant GPR2.Package_Id :=
      GPR2."+" ("documentation");
-   Output_Dir_Attribute             : constant GPR2.Attribute_Id :=
+   Output_Dir_Attribute                 : constant GPR2.Attribute_Id :=
      GPR2."+" ("output_dir");
-   Resources_Dir_Attribute          : constant GPR2.Attribute_Id :=
+   Resources_Dir_Attribute              : constant GPR2.Attribute_Id :=
      GPR2."+" ("resources_dir");
-   Excluded_Project_Files_Attribute : constant GPR2.Attribute_Id :=
+   Excluded_Project_Files_Attribute     : constant GPR2.Attribute_Id :=
      GPR2."+" ("excluded_project_files");
+   Documentation_Output_Dir             : constant GPR2.Q_Attribute_Id :=
+     (Documentation_Package, Output_Dir_Attribute);
+   Documentation_Resources_Dir          : constant GPR2.Q_Attribute_Id :=
+     (Documentation_Package, Resources_Dir_Attribute);
+   Documentation_Excluded_Project_Files : constant GPR2.Q_Attribute_Id :=
+     (Documentation_Package, Excluded_Project_Files_Attribute);
 
    function Hash
      (Item : GNATCOLL.VFS.Virtual_File) return Ada.Containers.Hash_Type;
@@ -81,16 +87,12 @@ package body GNATdoc.Projects is
    begin
       return Result : GNATCOLL.VFS.Virtual_File := GNATCOLL.VFS.No_File do
          if Project_Tree.Root_Project.Has_Attribute
-           (Resources_Dir_Attribute,
-            Documentation_Package,
-            Index)
+           (Documentation_Resources_Dir, Index)
          then
             declare
                Attribute : constant GPR2.Project.Attribute.Object :=
                  Project_Tree.Root_Project.Attribute
-                   (Resources_Dir_Attribute,
-                    Documentation_Package,
-                    Index);
+                   (Documentation_Resources_Dir, Index);
 
             begin
                Result :=
@@ -161,12 +163,12 @@ package body GNATdoc.Projects is
       --  Setup list of excluded project files
 
       if Project_Tree.Root_Project.Has_Attribute
-        (Excluded_Project_Files_Attribute, Documentation_Package)
+        (Documentation_Excluded_Project_Files)
       then
          declare
             Attribute : constant GPR2.Project.Attribute.Object :=
               Project_Tree.Root_Project.Attribute
-                (Excluded_Project_Files_Attribute, Documentation_Package);
+                (Documentation_Excluded_Project_Files);
 
          begin
             for Item of Attribute.Values loop
@@ -212,16 +214,12 @@ package body GNATdoc.Projects is
           / "gnatdoc" / Backend_Dir
       do
          if Project_Tree.Root_Project.Has_Attribute
-           (Output_Dir_Attribute,
-            Documentation_Package,
-            Index)
+           (Documentation_Output_Dir, Index)
          then
             declare
                Attribute : constant GPR2.Project.Attribute.Object :=
                  Project_Tree.Root_Project.Attribute
-                   (Output_Dir_Attribute,
-                    Documentation_Package,
-                    Index);
+                   (Documentation_Output_Dir, Index);
 
             begin
                Result :=
@@ -287,9 +285,7 @@ package body GNATdoc.Projects is
         (Documentation_Package, GPR2.Project.Registry.Pack.Everywhere);
 
       GPR2.Project.Registry.Attribute.Add
-        (Name                 =>
-           GPR2.Project.Registry.Attribute.Create
-             (Output_Dir_Attribute, Documentation_Package),
+        (Name                 => Documentation_Output_Dir,
          Index_Type           => GPR2.Project.Registry.Attribute.String_Index,
          Value                => GPR2.Project.Registry.Attribute.Single,
          Value_Case_Sensitive => True,
@@ -297,9 +293,7 @@ package body GNATdoc.Projects is
          Index_Optional       => True);
 
       GPR2.Project.Registry.Attribute.Add
-        (Name                 =>
-           GPR2.Project.Registry.Attribute.Create
-             (Resources_Dir_Attribute, Documentation_Package),
+        (Name                 => Documentation_Resources_Dir,
          Index_Type           => GPR2.Project.Registry.Attribute.String_Index,
          Value                => GPR2.Project.Registry.Attribute.Single,
          Value_Case_Sensitive => True,
@@ -307,9 +301,7 @@ package body GNATdoc.Projects is
          Index_Optional       => True);
 
       GPR2.Project.Registry.Attribute.Add
-        (Name                 =>
-           GPR2.Project.Registry.Attribute.Create
-             (Excluded_Project_Files_Attribute, Documentation_Package),
+        (Name                 => Documentation_Excluded_Project_Files,
          Index_Type           => GPR2.Project.Registry.Attribute.No_Index,
          Value                => GPR2.Project.Registry.Attribute.List,
          Value_Case_Sensitive => True,
