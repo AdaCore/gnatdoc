@@ -283,8 +283,9 @@ package body GNATdoc.Comments.Helpers is
                     | Ada_Package_Renaming_Decl
                     | Ada_Subp_Decl
                     | Ada_Subtype_Decl
-        or (Decl.Kind = Ada_Type_Decl
-            and then Decl.As_Type_Decl.F_Type_Def.Kind in Ada_Access_To_Subp_Def
+        or (Decl.Kind in Ada_Type_Decl
+            and then Decl.As_Type_Decl.F_Type_Def.Kind
+                     in Ada_Access_To_Subp_Def
                       | Ada_Array_Type_Def
                       | Ada_Derived_Type_Def
                       | Ada_Enum_Type_Def
@@ -309,7 +310,7 @@ package body GNATdoc.Comments.Helpers is
          Name_To_Extract := Name.As_Defining_Name;
 
       elsif Decl.Kind in Ada_Discriminant_Spec | Ada_Component_Decl
-        and then Decl.P_Parent_Basic_Decl.Kind = Ada_Type_Decl
+        and then Decl.P_Parent_Basic_Decl.Kind in Ada_Type_Decl
         and then Decl.P_Parent_Basic_Decl.As_Type_Decl.F_Type_Def.Kind
                    = Ada_Record_Type_Def
       then

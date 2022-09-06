@@ -23,6 +23,7 @@ with GNATdoc.Comments.Options;
 package GNATdoc.Comments.Extractor is
 
    use all type Libadalang.Common.Ada_Node_Kind_Type;
+   use Libadalang.Common;
 
    function Extract
      (Node    : Libadalang.Analysis.Basic_Decl'Class;
@@ -43,7 +44,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Subp_Decl
                       | Ada_Subp_Renaming_Decl
                       | Ada_Subtype_Decl
-         or (Node.Kind = Ada_Type_Decl
+         or (Node.Kind in Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
                           in Ada_Access_To_Subp_Def
                                | Ada_Array_Type_Def
@@ -76,7 +77,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Subp_Decl
                       | Ada_Subp_Renaming_Decl
                       | Ada_Subtype_Decl
-         or (Node.Kind = Ada_Type_Decl
+         or (Node.Kind in Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
                           in Ada_Access_To_Subp_Def
                                | Ada_Array_Type_Def
@@ -109,7 +110,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Subp_Decl
                       | Ada_Subp_Renaming_Decl
                       | Ada_Subtype_Decl
-         or (Node.Kind = Ada_Type_Decl
+         or (Node.Kind in Ada_Type_Decl
                and then Node.As_Type_Decl.F_Type_Def.Kind
                           in Ada_Access_To_Subp_Def
                                | Ada_Array_Type_Def
