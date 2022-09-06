@@ -22,6 +22,13 @@ echo PATH=$PATH
 
 BRANCH=master
 
+# Rebase on top of edge branch
+
+git branch
+git fetch origin
+git branch -ar
+git rebase --verbose origin/edge
+
 # Get libadalang binaries
 mkdir -p $prefix
 FILE=libadalang-$RUNNER_OS-$BRANCH${DEBUG:+-dbg}-static.tar.gz
