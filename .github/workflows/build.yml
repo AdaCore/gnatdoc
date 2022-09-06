@@ -35,6 +35,8 @@ jobs:
             mingw64/mingw-w64-x86_64-gmp
       - name: Get gnatdoc
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Get VSS
         uses: actions/checkout@v2
         with:

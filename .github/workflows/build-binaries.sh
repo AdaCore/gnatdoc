@@ -22,6 +22,12 @@ echo PATH=$PATH
 
 BRANCH=master
 
+# Rebase on top of edge branch
+
+git config user.email "`git log -1 --pretty=format:'%ae'`"
+git config user.name  "`git log -1 --pretty=format:'%an'`"
+git rebase --verbose origin/edge
+
 # Get libadalang binaries
 mkdir -p $prefix
 FILE=libadalang-$RUNNER_OS-$BRANCH${DEBUG:+-dbg}-static.tar.gz
