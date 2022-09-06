@@ -93,6 +93,7 @@ jobs:
         if: ${{ runner.os != 'Windows' }}
         run: .github/workflows/build-binaries.sh debug ${{ runner.os }}
       - name: AWS S3 upload
+        if: ${{ github.head_ref == 'master' }}
         env:
           AWS_ACCESS_KEY_ID: ${{secrets.GHA_CACHE_ACCESS_KEY_ID}}
           AWS_SECRET_ACCESS_KEY: ${{secrets.GHA_CACHE_SECRET}}
