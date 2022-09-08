@@ -2,6 +2,8 @@ on:
   push:
     branches:
       - master
+      - edge
+      - 'topic/**'
   pull_request:
 name: Build binaries
 env:
@@ -33,6 +35,8 @@ jobs:
             mingw64/mingw-w64-x86_64-gmp
       - name: Get gnatdoc
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Get VSS
         uses: actions/checkout@v2
         with:
@@ -91,6 +95,7 @@ jobs:
         if: ${{ runner.os != 'Windows' }}
         run: .github/workflows/build-binaries.sh debug ${{ runner.os }}
       - name: AWS S3 upload
+        if: ${{ github.ref == 'refs/heads/master' }}
         env:
           AWS_ACCESS_KEY_ID: ${{secrets.GHA_CACHE_ACCESS_KEY_ID}}
           AWS_SECRET_ACCESS_KEY: ${{secrets.GHA_CACHE_SECRET}}
