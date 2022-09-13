@@ -1,0 +1,451 @@
+<CompilationUnit overriding_indicator.ads:5:1-113:26>
+<AdaNodeList overriding_indicator.ads:5:1-5:1>
+<LibraryItem overriding_indicator.ads:5:1-113:26>
+<PrivateAbsent overriding_indicator.ads:5:1-5:1>
+<PackageDecl ["Overriding_Indicator"] overriding_indicator.ads:5:1-113:26>
+<DefiningName overriding_indicator.ads:5:9-5:29>
+<Id "Overriding_Indicator" overriding_indicator.ads:5:9-5:29>
+<PublicPart overriding_indicator.ads:5:32-113:1>
+<AdaNodeList overriding_indicator.ads:7:4-111:56>
+<TypeDecl ["T1"] overriding_indicator.ads:7:4-7:51>
+<DefiningName overriding_indicator.ads:7:9-7:11>
+<Id "T1" overriding_indicator.ads:7:9-7:11>
+<RecordTypeDef overriding_indicator.ads:7:15-7:50>
+<AbstractPresent overriding_indicator.ads:7:15-7:23>
+<TaggedPresent overriding_indicator.ads:7:24-7:30>
+<LimitedPresent overriding_indicator.ads:7:31-7:38>
+<NullRecordDef overriding_indicator.ads:7:39-7:50>
+<ComponentList overriding_indicator.ads:7:50-7:50>
+<AdaNodeList overriding_indicator.ads:7:50-7:50>
+<AbstractSubpDecl ["P1"] overriding_indicator.ads:9:4-9:41>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  10 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  9 9 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P1 (Self : T1)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<AbstractSubpDecl ["P2"] overriding_indicator.ads:11:4-13:35>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  14 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  12 12 13 12
+\/ PARAMETER x (X)  13 13 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P2
+  (Self : T1;
+   X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<AbstractSubpDecl ["P3"] overriding_indicator.ads:15:4-16:46>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  17 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  15 15 16 15
+\/ PARAMETER x (X)  16 16 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P3 (Self : T1;
+              X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<AbstractSubpDecl ["P4"] overriding_indicator.ads:18:4-19:35>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  20 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  18 18 19 18
+\/ PARAMETER x (X)  19 19 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P4 (Self : T1;
+   X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<AbstractSubpDecl ["F1"] overriding_indicator.ads:21:4-21:55>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  22 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  21 21 0 0
+\/ RETURNS  ()  21 21 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+function F1 (Self : T1) return Integer
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<TypeDecl ["T2"] overriding_indicator.ads:23:4-23:48>
+<DefiningName overriding_indicator.ads:23:9-23:11>
+<Id "T2" overriding_indicator.ads:23:9-23:11>
+<DerivedTypeDef overriding_indicator.ads:23:15-23:47>
+<AbstractPresent overriding_indicator.ads:23:15-23:23>
+<LimitedAbsent overriding_indicator.ads:23:23-23:23>
+<SynchronizedAbsent overriding_indicator.ads:23:23-23:23>
+<SubtypeIndication overriding_indicator.ads:23:28-23:30>
+<NotNullAbsent overriding_indicator.ads:23:27-23:27>
+<Id "T1" overriding_indicator.ads:23:28-23:30>
+<ParentList overriding_indicator.ads:23:27-23:27>
+<NullRecordDef overriding_indicator.ads:23:36-23:47>
+<ComponentList overriding_indicator.ads:23:47-23:47>
+<AdaNodeList overriding_indicator.ads:23:47-23:47>
+<WithPrivateAbsent overriding_indicator.ads:23:47-23:47>
+<SubpDecl ["P1"] overriding_indicator.ads:25:4-25:40>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  26 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  25 25 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P1 (Self : T2)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<SubpDecl ["P2"] overriding_indicator.ads:27:4-29:23>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  30 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  28 28 29 28
+\/ PARAMETER x (X)  29 29 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P2
+  (Self : T2;
+   X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<SubpDecl ["P3"] overriding_indicator.ads:31:4-32:45>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  33 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  31 31 32 31
+\/ PARAMETER x (X)  32 32 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P3 (Self : T2;
+              X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<SubpDecl ["P4"] overriding_indicator.ads:34:4-35:23>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  36 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  34 34 35 34
+\/ PARAMETER x (X)  35 35 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P4 (Self : T2;
+   X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<TypeDecl ["T3"] overriding_indicator.ads:37:4-37:48>
+<DefiningName overriding_indicator.ads:37:9-37:11>
+<Id "T3" overriding_indicator.ads:37:9-37:11>
+<DerivedTypeDef overriding_indicator.ads:37:15-37:47>
+<AbstractPresent overriding_indicator.ads:37:15-37:23>
+<LimitedAbsent overriding_indicator.ads:37:23-37:23>
+<SynchronizedAbsent overriding_indicator.ads:37:23-37:23>
+<SubtypeIndication overriding_indicator.ads:37:28-37:30>
+<NotNullAbsent overriding_indicator.ads:37:27-37:27>
+<Id "T1" overriding_indicator.ads:37:28-37:30>
+<ParentList overriding_indicator.ads:37:27-37:27>
+<NullRecordDef overriding_indicator.ads:37:36-37:47>
+<ComponentList overriding_indicator.ads:37:47-37:47>
+<AdaNodeList overriding_indicator.ads:37:47-37:47>
+<WithPrivateAbsent overriding_indicator.ads:37:47-37:47>
+<SubpDecl ["P1"] overriding_indicator.ads:39:4-40:29>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  41 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  40 40 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P1 (Self : T3)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<SubpDecl ["P2"] overriding_indicator.ads:42:4-45:23>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  46 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  44 44 45 44
+\/ PARAMETER x (X)  45 45 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P2
+  (Self : T3;
+   X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<SubpDecl ["P3"] overriding_indicator.ads:47:4-49:34>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  50 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  48 48 49 48
+\/ PARAMETER x (X)  49 49 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P3 (Self : T3;
+              X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<SubpDecl ["P4"] overriding_indicator.ads:51:4-53:23>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  54 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  52 52 53 52
+\/ PARAMETER x (X)  53 53 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P4 (Self : T3;
+   X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<TypeDecl ["T4"] overriding_indicator.ads:55:4-55:48>
+<DefiningName overriding_indicator.ads:55:9-55:11>
+<Id "T4" overriding_indicator.ads:55:9-55:11>
+<DerivedTypeDef overriding_indicator.ads:55:15-55:47>
+<AbstractPresent overriding_indicator.ads:55:15-55:23>
+<LimitedAbsent overriding_indicator.ads:55:23-55:23>
+<SynchronizedAbsent overriding_indicator.ads:55:23-55:23>
+<SubtypeIndication overriding_indicator.ads:55:28-55:30>
+<NotNullAbsent overriding_indicator.ads:55:27-55:27>
+<Id "T1" overriding_indicator.ads:55:28-55:30>
+<ParentList overriding_indicator.ads:55:27-55:27>
+<NullRecordDef overriding_indicator.ads:55:36-55:47>
+<ComponentList overriding_indicator.ads:55:47-55:47>
+<AdaNodeList overriding_indicator.ads:55:47-55:47>
+<WithPrivateAbsent overriding_indicator.ads:55:47-55:47>
+<NullSubpDecl ["P1"] overriding_indicator.ads:57:4-58:37>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  59 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  58 58 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P1 (Self : T4)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<NullSubpDecl ["P2"] overriding_indicator.ads:60:4-63:31>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  64 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  62 62 63 62
+\/ PARAMETER x (X)  63 63 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P2
+  (Self : T4;
+   X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<NullSubpDecl ["P3"] overriding_indicator.ads:65:4-67:42>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  68 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  66 66 67 66
+\/ PARAMETER x (X)  67 67 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P3 (Self : T4;
+              X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<NullSubpDecl ["P4"] overriding_indicator.ads:69:4-71:31>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  72 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  70 70 71 70
+\/ PARAMETER x (X)  71 71 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P4 (Self : T4;
+   X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<ExprFunction ["F1"] overriding_indicator.ads:73:4-74:50>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  75 73 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  75 0 0 0
+\/ PARAMETER self (Self)  74 74 0 0
+\/ RETURNS  ()  74 74 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+function F1 (Self : T4) return Integer
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<TypeDecl ["T5"] overriding_indicator.ads:76:4-76:48>
+<DefiningName overriding_indicator.ads:76:9-76:11>
+<Id "T5" overriding_indicator.ads:76:9-76:11>
+<DerivedTypeDef overriding_indicator.ads:76:15-76:47>
+<AbstractPresent overriding_indicator.ads:76:15-76:23>
+<LimitedAbsent overriding_indicator.ads:76:23-76:23>
+<SynchronizedAbsent overriding_indicator.ads:76:23-76:23>
+<SubtypeIndication overriding_indicator.ads:76:28-76:30>
+<NotNullAbsent overriding_indicator.ads:76:27-76:27>
+<Id "T1" overriding_indicator.ads:76:28-76:30>
+<ParentList overriding_indicator.ads:76:27-76:27>
+<NullRecordDef overriding_indicator.ads:76:36-76:47>
+<ComponentList overriding_indicator.ads:76:47-76:47>
+<AdaNodeList overriding_indicator.ads:76:47-76:47>
+<WithPrivateAbsent overriding_indicator.ads:76:47-76:47>
+<AbstractSubpDecl ["P11"] overriding_indicator.ads:78:4-78:57>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  79 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  78 78 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P11 (Self : T5)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<AbstractSubpDecl ["P12"] overriding_indicator.ads:80:4-82:35>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  83 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  81 81 82 81
+\/ PARAMETER x (X)  82 82 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P12
+  (Self : T5;
+   X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<AbstractSubpDecl ["P13"] overriding_indicator.ads:84:4-85:62>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  86 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  84 84 85 84
+\/ PARAMETER x (X)  85 85 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P13 (Self : T5;
+               X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<AbstractSubpDecl ["P14"] overriding_indicator.ads:87:4-88:35>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  89 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  87 87 88 87
+\/ PARAMETER x (X)  88 88 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P14 (Self : T5;
+   X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<AbstractSubpDecl ["F11"] overriding_indicator.ads:90:4-90:71>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  91 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  90 90 0 0
+\/ RETURNS  ()  90 90 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+function F11 (Self : T5) return Integer
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<TypeDecl ["T6"] overriding_indicator.ads:92:4-92:48>
+<DefiningName overriding_indicator.ads:92:9-92:11>
+<Id "T6" overriding_indicator.ads:92:9-92:11>
+<DerivedTypeDef overriding_indicator.ads:92:15-92:47>
+<AbstractPresent overriding_indicator.ads:92:15-92:23>
+<LimitedAbsent overriding_indicator.ads:92:23-92:23>
+<SynchronizedAbsent overriding_indicator.ads:92:23-92:23>
+<SubtypeIndication overriding_indicator.ads:92:28-92:30>
+<NotNullAbsent overriding_indicator.ads:92:27-92:27>
+<Id "T1" overriding_indicator.ads:92:28-92:30>
+<ParentList overriding_indicator.ads:92:27-92:27>
+<NullRecordDef overriding_indicator.ads:92:36-92:47>
+<ComponentList overriding_indicator.ads:92:47-92:47>
+<AdaNodeList overriding_indicator.ads:92:47-92:47>
+<WithPrivateAbsent overriding_indicator.ads:92:47-92:47>
+<AbstractSubpDecl ["P11"] overriding_indicator.ads:94:4-95:42>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  96 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  95 95 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P11 (Self : T6)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<AbstractSubpDecl ["P12"] overriding_indicator.ads:97:4-100:35>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  101 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  99 99 100 99
+\/ PARAMETER x (X)  100 100 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P12
+  (Self : T6;
+   X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<AbstractSubpDecl ["P13"] overriding_indicator.ads:102:4-104:47>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  105 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  103 103 104 103
+\/ PARAMETER x (X)  104 104 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P13 (Self : T6;
+               X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<AbstractSubpDecl ["P14"] overriding_indicator.ads:106:4-108:35>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  109 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  107 107 108 107
+\/ PARAMETER x (X)  108 108 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure P14 (Self : T6;
+   X    : Integer)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<AbstractSubpDecl ["F11"] overriding_indicator.ads:110:4-111:56>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  112 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  111 111 0 0
+\/ RETURNS  ()  111 111 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+function F11 (Self : T6) return Integer
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<EndName overriding_indicator.ads:113:5-113:25>
+<Id "Overriding_Indicator" overriding_indicator.ads:113:5-113:25>
+<PragmaNodeList overriding_indicator.ads:113:26-113:26>
