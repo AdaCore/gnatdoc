@@ -5,3 +5,8 @@ all:
 
 clean:
 	rm -rf .objs bin
+
+build_tests:
+	gprbuild -j0 -p -P gnat/tests/test_drivers.gpr
+
+check: build_tests
