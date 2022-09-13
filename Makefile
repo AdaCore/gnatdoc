@@ -5,3 +5,11 @@ all:
 
 clean:
 	rm -rf .objs bin
+
+build_tests:
+	gprbuild -j0 -p -P gnat/tests/test_drivers.gpr
+
+check: build_tests check_extractor
+
+check_extractor:
+	(cd testsuite/extractor && ../../.objs/test_extractor gnat overriding_indicator.ads | diff -u overriding_indicator.out -)

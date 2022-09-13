@@ -22,6 +22,7 @@ with Langkit_Support.Symbols;         use Langkit_Support.Symbols;
 with Langkit_Support.Text;            use Langkit_Support.Text;
 
 with VSS.Characters;                  use VSS.Characters;
+with VSS.Characters.Latin;            use VSS.Characters.Latin;
 with VSS.Regular_Expressions;         use VSS.Regular_Expressions;
 with VSS.String_Vectors;              use VSS.String_Vectors;
 with VSS.Strings;                     use VSS.Strings;
@@ -1292,6 +1293,42 @@ package body GNATdoc.Comments.Extractor is
      (Node          : Ada_Node'Class;
       Documentation : in out Structured_Comment'Class)
    is
+
+      procedure Remove_Leading_Spaces
+        (Text       : in out VSS.String_Vectors.Virtual_String_Vector;
+         Line_Index : Positive;
+         Amount     : VSS.Strings.Character_Count);
+      --  Remove given amount of space characters from the line of the given
+      --  index.
+
+      ---------------------------
+      -- Remove_Leading_Spaces --
+      ---------------------------
+
+      procedure Remove_Leading_Spaces
+        (Text       : in out VSS.String_Vectors.Virtual_String_Vector;
+         Line_Index : Positive;
+         Amount     : VSS.Strings.Character_Count)
+      is
+         Line      : Virtual_String     := Text (Line_Index);
+         Iterator  : Character_Iterator := Line.At_First_Character;
+         Count     : Character_Count    := Amount;
+
+      begin
+         while Iterator.Forward loop
+            exit when Iterator.Element /= Space;
+
+            Count := Count - 1;
+
+            if Count = 0 then
+               Text.Replace (Line_Index, Line.Tail_From (Iterator));
+
+               exit;
+            end if;
+         end loop;
+      end Remove_Leading_Spaces;
+
+      Node_Location   : constant Source_Location_Range := Node.Sloc_Range;
       Snippet_Section : Section_Access;
       Text            : Virtual_String_Vector;
 
@@ -1305,7 +1342,7 @@ package body GNATdoc.Comments.Extractor is
          Line : Virtual_String := Text (1);
 
       begin
-         for J in 2 .. Node.Sloc_Range.Start_Column loop
+         for J in 2 .. Node_Location.Start_Column loop
             Line.Prepend (' ');
          end loop;
 
@@ -1315,7 +1352,7 @@ package body GNATdoc.Comments.Extractor is
       --  Remove comments
 
       declare
-         Line_Offset : constant Line_Number := Node.Sloc_Range.Start_Line - 1;
+         Line_Offset : constant Line_Number := Node_Location.Start_Line - 1;
          Token       : Token_Reference      := Node.Token_End;
 
       begin
@@ -1374,6 +1411,64 @@ package body GNATdoc.Comments.Extractor is
             end if;
          end loop;
       end;
+
+      --  For the subprogram specification check whether "overriding"/"not
+      --  overriding" indicator is used at the same line with subprogram
+      --  specification and reformat code snippet: first line of the
+      --  subprogram specification is moved left to position of the indicator;
+      --  if subprogram parameter is present on this line too, all lines
+      --  below is moved too, unless any non-space characters are found in
+      --  the removed slice of the line.
+
+      if Node.Kind = Ada_Subp_Spec
+        and then Node.Parent.Kind
+                   in Ada_Classic_Subp_Decl | Ada_Base_Subp_Body
+      then
+         declare
+            Indicator_Node     : constant Overriding_Node :=
+              (if Node.Parent.Kind in Ada_Classic_Subp_Decl
+               then Node.Parent.As_Classic_Subp_Decl.F_Overriding
+               else Node.Parent.As_Base_Subp_Body.F_Overriding);
+            Indicator_Location : constant Source_Location_Range :=
+              Indicator_Node.Sloc_Range;
+            Offset             : VSS.Strings.Character_Count := 0;
+
+         begin
+            if Indicator_Node.Kind /= Ada_Overriding_Unspecified
+              and then Node_Location.Start_Line = Indicator_Location.Start_Line
+            then
+               Offset :=
+                 VSS.Strings.Character_Count
+                   (Node_Location.Start_Column
+                      - Indicator_Location.Start_Column);
+            end if;
+
+            if Offset /= 0 then
+               Remove_Leading_Spaces (Text, 1, Offset);
+
+               declare
+                  Params_Node : constant Params :=
+                    Node.As_Subp_Spec.F_Subp_Params;
+                  P1_Node     : Ada_Node;
+                  Success     : Boolean;
+
+               begin
+                  if Params_Node /= No_Params then
+                     Params_Node.F_Params.Get_Child (1, Success, P1_Node);
+
+                     if Success
+                       and then P1_Node.Sloc_Range.Start_Line
+                                  = Node_Location.Start_Line
+                     then
+                        for J in 2 .. Text.Length loop
+                           Remove_Leading_Spaces (Text, J, Offset);
+                        end loop;
+                     end if;
+                  end if;
+               end;
+            end if;
+         end;
+      end if;
 
       Snippet_Section :=
         new Section'
