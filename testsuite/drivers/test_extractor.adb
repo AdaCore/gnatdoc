@@ -22,7 +22,11 @@ with Ada.Text_IO;
 with Ada.Wide_Wide_Text_IO;   use Ada.Wide_Wide_Text_IO;
 
 with VSS.Application;         use VSS.Application;
+with VSS.JSON.Pull_Readers.Simple;
+with VSS.Regular_Expressions;
+with VSS.Strings;             use VSS.Strings;
 with VSS.Strings.Conversions; use VSS.Strings.Conversions;
+with VSS.Text_Streams.File_Input;
 
 with Libadalang.Analysis;     use Libadalang.Analysis;
 with Libadalang.Common;       use Libadalang.Common;
@@ -33,7 +37,64 @@ with GNATdoc.Comments.Options;
 
 procedure Test_Extractor is
 
+   procedure Load_Options;
+
    function Process (Node : Ada_Node'Class) return Visit_Status;
+
+   Options : GNATdoc.Comments.Options.Extractor_Options;
+
+   ------------------
+   -- Load_Options --
+   ------------------
+
+   procedure Load_Options is
+      use all type VSS.JSON.Pull_Readers.JSON_Event_Kind;
+
+      Stream : aliased VSS.Text_Streams.File_Input.File_Input_Text_Stream;
+      Reader : VSS.JSON.Pull_Readers.Simple.JSON_Simple_Pull_Reader;
+      Key    : Virtual_String;
+
+   begin
+      Stream.Open (Arguments.Element (1), "utf-8");
+      Reader.Set_Stream (Stream'Unchecked_Access);
+
+      while not Reader.At_End loop
+         case Reader.Read_Next is
+            when Start_Document | End_Document | Start_Object | End_Object =>
+               null;
+
+            when Key_Name =>
+               Key := Reader.Key_Name;
+
+            when String_Value =>
+               if Key = "style" then
+                  Options.Style :=
+                    GNATdoc.Comments.Options.Documentation_Style'
+                      Wide_Wide_Value
+                        (To_Wide_Wide_String (Reader.String_Value));
+
+               elsif Key = "documentation_pattern" then
+                  if not Reader.String_Value.Is_Empty then
+                     Options.Pattern :=
+                       VSS.Regular_Expressions.To_Regular_Expression
+                         (Reader.String_Value);
+
+                     if not Options.Pattern.Is_Valid then
+                        raise Program_Error;
+                     end if;
+                  end if;
+
+               else
+                  raise Program_Error;
+               end if;
+
+            when others =>
+               raise Program_Error
+                 with VSS.JSON.Pull_Readers.JSON_Event_Kind'Image
+                        (Reader.Event_Kind);
+         end case;
+      end loop;
+   end Load_Options;
 
    -------------
    -- Process --
@@ -51,12 +112,6 @@ procedure Test_Extractor is
 
             declare
                Comment : GNATdoc.Comments.Structured_Comment_Access;
-               Options : GNATdoc.Comments.Options.Extractor_Options :=
-                 (Style    =>
-                    GNATdoc.Comments.Options.Documentation_Style
-                      'Wide_Wide_Value (To_Wide_Wide_String
-                    (Arguments.Element (1))),
-                  Fallback => False);
 
             begin
                Comment :=
@@ -87,6 +142,8 @@ begin
 
       return;
    end if;
+
+   Load_Options;
 
    Unit.Root.Traverse (Process'Access);
 end Test_Extractor;
