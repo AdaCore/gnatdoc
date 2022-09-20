@@ -4,6 +4,13 @@ GNATdoc use some attributes of the package Documentation of the project file.
 Supported attributes are listed below. Only attributes specified in the root
 project file are used.
 
+## Documentation_Pattern
+
+Regular expression to detect comment lines to be included into the
+documentation. Regular expression should include two minus signs (start of the
+Ada comment). All text starting from the beginning of the line and including
+text that match regular expression are removed from the documentation line.
+
 ## Excluded_Project_Files
 
 List of project files to exclude from documentation generation. This list may
