@@ -21,7 +21,9 @@ with GNATdoc.Frontend.Options;
 package GNATdoc.Options is
 
    Extractor_Options : GNATdoc.Comments.Options.Extractor_Options :=
-     (GNATdoc.Comments.Options.GNAT, False);
+     (Style    => GNATdoc.Comments.Options.GNAT,
+      Pattern  => <>,
+      Fallback => False);
 
    Frontend_Options  : GNATdoc.Frontend.Options.Frontend_Options :=
      (others => <>);

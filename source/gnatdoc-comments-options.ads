@@ -15,6 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with VSS.Regular_Expressions;
+
 package GNATdoc.Comments.Options is
 
    type Documentation_Style is
@@ -24,6 +26,11 @@ package GNATdoc.Comments.Options is
    type Extractor_Options is record
       Style    : Documentation_Style := GNAT;
       --  Style of the documentation comments.
+
+      Pattern  : VSS.Regular_Expressions.Regular_Expression;
+      --  Regular expression to recognize documentation lines in the comments.
+      --
+      --  All lines that doesn't match given pattern are filtered out.
 
       Fallback : Boolean             := False;
       --  Control wheather to attempt to extract documentation using simple
