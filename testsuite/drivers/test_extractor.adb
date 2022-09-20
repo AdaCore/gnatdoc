@@ -101,27 +101,45 @@ procedure Test_Extractor is
    -------------
 
    function Process (Node : Ada_Node'Class) return Visit_Status is
+
+      procedure Extract_And_Dump;
+      --  Extract documentation and dump structured comment.
+
+      ----------------------
+      -- Extract_And_Dump --
+      ----------------------
+
+      procedure Extract_And_Dump is
+      begin
+         Put_Line ("**************************");
+
+         declare
+            Comment : GNATdoc.Comments.Structured_Comment_Access;
+
+         begin
+            Comment :=
+              GNATdoc.Comments.Extractor.Extract
+                (Node.As_Basic_Decl, Options);
+            GNATdoc.Comments.Debug.Dump (Comment.all);
+            GNATdoc.Comments.Free (Comment);
+         end;
+
+         Put_Line ("**************************");
+      end Extract_And_Dump;
+
    begin
       Ada.Text_IO.Put_Line (Node.Image);
 
       case Node.Kind is
+         when Ada_Package_Decl =>
+            Extract_And_Dump;
+
+            return Into;
+
          when Ada_Subp_Decl | Ada_Null_Subp_Decl | Ada_Abstract_Subp_Decl
             | Ada_Expr_Function
          =>
-            Put_Line ("**************************");
-
-            declare
-               Comment : GNATdoc.Comments.Structured_Comment_Access;
-
-            begin
-               Comment :=
-                 GNATdoc.Comments.Extractor.Extract
-                   (Node.As_Basic_Decl, Options);
-               GNATdoc.Comments.Debug.Dump (Comment.all);
-               GNATdoc.Comments.Free (Comment);
-            end;
-
-            Put_Line ("**************************");
+            Extract_And_Dump;
 
             return Over;
 
