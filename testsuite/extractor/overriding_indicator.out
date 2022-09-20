@@ -3,6 +3,15 @@
 <LibraryItem overriding_indicator.ads:5:1-113:26>
 <PrivateAbsent overriding_indicator.ads:5:1-5:1>
 <PackageDecl ["Overriding_Indicator"] overriding_indicator.ads:5:1-113:26>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+Test of extraction of the code snippet for subprograms with overriding
+keyword.
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+Test of extraction of the code snippet for subprograms with overriding
+keyword.
+**************************
 <DefiningName overriding_indicator.ads:5:9-5:29>
 <Id "Overriding_Indicator" overriding_indicator.ads:5:9-5:29>
 <PublicPart overriding_indicator.ads:5:32-113:1>
