@@ -52,6 +52,6 @@ make -C subprojects/gpr setup prefix=$prefix \
  GPR2KBDIR=./gprconfig_kb/db ENABLE_SHARED=no \
  ${DEBUG:+BUILD=debug} build-lib-static install-lib-static
 
-make
+make all check
 
 tar cfz gnatdoc-$RUNNER_OS.tar.gz bin share
