@@ -12,4 +12,5 @@ build_tests:
 check: build_tests check_extractor
 
 check_extractor:
-	(cd testsuite/extractor && ../../.objs/test_extractor gnat overriding_indicator.ads | diff -u overriding_indicator.out -)
+	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json overriding_indicator.ads | diff -u overriding_indicator.out -)
+	(cd testsuite/extractor && ../../.objs/test_extractor pattern.json documentation_pattern.ads | diff -u documentation_pattern.out -)

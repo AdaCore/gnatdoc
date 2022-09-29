@@ -3,11 +3,20 @@
 <LibraryItem overriding_indicator.ads:5:1-113:26>
 <PrivateAbsent overriding_indicator.ads:5:1-5:1>
 <PackageDecl ["Overriding_Indicator"] overriding_indicator.ads:5:1-113:26>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+Test of extraction of the code snippet for subprograms with overriding
+keyword.
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+Test of extraction of the code snippet for subprograms with overriding
+keyword.
+**************************
 <DefiningName overriding_indicator.ads:5:9-5:29>
 <Id "Overriding_Indicator" overriding_indicator.ads:5:9-5:29>
 <PublicPart overriding_indicator.ads:5:32-113:1>
 <AdaNodeList overriding_indicator.ads:7:4-111:56>
-<TypeDecl ["T1"] overriding_indicator.ads:7:4-7:51>
+<ConcreteTypeDecl ["T1"] overriding_indicator.ads:7:4-7:51>
 <DefiningName overriding_indicator.ads:7:9-7:11>
 <Id "T1" overriding_indicator.ads:7:9-7:11>
 <RecordTypeDef overriding_indicator.ads:7:15-7:50>
@@ -80,7 +89,7 @@ procedure P4 (Self : T1;
 function F1 (Self : T1) return Integer
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
-<TypeDecl ["T2"] overriding_indicator.ads:23:4-23:48>
+<ConcreteTypeDecl ["T2"] overriding_indicator.ads:23:4-23:48>
 <DefiningName overriding_indicator.ads:23:9-23:11>
 <Id "T2" overriding_indicator.ads:23:9-23:11>
 <DerivedTypeDef overriding_indicator.ads:23:15-23:47>
@@ -146,7 +155,7 @@ procedure P4 (Self : T2;
    X    : Integer)
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
-<TypeDecl ["T3"] overriding_indicator.ads:37:4-37:48>
+<ConcreteTypeDecl ["T3"] overriding_indicator.ads:37:4-37:48>
 <DefiningName overriding_indicator.ads:37:9-37:11>
 <Id "T3" overriding_indicator.ads:37:9-37:11>
 <DerivedTypeDef overriding_indicator.ads:37:15-37:47>
@@ -212,7 +221,7 @@ procedure P4 (Self : T3;
    X    : Integer)
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
-<TypeDecl ["T4"] overriding_indicator.ads:55:4-55:48>
+<ConcreteTypeDecl ["T4"] overriding_indicator.ads:55:4-55:48>
 <DefiningName overriding_indicator.ads:55:9-55:11>
 <Id "T4" overriding_indicator.ads:55:9-55:11>
 <DerivedTypeDef overriding_indicator.ads:55:15-55:47>
@@ -290,7 +299,7 @@ procedure P4 (Self : T4;
 function F1 (Self : T4) return Integer
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
-<TypeDecl ["T5"] overriding_indicator.ads:76:4-76:48>
+<ConcreteTypeDecl ["T5"] overriding_indicator.ads:76:4-76:48>
 <DefiningName overriding_indicator.ads:76:9-76:11>
 <Id "T5" overriding_indicator.ads:76:9-76:11>
 <DerivedTypeDef overriding_indicator.ads:76:15-76:47>
@@ -368,7 +377,7 @@ procedure P14 (Self : T5;
 function F11 (Self : T5) return Integer
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
-<TypeDecl ["T6"] overriding_indicator.ads:92:4-92:48>
+<ConcreteTypeDecl ["T6"] overriding_indicator.ads:92:4-92:48>
 <DefiningName overriding_indicator.ads:92:9-92:11>
 <Id "T6" overriding_indicator.ads:92:9-92:11>
 <DerivedTypeDef overriding_indicator.ads:92:15-92:47>

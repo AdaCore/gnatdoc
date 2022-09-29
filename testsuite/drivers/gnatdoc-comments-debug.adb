@@ -15,17 +15,38 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with "../libgnatdoc";
-with "vss_json";
+with Ada.Wide_Wide_Text_IO;   use Ada.Wide_Wide_Text_IO;
 
-project Test_Drivers is
+with VSS.Strings.Conversions; use VSS.Strings.Conversions;
 
-   for Object_Dir use "../../.objs";
-   for Source_Dirs use ("../../testsuite/drivers");
-   for Main use ("test_extractor.adb");
+with Langkit_Support.Slocs;   use Langkit_Support.Slocs;
 
-   package Compiler is
-      for Switches ("Ada") use ("-g", "-gnatygO", "-gnata");
-   end Compiler;
+package body GNATdoc.Comments.Debug is
 
-end Test_Drivers;
+   ----------
+   -- Dump --
+   ----------
+
+   procedure Dump (Comment : Structured_Comment'Class) is
+   begin
+      for Section of Comment.Sections loop
+         Put_Line
+           ("\/ "
+            & Section_Kind'Wide_Wide_Image (Section.Kind)
+            & " "
+            & To_Wide_Wide_String (Section.Symbol)
+            & " ("
+            & To_Wide_Wide_String (Section.Name)
+            & ") "
+            & Line_Number'Wide_Wide_Image (Section.Exact_Start_Line)
+            & Line_Number'Wide_Wide_Image (Section.Exact_End_Line)
+            & Line_Number'Wide_Wide_Image (Section.Group_Start_Line)
+            & Line_Number'Wide_Wide_Image (Section.Group_End_Line));
+
+         for Line of Section.Text loop
+            Put_Line (To_Wide_Wide_String (Line));
+         end loop;
+      end loop;
+   end Dump;
+
+end GNATdoc.Comments.Debug;

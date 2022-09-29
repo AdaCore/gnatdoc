@@ -33,9 +33,11 @@ with GPR2.Project.Registry.Attribute;
 with GPR2.Project.Registry.Pack;
 
 with VSS.Command_Line;
+with VSS.Regular_Expressions;
 with VSS.Strings.Conversions;
 
 with GNATdoc.Command_Line;
+with GNATdoc.Options;
 
 package body GNATdoc.Projects is
 
@@ -43,18 +45,24 @@ package body GNATdoc.Projects is
 
    Documentation_Package                : constant GPR2.Package_Id :=
      GPR2."+" ("documentation");
+
+   Documentation_Pattern_Attribute      : constant GPR2.Attribute_Id :=
+     GPR2."+" ("documentation_pattern");
+   Excluded_Project_Files_Attribute     : constant GPR2.Attribute_Id :=
+     GPR2."+" ("excluded_project_files");
    Output_Dir_Attribute                 : constant GPR2.Attribute_Id :=
      GPR2."+" ("output_dir");
    Resources_Dir_Attribute              : constant GPR2.Attribute_Id :=
      GPR2."+" ("resources_dir");
-   Excluded_Project_Files_Attribute     : constant GPR2.Attribute_Id :=
-     GPR2."+" ("excluded_project_files");
+
+   Documentation_Documentation_Pattern  : constant GPR2.Q_Attribute_Id :=
+     (Documentation_Package, Documentation_Pattern_Attribute);
+   Documentation_Excluded_Project_Files : constant GPR2.Q_Attribute_Id :=
+     (Documentation_Package, Excluded_Project_Files_Attribute);
    Documentation_Output_Dir             : constant GPR2.Q_Attribute_Id :=
      (Documentation_Package, Output_Dir_Attribute);
    Documentation_Resources_Dir          : constant GPR2.Q_Attribute_Id :=
      (Documentation_Package, Resources_Dir_Attribute);
-   Documentation_Excluded_Project_Files : constant GPR2.Q_Attribute_Id :=
-     (Documentation_Package, Excluded_Project_Files_Attribute);
 
    function Hash
      (Item : GNATCOLL.VFS.Virtual_File) return Ada.Containers.Hash_Type;
@@ -191,6 +199,24 @@ package body GNATdoc.Projects is
             end loop;
          end;
       end if;
+
+      --  Set documentation pattern
+
+      if Project_Tree.Root_Project.Has_Attribute
+        (Documentation_Documentation_Pattern)
+      then
+         declare
+            Attribute : constant GPR2.Project.Attribute.Object :=
+              Project_Tree.Root_Project.Attribute
+                (Documentation_Documentation_Pattern);
+
+         begin
+            GNATdoc.Options.Extractor_Options.Pattern :=
+              VSS.Regular_Expressions.To_Regular_Expression
+                (VSS.Strings.Conversions.To_Virtual_String
+                   (Attribute.Value.Text));
+         end;
+      end if;
    end Initialize;
 
    ----------------------
@@ -283,6 +309,13 @@ package body GNATdoc.Projects is
    begin
       GPR2.Project.Registry.Pack.Add
         (Documentation_Package, GPR2.Project.Registry.Pack.Everywhere);
+
+      GPR2.Project.Registry.Attribute.Add
+        (Name                 => Documentation_Documentation_Pattern,
+         Index_Type           => GPR2.Project.Registry.Attribute.No_Index,
+         Value                => GPR2.Project.Registry.Attribute.Single,
+         Value_Case_Sensitive => True,
+         Is_Allowed_In        => GPR2.Project.Registry.Attribute.Everywhere);
 
       GPR2.Project.Registry.Attribute.Add
         (Name                 => Documentation_Output_Dir,

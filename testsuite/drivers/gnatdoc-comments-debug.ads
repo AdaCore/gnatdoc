@@ -15,17 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with "../libgnatdoc";
-with "vss_json";
+package GNATdoc.Comments.Debug is
 
-project Test_Drivers is
+   procedure Dump (Comment : Structured_Comment'Class);
 
-   for Object_Dir use "../../.objs";
-   for Source_Dirs use ("../../testsuite/drivers");
-   for Main use ("test_extractor.adb");
-
-   package Compiler is
-      for Switches ("Ada") use ("-g", "-gnatygO", "-gnata");
-   end Compiler;
-
-end Test_Drivers;
+end GNATdoc.Comments.Debug;
