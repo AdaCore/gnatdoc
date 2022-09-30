@@ -33,6 +33,7 @@ jobs:
           install: >-
             mingw64/mingw-w64-x86_64-libiconv
             mingw64/mingw-w64-x86_64-gmp
+            mingw64/mingw-w64-x86_64-diffutils
       - name: Get gnatdoc
         uses: actions/checkout@v2
         with:
