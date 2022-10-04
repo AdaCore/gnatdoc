@@ -98,6 +98,11 @@ package body GNATdoc.Frontend is
      (Node      : Number_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Exception_Decl
+     (Node      : Exception_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+   --  Process exception declaration.
+
    procedure Process_Generic_Package_Decl
      (Node      : Generic_Package_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -358,7 +363,7 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Exception_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Exception_Decl (Node.As_Exception_Decl, Enclosing);
 
                return Over;
 
@@ -561,6 +566,33 @@ package body GNATdoc.Frontend is
          Enclosing.Simple_Types.Insert (Entity);
       end if;
    end Process_Derived_Type_Def;
+
+   ----------------------------
+   -- Process_Exception_Decl --
+   ----------------------------
+
+   procedure Process_Exception_Decl
+     (Node      : Exception_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access) is
+   begin
+      for Name of Node.F_Ids loop
+         declare
+            Entity : constant not null
+              GNATdoc.Entities.Entity_Information_Access :=
+                new GNATdoc.Entities.Entity_Information'
+                  (Name           => To_Virtual_String (Name.Text),
+                   Qualified_Name =>
+                     To_Virtual_String (Name.P_Fully_Qualified_Name),
+                   Signature      => Signature (Name),
+                   Documentation  =>
+                     Extract (Node, GNATdoc.Options.Extractor_Options),
+                   others         => <>);
+
+         begin
+            Enclosing.Exceptions.Insert (Entity);
+         end;
+      end loop;
+   end Process_Exception_Decl;
 
    -----------------------------------
    -- Process_Generic_Instantiation --
@@ -930,6 +962,7 @@ package body GNATdoc.Frontend is
                | Ada_Object_Decl
                | Ada_Number_Decl
                | Ada_Subtype_Decl
+               | Ada_Exception_Decl
                =>
                null;
 
