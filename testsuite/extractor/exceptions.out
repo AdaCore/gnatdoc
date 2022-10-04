@@ -1,0 +1,29 @@
+<CompilationUnit exceptions.ads:4:1-9:16>
+<AdaNodeList exceptions.ads:4:1-4:1>
+<LibraryItem exceptions.ads:4:1-9:16>
+<PrivateAbsent exceptions.ads:4:1-4:1>
+<PackageDecl ["Exceptions"] exceptions.ads:4:1-9:16>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+Test of documentation extraction for exceptions.
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+Test of documentation extraction for exceptions.
+**************************
+<DefiningName exceptions.ads:4:9-4:19>
+<Id "Exceptions" exceptions.ads:4:9-4:19>
+<PublicPart exceptions.ads:4:22-9:1>
+<AdaNodeList exceptions.ads:6:4-6:29>
+<ExceptionDecl ["My_Exception"] exceptions.ads:6:4-6:29>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Declaration of the exception.
+\/ SNIPPET ada ()  0 0 0 0
+My_Exception : exception;
+\/ DESCRIPTION  ()  0 0 0 0
+Declaration of the exception.
+**************************
+<EndName exceptions.ads:9:5-9:15>
+<Id "Exceptions" exceptions.ads:9:5-9:15>
+<PragmaNodeList exceptions.ads:9:16-9:16>

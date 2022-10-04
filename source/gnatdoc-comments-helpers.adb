@@ -273,6 +273,7 @@ package body GNATdoc.Comments.Helpers is
 
    begin
       if Decl.Kind in Ada_Abstract_Subp_Decl
+                    | Ada_Exception_Decl
                     | Ada_Expr_Function
                     | Ada_Generic_Package_Decl
                     | Ada_Generic_Package_Instantiation

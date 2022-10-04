@@ -112,7 +112,8 @@ package body GNATdoc.Comments.Extractor is
      (Node          : Libadalang.Analysis.Basic_Decl'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class)
-     with Pre => Node.Kind in Ada_Generic_Package_Instantiation
+     with Pre => Node.Kind in Ada_Exception_Decl
+                   | Ada_Generic_Package_Instantiation
                    | Ada_Generic_Subp_Instantiation
                    | Ada_Number_Decl
                    | Ada_Object_Decl
@@ -384,6 +385,10 @@ package body GNATdoc.Comments.Extractor is
          when Ada_Number_Decl =>
             Extract_Simple_Declaration_Documentation
               (Node.As_Number_Decl, Options, Documentation);
+
+         when Ada_Exception_Decl =>
+            Extract_Simple_Declaration_Documentation
+              (Node.As_Exception_Decl, Options, Documentation);
 
          when others =>
             raise Program_Error;
