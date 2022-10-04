@@ -179,6 +179,11 @@ package body GNATdoc.Backend.HTML is
               Entity_Information_Set_Proxy'
                 (Index_Entities => Self.Entity.Subprograms'Unchecked_Access);
 
+         elsif Name = "exceptions" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Exceptions'Unchecked_Access);
+
          elsif Name = "generic_instantiations" then
             return
               Entity_Information_Set_Proxy'
@@ -396,6 +401,7 @@ package body GNATdoc.Backend.HTML is
          Path   : VSS.String_Vectors.Virtual_String_Vector;
 
       begin
+         Nested.Union (Entity.Exceptions);
          Nested.Union (Entity.Simple_Types);
          Nested.Union (Entity.Array_Types);
          Nested.Union (Entity.Record_Types);

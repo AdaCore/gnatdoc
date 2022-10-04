@@ -73,6 +73,7 @@ package GNATdoc.Entities is
       Subtypes               : aliased Entity_Information_Sets.Set;
       Constants              : aliased Entity_Information_Sets.Set;
       Variables              : aliased Entity_Information_Sets.Set;
+      Exceptions             : aliased Entity_Information_Sets.Set;
 
       --  Access_Types      : EInfo_List.Vector;  +++
       --  Generic_Formals   : EInfo_List.Vector;
