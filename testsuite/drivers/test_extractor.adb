@@ -143,6 +143,11 @@ procedure Test_Extractor is
 
             return Over;
 
+         when Ada_Exception_Decl =>
+            Extract_And_Dump;
+
+            return Over;
+
          when others =>
             return Into;
       end case;
