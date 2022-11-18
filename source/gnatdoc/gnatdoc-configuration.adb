@@ -15,30 +15,40 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATdoc.Command_Line;
-with GNATdoc.Configuration.Command_Line;
-with GNATdoc.Configuration.Project;
-with GNATdoc.Backend.HTML;
-with GNATdoc.Frontend;
-with GNATdoc.Projects;
+package body GNATdoc.Configuration is
 
-procedure GNATdoc.Driver is
-   CL_Provider : aliased
-     GNATdoc.Configuration.Command_Line.Command_Line_Configuration_Provider;
-   PF_Provider : aliased
-     GNATdoc.Configuration.Project.Project_Configuration_Provider
-       (CL_Provider'Unchecked_Access);
+   --------------------------------
+   -- Custom_Resources_Directory --
+   --------------------------------
 
-   Backend : GNATdoc.Backend.HTML.HTML_Backend;
+   not overriding function Custom_Resources_Directory
+     (Self         : Abstract_Configuration_Provider;
+      Backend_Name : VSS.Strings.Virtual_String)
+      return GNATCOLL.VFS.Virtual_File is
+   begin
+      if Self.Child /= null then
+         return Self.Child.Custom_Resources_Directory (Backend_Name);
 
-begin
-   GNATdoc.Command_Line.Initialize;
-   GNATdoc.Projects.Initialize;
+      else
+         return GNATCOLL.VFS.No_File;
+      end if;
+   end Custom_Resources_Directory;
 
-   GNATdoc.Configuration.Provider := PF_Provider'Unchecked_Access;
+   ----------------------
+   -- Output_Directory --
+   ----------------------
 
-   Backend.Initialize;
-   GNATdoc.Projects.Process_Compilation_Units
-     (GNATdoc.Frontend.Process_Compilation_Unit'Access);
-   Backend.Generate;
-end GNATdoc.Driver;
+   not overriding function Output_Directory
+     (Self         : Abstract_Configuration_Provider;
+      Backend_Name : VSS.Strings.Virtual_String)
+      return GNATCOLL.VFS.Virtual_File is
+   begin
+      if Self.Child /= null then
+         return Self.Child.Output_Directory (Backend_Name);
+
+      else
+         return GNATCOLL.VFS.No_File;
+      end if;
+   end Output_Directory;
+
+end GNATdoc.Configuration;

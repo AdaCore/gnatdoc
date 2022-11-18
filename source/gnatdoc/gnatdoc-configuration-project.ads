@@ -15,30 +15,28 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATdoc.Command_Line;
-with GNATdoc.Configuration.Command_Line;
-with GNATdoc.Configuration.Project;
-with GNATdoc.Backend.HTML;
-with GNATdoc.Frontend;
-with GNATdoc.Projects;
+--  Configuration provider on top of project files.
 
-procedure GNATdoc.Driver is
-   CL_Provider : aliased
-     GNATdoc.Configuration.Command_Line.Command_Line_Configuration_Provider;
-   PF_Provider : aliased
-     GNATdoc.Configuration.Project.Project_Configuration_Provider
-       (CL_Provider'Unchecked_Access);
+package GNATdoc.Configuration.Project is
 
-   Backend : GNATdoc.Backend.HTML.HTML_Backend;
+   type Project_Configuration_Provider is
+     new Abstract_Configuration_Provider with private;
 
-begin
-   GNATdoc.Command_Line.Initialize;
-   GNATdoc.Projects.Initialize;
+   overriding function Output_Directory
+     (Self         : Project_Configuration_Provider;
+      Backend_Name : VSS.Strings.Virtual_String)
+      return GNATCOLL.VFS.Virtual_File;
+   --  Return output directory to generate documentation.
 
-   GNATdoc.Configuration.Provider := PF_Provider'Unchecked_Access;
+   overriding function Custom_Resources_Directory
+     (Self         : Project_Configuration_Provider;
+      Backend_Name : VSS.Strings.Virtual_String)
+      return GNATCOLL.VFS.Virtual_File;
+   --  Return custom resources directory if specified.
 
-   Backend.Initialize;
-   GNATdoc.Projects.Process_Compilation_Units
-     (GNATdoc.Frontend.Process_Compilation_Unit'Access);
-   Backend.Generate;
-end GNATdoc.Driver;
+private
+
+   type Project_Configuration_Provider is
+     new Abstract_Configuration_Provider with null record;
+
+end GNATdoc.Configuration.Project;

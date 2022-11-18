@@ -16,29 +16,32 @@
 ------------------------------------------------------------------------------
 
 with GNATdoc.Command_Line;
-with GNATdoc.Configuration.Command_Line;
-with GNATdoc.Configuration.Project;
-with GNATdoc.Backend.HTML;
-with GNATdoc.Frontend;
-with GNATdoc.Projects;
 
-procedure GNATdoc.Driver is
-   CL_Provider : aliased
-     GNATdoc.Configuration.Command_Line.Command_Line_Configuration_Provider;
-   PF_Provider : aliased
-     GNATdoc.Configuration.Project.Project_Configuration_Provider
-       (CL_Provider'Unchecked_Access);
+package body GNATdoc.Configuration.Command_Line is
 
-   Backend : GNATdoc.Backend.HTML.HTML_Backend;
+   ----------------------
+   -- Output_Directory --
+   ----------------------
 
-begin
-   GNATdoc.Command_Line.Initialize;
-   GNATdoc.Projects.Initialize;
+   overriding function Output_Directory
+     (Self         : Command_Line_Configuration_Provider;
+      Backend_Name : VSS.Strings.Virtual_String)
+      return GNATCOLL.VFS.Virtual_File
+   is
+      use type GNATCOLL.VFS.Virtual_File;
 
-   GNATdoc.Configuration.Provider := PF_Provider'Unchecked_Access;
+      Aux : constant GNATCOLL.VFS.Virtual_File :=
+        GNATdoc.Command_Line.Output_Directory;
 
-   Backend.Initialize;
-   GNATdoc.Projects.Process_Compilation_Units
-     (GNATdoc.Frontend.Process_Compilation_Unit'Access);
-   Backend.Generate;
-end GNATdoc.Driver;
+   begin
+      if Aux /= GNATCOLL.VFS.No_File then
+         return Aux;
+
+      else
+         return
+           Abstract_Configuration_Provider
+             (Self).Output_Directory (Backend_Name);
+      end if;
+   end Output_Directory;
+
+end GNATdoc.Configuration.Command_Line;

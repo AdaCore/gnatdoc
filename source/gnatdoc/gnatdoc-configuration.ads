@@ -15,30 +15,39 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATdoc.Command_Line;
-with GNATdoc.Configuration.Command_Line;
-with GNATdoc.Configuration.Project;
-with GNATdoc.Backend.HTML;
-with GNATdoc.Frontend;
-with GNATdoc.Projects;
+with GNATCOLL.VFS;
 
-procedure GNATdoc.Driver is
-   CL_Provider : aliased
-     GNATdoc.Configuration.Command_Line.Command_Line_Configuration_Provider;
-   PF_Provider : aliased
-     GNATdoc.Configuration.Project.Project_Configuration_Provider
-       (CL_Provider'Unchecked_Access);
+with VSS.Strings;
 
-   Backend : GNATdoc.Backend.HTML.HTML_Backend;
+package GNATdoc.Configuration is
 
-begin
-   GNATdoc.Command_Line.Initialize;
-   GNATdoc.Projects.Initialize;
+   type Abstract_Configuration_Provider is tagged;
 
-   GNATdoc.Configuration.Provider := PF_Provider'Unchecked_Access;
+   type Configuration_Provider_Access is
+     access all Abstract_Configuration_Provider'Class;
 
-   Backend.Initialize;
-   GNATdoc.Projects.Process_Compilation_Units
-     (GNATdoc.Frontend.Process_Compilation_Unit'Access);
-   Backend.Generate;
-end GNATdoc.Driver;
+   type Abstract_Configuration_Provider
+     (Child : Configuration_Provider_Access := null) is
+       abstract tagged limited private;
+
+   not overriding function Output_Directory
+     (Self         : Abstract_Configuration_Provider;
+      Backend_Name : VSS.Strings.Virtual_String)
+      return GNATCOLL.VFS.Virtual_File;
+   --  Return output directory to generate documentation.
+
+   not overriding function Custom_Resources_Directory
+     (Self         : Abstract_Configuration_Provider;
+      Backend_Name : VSS.Strings.Virtual_String)
+      return GNATCOLL.VFS.Virtual_File;
+   --  Return custom resources directory if specified.
+
+   Provider : Configuration_Provider_Access;
+
+private
+
+   type Abstract_Configuration_Provider
+     (Child : Configuration_Provider_Access := null) is
+        abstract tagged limited null record;
+
+end GNATdoc.Configuration;
