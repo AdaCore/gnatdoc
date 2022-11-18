@@ -6,6 +6,13 @@ GNATdoc supports following switches:
 
    Specify project file to process.
 
+ -O output/dir
+ --output-dir=output/dir
+
+   Specify output directory to generate documentation. This command line option
+   overrides corresponding value of of the Documentation'Output_Dir attribute
+   in the project file.
+
  -X NAME=VALUE
 
    Specify scenario variable to use in project files.
