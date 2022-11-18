@@ -24,26 +24,32 @@ with GNATdoc.Options;
 
 package body GNATdoc.Command_Line is
 
-   Generate_Option : constant VSS.Command_Line.Value_Option :=
+   Generate_Option           : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => <>,
       Long_Name   => "generate",
       Value_Name  => "part",
       Description => "Part of code to generate documentation");
 
-   Project_Option : constant VSS.Command_Line.Value_Option :=
+   Output_Dir_Option         : constant VSS.Command_Line.Value_Option :=
+     (Short_Name  => "O",
+      Long_Name   => "output-dir",
+      Value_Name  => "output_dir",
+      Description => "Output directory for generated documentation");
+
+   Project_Option            : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => "P",
       Long_Name   => "project",
       Value_Name  => "project_file",
       Description => "Project file to process");
 
-   Scenario_Option : constant VSS.Command_Line.Name_Value_Option :=
+   Scenario_Option           : constant VSS.Command_Line.Name_Value_Option :=
      (Short_Name  => "X",
       Long_Name   => <>,
       Name_Name   => "variable",
       Value_Name  => "value",
       Description => "Set scenario variable");
 
-   Style_Option    : constant VSS.Command_Line.Value_Option :=
+   Style_Option              : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => <>,
       Long_Name   => "style",
       Value_Name  => "style",
@@ -53,6 +59,7 @@ package body GNATdoc.Command_Line is
      (Name        => "project_file",
       Description => "Project file to process");
 
+   Output_Dir_Argument       : GNATCOLL.VFS.Virtual_File;
    Project_File_Argument     : VSS.Strings.Virtual_String;
    Project_Context_Arguments : GPR2.Context.Object;
 
@@ -67,6 +74,7 @@ package body GNATdoc.Command_Line is
 
    begin
       VSS.Command_Line.Add_Option (Generate_Option);
+      VSS.Command_Line.Add_Option (Output_Dir_Option);
       VSS.Command_Line.Add_Option (Project_Option);
       VSS.Command_Line.Add_Option (Style_Option);
       VSS.Command_Line.Add_Option (Scenario_Option);
@@ -149,7 +157,27 @@ package body GNATdoc.Command_Line is
             VSS.Command_Line.Report_Error ("unsupported part of the code");
          end if;
       end if;
+
+      --  Check output dicretory argument.
+
+      if VSS.Command_Line.Is_Specified (Output_Dir_Option) then
+         Output_Dir_Argument :=
+           GNATCOLL.VFS.Create_From_Base
+             (GNATCOLL.VFS.Filesystem_String
+                (VSS.Strings.Conversions.To_UTF_8_String
+                   (VSS.Command_Line.Value (Output_Dir_Option))),
+              GNATCOLL.VFS.Get_Current_Dir.Full_Name);
+      end if;
    end Initialize;
+
+   ----------------------
+   -- Output_Directory --
+   ----------------------
+
+   function Output_Directory return GNATCOLL.VFS.Virtual_File is
+   begin
+      return GNATCOLL.VFS.No_File;
+   end Output_Directory;
 
    ---------------------
    -- Project_Context --
