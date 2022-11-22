@@ -107,8 +107,8 @@ package body GNATdoc.Comments.Builders.Records is
    begin
       Self.Initialize (Documentation, Options, Node);
 
-      if not Node.F_Discriminants.Is_Null then
-         Node.F_Discriminants.Traverse (Process'Access);
+      if not Discriminants.Is_Null then
+         Discriminants.Traverse (Process'Access);
       end if;
 
       Components.Traverse (Process'Access);
