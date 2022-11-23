@@ -235,10 +235,13 @@ package body GNATdoc.Projects is
           (VSS.Strings.Conversions.To_UTF_8_String (Backend_Name));
 
    begin
-      return Result : GNATCOLL.VFS.Virtual_File :=
-        Project_Tree.Root_Project.Object_Directory.Virtual_File
-          / "gnatdoc" / Backend_Dir
-      do
+      return Result : GNATCOLL.VFS.Virtual_File do
+         if Project_Tree.Root_Project.Kind in GPR2.With_Object_Dir_Kind then
+            Result :=
+              Project_Tree.Root_Project.Object_Directory.Virtual_File
+                / "gnatdoc" / Backend_Dir;
+         end if;
+
          if Project_Tree.Root_Project.Has_Attribute
            (Documentation_Output_Dir, Index)
          then

@@ -18,7 +18,7 @@
 with VSS.Application;
 with VSS.Strings.Conversions;
 
-with GNATdoc.Projects;
+with GNATdoc.Configuration;
 
 package body GNATdoc.Backend is
 
@@ -43,9 +43,10 @@ package body GNATdoc.Backend is
           / GNATCOLL.VFS.Filesystem_String
               (VSS.Strings.Conversions.To_UTF_8_String (Name));
       Self.Project_Resources_Root :=
-        GNATdoc.Projects.Custom_Resources_Directory (Name);
+        GNATdoc.Configuration.Provider.Custom_Resources_Directory (Name);
 
-      Self.Output_Root := GNATdoc.Projects.Output_Directory (Name);
+      Self.Output_Root :=
+        GNATdoc.Configuration.Provider.Output_Directory (Name);
 
       --  Create output directory if not exists
 
