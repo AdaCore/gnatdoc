@@ -149,6 +149,48 @@ package body GNATdoc.Comments.Extractor is
    --    group comment is started.
    --  @param Documentation       Structured comment to fill.
 
+   procedure Extract_General_Leading_Documentation
+     (Decl_Node       : Basic_Decl'Class;
+      Pattern         : VSS.Regular_Expressions.Regular_Expression;
+      Documentation   : in out Structured_Comment'Class;
+      Leading_Section : out not null Section_Access);
+   --  Creates leading documetation section of the structured comment
+   --  and extracts leading documentation follow general rules (there are
+   --  few exceptions from this rules, like ordinary and generic package
+   --  declarations).
+   --
+   --  @param Decl_Node       Declaration node
+   --  @param Pattern
+   --    Regular expression to check whenther line should be included into
+   --    the documentation or not.
+   --  @param Documentation   Structured comment to add and fill section
+   --  @param Leading_Section Created section
+
+   procedure Extract_General_Trailing_Documentation
+     (Decl_Node        : Basic_Decl'Class;
+      Pattern          : VSS.Regular_Expressions.Regular_Expression;
+      Last_Section     : Section_Access;
+      Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
+      Documentation    : in out Structured_Comment'Class;
+      Trailing_Section : out not null Section_Access);
+   --  Creates leading documetation section of the structured comment
+   --  and extracts leading documentation follow general rules (there are
+   --  few exceptions from this rules, like ordinary and generic package
+   --  declarations).
+   --
+   --  @param Decl_Node        Declaration node
+   --  @param Pattern
+   --    Regular expression to check whenther line should be included into
+   --    the documentation or not.
+   --  @param Last_Section
+   --    Last section inside the declaration. If there are some comments after
+   --    the declaration and its indentation is equal of deeper than the value
+   --    of the Minimum_Indent parameter, this section is filled by these
+   --    comments.
+   --  @param Minimum_Indent   Minimum indentation to fill last section.
+   --  @param Documentation    Structured comment to add and fill section
+   --  @param Trailing_Section Trailing raw text.
+
    procedure Extract_General_Leading_Trailing_Documentation
      (Decl_Node        : Basic_Decl'Class;
       Pattern          : VSS.Regular_Expressions.Regular_Expression;
@@ -157,19 +199,8 @@ package body GNATdoc.Comments.Extractor is
       Documentation    : in out Structured_Comment'Class;
       Leading_Section  : out not null Section_Access;
       Trailing_Section : out not null Section_Access);
-   --  Extract leading and trailing documentation follow general rules (there
-   --  are few exceptions from this rules, like ordinary and generic package
-   --  declarations).
-   --
-   --  @param Last_Section
-   --    Last section inside the declaration. If there are some comments after
-   --    the declaration and its indentation is equal of deeper than the value
-   --    of the Minimum_Indent parameter, this section is filled by these
-   --    comments.
-   --  @param Minimum_Indent      Minimum indentation to fill last section.
-   --  @param Documentation       Structured comment to fill.
-   --  @param Leading_Section     Leading raw text
-   --  @param Trailing_Section    Trailing raw text.
+   --  Call both Extract_General_Leading_Documentation and
+   --  Extract_General_Trailing_Documentation subprograms.
 
    procedure Fill_Code_Snippet
      (Node          : Ada_Node'Class;
@@ -805,19 +836,18 @@ package body GNATdoc.Comments.Extractor is
       end;
    end Extract_Enumeration_Type_Documentation;
 
-   ----------------------------------------------------
-   -- Extract_General_Leading_Trailing_Documentation --
-   ----------------------------------------------------
+   -------------------------------------------
+   -- Extract_General_Leading_Documentation --
+   -------------------------------------------
 
-   procedure Extract_General_Leading_Trailing_Documentation
-     (Decl_Node        : Basic_Decl'Class;
-      Pattern          : VSS.Regular_Expressions.Regular_Expression;
-      Last_Section     : Section_Access;
-      Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
-      Documentation    : in out Structured_Comment'Class;
-      Leading_Section  : out not null Section_Access;
-      Trailing_Section : out not null Section_Access) is
+   procedure Extract_General_Leading_Documentation
+     (Decl_Node       : Basic_Decl'Class;
+      Pattern         : VSS.Regular_Expressions.Regular_Expression;
+      Documentation   : in out Structured_Comment'Class;
+      Leading_Section : out not null Section_Access) is
    begin
+      --  Create and add leading section
+
       Leading_Section :=
         new Section'
           (Kind             => Raw,
@@ -827,8 +857,10 @@ package body GNATdoc.Comments.Extractor is
            others           => <>);
       Documentation.Sections.Append (Leading_Section);
 
+      --  Process tokens before the declaration node.
+
       declare
-         Token   : Token_Reference := Decl_Node.Token_Start;
+         Token : Token_Reference := Decl_Node.Token_Start;
 
       begin
          loop
@@ -855,9 +887,45 @@ package body GNATdoc.Comments.Extractor is
             end case;
          end loop;
       end;
+   end Extract_General_Leading_Documentation;
 
-      --  Create trailing section and process tokens after the declaration
-      --  node.
+   ----------------------------------------------------
+   -- Extract_General_Leading_Trailing_Documentation --
+   ----------------------------------------------------
+
+   procedure Extract_General_Leading_Trailing_Documentation
+     (Decl_Node        : Basic_Decl'Class;
+      Pattern          : VSS.Regular_Expressions.Regular_Expression;
+      Last_Section     : Section_Access;
+      Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
+      Documentation    : in out Structured_Comment'Class;
+      Leading_Section  : out not null Section_Access;
+      Trailing_Section : out not null Section_Access) is
+   begin
+      Extract_General_Leading_Documentation
+        (Decl_Node, Pattern, Documentation, Leading_Section);
+      Extract_General_Trailing_Documentation
+        (Decl_Node,
+         Pattern,
+         Last_Section,
+         Minimum_Indent,
+         Documentation,
+         Trailing_Section);
+   end Extract_General_Leading_Trailing_Documentation;
+
+   --------------------------------------------
+   -- Extract_General_Trailing_Documentation --
+   --------------------------------------------
+
+   procedure Extract_General_Trailing_Documentation
+     (Decl_Node        : Basic_Decl'Class;
+      Pattern          : VSS.Regular_Expressions.Regular_Expression;
+      Last_Section     : Section_Access;
+      Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
+      Documentation    : in out Structured_Comment'Class;
+      Trailing_Section : out not null Section_Access) is
+   begin
+      --  Create and add trailing section.
 
       Trailing_Section :=
         new Section'
@@ -867,6 +935,8 @@ package body GNATdoc.Comments.Extractor is
            Text             => <>,
            others           => <>);
       Documentation.Sections.Append (Trailing_Section);
+
+      --  Process tokens after the declaration node.
 
       declare
          Current_Node : Ada_Node := Decl_Node.As_Ada_Node;
@@ -933,7 +1003,7 @@ package body GNATdoc.Comments.Extractor is
             end case;
          end loop;
       end;
-   end Extract_General_Leading_Trailing_Documentation;
+   end Extract_General_Trailing_Documentation;
 
    ------------------------------------------------
    -- Extract_Generic_Package_Decl_Documentation --
