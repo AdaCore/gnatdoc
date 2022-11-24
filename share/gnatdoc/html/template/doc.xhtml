@@ -61,6 +61,15 @@
       </ul>
     </div>
 
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/task_types">
+      <h3>Task Types and Tasks</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/task_types'>
+          <a href='#' tal:attributes='href item/full_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
     <div tal:omit-tag="" tal:condition="gnatdoc/entity/access_types">
       <h3>Access Types</h3>
       <ul>

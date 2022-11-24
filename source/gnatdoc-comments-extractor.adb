@@ -133,6 +133,13 @@ package body GNATdoc.Comments.Extractor is
    --  Extract documentation for simple declaration (declarations that doesn't
    --  contains components).
 
+   procedure Extract_Single_Task_Decl_Documentation
+     (Node          : Libadalang.Analysis.Basic_Decl'Class;
+      Decl          : Libadalang.Analysis.Task_Type_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : in out Structured_Comment'Class);
+   --  Extract documentation for single task declaration.
+
    procedure Fill_Structured_Comment
      (Decl_Node       : Basic_Decl'Class;
       Advanced_Groups : Boolean;
@@ -420,6 +427,20 @@ package body GNATdoc.Comments.Extractor is
          when Ada_Exception_Decl =>
             Extract_Simple_Declaration_Documentation
               (Node.As_Exception_Decl, Options, Documentation);
+
+         when Ada_Single_Task_Decl =>
+            Extract_Single_Task_Decl_Documentation
+              (Node.As_Single_Task_Decl,
+               Node.As_Single_Task_Decl.F_Task_Type,
+               Options,
+               Documentation);
+
+         when Ada_Task_Type_Decl =>
+            Extract_Single_Task_Decl_Documentation
+              (Node.As_Task_Type_Decl,
+               Node.As_Task_Type_Decl,
+               Options,
+               Documentation);
 
          when others =>
             raise Program_Error;
@@ -1181,6 +1202,171 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section (Raw_Section, (others => False), Documentation);
       end;
    end Extract_Simple_Declaration_Documentation;
+
+   --------------------------------------------
+   -- Extract_Single_Task_Decl_Documentation --
+   --------------------------------------------
+
+   procedure Extract_Single_Task_Decl_Documentation
+     (Node          : Libadalang.Analysis.Basic_Decl'Class;
+      Decl          : Libadalang.Analysis.Task_Type_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : in out Structured_Comment'Class)
+   is
+      Definition       : Libadalang.Analysis.Task_Def'Class :=
+        Decl.F_Definition;
+      Is_Or_With_Token : Token_Reference;
+
+      Leading_Section            : Section_Access;
+      Trailing_Section           : Section_Access;
+      Intermediate_Lower_Section : Section_Access;
+
+   begin
+      Extract_General_Leading_Documentation
+        (Node, Options.Pattern, Documentation, Leading_Section);
+
+      if Definition.Is_Null then
+         --  It is the case of the entry-less and definition-less task
+         --  declaration. Documentation may be provided by the comment
+         --  immidiately below task declaration. Retreive it into the
+         --  tailing section.
+
+         Extract_General_Trailing_Documentation
+           (Node, Options.Pattern, null, 0, Documentation, Trailing_Section);
+
+      else
+         --  Overwise, documentation may be provided inside task definition
+         --  before the first entry.
+
+         --  Lower intermediate section: after 'is'/'with' and before any
+         --  declarations.
+
+         Intermediate_Lower_Section :=
+           new Section'
+             (Kind             => Raw,
+              Symbol           => "<<INTERMEDIATE LOWER>>",
+              Name             => <>,
+              Text             => <>,
+              others           => <>);
+         Documentation.Sections.Append (Intermediate_Lower_Section);
+
+         --  Lookup for 'is' token that begins task definition, or 'with'
+         --  token that ends interface part.
+
+         Is_Or_With_Token := Definition.Token_Start;
+
+         if Definition.F_Interfaces.Children_Count /= 0 then
+            Is_Or_With_Token := Definition.F_Interfaces.Token_End;
+
+            loop
+               Is_Or_With_Token := Next (Is_Or_With_Token);
+
+               exit when Is_Or_With_Token = No_Token;
+
+               case Kind (Data (Is_Or_With_Token)) is
+                  when Ada_Whitespace =>
+                     null;
+
+                  when Ada_With =>
+                     exit;
+
+                  when others =>
+                     raise Program_Error;
+               end case;
+            end loop;
+         end if;
+
+         declare
+            Token     : Token_Reference := Is_Or_With_Token;
+            Found     : Boolean := False;
+            Separated : Boolean := False;
+            --  Comments block starts after an empty line. it means that
+            --  documentation can be leading documentation for the first
+            --  entry.
+
+         begin
+            loop
+               Token := Next (Token);
+
+               exit when Token = No_Token or else Token = Definition.Token_End;
+
+               case Kind (Data (Token)) is
+                  when Ada_Comment =>
+                     Found := True;
+                     Append_Documentation_Line
+                       (Intermediate_Lower_Section.Text,
+                        Text (Token),
+                        Options.Pattern);
+
+                  when Ada_Whitespace =>
+                     declare
+                        Location : constant Source_Location_Range :=
+                          Sloc_Range (Data (Token));
+
+                     begin
+                        if Location.End_Line - Location.Start_Line > 1 then
+                           exit when Found;
+
+                           Found     := True;
+                           Separated := True;
+                        end if;
+                     end;
+
+                  when Ada_End | Ada_Pragma =>
+                     exit;
+
+                  when Ada_Entry =>
+                     if Separated then
+                        --  Comments block is separated from the start of the
+                        --  task declaration by the empty line, but not from
+                        --  the entry declaration, thus, it belongs to the
+                        --  entry declaration. Clear accumilated text.
+
+                        Intermediate_Lower_Section.Text.Clear;
+                     end if;
+
+                     exit;
+
+                  when others =>
+                     raise Program_Error;
+               end case;
+            end loop;
+         end;
+      end if;
+
+      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+
+      declare
+         Raw_Section : Section_Access;
+
+      begin
+         --  Select most appropriate section.
+
+         if Trailing_Section /= null
+           and then not Trailing_Section.Text.Is_Empty
+         then
+            --  Trailing section is present in the corner case only, and
+            --  preferable section in this case.
+
+            Raw_Section := Trailing_Section;
+
+         elsif Intermediate_Lower_Section /= null
+           and then not Intermediate_Lower_Section.Text.Is_Empty
+         then
+            Raw_Section := Intermediate_Lower_Section;
+
+         elsif not Leading_Section.Text.Is_Empty then
+            Raw_Section := Leading_Section;
+         end if;
+
+         Parse_Raw_Section
+           (Raw_Section,
+            (Private_Tag => True,
+             Member_Tag  => True,
+             others      => False),
+            Documentation);
+      end;
+   end Extract_Single_Task_Decl_Documentation;
 
    --------------------------------------
    -- Extract_Subprogram_Documentation --

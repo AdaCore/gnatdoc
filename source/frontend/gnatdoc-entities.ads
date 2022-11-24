@@ -69,6 +69,7 @@ package GNATdoc.Entities is
       Record_Types           : aliased Entity_Information_Sets.Set;
       Interface_Types        : aliased Entity_Information_Sets.Set;
       Tagged_Types           : aliased Entity_Information_Sets.Set;
+      Task_Types             : aliased Entity_Information_Sets.Set;
       Access_Types           : aliased Entity_Information_Sets.Set;
       Subtypes               : aliased Entity_Information_Sets.Set;
       Constants              : aliased Entity_Information_Sets.Set;
