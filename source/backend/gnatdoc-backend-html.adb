@@ -164,6 +164,11 @@ package body GNATdoc.Backend.HTML is
               Entity_Information_Set_Proxy'
                 (Index_Entities => Self.Entity.Subtypes'Unchecked_Access);
 
+         elsif Name = "task_types" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Task_Types'Unchecked_Access);
+
          elsif Name = "constants" then
             return
               Entity_Information_Set_Proxy'
@@ -304,7 +309,8 @@ package body GNATdoc.Backend.HTML is
    --------------
 
    overriding procedure Generate (Self : in out HTML_Backend) is
-      Index_Entities : aliased Entity_Information_Sets.Set;
+      Index_Entities     : aliased Entity_Information_Sets.Set;
+      Non_Index_Entities : aliased Entity_Information_Sets.Set;
 
    begin
       for Item of Globals.Packages loop
@@ -322,6 +328,12 @@ package body GNATdoc.Backend.HTML is
       for Item of Globals.Package_Renamings loop
          if not Is_Private_Entity (Item) then
             Index_Entities.Insert (Item);
+         end if;
+      end loop;
+
+      for Item of Globals.Task_Types loop
+         if not Is_Private_Entity (Item) then
+            Non_Index_Entities.Insert (Item);
          end if;
       end loop;
 
@@ -372,6 +384,10 @@ package body GNATdoc.Backend.HTML is
       end;
 
       for Item of Index_Entities loop
+         Self.Generate_Entity_Documentation_Page (Item);
+      end loop;
+
+      for Item of Non_Index_Entities loop
          Self.Generate_Entity_Documentation_Page (Item);
       end loop;
    end Generate;

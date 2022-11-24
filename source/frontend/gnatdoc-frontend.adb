@@ -119,6 +119,12 @@ package body GNATdoc.Frontend is
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
       Global    : GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Task_Decl
+     (Node      : Basic_Decl'Class;
+      Decl      : Task_Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+     with Pre => Node.Kind in Ada_Single_Task_Decl | Ada_Task_Type_Decl;
+
    procedure Process_Children
      (Parent    : Ada_Node'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -385,9 +391,26 @@ package body GNATdoc.Frontend is
 
                return Over;
 
+            when Ada_Single_Task_Decl =>
+               Process_Task_Decl
+                 (Node.As_Basic_Decl,
+                  Node.As_Single_Task_Decl.F_Task_Type,
+                  Enclosing);
+
+               return Over;
+
+            when Ada_Task_Type_Decl =>
+               Process_Task_Decl
+                 (Node.As_Basic_Decl,
+                  Node.As_Task_Type_Decl,
+                  Enclosing);
+
+               return Over;
+
             when Ada_Ada_Node_List
                | Ada_Public_Part | Ada_Private_Part
                | Ada_Declarative_Part
+               | Ada_Decl_List
             =>
                --  These nodes doesn't contribute to documentation but enclose
                --  other meaningful nodes.
@@ -398,6 +421,7 @@ package body GNATdoc.Frontend is
                    | Ada_Pragma_Node
                    | Ada_Record_Rep_Clause | Ada_Enum_Rep_Clause
                    | Ada_Attribute_Def_Clause
+                   | Ada_Task_Body
             =>
                --  These nodes doesn't contribute to documentation and
                --  are ignored.
@@ -931,6 +955,46 @@ package body GNATdoc.Frontend is
       Enclosing.Subtypes.Insert (Entity);
    end Process_Subtype_Decl;
 
+   -----------------------
+   -- Process_Task_Decl --
+   -----------------------
+
+   procedure Process_Task_Decl
+     (Node      : Basic_Decl'Class;
+      Decl      : Task_Type_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Name   : constant Defining_Name := Decl.F_Name;
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Name.F_Name.Text),
+           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
+           Signature      => Signature (Name),
+           Enclosing      =>
+             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
+           Is_Private     =>
+             (Node.Parent.Kind = Ada_Library_Item
+                and then Node.Parent.As_Library_Item.F_Has_Private),
+           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Task_Types.Insert (Entity);
+      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+
+      if GNATdoc.Entities.Globals'Access /= Enclosing then
+         GNATdoc.Entities.Globals.Task_Types.Insert (Entity);
+      end if;
+
+      if not Decl.F_Definition.Is_Null then
+         Process_Children (Decl.F_Definition.F_Public_Part, Entity);
+
+         if GNATdoc.Options.Frontend_Options.Generate_Private then
+            Process_Children (Decl.F_Definition.F_Private_Part, Entity);
+         end if;
+      end if;
+   end Process_Task_Decl;
+
    ---------------
    -- Signature --
    ---------------
@@ -963,6 +1027,7 @@ package body GNATdoc.Frontend is
                | Ada_Number_Decl
                | Ada_Subtype_Decl
                | Ada_Exception_Decl
+               | Ada_Single_Task_Type_Decl | Ada_Task_Type_Decl
                =>
                null;
 
