@@ -140,6 +140,7 @@ procedure Test_Extractor is
             | Ada_Expr_Function
             | Ada_Concrete_Type_Decl
             | Ada_Exception_Decl
+            | Ada_Entry_Decl
          =>
             Extract_And_Dump;
 
@@ -149,6 +150,11 @@ procedure Test_Extractor is
             --  These nodes doesn't have own documentation, ignore them.
 
             return Over;
+
+         when Ada_Single_Task_Decl | Ada_Task_Type_Decl =>
+            Extract_And_Dump;
+
+            return Into;
 
          when others =>
             return Into;

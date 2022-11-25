@@ -1,0 +1,386 @@
+<CompilationUnit tasks.ads:7:1-93:11>
+<AdaNodeList tasks.ads:7:1-7:1>
+<LibraryItem tasks.ads:7:1-93:11>
+<PrivateAbsent tasks.ads:7:1-7:1>
+<PackageDecl ["Tasks"] tasks.ads:7:1-93:11>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+Test extraction of the documentation for tasks and task types.
+Note, documentation extraction code is almost common for subprograms and
+entries, thus, number of test cases for entries are minimal to check that
+it works and cover entries specific cases.
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+Test extraction of the documentation for tasks and task types.
+Note, documentation extraction code is almost common for subprograms and
+entries, thus, number of test cases for entries are minimal to check that
+it works and cover entries specific cases.
+**************************
+<DefiningName tasks.ads:7:9-7:14>
+<Id "Tasks" tasks.ads:7:9-7:14>
+<PublicPart tasks.ads:7:17-93:1>
+<AdaNodeList tasks.ads:9:4-91:13>
+<ConcreteTypeDecl ["IE"] tasks.ads:9:4-9:38>
+<DefiningName tasks.ads:9:9-9:11>
+<Id "IE" tasks.ads:9:9-9:11>
+<InterfaceTypeDef tasks.ads:9:15-9:37>
+<InterfaceKindSynchronized tasks.ads:9:15-9:27>
+<ParentList tasks.ads:9:27-9:27>
+<ConcreteTypeDecl ["IP"] tasks.ads:11:4-11:38>
+<DefiningName tasks.ads:11:9-11:11>
+<Id "IP" tasks.ads:11:9-11:11>
+<InterfaceTypeDef tasks.ads:11:15-11:37>
+<InterfaceKindSynchronized tasks.ads:11:15-11:27>
+<ParentList tasks.ads:11:27-11:27>
+<AbstractSubpDecl ["Process"] tasks.ads:13:4-13:61>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  14 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER self (Self)  13 13 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure Process (Self : IP)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<SingleTaskDecl ["T_Entryless_Empty_Trailing"] tasks.ads:15:4-15:36>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+This is trailing section of description of the task
+T_Entryless_Empty_Trailing.
+\/ DESCRIPTION  ()  0 0 0 0
+This is trailing section of description of the task
+T_Entryless_Empty_Trailing.
+**************************
+<SingleTaskTypeDecl ["T_Entryless_Empty_Trailing"] tasks.ads:15:9-15:35>
+<DefiningName tasks.ads:15:9-15:35>
+<Id "T_Entryless_Empty_Trailing" tasks.ads:15:9-15:35>
+<SingleTaskDecl ["T_Entryless_Leading"] tasks.ads:21:4-22:28>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+This is leading section of the description of the task
+T_Entryless_Leading.
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+This is leading section of the description of the task
+T_Entryless_Leading.
+**************************
+<SingleTaskTypeDecl ["T_Entryless_Leading"] tasks.ads:21:9-22:27>
+<DefiningName tasks.ads:21:9-21:28>
+<Id "T_Entryless_Leading" tasks.ads:21:9-21:28>
+<TaskDef tasks.ads:21:29-22:27>
+<ParentList tasks.ads:21:28-21:28>
+<PublicPart tasks.ads:21:31-22:4>
+<DeclList tasks.ads:21:31-21:31>
+<EndName tasks.ads:22:8-22:27>
+<Id "T_Entryless_Leading" tasks.ads:22:8-22:27>
+<SingleTaskDecl ["T_Entryless_Intermediate"] tasks.ads:24:4-27:33>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+This is intermediate section of the description of the task
+T_Entryless_Intermediate.
+\/ DESCRIPTION  ()  0 0 0 0
+This is intermediate section of the description of the task
+T_Entryless_Intermediate.
+**************************
+<SingleTaskTypeDecl ["T_Entryless_Intermediate"] tasks.ads:24:9-27:32>
+<DefiningName tasks.ads:24:9-24:33>
+<Id "T_Entryless_Intermediate" tasks.ads:24:9-24:33>
+<TaskDef tasks.ads:24:34-27:32>
+<ParentList tasks.ads:24:33-24:33>
+<PublicPart tasks.ads:24:36-27:4>
+<DeclList tasks.ads:24:36-24:36>
+<EndName tasks.ads:27:8-27:32>
+<Id "T_Entryless_Intermediate" tasks.ads:27:8-27:32>
+<SingleTaskDecl ["T_Entryless_Inherited_Leading"] tasks.ads:31:4-32:38>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+This is leading section of the description of the task
+T_Entryless_Inherited_Leading
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+This is leading section of the description of the task
+T_Entryless_Inherited_Leading
+**************************
+<SingleTaskTypeDecl ["T_Entryless_Inherited_Leading"] tasks.ads:31:9-32:37>
+<DefiningName tasks.ads:31:9-31:38>
+<Id "T_Entryless_Inherited_Leading" tasks.ads:31:9-31:38>
+<TaskDef tasks.ads:31:39-32:37>
+<ParentList tasks.ads:31:46-31:48>
+<Id "IE" tasks.ads:31:46-31:48>
+<PublicPart tasks.ads:31:53-32:4>
+<DeclList tasks.ads:31:53-31:53>
+<EndName tasks.ads:32:8-32:37>
+<Id "T_Entryless_Inherited_Leading" tasks.ads:32:8-32:37>
+<SingleTaskDecl ["T_Entryless_Inherited_Intermediate"] tasks.ads:34:4-37:43>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+This is intermediate section of the description of the task
+T_Entryless_Inherited_Intermediate.
+\/ DESCRIPTION  ()  0 0 0 0
+This is intermediate section of the description of the task
+T_Entryless_Inherited_Intermediate.
+**************************
+<SingleTaskTypeDecl ["T_Entryless_Inherited_Intermediate"] tasks.ads:34:9-37:42>
+<DefiningName tasks.ads:34:9-34:43>
+<Id "T_Entryless_Inherited_Intermediate" tasks.ads:34:9-34:43>
+<TaskDef tasks.ads:34:44-37:42>
+<ParentList tasks.ads:34:51-34:53>
+<Id "IE" tasks.ads:34:51-34:53>
+<PublicPart tasks.ads:34:58-37:4>
+<DeclList tasks.ads:34:58-34:58>
+<EndName tasks.ads:37:8-37:42>
+<Id "T_Entryless_Inherited_Intermediate" tasks.ads:37:8-37:42>
+<SingleTaskDecl ["T_1"] tasks.ads:39:4-42:12>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<SingleTaskTypeDecl ["T_1"] tasks.ads:39:9-42:11>
+<DefiningName tasks.ads:39:9-39:12>
+<Id "T_1" tasks.ads:39:9-39:12>
+<TaskDef tasks.ads:39:13-42:11>
+<ParentList tasks.ads:39:12-39:12>
+<PublicPart tasks.ads:39:15-42:4>
+<DeclList tasks.ads:40:7-40:15>
+<EntryDecl ["E"] tasks.ads:40:7-40:15>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  40 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Trailing comment for the entry
+\/ SNIPPET ada ()  0 0 0 0
+entry E
+\/ DESCRIPTION  ()  0 0 0 0
+Trailing comment for the entry
+**************************
+<EndName tasks.ads:42:8-42:11>
+<Id "T_1" tasks.ads:42:8-42:11>
+<SingleTaskDecl ["T_2"] tasks.ads:44:4-47:12>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+Leading comment for the entry
+\/ DESCRIPTION  ()  0 0 0 0
+Leading comment for the entry
+**************************
+<SingleTaskTypeDecl ["T_2"] tasks.ads:44:9-47:11>
+<DefiningName tasks.ads:44:9-44:12>
+<Id "T_2" tasks.ads:44:9-44:12>
+<TaskDef tasks.ads:44:13-47:11>
+<ParentList tasks.ads:44:12-44:12>
+<PublicPart tasks.ads:44:15-47:4>
+<DeclList tasks.ads:46:7-46:15>
+<EntryDecl ["E"] tasks.ads:46:7-46:15>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  46 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+Leading comment for the entry
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+entry E
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<EndName tasks.ads:47:8-47:11>
+<Id "T_2" tasks.ads:47:8-47:11>
+<SingleTaskDecl ["T_3"] tasks.ads:49:4-52:12>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<SingleTaskTypeDecl ["T_3"] tasks.ads:49:9-52:11>
+<DefiningName tasks.ads:49:9-49:12>
+<Id "T_3" tasks.ads:49:9-49:12>
+<TaskDef tasks.ads:49:13-52:11>
+<ParentList tasks.ads:49:12-49:12>
+<PublicPart tasks.ads:49:15-52:4>
+<DeclList tasks.ads:50:7-50:15>
+<EntryDecl ["E"] tasks.ads:50:7-50:15>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  50 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Trailing comment for the entry
+\/ SNIPPET ada ()  0 0 0 0
+entry E
+\/ DESCRIPTION  ()  0 0 0 0
+Trailing comment for the entry
+**************************
+<EndName tasks.ads:52:8-52:11>
+<Id "T_3" tasks.ads:52:8-52:11>
+<TaskTypeDecl ["TT_Entryless_Empty_Trailing"] tasks.ads:54:4-54:42>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+This is trailing section of description of the task
+TT_Entryless_Empty_Trailing.
+\/ DESCRIPTION  ()  0 0 0 0
+This is trailing section of description of the task
+TT_Entryless_Empty_Trailing.
+**************************
+<DefiningName tasks.ads:54:14-54:41>
+<Id "TT_Entryless_Empty_Trailing" tasks.ads:54:14-54:41>
+<TaskTypeDecl ["TT_Entryless_Leading"] tasks.ads:60:4-61:29>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+This is leading section of the description of the task
+TT_Entryless_Leading.
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+This is leading section of the description of the task
+TT_Entryless_Leading.
+**************************
+<DefiningName tasks.ads:60:14-60:34>
+<Id "TT_Entryless_Leading" tasks.ads:60:14-60:34>
+<TaskDef tasks.ads:60:35-61:28>
+<ParentList tasks.ads:60:34-60:34>
+<PublicPart tasks.ads:60:37-61:4>
+<DeclList tasks.ads:60:37-60:37>
+<EndName tasks.ads:61:8-61:28>
+<Id "TT_Entryless_Leading" tasks.ads:61:8-61:28>
+<TaskTypeDecl ["TT_Entryless_Intermediate"] tasks.ads:63:4-66:34>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+This is intermediate section of the description of the task
+TT_Entryless_Intermediate.
+\/ DESCRIPTION  ()  0 0 0 0
+This is intermediate section of the description of the task
+TT_Entryless_Intermediate.
+**************************
+<DefiningName tasks.ads:63:14-63:39>
+<Id "TT_Entryless_Intermediate" tasks.ads:63:14-63:39>
+<TaskDef tasks.ads:63:40-66:33>
+<ParentList tasks.ads:63:39-63:39>
+<PublicPart tasks.ads:63:42-66:4>
+<DeclList tasks.ads:63:42-63:42>
+<EndName tasks.ads:66:8-66:33>
+<Id "TT_Entryless_Intermediate" tasks.ads:66:8-66:33>
+<TaskTypeDecl ["TT_Entryless_Inherited_Leading"] tasks.ads:70:4-71:39>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+This is leading section of the description of the task
+TT_Entryless_Inherited_Leading
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+This is leading section of the description of the task
+TT_Entryless_Inherited_Leading
+**************************
+<DefiningName tasks.ads:70:14-70:44>
+<Id "TT_Entryless_Inherited_Leading" tasks.ads:70:14-70:44>
+<TaskDef tasks.ads:70:45-71:38>
+<ParentList tasks.ads:70:52-70:54>
+<Id "IE" tasks.ads:70:52-70:54>
+<PublicPart tasks.ads:70:59-71:4>
+<DeclList tasks.ads:70:59-70:59>
+<EndName tasks.ads:71:8-71:38>
+<Id "TT_Entryless_Inherited_Leading" tasks.ads:71:8-71:38>
+<TaskTypeDecl ["TT_Entryless_Inherited_Intermediate"] tasks.ads:73:4-76:44>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+This is intermediate section of the description of the task
+TT_Entryless_Inherited_Intermediate.
+\/ DESCRIPTION  ()  0 0 0 0
+This is intermediate section of the description of the task
+TT_Entryless_Inherited_Intermediate.
+**************************
+<DefiningName tasks.ads:73:14-73:49>
+<Id "TT_Entryless_Inherited_Intermediate" tasks.ads:73:14-73:49>
+<TaskDef tasks.ads:73:50-76:43>
+<ParentList tasks.ads:73:57-73:59>
+<Id "IE" tasks.ads:73:57-73:59>
+<PublicPart tasks.ads:73:64-76:4>
+<DeclList tasks.ads:73:64-73:64>
+<EndName tasks.ads:76:8-76:43>
+<Id "TT_Entryless_Inherited_Intermediate" tasks.ads:76:8-76:43>
+<TaskTypeDecl ["TT_1"] tasks.ads:78:4-81:13>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<DefiningName tasks.ads:78:14-78:18>
+<Id "TT_1" tasks.ads:78:14-78:18>
+<TaskDef tasks.ads:78:19-81:12>
+<ParentList tasks.ads:78:18-78:18>
+<PublicPart tasks.ads:78:21-81:4>
+<DeclList tasks.ads:79:7-79:15>
+<EntryDecl ["E"] tasks.ads:79:7-79:15>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  79 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Trailing comment for the entry
+\/ SNIPPET ada ()  0 0 0 0
+entry E
+\/ DESCRIPTION  ()  0 0 0 0
+Trailing comment for the entry
+**************************
+<EndName tasks.ads:81:8-81:12>
+<Id "TT_1" tasks.ads:81:8-81:12>
+<TaskTypeDecl ["TT_2"] tasks.ads:83:4-86:13>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+Leading comment for the entry
+\/ DESCRIPTION  ()  0 0 0 0
+Leading comment for the entry
+**************************
+<DefiningName tasks.ads:83:14-83:18>
+<Id "TT_2" tasks.ads:83:14-83:18>
+<TaskDef tasks.ads:83:19-86:12>
+<ParentList tasks.ads:83:18-83:18>
+<PublicPart tasks.ads:83:21-86:4>
+<DeclList tasks.ads:85:7-85:15>
+<EntryDecl ["E"] tasks.ads:85:7-85:15>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  85 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+Leading comment for the entry
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+entry E
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<EndName tasks.ads:86:8-86:12>
+<Id "TT_2" tasks.ads:86:8-86:12>
+<TaskTypeDecl ["TT_3"] tasks.ads:88:4-91:13>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<DefiningName tasks.ads:88:14-88:18>
+<Id "TT_3" tasks.ads:88:14-88:18>
+<TaskDef tasks.ads:88:19-91:12>
+<ParentList tasks.ads:88:18-88:18>
+<PublicPart tasks.ads:88:21-91:4>
+<DeclList tasks.ads:89:7-89:15>
+<EntryDecl ["E"] tasks.ads:89:7-89:15>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  89 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Trailing comment for the entry
+\/ SNIPPET ada ()  0 0 0 0
+entry E
+\/ DESCRIPTION  ()  0 0 0 0
+Trailing comment for the entry
+**************************
+<EndName tasks.ads:91:8-91:12>
+<Id "TT_3" tasks.ads:91:8-91:12>
+<EndName tasks.ads:93:5-93:10>
+<Id "Tasks" tasks.ads:93:5-93:10>
+<PragmaNodeList tasks.ads:93:11-93:11>
