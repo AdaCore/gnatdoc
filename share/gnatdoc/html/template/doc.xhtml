@@ -106,6 +106,15 @@
       </ul>
     </div>
 
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/entries">
+      <h3>Entries</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/entries'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
     <div tal:omit-tag="" tal:condition="gnatdoc/entity/subprograms">
       <h3>Subprograms</h3>
       <ul>

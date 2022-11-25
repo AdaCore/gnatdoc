@@ -30,7 +30,10 @@ package body GNATdoc.Comments.Builders.Subprograms is
      (Self            : in out Subprogram_Components_Builder;
       Documentation   : not null GNATdoc.Comments.Structured_Comment_Access;
       Options         : GNATdoc.Comments.Options.Extractor_Options;
-      Node            : Libadalang.Analysis.Subp_Spec'Class;
+      Spec_Node       : Libadalang.Analysis.Base_Subp_Spec'Class;
+      Name_Node       : Libadalang.Analysis.Defining_Name'Class;
+      Params_Node     : Libadalang.Analysis.Params'Class;
+      Returns_Node    : Libadalang.Analysis.Type_Expr'Class;
       Advanced_Groups : out Boolean;
       Last_Section    : out GNATdoc.Comments.Section_Access;
       Minimum_Indent  : out Langkit_Support.Slocs.Column_Number)
@@ -38,24 +41,21 @@ package body GNATdoc.Comments.Builders.Subprograms is
       use all type GNATdoc.Comments.Options.Documentation_Style;
       use type Langkit_Support.Slocs.Line_Number;
 
-      Params_Node  : constant Params    := Node.F_Subp_Params;
-      Returns_Node : constant Type_Expr := Node.F_Subp_Returns;
-
    begin
-      Self.Initialize (Documentation, Options, Node);
+      Self.Initialize (Documentation, Options, Spec_Node);
 
       if Self.Style = Leading then
-         if not Node.F_Subp_Name.Is_Null then
+         if not Name_Node.Is_Null then
             --  In leading style, additional comment for the first parameter
             --  started on the next line after subprogram's name if present...
 
-            Self.Group_Start_Line := Node.F_Subp_Name.Sloc_Range.End_Line + 1;
+            Self.Group_Start_Line := Name_Node.Sloc_Range.End_Line + 1;
 
          else
             --  ... or at the first line of the subprogram specification of
             --  access to subprogram type.
 
-            Self.Group_Start_Line := Node.Sloc_Range.Start_Line;
+            Self.Group_Start_Line := Spec_Node.Sloc_Range.Start_Line;
          end if;
       end if;
 

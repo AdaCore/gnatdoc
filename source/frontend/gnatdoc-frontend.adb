@@ -125,6 +125,10 @@ package body GNATdoc.Frontend is
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
      with Pre => Node.Kind in Ada_Single_Task_Decl | Ada_Task_Type_Decl;
 
+   procedure Process_Entry_Decl
+     (Node      : Entry_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Children
      (Parent    : Ada_Node'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -407,6 +411,19 @@ package body GNATdoc.Frontend is
 
                return Over;
 
+            when Ada_Entry_Decl =>
+               Process_Entry_Decl (Node.As_Entry_Decl, Enclosing);
+
+               return Over;
+
+            when Ada_Single_Protected_Decl
+               | Ada_Protected_Type_Decl
+               | Ada_Protected_Body
+            =>
+               Ada.Text_IO.Put_Line (Image (Node));
+
+               return Over;
+
             when Ada_Ada_Node_List
                | Ada_Public_Part | Ada_Private_Part
                | Ada_Declarative_Part
@@ -590,6 +607,27 @@ package body GNATdoc.Frontend is
          Enclosing.Simple_Types.Insert (Entity);
       end if;
    end Process_Derived_Type_Def;
+
+   ------------------------
+   -- Process_Entry_Decl --
+   ------------------------
+
+   procedure Process_Entry_Decl
+     (Node      : Entry_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Name   : constant Defining_Name := Node.F_Spec.F_Entry_Name;
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Name.Text),
+           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
+           Signature      => Signature (Name),
+           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Entries.Insert (Entity);
+   end Process_Entry_Decl;
 
    ----------------------------
    -- Process_Exception_Decl --
@@ -1028,6 +1066,7 @@ package body GNATdoc.Frontend is
                | Ada_Subtype_Decl
                | Ada_Exception_Decl
                | Ada_Single_Task_Type_Decl | Ada_Task_Type_Decl
+               | Ada_Entry_Decl
                =>
                null;
 

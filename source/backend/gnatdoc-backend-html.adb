@@ -184,6 +184,11 @@ package body GNATdoc.Backend.HTML is
               Entity_Information_Set_Proxy'
                 (Index_Entities => Self.Entity.Subprograms'Unchecked_Access);
 
+         elsif Name = "entries" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Entries'Unchecked_Access);
+
          elsif Name = "exceptions" then
             return
               Entity_Information_Set_Proxy'
@@ -428,6 +433,7 @@ package body GNATdoc.Backend.HTML is
          Nested.Union (Entity.Constants);
          Nested.Union (Entity.Variables);
          Nested.Union (Entity.Subprograms);
+         Nested.Union (Entity.Entries);
          Nested.Union (Entity.Generic_Instantiations);
 
          --  Open input and output files.
