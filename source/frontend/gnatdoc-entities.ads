@@ -55,6 +55,7 @@ package GNATdoc.Entities is
 
       Packages               : Entity_Information_Sets.Set;
       Subprograms            : aliased Entity_Information_Sets.Set;
+      Entries                : aliased Entity_Information_Sets.Set;
       Generic_Instantiations : aliased Entity_Information_Sets.Set;
       --  Generic_Packages
       --  Generic_Subprograms

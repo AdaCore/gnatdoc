@@ -31,6 +31,7 @@ package GNATdoc.Comments.Extractor is
       return not null Structured_Comment_Access
      with Pre =>
        Node.Kind in Ada_Abstract_Subp_Decl
+                      | Ada_Entry_Decl
                       | Ada_Exception_Decl
                       | Ada_Expr_Function
                       | Ada_Generic_Package_Decl
@@ -67,6 +68,7 @@ package GNATdoc.Comments.Extractor is
       Documentation : out Structured_Comment'Class)
      with Pre =>
        Node.Kind in Ada_Abstract_Subp_Decl
+                      | Ada_Entry_Decl
                       | Ada_Exception_Decl
                       | Ada_Expr_Function
                       | Ada_Generic_Package_Decl
@@ -103,6 +105,7 @@ package GNATdoc.Comments.Extractor is
       return Structured_Comment
      with Pre =>
        Node.Kind in Ada_Abstract_Subp_Decl
+                      | Ada_Entry_Decl
                       | Ada_Exception_Decl
                       | Ada_Expr_Function
                       | Ada_Generic_Package_Decl
