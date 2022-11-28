@@ -1,7 +1,13 @@
+prefix := $(dir $(shell which gnatls))..
+GPR_OPTIONS=
+INSTALLER=${GPRINSTALL} -p -f ${GPR_OPTIONS} --prefix='${prefix}'
 
 all:
-	gprbuild -j0 -p -P gnat/libgnatdoc.gpr -XSUPERPROJECT=
-	gprbuild -j0 -p -P gnat/gnatdoc.gpr -XGPR_UNIT_PROVIDER_LIBRARY_TYPE=static -XSUPERPROJECT= -XGPR_UNIT_PROVIDER_BUILD=debug
+	gprbuild -j0 -p -P gnat/libgnatdoc.gpr ${GPR_OPTIONS} -XSUPERPROJECT=
+	gprbuild -j0 -p -P gnat/gnatdoc.gpr ${GPR_OPTIONS} -XGPR_UNIT_PROVIDER_LIBRARY_TYPE=static -XSUPERPROJECT= -XGPR_UNIT_PROVIDER_BUILD=debug
+
+install-lib:
+	${INSTALLER} -P gnat/libgnatdoc.gpr
 
 clean:
 	rm -rf .objs bin
