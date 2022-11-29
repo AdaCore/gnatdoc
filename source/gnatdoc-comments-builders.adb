@@ -98,10 +98,10 @@ package body GNATdoc.Comments.Builders is
             return True;
          end if;
 
-         Token := Previous (Token);
-
          --  Start new advanced group when whitespace contains at least one
          --  blank line
+
+         Token := Previous (Token);
 
          if Kind (Data (Token)) = Ada_Whitespace then
             declare
@@ -113,6 +113,15 @@ package body GNATdoc.Comments.Builders is
                   return True;
                end if;
             end;
+         end if;
+
+         --  Start new advanced group when there is comment present before
+         --  the node
+
+         Token := Previous (Token);
+
+         if Kind (Data (Token)) = Ada_Comment then
+            return True;
          end if;
 
          return False;
