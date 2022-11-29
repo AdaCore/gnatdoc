@@ -138,13 +138,15 @@ procedure Test_Extractor is
 
          when Ada_Subp_Decl | Ada_Null_Subp_Decl | Ada_Abstract_Subp_Decl
             | Ada_Expr_Function
+            | Ada_Concrete_Type_Decl
+            | Ada_Exception_Decl
          =>
             Extract_And_Dump;
 
             return Over;
 
-         when Ada_Exception_Decl =>
-            Extract_And_Dump;
+         when Ada_Record_Rep_Clause =>
+            --  These nodes doesn't have own documentation, ignore them.
 
             return Over;
 
