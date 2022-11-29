@@ -17,15 +17,13 @@ keyword.
 <PublicPart overriding_indicator.ads:5:32-113:1>
 <AdaNodeList overriding_indicator.ads:7:4-111:56>
 <ConcreteTypeDecl ["T1"] overriding_indicator.ads:7:4-7:51>
-<DefiningName overriding_indicator.ads:7:9-7:11>
-<Id "T1" overriding_indicator.ads:7:9-7:11>
-<RecordTypeDef overriding_indicator.ads:7:15-7:50>
-<AbstractPresent overriding_indicator.ads:7:15-7:23>
-<TaggedPresent overriding_indicator.ads:7:24-7:30>
-<LimitedPresent overriding_indicator.ads:7:31-7:38>
-<NullRecordDef overriding_indicator.ads:7:39-7:50>
-<ComponentList overriding_indicator.ads:7:50-7:50>
-<AdaNodeList overriding_indicator.ads:7:50-7:50>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type T1 is abstract tagged limited null record;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
 <AbstractSubpDecl ["P1"] overriding_indicator.ads:9:4-9:41>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  10 0 0 0
@@ -90,20 +88,13 @@ function F1 (Self : T1) return Integer
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <ConcreteTypeDecl ["T2"] overriding_indicator.ads:23:4-23:48>
-<DefiningName overriding_indicator.ads:23:9-23:11>
-<Id "T2" overriding_indicator.ads:23:9-23:11>
-<DerivedTypeDef overriding_indicator.ads:23:15-23:47>
-<AbstractPresent overriding_indicator.ads:23:15-23:23>
-<LimitedAbsent overriding_indicator.ads:23:23-23:23>
-<SynchronizedAbsent overriding_indicator.ads:23:23-23:23>
-<SubtypeIndication overriding_indicator.ads:23:28-23:30>
-<NotNullAbsent overriding_indicator.ads:23:27-23:27>
-<Id "T1" overriding_indicator.ads:23:28-23:30>
-<ParentList overriding_indicator.ads:23:27-23:27>
-<NullRecordDef overriding_indicator.ads:23:36-23:47>
-<ComponentList overriding_indicator.ads:23:47-23:47>
-<AdaNodeList overriding_indicator.ads:23:47-23:47>
-<WithPrivateAbsent overriding_indicator.ads:23:47-23:47>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type T2 is abstract new T1 with null record;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
 <SubpDecl ["P1"] overriding_indicator.ads:25:4-25:40>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  26 0 0 0
@@ -156,20 +147,13 @@ procedure P4 (Self : T2;
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <ConcreteTypeDecl ["T3"] overriding_indicator.ads:37:4-37:48>
-<DefiningName overriding_indicator.ads:37:9-37:11>
-<Id "T3" overriding_indicator.ads:37:9-37:11>
-<DerivedTypeDef overriding_indicator.ads:37:15-37:47>
-<AbstractPresent overriding_indicator.ads:37:15-37:23>
-<LimitedAbsent overriding_indicator.ads:37:23-37:23>
-<SynchronizedAbsent overriding_indicator.ads:37:23-37:23>
-<SubtypeIndication overriding_indicator.ads:37:28-37:30>
-<NotNullAbsent overriding_indicator.ads:37:27-37:27>
-<Id "T1" overriding_indicator.ads:37:28-37:30>
-<ParentList overriding_indicator.ads:37:27-37:27>
-<NullRecordDef overriding_indicator.ads:37:36-37:47>
-<ComponentList overriding_indicator.ads:37:47-37:47>
-<AdaNodeList overriding_indicator.ads:37:47-37:47>
-<WithPrivateAbsent overriding_indicator.ads:37:47-37:47>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type T3 is abstract new T1 with null record;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
 <SubpDecl ["P1"] overriding_indicator.ads:39:4-40:29>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  41 0 0 0
@@ -222,20 +206,13 @@ procedure P4 (Self : T3;
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <ConcreteTypeDecl ["T4"] overriding_indicator.ads:55:4-55:48>
-<DefiningName overriding_indicator.ads:55:9-55:11>
-<Id "T4" overriding_indicator.ads:55:9-55:11>
-<DerivedTypeDef overriding_indicator.ads:55:15-55:47>
-<AbstractPresent overriding_indicator.ads:55:15-55:23>
-<LimitedAbsent overriding_indicator.ads:55:23-55:23>
-<SynchronizedAbsent overriding_indicator.ads:55:23-55:23>
-<SubtypeIndication overriding_indicator.ads:55:28-55:30>
-<NotNullAbsent overriding_indicator.ads:55:27-55:27>
-<Id "T1" overriding_indicator.ads:55:28-55:30>
-<ParentList overriding_indicator.ads:55:27-55:27>
-<NullRecordDef overriding_indicator.ads:55:36-55:47>
-<ComponentList overriding_indicator.ads:55:47-55:47>
-<AdaNodeList overriding_indicator.ads:55:47-55:47>
-<WithPrivateAbsent overriding_indicator.ads:55:47-55:47>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type T4 is abstract new T1 with null record;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
 <NullSubpDecl ["P1"] overriding_indicator.ads:57:4-58:37>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  59 0 0 0
@@ -300,20 +277,13 @@ function F1 (Self : T4) return Integer
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <ConcreteTypeDecl ["T5"] overriding_indicator.ads:76:4-76:48>
-<DefiningName overriding_indicator.ads:76:9-76:11>
-<Id "T5" overriding_indicator.ads:76:9-76:11>
-<DerivedTypeDef overriding_indicator.ads:76:15-76:47>
-<AbstractPresent overriding_indicator.ads:76:15-76:23>
-<LimitedAbsent overriding_indicator.ads:76:23-76:23>
-<SynchronizedAbsent overriding_indicator.ads:76:23-76:23>
-<SubtypeIndication overriding_indicator.ads:76:28-76:30>
-<NotNullAbsent overriding_indicator.ads:76:27-76:27>
-<Id "T1" overriding_indicator.ads:76:28-76:30>
-<ParentList overriding_indicator.ads:76:27-76:27>
-<NullRecordDef overriding_indicator.ads:76:36-76:47>
-<ComponentList overriding_indicator.ads:76:47-76:47>
-<AdaNodeList overriding_indicator.ads:76:47-76:47>
-<WithPrivateAbsent overriding_indicator.ads:76:47-76:47>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type T5 is abstract new T1 with null record;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
 <AbstractSubpDecl ["P11"] overriding_indicator.ads:78:4-78:57>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  79 0 0 0
@@ -378,20 +348,13 @@ function F11 (Self : T5) return Integer
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <ConcreteTypeDecl ["T6"] overriding_indicator.ads:92:4-92:48>
-<DefiningName overriding_indicator.ads:92:9-92:11>
-<Id "T6" overriding_indicator.ads:92:9-92:11>
-<DerivedTypeDef overriding_indicator.ads:92:15-92:47>
-<AbstractPresent overriding_indicator.ads:92:15-92:23>
-<LimitedAbsent overriding_indicator.ads:92:23-92:23>
-<SynchronizedAbsent overriding_indicator.ads:92:23-92:23>
-<SubtypeIndication overriding_indicator.ads:92:28-92:30>
-<NotNullAbsent overriding_indicator.ads:92:27-92:27>
-<Id "T1" overriding_indicator.ads:92:28-92:30>
-<ParentList overriding_indicator.ads:92:27-92:27>
-<NullRecordDef overriding_indicator.ads:92:36-92:47>
-<ComponentList overriding_indicator.ads:92:47-92:47>
-<AdaNodeList overriding_indicator.ads:92:47-92:47>
-<WithPrivateAbsent overriding_indicator.ads:92:47-92:47>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type T6 is abstract new T1 with null record;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
 <AbstractSubpDecl ["P11"] overriding_indicator.ads:94:4-95:42>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  96 0 0 0

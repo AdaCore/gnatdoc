@@ -112,6 +112,7 @@ package body GNATdoc.Comments.Builders.Records is
       end if;
 
       Components.Traverse (Process'Access);
+      Self.Restart_Component_Group (Node.Sloc_Range.End_Line);
 
       Advanced_Groups := Self.Advanced_Groups;
       Last_Section    := Self.Last_Section;
