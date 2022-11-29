@@ -97,7 +97,6 @@ package body GNATdoc.Comments.Builders.Records is
          end case;
       end Process;
 
-      Discriminants : constant Discriminant_Part := Node.F_Discriminants;
       Components    : constant Component_List    :=
         (if Node.F_Type_Def.Kind = Ada_Record_Type_Def
          then Node.F_Type_Def.As_Record_Type_Def.F_Record_Def.F_Components

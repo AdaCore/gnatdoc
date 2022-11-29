@@ -59,7 +59,8 @@ package body GNATdoc.Command_Line is
      (Name        => "project_file",
       Description => "Project file to process");
 
-   Output_Dir_Argument       : GNATCOLL.VFS.Virtual_File;
+   Output_Dir_Argument : GNATCOLL.VFS.Virtual_File := GNATCOLL.VFS.No_File;
+
    Project_File_Argument     : VSS.Strings.Virtual_String;
    Project_Context_Arguments : GPR2.Context.Object;
 
@@ -176,7 +177,7 @@ package body GNATdoc.Command_Line is
 
    function Output_Directory return GNATCOLL.VFS.Virtual_File is
    begin
-      return GNATCOLL.VFS.No_File;
+      return Output_Dir_Argument;
    end Output_Directory;
 
    ---------------------

@@ -32,8 +32,22 @@ project GNATdoc is
    for Exec_Dir use "../bin";
    for Main use ("gnatdoc-driver.adb");
 
+   type Build_Type is ("DEBUG", "PROD");
+   Build : Build_Type :=
+     External ("GNATDOC_BUILD", External ("BUILD", "PROD"));
+
    package Compiler is
-      for Switches ("Ada") use ("-g", "-gnatygO", "-gnata");
+
+      case Build is
+         when "DEBUG" =>
+            for Switches ("Ada") use
+              ("-g", "-O0", "-gnata", "-gnatVa", "-gnatQ", "-gnaty", "-gnateE",
+               "-gnatwaCJe", "-fstack-check");
+
+         when "PROD" =>
+            for Switches ("Ada") use ("-O2", "-gnatn", "-gnatwaCJ");
+      end case;
+
    end Compiler;
 
    package Builder is
