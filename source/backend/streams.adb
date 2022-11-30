@@ -15,8 +15,6 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with Ada.Streams;
-
 with VSS.Stream_Element_Vectors.Conversions;
 
 package body Streams is
@@ -57,6 +55,7 @@ package body Streams is
 
    begin
       GNATCOLL.VFS.Write (Self.Writable, Data);
+      Success := True;
    end Put;
 
 end Streams;

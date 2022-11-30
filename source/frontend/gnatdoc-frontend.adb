@@ -16,21 +16,18 @@
 ------------------------------------------------------------------------------
 
 with Ada.Text_IO;
-with Ada.Wide_Wide_Text_IO;
 
 with Libadalang.Common;
 
 with VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Extractor;
-with GNATdoc.Comments.Options;
 with GNATdoc.Entities;
 with GNATdoc.Options;
 
 package body GNATdoc.Frontend is
 
    use GNATdoc.Comments.Extractor;
-   use GNATdoc.Comments.Options;
    use Libadalang.Analysis;
    use Libadalang.Common;
    use VSS.Strings;

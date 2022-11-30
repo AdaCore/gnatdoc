@@ -24,8 +24,26 @@ project LibGNATdoc is
    for Object_Dir use "../.objs";
    for Source_Dirs use ("../source");
 
+   type Library_Type_Type is ("relocatable", "static", "static-pic");
+   Library_Type : Library_Type_Type := External ("LIBRARY_TYPE", "static");
+   for Library_Kind use Library_Type;
+
+   type Build_Type is ("DEBUG", "PROD");
+   Build : Build_Type :=
+     External ("LIBGNATDOC_BUILD", External ("BUILD", "PROD"));
+
    package Compiler is
-      for Switches ("Ada") use ("-g", "-gnatygO", "-gnata");
+
+      case Build is
+         when "DEBUG" =>
+            for Switches ("Ada") use
+              ("-g", "-O0", "-gnata", "-gnatVa", "-gnatQ", "-gnaty", "-gnateE",
+               "-gnatwaCJe", "-fstack-check");
+
+         when "PROD" =>
+            for Switches ("Ada") use ("-O2", "-gnatn", "-gnatwaCJ");
+      end case;
+
    end Compiler;
 
 end LibGNATdoc;

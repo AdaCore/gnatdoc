@@ -16,7 +16,6 @@
 ------------------------------------------------------------------------------
 
 with VSS.String_Vectors;
-with VSS.Strings;
 
 with Libadalang.Analysis;
 

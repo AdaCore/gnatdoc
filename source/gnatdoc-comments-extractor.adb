@@ -404,7 +404,7 @@ package body GNATdoc.Comments.Extractor is
       Options : GNATdoc.Comments.Options.Extractor_Options)
       return not null Structured_Comment_Access is
    begin
-      return Result : not null Structured_Comment_Access :=
+      return Result : constant not null Structured_Comment_Access :=
         new Structured_Comment
       do
          Extract (Node, Options, Result.all);
@@ -1375,9 +1375,9 @@ package body GNATdoc.Comments.Extractor is
          Line_Index : Positive;
          Amount     : VSS.Strings.Character_Count)
       is
-         Line      : Virtual_String     := Text (Line_Index);
-         Iterator  : Character_Iterator := Line.At_First_Character;
-         Count     : Character_Count    := Amount;
+         Line      : constant Virtual_String := Text (Line_Index);
+         Iterator  : Character_Iterator      := Line.At_First_Character;
+         Count     : Character_Count         := Amount;
 
       begin
          while Iterator.Forward loop
@@ -1551,8 +1551,6 @@ package body GNATdoc.Comments.Extractor is
       Pattern         : VSS.Regular_Expressions.Regular_Expression;
       Documentation   : in out Structured_Comment'Class)
    is
-      Node_Location : constant Source_Location_Range :=
-        Decl_Node.Sloc_Range;
       Location      : Source_Location_Range;
 
    begin
@@ -1871,7 +1869,7 @@ package body GNATdoc.Comments.Extractor is
 
                         else
                            declare
-                              Match : Regular_Expression_Match :=
+                              Match : constant Regular_Expression_Match :=
                                 Pattern.Match (Line);
 
                            begin
@@ -1902,12 +1900,12 @@ package body GNATdoc.Comments.Extractor is
                        Section.Text (J);
                      Iterator : Character_Iterator :=
                        Line.At_First_Character;
-                     Success  : Boolean;
 
+                     Unused : Boolean;
                   begin
                      if Line.Character_Length > Indent then
                         for J in 1 .. Indent loop
-                           Success := Iterator.Forward;
+                           Unused := Iterator.Forward;
                         end loop;
 
                         Section.Text.Replace (J, Line.Tail_From (Iterator));
