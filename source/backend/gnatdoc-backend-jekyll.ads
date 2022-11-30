@@ -15,22 +15,19 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
---  Configuration provider on top of command line.
+package GNATdoc.Backend.Jekyll is
 
-package GNATdoc.Configuration.Command_Line is
-
-   type Command_Line_Configuration_Provider is
-     new Abstract_Configuration_Provider with private;
+   type Jekyll_Backend is new Abstract_Backend with private;
 
 private
 
-   type Command_Line_Configuration_Provider is
-     new Abstract_Configuration_Provider with null record;
+   type Jekyll_Backend is new Abstract_Backend with null record;
 
-   overriding function Output_Directory
-     (Self         : Command_Line_Configuration_Provider;
-      Backend_Name : VSS.Strings.Virtual_String)
-      return GNATCOLL.VFS.Virtual_File;
-   --  Return output directory to generate documentation.
+   overriding function Name
+     (Self : in out Jekyll_Backend) return VSS.Strings.Virtual_String;
 
-end GNATdoc.Configuration.Command_Line;
+   overriding procedure Initialize (Self : in out Jekyll_Backend);
+
+   overriding procedure Generate (Self : in out Jekyll_Backend);
+
+end GNATdoc.Backend.Jekyll;

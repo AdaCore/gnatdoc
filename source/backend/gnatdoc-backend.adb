@@ -18,7 +18,8 @@
 with VSS.Application;
 with VSS.Strings.Conversions;
 
-with GNATdoc.Configuration;
+with GNATdoc.Options;
+with GNATdoc.Projects;
 
 package body GNATdoc.Backend is
 
@@ -42,11 +43,28 @@ package body GNATdoc.Backend is
         Exe_Path.Dir.Get_Parent / "share" / "gnatdoc"
           / GNATCOLL.VFS.Filesystem_String
               (VSS.Strings.Conversions.To_UTF_8_String (Name));
-      Self.Project_Resources_Root :=
-        GNATdoc.Configuration.Provider.Custom_Resources_Directory (Name);
 
-      Self.Output_Root :=
-        GNATdoc.Configuration.Provider.Output_Directory (Name);
+      --  Get custom resource directory either from command line or project
+      --  file.
+      if GNATdoc.Options.Backend_Options.Resource_Directory .Is_Empty then
+         Self.Project_Resources_Root :=
+           GNATdoc.Projects.Custom_Resources_Directory (Name);
+      else
+         Self.Project_Resources_Root := GNATCOLL.VFS.Create_From_Base
+           (GNATCOLL.VFS.Filesystem_String
+              (VSS.Strings.Conversions.To_UTF_8_String
+                   (GNATdoc.Options.Backend_Options.Resource_Directory)));
+      end if;
+
+      --  Get output root directory either from command line or project file
+      if GNATdoc.Options.Backend_Options.Output_Directory.Is_Empty then
+         Self.Output_Root := GNATdoc.Projects.Output_Directory (Name);
+      else
+         Self.Output_Root := GNATCOLL.VFS.Create_From_Base
+           (GNATCOLL.VFS.Filesystem_String
+              (VSS.Strings.Conversions.To_UTF_8_String
+                   (GNATdoc.Options.Backend_Options.Output_Directory)));
+      end if;
 
       --  Create output directory if not exists
 

@@ -15,8 +15,6 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATCOLL.VFS;
-
 with GPR2.Context;
 
 with VSS.Strings;
@@ -28,10 +26,6 @@ package GNATdoc.Command_Line is
 
    function Project_File return VSS.Strings.Virtual_String;
    --  Return path to the project file.
-
-   function Output_Directory return GNATCOLL.VFS.Virtual_File;
-   --  Return path to the output directory, specified in the command line.
-   --  Return No_File when output directory is not specified.
 
    function Project_Context return GPR2.Context.Object;
    --  Return prject context.

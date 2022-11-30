@@ -15,40 +15,18 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-package body GNATdoc.Configuration is
+with VSS.Strings;
 
-   --------------------------------
-   -- Custom_Resources_Directory --
-   --------------------------------
+package GNATdoc.Entities.YAML is
 
-   not overriding function Custom_Resources_Directory
-     (Self         : Abstract_Configuration_Provider;
-      Backend_Name : VSS.Strings.Virtual_String)
-      return GNATCOLL.VFS.Virtual_File is
-   begin
-      if Self.Child /= null then
-         return Self.Child.Custom_Resources_Directory (Backend_Name);
+   function To_YAML (Entity    : Entity_Information;
+                     Indent    : VSS.Strings.Virtual_String := "";
+                     Recursive : Boolean := True)
+                     return VSS.Strings.Virtual_String;
 
-      else
-         return GNATCOLL.VFS.No_File;
-      end if;
-   end Custom_Resources_Directory;
+   function To_YAML (Set       : Entity_Information_Sets.Set;
+                     Indent    : VSS.Strings.Virtual_String := "";
+                     Recursive : Boolean := True)
+                     return VSS.Strings.Virtual_String;
 
-   ----------------------
-   -- Output_Directory --
-   ----------------------
-
-   not overriding function Output_Directory
-     (Self         : Abstract_Configuration_Provider;
-      Backend_Name : VSS.Strings.Virtual_String)
-      return GNATCOLL.VFS.Virtual_File is
-   begin
-      if Self.Child /= null then
-         return Self.Child.Output_Directory (Backend_Name);
-
-      else
-         return GNATCOLL.VFS.No_File;
-      end if;
-   end Output_Directory;
-
-end GNATdoc.Configuration;
+end GNATdoc.Entities.YAML;

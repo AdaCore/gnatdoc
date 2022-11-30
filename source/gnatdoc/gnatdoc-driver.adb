@@ -16,29 +16,36 @@
 ------------------------------------------------------------------------------
 
 with GNATdoc.Command_Line;
-with GNATdoc.Configuration.Command_Line;
-with GNATdoc.Configuration.Project;
 with GNATdoc.Backend.HTML;
+with GNATdoc.Backend.Jekyll;
 with GNATdoc.Frontend;
 with GNATdoc.Projects;
+with GNATdoc.Options;
+with GNATdoc.Backend.Options;
 
 procedure GNATdoc.Driver is
-   CL_Provider : aliased
-     GNATdoc.Configuration.Command_Line.Command_Line_Configuration_Provider;
-   PF_Provider : aliased
-     GNATdoc.Configuration.Project.Project_Configuration_Provider
-       (CL_Provider'Unchecked_Access);
 
-   Backend : GNATdoc.Backend.HTML.HTML_Backend;
+   HTML_Backend : aliased GNATdoc.Backend.HTML.HTML_Backend;
+   Jekyll_Backend : aliased GNATdoc.Backend.Jekyll.Jekyll_Backend;
+
+   Backend : access GNATdoc.Backend.Abstract_Backend'Class :=
+     HTML_Backend'Unchecked_Access;
 
 begin
    GNATdoc.Command_Line.Initialize;
    GNATdoc.Projects.Initialize;
 
-   GNATdoc.Configuration.Provider := PF_Provider'Unchecked_Access;
+   case GNATdoc.Options.Backend_Options.Backend is
+      when GNATdoc.Backend.Options.HTML =>
+         Backend := HTML_Backend'Unchecked_Access;
+      when GNATdoc.Backend.Options.Jekyll =>
+         Backend := Jekyll_Backend'Unchecked_Access;
+   end case;
 
    Backend.Initialize;
+
    GNATdoc.Projects.Process_Compilation_Units
      (GNATdoc.Frontend.Process_Compilation_Unit'Access);
+
    Backend.Generate;
 end GNATdoc.Driver;

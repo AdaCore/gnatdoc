@@ -15,39 +15,27 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATCOLL.VFS;
+with VSS.String_Vectors;
 
-with VSS.Strings;
+package GNATdoc.Backend.Options is
 
-package GNATdoc.Configuration is
+   type Backend_Kind is (HTML, Jekyll);
 
-   type Abstract_Configuration_Provider is tagged;
+   type Backend_Options is record
+      Backend : Backend_Kind := Backend_Kind'First;
+      --  Which backend to use
 
-   type Configuration_Provider_Access is
-     access all Abstract_Configuration_Provider'Class;
+      Output_Directory : VSS.Strings.Virtual_String :=
+        VSS.Strings.Empty_Virtual_String;
+      --  Custom output directory
 
-   type Abstract_Configuration_Provider
-     (Child : Configuration_Provider_Access := null) is
-       abstract tagged limited private;
+      Resource_Directory : VSS.Strings.Virtual_String :=
+        VSS.Strings.Empty_Virtual_String;
+      --  Custom reource directory
 
-   not overriding function Output_Directory
-     (Self         : Abstract_Configuration_Provider;
-      Backend_Name : VSS.Strings.Virtual_String)
-      return GNATCOLL.VFS.Virtual_File;
-   --  Return output directory to generate documentation.
+      Jekyll_Front_Matter : VSS.String_Vectors.Virtual_String_Vector :=
+        VSS.String_Vectors.Empty_Virtual_String_Vector;
+      --  Custom lines in Jekyll Front Matter header
+   end record;
 
-   not overriding function Custom_Resources_Directory
-     (Self         : Abstract_Configuration_Provider;
-      Backend_Name : VSS.Strings.Virtual_String)
-      return GNATCOLL.VFS.Virtual_File;
-   --  Return custom resources directory if specified.
-
-   Provider : Configuration_Provider_Access;
-
-private
-
-   type Abstract_Configuration_Provider
-     (Child : Configuration_Provider_Access := null) is
-        abstract tagged limited null record;
-
-end GNATdoc.Configuration;
+end GNATdoc.Backend.Options;

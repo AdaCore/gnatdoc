@@ -17,6 +17,7 @@
 
 with GNATdoc.Comments.Options;
 with GNATdoc.Frontend.Options;
+with GNATdoc.Backend.Options;
 
 package GNATdoc.Options is
 
@@ -26,6 +27,9 @@ package GNATdoc.Options is
       Fallback => False);
 
    Frontend_Options  : GNATdoc.Frontend.Options.Frontend_Options :=
+     (others => <>);
+
+   Backend_Options  : GNATdoc.Backend.Options.Backend_Options :=
      (others => <>);
 
 end GNATdoc.Options;

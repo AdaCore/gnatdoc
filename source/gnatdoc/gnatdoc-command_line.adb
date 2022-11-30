@@ -21,6 +21,7 @@ with VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Options;
 with GNATdoc.Options;
+with GNATdoc.Backend.Options;
 
 package body GNATdoc.Command_Line is
 
@@ -35,6 +36,12 @@ package body GNATdoc.Command_Line is
       Long_Name   => "output-dir",
       Value_Name  => "output_dir",
       Description => "Output directory for generated documentation");
+
+   Resource_Dir_Option       : constant VSS.Command_Line.Value_Option :=
+     (Short_Name  => <>,
+      Long_Name   => "resource-dir",
+      Value_Name  => "resource_dir",
+      Description => "Directory for custom resource");
 
    Project_Option            : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => "P",
@@ -59,7 +66,19 @@ package body GNATdoc.Command_Line is
      (Name        => "project_file",
       Description => "Project file to process");
 
-   Output_Dir_Argument : GNATCOLL.VFS.Virtual_File := GNATCOLL.VFS.No_File;
+   Backend_Option            : constant VSS.Command_Line.Value_Option :=
+     (Short_Name  => <>,
+      Long_Name   => "backend",
+      Value_Name  => "backend",
+      Description => "Select the gnatdoc backend (html or jekyll)");
+
+   Front_Matter_Option : constant VSS.Command_Line.Value_Option :=
+     (Short_Name  => <>,
+      Long_Name   => "front-matter",
+      Value_Name  => "front-matter",
+      Description => "Custom line to add in the jekyll output Front Matter");
+   --  It should be possible to specify this option mutliple times but this is
+   --  not supported in VSS.Command_Line at the moment.
 
    Project_File_Argument     : VSS.Strings.Virtual_String;
    Project_Context_Arguments : GPR2.Context.Object;
@@ -80,6 +99,8 @@ package body GNATdoc.Command_Line is
       VSS.Command_Line.Add_Option (Style_Option);
       VSS.Command_Line.Add_Option (Scenario_Option);
       VSS.Command_Line.Add_Option (Positional_Project_Option);
+      VSS.Command_Line.Add_Option (Backend_Option);
+      VSS.Command_Line.Add_Option (Front_Matter_Option);
 
       VSS.Command_Line.Process;
       Positional := VSS.Command_Line.Positional_Arguments;
@@ -162,23 +183,48 @@ package body GNATdoc.Command_Line is
       --  Check output dicretory argument.
 
       if VSS.Command_Line.Is_Specified (Output_Dir_Option) then
-         Output_Dir_Argument :=
-           GNATCOLL.VFS.Create_From_Base
-             (GNATCOLL.VFS.Filesystem_String
-                (VSS.Strings.Conversions.To_UTF_8_String
-                   (VSS.Command_Line.Value (Output_Dir_Option))),
-              GNATCOLL.VFS.Get_Current_Dir.Full_Name);
+
+         GNATdoc.Options.Backend_Options.Output_Directory :=
+           VSS.Command_Line.Value (Output_Dir_Option);
       end if;
+
+      --  Check resource dicretory argument.
+
+      if VSS.Command_Line.Is_Specified (Resource_Dir_Option) then
+
+         GNATdoc.Options.Backend_Options.Resource_Directory :=
+           VSS.Command_Line.Value (Resource_Dir_Option);
+      end if;
+
+      --  Check Front Matter argument.
+
+      if VSS.Command_Line.Is_Specified (Front_Matter_Option) then
+
+         GNATdoc.Options.Backend_Options.Jekyll_Front_Matter.Append
+           (VSS.Command_Line.Value (Front_Matter_Option));
+      end if;
+
+      --  Check backend argument.
+
+      if VSS.Command_Line.Is_Specified (Backend_Option) then
+
+         if VSS.Command_Line.Value (Backend_Option).To_Lowercase = "html" then
+            GNATdoc.Options.Backend_Options.Backend :=
+              GNATdoc.Backend.Options.HTML;
+
+         elsif VSS.Command_Line.Value (Backend_Option).To_Lowercase = "jekyll"
+         then
+            GNATdoc.Options.Backend_Options.Backend :=
+              GNATdoc.Backend.Options.Jekyll;
+
+         else
+            VSS.Command_Line.Report_Error
+              ("Unknown backend: '" &
+                 VSS.Command_Line.Value (Backend_Option) & "'");
+         end if;
+      end if;
+
    end Initialize;
-
-   ----------------------
-   -- Output_Directory --
-   ----------------------
-
-   function Output_Directory return GNATCOLL.VFS.Virtual_File is
-   begin
-      return Output_Dir_Argument;
-   end Output_Directory;
 
    ---------------------
    -- Project_Context --
