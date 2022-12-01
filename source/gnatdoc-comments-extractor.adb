@@ -158,23 +158,6 @@ package body GNATdoc.Comments.Extractor is
    --    group comment is started.
    --  @param Documentation       Structured comment to fill.
 
-   procedure Extract_General_Leading_Documentation
-     (Decl_Node       : Basic_Decl'Class;
-      Pattern         : VSS.Regular_Expressions.Regular_Expression;
-      Documentation   : in out Structured_Comment'Class;
-      Leading_Section : out not null Section_Access);
-   --  Creates leading documetation section of the structured comment
-   --  and extracts leading documentation follow general rules (there are
-   --  few exceptions from this rules, like ordinary and generic package
-   --  declarations).
-   --
-   --  @param Decl_Node       Declaration node
-   --  @param Pattern
-   --    Regular expression to check whenther line should be included into
-   --    the documentation or not.
-   --  @param Documentation   Structured comment to add and fill section
-   --  @param Leading_Section Created section
-
    procedure Extract_General_Trailing_Documentation
      (Decl_Node        : Basic_Decl'Class;
       Pattern          : VSS.Regular_Expressions.Regular_Expression;
@@ -202,7 +185,7 @@ package body GNATdoc.Comments.Extractor is
 
    procedure Extract_General_Leading_Trailing_Documentation
      (Decl_Node        : Basic_Decl'Class;
-      Pattern          : VSS.Regular_Expressions.Regular_Expression;
+      Options          : GNATdoc.Comments.Options.Extractor_Options;
       Last_Section     : Section_Access;
       Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
       Documentation    : in out Structured_Comment'Class;
@@ -210,6 +193,24 @@ package body GNATdoc.Comments.Extractor is
       Trailing_Section : out not null Section_Access);
    --  Call both Extract_General_Leading_Documentation and
    --  Extract_General_Trailing_Documentation subprograms.
+
+   procedure Extract_Leading_Section
+     (Token_Start       : Token_Reference;
+      Options           : GNATdoc.Comments.Options.Extractor_Options;
+      Separator_Allowed : Boolean;
+      Documentation     : in out Structured_Comment'Class;
+      Section           : out not null Section_Access);
+   --  Creates leading documetation section of the structured comment
+   --  and extracts leading documentation.
+   --
+   --  @param Token_Start     Start token of the declaration node.
+   --  @param Options         Extractor options
+   --  @param Separator_Allowed
+   --    Whether empty line is allowed between line that contains Token_Start
+   --    and comment. It is the case for packages, tasks and protected
+   --    objects.
+   --  @param Documentation   Structured comment to add and fill section
+   --  @param Section         Created section
 
    procedure Extract_Upper_Intermediate_Section
      (Token_Start   : Token_Reference;
@@ -516,15 +517,6 @@ package body GNATdoc.Comments.Extractor is
       Last_Pragma_Or_Use         : Ada_Node;
 
    begin
-      Leading_Section :=
-        new Section'
-          (Kind             => Raw,
-           Symbol           => "<<LEADING>>",
-           Name             => <>,
-           Text             => <>,
-           others           => <>);
-      Documentation.Sections.Append (Leading_Section);
-
       --  Header section: before context clauses of compilation unit
 
       if Basic_Decl_Node.P_Is_Compilation_Unit_Root then
@@ -596,49 +588,12 @@ package body GNATdoc.Comments.Extractor is
       --  clauses of the compilation unit
 
       if not Basic_Decl_Node.P_Is_Compilation_Unit_Root or Prelude.Is_Null then
-         declare
-            Token : Token_Reference := Basic_Decl_Node.Token_Start;
-            Found : Boolean         := False;
-
-         begin
-            loop
-               Token := Previous (Token);
-
-               exit when Token = No_Token;
-
-               case Kind (Data (Token)) is
-                  when Ada_Comment =>
-                     if Found then
-                        Prepend_Documentation_Line
-                          (Leading_Section.Text,
-                           Text (Token),
-                           Options.Pattern);
-                     end if;
-
-                  when Ada_Whitespace =>
-                     declare
-                        Location : constant Source_Location_Range :=
-                          Sloc_Range (Data (Token));
-
-                     begin
-                        if Location.End_Line - Location.Start_Line > 1 then
-                           exit when Found;
-
-                           Found := True;
-                        end if;
-                     end;
-
-                  when others =>
-                     --  Leading section must be separated from the context
-                     --  clauses by the empty line, thus any other tokens
-                     --  cleanup accumulated text.
-
-                     Leading_Section.Text.Clear;
-
-                     exit;
-               end case;
-            end loop;
-         end;
+         Extract_Leading_Section
+           (Basic_Decl_Node.Token_Start,
+            Options,
+            True,
+            Documentation,
+            Leading_Section);
       end if;
 
       --  Looukp last use clause or pragma declarations at the beginning of the
@@ -743,7 +698,9 @@ package body GNATdoc.Comments.Extractor is
          then
             Raw_Section := Intermediate_Lower_Section;
 
-         elsif not Leading_Section.Text.Is_Empty then
+         elsif Leading_Section /= null
+           and then not Leading_Section.Text.Is_Empty
+         then
             Raw_Section := Leading_Section;
 
          elsif Header_Section /= null
@@ -797,7 +754,7 @@ package body GNATdoc.Comments.Extractor is
 
       Extract_General_Leading_Trailing_Documentation
         (Decl_Node        => Node,
-         Pattern          => Options.Pattern,
+         Options          => Options,
          Last_Section     => Last_Section,
          Minimum_Indent   => Minimum_Indent,
          Documentation    => Documentation,
@@ -844,77 +801,28 @@ package body GNATdoc.Comments.Extractor is
       end;
    end Extract_Enumeration_Type_Documentation;
 
-   -------------------------------------------
-   -- Extract_General_Leading_Documentation --
-   -------------------------------------------
-
-   procedure Extract_General_Leading_Documentation
-     (Decl_Node       : Basic_Decl'Class;
-      Pattern         : VSS.Regular_Expressions.Regular_Expression;
-      Documentation   : in out Structured_Comment'Class;
-      Leading_Section : out not null Section_Access) is
-   begin
-      --  Create and add leading section
-
-      Leading_Section :=
-        new Section'
-          (Kind             => Raw,
-           Symbol           => "<<LEADING>>",
-           Name             => <>,
-           Text             => <>,
-           others           => <>);
-      Documentation.Sections.Append (Leading_Section);
-
-      --  Process tokens before the declaration node.
-
-      declare
-         Token : Token_Reference := Decl_Node.Token_Start;
-
-      begin
-         loop
-            Token := Previous (Token);
-
-            exit when Token = No_Token;
-
-            case Kind (Data (Token)) is
-               when Ada_Comment =>
-                  Prepend_Documentation_Line
-                    (Leading_Section.Text, Text (Token), Pattern);
-
-               when Ada_Whitespace =>
-                  declare
-                     Location : constant Source_Location_Range :=
-                       Sloc_Range (Data (Token));
-
-                  begin
-                     exit when Location.End_Line - Location.Start_Line > 1;
-                  end;
-
-               when others =>
-                  exit;
-            end case;
-         end loop;
-      end;
-   end Extract_General_Leading_Documentation;
-
    ----------------------------------------------------
    -- Extract_General_Leading_Trailing_Documentation --
    ----------------------------------------------------
 
    procedure Extract_General_Leading_Trailing_Documentation
      (Decl_Node        : Basic_Decl'Class;
-      Pattern          : VSS.Regular_Expressions.Regular_Expression;
+      Options          : GNATdoc.Comments.Options.Extractor_Options;
       Last_Section     : Section_Access;
       Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
       Documentation    : in out Structured_Comment'Class;
       Leading_Section  : out not null Section_Access;
       Trailing_Section : out not null Section_Access) is
    begin
-      Extract_General_Leading_Documentation
-        (Decl_Node, Pattern, Documentation, Leading_Section);
+      Extract_Leading_Section
+        (Decl_Node.Token_Start,
+         Options,
+         False,
+         Documentation,
+         Leading_Section);
       Extract_General_Trailing_Documentation
         (Decl_Node,
-         Pattern,
+         Options.Pattern,
          Last_Section,
          Minimum_Indent,
          Documentation,
@@ -1044,6 +952,80 @@ package body GNATdoc.Comments.Extractor is
         (Node, Node.F_Package_Decl, Options, Documentation);
    end Extract_Generic_Package_Decl_Documentation;
 
+   -----------------------------
+   -- Extract_Leading_Section --
+   -----------------------------
+
+   procedure Extract_Leading_Section
+     (Token_Start       : Token_Reference;
+      Options           : GNATdoc.Comments.Options.Extractor_Options;
+      Separator_Allowed : Boolean;
+      Documentation     : in out Structured_Comment'Class;
+      Section           : out not null Section_Access) is
+   begin
+      --  Create and add leading section
+
+      Section :=
+        new GNATdoc.Comments.Section'
+          (Kind             => Raw,
+           Symbol           => "<<LEADING>>",
+           Name             => <>,
+           Text             => <>,
+           others           => <>);
+      Documentation.Sections.Append (Section);
+
+      --  Process tokens before the start token.
+
+      declare
+         Token : Token_Reference := Token_Start;
+         Found : Boolean         := False;
+         --  Separated : Boolean := False;
+
+      begin
+         loop
+            Token := Previous (Token);
+
+            exit when Token = No_Token;
+
+            case Kind (Data (Token)) is
+               when Ada_Comment =>
+                  Found := True;
+                  Prepend_Documentation_Line
+                    (Section.Text, Text (Token), Options.Pattern);
+
+               when Ada_Whitespace =>
+                  declare
+                     Location : constant Source_Location_Range :=
+                       Sloc_Range (Data (Token));
+
+                  begin
+                     if Location.End_Line - Location.Start_Line > 1 then
+                        if not Separator_Allowed then
+                           exit;
+
+                        else
+                           exit when Found;
+
+                           Found := True;
+                        end if;
+                     end if;
+                  end;
+
+               when others =>
+                  --  Leading section must be separated from the context
+                  --  clauses by the empty line, thus any other tokens
+                  --  cleanup accumulated text.
+
+                  if Separator_Allowed then
+                     Section.Text.Clear;
+                  end if;
+
+                  exit;
+            end case;
+         end loop;
+      end;
+   end Extract_Leading_Section;
+
    ---------------------------------------
    -- Extract_Record_Type_Documentation --
    ---------------------------------------
@@ -1078,7 +1060,7 @@ package body GNATdoc.Comments.Extractor is
 
       Extract_General_Leading_Trailing_Documentation
         (Decl_Node        => Node,
-         Pattern          => Options.Pattern,
+         Options          => Options,
          Last_Section     => Last_Section,
          Minimum_Indent   => Minimum_Indent,
          Documentation    => Documentation,
@@ -1146,7 +1128,7 @@ package body GNATdoc.Comments.Extractor is
 
       Extract_General_Leading_Trailing_Documentation
         (Decl_Node        => Node,
-         Pattern          => Options.Pattern,
+         Options          => Options,
          Last_Section     => null,
          Minimum_Indent   => 0,
          Documentation    => Documentation,
@@ -1209,8 +1191,8 @@ package body GNATdoc.Comments.Extractor is
       Intermediate_Upper_Section : Section_Access;
 
    begin
-      Extract_General_Leading_Documentation
-        (Node, Options.Pattern, Documentation, Leading_Section);
+      Extract_Leading_Section
+        (Node.Token_Start, Options, True, Documentation, Leading_Section);
 
       if Definition.Is_Null then
          --  It is the case of the entry-less and definition-less task
@@ -1478,7 +1460,7 @@ package body GNATdoc.Comments.Extractor is
 
       Extract_General_Leading_Trailing_Documentation
         (Decl_Node        => Decl_Node,
-         Pattern          => Options.Pattern,
+         Options          => Options,
          Last_Section     => Last_Section,
          Minimum_Indent   => Minimum_Indent,
          Documentation    => Documentation,
