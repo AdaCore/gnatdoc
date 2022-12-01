@@ -211,6 +211,16 @@ package body GNATdoc.Comments.Extractor is
    --  Call both Extract_General_Leading_Documentation and
    --  Extract_General_Trailing_Documentation subprograms.
 
+   procedure Extract_Upper_Intermediate_Section
+     (Token_Start   : Token_Reference;
+      Token_End     : Token_Reference;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : in out Structured_Comment'Class;
+      Section       : out Section_Access)
+     with Pre => Kind (Data (Token_Start)) in Ada_Is | Ada_With;
+   --  Extract documentation from the upper intermediate section: after
+   --  Token_Start ('is' or 'with') and before any other declarations.
+
    procedure Fill_Code_Snippet
      (Node          : Ada_Node'Class;
       Documentation : in out Structured_Comment'Class);
@@ -646,22 +656,8 @@ package body GNATdoc.Comments.Extractor is
 
       --  Upper intermediate section: after 'is' and before any declarations.
 
-      Intermediate_Upper_Section :=
-        new Section'
-          (Kind             => Raw,
-           Symbol           => "<<INTERMEDIATE UPPER>>",
-           Name             => <>,
-           Text             => <>,
-           others           => <>);
-      Documentation.Sections.Append (Intermediate_Upper_Section);
-
       declare
-         Token     : Token_Reference := Base_Package_Decl_Node.Token_Start;
-         Found     : Boolean := False;
-         Separated : Boolean := False;
-         --  Whether comment block is separated from the list with 'is'
-         --  keyword by empty line. In this case comment block can belong
-         --  to the entity declaration below.
+         Token : Token_Reference := Base_Package_Decl_Node.Token_Start;
 
       begin
          --  Lookup 'is' in the package declaration
@@ -673,46 +669,12 @@ package body GNATdoc.Comments.Extractor is
               Token = No_Token or else Kind (Data (Token)) = Ada_Is;
          end loop;
 
-         loop
-            Token := Next (Token);
-
-            exit when Token = No_Token;
-
-            case Kind (Data (Token)) is
-               when Ada_Comment =>
-                  Found := True;
-                  Append_Documentation_Line
-                    (Intermediate_Upper_Section.Text,
-                     Text (Token),
-                     Options.Pattern);
-
-               when Ada_Whitespace =>
-                  declare
-                     Location : constant Source_Location_Range :=
-                       Sloc_Range (Data (Token));
-
-                  begin
-                     if Location.End_Line - Location.Start_Line > 1 then
-                        exit when Found;
-
-                        Found     := True;
-                        Separated := True;
-                     end if;
-                  end;
-
-               when others =>
-                  if Separated then
-                     --  Comment block is separated from the line with 'is'
-                     --  keyword by an empty line, but not separated from the
-                     --  entity declaration below, thus don't include it into
-                     --  package documentation.
-
-                     Intermediate_Upper_Section.Text.Clear;
-                  end if;
-
-                  exit;
-            end case;
-         end loop;
+         Extract_Upper_Intermediate_Section
+           (Token,
+            Base_Package_Decl_Node.Token_End,
+            Options,
+            Documentation,
+            Intermediate_Upper_Section);
       end;
 
       --  Lower intermediate section: after 'is' and before any declarations.
@@ -721,7 +683,7 @@ package body GNATdoc.Comments.Extractor is
          Intermediate_Lower_Section :=
            new Section'
              (Kind             => Raw,
-              Symbol           => "<<INTERMEDIATE LOWER>>",
+              Symbol           => "<<INTERMEDIATE UPPER>>",
               Name             => <>,
               Text             => <>,
               others           => <>);
@@ -1244,7 +1206,7 @@ package body GNATdoc.Comments.Extractor is
 
       Leading_Section            : Section_Access;
       Trailing_Section           : Section_Access;
-      Intermediate_Lower_Section : Section_Access;
+      Intermediate_Upper_Section : Section_Access;
 
    begin
       Extract_General_Leading_Documentation
@@ -1262,18 +1224,6 @@ package body GNATdoc.Comments.Extractor is
       else
          --  Overwise, documentation may be provided inside task definition
          --  before the first entry.
-
-         --  Lower intermediate section: after 'is'/'with' and before any
-         --  declarations.
-
-         Intermediate_Lower_Section :=
-           new Section'
-             (Kind             => Raw,
-              Symbol           => "<<INTERMEDIATE LOWER>>",
-              Name             => <>,
-              Text             => <>,
-              others           => <>);
-         Documentation.Sections.Append (Intermediate_Lower_Section);
 
          --  Lookup for 'is' token that begins task definition, or 'with'
          --  token that ends interface part.
@@ -1301,62 +1251,12 @@ package body GNATdoc.Comments.Extractor is
             end loop;
          end if;
 
-         declare
-            Token     : Token_Reference := Is_Or_With_Token;
-            Found     : Boolean := False;
-            Separated : Boolean := False;
-            --  Comments block starts after an empty line. it means that
-            --  documentation can be leading documentation for the first
-            --  entry.
-
-         begin
-            loop
-               Token := Next (Token);
-
-               exit when Token = No_Token or else Token = Definition.Token_End;
-
-               case Kind (Data (Token)) is
-                  when Ada_Comment =>
-                     Found := True;
-                     Append_Documentation_Line
-                       (Intermediate_Lower_Section.Text,
-                        Text (Token),
-                        Options.Pattern);
-
-                  when Ada_Whitespace =>
-                     declare
-                        Location : constant Source_Location_Range :=
-                          Sloc_Range (Data (Token));
-
-                     begin
-                        if Location.End_Line - Location.Start_Line > 1 then
-                           exit when Found;
-
-                           Found     := True;
-                           Separated := True;
-                        end if;
-                     end;
-
-                  when Ada_End | Ada_Pragma =>
-                     exit;
-
-                  when Ada_Entry =>
-                     if Separated then
-                        --  Comments block is separated from the start of the
-                        --  task declaration by the empty line, but not from
-                        --  the entry declaration, thus, it belongs to the
-                        --  entry declaration. Clear accumilated text.
-
-                        Intermediate_Lower_Section.Text.Clear;
-                     end if;
-
-                     exit;
-
-                  when others =>
-                     raise Program_Error;
-               end case;
-            end loop;
-         end;
+         Extract_Upper_Intermediate_Section
+           (Is_Or_With_Token,
+            Definition.Token_End,
+            Options,
+            Documentation,
+            Intermediate_Upper_Section);
       end if;
 
       Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
@@ -1375,10 +1275,10 @@ package body GNATdoc.Comments.Extractor is
 
             Raw_Section := Trailing_Section;
 
-         elsif Intermediate_Lower_Section /= null
-           and then not Intermediate_Lower_Section.Text.Is_Empty
+         elsif Intermediate_Upper_Section /= null
+           and then not Intermediate_Upper_Section.Text.Is_Empty
          then
-            Raw_Section := Intermediate_Lower_Section;
+            Raw_Section := Intermediate_Upper_Section;
 
          elsif not Leading_Section.Text.Is_Empty then
             Raw_Section := Leading_Section;
@@ -1651,6 +1551,74 @@ package body GNATdoc.Comments.Extractor is
             Documentation);
       end;
    end Extract_Subprogram_Documentation;
+
+   ----------------------------------------
+   -- Extract_Upper_Intermediate_Section --
+   ----------------------------------------
+
+   procedure Extract_Upper_Intermediate_Section
+     (Token_Start   : Token_Reference;
+      Token_End     : Token_Reference;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : in out Structured_Comment'Class;
+      Section       : out Section_Access)
+   is
+      Token     : Token_Reference := Token_Start;
+      Found     : Boolean := False;
+      Separated : Boolean := False;
+      --  Whether comment block is separated from the list with 'is' keyword
+      --  by empty line. In this case comment block can belong to the entity
+      --  declaration below.
+
+   begin
+      Section :=
+        new GNATdoc.Comments.Section'
+          (Kind             => Raw,
+           Symbol           => "<<INTERMEDIATE UPPER>>",
+           Name             => <>,
+           Text             => <>,
+           others           => <>);
+      Documentation.Sections.Append (Section);
+
+      loop
+         Token := Next (Token);
+
+         exit when Token = No_Token or else Token = Token_End;
+
+         case Kind (Data (Token)) is
+            when Ada_Comment =>
+               Found := True;
+               Append_Documentation_Line
+                 (Section.Text, Text (Token), Options.Pattern);
+
+            when Ada_Whitespace =>
+               declare
+                  Location : constant Source_Location_Range :=
+                    Sloc_Range (Data (Token));
+
+               begin
+                  if Location.End_Line - Location.Start_Line > 1 then
+                     exit when Found;
+
+                     Found     := True;
+                     Separated := True;
+                  end if;
+               end;
+
+            when others =>
+               if Separated then
+                  --  Comment block is separated from the line with 'is'
+                  --  keyword by an empty line, but not separated from the
+                  --  entity declaration below, thus don't include it into
+                  --  package documentation.
+
+                  Section.Text.Clear;
+               end if;
+
+               exit;
+         end case;
+      end loop;
+   end Extract_Upper_Intermediate_Section;
 
    -----------------------
    -- Fill_Code_Snippet --
