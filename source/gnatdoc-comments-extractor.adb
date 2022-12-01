@@ -142,6 +142,13 @@ package body GNATdoc.Comments.Extractor is
       Documentation : in out Structured_Comment'Class);
    --  Extract documentation for single task declaration.
 
+   procedure Extract_Protected_Decl_Documentation
+     (Node          : Libadalang.Analysis.Basic_Decl'Class;
+      Definition    : Libadalang.Analysis.Protected_Def'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : in out Structured_Comment'Class);
+   --  Extract documentation for protected type declaration.
+
    procedure Fill_Structured_Comment
      (Decl_Node       : Basic_Decl'Class;
       Advanced_Groups : Boolean;
@@ -452,6 +459,20 @@ package body GNATdoc.Comments.Extractor is
             Extract_Single_Task_Decl_Documentation
               (Node.As_Task_Type_Decl,
                Node.As_Task_Type_Decl,
+               Options,
+               Documentation);
+
+         when Ada_Single_Protected_Decl =>
+            Extract_Protected_Decl_Documentation
+              (Node.As_Single_Protected_Decl,
+               Node.As_Single_Protected_Decl.F_Definition,
+               Options,
+               Documentation);
+
+         when Ada_Protected_Type_Decl =>
+            Extract_Protected_Decl_Documentation
+              (Node.As_Protected_Type_Decl,
+               Node.As_Protected_Type_Decl.F_Definition,
                Options,
                Documentation);
 
@@ -1025,6 +1046,79 @@ package body GNATdoc.Comments.Extractor is
          end loop;
       end;
    end Extract_Leading_Section;
+
+   ------------------------------------------
+   -- Extract_Protected_Decl_Documentation --
+   ------------------------------------------
+
+   procedure Extract_Protected_Decl_Documentation
+     (Node          : Libadalang.Analysis.Basic_Decl'Class;
+      Definition    : Libadalang.Analysis.Protected_Def'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : in out Structured_Comment'Class)
+   is
+      Is_Or_With_Token           : Token_Reference;
+      Leading_Section            : Section_Access;
+      Intermediate_Upper_Section : Section_Access;
+
+   begin
+      Extract_Leading_Section
+        (Node.Token_Start, Options, True, Documentation, Leading_Section);
+
+      --  Lookup for 'is' token that begins protected definition, or 'with'
+      --  token that ends interface part.
+
+      Is_Or_With_Token := Definition.Token_Start;
+
+      loop
+         Is_Or_With_Token := Previous (Is_Or_With_Token);
+
+         exit when Is_Or_With_Token = No_Token;
+
+         case Kind (Data (Is_Or_With_Token)) is
+            when Ada_Whitespace | Ada_Comment =>
+               null;
+
+            when Ada_Is | Ada_With =>
+               exit;
+
+            when others =>
+               raise Program_Error;
+         end case;
+      end loop;
+
+      Extract_Upper_Intermediate_Section
+        (Is_Or_With_Token,
+         Definition.Token_End,
+         Options,
+         Documentation,
+         Intermediate_Upper_Section);
+
+      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+
+      declare
+         Raw_Section : Section_Access;
+
+      begin
+         --  Select most appropriate section.
+
+         if Intermediate_Upper_Section /= null
+           and then not Intermediate_Upper_Section.Text.Is_Empty
+         then
+            Raw_Section := Intermediate_Upper_Section;
+
+         elsif not Leading_Section.Text.Is_Empty then
+            Raw_Section := Leading_Section;
+         end if;
+
+         Parse_Raw_Section
+           (Raw_Section,
+            (Private_Tag => True,
+             Member_Tag  => True,
+             others      => False),
+            Documentation);
+      end;
+   end Extract_Protected_Decl_Documentation;
 
    ---------------------------------------
    -- Extract_Record_Type_Documentation --

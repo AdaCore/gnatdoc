@@ -71,6 +71,7 @@ package GNATdoc.Entities is
       Interface_Types        : aliased Entity_Information_Sets.Set;
       Tagged_Types           : aliased Entity_Information_Sets.Set;
       Task_Types             : aliased Entity_Information_Sets.Set;
+      Protected_Types        : aliased Entity_Information_Sets.Set;
       Access_Types           : aliased Entity_Information_Sets.Set;
       Subtypes               : aliased Entity_Information_Sets.Set;
       Constants              : aliased Entity_Information_Sets.Set;
@@ -93,9 +94,9 @@ package GNATdoc.Entities is
       --  --  Generic subprograms instantiations.
       --  Tagged_Types      : EInfo_List.Vector;  +++
       --  Variables         : EInfo_List.Vector;  +++
-      --  Tasks             : EInfo_List.Vector;
-      --  Protected_Objects : EInfo_List.Vector;
-      --  Entries           : EInfo_List.Vector;
+      --  Tasks             : EInfo_List.Vector;  +++
+      --  Protected_Objects : EInfo_List.Vector;  +++
+      --  Entries           : EInfo_List.Vector;  +++
 
    end record;
 

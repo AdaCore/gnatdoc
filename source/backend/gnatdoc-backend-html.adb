@@ -169,6 +169,12 @@ package body GNATdoc.Backend.HTML is
               Entity_Information_Set_Proxy'
                 (Index_Entities => Self.Entity.Task_Types'Unchecked_Access);
 
+         elsif Name = "protected_types" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities =>
+                   Self.Entity.Protected_Types'Unchecked_Access);
+
          elsif Name = "constants" then
             return
               Entity_Information_Set_Proxy'
@@ -337,6 +343,12 @@ package body GNATdoc.Backend.HTML is
       end loop;
 
       for Item of Globals.Task_Types loop
+         if not Is_Private_Entity (Item) then
+            Non_Index_Entities.Insert (Item);
+         end if;
+      end loop;
+
+      for Item of Globals.Protected_Types loop
          if not Is_Private_Entity (Item) then
             Non_Index_Entities.Insert (Item);
          end if;
