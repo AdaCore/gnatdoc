@@ -151,7 +151,9 @@ procedure Test_Extractor is
 
             return Over;
 
-         when Ada_Single_Task_Decl | Ada_Task_Type_Decl =>
+         when Ada_Single_Task_Decl | Ada_Task_Type_Decl
+            | Ada_Single_Protected_Decl | Ada_Protected_Type_Decl
+         =>
             Extract_And_Dump;
 
             return Into;
