@@ -65,7 +65,7 @@ T_Entryless_Empty_Trailing.
 \/ RAW <<LEADING>> ()  0 0 0 0
 This is leading section of the description of the task
 T_Entryless_Leading.
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 This is leading section of the description of the task
 T_Entryless_Leading.
@@ -82,7 +82,7 @@ T_Entryless_Leading.
 <SingleTaskDecl ["T_Entryless_Intermediate"] tasks.ads:24:4-27:33>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 This is intermediate section of the description of the task
 T_Entryless_Intermediate.
 \/ DESCRIPTION  ()  0 0 0 0
@@ -103,7 +103,7 @@ T_Entryless_Intermediate.
 \/ RAW <<LEADING>> ()  0 0 0 0
 This is leading section of the description of the task
 T_Entryless_Inherited_Leading
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 This is leading section of the description of the task
 T_Entryless_Inherited_Leading
@@ -121,7 +121,7 @@ T_Entryless_Inherited_Leading
 <SingleTaskDecl ["T_Entryless_Inherited_Intermediate"] tasks.ads:34:4-37:43>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 This is intermediate section of the description of the task
 T_Entryless_Inherited_Intermediate.
 \/ DESCRIPTION  ()  0 0 0 0
@@ -141,7 +141,7 @@ T_Entryless_Inherited_Intermediate.
 <SingleTaskDecl ["T_1"] tasks.ads:39:4-42:12>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <SingleTaskTypeDecl ["T_1"] tasks.ads:39:9-42:11>
@@ -168,7 +168,7 @@ Trailing comment for the entry
 <SingleTaskDecl ["T_2"] tasks.ads:44:4-47:12>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 Leading comment for the entry
 \/ DESCRIPTION  ()  0 0 0 0
 Leading comment for the entry
@@ -196,7 +196,7 @@ entry E
 <SingleTaskDecl ["T_3"] tasks.ads:49:4-52:12>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <SingleTaskTypeDecl ["T_3"] tasks.ads:49:9-52:11>
@@ -237,7 +237,7 @@ TT_Entryless_Empty_Trailing.
 \/ RAW <<LEADING>> ()  0 0 0 0
 This is leading section of the description of the task
 TT_Entryless_Leading.
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 This is leading section of the description of the task
 TT_Entryless_Leading.
@@ -253,7 +253,7 @@ TT_Entryless_Leading.
 <TaskTypeDecl ["TT_Entryless_Intermediate"] tasks.ads:63:4-66:34>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 This is intermediate section of the description of the task
 TT_Entryless_Intermediate.
 \/ DESCRIPTION  ()  0 0 0 0
@@ -273,7 +273,7 @@ TT_Entryless_Intermediate.
 \/ RAW <<LEADING>> ()  0 0 0 0
 This is leading section of the description of the task
 TT_Entryless_Inherited_Leading
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 This is leading section of the description of the task
 TT_Entryless_Inherited_Leading
@@ -290,7 +290,7 @@ TT_Entryless_Inherited_Leading
 <TaskTypeDecl ["TT_Entryless_Inherited_Intermediate"] tasks.ads:73:4-76:44>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 This is intermediate section of the description of the task
 TT_Entryless_Inherited_Intermediate.
 \/ DESCRIPTION  ()  0 0 0 0
@@ -309,7 +309,7 @@ TT_Entryless_Inherited_Intermediate.
 <TaskTypeDecl ["TT_1"] tasks.ads:78:4-81:13>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <DefiningName tasks.ads:78:14-78:18>
@@ -335,7 +335,7 @@ Trailing comment for the entry
 <TaskTypeDecl ["TT_2"] tasks.ads:83:4-86:13>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 Leading comment for the entry
 \/ DESCRIPTION  ()  0 0 0 0
 Leading comment for the entry
@@ -362,7 +362,7 @@ entry E
 <TaskTypeDecl ["TT_3"] tasks.ads:88:4-91:13>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <DefiningName tasks.ads:88:14-88:18>
