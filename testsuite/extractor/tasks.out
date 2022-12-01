@@ -21,17 +21,21 @@ it works and cover entries specific cases.
 <PublicPart tasks.ads:7:17-93:1>
 <AdaNodeList tasks.ads:9:4-91:13>
 <ConcreteTypeDecl ["IE"] tasks.ads:9:4-9:38>
-<DefiningName tasks.ads:9:9-9:11>
-<Id "IE" tasks.ads:9:9-9:11>
-<InterfaceTypeDef tasks.ads:9:15-9:37>
-<InterfaceKindSynchronized tasks.ads:9:15-9:27>
-<ParentList tasks.ads:9:27-9:27>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type IE is synchronized interface;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
 <ConcreteTypeDecl ["IP"] tasks.ads:11:4-11:38>
-<DefiningName tasks.ads:11:9-11:11>
-<Id "IP" tasks.ads:11:9-11:11>
-<InterfaceTypeDef tasks.ads:11:15-11:37>
-<InterfaceKindSynchronized tasks.ads:11:15-11:27>
-<ParentList tasks.ads:11:27-11:27>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type IP is synchronized interface;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
 <AbstractSubpDecl ["Process"] tasks.ads:13:4-13:61>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  14 0 0 0
