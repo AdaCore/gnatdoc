@@ -656,8 +656,12 @@ package body GNATdoc.Comments.Extractor is
       Documentation.Sections.Append (Intermediate_Upper_Section);
 
       declare
-         Token : Token_Reference := Base_Package_Decl_Node.Token_Start;
-         Found : Boolean := False;
+         Token     : Token_Reference := Base_Package_Decl_Node.Token_Start;
+         Found     : Boolean := False;
+         Separated : Boolean := False;
+         --  Whether comment block is separated from the list with 'is'
+         --  keyword by empty line. In this case comment block can belong
+         --  to the entity declaration below.
 
       begin
          --  Lookup 'is' in the package declaration
@@ -691,11 +695,21 @@ package body GNATdoc.Comments.Extractor is
                      if Location.End_Line - Location.Start_Line > 1 then
                         exit when Found;
 
-                        Found := True;
+                        Found     := True;
+                        Separated := True;
                      end if;
                   end;
 
                when others =>
+                  if Separated then
+                     --  Comment block is separated from the line with 'is'
+                     --  keyword by an empty line, but not separated from the
+                     --  entity declaration below, thus don't include it into
+                     --  package documentation.
+
+                     Intermediate_Upper_Section.Text.Clear;
+                  end if;
+
                   exit;
             end case;
          end loop;
