@@ -125,6 +125,14 @@ package body GNATdoc.Frontend is
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
      with Pre => Node.Kind in Ada_Single_Task_Decl | Ada_Task_Type_Decl;
 
+   procedure Process_Protected_Decl
+     (Node       : Basic_Decl'Class;
+      Name       : Defining_Name'Class;
+      Definition : Protected_Def'Class;
+      Enclosing  : not null GNATdoc.Entities.Entity_Information_Access)
+     with
+       Pre => Node.Kind in Ada_Single_Protected_Decl | Ada_Protected_Type_Decl;
+
    procedure Process_Entry_Decl
      (Node      : Entry_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -411,16 +419,26 @@ package body GNATdoc.Frontend is
 
                return Over;
 
-            when Ada_Entry_Decl =>
-               Process_Entry_Decl (Node.As_Entry_Decl, Enclosing);
+            when Ada_Single_Protected_Decl =>
+               Process_Protected_Decl
+                 (Node.As_Single_Protected_Decl,
+                  Node.As_Single_Protected_Decl.F_Name,
+                  Node.As_Single_Protected_Decl.F_Definition,
+                  Enclosing);
 
                return Over;
 
-            when Ada_Single_Protected_Decl
-               | Ada_Protected_Type_Decl
-               | Ada_Protected_Body
-            =>
-               Ada.Text_IO.Put_Line (Image (Node));
+            when Ada_Protected_Type_Decl =>
+               Process_Protected_Decl
+                 (Node.As_Protected_Type_Decl,
+                  Node.As_Protected_Type_Decl.F_Name,
+                  Node.As_Protected_Type_Decl.F_Definition,
+                  Enclosing);
+
+               return Over;
+
+            when Ada_Entry_Decl =>
+               Process_Entry_Decl (Node.As_Entry_Decl, Enclosing);
 
                return Over;
 
@@ -930,6 +948,44 @@ package body GNATdoc.Frontend is
       end if;
    end Process_Private_Type_Def;
 
+   ----------------------------
+   -- Process_Protected_Decl --
+   ----------------------------
+
+   procedure Process_Protected_Decl
+     (Node       : Basic_Decl'Class;
+      Name       : Defining_Name'Class;
+      Definition : Protected_Def'Class;
+      Enclosing  : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Name.F_Name.Text),
+           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
+           Signature      => Signature (Name),
+           Enclosing      =>
+             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
+           Is_Private     =>
+             (Node.Parent.Kind = Ada_Library_Item
+                and then Node.Parent.As_Library_Item.F_Has_Private),
+           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Protected_Types.Insert (Entity);
+      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+
+      if GNATdoc.Entities.Globals'Access /= Enclosing then
+         GNATdoc.Entities.Globals.Protected_Types.Insert (Entity);
+      end if;
+
+      Process_Children (Definition.F_Public_Part, Entity);
+
+      if GNATdoc.Options.Frontend_Options.Generate_Private then
+         Process_Children (Definition.F_Private_Part, Entity);
+      end if;
+   end Process_Protected_Decl;
+
    -----------------------------
    -- Process_Record_Type_Def --
    -----------------------------
@@ -1066,8 +1122,9 @@ package body GNATdoc.Frontend is
                | Ada_Subtype_Decl
                | Ada_Exception_Decl
                | Ada_Single_Task_Type_Decl | Ada_Task_Type_Decl
+               | Ada_Single_Protected_Decl | Ada_Protected_Type_Decl
                | Ada_Entry_Decl
-               =>
+            =>
                null;
 
             when others =>

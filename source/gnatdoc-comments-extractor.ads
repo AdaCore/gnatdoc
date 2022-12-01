@@ -42,6 +42,8 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Object_Decl
                       | Ada_Package_Decl
                       | Ada_Package_Renaming_Decl
+                      | Ada_Protected_Type_Decl
+                      | Ada_Single_Protected_Decl
                       | Ada_Single_Task_Decl
                       | Ada_Subp_Body
                       | Ada_Subp_Decl
@@ -79,6 +81,8 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Object_Decl
                       | Ada_Package_Decl
                       | Ada_Package_Renaming_Decl
+                      | Ada_Protected_Type_Decl
+                      | Ada_Single_Protected_Decl
                       | Ada_Single_Task_Decl
                       | Ada_Subp_Body
                       | Ada_Subp_Decl
@@ -116,6 +120,8 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Object_Decl
                       | Ada_Package_Decl
                       | Ada_Package_Renaming_Decl
+                      | Ada_Protected_Type_Decl
+                      | Ada_Single_Protected_Decl
                       | Ada_Single_Task_Decl
                       | Ada_Subp_Body
                       | Ada_Subp_Decl
