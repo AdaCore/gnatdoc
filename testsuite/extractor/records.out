@@ -16,7 +16,6 @@
 <PrivateAbsent records.ads:4:23-4:23>
 <PackageDecl ["Records"] records.ads:6:1-103:13>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
 \/ RAW <<HEADER>> ()  0 0 0 0
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
