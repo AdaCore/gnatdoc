@@ -15,17 +15,74 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.Strings;             use VSS.Strings;
-with VSS.Strings.Conversions; use VSS.Strings.Conversions;
+with VSS.Strings;                use VSS.Strings;
+with VSS.Strings.Conversions;    use VSS.Strings.Conversions;
 
-with Langkit_Support.Slocs;   use Langkit_Support.Slocs;
-with Langkit_Support.Text;    use Langkit_Support.Text;
-with Libadalang.Analysis;     use Libadalang.Analysis;
-with Libadalang.Common;       use Libadalang.Common;
+with Langkit_Support.Slocs;      use Langkit_Support.Slocs;
+with Langkit_Support.Text;       use Langkit_Support.Text;
+with Libadalang.Analysis;        use Libadalang.Analysis;
+with Libadalang.Common;          use Libadalang.Common;
+
+with GNATdoc.Comments.Utilities; use GNATdoc.Comments.Utilities;
 
 package body GNATdoc.Comments.Builders is
 
    use all type GNATdoc.Comments.Options.Documentation_Style;
+
+   -----------------------------
+   -- Fill_Structured_Comment --
+   -----------------------------
+
+   procedure Fill_Structured_Comment
+     (Self    : in out Abstract_Components_Builder'Class;
+      Node    : Basic_Decl'Class;
+      Pattern : VSS.Regular_Expressions.Regular_Expression)
+   is
+      Node_Location : constant Source_Location_Range := Node.Sloc_Range;
+      Location      : Source_Location_Range;
+
+   begin
+      --  Extract comments inside the declaration and fill text of raw,
+      --  parameters, returns, and literals sections.
+
+      declare
+         Token : Token_Reference := Node.Token_Start;
+
+      begin
+         while Token /= No_Token and Token /= Node.Token_End loop
+            Location := Sloc_Range (Data (Token));
+
+            if Kind (Data (Token)) = Ada_Comment then
+               for Section of Self.Documentation.Sections loop
+                  if Section.Kind
+                       in Raw | Enumeration_Literal | Field
+                            | Parameter | Returns | Formal
+                    and then
+                      (Location.Start_Line
+                         in Section.Exact_Start_Line
+                              .. Section.Exact_End_Line
+                       or Location.Start_Line
+                            in Section.Group_Start_Line
+                                 .. Section.Group_End_Line)
+
+                  then
+                     if Self.Advanced_Groups
+                       and Location.Start_Line = Section.Group_Start_Line
+                       and not Section.Text.Is_Empty
+                     then
+                        Section.Text.Append (Empty_Virtual_String);
+                     end if;
+
+                     Append_Documentation_Line
+                       (Section.Text, Text (Token), Pattern);
+                  end if;
+               end loop;
+            end if;
+
+            Token := Next (Token);
+         end loop;
+      end;
+   end Fill_Structured_Comment;
 
    ----------------
    -- Initialize --

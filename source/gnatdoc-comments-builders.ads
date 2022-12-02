@@ -16,10 +16,14 @@
 ------------------------------------------------------------------------------
 
 --  This packages provides base tagged type to construct set of sections of
---  structured comment.
+--  structured comment and to fill them by documentation extracted from inside
+--  of the declaration. Builders doesn't process documentation above and below
+--  declaration.
 
 private with Langkit_Support.Slocs;
 private with Libadalang.Analysis;
+
+private with VSS.Regular_Expressions;
 
 private with GNATdoc.Comments.Options;
 
@@ -84,5 +88,17 @@ private
    --  tracking of the group. It must be used then some syntactic elements
    --  breaks group, for instance, t shpuld be called after processing of the
    --  discriminants of the record type, and before processing of the fields.
+
+   procedure Fill_Structured_Comment
+     (Self    : in out Abstract_Components_Builder'Class;
+      Node    : Libadalang.Analysis.Basic_Decl'Class;
+      Pattern : VSS.Regular_Expressions.Regular_Expression);
+   --  Extract comments' text from the given declaration and fill sections
+   --  of the provided structured comment. Also, creates raw sections for
+   --  the leading and trailing comments and extract them into these sections.
+   --
+   --  @param Decl_Node     Whole declaration.
+   --  @param Pattern       Regular expression to detect documentation lines.
+   --  @param Documentation Structured comment to fill.
 
 end GNATdoc.Comments.Builders;
