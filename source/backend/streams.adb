@@ -15,8 +15,6 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with Ada.Streams;
-
 with VSS.Stream_Element_Vectors.Conversions;
 
 package body Streams is
@@ -51,12 +49,15 @@ package body Streams is
       Item    : VSS.Characters.Virtual_Character;
       Success : in out Boolean)
    is
+      pragma Unreferenced (Success);
+
       Data : constant String :=
         VSS.Stream_Element_Vectors.Conversions.Unchecked_To_String
           (Self.Encoder.Encode (Item));
 
    begin
       GNATCOLL.VFS.Write (Self.Writable, Data);
+      --  Note, any errors are reported at the time of file close only.
    end Put;
 
 end Streams;

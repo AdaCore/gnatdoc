@@ -30,7 +30,6 @@ with VSS.Strings.Conversions;
 with VSS.String_Vectors;
 with VSS.XML.Templates.Processors;
 with VSS.XML.Templates.Proxies.Strings;
-with VSS.XML.Templates.Values;
 with VSS.XML.XmlAda_Readers;
 
 with GNATdoc.Comments.Helpers;
@@ -43,7 +42,6 @@ package body GNATdoc.Backend.HTML is
 
    use GNAT.SHA256;
    use GNATCOLL.VFS;
-   use GNATdoc.Comments.Helpers;
    use GNATdoc.Entities;
    use VSS.Strings.Conversions;
 
@@ -91,11 +89,7 @@ package body GNATdoc.Backend.HTML is
 
    package body Proxies is
 
-      use type VSS.String_Vectors.Virtual_String_Vector;
       use type VSS.Strings.Virtual_String;
-
-      type Entity_Information_Set_Proxy_Access is
-        access all Entity_Information_Set_Proxy;
 
       type TOC_Iterator is
         limited new VSS.XML.Templates.Proxies.Abstract_Proxy
@@ -417,11 +411,8 @@ package body GNATdoc.Backend.HTML is
      (Self   : in out HTML_Backend'Class;
       Entity : not null Entity_Information_Access)
    is
-      Name       : constant String :=
+      Name : constant String :=
         Digest (To_UTF_8_String (Entity.Signature)) & ".html";
-      File       : Writable_File :=
-        Create (Filesystem_String (Name)).Write_File;
-      All_Nested : Entity_Information_Sets.Set;
 
    begin
       declare

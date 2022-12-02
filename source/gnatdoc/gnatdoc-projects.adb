@@ -23,11 +23,9 @@ with Libadalang.Common;
 with Libadalang.Iterators;
 with Libadalang.GPR2_Provider;
 
-with GPR2.Context;
 with GPR2.Path_Name;
 with GPR2.Project.Attribute;
 with GPR2.Project.Attribute_Index;
-with GPR2.Project.Source.Set;
 with GPR2.Project.Tree;
 with GPR2.Project.Registry.Attribute;
 with GPR2.Project.Registry.Pack;
@@ -283,7 +281,7 @@ package body GNATdoc.Projects is
             for Source of View.Sources loop
                if Source.Is_Ada then
                   declare
-                     Unit     : Libadalang.Analysis.Analysis_Unit :=
+                     Unit     : constant Libadalang.Analysis.Analysis_Unit :=
                        LAL_Context.Get_From_File
                          (String (Source.Path_Name.Name));
                      Iterator : Libadalang.Iterators.Traverse_Iterator'Class :=

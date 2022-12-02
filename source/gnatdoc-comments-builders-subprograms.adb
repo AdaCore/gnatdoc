@@ -15,8 +15,6 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with Libadalang.Common;
-
 package body GNATdoc.Comments.Builders.Subprograms is
 
    use Libadalang.Analysis;
