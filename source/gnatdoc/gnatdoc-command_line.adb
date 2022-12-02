@@ -176,7 +176,7 @@ package body GNATdoc.Command_Line is
 
    function Output_Directory return GNATCOLL.VFS.Virtual_File is
    begin
-      return GNATCOLL.VFS.No_File;
+      return Output_Dir_Argument;
    end Output_Directory;
 
    ---------------------
