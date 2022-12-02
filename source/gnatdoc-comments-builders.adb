@@ -38,8 +38,7 @@ package body GNATdoc.Comments.Builders is
       Node    : Basic_Decl'Class;
       Pattern : VSS.Regular_Expressions.Regular_Expression)
    is
-      Node_Location : constant Source_Location_Range := Node.Sloc_Range;
-      Location      : Source_Location_Range;
+      Location : Source_Location_Range;
 
    begin
       --  Extract comments inside the declaration and fill text of raw,

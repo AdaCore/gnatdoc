@@ -17,7 +17,6 @@
 
 with VSS.Regular_Expressions;         use VSS.Regular_Expressions;
 with VSS.Strings;                     use VSS.Strings;
-with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
 
 package body GNATdoc.Comments.Utilities is
 
