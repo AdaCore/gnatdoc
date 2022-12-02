@@ -15,6 +15,9 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+--  Structured comment builder for enumeration types. It creates sections for
+--  enumeration literals and fill them.
+
 with Libadalang.Analysis;
 
 package GNATdoc.Comments.Builders.Enumerations is
@@ -23,13 +26,13 @@ package GNATdoc.Comments.Builders.Enumerations is
      new Abstract_Components_Builder with private;
 
    procedure Build
-     (Self            : in out Enumeration_Components_Builder;
-      Documentation   : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options         : GNATdoc.Comments.Options.Extractor_Options;
-      Node            : Libadalang.Analysis.Enum_Type_Def'Class;
-      Advanced_Groups : out Boolean;
-      Last_Section    : out GNATdoc.Comments.Section_Access;
-      Minimum_Indent  : out Langkit_Support.Slocs.Column_Number);
+     (Self           : in out Enumeration_Components_Builder;
+      Documentation  : not null GNATdoc.Comments.Structured_Comment_Access;
+      Options        : GNATdoc.Comments.Options.Extractor_Options;
+      Node           : Libadalang.Analysis.Type_Decl'Class;
+      Def_Node       : Libadalang.Analysis.Enum_Type_Def'Class;
+      Last_Section   : out GNATdoc.Comments.Section_Access;
+      Minimum_Indent : out Langkit_Support.Slocs.Column_Number);
 
 private
 

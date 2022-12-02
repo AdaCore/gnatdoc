@@ -33,6 +33,7 @@ with GNATdoc.Comments.Builders.Enumerations;
 with GNATdoc.Comments.Builders.Generics;
 with GNATdoc.Comments.Builders.Records;
 with GNATdoc.Comments.Builders.Subprograms;
+with GNATdoc.Comments.Utilities;      use GNATdoc.Comments.Utilities;
 
 package body GNATdoc.Comments.Extractor is
 
@@ -149,22 +150,6 @@ package body GNATdoc.Comments.Extractor is
       Documentation : in out Structured_Comment'Class);
    --  Extract documentation for protected type declaration.
 
-   procedure Fill_Structured_Comment
-     (Decl_Node       : Basic_Decl'Class;
-      Advanced_Groups : Boolean;
-      Pattern         : VSS.Regular_Expressions.Regular_Expression;
-      Documentation   : in out Structured_Comment'Class);
-   --  Extract comments' text from the given declaration and fill sections
-   --  of the provided structured comment. Also, creates raw sections for
-   --  the leading and trailing comments and extract them into these sections.
-   --
-   --  @param Decl_Node           Whole declaration.
-   --  @param Advanced_Groups
-   --    Advanced processing of the groups: empty line is added at the and
-   --    of the section's text when it is not empty and processing of the
-   --    group comment is started.
-   --  @param Documentation       Structured comment to fill.
-
    procedure Extract_General_Trailing_Documentation
      (Decl_Node        : Basic_Decl'Class;
       Pattern          : VSS.Regular_Expressions.Regular_Expression;
@@ -258,44 +243,12 @@ package body GNATdoc.Comments.Extractor is
    --  @param Item Character to be classified
    --  @return Whether given character is Ada's separator or not
 
-   procedure Append_Documentation_Line
-     (Text    : in out VSS.String_Vectors.Virtual_String_Vector;
-      Line    : Langkit_Support.Text.Text_Type;
-      Pattern : VSS.Regular_Expressions.Regular_Expression);
-   --  Append given Line to the Text when Pattern is valid and Line match to
-   --  Pattern. Always append Line when Pattern is invalid.
-
    procedure Prepend_Documentation_Line
      (Text    : in out VSS.String_Vectors.Virtual_String_Vector;
       Line    : Langkit_Support.Text.Text_Type;
       Pattern : VSS.Regular_Expressions.Regular_Expression);
    --  Prepend given Line to the Text when Pattern is valid and Line match to
    --  Pattern. Always prepend Line when Pattern is invalid.
-
-   -------------------------------
-   -- Append_Documentation_Line --
-   -------------------------------
-
-   procedure Append_Documentation_Line
-     (Text    : in out VSS.String_Vectors.Virtual_String_Vector;
-      Line    : Langkit_Support.Text.Text_Type;
-      Pattern : VSS.Regular_Expressions.Regular_Expression)
-   is
-      L : constant Virtual_String := To_Virtual_String (Line);
-      M : Regular_Expression_Match;
-
-   begin
-      if Pattern.Is_Valid then
-         M := Pattern.Match (L);
-
-         if M.Has_Match then
-            Text.Append (L);
-         end if;
-
-      else
-         Text.Append (L);
-      end if;
-   end Append_Documentation_Line;
 
    -------------
    -- Extract --
@@ -750,7 +703,6 @@ package body GNATdoc.Comments.Extractor is
    is
       Enum_Node         : constant Enum_Type_Def'Class :=
         Node.F_Type_Def.As_Enum_Type_Def;
-      Advanced_Groups   : Boolean;
       Last_Section      : Section_Access;
       Minimum_Indent    : Column_Number;
       Leading_Section   : Section_Access;
@@ -762,16 +714,10 @@ package body GNATdoc.Comments.Extractor is
       Component_Builder.Build
         (Documentation'Unchecked_Access,
          Options,
+         Node,
          Enum_Node,
-         Advanced_Groups,
          Last_Section,
          Minimum_Indent);
-
-      Fill_Structured_Comment
-        (Decl_Node       => Node,
-         Advanced_Groups => Advanced_Groups,
-         Pattern         => Options.Pattern,
-         Documentation   => Documentation);
 
       Extract_General_Leading_Trailing_Documentation
         (Decl_Node        => Node,
@@ -958,16 +904,9 @@ package body GNATdoc.Comments.Extractor is
       Component_Builder.Build
         (Documentation'Unchecked_Access,
          Options,
+         Node,
          Node.F_Formal_Part,
          Node.F_Package_Decl);
-
-      Fill_Structured_Comment
-        (Decl_Node       => Node,
-         Advanced_Groups => False,
-         Pattern         => Options.Pattern,
-         Documentation   => Documentation);
-
-      --  Fill_Code_Snippet (Node, Documentation);
 
       Extract_Base_Package_Decl_Documentation
         (Node, Node.F_Package_Decl, Options, Documentation);
@@ -1129,7 +1068,6 @@ package body GNATdoc.Comments.Extractor is
       Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class)
    is
-      Advanced_Groups   : Boolean;
       Last_Section      : Section_Access;
       Minimum_Indent    : Column_Number;
       Leading_Section   : Section_Access;
@@ -1142,15 +1080,8 @@ package body GNATdoc.Comments.Extractor is
         (Documentation'Unchecked_Access,
          Options,
          Node,
-         Advanced_Groups,
          Last_Section,
          Minimum_Indent);
-
-      Fill_Structured_Comment
-        (Decl_Node       => Node,
-         Advanced_Groups => Advanced_Groups,
-         Pattern         => Options.Pattern,
-         Documentation   => Documentation);
 
       Extract_General_Leading_Trailing_Documentation
         (Decl_Node        => Node,
@@ -1214,12 +1145,6 @@ package body GNATdoc.Comments.Extractor is
       Trailing_Section  : Section_Access;
 
    begin
-      Fill_Structured_Comment
-        (Decl_Node       => Node,
-         Advanced_Groups => False,
-         Pattern         => Options.Pattern,
-         Documentation   => Documentation);
-
       Extract_General_Leading_Trailing_Documentation
         (Decl_Node        => Node,
          Options          => Options,
@@ -1489,7 +1414,6 @@ package body GNATdoc.Comments.Extractor is
       Intermediate_Upper_Section : Section_Access;
       Intermediate_Lower_Section : Section_Access;
       Trailing_Section           : Section_Access;
-      Advanced_Groups            : Boolean;
       Last_Section               : Section_Access;
       Minimum_Indent             : Column_Number;
       Components_Builder         :
@@ -1535,22 +1459,13 @@ package body GNATdoc.Comments.Extractor is
       Components_Builder.Build
         (Documentation'Unchecked_Access,
          Options,
+         Decl_Node,
          Spec_Node,
          Name_Node,
          Params_Node,
          Returns_Node,
-         Advanced_Groups,
          Last_Section,
          Minimum_Indent);
-
-      --  Parse comments inside the subprogram declaration and fill
-      --  text of raw, parameters and returns sections.
-
-      Fill_Structured_Comment
-        (Decl_Node       => Decl_Node,
-         Pattern         => Options.Pattern,
-         Advanced_Groups => Advanced_Groups,
-         Documentation   => Documentation);
 
       Extract_General_Leading_Trailing_Documentation
         (Decl_Node        => Decl_Node,
@@ -1886,63 +1801,6 @@ package body GNATdoc.Comments.Extractor is
           (Kind => Snippet, Symbol => "ada", Text => Text, others => <>);
       Documentation.Sections.Append (Snippet_Section);
    end Fill_Code_Snippet;
-
-   -----------------------------
-   -- Fill_Structured_Comment --
-   -----------------------------
-
-   procedure Fill_Structured_Comment
-     (Decl_Node       : Basic_Decl'Class;
-      Advanced_Groups : Boolean;
-      Pattern         : VSS.Regular_Expressions.Regular_Expression;
-      Documentation   : in out Structured_Comment'Class)
-   is
-      Node_Location : constant Source_Location_Range :=
-        Decl_Node.Sloc_Range;
-      Location      : Source_Location_Range;
-
-   begin
-      --  Extract comments inside the declaration and fill text of raw,
-      --  parameters, returns, and literals sections.
-
-      declare
-         Token : Token_Reference := Decl_Node.Token_Start;
-
-      begin
-         while Token /= No_Token and Token /= Decl_Node.Token_End loop
-            Location := Sloc_Range (Data (Token));
-
-            if Kind (Data (Token)) = Ada_Comment then
-               for Section of Documentation.Sections loop
-                  if Section.Kind
-                       in Raw | Enumeration_Literal | Field
-                            | Parameter | Returns | Formal
-                    and then
-                      (Location.Start_Line
-                         in Section.Exact_Start_Line
-                              .. Section.Exact_End_Line
-                       or Location.Start_Line
-                            in Section.Group_Start_Line
-                                 .. Section.Group_End_Line)
-
-                  then
-                     if Advanced_Groups
-                       and Location.Start_Line = Section.Group_Start_Line
-                       and not Section.Text.Is_Empty
-                     then
-                        Section.Text.Append (Empty_Virtual_String);
-                     end if;
-
-                     Append_Documentation_Line
-                       (Section.Text, Text (Token), Pattern);
-                  end if;
-               end loop;
-            end if;
-
-            Token := Next (Token);
-         end loop;
-      end;
-   end Fill_Structured_Comment;
 
    ----------------------
    -- Is_Ada_Separator --

@@ -27,16 +27,16 @@ package body GNATdoc.Comments.Builders.Subprograms is
    -----------
 
    procedure Build
-     (Self            : in out Subprogram_Components_Builder;
-      Documentation   : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options         : GNATdoc.Comments.Options.Extractor_Options;
-      Spec_Node       : Libadalang.Analysis.Base_Subp_Spec'Class;
-      Name_Node       : Libadalang.Analysis.Defining_Name'Class;
-      Params_Node     : Libadalang.Analysis.Params'Class;
-      Returns_Node    : Libadalang.Analysis.Type_Expr'Class;
-      Advanced_Groups : out Boolean;
-      Last_Section    : out GNATdoc.Comments.Section_Access;
-      Minimum_Indent  : out Langkit_Support.Slocs.Column_Number)
+     (Self           : in out Subprogram_Components_Builder;
+      Documentation  : not null GNATdoc.Comments.Structured_Comment_Access;
+      Options        : GNATdoc.Comments.Options.Extractor_Options;
+      Node           : Libadalang.Analysis.Basic_Decl'Class;
+      Spec_Node      : Libadalang.Analysis.Base_Subp_Spec'Class;
+      Name_Node      : Libadalang.Analysis.Defining_Name'Class;
+      Params_Node    : Libadalang.Analysis.Params'Class;
+      Returns_Node   : Libadalang.Analysis.Type_Expr'Class;
+      Last_Section   : out GNATdoc.Comments.Section_Access;
+      Minimum_Indent : out Langkit_Support.Slocs.Column_Number)
    is
       use all type GNATdoc.Comments.Options.Documentation_Style;
       use type Langkit_Support.Slocs.Line_Number;
@@ -128,7 +128,8 @@ package body GNATdoc.Comments.Builders.Subprograms is
          end;
       end if;
 
-      Advanced_Groups := Self.Advanced_Groups;
+      Self.Fill_Structured_Comment (Node, Options.Pattern);
+
       Last_Section    := Self.Last_Section;
       Minimum_Indent  := Self.Minimum_Indent;
    end Build;

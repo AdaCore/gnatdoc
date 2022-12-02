@@ -29,13 +29,12 @@ package body GNATdoc.Comments.Builders.Records is
    -----------
 
    procedure Build
-     (Self            : in out Record_Components_Builder;
-      Documentation   : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options         : GNATdoc.Comments.Options.Extractor_Options;
-      Node            : Libadalang.Analysis.Type_Decl'Class;
-      Advanced_Groups : out Boolean;
-      Last_Section    : out GNATdoc.Comments.Section_Access;
-      Minimum_Indent  : out Langkit_Support.Slocs.Column_Number)
+     (Self           : in out Record_Components_Builder;
+      Documentation  : not null GNATdoc.Comments.Structured_Comment_Access;
+      Options        : GNATdoc.Comments.Options.Extractor_Options;
+      Node           : Libadalang.Analysis.Type_Decl'Class;
+      Last_Section   : out GNATdoc.Comments.Section_Access;
+      Minimum_Indent : out Langkit_Support.Slocs.Column_Number)
    is
       function Process (Node : Ada_Node'Class) return Visit_Status;
 
@@ -114,7 +113,8 @@ package body GNATdoc.Comments.Builders.Records is
       Components.Traverse (Process'Access);
       Self.Restart_Component_Group (Node.Sloc_Range.End_Line);
 
-      Advanced_Groups := Self.Advanced_Groups;
+      Self.Fill_Structured_Comment (Node, Options.Pattern);
+
       Last_Section    := Self.Last_Section;
       Minimum_Indent  := Self.Minimum_Indent;
    end Build;
