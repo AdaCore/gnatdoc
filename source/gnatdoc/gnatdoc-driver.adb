@@ -23,11 +23,11 @@ with GNATdoc.Frontend;
 with GNATdoc.Projects;
 
 procedure GNATdoc.Driver is
-   CL_Provider : aliased
-     GNATdoc.Configuration.Command_Line.Command_Line_Configuration_Provider;
    PF_Provider : aliased
-     GNATdoc.Configuration.Project.Project_Configuration_Provider
-       (CL_Provider'Unchecked_Access);
+     GNATdoc.Configuration.Project.Project_Configuration_Provider;
+   CL_Provider : aliased
+     GNATdoc.Configuration.Command_Line.Command_Line_Configuration_Provider
+       (PF_Provider'Unchecked_Access);
 
    Backend : GNATdoc.Backend.HTML.HTML_Backend;
 
@@ -35,7 +35,7 @@ begin
    GNATdoc.Command_Line.Initialize;
    GNATdoc.Projects.Initialize;
 
-   GNATdoc.Configuration.Provider := PF_Provider'Unchecked_Access;
+   GNATdoc.Configuration.Provider := CL_Provider'Unchecked_Access;
 
    Backend.Initialize;
    GNATdoc.Projects.Process_Compilation_Units
