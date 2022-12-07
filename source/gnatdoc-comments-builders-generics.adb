@@ -32,6 +32,7 @@ package body GNATdoc.Comments.Builders.Generics is
      (Self             : in out Generic_Components_Builder;
       Documentation    : not null GNATdoc.Comments.Structured_Comment_Access;
       Options          : GNATdoc.Comments.Options.Extractor_Options;
+      Node             : Libadalang.Analysis.Generic_Package_Decl'Class;
       Formal_Part_Node : Libadalang.Analysis.Generic_Formal_Part'Class;
       Basic_Decl_Node  : Libadalang.Analysis.Basic_Decl'Class) is
    begin
@@ -71,6 +72,8 @@ package body GNATdoc.Comments.Builders.Generics is
       end loop;
 
       Self.Restart_Component_Group (Basic_Decl_Node.Sloc_Range.Start_Line);
+
+      Self.Fill_Structured_Comment (Node, Options.Pattern);
    end Build;
 
 end GNATdoc.Comments.Builders.Generics;

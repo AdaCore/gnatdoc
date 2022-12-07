@@ -30,7 +30,6 @@ with VSS.Strings.Conversions;
 with VSS.String_Vectors;
 with VSS.XML.Templates.Processors;
 with VSS.XML.Templates.Proxies.Strings;
-with VSS.XML.Templates.Values;
 with VSS.XML.XmlAda_Readers;
 
 with GNATdoc.Comments.Helpers;
@@ -43,7 +42,6 @@ package body GNATdoc.Backend.HTML is
 
    use GNAT.SHA256;
    use GNATCOLL.VFS;
-   use GNATdoc.Comments.Helpers;
    use GNATdoc.Entities;
    use VSS.Strings.Conversions;
 
@@ -91,11 +89,7 @@ package body GNATdoc.Backend.HTML is
 
    package body Proxies is
 
-      use type VSS.String_Vectors.Virtual_String_Vector;
       use type VSS.Strings.Virtual_String;
-
-      type Entity_Information_Set_Proxy_Access is
-        access all Entity_Information_Set_Proxy;
 
       type TOC_Iterator is
         limited new VSS.XML.Templates.Proxies.Abstract_Proxy
@@ -164,6 +158,17 @@ package body GNATdoc.Backend.HTML is
               Entity_Information_Set_Proxy'
                 (Index_Entities => Self.Entity.Subtypes'Unchecked_Access);
 
+         elsif Name = "task_types" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Task_Types'Unchecked_Access);
+
+         elsif Name = "protected_types" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities =>
+                   Self.Entity.Protected_Types'Unchecked_Access);
+
          elsif Name = "constants" then
             return
               Entity_Information_Set_Proxy'
@@ -178,6 +183,11 @@ package body GNATdoc.Backend.HTML is
             return
               Entity_Information_Set_Proxy'
                 (Index_Entities => Self.Entity.Subprograms'Unchecked_Access);
+
+         elsif Name = "entries" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Entries'Unchecked_Access);
 
          elsif Name = "exceptions" then
             return
@@ -304,7 +314,8 @@ package body GNATdoc.Backend.HTML is
    --------------
 
    overriding procedure Generate (Self : in out HTML_Backend) is
-      Index_Entities : aliased Entity_Information_Sets.Set;
+      Index_Entities     : aliased Entity_Information_Sets.Set;
+      Non_Index_Entities : aliased Entity_Information_Sets.Set;
 
    begin
       for Item of Globals.Packages loop
@@ -322,6 +333,18 @@ package body GNATdoc.Backend.HTML is
       for Item of Globals.Package_Renamings loop
          if not Is_Private_Entity (Item) then
             Index_Entities.Insert (Item);
+         end if;
+      end loop;
+
+      for Item of Globals.Task_Types loop
+         if not Is_Private_Entity (Item) then
+            Non_Index_Entities.Insert (Item);
+         end if;
+      end loop;
+
+      for Item of Globals.Protected_Types loop
+         if not Is_Private_Entity (Item) then
+            Non_Index_Entities.Insert (Item);
          end if;
       end loop;
 
@@ -374,6 +397,10 @@ package body GNATdoc.Backend.HTML is
       for Item of Index_Entities loop
          Self.Generate_Entity_Documentation_Page (Item);
       end loop;
+
+      for Item of Non_Index_Entities loop
+         Self.Generate_Entity_Documentation_Page (Item);
+      end loop;
    end Generate;
 
    ----------------------------------------
@@ -384,11 +411,8 @@ package body GNATdoc.Backend.HTML is
      (Self   : in out HTML_Backend'Class;
       Entity : not null Entity_Information_Access)
    is
-      Name       : constant String :=
+      Name : constant String :=
         Digest (To_UTF_8_String (Entity.Signature)) & ".html";
-      File       : Writable_File :=
-        Create (Filesystem_String (Name)).Write_File;
-      All_Nested : Entity_Information_Sets.Set;
 
    begin
       declare
@@ -412,6 +436,7 @@ package body GNATdoc.Backend.HTML is
          Nested.Union (Entity.Constants);
          Nested.Union (Entity.Variables);
          Nested.Union (Entity.Subprograms);
+         Nested.Union (Entity.Entries);
          Nested.Union (Entity.Generic_Instantiations);
 
          --  Open input and output files.

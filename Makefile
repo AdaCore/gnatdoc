@@ -16,3 +16,5 @@ check_extractor:
 	(cd testsuite/extractor && ../../.objs/test_extractor pattern.json documentation_pattern.ads | diff -u --strip-trailing-cr documentation_pattern.out -)
 	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json exceptions.ads | diff -u --strip-trailing-cr exceptions.out -)
 	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json records.ads | diff -u --strip-trailing-cr records.out -)
+	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json tasks.ads | diff -u --strip-trailing-cr tasks.out -)
+	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json protecteds.ads | diff -u --strip-trailing-cr protecteds.out -)

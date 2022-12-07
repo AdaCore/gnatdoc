@@ -15,32 +15,34 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-package body GNATdoc.Comments.Builders.Enumerations is
+with VSS.Regular_Expressions;         use VSS.Regular_Expressions;
+with VSS.Strings;                     use VSS.Strings;
 
-   -----------
-   -- Build --
-   -----------
+package body GNATdoc.Comments.Utilities is
 
-   procedure Build
-     (Self           : in out Enumeration_Components_Builder;
-      Documentation  : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options        : GNATdoc.Comments.Options.Extractor_Options;
-      Node           : Libadalang.Analysis.Type_Decl'Class;
-      Def_Node       : Libadalang.Analysis.Enum_Type_Def'Class;
-      Last_Section   : out GNATdoc.Comments.Section_Access;
-      Minimum_Indent : out Langkit_Support.Slocs.Column_Number) is
+   -------------------------------
+   -- Append_Documentation_Line --
+   -------------------------------
+
+   procedure Append_Documentation_Line
+     (Text    : in out VSS.String_Vectors.Virtual_String_Vector;
+      Line    : Langkit_Support.Text.Text_Type;
+      Pattern : VSS.Regular_Expressions.Regular_Expression)
+   is
+      L : constant Virtual_String := To_Virtual_String (Line);
+      M : Regular_Expression_Match;
+
    begin
-      Self.Initialize (Documentation, Options, Def_Node);
+      if Pattern.Is_Valid then
+         M := Pattern.Match (L);
 
-      for Literal of Def_Node.F_Enum_Literals loop
-         Self.Process_Component_Declaration (Literal);
-         Self.Process_Defining_Name (Enumeration_Literal, Literal.F_Name);
-      end loop;
+         if M.Has_Match then
+            Text.Append (L);
+         end if;
 
-      Self.Fill_Structured_Comment (Node, Options.Pattern);
+      else
+         Text.Append (L);
+      end if;
+   end Append_Documentation_Line;
 
-      Last_Section    := Self.Last_Section;
-      Minimum_Indent  := Self.Minimum_Indent;
-   end Build;
-
-end GNATdoc.Comments.Builders.Enumerations;
+end GNATdoc.Comments.Utilities;

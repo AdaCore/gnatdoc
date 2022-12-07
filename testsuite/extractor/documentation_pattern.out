@@ -7,9 +7,8 @@
 \/ RAW <<LEADING>> ()  0 0 0 0
 This is description of the package.
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-This is description of the subprogram.
 \/ DESCRIPTION  ()  0 0 0 0
-This is description of the subprogram.
+This is description of the package.
 **************************
 <DefiningName documentation_pattern.ads:8:9-8:30>
 <Id "Documentation_Pattern" documentation_pattern.ads:8:9-8:30>

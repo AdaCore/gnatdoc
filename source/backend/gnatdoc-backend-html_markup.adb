@@ -16,7 +16,6 @@
 ------------------------------------------------------------------------------
 
 with VSS.XML.Events;
-with VSS.XML.Event_Vectors;
 with VSS.XML.Namespaces;
 
 with Markdown.Block_Containers;

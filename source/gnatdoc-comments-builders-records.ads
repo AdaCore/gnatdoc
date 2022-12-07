@@ -23,13 +23,12 @@ package GNATdoc.Comments.Builders.Records is
      new Abstract_Components_Builder with private;
 
    procedure Build
-     (Self            : in out Record_Components_Builder;
-      Documentation   : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options         : GNATdoc.Comments.Options.Extractor_Options;
-      Node            : Libadalang.Analysis.Type_Decl'Class;
-      Advanced_Groups : out Boolean;
-      Last_Section    : out GNATdoc.Comments.Section_Access;
-      Minimum_Indent  : out Langkit_Support.Slocs.Column_Number);
+     (Self           : in out Record_Components_Builder;
+      Documentation  : not null GNATdoc.Comments.Structured_Comment_Access;
+      Options        : GNATdoc.Comments.Options.Extractor_Options;
+      Node           : Libadalang.Analysis.Type_Decl'Class;
+      Last_Section   : out GNATdoc.Comments.Section_Access;
+      Minimum_Indent : out Langkit_Support.Slocs.Column_Number);
 
 private
 
