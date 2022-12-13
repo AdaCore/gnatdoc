@@ -16,7 +16,6 @@
 ------------------------------------------------------------------------------
 
 with "gpr2";
-with "gpr_unit_provider";
 with "libgnatdoc";
 with "markdown";
 with "vss_xml_xmlada";
