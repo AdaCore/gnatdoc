@@ -460,6 +460,12 @@ package body GNATdoc.Frontend is
 
                return Over;
 
+            when Ada_Component_Decl =>
+               --  Component declaration inside private part of the protected
+               --  object/type declaration is ignored here.
+
+               return Over;
+
             when others =>
                Ada.Text_IO.Put_Line (Image (Node) & " <<<<<");
 
