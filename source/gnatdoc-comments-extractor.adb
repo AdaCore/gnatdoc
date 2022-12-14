@@ -151,6 +151,12 @@ package body GNATdoc.Comments.Extractor is
       Documentation : in out Structured_Comment'Class);
    --  Extract documentation for protected type declaration.
 
+   procedure Extract_Protected_Body_Documentation
+     (Node          : Libadalang.Analysis.Protected_Body'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : in out Structured_Comment'Class);
+   --  Extract documentation for protected body.
+
    procedure Extract_General_Trailing_Documentation
      (Decl_Node        : Basic_Decl'Class;
       Pattern          : VSS.Regular_Expressions.Regular_Expression;
@@ -429,6 +435,10 @@ package body GNATdoc.Comments.Extractor is
                Node.As_Protected_Type_Decl.F_Definition,
                Options,
                Documentation);
+
+         when Ada_Protected_Body =>
+            Extract_Protected_Body_Documentation
+              (Node.As_Protected_Body, Options, Documentation);
 
          when Ada_Entry_Decl =>
             Extract_Subprogram_Documentation
@@ -986,6 +996,77 @@ package body GNATdoc.Comments.Extractor is
          end loop;
       end;
    end Extract_Leading_Section;
+
+   ------------------------------------------
+   -- Extract_Protected_Body_Documentation --
+   ------------------------------------------
+
+   procedure Extract_Protected_Body_Documentation
+     (Node          : Libadalang.Analysis.Protected_Body'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : in out Structured_Comment'Class)
+   is
+      Is_Token                   : Token_Reference :=
+        (if Node.F_Aspects.Is_Null
+           then Node.F_Name.Token_End else Node.F_Aspects.Token_End);
+      Leading_Section            : Section_Access;
+      Intermediate_Upper_Section : Section_Access;
+
+   begin
+      Extract_Leading_Section
+        (Node.Token_Start, Options, True, Documentation, Leading_Section);
+
+      --  Lookup for 'is' token that begins protected body.
+
+      loop
+         Is_Token := Next (Is_Token);
+
+         exit when Is_Token = No_Token;
+
+         case Kind (Data (Is_Token)) is
+            when Ada_Whitespace | Ada_Comment =>
+               null;
+
+            when Ada_Is =>
+               exit;
+
+            when others =>
+               raise Program_Error;
+         end case;
+      end loop;
+
+      Extract_Upper_Intermediate_Section
+        (Is_Token,
+         Node.Token_End,
+         Options,
+         Documentation,
+         Intermediate_Upper_Section);
+
+      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+
+      declare
+         Raw_Section : Section_Access;
+
+      begin
+         --  Select most appropriate section.
+
+         if Intermediate_Upper_Section /= null
+           and then not Intermediate_Upper_Section.Text.Is_Empty
+         then
+            Raw_Section := Intermediate_Upper_Section;
+
+         elsif not Leading_Section.Text.Is_Empty then
+            Raw_Section := Leading_Section;
+         end if;
+
+         Parse_Raw_Section
+           (Raw_Section,
+            (Private_Tag => True,
+             Member_Tag  => True,
+             others      => False),
+            Documentation);
+      end;
+   end Extract_Protected_Body_Documentation;
 
    ------------------------------------------
    -- Extract_Protected_Decl_Documentation --

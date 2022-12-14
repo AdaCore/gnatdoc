@@ -130,6 +130,10 @@ package body GNATdoc.Frontend is
      with
        Pre => Node.Kind in Ada_Single_Protected_Decl | Ada_Protected_Type_Decl;
 
+   procedure Process_Protected_Body
+     (Node      : Protected_Body'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Entry_Decl
      (Node      : Entry_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -436,6 +440,11 @@ package body GNATdoc.Frontend is
 
             when Ada_Entry_Decl =>
                Process_Entry_Decl (Node.As_Entry_Decl, Enclosing);
+
+               return Over;
+
+            when Ada_Protected_Body =>
+               Process_Protected_Body (Node.As_Protected_Body, Enclosing);
 
                return Over;
 
@@ -952,6 +961,37 @@ package body GNATdoc.Frontend is
    end Process_Private_Type_Def;
 
    ----------------------------
+   -- Process_Protected_Body --
+   ----------------------------
+
+   procedure Process_Protected_Body
+     (Node      : Protected_Body'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Name   : constant Defining_Name := Node.F_Name;
+      Entity : constant not null
+        GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Name.F_Name.Text),
+           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
+           Signature      => Signature (Name),
+           Enclosing      =>
+             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
+           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Protected_Types.Insert (Entity);
+      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+
+      if GNATdoc.Entities.Globals'Access /= Enclosing then
+         GNATdoc.Entities.Globals.Packages.Insert (Entity);
+      end if;
+
+      Process_Children (Node.F_Decls, Entity);
+   end Process_Protected_Body;
+
+   ----------------------------
    -- Process_Protected_Decl --
    ----------------------------
 
@@ -1107,7 +1147,7 @@ package body GNATdoc.Frontend is
       do
          case Name.P_Basic_Decl.Kind is
             when Ada_Package_Body | Ada_Subp_Body | Ada_Expr_Function
-               | Ada_Subp_Renaming_Decl
+               | Ada_Subp_Renaming_Decl | Ada_Protected_Body
             =>
                Result.Append ('$');
 
