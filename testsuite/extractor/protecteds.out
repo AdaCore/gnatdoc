@@ -1,8 +1,8 @@
-<CompilationUnit protecteds.ads:6:1-30:16>
+<CompilationUnit protecteds.ads:6:1-77:16>
 <AdaNodeList protecteds.ads:6:1-6:1>
-<LibraryItem protecteds.ads:6:1-30:16>
+<LibraryItem protecteds.ads:6:1-77:16>
 <PrivateAbsent protecteds.ads:6:1-6:1>
-<PackageDecl ["Protecteds"] protecteds.ads:6:1-30:16>
+<PackageDecl ["Protecteds"] protecteds.ads:6:1-77:16>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
 This package contains test cases of documentation extraction for protected
@@ -16,8 +16,8 @@ cases only (this code is tested by subprograms tests).
 **************************
 <DefiningName protecteds.ads:6:9-6:19>
 <Id "Protecteds" protecteds.ads:6:9-6:19>
-<PublicPart protecteds.ads:6:22-30:1>
-<AdaNodeList protecteds.ads:8:4-28:24>
+<PublicPart protecteds.ads:6:22-77:1>
+<AdaNodeList protecteds.ads:8:4-75:41>
 <ConcreteTypeDecl ["IE"] protecteds.ads:8:4-8:38>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
@@ -109,6 +109,200 @@ Intermediate description of the protected type PT_Intermediate.
 <DeclList protecteds.ads:26:37-26:37>
 <EndName protecteds.ads:28:8-28:23>
 <Id "PT_Intermediate" protecteds.ads:28:8-28:23>
-<EndName protecteds.ads:30:5-30:15>
-<Id "Protecteds" protecteds.ads:30:5-30:15>
-<PragmaNodeList protecteds.ads:30:16-30:16>
+<ProtectedTypeDecl ["PT_Discriminant_Component_Short"] protecteds.ads:30:4-35:40>
+**************************
+\/ FIELD discriminant (Discriminant)  31 31 32 32
+Short description of the discriminant
+\/ FIELD component (Component)  34 34 35 34
+Short description of the component
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<DefiningName protecteds.ads:30:19-30:50>
+<Id "PT_Discriminant_Component_Short" protecteds.ads:30:19-30:50>
+<KnownDiscriminantPart protecteds.ads:31:5-31:29>
+<DiscriminantSpecList protecteds.ads:31:6-31:28>
+<DiscriminantSpec ["Discriminant"] protecteds.ads:31:6-31:28>
+<DefiningNameList protecteds.ads:31:6-31:18>
+<DefiningName protecteds.ads:31:6-31:18>
+<Id "Discriminant" protecteds.ads:31:6-31:18>
+<SubtypeIndication protecteds.ads:31:21-31:28>
+<NotNullAbsent protecteds.ads:31:20-31:20>
+<Id "Integer" protecteds.ads:31:21-31:28>
+<ParentList protecteds.ads:31:29-31:29>
+<ProtectedDef protecteds.ads:33:4-35:39>
+<PublicPart protecteds.ads:32:6-33:4>
+<DeclList protecteds.ads:32:6-32:6>
+<PrivatePart protecteds.ads:33:11-35:4>
+<DeclList protecteds.ads:34:7-34:25>
+<ComponentDecl ["Component"] protecteds.ads:34:7-34:25>
+<DefiningNameList protecteds.ads:34:7-34:16>
+<DefiningName protecteds.ads:34:7-34:16>
+<Id "Component" protecteds.ads:34:7-34:16>
+<ComponentDef protecteds.ads:34:19-34:24>
+<AliasedAbsent protecteds.ads:34:18-34:18>
+<ConstantAbsent protecteds.ads:34:18-34:18>
+<SubtypeIndication protecteds.ads:34:19-34:24>
+<NotNullAbsent protecteds.ads:34:18-34:18>
+<Id "Float" protecteds.ads:34:19-34:24>
+<EndName protecteds.ads:35:8-35:39>
+<Id "PT_Discriminant_Component_Short" protecteds.ads:35:8-35:39>
+<ProtectedTypeDecl ["PT_Discriminant_Component_Longer"] protecteds.ads:37:4-44:41>
+**************************
+\/ FIELD discriminant (Discriminant)  38 38 39 40
+Longer description of the discriminant
+\/ FIELD component (Component)  42 42 43 43
+Longer description of the component
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<DefiningName protecteds.ads:37:19-37:51>
+<Id "PT_Discriminant_Component_Longer" protecteds.ads:37:19-37:51>
+<KnownDiscriminantPart protecteds.ads:38:5-38:29>
+<DiscriminantSpecList protecteds.ads:38:6-38:28>
+<DiscriminantSpec ["Discriminant"] protecteds.ads:38:6-38:28>
+<DefiningNameList protecteds.ads:38:6-38:18>
+<DefiningName protecteds.ads:38:6-38:18>
+<Id "Discriminant" protecteds.ads:38:6-38:18>
+<SubtypeIndication protecteds.ads:38:21-38:28>
+<NotNullAbsent protecteds.ads:38:20-38:20>
+<Id "Integer" protecteds.ads:38:21-38:28>
+<ParentList protecteds.ads:38:29-38:29>
+<ProtectedDef protecteds.ads:41:4-44:40>
+<PublicPart protecteds.ads:40:6-41:4>
+<DeclList protecteds.ads:40:6-40:6>
+<PrivatePart protecteds.ads:41:11-44:4>
+<DeclList protecteds.ads:42:7-42:25>
+<ComponentDecl ["Component"] protecteds.ads:42:7-42:25>
+<DefiningNameList protecteds.ads:42:7-42:16>
+<DefiningName protecteds.ads:42:7-42:16>
+<Id "Component" protecteds.ads:42:7-42:16>
+<ComponentDef protecteds.ads:42:19-42:24>
+<AliasedAbsent protecteds.ads:42:18-42:18>
+<ConstantAbsent protecteds.ads:42:18-42:18>
+<SubtypeIndication protecteds.ads:42:19-42:24>
+<NotNullAbsent protecteds.ads:42:18-42:18>
+<Id "Float" protecteds.ads:42:19-42:24>
+<EndName protecteds.ads:44:8-44:40>
+<Id "PT_Discriminant_Component_Longer" protecteds.ads:44:8-44:40>
+<ProtectedTypeDecl ["PT_Discriminant_Longer"] protecteds.ads:46:4-50:31>
+**************************
+\/ FIELD discriminant (Discriminant)  47 47 48 49
+Longer description of the discriminant
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<DefiningName protecteds.ads:46:19-46:41>
+<Id "PT_Discriminant_Longer" protecteds.ads:46:19-46:41>
+<KnownDiscriminantPart protecteds.ads:47:5-47:29>
+<DiscriminantSpecList protecteds.ads:47:6-47:28>
+<DiscriminantSpec ["Discriminant"] protecteds.ads:47:6-47:28>
+<DefiningNameList protecteds.ads:47:6-47:18>
+<DefiningName protecteds.ads:47:6-47:18>
+<Id "Discriminant" protecteds.ads:47:6-47:18>
+<SubtypeIndication protecteds.ads:47:21-47:28>
+<NotNullAbsent protecteds.ads:47:20-47:20>
+<Id "Integer" protecteds.ads:47:21-47:28>
+<ParentList protecteds.ads:47:29-47:29>
+<ProtectedDef protecteds.ads:50:4-50:30>
+<PublicPart protecteds.ads:49:6-50:4>
+<DeclList protecteds.ads:49:6-49:6>
+<EndName protecteds.ads:50:8-50:30>
+<Id "PT_Discriminant_Longer" protecteds.ads:50:8-50:30>
+<SingleProtectedDecl ["P_Private_Components_Subprograms"] protecteds.ads:52:4-75:41>
+**************************
+\/ FIELD x (X)  57 57 58 59
+Description of the component X
+\/ FIELD y (Y)  63 63 64 65
+Description of the component Y
+\/ FIELD z (Z)  69 69 70 71
+Description of the component Z
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+Protected type declaration with mix of components/subprograms in private part.
+\/ DESCRIPTION  ()  0 0 0 0
+Protected type declaration with mix of components/subprograms in private part.
+**************************
+<DefiningName protecteds.ads:52:14-52:46>
+<Id "P_Private_Components_Subprograms" protecteds.ads:52:14-52:46>
+<ParentList protecteds.ads:52:46-52:46>
+<ProtectedDef protecteds.ads:55:4-75:40>
+<PublicPart protecteds.ads:52:49-55:4>
+<DeclList protecteds.ads:52:49-52:49>
+<PrivatePart protecteds.ads:55:11-75:4>
+<DeclList protecteds.ads:57:7-72:15>
+<ComponentDecl ["X"] protecteds.ads:57:7-57:19>
+<DefiningNameList protecteds.ads:57:7-57:8>
+<DefiningName protecteds.ads:57:7-57:8>
+<Id "X" protecteds.ads:57:7-57:8>
+<ComponentDef protecteds.ads:57:11-57:18>
+<AliasedAbsent protecteds.ads:57:10-57:10>
+<ConstantAbsent protecteds.ads:57:10-57:10>
+<SubtypeIndication protecteds.ads:57:11-57:18>
+<NotNullAbsent protecteds.ads:57:10-57:10>
+<Id "Integer" protecteds.ads:57:11-57:18>
+<SubpDecl ["P"] protecteds.ads:60:7-60:19>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  60 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the procedure P
+\/ SNIPPET ada ()  0 0 0 0
+procedure P
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the procedure P
+**************************
+<ComponentDecl ["Y"] protecteds.ads:63:7-63:19>
+<DefiningNameList protecteds.ads:63:7-63:8>
+<DefiningName protecteds.ads:63:7-63:8>
+<Id "Y" protecteds.ads:63:7-63:8>
+<ComponentDef protecteds.ads:63:11-63:18>
+<AliasedAbsent protecteds.ads:63:10-63:10>
+<ConstantAbsent protecteds.ads:63:10-63:10>
+<SubtypeIndication protecteds.ads:63:11-63:18>
+<NotNullAbsent protecteds.ads:63:10-63:10>
+<Id "Integer" protecteds.ads:63:11-63:18>
+<SubpDecl ["F"] protecteds.ads:66:7-66:33>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  67 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RETURNS  ()  66 66 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the function F
+\/ SNIPPET ada ()  0 0 0 0
+function F return Integer
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the function F
+**************************
+<ComponentDecl ["Z"] protecteds.ads:69:7-69:19>
+<DefiningNameList protecteds.ads:69:7-69:8>
+<DefiningName protecteds.ads:69:7-69:8>
+<Id "Z" protecteds.ads:69:7-69:8>
+<ComponentDef protecteds.ads:69:11-69:18>
+<AliasedAbsent protecteds.ads:69:10-69:10>
+<ConstantAbsent protecteds.ads:69:10-69:10>
+<SubtypeIndication protecteds.ads:69:11-69:18>
+<NotNullAbsent protecteds.ads:69:10-69:10>
+<Id "Integer" protecteds.ads:69:11-69:18>
+<EntryDecl ["E"] protecteds.ads:72:7-72:15>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  72 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the entry E
+\/ SNIPPET ada ()  0 0 0 0
+entry E
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the entry E
+**************************
+<EndName protecteds.ads:75:8-75:40>
+<Id "P_Private_Components_Subprograms" protecteds.ads:75:8-75:40>
+<EndName protecteds.ads:77:5-77:15>
+<Id "Protecteds" protecteds.ads:77:5-77:15>
+<PragmaNodeList protecteds.ads:77:16-77:16>

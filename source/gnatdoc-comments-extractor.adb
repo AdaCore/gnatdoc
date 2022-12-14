@@ -31,6 +31,7 @@ with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Builders.Enumerations;
 with GNATdoc.Comments.Builders.Generics;
+with GNATdoc.Comments.Builders.Protecteds;
 with GNATdoc.Comments.Builders.Records;
 with GNATdoc.Comments.Builders.Subprograms;
 with GNATdoc.Comments.Utilities;      use GNATdoc.Comments.Utilities;
@@ -999,8 +1000,13 @@ package body GNATdoc.Comments.Extractor is
       Is_Or_With_Token           : Token_Reference;
       Leading_Section            : Section_Access;
       Intermediate_Upper_Section : Section_Access;
+      Component_Builder          :
+        GNATdoc.Comments.Builders.Protecteds.Protected_Components_Builder;
 
    begin
+      Component_Builder.Build
+        (Documentation'Unchecked_Access, Options, Node);
+
       Extract_Leading_Section
         (Node.Token_Start, Options, True, Documentation, Leading_Section);
 
