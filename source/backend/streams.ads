@@ -17,9 +17,8 @@
 
 with GNATCOLL.VFS;
 
-private with VSS.Characters;
-private with VSS.Strings.Converters.Encoders;
 with VSS.Text_Streams;
+private with VSS.Text_Streams.File_Output;
 
 package Streams is
 
@@ -35,14 +34,7 @@ package Streams is
 private
 
    type Output_Text_Stream is
-     limited new VSS.Text_Streams.Output_Text_Stream with record
-      Encoder  : VSS.Strings.Converters.Encoders.Virtual_String_Encoder;
-      Writable : GNATCOLL.VFS.Writable_File;
-   end record;
-
-   overriding procedure Put
-     (Self    : in out Output_Text_Stream;
-      Item    : VSS.Characters.Virtual_Character;
-      Success : in out Boolean);
+     limited new VSS.Text_Streams.File_Output.File_Output_Text_Stream with
+       null record;
 
 end Streams;
