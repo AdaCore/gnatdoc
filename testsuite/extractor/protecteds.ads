@@ -27,4 +27,51 @@ package Protecteds is
       --  Intermediate description of the protected type PT_Intermediate.
    end PT_Intermediate;
 
+   protected type PT_Discriminant_Component_Short
+    (Discriminant : Integer)  --  Short description of the discriminant
+   is
+   private
+      Component : Float;  --  Short description of the component
+   end PT_Discriminant_Component_Short;
+
+   protected type PT_Discriminant_Component_Longer
+    (Discriminant : Integer)
+     --  Longer description of the discriminant
+   is
+   private
+      Component : Float;
+      --  Longer description of the component
+   end PT_Discriminant_Component_Longer;
+
+   protected type PT_Discriminant_Longer
+    (Discriminant : Integer)
+     --  Longer description of the discriminant
+   is
+   end PT_Discriminant_Longer;
+
+   protected P_Private_Components_Subprograms is
+      --  Protected type declaration with mix of components/subprograms in private part.
+
+   private
+
+      X : Integer;
+      --  Description of the component X
+
+      procedure P;
+      --  Description of the procedure P
+
+      Y : Integer;
+      --  Description of the component Y
+
+      function F return Integer;
+      --  Description of the function F
+
+      Z : Integer;
+      --  Description of the component Z
+
+      entry E;
+      --  Description of the entry E
+
+   end P_Private_Components_Subprograms;
+
 end Protecteds;
