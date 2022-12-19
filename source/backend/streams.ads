@@ -19,6 +19,7 @@ with GNATCOLL.VFS;
 
 private with VSS.Characters;
 private with VSS.Strings.Converters.Encoders;
+private with VSS.Strings;
 with VSS.Text_Streams;
 
 package Streams is
@@ -44,5 +45,12 @@ private
      (Self    : in out Output_Text_Stream;
       Item    : VSS.Characters.Virtual_Character;
       Success : in out Boolean);
+
+   overriding function Has_Error
+     (Self : File_UTF8_Output_Stream) return Boolean is (False);
+
+   overriding function Error_Message
+     (Self : File_UTF8_Output_Stream) return VSS.Strings.Virtual_String
+   is (VSS.Strings.Empty_Virtual_String);
 
 end Streams;
