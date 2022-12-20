@@ -47,10 +47,10 @@ private
       Success : in out Boolean);
 
    overriding function Has_Error
-     (Self : File_UTF8_Output_Stream) return Boolean is (False);
+     (Self : Output_Text_Stream) return Boolean is (False);
 
    overriding function Error_Message
-     (Self : File_UTF8_Output_Stream) return VSS.Strings.Virtual_String
+     (Self : Output_Test_Stream) return VSS.Strings.Virtual_String
    is (VSS.Strings.Empty_Virtual_String);
 
 end Streams;
