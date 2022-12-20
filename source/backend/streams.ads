@@ -50,7 +50,7 @@ private
      (Self : Output_Text_Stream) return Boolean is (False);
 
    overriding function Error_Message
-     (Self : Output_Test_Stream) return VSS.Strings.Virtual_String
+     (Self : Output_Text_Stream) return VSS.Strings.Virtual_String
    is (VSS.Strings.Empty_Virtual_String);
 
 end Streams;
