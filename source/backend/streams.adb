@@ -15,7 +15,7 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.Stream_Element_Vectors.Conversions;
+with VSS.Strings.Conversions;
 
 package body Streams is
 
@@ -25,7 +25,8 @@ package body Streams is
 
    procedure Close (Self : in out Output_Text_Stream'Class) is
    begin
-      GNATCOLL.VFS.Close (Self.Writable);
+      VSS.Text_Streams.File_Output.File_Output_Text_Stream
+        (Self).Close;
    end Close;
 
    ----------
@@ -36,28 +37,9 @@ package body Streams is
      (Self : in out Output_Text_Stream'Class;
       File : GNATCOLL.VFS.Virtual_File) is
    begin
-      Self.Encoder.Initialize ("utf-8");
-      Self.Writable := File.Write_File;
+      Self.Create
+        (VSS.Strings.Conversions.To_Virtual_String (File.Display_Full_Name),
+         "utf-8");
    end Open;
-
-   ---------
-   -- Put --
-   ---------
-
-   overriding procedure Put
-     (Self    : in out Output_Text_Stream;
-      Item    : VSS.Characters.Virtual_Character;
-      Success : in out Boolean)
-   is
-      pragma Unreferenced (Success);
-
-      Data : constant String :=
-        VSS.Stream_Element_Vectors.Conversions.Unchecked_To_String
-          (Self.Encoder.Encode (Item));
-
-   begin
-      GNATCOLL.VFS.Write (Self.Writable, Data);
-      --  Note, any errors are reported at the time of file close only.
-   end Put;
 
 end Streams;

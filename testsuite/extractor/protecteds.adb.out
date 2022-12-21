@@ -1,0 +1,156 @@
+<CompilationUnit protecteds.adb:6:1-56:16>
+<AdaNodeList protecteds.adb:6:1-6:1>
+<LibraryItem protecteds.adb:6:1-56:16>
+<PrivateAbsent protecteds.adb:6:1-6:1>
+<PackageBody ["Protecteds"] protecteds.adb:6:1-56:16>
+<DefiningName protecteds.adb:6:14-6:24>
+<Id "Protecteds" protecteds.adb:6:14-6:24>
+<DeclarativePart protecteds.adb:6:27-56:1>
+<AdaNodeList protecteds.adb:15:4-54:41>
+<ProtectedBody ["P_Leading"] protecteds.adb:15:4-16:18>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+Leading description of the protected body P_Leading.
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+Leading description of the protected body P_Leading.
+**************************
+<DefiningName protecteds.adb:15:19-15:28>
+<Id "P_Leading" protecteds.adb:15:19-15:28>
+<DeclarativePart protecteds.adb:15:31-16:4>
+<AdaNodeList protecteds.adb:15:31-15:31>
+<EndName protecteds.adb:16:8-16:17>
+<Id "P_Leading" protecteds.adb:16:8-16:17>
+<ProtectedBody ["P_Intermediate"] protecteds.adb:18:4-20:23>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+Intermediate description of the protected body P_Intermediate.
+\/ DESCRIPTION  ()  0 0 0 0
+Intermediate description of the protected body P_Intermediate.
+**************************
+<DefiningName protecteds.adb:18:19-18:33>
+<Id "P_Intermediate" protecteds.adb:18:19-18:33>
+<DeclarativePart protecteds.adb:18:36-20:4>
+<AdaNodeList protecteds.adb:18:36-18:36>
+<EndName protecteds.adb:20:8-20:22>
+<Id "P_Intermediate" protecteds.adb:20:8-20:22>
+<ProtectedBody ["PT_Leading"] protecteds.adb:23:4-24:19>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+Leading description of the protected type PT_Leading.
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+Leading description of the protected type PT_Leading.
+**************************
+<DefiningName protecteds.adb:23:19-23:29>
+<Id "PT_Leading" protecteds.adb:23:19-23:29>
+<DeclarativePart protecteds.adb:23:32-24:4>
+<AdaNodeList protecteds.adb:23:32-23:32>
+<EndName protecteds.adb:24:8-24:18>
+<Id "PT_Leading" protecteds.adb:24:8-24:18>
+<ProtectedBody ["PT_Intermediate"] protecteds.adb:26:4-28:24>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+Intermediate description of the protected type PT_Intermediate.
+\/ DESCRIPTION  ()  0 0 0 0
+Intermediate description of the protected type PT_Intermediate.
+**************************
+<DefiningName protecteds.adb:26:19-26:34>
+<Id "PT_Intermediate" protecteds.adb:26:19-26:34>
+<DeclarativePart protecteds.adb:26:37-28:4>
+<AdaNodeList protecteds.adb:26:37-26:37>
+<EndName protecteds.adb:28:8-28:23>
+<Id "PT_Intermediate" protecteds.adb:28:8-28:23>
+<ProtectedBody ["PT_Discriminant_Component_Short"] protecteds.adb:30:4-31:40>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<DefiningName protecteds.adb:30:19-30:50>
+<Id "PT_Discriminant_Component_Short" protecteds.adb:30:19-30:50>
+<DeclarativePart protecteds.adb:30:53-31:4>
+<AdaNodeList protecteds.adb:30:53-30:53>
+<EndName protecteds.adb:31:8-31:39>
+<Id "PT_Discriminant_Component_Short" protecteds.adb:31:8-31:39>
+<ProtectedBody ["PT_Discriminant_Component_Longer"] protecteds.adb:33:4-34:41>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<DefiningName protecteds.adb:33:19-33:51>
+<Id "PT_Discriminant_Component_Longer" protecteds.adb:33:19-33:51>
+<DeclarativePart protecteds.adb:33:54-34:4>
+<AdaNodeList protecteds.adb:33:54-33:54>
+<EndName protecteds.adb:34:8-34:40>
+<Id "PT_Discriminant_Component_Longer" protecteds.adb:34:8-34:40>
+<ProtectedBody ["PT_Discriminant_Longer"] protecteds.adb:36:4-37:31>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<DefiningName protecteds.adb:36:19-36:41>
+<Id "PT_Discriminant_Longer" protecteds.adb:36:19-36:41>
+<DeclarativePart protecteds.adb:36:44-37:4>
+<AdaNodeList protecteds.adb:36:44-36:44>
+<EndName protecteds.adb:37:8-37:30>
+<Id "PT_Discriminant_Longer" protecteds.adb:37:8-37:30>
+<ProtectedBody ["P_Private_Components_Subprograms"] protecteds.adb:39:4-54:41>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+Protected type declaration with mix of components/subprograms in private part.
+\/ DESCRIPTION  ()  0 0 0 0
+Protected type declaration with mix of components/subprograms in private part.
+**************************
+<DefiningName protecteds.adb:39:19-39:51>
+<Id "P_Private_Components_Subprograms" protecteds.adb:39:19-39:51>
+<DeclarativePart protecteds.adb:39:54-54:4>
+<AdaNodeList protecteds.adb:42:7-52:13>
+<NullSubpDecl ["P"] protecteds.adb:42:7-42:27>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  42 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the procedure P body
+\/ SNIPPET ada ()  0 0 0 0
+procedure P
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the procedure P body
+**************************
+<ExprFunction ["F"] protecteds.adb:45:7-45:40>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  46 44 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  46 0 0 0
+\/ RETURNS  ()  45 45 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the function F body
+\/ SNIPPET ada ()  0 0 0 0
+function F return Integer
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the function F body
+**************************
+<EntryBody ["E"] protecteds.adb:48:7-52:13>
+<DefiningName protecteds.adb:48:13-48:14>
+<Id "E" protecteds.adb:48:13-48:14>
+<EntryCompletionFormalParams protecteds.adb:48:14-48:14>
+<Id "False" protecteds.adb:48:20-48:25>
+<DeclarativePart protecteds.adb:48:28-50:7>
+<AdaNodeList protecteds.adb:48:28-48:28>
+<HandledStmts protecteds.adb:50:12-52:7>
+<StmtList protecteds.adb:51:10-51:15>
+<NullStmt protecteds.adb:51:10-51:15>
+<AdaNodeList protecteds.adb:51:14-51:14>
+<EndName protecteds.adb:52:11-52:12>
+<Id "E" protecteds.adb:52:11-52:12>
+<EndName protecteds.adb:54:8-54:40>
+<Id "P_Private_Components_Subprograms" protecteds.adb:54:8-54:40>
+<EndName protecteds.adb:56:5-56:15>
+<Id "Protecteds" protecteds.adb:56:5-56:15>
+<PragmaNodeList protecteds.adb:56:16-56:16>
