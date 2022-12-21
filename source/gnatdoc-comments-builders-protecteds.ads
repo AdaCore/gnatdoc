@@ -15,36 +15,30 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATCOLL.VFS;
+--  Structured comment builder for protected types and objects. It creates
+--  sections for components (and discriminants).
 
-private with VSS.Characters;
-private with VSS.Strings.Converters.Encoders;
-private with VSS.Strings;
-with VSS.Text_Streams;
-private with VSS.Text_Streams.File_Output;
+with Libadalang.Analysis;
+with Libadalang.Common;
 
-package Streams is
+package GNATdoc.Comments.Builders.Protecteds is
 
-   type Output_Text_Stream is
-     limited new VSS.Text_Streams.Output_Text_Stream with private;
+   use all type Libadalang.Common.Ada_Node_Kind_Type;
 
-   procedure Open
-     (Self : in out Output_Text_Stream'Class;
-      File : GNATCOLL.VFS.Virtual_File);
+   type Protected_Components_Builder is
+     new Abstract_Components_Builder with private;
 
-   procedure Close (Self : in out Output_Text_Stream'Class);
+   procedure Build
+     (Self          : in out Protected_Components_Builder;
+      Documentation : not null GNATdoc.Comments.Structured_Comment_Access;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Node          : Libadalang.Analysis.Basic_Decl'Class)
+     with Pre =>
+       Node.Kind in Ada_Single_Protected_Decl | Ada_Protected_Type_Decl;
 
 private
 
-   type Output_Text_Stream is
-     limited new VSS.Text_Streams.File_Output.File_Output_Text_Stream with
-       null record;
+   type Protected_Components_Builder is
+     new Abstract_Components_Builder with null record;
 
-   overriding function Has_Error
-     (Self : Output_Text_Stream) return Boolean is (False);
-
-   overriding function Error_Message
-     (Self : Output_Text_Stream) return VSS.Strings.Virtual_String
-   is (VSS.Strings.Empty_Virtual_String);
-
-end Streams;
+end GNATdoc.Comments.Builders.Protecteds;

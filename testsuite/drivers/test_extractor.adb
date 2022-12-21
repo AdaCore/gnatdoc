@@ -153,6 +153,7 @@ procedure Test_Extractor is
 
          when Ada_Single_Task_Decl | Ada_Task_Type_Decl
             | Ada_Single_Protected_Decl | Ada_Protected_Type_Decl
+            | Ada_Protected_Body
          =>
             Extract_And_Dump;
 
