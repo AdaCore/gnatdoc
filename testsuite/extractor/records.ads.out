@@ -1,4 +1,4 @@
-<CompilationUnit records.ads:2:1-103:13>
+<CompilationUnit records.ads:2:1-124:13>
 <AdaNodeList records.ads:2:1-4:23>
 <WithClause records.ads:2:1-2:30>
 <LimitedAbsent records.ads:2:1-2:1>
@@ -12,9 +12,9 @@
 <PrivateAbsent records.ads:2:30-2:30>
 <NameList records.ads:4:6-4:22>
 <Id "All_Enumerations" records.ads:4:6-4:22>
-<LibraryItem records.ads:6:1-103:13>
+<LibraryItem records.ads:6:1-124:13>
 <PrivateAbsent records.ads:4:23-4:23>
-<PackageDecl ["Records"] records.ads:6:1-103:13>
+<PackageDecl ["Records"] records.ads:6:1-124:13>
 **************************
 \/ RAW <<HEADER>> ()  0 0 0 0
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
@@ -22,8 +22,8 @@
 **************************
 <DefiningName records.ads:6:9-6:16>
 <Id "Records" records.ads:6:9-6:16>
-<PublicPart records.ads:6:19-103:1>
-<AdaNodeList records.ads:8:4-100:15>
+<PublicPart records.ads:6:19-124:1>
+<AdaNodeList records.ads:8:4-120:15>
 <ConcreteTypeDecl ["Record_Type_1"] records.ads:8:4-10:15>
 **************************
 \/ FIELD a (A)  8 8 9 8
@@ -183,6 +183,37 @@ end record;
 \/ DESCRIPTION  ()  0 0 0 0
 Comments for both fields must be extracted from the comments around.
 **************************
-<EndName records.ads:103:5-103:12>
-<Id "Records" records.ads:103:5-103:12>
-<PragmaNodeList records.ads:103:13-103:13>
+<ConcreteTypeDecl ["Foo_1"] records.ads:107:4-120:15>
+**************************
+\/ FIELD x (X)  107 107 108 107
+\/ FIELD a (A)  110 110 111 110
+\/ FIELD b (B)  112 112 113 112
+\/ FIELD c (C)  114 114 115 114
+\/ FIELD d (D)  116 116 117 116
+\/ FIELD e (E)  118 118 119 119
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+This is example of the record type with discriminant of integer type and
+variant part that depends from few kind of values.
+\/ SNIPPET ada ()  0 0 0 0
+type Foo_1 (X : Integer) is record
+   case X is
+      when -6 =>
+         A : Integer;
+      when -5 | -4 =>
+         B : Integer;
+      when -3 .. -1 =>
+         C : Integer;
+      when Natural =>
+         D : Integer;
+      when others =>
+         E : Integer;
+   end case;
+end record;
+\/ DESCRIPTION  ()  0 0 0 0
+This is example of the record type with discriminant of integer type and
+variant part that depends from few kind of values.
+**************************
+<EndName records.ads:124:5-124:12>
+<Id "Records" records.ads:124:5-124:12>
+<PragmaNodeList records.ads:124:13-124:13>

@@ -60,12 +60,17 @@ package body GNATdoc.Comments.Builders.Records is
             when Ada_Ada_Node_List | Ada_Variant_List =>
                return Into;
 
-            when Ada_Alternatives_List | Ada_Others_Designator =>
-               return Into;
+            when Ada_Alternatives_List =>
+               return Over;
 
-            when Ada_Null_Component_Decl | Ada_Identifier | Ada_Dotted_Name
-               | Ada_Int_Literal
-               =>
+            when Ada_Identifier =>
+               --  Discriminant name in the variant part
+
+               return Over;
+
+            when Ada_Null_Component_Decl =>
+               --  null component is not included into documentation
+
                return Over;
 
             when Ada_Known_Discriminant_Part | Ada_Discriminant_Spec_List =>
@@ -90,7 +95,7 @@ package body GNATdoc.Comments.Builders.Records is
                return Over;
 
             when others =>
-               Put_Line (Image (Node));
+               Put_Line (Standard_Error, Image (Node));
 
                raise Program_Error with Ada_Node_Kind_Type'Image (Node.Kind);
          end case;
