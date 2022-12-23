@@ -95,7 +95,7 @@ package body GNATdoc.Comments.Builders.Records is
                return Over;
 
             when others =>
-               Put_Line (Image (Node));
+               Put_Line (Standard_Error, Image (Node));
 
                raise Program_Error with Ada_Node_Kind_Type'Image (Node.Kind);
          end case;
