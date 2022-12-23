@@ -100,4 +100,25 @@ package Records is
    end record;
    --  Comments for both fields must be extracted from the comments around.
 
+   --------------
+   -- VC20-026 --
+   --------------
+
+   type Foo_1 (X : Integer) is record
+      case X is
+         when -6 =>
+            A : Integer;
+         when -5 | -4 =>
+            B : Integer;
+         when -3 .. -1 =>
+            C : Integer;
+         when Natural =>
+            D : Integer;
+         when others =>
+            E : Integer;
+      end case;
+   end record;
+   --  This is example of the record type with discriminant of integer type and
+   --  variant part that depends from few kind of values.
+
 end Records;
