@@ -53,4 +53,29 @@ package body Protecteds is
 
    end P_Private_Components_Subprograms;
 
+   protected body P_Entry_Family is
+      --  Protected object body with entry family.
+
+      entry E1 (for V in Positive range 1 .. 10) (X : Float) when True is
+         --  Entry family body
+         --  @param V Description of the entry family index
+         --  @param X Description of the parameter
+      begin
+         null;
+      end E1;
+
+      entry E2
+        (for V in Positive range 1 .. 10)  --  Index of the entry family
+        (X : Float)                        --  Parameter of the entry family
+         --  Entry family body
+         --  @param V Description of the entry family index
+         --  @param X Description of the parameter
+        with SPARK_Mode => Off
+        when True is
+      begin
+         null;
+      end E2;
+
+   end P_Entry_Family;
+
 end Protecteds;

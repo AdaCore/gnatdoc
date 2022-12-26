@@ -1,8 +1,8 @@
-<CompilationUnit protecteds.ads:6:1-77:16>
+<CompilationUnit protecteds.ads:6:1-88:16>
 <AdaNodeList protecteds.ads:6:1-6:1>
-<LibraryItem protecteds.ads:6:1-77:16>
+<LibraryItem protecteds.ads:6:1-88:16>
 <PrivateAbsent protecteds.ads:6:1-6:1>
-<PackageDecl ["Protecteds"] protecteds.ads:6:1-77:16>
+<PackageDecl ["Protecteds"] protecteds.ads:6:1-88:16>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
 This package contains test cases of documentation extraction for protected
@@ -16,8 +16,8 @@ cases only (this code is tested by subprograms tests).
 **************************
 <DefiningName protecteds.ads:6:9-6:19>
 <Id "Protecteds" protecteds.ads:6:9-6:19>
-<PublicPart protecteds.ads:6:22-77:1>
-<AdaNodeList protecteds.ads:8:4-75:41>
+<PublicPart protecteds.ads:6:22-88:1>
+<AdaNodeList protecteds.ads:8:4-86:23>
 <ConcreteTypeDecl ["IE"] protecteds.ads:8:4-8:38>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
@@ -303,6 +303,48 @@ Description of the entry E
 **************************
 <EndName protecteds.ads:75:8-75:40>
 <Id "P_Private_Components_Subprograms" protecteds.ads:75:8-75:40>
-<EndName protecteds.ads:77:5-77:15>
-<Id "Protecteds" protecteds.ads:77:5-77:15>
-<PragmaNodeList protecteds.ads:77:16-77:16>
+<SingleProtectedDecl ["P_Entry_Family"] protecteds.ads:77:4-86:23>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+Protected object with entry family.
+\/ DESCRIPTION  ()  0 0 0 0
+Protected object with entry family.
+**************************
+<DefiningName protecteds.ads:77:14-77:28>
+<Id "P_Entry_Family" protecteds.ads:77:14-77:28>
+<ParentList protecteds.ads:77:28-77:28>
+<ProtectedDef protecteds.ads:80:7-86:22>
+<PublicPart protecteds.ads:77:31-86:4>
+<DeclList protecteds.ads:80:7-84:32>
+<EntryDecl ["E1"] protecteds.ads:80:7-80:53>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  81 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER x (X)  80 80 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+First entry family.
+\/ SNIPPET ada ()  0 0 0 0
+entry E1 (Positive range 1 .. 10) (X : Float)
+\/ DESCRIPTION  ()  0 0 0 0
+First entry family.
+**************************
+<EntryDecl ["E2"] protecteds.ads:83:7-84:32>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  84 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER x (X)  83 83 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Second entry family.
+\/ SNIPPET ada ()  0 0 0 0
+entry E2 (Positive range 1 .. 10) (X : Float)
+\/ DESCRIPTION  ()  0 0 0 0
+Second entry family.
+**************************
+<EndName protecteds.ads:86:8-86:22>
+<Id "P_Entry_Family" protecteds.ads:86:8-86:22>
+<EndName protecteds.ads:88:5-88:15>
+<Id "Protecteds" protecteds.ads:88:5-88:15>
+<PragmaNodeList protecteds.ads:88:16-88:16>
