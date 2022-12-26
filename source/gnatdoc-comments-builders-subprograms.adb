@@ -31,6 +31,7 @@ package body GNATdoc.Comments.Builders.Subprograms is
       Node           : Libadalang.Analysis.Basic_Decl'Class;
       Spec_Node      : Libadalang.Analysis.Base_Subp_Spec'Class;
       Name_Node      : Libadalang.Analysis.Defining_Name'Class;
+      Family_Node    : Libadalang.Analysis.Entry_Index_Spec'Class;
       Params_Node    : Libadalang.Analysis.Params'Class;
       Returns_Node   : Libadalang.Analysis.Type_Expr'Class;
       Last_Section   : out GNATdoc.Comments.Section_Access;
@@ -55,6 +56,13 @@ package body GNATdoc.Comments.Builders.Subprograms is
 
             Self.Group_Start_Line := Spec_Node.Sloc_Range.Start_Line;
          end if;
+      end if;
+
+      --  Create section of the structured comment for family index.
+
+      if not Family_Node.Is_Null then
+         Self.Process_Component_Declaration (Family_Node);
+         Self.Process_Defining_Name (Parameter, Family_Node.F_Id);
       end if;
 
       --  Create sections of structured comment for parameters, compute

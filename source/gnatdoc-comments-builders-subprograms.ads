@@ -32,13 +32,15 @@ package GNATdoc.Comments.Builders.Subprograms is
       Node           : Libadalang.Analysis.Basic_Decl'Class;
       Spec_Node      : Libadalang.Analysis.Base_Subp_Spec'Class;
       Name_Node      : Libadalang.Analysis.Defining_Name'Class;
+      Family_Node    : Libadalang.Analysis.Entry_Index_Spec'Class;
       Params_Node    : Libadalang.Analysis.Params'Class;
       Returns_Node   : Libadalang.Analysis.Type_Expr'Class;
       Last_Section   : out GNATdoc.Comments.Section_Access;
       Minimum_Indent : out Langkit_Support.Slocs.Column_Number)
      with Pre =>
-       Spec_Node.Kind in Libadalang.Common.Ada_Entry_Spec
-                       | Libadalang.Common.Ada_Subp_Spec;
+       Spec_Node.Is_Null  --  entry body doesn't have specification node
+         or else Spec_Node.Kind in Libadalang.Common.Ada_Entry_Spec
+                                 | Libadalang.Common.Ada_Subp_Spec;
 
 private
 
