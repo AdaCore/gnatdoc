@@ -17,6 +17,7 @@
 
 with VSS.XML.Event_Vectors;
 with VSS.XML.Templates.Proxies.Strings;
+with VSS.XML.Templates.Values;
 
 with GNATdoc.Backend.HTML_Markup;
 
@@ -65,19 +66,14 @@ package body GNATdoc.Comments.Proxies is
       Name : VSS.Strings.Virtual_String)
       return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
 
-   type Text_Markup_Proxy is
-     limited new VSS.XML.Templates.Proxies.Abstract_Text_Content_Proxy
-       and VSS.XML.Templates.Proxies.Abstract_Structure_Content_Proxy with
+   type Markup_Proxy is
+     limited new VSS.XML.Templates.Proxies.Abstract_Value_Proxy with
    record
-      Text   : VSS.String_Vectors.Virtual_String_Vector;
       Markup : VSS.XML.Event_Vectors.Vector;
    end record;
 
-   overriding function Content
-     (Self : Text_Markup_Proxy) return VSS.Strings.Virtual_String;
-
-   overriding function Content
-     (Self : in out Text_Markup_Proxy) return VSS.XML.Event_Vectors.Vector;
+   overriding function Value
+     (Self : Markup_Proxy) return VSS.XML.Templates.Values.Value;
 
    ---------------
    -- Component --
@@ -126,9 +122,8 @@ package body GNATdoc.Comments.Proxies is
             end loop;
 
             return
-              Text_Markup_Proxy'
-                (Text   => Text,
-                 Markup => GNATdoc.Backend.HTML_Markup.Build_Markup (Text));
+              Markup_Proxy'
+                (Markup => GNATdoc.Backend.HTML_Markup.Build_Markup (Text));
          end;
 
       elsif Name = "enumeration_literals" then
@@ -176,9 +171,8 @@ package body GNATdoc.Comments.Proxies is
 
       elsif Name = "description" then
          return
-           Text_Markup_Proxy'
-             (Text   => Self.Section.Text,
-              Markup =>
+           Markup_Proxy'
+             (Markup =>
                 GNATdoc.Backend.HTML_Markup.Build_Markup (Self.Section.Text));
 
       else
@@ -187,26 +181,6 @@ package body GNATdoc.Comments.Proxies is
              (Message => "unknown component '" & Name & "'");
       end if;
    end Component;
-
-   -------------
-   -- Content --
-   -------------
-
-   overriding function Content
-     (Self : Text_Markup_Proxy) return VSS.Strings.Virtual_String is
-   begin
-      return Self.Text.Join_Lines (VSS.Strings.LF);
-   end Content;
-
-   -------------
-   -- Content --
-   -------------
-
-   overriding function Content
-     (Self : in out Text_Markup_Proxy) return VSS.XML.Event_Vectors.Vector is
-   begin
-      return Self.Markup;
-   end Content;
 
    -------------
    -- Element --
@@ -260,5 +234,15 @@ package body GNATdoc.Comments.Proxies is
 
       return Section_Vectors.Has_Element (Self.Position);
    end Next;
+
+   -----------
+   -- Value --
+   -----------
+
+   overriding function Value
+     (Self : Markup_Proxy) return VSS.XML.Templates.Values.Value is
+   begin
+      return (VSS.XML.Templates.Values.Content, Self.Markup);
+   end Value;
 
 end GNATdoc.Comments.Proxies;
