@@ -21,7 +21,7 @@ with Ada.Text_IO;
 
 with Libadalang.Common;
 with Libadalang.Iterators;
-with Libadalang.GPR2_Provider;
+with Libadalang.Project_Provider;
 
 with GPR2.Path_Name;
 with GPR2.Project.Attribute;
@@ -163,7 +163,7 @@ package body GNATdoc.Projects is
       LAL_Context :=
         Libadalang.Analysis.Create_Context
           (Unit_Provider =>
-             Libadalang.GPR2_Provider.Create_Project_Unit_Provider
+             Libadalang.Project_Provider.Create_Project_Unit_Provider
                (Project_Tree));
 
       --  Setup list of excluded project files
