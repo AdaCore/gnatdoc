@@ -138,6 +138,10 @@ package body GNATdoc.Frontend is
      (Node      : Entry_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Entry_Body
+     (Node      : Entry_Body'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Children
      (Parent    : Ada_Node'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
@@ -443,6 +447,11 @@ package body GNATdoc.Frontend is
 
                return Over;
 
+            when Ada_Entry_Body =>
+               Process_Entry_Body (Node.As_Entry_Body, Enclosing);
+
+               return Over;
+
             when Ada_Protected_Body =>
                Process_Protected_Body (Node.As_Protected_Body, Enclosing);
 
@@ -637,6 +646,27 @@ package body GNATdoc.Frontend is
          Enclosing.Simple_Types.Insert (Entity);
       end if;
    end Process_Derived_Type_Def;
+
+   ------------------------
+   -- Process_Entry_Body --
+   ------------------------
+
+   procedure Process_Entry_Body
+     (Node      : Entry_Body'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Name   : constant Defining_Name := Node.F_Entry_Name;
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Name           => To_Virtual_String (Name.Text),
+           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
+           Signature      => Signature (Name),
+           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Entries.Insert (Entity);
+   end Process_Entry_Body;
 
    ------------------------
    -- Process_Entry_Decl --
@@ -1147,7 +1177,7 @@ package body GNATdoc.Frontend is
       do
          case Name.P_Basic_Decl.Kind is
             when Ada_Package_Body | Ada_Subp_Body | Ada_Expr_Function
-               | Ada_Subp_Renaming_Decl | Ada_Protected_Body
+               | Ada_Subp_Renaming_Decl | Ada_Protected_Body | Ada_Entry_Body
             =>
                Result.Append ('$');
 
