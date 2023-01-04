@@ -1,12 +1,12 @@
-<CompilationUnit protecteds.adb:6:1-56:16>
+<CompilationUnit protecteds.adb:6:1-81:16>
 <AdaNodeList protecteds.adb:6:1-6:1>
-<LibraryItem protecteds.adb:6:1-56:16>
+<LibraryItem protecteds.adb:6:1-81:16>
 <PrivateAbsent protecteds.adb:6:1-6:1>
-<PackageBody ["Protecteds"] protecteds.adb:6:1-56:16>
+<PackageBody ["Protecteds"] protecteds.adb:6:1-81:16>
 <DefiningName protecteds.adb:6:14-6:24>
 <Id "Protecteds" protecteds.adb:6:14-6:24>
-<DeclarativePart protecteds.adb:6:27-56:1>
-<AdaNodeList protecteds.adb:15:4-54:41>
+<DeclarativePart protecteds.adb:6:27-81:1>
+<AdaNodeList protecteds.adb:15:4-79:23>
 <ProtectedBody ["P_Leading"] protecteds.adb:15:4-16:18>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
@@ -137,20 +137,75 @@ function F return Integer
 Description of the function F body
 **************************
 <EntryBody ["E"] protecteds.adb:48:7-52:13>
-<DefiningName protecteds.adb:48:13-48:14>
-<Id "E" protecteds.adb:48:13-48:14>
-<EntryCompletionFormalParams protecteds.adb:48:14-48:14>
-<Id "False" protecteds.adb:48:20-48:25>
-<DeclarativePart protecteds.adb:48:28-50:7>
-<AdaNodeList protecteds.adb:48:28-48:28>
-<HandledStmts protecteds.adb:50:12-52:7>
-<StmtList protecteds.adb:51:10-51:15>
-<NullStmt protecteds.adb:51:10-51:15>
-<AdaNodeList protecteds.adb:51:14-51:14>
-<EndName protecteds.adb:52:11-52:12>
-<Id "E" protecteds.adb:52:11-52:12>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  49 47 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  49 52 0 0
+Description of the entry E body
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+entry E
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the entry E body
+**************************
 <EndName protecteds.adb:54:8-54:40>
 <Id "P_Private_Components_Subprograms" protecteds.adb:54:8-54:40>
-<EndName protecteds.adb:56:5-56:15>
-<Id "Protecteds" protecteds.adb:56:5-56:15>
-<PragmaNodeList protecteds.adb:56:16-56:16>
+<ProtectedBody ["P_Entry_Family"] protecteds.adb:56:4-79:23>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+Protected object body with entry family.
+\/ DESCRIPTION  ()  0 0 0 0
+Protected object body with entry family.
+**************************
+<DefiningName protecteds.adb:56:19-56:33>
+<Id "P_Entry_Family" protecteds.adb:56:19-56:33>
+<DeclarativePart protecteds.adb:56:36-79:4>
+<AdaNodeList protecteds.adb:59:7-77:14>
+<EntryBody ["E1"] protecteds.adb:59:7-65:14>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  60 58 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  60 65 0 0
+Entry family body
+@param V Description of the entry family index
+@param X Description of the parameter
+\/ PARAMETER v (V)  59 59 60 58
+Description of the entry family index
+\/ PARAMETER x (X)  59 59 0 0
+Description of the parameter
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+entry E1 (for V in Positive range 1 .. 10) (X : Float)
+\/ DESCRIPTION  ()  0 0 0 0
+Entry family body
+**************************
+<EntryBody ["E2"] protecteds.adb:67:7-77:14>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  70 72 0 0
+Entry family body
+@param V Description of the entry family index
+@param X Description of the parameter
+\/ RAW <<INTERMEDIATE LOWER>> ()  75 77 0 0
+\/ PARAMETER v (V)  68 68 69 68
+Index of the entry family
+
+Description of the entry family index
+\/ PARAMETER x (X)  69 69 0 0
+Parameter of the entry family
+
+Description of the parameter
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+entry E2
+  (for V in Positive range 1 .. 10)
+  (X : Float)
+\/ DESCRIPTION  ()  0 0 0 0
+Entry family body
+**************************
+<EndName protecteds.adb:79:8-79:22>
+<Id "P_Entry_Family" protecteds.adb:79:8-79:22>
+<EndName protecteds.adb:81:5-81:15>
+<Id "Protecteds" protecteds.adb:81:5-81:15>
+<PragmaNodeList protecteds.adb:81:16-81:16>

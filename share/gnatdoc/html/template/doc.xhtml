@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class='main' xmlns="http://www.w3.org/1999/xhtml" xmlns:tal="http://xml.zope.org/namespaces/tal">
+<html class='main' xmlns="http://www.w3.org/1999/xhtml" xmlns:tal="http://xml.adacore.com/namespaces/tal">
   <head>
     <link rel='stylesheet' href='gnatdoc.css'/>
   </head>
@@ -143,19 +143,19 @@
     </div>
 
     <h2>Description</h2>
-    <div tal:omit-tag='' tal:content='structure gnatdoc/entity/documentation/description'>Description of the entity</div>
+    <div tal:omit-tag='' tal:content='gnatdoc/entity/documentation/description'>Description of the entity</div>
 
     <div tal:omit-tag='' tal:repeat='item gnatdoc/entity/all'>
       <h4 tal:content='item/name' tal:attributes='id item/id'>Entity Name</h4>
       <pre class='ada-code-snippet'><code xml:space='preserve' tal:content='item/code'>Source code of the entity declaration</code></pre>
-      <div tal:omit-tag='' tal:content='structure item/documentation/description'>Description of the entity</div>
+      <div tal:omit-tag='' tal:content='item/documentation/description'>Description of the entity</div>
 
       <div tal:omit-tag='' tal:condition='item/documentation/enumeration_literals'>
         <h5>Enumeration Literal</h5>
         <dl>
           <div tal:omit-tag='' tal:repeat='literal item/documentation/enumeration_literals'>
             <dt tal:content='literal/name'>Name of the literal</dt>
-            <dd tal:content='structure literal/description'>Description of the literal</dd>
+            <dd tal:content='literal/description'>Description of the literal</dd>
           </div>
         </dl>
       </div>
@@ -165,7 +165,7 @@
         <dl>
           <div tal:omit-tag='' tal:repeat='formal item/documentation/fields'>
             <dt tal:content='formal/name'>Name of the field</dt>
-            <dd tal:content='structure formal/description'>Description of the field</dd>
+            <dd tal:content='formal/description'>Description of the field</dd>
           </div>
         </dl>
       </div>
@@ -175,7 +175,7 @@
         <dl>
           <div tal:omit-tag='' tal:repeat='formal item/documentation/formals'>
             <dt tal:content='formal/name'>name of the parameter</dt>
-            <dd tal:content='structure formal/description'>description of the parameter</dd>
+            <dd tal:content='formal/description'>description of the parameter</dd>
           </div>
         </dl>
       </div>
@@ -185,7 +185,7 @@
         <dl>
           <div tal:omit-tag='' tal:repeat='parameter item/documentation/parameters'>
             <dt tal:content='parameter/name'>Name of the parameter</dt>
-            <dd tal:content='structure parameter/description'>Description of the parameter</dd>
+            <dd tal:content='parameter/description'>Description of the parameter</dd>
           </div>
         </dl>
       </div>
@@ -194,7 +194,7 @@
         <h5>Return Value</h5>
         <dl>
           <div tal:omit-tag='' tal:repeat='return item/documentation/returns'>
-            <dd tal:content='structure return/description'>Description of the return value</dd>
+            <dd tal:content='return/description'>Description of the return value</dd>
           </div>
         </dl>
       </div>
@@ -204,7 +204,7 @@
         <dl>
           <div tal:omit-tag='' tal:repeat='exception item/documentation/exceptions'>
             <dt tal:content='exception/name'>name of the exception</dt>
-            <dd tal:content='structure exception/description'>description of the exception</dd>
+            <dd tal:content='exception/description'>description of the exception</dd>
           </div>
         </dl>
       </div>

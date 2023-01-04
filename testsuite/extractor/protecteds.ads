@@ -74,4 +74,15 @@ package Protecteds is
 
    end P_Private_Components_Subprograms;
 
+   protected P_Entry_Family is
+      --  Protected object with entry family.
+
+      entry E1 (Positive range 1 .. 10) (X : Float);
+      --  First entry family.
+
+      entry E2 (Positive range 1 .. 10) (X : Float)
+        with SPARK_Mode => Off;
+      --  Second entry family.
+   end P_Entry_Family;
+
 end Protecteds;

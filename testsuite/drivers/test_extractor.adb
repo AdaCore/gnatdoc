@@ -141,6 +141,7 @@ procedure Test_Extractor is
             | Ada_Concrete_Type_Decl
             | Ada_Exception_Decl
             | Ada_Entry_Decl
+            | Ada_Entry_Body
          =>
             Extract_And_Dump;
 
