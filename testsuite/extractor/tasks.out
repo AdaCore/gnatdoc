@@ -16,7 +16,7 @@ Note, documentation extraction code is almost common for subprograms and
 entries, thus, number of test cases for entries are minimal to check that
 it works and cover entries specific cases.
 **************************
-<DefiningName tasks.ads:7:9-7:14>
+<DefiningName "Tasks" tasks.ads:7:9-7:14>
 <Id "Tasks" tasks.ads:7:9-7:14>
 <PublicPart tasks.ads:7:17-93:1>
 <AdaNodeList tasks.ads:9:4-91:13>
@@ -58,7 +58,7 @@ This is trailing section of description of the task
 T_Entryless_Empty_Trailing.
 **************************
 <SingleTaskTypeDecl ["T_Entryless_Empty_Trailing"] tasks.ads:15:9-15:35>
-<DefiningName tasks.ads:15:9-15:35>
+<DefiningName "T_Entryless_Empty_Trailing" tasks.ads:15:9-15:35>
 <Id "T_Entryless_Empty_Trailing" tasks.ads:15:9-15:35>
 <SingleTaskDecl ["T_Entryless_Leading"] tasks.ads:21:4-22:28>
 **************************
@@ -71,7 +71,7 @@ This is leading section of the description of the task
 T_Entryless_Leading.
 **************************
 <SingleTaskTypeDecl ["T_Entryless_Leading"] tasks.ads:21:9-22:27>
-<DefiningName tasks.ads:21:9-21:28>
+<DefiningName "T_Entryless_Leading" tasks.ads:21:9-21:28>
 <Id "T_Entryless_Leading" tasks.ads:21:9-21:28>
 <TaskDef tasks.ads:21:29-22:27>
 <ParentList tasks.ads:21:28-21:28>
@@ -90,7 +90,7 @@ This is intermediate section of the description of the task
 T_Entryless_Intermediate.
 **************************
 <SingleTaskTypeDecl ["T_Entryless_Intermediate"] tasks.ads:24:9-27:32>
-<DefiningName tasks.ads:24:9-24:33>
+<DefiningName "T_Entryless_Intermediate" tasks.ads:24:9-24:33>
 <Id "T_Entryless_Intermediate" tasks.ads:24:9-24:33>
 <TaskDef tasks.ads:24:34-27:32>
 <ParentList tasks.ads:24:33-24:33>
@@ -109,7 +109,7 @@ This is leading section of the description of the task
 T_Entryless_Inherited_Leading
 **************************
 <SingleTaskTypeDecl ["T_Entryless_Inherited_Leading"] tasks.ads:31:9-32:37>
-<DefiningName tasks.ads:31:9-31:38>
+<DefiningName "T_Entryless_Inherited_Leading" tasks.ads:31:9-31:38>
 <Id "T_Entryless_Inherited_Leading" tasks.ads:31:9-31:38>
 <TaskDef tasks.ads:31:39-32:37>
 <ParentList tasks.ads:31:46-31:48>
@@ -129,7 +129,7 @@ This is intermediate section of the description of the task
 T_Entryless_Inherited_Intermediate.
 **************************
 <SingleTaskTypeDecl ["T_Entryless_Inherited_Intermediate"] tasks.ads:34:9-37:42>
-<DefiningName tasks.ads:34:9-34:43>
+<DefiningName "T_Entryless_Inherited_Intermediate" tasks.ads:34:9-34:43>
 <Id "T_Entryless_Inherited_Intermediate" tasks.ads:34:9-34:43>
 <TaskDef tasks.ads:34:44-37:42>
 <ParentList tasks.ads:34:51-34:53>
@@ -145,7 +145,7 @@ T_Entryless_Inherited_Intermediate.
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <SingleTaskTypeDecl ["T_1"] tasks.ads:39:9-42:11>
-<DefiningName tasks.ads:39:9-39:12>
+<DefiningName "T_1" tasks.ads:39:9-39:12>
 <Id "T_1" tasks.ads:39:9-39:12>
 <TaskDef tasks.ads:39:13-42:11>
 <ParentList tasks.ads:39:12-39:12>
@@ -174,7 +174,7 @@ Leading comment for the entry
 Leading comment for the entry
 **************************
 <SingleTaskTypeDecl ["T_2"] tasks.ads:44:9-47:11>
-<DefiningName tasks.ads:44:9-44:12>
+<DefiningName "T_2" tasks.ads:44:9-44:12>
 <Id "T_2" tasks.ads:44:9-44:12>
 <TaskDef tasks.ads:44:13-47:11>
 <ParentList tasks.ads:44:12-44:12>
@@ -200,7 +200,7 @@ entry E
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <SingleTaskTypeDecl ["T_3"] tasks.ads:49:9-52:11>
-<DefiningName tasks.ads:49:9-49:12>
+<DefiningName "T_3" tasks.ads:49:9-49:12>
 <Id "T_3" tasks.ads:49:9-49:12>
 <TaskDef tasks.ads:49:13-52:11>
 <ParentList tasks.ads:49:12-49:12>
@@ -230,7 +230,7 @@ TT_Entryless_Empty_Trailing.
 This is trailing section of description of the task
 TT_Entryless_Empty_Trailing.
 **************************
-<DefiningName tasks.ads:54:14-54:41>
+<DefiningName "TT_Entryless_Empty_Trailing" tasks.ads:54:14-54:41>
 <Id "TT_Entryless_Empty_Trailing" tasks.ads:54:14-54:41>
 <TaskTypeDecl ["TT_Entryless_Leading"] tasks.ads:60:4-61:29>
 **************************
@@ -242,7 +242,7 @@ TT_Entryless_Leading.
 This is leading section of the description of the task
 TT_Entryless_Leading.
 **************************
-<DefiningName tasks.ads:60:14-60:34>
+<DefiningName "TT_Entryless_Leading" tasks.ads:60:14-60:34>
 <Id "TT_Entryless_Leading" tasks.ads:60:14-60:34>
 <TaskDef tasks.ads:60:35-61:28>
 <ParentList tasks.ads:60:34-60:34>
@@ -260,7 +260,7 @@ TT_Entryless_Intermediate.
 This is intermediate section of the description of the task
 TT_Entryless_Intermediate.
 **************************
-<DefiningName tasks.ads:63:14-63:39>
+<DefiningName "TT_Entryless_Intermediate" tasks.ads:63:14-63:39>
 <Id "TT_Entryless_Intermediate" tasks.ads:63:14-63:39>
 <TaskDef tasks.ads:63:40-66:33>
 <ParentList tasks.ads:63:39-63:39>
@@ -278,7 +278,7 @@ TT_Entryless_Inherited_Leading
 This is leading section of the description of the task
 TT_Entryless_Inherited_Leading
 **************************
-<DefiningName tasks.ads:70:14-70:44>
+<DefiningName "TT_Entryless_Inherited_Leading" tasks.ads:70:14-70:44>
 <Id "TT_Entryless_Inherited_Leading" tasks.ads:70:14-70:44>
 <TaskDef tasks.ads:70:45-71:38>
 <ParentList tasks.ads:70:52-70:54>
@@ -297,7 +297,7 @@ TT_Entryless_Inherited_Intermediate.
 This is intermediate section of the description of the task
 TT_Entryless_Inherited_Intermediate.
 **************************
-<DefiningName tasks.ads:73:14-73:49>
+<DefiningName "TT_Entryless_Inherited_Intermediate" tasks.ads:73:14-73:49>
 <Id "TT_Entryless_Inherited_Intermediate" tasks.ads:73:14-73:49>
 <TaskDef tasks.ads:73:50-76:43>
 <ParentList tasks.ads:73:57-73:59>
@@ -312,7 +312,7 @@ TT_Entryless_Inherited_Intermediate.
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
-<DefiningName tasks.ads:78:14-78:18>
+<DefiningName "TT_1" tasks.ads:78:14-78:18>
 <Id "TT_1" tasks.ads:78:14-78:18>
 <TaskDef tasks.ads:78:19-81:12>
 <ParentList tasks.ads:78:18-78:18>
@@ -340,7 +340,7 @@ Leading comment for the entry
 \/ DESCRIPTION  ()  0 0 0 0
 Leading comment for the entry
 **************************
-<DefiningName tasks.ads:83:14-83:18>
+<DefiningName "TT_2" tasks.ads:83:14-83:18>
 <Id "TT_2" tasks.ads:83:14-83:18>
 <TaskDef tasks.ads:83:19-86:12>
 <ParentList tasks.ads:83:18-83:18>
@@ -365,7 +365,7 @@ entry E
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
-<DefiningName tasks.ads:88:14-88:18>
+<DefiningName "TT_3" tasks.ads:88:14-88:18>
 <Id "TT_3" tasks.ads:88:14-88:18>
 <TaskDef tasks.ads:88:19-91:12>
 <ParentList tasks.ads:88:18-88:18>

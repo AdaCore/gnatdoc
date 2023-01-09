@@ -10,7 +10,7 @@ Test of documentation extraction for exceptions.
 \/ DESCRIPTION  ()  0 0 0 0
 Test of documentation extraction for exceptions.
 **************************
-<DefiningName exceptions.ads:4:9-4:19>
+<DefiningName "Exceptions" exceptions.ads:4:9-4:19>
 <Id "Exceptions" exceptions.ads:4:9-4:19>
 <PublicPart exceptions.ads:4:22-9:1>
 <AdaNodeList exceptions.ads:6:4-6:29>
