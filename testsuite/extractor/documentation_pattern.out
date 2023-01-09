@@ -10,7 +10,7 @@ This is description of the package.
 \/ DESCRIPTION  ()  0 0 0 0
 This is description of the package.
 **************************
-<DefiningName documentation_pattern.ads:8:9-8:30>
+<DefiningName "Documentation_Pattern" documentation_pattern.ads:8:9-8:30>
 <Id "Documentation_Pattern" documentation_pattern.ads:8:9-8:30>
 <PublicPart documentation_pattern.ads:8:33-16:1>
 <AdaNodeList documentation_pattern.ads:14:3-14:15>
