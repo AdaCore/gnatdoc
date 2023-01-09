@@ -20,7 +20,7 @@
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
-<DefiningName records.ads:6:9-6:16>
+<DefiningName "Records" records.ads:6:9-6:16>
 <Id "Records" records.ads:6:9-6:16>
 <PublicPart records.ads:6:19-124:1>
 <AdaNodeList records.ads:8:4-120:15>
@@ -91,7 +91,7 @@ type Character_Offset is range -2 ** 30 .. 2 ** 30 - 1;
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <SubtypeDecl ["Character_Count"] records.ads:50:4-51:39>
-<DefiningName records.ads:50:12-50:27>
+<DefiningName "Character_Count" records.ads:50:12-50:27>
 <Id "Character_Count" records.ads:50:12-50:27>
 <SubtypeIndication records.ads:50:31-51:38>
 <NotNullAbsent records.ads:50:30-50:30>

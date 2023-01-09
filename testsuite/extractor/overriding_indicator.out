@@ -12,7 +12,7 @@ keyword.
 Test of extraction of the code snippet for subprograms with overriding
 keyword.
 **************************
-<DefiningName overriding_indicator.ads:5:9-5:29>
+<DefiningName "Overriding_Indicator" overriding_indicator.ads:5:9-5:29>
 <Id "Overriding_Indicator" overriding_indicator.ads:5:9-5:29>
 <PublicPart overriding_indicator.ads:5:32-113:1>
 <AdaNodeList overriding_indicator.ads:7:4-111:56>

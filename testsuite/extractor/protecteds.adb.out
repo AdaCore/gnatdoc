@@ -3,7 +3,7 @@
 <LibraryItem protecteds.adb:6:1-81:16>
 <PrivateAbsent protecteds.adb:6:1-6:1>
 <PackageBody ["Protecteds"] protecteds.adb:6:1-81:16>
-<DefiningName protecteds.adb:6:14-6:24>
+<DefiningName "Protecteds" protecteds.adb:6:14-6:24>
 <Id "Protecteds" protecteds.adb:6:14-6:24>
 <DeclarativePart protecteds.adb:6:27-81:1>
 <AdaNodeList protecteds.adb:15:4-79:23>
@@ -15,7 +15,7 @@ Leading description of the protected body P_Leading.
 \/ DESCRIPTION  ()  0 0 0 0
 Leading description of the protected body P_Leading.
 **************************
-<DefiningName protecteds.adb:15:19-15:28>
+<DefiningName "P_Leading" protecteds.adb:15:19-15:28>
 <Id "P_Leading" protecteds.adb:15:19-15:28>
 <DeclarativePart protecteds.adb:15:31-16:4>
 <AdaNodeList protecteds.adb:15:31-15:31>
@@ -29,7 +29,7 @@ Intermediate description of the protected body P_Intermediate.
 \/ DESCRIPTION  ()  0 0 0 0
 Intermediate description of the protected body P_Intermediate.
 **************************
-<DefiningName protecteds.adb:18:19-18:33>
+<DefiningName "P_Intermediate" protecteds.adb:18:19-18:33>
 <Id "P_Intermediate" protecteds.adb:18:19-18:33>
 <DeclarativePart protecteds.adb:18:36-20:4>
 <AdaNodeList protecteds.adb:18:36-18:36>
@@ -43,7 +43,7 @@ Leading description of the protected type PT_Leading.
 \/ DESCRIPTION  ()  0 0 0 0
 Leading description of the protected type PT_Leading.
 **************************
-<DefiningName protecteds.adb:23:19-23:29>
+<DefiningName "PT_Leading" protecteds.adb:23:19-23:29>
 <Id "PT_Leading" protecteds.adb:23:19-23:29>
 <DeclarativePart protecteds.adb:23:32-24:4>
 <AdaNodeList protecteds.adb:23:32-23:32>
@@ -57,7 +57,7 @@ Intermediate description of the protected type PT_Intermediate.
 \/ DESCRIPTION  ()  0 0 0 0
 Intermediate description of the protected type PT_Intermediate.
 **************************
-<DefiningName protecteds.adb:26:19-26:34>
+<DefiningName "PT_Intermediate" protecteds.adb:26:19-26:34>
 <Id "PT_Intermediate" protecteds.adb:26:19-26:34>
 <DeclarativePart protecteds.adb:26:37-28:4>
 <AdaNodeList protecteds.adb:26:37-26:37>
@@ -69,7 +69,7 @@ Intermediate description of the protected type PT_Intermediate.
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
-<DefiningName protecteds.adb:30:19-30:50>
+<DefiningName "PT_Discriminant_Component_Short" protecteds.adb:30:19-30:50>
 <Id "PT_Discriminant_Component_Short" protecteds.adb:30:19-30:50>
 <DeclarativePart protecteds.adb:30:53-31:4>
 <AdaNodeList protecteds.adb:30:53-30:53>
@@ -81,7 +81,7 @@ Intermediate description of the protected type PT_Intermediate.
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
-<DefiningName protecteds.adb:33:19-33:51>
+<DefiningName "PT_Discriminant_Component_Longer" protecteds.adb:33:19-33:51>
 <Id "PT_Discriminant_Component_Longer" protecteds.adb:33:19-33:51>
 <DeclarativePart protecteds.adb:33:54-34:4>
 <AdaNodeList protecteds.adb:33:54-33:54>
@@ -93,7 +93,7 @@ Intermediate description of the protected type PT_Intermediate.
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
-<DefiningName protecteds.adb:36:19-36:41>
+<DefiningName "PT_Discriminant_Longer" protecteds.adb:36:19-36:41>
 <Id "PT_Discriminant_Longer" protecteds.adb:36:19-36:41>
 <DeclarativePart protecteds.adb:36:44-37:4>
 <AdaNodeList protecteds.adb:36:44-36:44>
@@ -107,7 +107,7 @@ Protected type declaration with mix of components/subprograms in private part.
 \/ DESCRIPTION  ()  0 0 0 0
 Protected type declaration with mix of components/subprograms in private part.
 **************************
-<DefiningName protecteds.adb:39:19-39:51>
+<DefiningName "P_Private_Components_Subprograms" protecteds.adb:39:19-39:51>
 <Id "P_Private_Components_Subprograms" protecteds.adb:39:19-39:51>
 <DeclarativePart protecteds.adb:39:54-54:4>
 <AdaNodeList protecteds.adb:42:7-52:13>
@@ -158,7 +158,7 @@ Protected object body with entry family.
 \/ DESCRIPTION  ()  0 0 0 0
 Protected object body with entry family.
 **************************
-<DefiningName protecteds.adb:56:19-56:33>
+<DefiningName "P_Entry_Family" protecteds.adb:56:19-56:33>
 <Id "P_Entry_Family" protecteds.adb:56:19-56:33>
 <DeclarativePart protecteds.adb:56:36-79:4>
 <AdaNodeList protecteds.adb:59:7-77:14>
