@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -24,6 +24,12 @@ with GNATdoc.Comments;
 
 package GNATdoc.Entities is
 
+   type Entity_Location is record
+      File   : VSS.Strings.Virtual_String;
+      Line   : VSS.Strings.Line_Count      := 0;
+      Column : VSS.Strings.Character_Count := 0;
+   end record;
+
    type Entity_Information;
 
    type Entity_Information_Access is access all Entity_Information;
@@ -43,6 +49,7 @@ package GNATdoc.Entities is
         VSS.Strings."=");
 
    type Entity_Information is record
+      Location               : Entity_Location;
       Name                   : VSS.Strings.Virtual_String;
       Qualified_Name         : VSS.Strings.Virtual_String;
       Signature              : VSS.Strings.Virtual_String;

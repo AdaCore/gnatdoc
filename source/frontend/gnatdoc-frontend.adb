@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -17,6 +17,7 @@
 
 with Ada.Text_IO;
 
+with Langkit_Support.Slocs;
 with Libadalang.Common;
 
 with VSS.Strings.Conversions;
@@ -148,8 +149,30 @@ package body GNATdoc.Frontend is
    --  Process children nodes, filter out important nodes, and dispatch to
    --  corresponding documentation extraction and entity creation subprograms.
 
+   function Location
+     (Name : Defining_Name'Class) return GNATdoc.Entities.Entity_Location;
+   --  Return location of the defining name.
+
    function Signature (Name : Defining_Name'Class) return Virtual_String;
    --  Computes unique signature of the given entity.
+
+   --------------
+   -- Location --
+   --------------
+
+   function Location
+     (Name : Defining_Name'Class) return GNATdoc.Entities.Entity_Location
+   is
+      Aux : constant Langkit_Support.Slocs.Source_Location_Range :=
+        Name.Sloc_Range;
+
+   begin
+      return
+        (File   =>
+           VSS.Strings.Conversions.To_Virtual_String (Name.Unit.Get_Filename),
+         Line   => VSS.Strings.Line_Count (Aux.Start_Line),
+         Column => VSS.Strings.Character_Count (Aux.Start_Column));
+   end Location;
 
    -----------------------------
    -- Process_Access_Type_Def --
@@ -162,7 +185,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -183,7 +207,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -205,7 +230,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Subp_Spec.F_Subp_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -509,7 +535,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Subp_Spec.F_Subp_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -630,7 +657,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -658,7 +686,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Entry_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -679,7 +708,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Spec.F_Entry_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -702,7 +732,8 @@ package body GNATdoc.Frontend is
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
-                  (Name           => To_Virtual_String (Name.Text),
+                  (Location       => Location (Name),
+                   Name           => To_Virtual_String (Name.Text),
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
@@ -731,7 +762,8 @@ package body GNATdoc.Frontend is
          else Node.As_Generic_Subp_Instantiation.F_Subp_Name);
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -756,7 +788,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Package_Decl.F_Package_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.F_Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
@@ -793,7 +826,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -816,7 +850,8 @@ package body GNATdoc.Frontend is
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
-                  (Name           => To_Virtual_String (Name.Text),
+                  (Location       => Location (Name),
+                   Name           => To_Virtual_String (Name.Text),
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
@@ -843,7 +878,8 @@ package body GNATdoc.Frontend is
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
-                  (Name           => To_Virtual_String (Name.Text),
+                  (Location       => Location (Name),
+                   Name           => To_Virtual_String (Name.Text),
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
@@ -873,7 +909,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Package_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.F_Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
@@ -912,7 +949,8 @@ package body GNATdoc.Frontend is
       Entity    : constant not null
         GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.F_Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
@@ -949,7 +987,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      =>
              To_Virtual_String (Name.P_Unique_Identifying_Name),
@@ -975,7 +1014,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -1002,7 +1042,8 @@ package body GNATdoc.Frontend is
       Entity : constant not null
         GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.F_Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
@@ -1033,7 +1074,8 @@ package body GNATdoc.Frontend is
    is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.F_Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
@@ -1070,7 +1112,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -1091,7 +1134,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -1112,7 +1156,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -1134,7 +1179,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Decl.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.F_Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
