@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -112,6 +112,11 @@ package body GNATdoc.Comments.Builders.Subprograms is
 
                Token := Previous (Token);
             end loop;
+
+            Self.Restart_Component_Group (Returns_Section.Exact_Start_Line);
+            --  Restart components group to include all comments after last
+            --  parameter till line with return keyword into the documentation
+            --  of the parameter.
 
             if Options.Style = Leading then
                --  In leading style, set attitional range to lookup
