@@ -273,6 +273,7 @@ package body GNATdoc.Comments.Helpers is
 
    begin
       if Decl.Kind in Ada_Abstract_Subp_Decl
+                    | Ada_Entry_Decl
                     | Ada_Exception_Decl
                     | Ada_Expr_Function
                     | Ada_Generic_Package_Decl
@@ -282,8 +283,11 @@ package body GNATdoc.Comments.Helpers is
                     | Ada_Object_Decl
                     | Ada_Package_Decl
                     | Ada_Package_Renaming_Decl
+                    | Ada_Protected_Type_Decl
+                    | Ada_Single_Protected_Decl
                     | Ada_Subp_Decl
                     | Ada_Subtype_Decl
+                    | Ada_Task_Type_Decl
         or (Decl.Kind in Ada_Type_Decl
             and then Decl.As_Type_Decl.F_Type_Def.Kind
                      in Ada_Access_To_Subp_Def
@@ -299,9 +303,25 @@ package body GNATdoc.Comments.Helpers is
       then
          Decl_To_Extract := Decl;
 
-      elsif Decl.Kind = Ada_Param_Spec
-        and then Decl.P_Parent_Basic_Decl.Kind in Ada_Subp_Decl
+      elsif Decl.Kind = Ada_Single_Task_Type_Decl then
+         Decl_To_Extract := Decl.P_Parent_Basic_Decl;
+
+      elsif Decl.Kind in Ada_Param_Spec | Ada_Entry_Index_Spec
+        and then Decl.P_Parent_Basic_Decl.Kind
+                   in Ada_Subp_Decl | Ada_Entry_Decl | Ada_Entry_Body
       then
+         --  Parameters of the subprograms and entries, family index of
+         --  entries.
+
+         Decl_To_Extract := Decl.P_Parent_Basic_Decl;
+         Name_To_Extract := Name.As_Defining_Name;
+
+      elsif Decl.Kind in Ada_Discriminant_Spec | Ada_Component_Decl
+        and then Decl.P_Parent_Basic_Decl.Kind
+                   in Ada_Protected_Type_Decl | Ada_Single_Protected_Decl
+      then
+         --  Discriminants and components of the protected types/objects.
+
          Decl_To_Extract := Decl.P_Parent_Basic_Decl;
          Name_To_Extract := Name.As_Defining_Name;
 
