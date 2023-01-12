@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -43,5 +43,15 @@ package body GNATdoc.Configuration.Command_Line is
              (Self).Output_Directory (Backend_Name);
       end if;
    end Output_Directory;
+
+   ----------------------
+   -- Warnings_Enabled --
+   ----------------------
+
+   overriding function Warnings_Enabled
+     (Self : Command_Line_Configuration_Provider) return Boolean is
+   begin
+      return GNATdoc.Command_Line.Warnings;
+   end Warnings_Enabled;
 
 end GNATdoc.Configuration.Command_Line;

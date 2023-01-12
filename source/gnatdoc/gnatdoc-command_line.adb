@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -55,6 +55,11 @@ package body GNATdoc.Command_Line is
       Value_Name  => "style",
       Description => "Use given style of documentation");
 
+   Warnings_Option           : constant VSS.Command_Line.Binary_Option :=
+     (Short_Name  => <>,
+      Long_Name   => "warnings",
+      Description => "Report warnings for undocumented entities");
+
    Positional_Project_Option : constant VSS.Command_Line.Positional_Option :=
      (Name        => "project_file",
       Description => "Project file to process");
@@ -62,6 +67,7 @@ package body GNATdoc.Command_Line is
    Output_Dir_Argument       : GNATCOLL.VFS.Virtual_File;
    Project_File_Argument     : VSS.Strings.Virtual_String;
    Project_Context_Arguments : GPR2.Context.Object;
+   Warnings_Argument         : Boolean := False;
 
    ----------------
    -- Initialize --
@@ -77,6 +83,7 @@ package body GNATdoc.Command_Line is
       VSS.Command_Line.Add_Option (Output_Dir_Option);
       VSS.Command_Line.Add_Option (Project_Option);
       VSS.Command_Line.Add_Option (Style_Option);
+      VSS.Command_Line.Add_Option (Warnings_Option);
       VSS.Command_Line.Add_Option (Scenario_Option);
       VSS.Command_Line.Add_Option (Positional_Project_Option);
 
@@ -168,6 +175,12 @@ package body GNATdoc.Command_Line is
                    (VSS.Command_Line.Value (Output_Dir_Option))),
               GNATCOLL.VFS.Get_Current_Dir.Full_Name);
       end if;
+
+      --  Process warnings command line switch.
+
+      if VSS.Command_Line.Is_Specified (Warnings_Option) then
+         Warnings_Argument := True;
+      end if;
    end Initialize;
 
    ----------------------
@@ -196,5 +209,14 @@ package body GNATdoc.Command_Line is
    begin
       return Project_File_Argument;
    end Project_File;
+
+   --------------
+   -- Warnings --
+   --------------
+
+   function Warnings return Boolean is
+   begin
+      return Warnings_Argument;
+   end Warnings;
 
 end GNATdoc.Command_Line;
