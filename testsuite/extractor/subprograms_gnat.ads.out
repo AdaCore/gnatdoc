@@ -280,7 +280,7 @@ Procedure with parameter.
 \/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
 \/ PARAMETER x (X)  124 124 125 123
 Value of X
-\/ PARAMETER y (Y)  124 124 0 0
+\/ PARAMETER y (Y)  124 124 125 123
 Value of Y
 \/ RETURNS  ()  124 124 0 0
 Return value
@@ -302,7 +302,7 @@ Function with two parameters
 \/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
 \/ PARAMETER x (X)  131 131 132 130
 Value of X
-\/ PARAMETER y (Y)  131 131 0 0
+\/ PARAMETER y (Y)  131 131 132 131
 Value of Y
 \/ RETURNS  ()  132 133 0 0
 Multiline inlined description
@@ -403,7 +403,7 @@ Abstract procedure.
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  166 0 0 0
 \/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ PARAMETER self (Self)  165 165 0 0
+\/ PARAMETER self (Self)  165 165 166 164
 \/ RETURNS  ()  165 165 0 0
 \/ RAW <<LEADING>> ()  0 0 0 0
 \/ RAW <<TRAILING>> ()  0 0 0 0
@@ -553,7 +553,7 @@ Access to parameterless function.
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  212 0 0 0
 \/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ PARAMETER x (X)  211 211 0 0
+\/ PARAMETER x (X)  211 211 212 210
 Value of X
 \/ RETURNS  ()  211 211 0 0
 Return value
