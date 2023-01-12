@@ -23,6 +23,8 @@ with Libadalang.Common;
 with VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Extractor;
+with GNATdoc.Comments.Undocumented_Checker;
+with GNATdoc.Configuration;
 with GNATdoc.Entities;
 with GNATdoc.Options;
 
@@ -156,6 +158,24 @@ package body GNATdoc.Frontend is
    function Signature (Name : Defining_Name'Class) return Virtual_String;
    --  Computes unique signature of the given entity.
 
+   procedure Check_Undocumented
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access);
+   --  Check whether entiry and all components of the entity are documented.
+   --  Generate warnings when they are enabled.
+
+   ------------------------
+   -- Check_Undocumented --
+   ------------------------
+
+   procedure Check_Undocumented
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access) is
+   begin
+      if GNATdoc.Configuration.Provider.Warnings_Enabled then
+         GNATdoc.Comments.Undocumented_Checker.Check_Undocumented
+           (Entity.Location, Entity.Name, Entity.Documentation);
+      end if;
+   end Check_Undocumented;
+
    --------------
    -- Location --
    --------------
@@ -194,6 +214,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Access_Types.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Access_Type_Def;
 
    ----------------------------
@@ -216,6 +237,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Array_Types.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Array_Type_Def;
 
    ----------------------------
@@ -243,6 +265,8 @@ package body GNATdoc.Frontend is
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Subprograms.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
    end Process_Base_Subp_Body;
 
    ----------------------
@@ -548,6 +572,8 @@ package body GNATdoc.Frontend is
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Subprograms.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
    end Process_Classic_Subp_Decl;
 
    ------------------------------
@@ -673,6 +699,8 @@ package body GNATdoc.Frontend is
       else
          Enclosing.Simple_Types.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
    end Process_Derived_Type_Def;
 
    ------------------------
@@ -695,6 +723,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Entries.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Entry_Body;
 
    ------------------------
@@ -717,6 +746,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Entries.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Entry_Decl;
 
    ----------------------------
@@ -743,6 +773,7 @@ package body GNATdoc.Frontend is
 
          begin
             Enclosing.Exceptions.Insert (Entity);
+            Check_Undocumented (Entity);
          end;
       end loop;
    end Process_Exception_Decl;
@@ -775,6 +806,8 @@ package body GNATdoc.Frontend is
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Generic_Instantiations.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
    end Process_Generic_Instantiation;
 
    ----------------------------------
@@ -808,6 +841,8 @@ package body GNATdoc.Frontend is
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
       end if;
 
+      Check_Undocumented (Entity);
+
       Process_Children (Node.F_Package_Decl.F_Public_Part, Entity);
 
       if GNATdoc.Options.Frontend_Options.Generate_Private then
@@ -835,6 +870,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Interface_Types.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Interface_Type_Def;
 
    -------------------------
@@ -861,6 +897,7 @@ package body GNATdoc.Frontend is
 
          begin
             Enclosing.Constants.Insert (Entity);
+            Check_Undocumented (Entity);
          end;
       end loop;
    end Process_Number_Decl;
@@ -894,6 +931,8 @@ package body GNATdoc.Frontend is
             else
                Enclosing.Variables.Insert (Entity);
             end if;
+
+            Check_Undocumented (Entity);
          end;
       end loop;
    end Process_Object_Decl;
@@ -928,6 +967,8 @@ package body GNATdoc.Frontend is
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
 
       Process_Children (Node.F_Public_Part, Entity);
 
@@ -972,6 +1013,8 @@ package body GNATdoc.Frontend is
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
       end if;
 
+      Check_Undocumented (Entity);
+
       Process_Children (Node.F_Decls, Entity);
    end Process_Package_Body;
 
@@ -1001,6 +1044,8 @@ package body GNATdoc.Frontend is
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Package_Renamings.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
    end Process_Package_Renaming_Decl;
 
    ------------------------------
@@ -1028,6 +1073,8 @@ package body GNATdoc.Frontend is
       else
          Enclosing.Simple_Types.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
    end Process_Private_Type_Def;
 
    ----------------------------
@@ -1058,6 +1105,8 @@ package body GNATdoc.Frontend is
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
 
       Process_Children (Node.F_Decls, Entity);
    end Process_Protected_Body;
@@ -1094,6 +1143,8 @@ package body GNATdoc.Frontend is
          GNATdoc.Entities.Globals.Protected_Types.Insert (Entity);
       end if;
 
+      Check_Undocumented (Entity);
+
       Process_Children (Definition.F_Public_Part, Entity);
 
       if GNATdoc.Options.Frontend_Options.Generate_Private then
@@ -1121,6 +1172,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Record_Types.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Record_Type_Def;
 
    -----------------------------
@@ -1143,6 +1195,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Simple_Types.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Simple_Type_Def;
 
    --------------------------
@@ -1165,6 +1218,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Subtypes.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Subtype_Decl;
 
    -----------------------
@@ -1198,6 +1252,8 @@ package body GNATdoc.Frontend is
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Task_Types.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
 
       if not Decl.F_Definition.Is_Null then
          Process_Children (Decl.F_Definition.F_Public_Part, Entity);
