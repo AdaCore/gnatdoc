@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -41,6 +41,10 @@ package GNATdoc.Configuration is
       Backend_Name : VSS.Strings.Virtual_String)
       return GNATCOLL.VFS.Virtual_File;
    --  Return custom resources directory if specified.
+
+   not overriding function Warnings_Enabled
+     (Self : Abstract_Configuration_Provider) return Boolean;
+   --  Return True when warnings about undocumented entities are enabled.
 
    Provider : Configuration_Provider_Access;
 

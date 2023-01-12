@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                       Copyright (C) 2023, AdaCore                        --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,43 +15,14 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATdoc.Command_Line;
+with VSS.Strings;
 
-package body GNATdoc.Configuration.Command_Line is
+with GNATdoc.Entities;
 
-   ----------------------
-   -- Output_Directory --
-   ----------------------
+package GNATdoc.Messages is
 
-   overriding function Output_Directory
-     (Self         : Command_Line_Configuration_Provider;
-      Backend_Name : VSS.Strings.Virtual_String)
-      return GNATCOLL.VFS.Virtual_File
-   is
-      use type GNATCOLL.VFS.Virtual_File;
+   procedure Report_Warning
+     (Location : GNATdoc.Entities.Entity_Location;
+      Message  : VSS.Strings.Virtual_String);
 
-      Aux : constant GNATCOLL.VFS.Virtual_File :=
-        GNATdoc.Command_Line.Output_Directory;
-
-   begin
-      if Aux /= GNATCOLL.VFS.No_File then
-         return Aux;
-
-      else
-         return
-           Abstract_Configuration_Provider
-             (Self).Output_Directory (Backend_Name);
-      end if;
-   end Output_Directory;
-
-   ----------------------
-   -- Warnings_Enabled --
-   ----------------------
-
-   overriding function Warnings_Enabled
-     (Self : Command_Line_Configuration_Provider) return Boolean is
-   begin
-      return GNATdoc.Command_Line.Warnings;
-   end Warnings_Enabled;
-
-end GNATdoc.Configuration.Command_Line;
+end GNATdoc.Messages;

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -35,5 +35,9 @@ package GNATdoc.Command_Line is
 
    function Project_Context return GPR2.Context.Object;
    --  Return prject context.
+
+   function Warnings return Boolean;
+   --  Return True when report of the warnings is enabled by the command line
+   --  switch.
 
 end GNATdoc.Command_Line;

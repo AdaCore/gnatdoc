@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -50,5 +50,20 @@ package body GNATdoc.Configuration is
          return GNATCOLL.VFS.No_File;
       end if;
    end Output_Directory;
+
+   ----------------------
+   -- Warnings_Enabled --
+   ----------------------
+
+   not overriding function Warnings_Enabled
+     (Self : Abstract_Configuration_Provider) return Boolean is
+   begin
+      if Self.Child /= null then
+         return Self.Child.Warnings_Enabled;
+
+      else
+         return False;
+      end if;
+   end Warnings_Enabled;
 
 end GNATdoc.Configuration;
