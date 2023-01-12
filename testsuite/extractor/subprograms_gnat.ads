@@ -214,6 +214,18 @@ package Subprograms_GNAT is
    --  @param X Value of X
    --  @return Return value
 
+   --------------
+   -- VC20-013 --
+   --------------
+
+   function Test_VC20_013_Baz3
+      (Arg : Integer
+      -- Text 2
+      )
+      return Integer;
+   -- Text 1
+   -- @return Text 3
+
 private
 
    --  This is description of the package at the beginning of the private

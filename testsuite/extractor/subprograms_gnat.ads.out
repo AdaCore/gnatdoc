@@ -1,13 +1,13 @@
-<CompilationUnit subprograms_gnat.ads:5:1-222:22>
+<CompilationUnit subprograms_gnat.ads:5:1-234:22>
 <AdaNodeList subprograms_gnat.ads:5:1-5:17>
 <WithClause subprograms_gnat.ads:5:1-5:17>
 <LimitedAbsent subprograms_gnat.ads:5:1-5:1>
 <PrivateAbsent subprograms_gnat.ads:5:1-5:1>
 <NameList subprograms_gnat.ads:5:6-5:16>
 <Id "Interfaces" subprograms_gnat.ads:5:6-5:16>
-<LibraryItem subprograms_gnat.ads:7:1-222:22>
+<LibraryItem subprograms_gnat.ads:7:1-234:22>
 <PrivateAbsent subprograms_gnat.ads:5:17-5:17>
-<PackageDecl ["Subprograms_GNAT"] subprograms_gnat.ads:7:1-222:22>
+<PackageDecl ["Subprograms_GNAT"] subprograms_gnat.ads:7:1-234:22>
 **************************
 \/ RAW <<HEADER>> ()  0 0 0 0
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
@@ -18,8 +18,8 @@ This is description of the package at the top of the specification.
 **************************
 <DefiningName subprograms_gnat.ads:7:9-7:25>
 <Id "Subprograms_GNAT" subprograms_gnat.ads:7:9-7:25>
-<PublicPart subprograms_gnat.ads:7:28-217:1>
-<AdaNodeList subprograms_gnat.ads:9:4-211:49>
+<PublicPart subprograms_gnat.ads:7:28-229:1>
+<AdaNodeList subprograms_gnat.ads:9:4-225:22>
 <PragmaNode subprograms_gnat.ads:9:4-9:24>
 <Id "Preelaborate" subprograms_gnat.ads:9:11-9:23>
 <BaseAssocList subprograms_gnat.ads:9:10-9:10>
@@ -569,8 +569,28 @@ type Access_Function_2 is
 \/ DESCRIPTION  ()  0 0 0 0
 Access to function
 **************************
-<PrivatePart subprograms_gnat.ads:217:8-222:1>
-<AdaNodeList subprograms_gnat.ads:217:8-217:8>
-<EndName subprograms_gnat.ads:222:5-222:21>
-<Id "Subprograms_GNAT" subprograms_gnat.ads:222:5-222:21>
-<PragmaNodeList subprograms_gnat.ads:222:22-222:22>
+<SubpDecl ["Test_VC20_013_Baz3"] subprograms_gnat.ads:221:4-225:22>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  226 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER arg (Arg)  222 222 223 224
+Text 2
+\/ RETURNS  ()  225 225 0 0
+Text 3
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Text 1
+@return Text 3
+\/ SNIPPET ada ()  0 0 0 0
+function Test_VC20_013_Baz3
+   (Arg : Integer
+   )
+   return Integer
+\/ DESCRIPTION  ()  0 0 0 0
+Text 1
+**************************
+<PrivatePart subprograms_gnat.ads:229:8-234:1>
+<AdaNodeList subprograms_gnat.ads:229:8-229:8>
+<EndName subprograms_gnat.ads:234:5-234:21>
+<Id "Subprograms_GNAT" subprograms_gnat.ads:234:5-234:21>
+<PragmaNodeList subprograms_gnat.ads:234:22-234:22>
