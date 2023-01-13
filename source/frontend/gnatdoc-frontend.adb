@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -17,11 +17,14 @@
 
 with Ada.Text_IO;
 
+with Langkit_Support.Slocs;
 with Libadalang.Common;
 
 with VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Extractor;
+with GNATdoc.Comments.Undocumented_Checker;
+with GNATdoc.Configuration;
 with GNATdoc.Entities;
 with GNATdoc.Options;
 
@@ -148,8 +151,48 @@ package body GNATdoc.Frontend is
    --  Process children nodes, filter out important nodes, and dispatch to
    --  corresponding documentation extraction and entity creation subprograms.
 
+   function Location
+     (Name : Defining_Name'Class) return GNATdoc.Entities.Entity_Location;
+   --  Return location of the defining name.
+
    function Signature (Name : Defining_Name'Class) return Virtual_String;
    --  Computes unique signature of the given entity.
+
+   procedure Check_Undocumented
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access);
+   --  Check whether entiry and all components of the entity are documented.
+   --  Generate warnings when they are enabled.
+
+   ------------------------
+   -- Check_Undocumented --
+   ------------------------
+
+   procedure Check_Undocumented
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access) is
+   begin
+      if GNATdoc.Configuration.Provider.Warnings_Enabled then
+         GNATdoc.Comments.Undocumented_Checker.Check_Undocumented
+           (Entity.Location, Entity.Name, Entity.Documentation);
+      end if;
+   end Check_Undocumented;
+
+   --------------
+   -- Location --
+   --------------
+
+   function Location
+     (Name : Defining_Name'Class) return GNATdoc.Entities.Entity_Location
+   is
+      Aux : constant Langkit_Support.Slocs.Source_Location_Range :=
+        Name.Sloc_Range;
+
+   begin
+      return
+        (File   =>
+           VSS.Strings.Conversions.To_Virtual_String (Name.Unit.Get_Filename),
+         Line   => VSS.Strings.Line_Count (Aux.Start_Line),
+         Column => VSS.Strings.Character_Count (Aux.Start_Column));
+   end Location;
 
    -----------------------------
    -- Process_Access_Type_Def --
@@ -162,7 +205,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -170,6 +214,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Access_Types.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Access_Type_Def;
 
    ----------------------------
@@ -183,7 +228,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -191,6 +237,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Array_Types.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Array_Type_Def;
 
    ----------------------------
@@ -205,7 +252,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Subp_Spec.F_Subp_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -217,6 +265,8 @@ package body GNATdoc.Frontend is
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Subprograms.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
    end Process_Base_Subp_Body;
 
    ----------------------
@@ -509,7 +559,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Subp_Spec.F_Subp_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -521,6 +572,8 @@ package body GNATdoc.Frontend is
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Subprograms.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
    end Process_Classic_Subp_Decl;
 
    ------------------------------
@@ -630,7 +683,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -645,6 +699,8 @@ package body GNATdoc.Frontend is
       else
          Enclosing.Simple_Types.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
    end Process_Derived_Type_Def;
 
    ------------------------
@@ -658,7 +714,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Entry_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -666,6 +723,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Entries.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Entry_Body;
 
    ------------------------
@@ -679,7 +737,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Spec.F_Entry_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -687,6 +746,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Entries.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Entry_Decl;
 
    ----------------------------
@@ -702,7 +762,8 @@ package body GNATdoc.Frontend is
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
-                  (Name           => To_Virtual_String (Name.Text),
+                  (Location       => Location (Name),
+                   Name           => To_Virtual_String (Name.Text),
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
@@ -712,6 +773,7 @@ package body GNATdoc.Frontend is
 
          begin
             Enclosing.Exceptions.Insert (Entity);
+            Check_Undocumented (Entity);
          end;
       end loop;
    end Process_Exception_Decl;
@@ -731,7 +793,8 @@ package body GNATdoc.Frontend is
          else Node.As_Generic_Subp_Instantiation.F_Subp_Name);
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -743,6 +806,8 @@ package body GNATdoc.Frontend is
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Generic_Instantiations.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
    end Process_Generic_Instantiation;
 
    ----------------------------------
@@ -756,7 +821,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Package_Decl.F_Package_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.F_Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
@@ -774,6 +840,8 @@ package body GNATdoc.Frontend is
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
 
       Process_Children (Node.F_Package_Decl.F_Public_Part, Entity);
 
@@ -793,7 +861,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -801,6 +870,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Interface_Types.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Interface_Type_Def;
 
    -------------------------
@@ -816,7 +886,8 @@ package body GNATdoc.Frontend is
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
-                  (Name           => To_Virtual_String (Name.Text),
+                  (Location       => Location (Name),
+                   Name           => To_Virtual_String (Name.Text),
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
@@ -826,6 +897,7 @@ package body GNATdoc.Frontend is
 
          begin
             Enclosing.Constants.Insert (Entity);
+            Check_Undocumented (Entity);
          end;
       end loop;
    end Process_Number_Decl;
@@ -843,7 +915,8 @@ package body GNATdoc.Frontend is
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
-                  (Name           => To_Virtual_String (Name.Text),
+                  (Location       => Location (Name),
+                   Name           => To_Virtual_String (Name.Text),
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
@@ -858,6 +931,8 @@ package body GNATdoc.Frontend is
             else
                Enclosing.Variables.Insert (Entity);
             end if;
+
+            Check_Undocumented (Entity);
          end;
       end loop;
    end Process_Object_Decl;
@@ -873,7 +948,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Package_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.F_Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
@@ -891,6 +967,8 @@ package body GNATdoc.Frontend is
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
 
       Process_Children (Node.F_Public_Part, Entity);
 
@@ -912,7 +990,8 @@ package body GNATdoc.Frontend is
       Entity    : constant not null
         GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.F_Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
@@ -934,6 +1013,8 @@ package body GNATdoc.Frontend is
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
       end if;
 
+      Check_Undocumented (Entity);
+
       Process_Children (Node.F_Decls, Entity);
    end Process_Package_Body;
 
@@ -949,7 +1030,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      =>
              To_Virtual_String (Name.P_Unique_Identifying_Name),
@@ -962,6 +1044,8 @@ package body GNATdoc.Frontend is
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Package_Renamings.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
    end Process_Package_Renaming_Decl;
 
    ------------------------------
@@ -975,7 +1059,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -988,6 +1073,8 @@ package body GNATdoc.Frontend is
       else
          Enclosing.Simple_Types.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
    end Process_Private_Type_Def;
 
    ----------------------------
@@ -1002,7 +1089,8 @@ package body GNATdoc.Frontend is
       Entity : constant not null
         GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.F_Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
@@ -1017,6 +1105,8 @@ package body GNATdoc.Frontend is
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
 
       Process_Children (Node.F_Decls, Entity);
    end Process_Protected_Body;
@@ -1033,7 +1123,8 @@ package body GNATdoc.Frontend is
    is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.F_Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
@@ -1051,6 +1142,8 @@ package body GNATdoc.Frontend is
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Protected_Types.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
 
       Process_Children (Definition.F_Public_Part, Entity);
 
@@ -1070,7 +1163,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -1078,6 +1172,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Record_Types.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Record_Type_Def;
 
    -----------------------------
@@ -1091,7 +1186,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -1099,6 +1195,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Simple_Types.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Simple_Type_Def;
 
    --------------------------
@@ -1112,7 +1209,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
@@ -1120,6 +1218,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Subtypes.Insert (Entity);
+      Check_Undocumented (Entity);
    end Process_Subtype_Decl;
 
    -----------------------
@@ -1134,7 +1233,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Decl.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Name           => To_Virtual_String (Name.F_Name.Text),
+          (Location       => Location (Name),
+           Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            Enclosing      =>
@@ -1152,6 +1252,8 @@ package body GNATdoc.Frontend is
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Task_Types.Insert (Entity);
       end if;
+
+      Check_Undocumented (Entity);
 
       if not Decl.F_Definition.Is_Null then
          Process_Children (Decl.F_Definition.F_Public_Part, Entity);

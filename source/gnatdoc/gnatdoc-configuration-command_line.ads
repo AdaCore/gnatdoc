@@ -33,4 +33,7 @@ private
       return GNATCOLL.VFS.Virtual_File;
    --  Return output directory to generate documentation.
 
+   overriding function Warnings_Enabled
+     (Self : Command_Line_Configuration_Provider) return Boolean;
+
 end GNATdoc.Configuration.Command_Line;
