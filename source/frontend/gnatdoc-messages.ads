@@ -25,4 +25,8 @@ package GNATdoc.Messages is
      (Location : GNATdoc.Entities.Entity_Location;
       Message  : VSS.Strings.Virtual_String);
 
+   procedure Report_Error
+     (Location : GNATdoc.Entities.Entity_Location;
+      Message  : VSS.Strings.Virtual_String);
+
 end GNATdoc.Messages;
