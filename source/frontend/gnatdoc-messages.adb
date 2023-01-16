@@ -46,6 +46,27 @@ package body GNATdoc.Messages is
       return To_Wide_Wide_String (To_Virtual_String (F.Display_Base_Name));
    end File_Name;
 
+   ------------------
+   -- Report_Error --
+   ------------------
+
+   procedure Report_Error
+     (Location : GNATdoc.Entities.Entity_Location;
+      Message  : VSS.Strings.Virtual_String) is
+   begin
+      Put_Line
+        (Standard_Error,
+         File_Name (Location.File)
+         & ':'
+         & Trim (VSS.Strings.Line_Count'Wide_Wide_Image (Location.Line), Both)
+         & ':'
+         & Trim
+           (VSS.Strings.Character_Count'Wide_Wide_Image (Location.Column),
+            Both)
+         & ": "
+         & To_Wide_Wide_String (Message));
+   end Report_Error;
+
    --------------------
    -- Report_Warning --
    --------------------
@@ -63,8 +84,7 @@ package body GNATdoc.Messages is
          & Trim
            (VSS.Strings.Character_Count'Wide_Wide_Image (Location.Column),
             Both)
-         & ':'
-         & " warning: "
+         & ": warning: "
          & To_Wide_Wide_String (Message));
    end Report_Warning;
 

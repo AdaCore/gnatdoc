@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -19,6 +19,7 @@ with Ada.Containers.Hashed_Sets;
 with Ada.Strings.Hash;
 with Ada.Text_IO;
 
+with Langkit_Support.Text;
 with Libadalang.Common;
 with Libadalang.Iterators;
 with Libadalang.Project_Provider;
@@ -35,6 +36,7 @@ with VSS.Regular_Expressions;
 with VSS.Strings.Conversions;
 
 with GNATdoc.Command_Line;
+with GNATdoc.Messages;
 with GNATdoc.Options;
 
 package body GNATdoc.Projects is
@@ -62,6 +64,22 @@ package body GNATdoc.Projects is
    Documentation_Resources_Dir          : constant GPR2.Q_Attribute_Id :=
      (Documentation_Package, Resources_Dir_Attribute);
 
+   type Missing_File_Event_Handler is
+     new Libadalang.Analysis.Event_Handler_Interface with null record;
+   --  Collect critical unit resolution failures in global object. It is used
+   --  to report errors.
+
+   overriding procedure Unit_Requested_Callback
+     (Self               : in out Missing_File_Event_Handler;
+      Context            : Libadalang.Analysis.Analysis_Context'Class;
+      Name               : Langkit_Support.Text.Text_Type;
+      From               : Libadalang.Analysis.Analysis_Unit'Class;
+      Found              : Boolean;
+      Is_Not_Found_Error : Boolean);
+
+   overriding procedure Release
+     (Self : in out Missing_File_Event_Handler) is null;
+
    function Hash
      (Item : GNATCOLL.VFS.Virtual_File) return Ada.Containers.Hash_Type;
 
@@ -72,6 +90,8 @@ package body GNATdoc.Projects is
    Project_Tree          : GPR2.Project.Tree.Object;
    Exclude_Project_Files : Virtual_File_Sets.Set;
    LAL_Context           : Libadalang.Analysis.Analysis_Context;
+   Event_Handler         : Libadalang.Analysis.Event_Handler_Reference;
+   Missing_Files         : Virtual_File_Sets.Set;
 
    procedure Register_Attributes;
 
@@ -160,11 +180,17 @@ package body GNATdoc.Projects is
 
       --  Create Libadalang context and unit provider
 
+      Event_Handler :=
+        Libadalang.Analysis.Create_Event_Handler_Reference
+          (Missing_File_Event_Handler'(null record));
+
       LAL_Context :=
         Libadalang.Analysis.Create_Context
           (Unit_Provider =>
              Libadalang.Project_Provider.Create_Project_Unit_Provider
-               (Project_Tree));
+               (Project_Tree),
+           Event_Handler => Event_Handler);
+      LAL_Context.Discard_Errors_In_Populate_Lexical_Env (False);
 
       --  Setup list of excluded project files
 
@@ -280,7 +306,11 @@ package body GNATdoc.Projects is
          then
             for Source of View.Sources loop
                if Source.Is_Ada then
+                  Missing_Files.Clear;
+
                   declare
+                     use type VSS.Strings.Virtual_String;
+
                      Unit     : constant Libadalang.Analysis.Analysis_Unit :=
                        LAL_Context.Get_From_File
                          (String (Source.Path_Name.Name));
@@ -292,9 +322,33 @@ package body GNATdoc.Projects is
                      Node     : Libadalang.Analysis.Ada_Node;
 
                   begin
-                     while Iterator.Next (Node) loop
-                        Handler (Node.As_Compilation_Unit);
-                     end loop;
+                     Unit.Populate_Lexical_Env;
+
+                     if Missing_Files.Is_Empty then
+                        while Iterator.Next (Node) loop
+                           Handler (Node.As_Compilation_Unit);
+                        end loop;
+
+                     else
+                        GNATdoc.Messages.Report_Error
+                          ((VSS.Strings.Conversions.To_Virtual_String
+                           (String (Source.Path_Name.Name)),
+                           1,
+                           1),
+                           "ignore file due to missing dependencies");
+
+                        for File of Missing_Files loop
+                           GNATdoc.Messages.Report_Error
+                             ((VSS.Strings.Conversions.To_Virtual_String
+                              (String (Source.Path_Name.Name)),
+                              1,
+                              1),
+                              "file "
+                              & VSS.Strings.Conversions.To_Virtual_String
+                                (File.Display_Base_Name)
+                              & " is not found");
+                        end loop;
+                     end if;
                   end;
                end if;
             end loop;
@@ -341,5 +395,25 @@ package body GNATdoc.Projects is
          Value_Case_Sensitive => True,
          Is_Allowed_In        => GPR2.Project.Registry.Attribute.Everywhere);
    end Register_Attributes;
+
+   -----------------------------
+   -- Unit_Requested_Callback --
+   -----------------------------
+
+   overriding procedure Unit_Requested_Callback
+     (Self               : in out Missing_File_Event_Handler;
+      Context            : Libadalang.Analysis.Analysis_Context'Class;
+      Name               : Langkit_Support.Text.Text_Type;
+      From               : Libadalang.Analysis.Analysis_Unit'Class;
+      Found              : Boolean;
+      Is_Not_Found_Error : Boolean) is
+   begin
+      if not Found and Is_Not_Found_Error then
+         Missing_Files.Include
+           (GNATCOLL.VFS.Create_From_UTF8
+              (VSS.Strings.Conversions.To_UTF_8_String
+                   (VSS.Strings.To_Virtual_String (Name))));
+      end if;
+   end Unit_Requested_Callback;
 
 end GNATdoc.Projects;
