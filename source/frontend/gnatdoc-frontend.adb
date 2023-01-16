@@ -26,6 +26,7 @@ with GNATdoc.Comments.Extractor;
 with GNATdoc.Comments.Undocumented_Checker;
 with GNATdoc.Configuration;
 with GNATdoc.Entities;
+with GNATdoc.Messages;
 with GNATdoc.Options;
 
 package body GNATdoc.Frontend is
@@ -152,8 +153,8 @@ package body GNATdoc.Frontend is
    --  corresponding documentation extraction and entity creation subprograms.
 
    function Location
-     (Name : Defining_Name'Class) return GNATdoc.Entities.Entity_Location;
-   --  Return location of the defining name.
+     (Name : Ada_Node'Class) return GNATdoc.Entities.Entity_Location;
+   --  Return location of the given node.
 
    function Signature (Name : Defining_Name'Class) return Virtual_String;
    --  Computes unique signature of the given entity.
@@ -181,7 +182,7 @@ package body GNATdoc.Frontend is
    --------------
 
    function Location
-     (Name : Defining_Name'Class) return GNATdoc.Entities.Entity_Location
+     (Name : Ada_Node'Class) return GNATdoc.Entities.Entity_Location
    is
       Aux : constant Langkit_Support.Slocs.Source_Location_Range :=
         Name.Sloc_Range;
@@ -539,6 +540,13 @@ package body GNATdoc.Frontend is
 
                return Into;
          end case;
+
+      exception
+         when E : others =>
+
+            GNATdoc.Messages.Report_Internal_Error (Location (Node), E);
+
+            return Over;
       end Process_Node;
 
    begin
@@ -666,6 +674,12 @@ package body GNATdoc.Frontend is
 
                return Into;
          end case;
+
+      exception
+         when E : others =>
+            GNATdoc.Messages.Report_Internal_Error (Location (Node), E);
+
+            return Over;
       end Process_Node;
 
    begin

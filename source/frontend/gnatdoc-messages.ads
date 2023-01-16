@@ -15,6 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with Ada.Exceptions;
+
 with VSS.Strings;
 
 with GNATdoc.Entities;
@@ -28,5 +30,9 @@ package GNATdoc.Messages is
    procedure Report_Error
      (Location : GNATdoc.Entities.Entity_Location;
       Message  : VSS.Strings.Virtual_String);
+
+   procedure Report_Internal_Error
+     (Location   : GNATdoc.Entities.Entity_Location;
+      Occurrence : Ada.Exceptions.Exception_Occurrence);
 
 end GNATdoc.Messages;
