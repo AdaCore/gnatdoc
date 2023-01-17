@@ -21,6 +21,7 @@ with Ada.Wide_Wide_Text_IO;
 with GNATCOLL.VFS;
 
 with VSS.Strings.Conversions;
+with VSS.String_Vectors;
 
 package body GNATdoc.Messages is
 
@@ -46,6 +47,55 @@ package body GNATdoc.Messages is
       return To_Wide_Wide_String (To_Virtual_String (F.Display_Base_Name));
    end File_Name;
 
+   ------------------
+   -- Report_Error --
+   ------------------
+
+   procedure Report_Error
+     (Location : GNATdoc.Entities.Entity_Location;
+      Message  : VSS.Strings.Virtual_String) is
+   begin
+      Put_Line
+        (Standard_Error,
+         File_Name (Location.File)
+         & ':'
+         & Trim (VSS.Strings.Line_Count'Wide_Wide_Image (Location.Line), Both)
+         & ':'
+         & Trim
+           (VSS.Strings.Character_Count'Wide_Wide_Image (Location.Column),
+            Both)
+         & ": "
+         & To_Wide_Wide_String (Message));
+   end Report_Error;
+
+   ---------------------------
+   -- Report_Internal_Error --
+   ---------------------------
+
+   procedure Report_Internal_Error
+     (Location   : GNATdoc.Entities.Entity_Location;
+      Occurrence : Ada.Exceptions.Exception_Occurrence)
+   is
+      use type VSS.Strings.Virtual_String;
+
+      Lines : constant VSS.String_Vectors.Virtual_String_Vector :=
+        VSS.Strings.Conversions.To_Virtual_String
+          (Ada.Exceptions.Exception_Information (Occurrence)).Split_Lines;
+
+   begin
+      if Lines.Length = 1 then
+         GNATdoc.Messages.Report_Error
+           (Location, "internal error: " & Lines (1));
+
+      else
+         GNATdoc.Messages.Report_Error (Location, "internal error:");
+
+         for Line of Lines loop
+            GNATdoc.Messages.Report_Error (Location, Line);
+         end loop;
+      end if;
+   end Report_Internal_Error;
+
    --------------------
    -- Report_Warning --
    --------------------
@@ -63,8 +113,7 @@ package body GNATdoc.Messages is
          & Trim
            (VSS.Strings.Character_Count'Wide_Wide_Image (Location.Column),
             Both)
-         & ':'
-         & " warning: "
+         & ": warning: "
          & To_Wide_Wide_String (Message));
    end Report_Warning;
 
