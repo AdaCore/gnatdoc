@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,6 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with VSS.Characters.Latin;
+with VSS.Strings.Character_Iterators;
 with VSS.Strings.Conversions;
 
 package body Streams is
@@ -29,6 +31,17 @@ package body Streams is
         (Self).Close;
    end Close;
 
+   --------------
+   -- New_Line --
+   --------------
+
+   procedure New_Line
+     (Self    : in out Output_Text_Stream'Class;
+      Success : in out Boolean) is
+   begin
+      Self.Put (VSS.Characters.Latin.Line_Feed, Success);
+   end New_Line;
+
    ----------
    -- Open --
    ----------
@@ -41,5 +54,40 @@ package body Streams is
         (VSS.Strings.Conversions.To_Virtual_String (File.Display_Full_Name),
          "utf-8");
    end Open;
+
+   ---------
+   -- Put --
+   ---------
+
+   procedure Put
+     (Self    : in out Output_Text_Stream'Class;
+      Item    : VSS.Strings.Virtual_String'Class;
+      Success : in out Boolean)
+   is
+      Iterator : VSS.Strings.Character_Iterators.Character_Iterator :=
+        Item.Before_First_Character;
+
+   begin
+      while Iterator.Forward loop
+         exit when not Success;
+
+         Self.Put (Iterator.Element, Success);
+      end loop;
+   end Put;
+
+   ---------------
+   -- Put_Lines --
+   ---------------
+
+   procedure Put_Lines
+     (Self    : in out Output_Text_Stream'Class;
+      Item    : VSS.String_Vectors.Virtual_String_Vector;
+      Success : in out Boolean) is
+   begin
+      for Line of Item loop
+         Self.Put (Line, Success);
+         Self.New_Line (Success);
+      end loop;
+   end Put_Lines;
 
 end Streams;
