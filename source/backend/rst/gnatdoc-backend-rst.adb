@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                       Copyright (C) 2023, AdaCore                        --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,29 +15,34 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with "gpr2";
-with "libgnatdoc";
-with "markdown";
-with "vss_xml_xmlada";
-with "vss_xml_templates";
+package body GNATdoc.Backend.RST is
 
-project GNATdoc is
+   --------------
+   -- Generate --
+   --------------
 
-   for Object_Dir use "../.objs";
-   for Source_Dirs use
-     ("../source/backend",
-      "../source/backend/rst",
-      "../source/frontend",
-      "../source/gnatdoc");
-   for Exec_Dir use "../bin";
-   for Main use ("gnatdoc-driver.adb");
+   overriding procedure Generate (Self : in out RST_Backend) is
+   begin
+      null;
+   end Generate;
 
-   package Compiler is
-      for Switches ("Ada") use ("-g", "-gnatygO", "-gnata", "-gnatwa");
-   end Compiler;
+   ----------------
+   -- Initialize --
+   ----------------
 
-   package Builder is
-      for Executable ("gnatdoc-driver.adb") use "gnatdoc4";
-   end Builder;
+   overriding procedure Initialize (Self : in out RST_Backend) is
+   begin
+      Abstract_Backend (Self).Initialize;
+   end Initialize;
 
-end GNATdoc;
+   ----------
+   -- Name --
+   ----------
+
+   overriding function Name
+     (Self : in out RST_Backend) return VSS.Strings.Virtual_String is
+   begin
+      return "rst";
+   end Name;
+
+end GNATdoc.Backend.RST;

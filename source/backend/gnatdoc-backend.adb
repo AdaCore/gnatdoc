@@ -19,6 +19,7 @@ with VSS.Application;
 with VSS.Strings.Conversions;
 
 with GNATdoc.Backend.HTML;
+with GNATdoc.Backend.RST;
 with GNATdoc.Configuration;
 
 package body GNATdoc.Backend is
@@ -31,6 +32,9 @@ package body GNATdoc.Backend is
    begin
       if Name = "html" then
          return new GNATdoc.Backend.HTML.HTML_Backend;
+
+      elsif Name = "rst" then
+         return new GNATdoc.Backend.RST.RST_Backend;
       end if;
 
       return null;
