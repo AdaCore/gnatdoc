@@ -40,4 +40,7 @@ package GNATdoc.Command_Line is
    --  Return True when report of the warnings is enabled by the command line
    --  switch.
 
+   function Backend_Name return VSS.Strings.Virtual_String;
+   --  Return name of the backend if specified.
+
 end GNATdoc.Command_Line;

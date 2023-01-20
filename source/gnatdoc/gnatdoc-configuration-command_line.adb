@@ -19,6 +19,26 @@ with GNATdoc.Command_Line;
 
 package body GNATdoc.Configuration.Command_Line is
 
+   ------------------
+   -- Backend_Name --
+   ------------------
+
+   overriding function Backend_Name
+     (Self : Command_Line_Configuration_Provider)
+      return VSS.Strings.Virtual_String
+   is
+      Aux : constant VSS.Strings.Virtual_String :=
+        GNATdoc.Command_Line.Backend_Name;
+
+   begin
+      if not Aux.Is_Empty then
+         return Aux;
+
+      else
+         return Abstract_Configuration_Provider (Self).Backend_Name;
+      end if;
+   end Backend_Name;
+
    ----------------------
    -- Output_Directory --
    ----------------------
