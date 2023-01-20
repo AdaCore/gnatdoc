@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -18,11 +18,23 @@
 with VSS.Application;
 with VSS.Strings.Conversions;
 
+with GNATdoc.Backend.HTML;
 with GNATdoc.Configuration;
 
 package body GNATdoc.Backend is
 
    use type GNATCOLL.VFS.Virtual_File;
+   use type VSS.Strings.Virtual_String;
+
+   function Create_Backend
+     (Name : VSS.Strings.Virtual_String) return Backend_Access is
+   begin
+      if Name = "html" then
+         return new GNATdoc.Backend.HTML.HTML_Backend;
+      end if;
+
+      return null;
+   end Create_Backend;
 
    ----------------
    -- Initialize --

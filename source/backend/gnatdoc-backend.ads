@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -24,6 +24,8 @@ package GNATdoc.Backend is
 
    type Abstract_Backend is abstract tagged limited private;
 
+   type Backend_Access is access all Abstract_Backend'Class;
+
    procedure Initialize (Self : in out Abstract_Backend);
 
    function Name
@@ -31,6 +33,9 @@ package GNATdoc.Backend is
       return VSS.Strings.Virtual_String is abstract;
 
    procedure Generate (Self : in out Abstract_Backend) is abstract;
+
+   function Create_Backend
+     (Name : VSS.Strings.Virtual_String) return Backend_Access;
 
 private
 
