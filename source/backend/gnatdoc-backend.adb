@@ -21,6 +21,7 @@ with VSS.Strings.Conversions;
 with GNATdoc.Backend.HTML;
 with GNATdoc.Backend.RST;
 with GNATdoc.Configuration;
+with GNATdoc.Options;
 
 package body GNATdoc.Backend is
 
@@ -70,6 +71,23 @@ package body GNATdoc.Backend is
          Self.Output_Root.Make_Dir;
       end if;
    end Initialize;
+
+   -----------------------
+   -- Is_Private_Entity --
+   -----------------------
+
+   function Is_Private_Entity
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access)
+      return Boolean is
+   begin
+      return
+        (Entity.Is_Private
+           and not GNATdoc.Options.Frontend_Options.Generate_Private)
+        or Entity.Documentation.Is_Private
+        or (not Entity.Enclosing.Is_Empty
+              and then Is_Private_Entity
+                         (GNATdoc.Entities.To_Entity (Entity.Enclosing)));
+   end Is_Private_Entity;
 
    --------------------------
    -- Lookup_Resource_File --
