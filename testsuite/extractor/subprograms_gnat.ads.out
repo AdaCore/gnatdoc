@@ -16,7 +16,7 @@ This is description of the package at the top of the specification.
 \/ DESCRIPTION  ()  0 0 0 0
 This is description of the package at the top of the specification.
 **************************
-<DefiningName subprograms_gnat.ads:7:9-7:25>
+<DefiningName "Subprograms_GNAT" subprograms_gnat.ads:7:9-7:25>
 <Id "Subprograms_GNAT" subprograms_gnat.ads:7:9-7:25>
 <PublicPart subprograms_gnat.ads:7:28-229:1>
 <AdaNodeList subprograms_gnat.ads:9:4-225:22>

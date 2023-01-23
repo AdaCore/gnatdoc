@@ -17,6 +17,10 @@
 
 with GNATCOLL.VFS;
 
+private with VSS.Characters;
+private with VSS.Strings.Converters.Encoders;
+private with VSS.Strings;
+
 with VSS.Text_Streams;
 private with VSS.Text_Streams.File_Output;
 
@@ -36,5 +40,12 @@ private
    type Output_Text_Stream is
      limited new VSS.Text_Streams.File_Output.File_Output_Text_Stream with
        null record;
+
+   overriding function Has_Error
+     (Self : Output_Text_Stream) return Boolean is (False);
+
+   overriding function Error_Message
+     (Self : Output_Text_Stream) return VSS.Strings.Virtual_String
+   is (VSS.Strings.Empty_Virtual_String);
 
 end Streams;
