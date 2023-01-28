@@ -15,8 +15,6 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.Characters.Latin;
-with VSS.Strings.Character_Iterators;
 with VSS.Strings.Conversions;
 
 package body Streams is
@@ -31,17 +29,6 @@ package body Streams is
         (Self).Close;
    end Close;
 
-   --------------
-   -- New_Line --
-   --------------
-
-   procedure New_Line
-     (Self    : in out Output_Text_Stream'Class;
-      Success : in out Boolean) is
-   begin
-      Self.Put (VSS.Characters.Latin.Line_Feed, Success);
-   end New_Line;
-
    ----------
    -- Open --
    ----------
@@ -54,26 +41,6 @@ package body Streams is
         (VSS.Strings.Conversions.To_Virtual_String (File.Display_Full_Name),
          "utf-8");
    end Open;
-
-   ---------
-   -- Put --
-   ---------
-
-   procedure Put
-     (Self    : in out Output_Text_Stream'Class;
-      Item    : VSS.Strings.Virtual_String'Class;
-      Success : in out Boolean)
-   is
-      Iterator : VSS.Strings.Character_Iterators.Character_Iterator :=
-        Item.Before_First_Character;
-
-   begin
-      while Iterator.Forward loop
-         exit when not Success;
-
-         Self.Put (Iterator.Element, Success);
-      end loop;
-   end Put;
 
    ---------------
    -- Put_Lines --

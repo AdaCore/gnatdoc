@@ -33,15 +33,6 @@ package Streams is
 
    procedure Close (Self : in out Output_Text_Stream'Class);
 
-   procedure Put
-     (Self    : in out Output_Text_Stream'Class;
-      Item    : VSS.Strings.Virtual_String'Class;
-      Success : in out Boolean);
-
-   procedure New_Line
-     (Self    : in out Output_Text_Stream'Class;
-      Success : in out Boolean);
-
    procedure Put_Lines
      (Self    : in out Output_Text_Stream'Class;
       Item    : VSS.String_Vectors.Virtual_String_Vector;
