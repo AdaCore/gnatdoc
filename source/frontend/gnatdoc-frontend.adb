@@ -164,6 +164,10 @@ package body GNATdoc.Frontend is
    --  Check whether entiry and all components of the entity are documented.
    --  Generate warnings when they are enabled.
 
+   function RST_Profile
+     (Node : Libadalang.Analysis.Subp_Spec'Class)
+      return VSS.Strings.Virtual_String;
+
    ------------------------
    -- Check_Undocumented --
    ------------------------
@@ -254,9 +258,16 @@ package body GNATdoc.Frontend is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
           (Location       => Location (Name),
+           Kind           =>
+             (case Node.F_Subp_Spec.F_Subp_Kind is
+                 when Ada_Subp_Kind_Function  =>
+                   GNATdoc.Entities.Ada_Function,
+                 when Ada_Subp_Kind_Procedure =>
+                   GNATdoc.Entities.Ada_Procedure),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
+           RST_Profile    => RST_Profile (Node.F_Subp_Spec),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
@@ -568,9 +579,16 @@ package body GNATdoc.Frontend is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
           (Location       => Location (Name),
+           Kind           =>
+             (case Node.F_Subp_Spec.F_Subp_Kind is
+                 when Ada_Subp_Kind_Function  =>
+                   GNATdoc.Entities.Ada_Function,
+                 when Ada_Subp_Kind_Procedure =>
+                   GNATdoc.Entities.Ada_Procedure),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
+           RST_Profile    => RST_Profile (Node.F_Subp_Spec),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
@@ -1277,6 +1295,90 @@ package body GNATdoc.Frontend is
          end if;
       end if;
    end Process_Task_Decl;
+
+   -----------------
+   -- RST_Profile --
+   -----------------
+
+   function RST_Profile
+     (Node : Libadalang.Analysis.Subp_Spec'Class)
+      return VSS.Strings.Virtual_String
+   is
+      Params  : constant Libadalang.Analysis.Params'Class :=
+        Node.F_Subp_Params;
+      Returns : constant Libadalang.Analysis.Type_Expr'Class :=
+        Node.F_Subp_Returns;
+      First   : Boolean := True;
+
+   begin
+      return Result : VSS.Strings.Virtual_String do
+         case Node.F_Subp_Kind is
+            when Ada_Subp_Kind_Function =>
+               Result.Append ("function ");
+            when Ada_Subp_Kind_Procedure =>
+               Result.Append ("procedure ");
+         end case;
+
+         Result.Append
+           (VSS.Strings.Conversions.To_Virtual_String
+              (Node.F_Subp_Name.P_Canonical_Text));
+
+         if not Params.Is_Null then
+            Result.Append (" (");
+
+            for Param of Params.F_Params loop
+               declare
+                  Ids : constant Defining_Name_List := Param.F_Ids;
+
+               begin
+                  for Id of Ids loop
+                     if First then
+                        First := False;
+
+                     else
+                        Result.Append ("; ");
+                     end if;
+
+                     Result.Append
+                       (VSS.Strings.To_Virtual_String (Id.F_Name.Text));
+                     Result.Append (" : ");
+                     Result.Append
+                       (VSS.Strings.To_Virtual_String
+                          (Param.F_Type_Expr.P_Type_Name
+                             .P_Referenced_Defining_Name
+                               .P_Fully_Qualified_Name));
+                  end loop;
+               end;
+            end loop;
+
+            Result.Append (")");
+         end if;
+
+         if not Returns.Is_Null then
+            Result.Append (" return ");
+
+            case Returns.Kind is
+               when Ada_Subtype_Indication =>
+                  Result.Append
+                    (VSS.Strings.To_Virtual_String
+                       (Returns.P_Type_Name.P_Referenced_Defining_Name
+                        .P_Fully_Qualified_Name));
+
+               when Ada_Anonymous_Type =>
+                  Result.Append
+                    (VSS.Strings.To_Virtual_String
+                       (Returns.As_Anonymous_Type.F_Type_Decl
+                        .F_Type_Def.As_Type_Access_Def.F_Subtype_Indication
+                        .P_Type_Name
+                        .P_Referenced_Defining_Name
+                        .P_Fully_Qualified_Name));
+
+               when others =>
+                  raise Program_Error;
+            end case;
+         end if;
+      end return;
+   end RST_Profile;
 
    ---------------
    -- Signature --

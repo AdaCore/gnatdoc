@@ -19,7 +19,7 @@ with VSS.Characters.Latin;
 with VSS.Strings.Character_Iterators;
 with VSS.Strings.Conversions;
 
-with GNATdoc.Comments.Helpers;
+with GNATdoc.Comments.RST_Helpers;
 with GNATdoc.Configuration;
 with GNATdoc.Entities; use GNATdoc.Entities;
 with Streams;
@@ -133,14 +133,14 @@ package body GNATdoc.Backend.RST is
       File.Put (Entity.Qualified_Name.Character_Length * '*', Success);
       File.New_Line (Success);
 
-      File.Put (".. ada:package:: ", Success);
+      File.Put (".. ada:set_package:: ", Success);
       File.Put (Entity.Qualified_Name, Success);
       File.New_Line (Success);
       File.New_Line (Success);
 
       File.Put_Lines
-        (GNATdoc.Comments.Helpers.Get_Plain_Text_Description
-           (Entity.Documentation),
+        (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
+           ("", Entity.Documentation),
          Success);
       File.New_Line (Success);
 
@@ -171,11 +171,14 @@ package body GNATdoc.Backend.RST is
                File.Put (".. ada:type:: type ", Success);
                File.Put (Item.Name, Success);
                File.New_Line (Success);
+               File.Put ("    :package: ", Success);
+               File.Put (Entity.Qualified_Name, Success);
+               File.New_Line (Success);
                File.New_Line (Success);
 
                File.Put_Lines
-                 (GNATdoc.Comments.Helpers.Get_Plain_Text_Description
-                    (Item.Documentation),
+                 (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
+                    ("    ", Item.Documentation),
                   Success);
                File.New_Line (Success);
             end loop;
@@ -192,18 +195,31 @@ package body GNATdoc.Backend.RST is
             File.New_Line (Success);
             File.New_Line (Success);
 
-      --        for Item of Types loop
-      --           File.Put (".. ada:type:: type ", Success);
-      --           File.Put (Item.Name, Success);
-      --           File.New_Line (Success);
-      --           File.New_Line (Success);
-      --
-      --           File.Put_Lines
-      --             (GNATdoc.Comments.Helpers.Get_Plain_Text_Description
-      --                (Item.Documentation),
-      --              Success);
-      --           File.New_Line (Success);
-      --        end loop;
+            for Item of Entity.Subprograms loop
+               case Item.Kind is
+                  when Ada_Function =>
+                     File.Put (".. ada:function:: ", Success);
+
+                  when Ada_Procedure =>
+                     File.Put (".. ada:procedure:: ", Success);
+
+                  when others =>
+                     raise Program_Error;
+               end case;
+
+               File.Put (Item.RST_Profile, Success);
+               File.New_Line (Success);
+               File.Put ("    :package: ", Success);
+               File.Put (Entity.Qualified_Name, Success);
+               File.New_Line (Success);
+               File.New_Line (Success);
+
+               File.Put_Lines
+                 (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
+                    ("    ", Item.Documentation),
+                  Success);
+               File.New_Line (Success);
+            end loop;
          end if;
       end;
 
