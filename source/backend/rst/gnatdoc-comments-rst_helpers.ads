@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                       Copyright (C) 2023, AdaCore                        --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,29 +15,15 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with "gpr2";
-with "libgnatdoc";
-with "markdown";
-with "vss_xml_xmlada";
-with "vss_xml_templates";
+with VSS.Strings;
+with VSS.String_Vectors;
 
-project GNATdoc is
+package GNATdoc.Comments.RST_Helpers is
 
-   for Object_Dir use "../.objs";
-   for Source_Dirs use
-     ("../source/backend",
-      "../source/backend/rst",
-      "../source/frontend",
-      "../source/gnatdoc");
-   for Exec_Dir use "../bin";
-   for Main use ("gnatdoc-driver.adb");
+   function Get_RST_Documentation
+     (Indent        : VSS.Strings.Virtual_String;
+      Documentation : Structured_Comment)
+      return VSS.String_Vectors.Virtual_String_Vector;
+   --  Return description as RST text.
 
-   package Compiler is
-      for Switches ("Ada") use ("-g", "-gnatygO", "-gnata", "-gnatwa");
-   end Compiler;
-
-   package Builder is
-      for Executable ("gnatdoc-driver.adb") use "gnatdoc4";
-   end Builder;
-
-end GNATdoc;
+end GNATdoc.Comments.RST_Helpers;

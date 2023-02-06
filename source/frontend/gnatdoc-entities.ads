@@ -24,6 +24,11 @@ with GNATdoc.Comments;
 
 package GNATdoc.Entities is
 
+   type Entity_Kind is
+     (Undefined,
+      Ada_Function,
+      Ada_Procedure);
+
    type Entity_Location is record
       File   : VSS.Strings.Virtual_String;
       Line   : VSS.Strings.Line_Count      := 0;
@@ -50,6 +55,7 @@ package GNATdoc.Entities is
 
    type Entity_Information is record
       Location               : Entity_Location;
+      Kind                   : Entity_Kind := Undefined;
       Name                   : VSS.Strings.Virtual_String;
       Qualified_Name         : VSS.Strings.Virtual_String;
       Signature              : VSS.Strings.Virtual_String;
@@ -59,6 +65,9 @@ package GNATdoc.Entities is
       --  Signature of the enclosing entity.
       Is_Private             : Boolean := False;
       --  Private entities are excluded from the documentartion.
+
+      RST_Profile            : VSS.Strings.Virtual_String;
+      --  Subprogram's profile in fortmat to use by RST backend
 
       Packages               : Entity_Information_Sets.Set;
       Subprograms            : aliased Entity_Information_Sets.Set;

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -18,7 +18,7 @@
 with GNATdoc.Command_Line;
 with GNATdoc.Configuration.Command_Line;
 with GNATdoc.Configuration.Project;
-with GNATdoc.Backend.HTML;
+with GNATdoc.Backend;
 with GNATdoc.Frontend;
 with GNATdoc.Projects;
 
@@ -29,16 +29,31 @@ procedure GNATdoc.Driver is
      GNATdoc.Configuration.Command_Line.Command_Line_Configuration_Provider
        (PF_Provider'Unchecked_Access);
 
-   Backend : GNATdoc.Backend.HTML.HTML_Backend;
+   Backend : GNATdoc.Backend.Backend_Access;
 
 begin
-   GNATdoc.Command_Line.Initialize;
-   GNATdoc.Projects.Initialize;
+   --  Configure configuration options provider.
 
    GNATdoc.Configuration.Provider := CL_Provider'Unchecked_Access;
 
+   --  Initialize command line and project.
+
+   GNATdoc.Command_Line.Initialize;
+   GNATdoc.Projects.Initialize;
+
+   --  Create and initialize backend.
+
+   Backend :=
+     GNATdoc.Backend.Create_Backend
+       (GNATdoc.Configuration.Provider.Backend_Name);
    Backend.Initialize;
+
+   --  Process files
+
    GNATdoc.Projects.Process_Compilation_Units
      (GNATdoc.Frontend.Process_Compilation_Unit'Access);
+
+   --  Generate documentation
+
    Backend.Generate;
 end GNATdoc.Driver;

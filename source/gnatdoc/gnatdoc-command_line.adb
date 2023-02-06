@@ -24,6 +24,12 @@ with GNATdoc.Options;
 
 package body GNATdoc.Command_Line is
 
+   Backend_Option            : constant VSS.Command_Line.Value_Option :=
+     (Short_Name  => <>,
+      Long_Name   => "backend",
+      Value_Name  => "name",
+      Description => "Backend to use to generate output");
+
    Generate_Option           : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => <>,
       Long_Name   => "generate",
@@ -64,10 +70,20 @@ package body GNATdoc.Command_Line is
      (Name        => "project_file",
       Description => "Project file to process");
 
+   Backend_Name_Argument     : VSS.Strings.Virtual_String;
    Output_Dir_Argument       : GNATCOLL.VFS.Virtual_File;
    Project_File_Argument     : VSS.Strings.Virtual_String;
    Project_Context_Arguments : GPR2.Context.Object;
    Warnings_Argument         : Boolean := False;
+
+   ------------------
+   -- Backend_Name --
+   ------------------
+
+   function Backend_Name return VSS.Strings.Virtual_String is
+   begin
+      return Backend_Name_Argument;
+   end Backend_Name;
 
    ----------------
    -- Initialize --
@@ -79,6 +95,7 @@ package body GNATdoc.Command_Line is
       Positional : VSS.String_Vectors.Virtual_String_Vector;
 
    begin
+      VSS.Command_Line.Add_Option (Backend_Option);
       VSS.Command_Line.Add_Option (Generate_Option);
       VSS.Command_Line.Add_Option (Output_Dir_Option);
       VSS.Command_Line.Add_Option (Project_Option);
@@ -180,6 +197,18 @@ package body GNATdoc.Command_Line is
 
       if VSS.Command_Line.Is_Specified (Warnings_Option) then
          Warnings_Argument := True;
+      end if;
+
+      --  Check configured backend.
+
+      if VSS.Command_Line.Is_Specified (Backend_Option) then
+         Backend_Name_Argument := VSS.Command_Line.Value (Backend_Option);
+
+         if Backend_Name_Argument.Is_Empty then
+            VSS.Command_Line.Report_Error ("empty name of the backend");
+         end if;
+
+         --  XXX check whether backend name is know should be added here.
       end if;
    end Initialize;
 
