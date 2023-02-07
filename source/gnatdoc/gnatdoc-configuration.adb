@@ -17,6 +17,22 @@
 
 package body GNATdoc.Configuration is
 
+   ------------------
+   -- Backend_Name --
+   ------------------
+
+   not overriding function Backend_Name
+     (Self : Abstract_Configuration_Provider)
+      return VSS.Strings.Virtual_String is
+   begin
+      if Self.Child /= null then
+         return Self.Child.Backend_Name;
+
+      else
+         return "html";
+      end if;
+   end Backend_Name;
+
    --------------------------------
    -- Custom_Resources_Directory --
    --------------------------------

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -17,9 +17,8 @@
 
 with GNATCOLL.VFS;
 
-private with VSS.Characters;
-private with VSS.Strings.Converters.Encoders;
-private with VSS.Strings;
+with VSS.String_Vectors;
+with VSS.Strings;
 with VSS.Text_Streams;
 private with VSS.Text_Streams.File_Output;
 
@@ -33,6 +32,11 @@ package Streams is
       File : GNATCOLL.VFS.Virtual_File);
 
    procedure Close (Self : in out Output_Text_Stream'Class);
+
+   procedure Put_Lines
+     (Self    : in out Output_Text_Stream'Class;
+      Item    : VSS.String_Vectors.Virtual_String_Vector;
+      Success : in out Boolean);
 
 private
 

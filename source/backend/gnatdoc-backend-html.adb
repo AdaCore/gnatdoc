@@ -35,7 +35,6 @@ with VSS.XML.XmlAda_Readers;
 with GNATdoc.Comments.Helpers;
 with GNATdoc.Comments.Proxies;
 with GNATdoc.Entities;
-with GNATdoc.Options;
 with Streams;
 
 package body GNATdoc.Backend.HTML is
@@ -48,12 +47,6 @@ package body GNATdoc.Backend.HTML is
    procedure Generate_Entity_Documentation_Page
      (Self   : in out HTML_Backend'Class;
       Entity : not null Entity_Information_Access);
-
-   function Is_Private_Entity
-     (Entity : not null Entity_Information_Access) return Boolean;
-   --  Return True when given entity is private package, or explicitly marked
-   --  as private entity, or enclosed by the private package, or enclosed by
-   --  the entity marked as private entity.
 
    package Proxies is
 
@@ -507,21 +500,6 @@ package body GNATdoc.Backend.HTML is
       Copy_Static (Self.System_Resources_Root);
       Copy_Static (Self.Project_Resources_Root);
    end Initialize;
-
-   -----------------------
-   -- Is_Private_Entity --
-   -----------------------
-
-   function Is_Private_Entity
-     (Entity : not null Entity_Information_Access) return Boolean is
-   begin
-      return
-        (Entity.Is_Private
-           and not GNATdoc.Options.Frontend_Options.Generate_Private)
-        or Entity.Documentation.Is_Private
-        or (not Entity.Enclosing.Is_Empty
-              and then Is_Private_Entity (To_Entity (Entity.Enclosing)));
-   end Is_Private_Entity;
 
    ----------
    -- Name --
