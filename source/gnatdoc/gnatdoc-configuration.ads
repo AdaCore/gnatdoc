@@ -30,6 +30,11 @@ package GNATdoc.Configuration is
      (Child : Configuration_Provider_Access := null) is
        abstract tagged limited private;
 
+   not overriding function Backend_Name
+     (Self : Abstract_Configuration_Provider)
+      return VSS.Strings.Virtual_String;
+   --  Return name of the configured backend.
+
    not overriding function Output_Directory
      (Self         : Abstract_Configuration_Provider;
       Backend_Name : VSS.Strings.Virtual_String)

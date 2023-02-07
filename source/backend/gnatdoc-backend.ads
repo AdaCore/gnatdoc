@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -20,9 +20,13 @@ private with GNATCOLL.VFS;
 with VSS.Strings;
 private with VSS.String_Vectors;
 
+private with GNATdoc.Entities;
+
 package GNATdoc.Backend is
 
    type Abstract_Backend is abstract tagged limited private;
+
+   type Backend_Access is access all Abstract_Backend'Class;
 
    procedure Initialize (Self : in out Abstract_Backend);
 
@@ -31,6 +35,9 @@ package GNATdoc.Backend is
       return VSS.Strings.Virtual_String is abstract;
 
    procedure Generate (Self : in out Abstract_Backend) is abstract;
+
+   function Create_Backend
+     (Name : VSS.Strings.Virtual_String) return Backend_Access;
 
 private
 
@@ -49,5 +56,16 @@ private
      (Self : Abstract_Backend;
       Path : VSS.String_Vectors.Virtual_String_Vector)
       return GNATCOLL.VFS.Virtual_File;
+
+   -------------------------
+   -- Utility subprograms --
+   -------------------------
+
+   function Is_Private_Entity
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access)
+      return Boolean;
+   --  Return True when given entity is private package, or explicitly marked
+   --  as private entity, or enclosed by the private package, or enclosed by
+   --  the entity marked as private entity.
 
 end GNATdoc.Backend;

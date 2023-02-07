@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -41,5 +41,20 @@ package body Streams is
         (VSS.Strings.Conversions.To_Virtual_String (File.Display_Full_Name),
          "utf-8");
    end Open;
+
+   ---------------
+   -- Put_Lines --
+   ---------------
+
+   procedure Put_Lines
+     (Self    : in out Output_Text_Stream'Class;
+      Item    : VSS.String_Vectors.Virtual_String_Vector;
+      Success : in out Boolean) is
+   begin
+      for Line of Item loop
+         Self.Put (Line, Success);
+         Self.New_Line (Success);
+      end loop;
+   end Put_Lines;
 
 end Streams;
