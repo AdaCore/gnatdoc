@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -251,6 +251,41 @@ package body GNATdoc.Comments.Builders is
       Self.Last_Section   := New_Section;
       Self.Minimum_Indent := Self.Location.Start_Column;
    end Process_Defining_Name;
+
+   --------------------------------
+   -- Process_Discriminants_Node --
+   --------------------------------
+
+   procedure Process_Discriminants_Node
+     (Self    : in out Abstract_Components_Builder'Class;
+      Node    : Libadalang.Analysis.Ada_Node'Class;
+      Done    : out Boolean;
+      Control : out Libadalang.Common.Visit_Status) is
+   begin
+      Done    := False;
+      Control := Stop;
+
+      case Node.Kind is
+         when Ada_Known_Discriminant_Part | Ada_Discriminant_Spec_List =>
+            --  Nodes that contains significant nodes inside thier subtrees.
+
+            Done    := True;
+            Control := Into;
+
+         when Ada_Discriminant_Spec =>
+            Self.Process_Component_Declaration (Node.As_Discriminant_Spec);
+
+            for Name of Node.As_Discriminant_Spec.F_Ids loop
+               Self.Process_Defining_Name (Field, Name);
+            end loop;
+
+            Done    := True;
+            Control := Over;
+
+         when others =>
+            null;
+      end case;
+   end Process_Discriminants_Node;
 
    -----------------------------
    -- Restart_Component_Group --

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -43,7 +43,16 @@ package body GNATdoc.Comments.Builders.Records is
       -------------
 
       function Process (Node : Ada_Node'Class) return Visit_Status is
+         Done    : Boolean;
+         Control : Visit_Status;
+
       begin
+         Self.Process_Discriminants_Node (Node, Done, Control);
+
+         if Done then
+            return Control;
+         end if;
+
          case Node.Kind is
             when Ada_Component_List | Ada_Variant_Part | Ada_Variant =>
                --  Restart group of components at the beginning of the
@@ -73,22 +82,10 @@ package body GNATdoc.Comments.Builders.Records is
 
                return Over;
 
-            when Ada_Known_Discriminant_Part | Ada_Discriminant_Spec_List =>
-               return Into;
-
             when Ada_Component_Decl =>
                Self.Process_Component_Declaration (Node.As_Component_Decl);
 
                for Name of Node.As_Component_Decl.F_Ids loop
-                  Self.Process_Defining_Name (Field, Name);
-               end loop;
-
-               return Over;
-
-            when Ada_Discriminant_Spec =>
-               Self.Process_Component_Declaration (Node.As_Discriminant_Spec);
-
-               for Name of Node.As_Discriminant_Spec.F_Ids loop
                   Self.Process_Defining_Name (Field, Name);
                end loop;
 

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -22,6 +22,7 @@
 
 private with Langkit_Support.Slocs;
 private with Libadalang.Analysis;
+private with Libadalang.Common;
 
 private with VSS.Regular_Expressions;
 
@@ -100,5 +101,18 @@ private
    --  @param Decl_Node     Whole declaration.
    --  @param Pattern       Regular expression to detect documentation lines.
    --  @param Documentation Structured comment to fill.
+
+   procedure Process_Discriminants_Node
+     (Self    : in out Abstract_Components_Builder'Class;
+      Node    : Libadalang.Analysis.Ada_Node'Class;
+      Done    : out Boolean;
+      Control : out Libadalang.Common.Visit_Status);
+   --  Process nodes of the discriminant part of the declaration. Ignore all
+   --  other nodes. This allows to share common code to process discriminants.
+   --
+   --  @param Self    Builder object
+   --  @param Node    Node to process
+   --  @param Done    Whether node has been processed or not
+   --  @param Control Traversal control status
 
 end GNATdoc.Comments.Builders;
