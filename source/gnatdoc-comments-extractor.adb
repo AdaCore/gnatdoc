@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -29,6 +29,7 @@ with VSS.Strings;                     use VSS.Strings;
 with VSS.Strings.Character_Iterators; use VSS.Strings.Character_Iterators;
 with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
 
+with GNATdoc.Comments.Builders.Private_Types;
 with GNATdoc.Comments.Builders.Enumerations;
 with GNATdoc.Comments.Builders.Generics;
 with GNATdoc.Comments.Builders.Protecteds;
@@ -123,6 +124,15 @@ package body GNATdoc.Comments.Extractor is
                           .F_Record_Extension.Is_Null);
    --  Extract documentation for record type declaration.
 
+   procedure Extract_Private_Type_Documentation
+     (Node          : Libadalang.Analysis.Type_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : out Structured_Comment'Class)
+     with Pre =>
+       Node.Kind in Ada_Type_Decl
+         and then Node.As_Type_Decl.F_Type_Def.Kind = Ada_Private_Type_Def;
+   --  Extract documentation for private type declaration.
+
    procedure Extract_Simple_Declaration_Documentation
      (Node          : Libadalang.Analysis.Basic_Decl'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
@@ -138,7 +148,6 @@ package body GNATdoc.Comments.Extractor is
          and then Node.As_Type_Decl.F_Type_Def.Kind in Ada_Array_Type_Def
                     | Ada_Interface_Type_Def
                     | Ada_Mod_Int_Type_Def
-                    | Ada_Private_Type_Def
                     | Ada_Signed_Int_Type_Def
                     | Ada_Type_Access_Def)
      or (Node.Kind in Ada_Type_Decl
@@ -349,6 +358,7 @@ package body GNATdoc.Comments.Extractor is
                Documentation => Documentation);
 
          when Ada_Type_Decl =>
+            --  Print (Node);
             case Node.As_Type_Decl.F_Type_Def.Kind is
                when Ada_Array_Type_Def =>
                   Extract_Simple_Declaration_Documentation
@@ -383,7 +393,7 @@ package body GNATdoc.Comments.Extractor is
                     (Node.As_Type_Decl, Options, Documentation);
 
                when Ada_Private_Type_Def =>
-                  Extract_Simple_Declaration_Documentation
+                  Extract_Private_Type_Documentation
                     (Node.As_Type_Decl, Options, Documentation);
 
                when Ada_Type_Access_Def =>
@@ -1272,6 +1282,79 @@ package body GNATdoc.Comments.Extractor is
          end loop;
       end;
    end Extract_Leading_Section;
+
+   ----------------------------------------
+   -- Extract_Private_Type_Documentation --
+   ----------------------------------------
+
+   procedure Extract_Private_Type_Documentation
+     (Node          : Libadalang.Analysis.Type_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation : out Structured_Comment'Class)
+   is
+      Last_Section      : Section_Access;
+      Leading_Section   : Section_Access;
+      Trailing_Section  : Section_Access;
+
+      Component_Builder :
+        GNATdoc.Comments.Builders.Private_Types.Private_Type_Builder;
+      Minimum_Indent    : Column_Number := 0;
+
+   begin
+      Component_Builder.Build
+        (Documentation'Unchecked_Access,
+         Options,
+         Node,
+         Last_Section,
+         Minimum_Indent);
+
+      Extract_General_Leading_Trailing_Documentation
+        (Decl_Node        => Node,
+         Options          => Options,
+         Last_Section     => Last_Section,
+         Minimum_Indent   => Minimum_Indent,
+         Documentation    => Documentation,
+         Leading_Section  => Leading_Section,
+         Trailing_Section => Trailing_Section);
+
+      Fill_Code_Snippet
+        (Node, Node.Token_Start, Node.Token_End, Documentation);
+
+      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+
+      declare
+         Raw_Section : Section_Access;
+
+      begin
+         --  Select most appropriate section depending from the style and
+         --  fallback.
+
+         case Options.Style is
+            when GNAT =>
+               if not Trailing_Section.Text.Is_Empty then
+                  Raw_Section := Trailing_Section;
+
+               elsif Options.Fallback
+                 and not Leading_Section.Text.Is_Empty
+               then
+                  Raw_Section := Leading_Section;
+               end if;
+
+            when Leading =>
+               if not Leading_Section.Text.Is_Empty then
+                  Raw_Section := Leading_Section;
+
+               elsif Options.Fallback
+                 and not Trailing_Section.Text.Is_Empty
+               then
+                  Raw_Section := Trailing_Section;
+               end if;
+         end case;
+
+         Parse_Raw_Section
+           (Raw_Section, (Member_Tag => True, others => False), Documentation);
+      end;
+   end Extract_Private_Type_Documentation;
 
    ------------------------------------------
    -- Extract_Protected_Body_Documentation --

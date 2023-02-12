@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                       Copyright (C) 2023, AdaCore                        --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -19,7 +19,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 with Libadalang.Common;
 
-package body GNATdoc.Comments.Builders.Records is
+package body GNATdoc.Comments.Builders.Private_Types is
 
    use Libadalang.Analysis;
    use Libadalang.Common;
@@ -29,7 +29,7 @@ package body GNATdoc.Comments.Builders.Records is
    -----------
 
    procedure Build
-     (Self           : in out Record_Components_Builder;
+     (Self           : in out Private_Type_Builder;
       Documentation  : not null GNATdoc.Comments.Structured_Comment_Access;
       Options        : GNATdoc.Comments.Options.Extractor_Options;
       Node           : Libadalang.Analysis.Type_Decl'Class;
@@ -53,57 +53,12 @@ package body GNATdoc.Comments.Builders.Records is
             return Control;
          end if;
 
-         case Node.Kind is
-            when Ada_Component_List | Ada_Variant_Part | Ada_Variant =>
-               --  Restart group of components at the beginning of the
-               --   - Ada_Component_List - to complete group of discriminants
-               --   - Ada_Variant_Part - to complete group of components before
-               --     the start of variants
-               --   - Ada_Variant - to complete group of components before
-               --     the start of components of the next alternative
+         Put_Line (Standard_Error, Image (Node));
 
-               Self.Restart_Component_Group (Node.Sloc_Range.Start_Line);
-
-               return Into;
-
-            when Ada_Ada_Node_List | Ada_Variant_List =>
-               return Into;
-
-            when Ada_Alternatives_List =>
-               return Over;
-
-            when Ada_Identifier =>
-               --  Discriminant name in the variant part
-
-               return Over;
-
-            when Ada_Null_Component_Decl =>
-               --  null component is not included into documentation
-
-               return Over;
-
-            when Ada_Component_Decl =>
-               Self.Process_Component_Declaration (Node.As_Component_Decl);
-
-               for Name of Node.As_Component_Decl.F_Ids loop
-                  Self.Process_Defining_Name (Field, Name);
-               end loop;
-
-               return Over;
-
-            when others =>
-               Put_Line (Standard_Error, Image (Node));
-
-               raise Program_Error with Ada_Node_Kind_Type'Image (Node.Kind);
-         end case;
+         raise Program_Error with Ada_Node_Kind_Type'Image (Node.Kind);
       end Process;
 
       Discriminants : constant Discriminant_Part := Node.F_Discriminants;
-      Components    : constant Component_List    :=
-        (if Node.F_Type_Def.Kind = Ada_Record_Type_Def
-         then Node.F_Type_Def.As_Record_Type_Def.F_Record_Def.F_Components
-         else Node.F_Type_Def.As_Derived_Type_Def
-                .F_Record_Extension.F_Components);
 
    begin
       Self.Initialize (Documentation, Options, Node);
@@ -112,13 +67,12 @@ package body GNATdoc.Comments.Builders.Records is
          Discriminants.Traverse (Process'Access);
       end if;
 
-      Components.Traverse (Process'Access);
       Self.Restart_Component_Group (Node.Sloc_Range.End_Line);
 
       Self.Fill_Structured_Comment (Node, Options.Pattern);
 
-      Last_Section    := Self.Last_Section;
-      Minimum_Indent  := Self.Minimum_Indent;
+      Last_Section   := Self.Last_Section;
+      Minimum_Indent := Self.Minimum_Indent;
    end Build;
 
-end GNATdoc.Comments.Builders.Records;
+end GNATdoc.Comments.Builders.Private_Types;
