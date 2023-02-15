@@ -24,6 +24,7 @@ with Libadalang.Common;
 with Libadalang.Iterators;
 with Libadalang.Project_Provider;
 
+with GPR2.Context;
 with GPR2.Path_Name;
 with GPR2.Project.Attribute;
 with GPR2.Project.Attribute_Index;
@@ -31,6 +32,7 @@ with GPR2.Project.Tree;
 with GPR2.Project.Registry.Attribute;
 with GPR2.Project.Registry.Pack;
 
+with VSS.Application;
 with VSS.Command_Line;
 with VSS.Regular_Expressions;
 with VSS.Strings.Conversions;
@@ -153,8 +155,19 @@ package body GNATdoc.Projects is
    ----------------
 
    procedure Initialize is
+      Project_Context : GPR2.Context.Object :=
+        GNATdoc.Command_Line.Project_Context;
+
    begin
       Register_Attributes;
+
+      --  Export GPR_TOOL scenario variable when necessary
+
+      if not Project_Context.Contains ("GPR_TOOL")
+        and not VSS.Application.System_Environment.Contains ("GPR_TOOL")
+      then
+         Project_Context.Insert ("GPR_TOOL", "gnatdoc");
+      end if;
 
       --  Load project file
 
@@ -164,7 +177,7 @@ package body GNATdoc.Projects is
               (GPR2.Filename_Type
                    (VSS.Strings.Conversions.To_UTF_8_String
                         (GNATdoc.Command_Line.Project_File))),
-            GNATdoc.Command_Line.Project_Context);
+            Project_Context);
 
          Project_Tree.Update_Sources (With_Runtime => True);
 
