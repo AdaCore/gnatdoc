@@ -9,7 +9,7 @@ clean:
 build_tests:
 	gprbuild -j0 -p -P gnat/tests/test_drivers.gpr
 
-check: build_tests check_extractor
+check: build_tests check_extractor check_gnatdoc
 
 check_extractor:
 	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json overriding_indicator.ads | diff -u --strip-trailing-cr overriding_indicator.out -)
@@ -21,3 +21,6 @@ check_extractor:
 	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json protecteds.adb | diff -u --strip-trailing-cr protecteds.adb.out -)
 	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json subprograms_gnat.ads | diff -u --strip-trailing-cr subprograms_gnat.ads.out -)
 	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json test_vb10_011.ads | diff -u --strip-trailing-cr test_vb10_011.ads.out -)
+
+check_gnatdoc:
+	make -C testsuite/gnatdoc.RB16-013.gpt_tool
