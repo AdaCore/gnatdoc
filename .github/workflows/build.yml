@@ -14,11 +14,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix: # Build debug and production
-        os: [ubuntu-18.04, macos-10.15, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup Python 3.8
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.8'
       - name: Set git autocrlf
@@ -35,47 +35,47 @@ jobs:
             mingw64/mingw-w64-x86_64-gmp
             mingw64/mingw-w64-x86_64-diffutils
       - name: Get gnatdoc
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Get VSS
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: AdaCore/VSS
           path: subprojects/VSS
       - name: Get Markdown
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: AdaCore/markdown
           path: subprojects/markdown
       - name: Get Langkit
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: AdaCore/langkit
           path: subprojects/langkit
       - name: Get gpr-unit-provider
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: AdaCore/gpr-unit-provider
           path: subprojects/gpr-unit-provider
       - name: Get gpr
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: AdaCore/gpr
           path: subprojects/gpr
           ref: edge
       - name: Get gprconfig_kb
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: AdaCore/gprconfig_kb
           path: subprojects/gpr/gprconfig_kb
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ./cached_gnat
           key: ${{ runner.os }}-alire-2021
           restore-keys: ${{ runner.os }}-alire-2021
       - name: Get GNAT toolchain with alire
-        uses: alire-project/setup-alire@v1
+        uses: alire-project/setup-alire@v2
         with:
           toolchain: gnat_native^12 gprbuild^22
           toolchain_dir: ./cached_gnat
