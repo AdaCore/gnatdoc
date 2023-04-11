@@ -30,7 +30,7 @@ package body GNATdoc.Comments.Builders.Records is
 
    procedure Build
      (Self           : in out Record_Components_Builder;
-      Documentation  : not null GNATdoc.Comments.Structured_Comment_Access;
+      Sections       : not null GNATdoc.Comments.Sections_Access;
       Options        : GNATdoc.Comments.Options.Extractor_Options;
       Node           : Libadalang.Analysis.Type_Decl'Class;
       Last_Section   : out GNATdoc.Comments.Section_Access;
@@ -106,7 +106,7 @@ package body GNATdoc.Comments.Builders.Records is
                 .F_Record_Extension.F_Components);
 
    begin
-      Self.Initialize (Documentation, Options, Node);
+      Self.Initialize (Sections, Options, Node);
 
       if not Discriminants.Is_Null then
          Discriminants.Traverse (Process'Access);

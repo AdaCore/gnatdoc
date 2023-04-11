@@ -40,8 +40,8 @@ private
    type Abstract_Components_Builder is abstract tagged limited record
       Style            : GNATdoc.Comments.Options.Documentation_Style;
 
-      Documentation    : GNATdoc.Comments.Structured_Comment_Access;
-      --  Documentation to fill.
+      Sections         : GNATdoc.Comments.Sections_Access;
+      --  Sections of documentation to fill.
 
       Advanced_Groups  : Boolean;
       --  Process advanced groups of the components in GNAT style.
@@ -63,10 +63,10 @@ private
    end record;
 
    procedure Initialize
-     (Self          : in out Abstract_Components_Builder'Class;
-      Documentation : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Node          : Libadalang.Analysis.Ada_Node'Class);
+     (Self     : in out Abstract_Components_Builder'Class;
+      Sections : not null GNATdoc.Comments.Sections_Access;
+      Options  : GNATdoc.Comments.Options.Extractor_Options;
+      Node     : Libadalang.Analysis.Ada_Node'Class);
 
    procedure Process_Component_Declaration
      (Self : in out Abstract_Components_Builder'Class;

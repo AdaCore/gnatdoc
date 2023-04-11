@@ -874,7 +874,7 @@ package body GNATdoc.Comments.Extractor is
       --  Create sections for family index and parameters.
 
       Components_Builder.Build
-        (Documentation  => Documentation'Unchecked_Access,
+        (Sections       => Documentation.Sections'Unchecked_Access,
          Options        => Options,
          Node           => Decl_Node,
          Spec_Node      => No_Base_Subp_Spec,
@@ -1008,7 +1008,7 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Component_Builder.Build
-        (Documentation'Unchecked_Access,
+        (Documentation.Sections'Unchecked_Access,
          Options,
          Node,
          Enum_Node,
@@ -1199,7 +1199,7 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Component_Builder.Build
-        (Documentation'Unchecked_Access,
+        (Documentation.Sections'Unchecked_Access,
          Options,
          Node,
          Node.F_Formal_Part,
@@ -1302,7 +1302,7 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Component_Builder.Build
-        (Documentation'Unchecked_Access,
+        (Documentation.Sections'Unchecked_Access,
          Options,
          Node,
          Last_Section,
@@ -1445,7 +1445,7 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Component_Builder.Build
-        (Documentation'Unchecked_Access, Options, Node);
+        (Documentation.Sections'Unchecked_Access, Options, Node);
 
       Extract_Leading_Section
         (Node.Token_Start, Options, True, Documentation, Leading_Section);
@@ -1523,7 +1523,7 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Component_Builder.Build
-        (Documentation'Unchecked_Access,
+        (Documentation.Sections'Unchecked_Access,
          Options,
          Node,
          Last_Section,
@@ -1905,7 +1905,7 @@ package body GNATdoc.Comments.Extractor is
       --  Create sections for parameters and return value.
 
       Components_Builder.Build
-        (Documentation  => Documentation'Unchecked_Access,
+        (Sections       => Documentation.Sections'Unchecked_Access,
          Options        => Options,
          Node           => Decl_Node,
          Spec_Node      => Spec_Node,

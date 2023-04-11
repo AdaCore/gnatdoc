@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -30,13 +30,13 @@ package body GNATdoc.Comments.Builders.Generics is
 
    procedure Build
      (Self             : in out Generic_Components_Builder;
-      Documentation    : not null GNATdoc.Comments.Structured_Comment_Access;
+      Sections         : not null GNATdoc.Comments.Sections_Access;
       Options          : GNATdoc.Comments.Options.Extractor_Options;
       Node             : Libadalang.Analysis.Generic_Package_Decl'Class;
       Formal_Part_Node : Libadalang.Analysis.Generic_Formal_Part'Class;
       Basic_Decl_Node  : Libadalang.Analysis.Basic_Decl'Class) is
    begin
-      Self.Initialize (Documentation, Options, Formal_Part_Node);
+      Self.Initialize (Sections, Options, Formal_Part_Node);
 
       Self.Advanced_Groups := False;
       --  Advanced groups is not supported for generic formal parameters.
