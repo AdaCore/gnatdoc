@@ -25,10 +25,10 @@ package body GNATdoc.Comments.Builders.Protecteds is
    -----------
 
    procedure Build
-     (Self          : in out Protected_Components_Builder;
-      Documentation : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Node          : Libadalang.Analysis.Basic_Decl'Class)
+     (Self     : in out Protected_Components_Builder;
+      Sections : not null GNATdoc.Comments.Sections_Access;
+      Options  : GNATdoc.Comments.Options.Extractor_Options;
+      Node     : Libadalang.Analysis.Basic_Decl'Class)
    is
       function Process (Node : Ada_Node'Class) return Visit_Status;
 
@@ -92,7 +92,7 @@ package body GNATdoc.Comments.Builders.Protecteds is
             when others                    => No_Protected_Def);
 
    begin
-      Self.Initialize (Documentation, Options, Node);
+      Self.Initialize (Sections, Options, Node);
 
       --  Process discriminants of the protected type declaration.
 

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -23,14 +23,14 @@ package body GNATdoc.Comments.Builders.Enumerations is
 
    procedure Build
      (Self           : in out Enumeration_Components_Builder;
-      Documentation  : not null GNATdoc.Comments.Structured_Comment_Access;
+      Sections       : not null GNATdoc.Comments.Sections_Access;
       Options        : GNATdoc.Comments.Options.Extractor_Options;
       Node           : Libadalang.Analysis.Type_Decl'Class;
       Def_Node       : Libadalang.Analysis.Enum_Type_Def'Class;
       Last_Section   : out GNATdoc.Comments.Section_Access;
       Minimum_Indent : out Langkit_Support.Slocs.Column_Number) is
    begin
-      Self.Initialize (Documentation, Options, Def_Node);
+      Self.Initialize (Sections, Options, Def_Node);
 
       for Literal of Def_Node.F_Enum_Literals loop
          Self.Process_Component_Declaration (Literal);

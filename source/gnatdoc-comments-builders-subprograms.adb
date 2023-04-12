@@ -26,7 +26,7 @@ package body GNATdoc.Comments.Builders.Subprograms is
 
    procedure Build
      (Self           : in out Subprogram_Components_Builder;
-      Documentation  : not null GNATdoc.Comments.Structured_Comment_Access;
+      Sections       : not null GNATdoc.Comments.Sections_Access;
       Options        : GNATdoc.Comments.Options.Extractor_Options;
       Node           : Libadalang.Analysis.Basic_Decl'Class;
       Spec_Node      : Libadalang.Analysis.Base_Subp_Spec'Class;
@@ -41,7 +41,7 @@ package body GNATdoc.Comments.Builders.Subprograms is
       use type Langkit_Support.Slocs.Line_Number;
 
    begin
-      Self.Initialize (Documentation, Options, Spec_Node);
+      Self.Initialize (Sections, Options, Spec_Node);
 
       if Self.Style = Leading then
          if not Name_Node.Is_Null then
@@ -130,7 +130,7 @@ package body GNATdoc.Comments.Builders.Subprograms is
                  Returns_Section.Exact_Start_Line - 1;
             end if;
 
-            Self.Documentation.Sections.Append (Returns_Section);
+            Self.Sections.Append (Returns_Section);
 
             --  Remember section of the return statement for extracting of
             --  the comment from the last line of the declaration.

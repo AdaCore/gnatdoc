@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -85,9 +85,11 @@ private
    package Section_Vectors is
      new Ada.Containers.Vectors (Positive, Section_Access);
 
+   type Sections_Access is access all Section_Vectors.Vector;
+
    type Structured_Comment is
      new Ada.Finalization.Limited_Controlled with record
-      Sections   : Section_Vectors.Vector;
+      Sections   : aliased Section_Vectors.Vector;
       Is_Private : Boolean := False;
    end record;
 
