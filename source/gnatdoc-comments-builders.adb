@@ -52,7 +52,7 @@ package body GNATdoc.Comments.Builders is
             Location := Sloc_Range (Data (Token));
 
             if Kind (Data (Token)) = Ada_Comment then
-               for Section of Self.Documentation.Sections loop
+               for Section of Self.Sections.all loop
                   if Section.Kind
                        in Raw | Enumeration_Literal | Field
                             | Parameter | Returns | Formal
@@ -88,13 +88,13 @@ package body GNATdoc.Comments.Builders is
    ----------------
 
    procedure Initialize
-     (Self          : in out Abstract_Components_Builder'Class;
-      Documentation : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Node          : Libadalang.Analysis.Ada_Node'Class) is
+     (Self     : in out Abstract_Components_Builder'Class;
+      Sections : not null GNATdoc.Comments.Sections_Access;
+      Options  : GNATdoc.Comments.Options.Extractor_Options;
+      Node     : Libadalang.Analysis.Ada_Node'Class) is
    begin
       Self.Style            := Options.Style;
-      Self.Documentation    := Documentation;
+      Self.Sections         := Sections;
       Self.Location         := (0, 0, 0, 0);
       Self.Advanced_Groups  := False;
       Self.Group_Start_Line := 0;
@@ -234,7 +234,7 @@ package body GNATdoc.Comments.Builders is
            others           => <>);
 
    begin
-      Self.Documentation.Sections.Append (New_Section);
+      Self.Sections.Append (New_Section);
       Self.Previous_Group.Append (New_Section);
 
       if Self.Style = Leading then

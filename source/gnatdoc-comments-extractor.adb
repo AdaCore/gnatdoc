@@ -874,7 +874,7 @@ package body GNATdoc.Comments.Extractor is
       --  Create sections for family index and parameters.
 
       Components_Builder.Build
-        (Documentation  => Documentation'Unchecked_Access,
+        (Sections       => Documentation.Sections'Unchecked_Access,
          Options        => Options,
          Node           => Decl_Node,
          Spec_Node      => No_Base_Subp_Spec,
@@ -1008,7 +1008,7 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Component_Builder.Build
-        (Documentation'Unchecked_Access,
+        (Documentation.Sections'Unchecked_Access,
          Options,
          Node,
          Enum_Node,
@@ -1199,7 +1199,7 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Component_Builder.Build
-        (Documentation'Unchecked_Access,
+        (Documentation.Sections'Unchecked_Access,
          Options,
          Node,
          Node.F_Formal_Part,
@@ -1302,7 +1302,7 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Component_Builder.Build
-        (Documentation'Unchecked_Access,
+        (Documentation.Sections'Unchecked_Access,
          Options,
          Node,
          Last_Section,
@@ -1445,7 +1445,7 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Component_Builder.Build
-        (Documentation'Unchecked_Access, Options, Node);
+        (Documentation.Sections'Unchecked_Access, Options, Node);
 
       Extract_Leading_Section
         (Node.Token_Start, Options, True, Documentation, Leading_Section);
@@ -1523,7 +1523,7 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Component_Builder.Build
-        (Documentation'Unchecked_Access,
+        (Documentation.Sections'Unchecked_Access,
          Options,
          Node,
          Last_Section,
@@ -1905,7 +1905,7 @@ package body GNATdoc.Comments.Extractor is
       --  Create sections for parameters and return value.
 
       Components_Builder.Build
-        (Documentation  => Documentation'Unchecked_Access,
+        (Sections       => Documentation.Sections'Unchecked_Access,
          Options        => Options,
          Node           => Decl_Node,
          Spec_Node      => Spec_Node,
@@ -2179,30 +2179,144 @@ package body GNATdoc.Comments.Extractor is
                      exit when not Is_Ada_Separator (Iterator.Element);
                   end loop;
 
-                  --  Remove comment and spaces before it from the line,
-                  --  or remove whole line if after remove of the
-                  --  comment's text it contains whitespaces only.
+                  --  Remove comment and spaces before it from the line.
 
-                  if Iterator.Has_Element then
-                     Line :=
-                       Line.Slice (Line.At_First_Character, Iterator);
-                     Text.Replace (Index, Line);
-
-                  else
-                     Text.Delete (Index);
-                  end if;
+                  Line := Line.Slice (Line.At_First_Character, Iterator);
+                  Text.Replace (Index, Line);
                end;
             end if;
          end loop;
-
-         --  Remove all empty lines
-
-         for Index in reverse 1 .. Text.Length loop
-            if Text (Index).Is_Empty then
-               Text.Delete (Index);
-            end if;
-         end loop;
       end;
+
+      --  For enumeration types with large number of defined enumeration
+      --  literals, limit text for few first literals and last literal.
+
+      if Node.Kind = Ada_Concrete_Type_Decl
+        and then Node.As_Concrete_Type_Decl.F_Type_Def.Kind
+                   = Ada_Enum_Type_Def
+      then
+         declare
+            procedure Move_At
+              (Iterator : in out Character_Iterator;
+               Position : Character_Index);
+
+            -------------
+            -- Move_At --
+            -------------
+
+            procedure Move_At
+              (Iterator : in out Character_Iterator;
+               Position : Character_Index) is
+            begin
+               if Iterator.Character_Index = Position then
+                  return;
+
+               elsif Iterator.Character_Index < Position then
+                  while Iterator.Forward loop
+                     exit when Iterator.Character_Index = Position;
+                  end loop;
+
+               else
+                  while Iterator.Backward loop
+                     exit when Iterator.Character_Index = Position;
+                  end loop;
+               end if;
+            end Move_At;
+
+            Max_Enum_Literals : constant := 10;
+            --  Maximum number of the enumeration literals presented in the
+            --  code snippet.
+
+            Line_Offset : constant Line_Number :=
+              First_Token_Location.Start_Line - 1;
+            Literals    : constant Enum_Literal_Decl_List :=
+              Node.As_Concrete_Type_Decl.F_Type_Def.As_Enum_Type_Def
+                .F_Enum_Literals;
+
+         begin
+            if Literals.Children_Count > Max_Enum_Literals then
+               --  Replace enumeration literal before the last enumeration
+               --  literal of the type by the horizontal ellipsis.
+
+               declare
+                  Location   : constant Source_Location_Range :=
+                    Literals.Child (Literals.Last_Child_Index - 1).Sloc_Range;
+                  Index      : constant Positive :=
+                    Positive (Location.Start_Line - Line_Offset);
+                  Line       : Virtual_String := Text (Index);
+                  E_Iterator : Character_Iterator :=
+                    Line.After_Last_Character;
+                  S_Iterator : Character_Iterator :=
+                    Line.After_Last_Character;
+
+               begin
+                  Move_At
+                    (S_Iterator, Character_Index (Location.Start_Column));
+                  Move_At
+                    (E_Iterator, Character_Index (Location.End_Column) - 1);
+                  Line.Replace (S_Iterator, E_Iterator, "…");
+                  Text.Replace (Index, Line);
+               end;
+
+               --  Remove all other intermediate enumeration literals.
+
+               for J in reverse
+                 Literals.First_Child_Index + Max_Enum_Literals - 2
+                   .. Literals.Last_Child_Index - 2
+               loop
+                  declare
+                     Location   : constant Source_Location_Range :=
+                       Literals.Child (J).Sloc_Range;
+                     Index      : constant Positive :=
+                       Positive (Location.Start_Line - Line_Offset);
+                     Line       : Virtual_String := Text (Index);
+                     E_Iterator : Character_Iterator :=
+                       Line.After_Last_Character;
+                     S_Iterator : Character_Iterator :=
+                       Line.After_Last_Character;
+
+                  begin
+                     Move_At
+                       (S_Iterator, Character_Index (Location.Start_Column));
+                     Move_At
+                       (E_Iterator, Character_Index (Location.End_Column) - 1);
+
+                     while S_Iterator.Backward loop
+                        exit when not Is_Ada_Separator (S_Iterator.Element);
+                     end loop;
+
+                     if S_Iterator.Has_Element then
+                        Line.Delete (S_Iterator, E_Iterator);
+                        Text.Replace (Index, Line);
+
+                     else
+                        Line.Delete (Line.At_First_Character, E_Iterator);
+
+                        declare
+                           Previous : Virtual_String := Text (Index - 1);
+
+                        begin
+                           E_Iterator.Set_At_Last (Previous);
+                           Previous.Delete
+                             (E_Iterator, Previous.At_Last_Character);
+                           Previous.Append (Line);
+                           Text.Replace (Index - 1, Previous);
+                           Text.Delete (Index);
+                        end;
+                     end if;
+                  end;
+               end loop;
+            end if;
+         end;
+      end if;
+
+      --  Remove all empty lines
+
+      for Index in reverse 1 .. Text.Length loop
+         if Text (Index).Is_Empty then
+            Text.Delete (Index);
+         end if;
+      end loop;
 
       --  For the subprogram specification check whether "overriding"/"not
       --  overriding" indicator is used at the same line with subprogram

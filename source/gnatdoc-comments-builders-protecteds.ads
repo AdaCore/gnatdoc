@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -29,10 +29,10 @@ package GNATdoc.Comments.Builders.Protecteds is
      new Abstract_Components_Builder with private;
 
    procedure Build
-     (Self          : in out Protected_Components_Builder;
-      Documentation : not null GNATdoc.Comments.Structured_Comment_Access;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Node          : Libadalang.Analysis.Basic_Decl'Class)
+     (Self     : in out Protected_Components_Builder;
+      Sections : not null GNATdoc.Comments.Sections_Access;
+      Options  : GNATdoc.Comments.Options.Extractor_Options;
+      Node     : Libadalang.Analysis.Basic_Decl'Class)
      with Pre =>
        Node.Kind in Ada_Single_Protected_Decl | Ada_Protected_Type_Decl;
 
