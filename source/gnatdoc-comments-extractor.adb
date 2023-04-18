@@ -253,11 +253,14 @@ package body GNATdoc.Comments.Extractor is
    --  @param Sections     List of sections to append new section.
 
    procedure Remove_Comment_Start_And_Indentation
-     (Documentation : in out Structured_Comment'Class;
-      Pattern       : VSS.Regular_Expressions.Regular_Expression);
+     (Sections : in out Section_Vectors.Vector;
+      Pattern  : VSS.Regular_Expressions.Regular_Expression);
    --  Postprocess extracted text, for each group of lines, separated by empty
    --  line, by remove of two minus signs and common leading whitespaces. For
    --  code snippet remove common leading whitespaces only.
+   --
+   --  @param Sections  List of sections of the documentation
+   --  @param Pattern   Regular expression to remove "start of comment" text
 
    procedure Parse_Raw_Section
      (Raw_Section   : Section_Access;
@@ -708,7 +711,8 @@ package body GNATdoc.Comments.Extractor is
          end;
       end if;
 
-      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+      Remove_Comment_Start_And_Indentation
+        (Documentation.Sections, Options.Pattern);
 
       declare
          Raw_Section : Section_Access;
@@ -950,7 +954,8 @@ package body GNATdoc.Comments.Extractor is
       --  by empty line by remove of two minus signs and common leading
       --  whitespaces
 
-      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+      Remove_Comment_Start_And_Indentation
+        (Documentation.Sections, Options.Pattern);
 
       --  Process raw documentation for subprogram, fill sections and create
       --  description section.
@@ -1043,7 +1048,8 @@ package body GNATdoc.Comments.Extractor is
       Fill_Code_Snippet
         (Node, Node.Token_Start, Node.Token_End, Documentation.Sections);
 
-      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+      Remove_Comment_Start_And_Indentation
+        (Documentation.Sections, Options.Pattern);
 
       declare
          Raw_Section : Section_Access;
@@ -1336,7 +1342,8 @@ package body GNATdoc.Comments.Extractor is
       Fill_Code_Snippet
         (Node, Node.Token_Start, Node.Token_End, Documentation.Sections);
 
-      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+      Remove_Comment_Start_And_Indentation
+        (Documentation.Sections, Options.Pattern);
 
       declare
          Raw_Section : Section_Access;
@@ -1419,7 +1426,8 @@ package body GNATdoc.Comments.Extractor is
          Documentation,
          Intermediate_Upper_Section);
 
-      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+      Remove_Comment_Start_And_Indentation
+        (Documentation.Sections, Options.Pattern);
 
       declare
          Raw_Section : Section_Access;
@@ -1498,7 +1506,8 @@ package body GNATdoc.Comments.Extractor is
          Documentation,
          Intermediate_Upper_Section);
 
-      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+      Remove_Comment_Start_And_Indentation
+        (Documentation.Sections, Options.Pattern);
 
       declare
          Raw_Section : Section_Access;
@@ -1561,7 +1570,8 @@ package body GNATdoc.Comments.Extractor is
       Fill_Code_Snippet
         (Node, Node.Token_Start, Node.Token_End, Documentation.Sections);
 
-      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+      Remove_Comment_Start_And_Indentation
+        (Documentation.Sections, Options.Pattern);
 
       declare
          Raw_Section : Section_Access;
@@ -1624,7 +1634,8 @@ package body GNATdoc.Comments.Extractor is
       Fill_Code_Snippet
         (Node, Node.Token_Start, Node.Token_End, Documentation.Sections);
 
-      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+      Remove_Comment_Start_And_Indentation
+        (Documentation.Sections, Options.Pattern);
 
       declare
          Raw_Section : Section_Access;
@@ -1729,7 +1740,8 @@ package body GNATdoc.Comments.Extractor is
             Intermediate_Upper_Section);
       end if;
 
-      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+      Remove_Comment_Start_And_Indentation
+        (Documentation.Sections, Options.Pattern);
 
       declare
          Raw_Section : Section_Access;
@@ -1971,7 +1983,8 @@ package body GNATdoc.Comments.Extractor is
       --  by empty line by remove of two minus signs and common leading
       --  whitespaces
 
-      Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
+      Remove_Comment_Start_And_Indentation
+        (Documentation.Sections, Options.Pattern);
 
       --  Process raw documentation for subprogram, fill sections and create
       --  description section.
@@ -2640,10 +2653,10 @@ package body GNATdoc.Comments.Extractor is
    ------------------------------------------
 
    procedure Remove_Comment_Start_And_Indentation
-     (Documentation : in out Structured_Comment'Class;
-      Pattern       : VSS.Regular_Expressions.Regular_Expression) is
+     (Sections : in out Section_Vectors.Vector;
+      Pattern  : VSS.Regular_Expressions.Regular_Expression) is
    begin
-      for Section of Documentation.Sections loop
+      for Section of Sections loop
          declare
             First_Line : Positive := 1;
             Last_Line  : Natural  := 0;
