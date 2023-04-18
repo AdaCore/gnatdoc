@@ -18,7 +18,6 @@
 with Libadalang.Analysis;             use Libadalang.Analysis;
 with Libadalang.Common;               use Libadalang.Common;
 with Langkit_Support.Slocs;           use Langkit_Support.Slocs;
-with Langkit_Support.Symbols;         use Langkit_Support.Symbols;
 with Langkit_Support.Text;            use Langkit_Support.Text;
 
 with VSS.Characters;                  use VSS.Characters;
@@ -27,7 +26,6 @@ with VSS.Regular_Expressions;         use VSS.Regular_Expressions;
 with VSS.String_Vectors;              use VSS.String_Vectors;
 with VSS.Strings;                     use VSS.Strings;
 with VSS.Strings.Character_Iterators; use VSS.Strings.Character_Iterators;
-with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Builders.Private_Types;
 with GNATdoc.Comments.Builders.Enumerations;
@@ -2502,17 +2500,8 @@ package body GNATdoc.Comments.Extractor is
                   goto Default;
                end if;
 
-               Name := Match.Captured (1);
-
-               --  Compute symbol name. For character literals it is equal to
-               --  name, for identifiers it is canonicalized name.
-
-               Symbol :=
-                 (if Name.Starts_With ("'")
-                  then Name
-                  else To_Virtual_String
-                    (Fold_Case (To_Wide_Wide_String (Name)).Symbol));
-
+               Name      := Match.Captured (1);
+               Symbol    := GNATdoc.Comments.Utilities.To_Symbol (Name);
                Line_Tail := Line_Tail.Tail_After (Match.Last_Marker);
 
             else

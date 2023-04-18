@@ -16,10 +16,8 @@
 ------------------------------------------------------------------------------
 
 with VSS.Strings;                use VSS.Strings;
-with VSS.Strings.Conversions;    use VSS.Strings.Conversions;
 
 with Langkit_Support.Slocs;      use Langkit_Support.Slocs;
-with Langkit_Support.Text;       use Langkit_Support.Text;
 with Libadalang.Analysis;        use Libadalang.Analysis;
 with Libadalang.Common;          use Libadalang.Common;
 
@@ -219,15 +217,7 @@ package body GNATdoc.Comments.Builders is
         new Section'
           (Kind             => Kind,
            Name             => To_Virtual_String (Text (Node.Token_Start)),
-           Symbol           =>
-             --  To_Virtual_String (Node.F_Name.P_Canonical_Text),
-             To_Virtual_String
-               ((if Node.F_Name.Kind = Ada_Char_Literal
-                   then To_Unbounded_Text (Text (Node.Token_Start))
-                   else Node.F_Name.P_Canonical_Text)),
-           --  LAL: P_Canonical_Text do case conversion which
-           --  makes lowercase and uppercase character literals
-           --  undistingushable.
+           Symbol           => GNATdoc.Comments.Utilities.To_Symbol (Node),
            Text             => <>,
            Exact_Start_Line => Self.Location.Start_Line,
            Exact_End_Line   => Self.Location.End_Line,

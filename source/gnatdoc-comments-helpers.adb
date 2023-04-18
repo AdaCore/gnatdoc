@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,18 +15,16 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.Strings.Conversions;
-
 with Libadalang.Common;
 
 with GNATdoc.Comments.Extractor;
+with GNATdoc.Comments.Utilities;
 
 package body GNATdoc.Comments.Helpers is
 
    use Libadalang.Analysis;
    use Libadalang.Common;
    use VSS.Strings;
-   use VSS.Strings.Conversions;
    use VSS.String_Vectors;
 
    function Get_Plain_Text_Description
@@ -238,15 +236,11 @@ package body GNATdoc.Comments.Helpers is
    function Get_Plain_Text_Description
      (Documentation : Structured_Comment;
       Name          : Defining_Name'Class)
-      return VSS.String_Vectors.Virtual_String_Vector
-   is
-      Symbol : constant Virtual_String :=
-        To_Virtual_String (Name.P_Canonical_Text);
-
+      return VSS.String_Vectors.Virtual_String_Vector is
    begin
       for Section of Documentation.Sections loop
          if Section.Kind in Component
-           and then Section.Symbol = Symbol
+           and then Section.Symbol = Utilities.To_Symbol (Name)
          then
             return Get_Plain_Text_Description (Section);
          end if;

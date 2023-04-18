@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -18,6 +18,7 @@
 --  Utilities subprograms to share code between several packages.
 
 with Langkit_Support.Text;
+with Libadalang.Analysis;
 
 with VSS.Regular_Expressions;
 
@@ -29,5 +30,14 @@ private package GNATdoc.Comments.Utilities is
       Pattern : VSS.Regular_Expressions.Regular_Expression);
    --  Append given Line to the Text when Pattern is valid and Line match to
    --  Pattern. Always append Line when Pattern is invalid.
+
+   function To_Symbol
+     (Name : Libadalang.Analysis.Defining_Name'Class)
+      return VSS.Strings.Virtual_String;
+   --  Returns symbol of the defining name for internal use.
+
+   function To_Symbol
+     (Name : VSS.Strings.Virtual_String) return VSS.Strings.Virtual_String;
+   --  Returns symbol of the name for internal use.
 
 end GNATdoc.Comments.Utilities;
