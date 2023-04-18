@@ -2531,7 +2531,7 @@ package body GNATdoc.Comments.Extractor is
 
             elsif Match.Captured (1) = "formal" then
                Tag  := Formal_Tag;
-               Kind := Field;
+               Kind := Formal;
 
             elsif Match.Captured (1) = "private" then
                Tag  := Private_Tag;
