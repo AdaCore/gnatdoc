@@ -205,7 +205,7 @@ package body GNATdoc.Comments.Extractor is
       Options          : GNATdoc.Comments.Options.Extractor_Options;
       Last_Section     : Section_Access;
       Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
-      Documentation    : in out Structured_Comment'Class;
+      Sections         : in out Section_Vectors.Vector;
       Leading_Section  : out not null Section_Access;
       Trailing_Section : out not null Section_Access);
    --  Call both Extract_General_Leading_Documentation and
@@ -907,7 +907,7 @@ package body GNATdoc.Comments.Extractor is
          Options          => Options,
          Last_Section     => Last_Section,
          Minimum_Indent   => Minimum_Indent,
-         Documentation    => Documentation,
+         Sections         => Documentation.Sections,
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
@@ -1041,7 +1041,7 @@ package body GNATdoc.Comments.Extractor is
          Options          => Options,
          Last_Section     => Last_Section,
          Minimum_Indent   => Minimum_Indent,
-         Documentation    => Documentation,
+         Sections         => Documentation.Sections,
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
@@ -1096,22 +1096,18 @@ package body GNATdoc.Comments.Extractor is
       Options          : GNATdoc.Comments.Options.Extractor_Options;
       Last_Section     : Section_Access;
       Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
-      Documentation    : in out Structured_Comment'Class;
+      Sections         : in out Section_Vectors.Vector;
       Leading_Section  : out not null Section_Access;
       Trailing_Section : out not null Section_Access) is
    begin
       Extract_Leading_Section
-        (Decl_Node.Token_Start,
-         Options,
-         False,
-         Documentation.Sections,
-         Leading_Section);
+        (Decl_Node.Token_Start, Options, False, Sections, Leading_Section);
       Extract_General_Trailing_Documentation
         (Decl_Node,
          Options.Pattern,
          Last_Section,
          Minimum_Indent,
-         Documentation.Sections,
+         Sections,
          Trailing_Section);
    end Extract_General_Leading_Trailing_Documentation;
 
@@ -1335,7 +1331,7 @@ package body GNATdoc.Comments.Extractor is
          Options          => Options,
          Last_Section     => Last_Section,
          Minimum_Indent   => Minimum_Indent,
-         Documentation    => Documentation,
+         Sections         => Documentation.Sections,
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
@@ -1571,7 +1567,7 @@ package body GNATdoc.Comments.Extractor is
          Options          => Options,
          Last_Section     => Last_Section,
          Minimum_Indent   => Minimum_Indent,
-         Documentation    => Documentation,
+         Sections         => Documentation.Sections,
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
@@ -1635,7 +1631,7 @@ package body GNATdoc.Comments.Extractor is
          Options          => Options,
          Last_Section     => null,
          Minimum_Indent   => 0,
-         Documentation    => Documentation,
+         Sections         => Documentation.Sections,
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
@@ -1972,7 +1968,7 @@ package body GNATdoc.Comments.Extractor is
          Options          => Options,
          Last_Section     => Last_Section,
          Minimum_Indent   => Minimum_Indent,
-         Documentation    => Documentation,
+         Sections         => Documentation.Sections,
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
