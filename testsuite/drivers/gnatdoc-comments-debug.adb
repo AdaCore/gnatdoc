@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -23,15 +23,31 @@ with Langkit_Support.Slocs;   use Langkit_Support.Slocs;
 
 package body GNATdoc.Comments.Debug is
 
+   procedure Dump
+     (Sections : Section_Vectors.Vector;
+      Indent   : Wide_Wide_String);
+
    ----------
    -- Dump --
    ----------
 
    procedure Dump (Comment : Structured_Comment'Class) is
    begin
-      for Section of Comment.Sections loop
+      Dump (Comment.Sections, "");
+   end Dump;
+
+   ----------
+   -- Dump --
+   ----------
+
+   procedure Dump
+     (Sections : Section_Vectors.Vector;
+      Indent   : Wide_Wide_String) is
+   begin
+      for Section of Sections loop
          Put_Line
-           ("\/ "
+           (Indent
+            & "\/ "
             & Section_Kind'Wide_Wide_Image (Section.Kind)
             & " "
             & To_Wide_Wide_String (Section.Symbol)
@@ -46,6 +62,8 @@ package body GNATdoc.Comments.Debug is
          for Line of Section.Text loop
             Put_Line (To_Wide_Wide_String (Line));
          end loop;
+
+         Dump (Section.Sections, Indent & "  ");
       end loop;
    end Dump;
 
