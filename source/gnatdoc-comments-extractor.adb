@@ -132,9 +132,9 @@ package body GNATdoc.Comments.Extractor is
    --  Extract documentation for private type declaration.
 
    procedure Extract_Simple_Declaration_Documentation
-     (Node          : Libadalang.Analysis.Basic_Decl'Class;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Documentation : out Structured_Comment'Class)
+     (Node     : Libadalang.Analysis.Basic_Decl'Class;
+      Options  : GNATdoc.Comments.Options.Extractor_Options;
+      Sections : in out Section_Vectors.Vector)
      with Pre => Node.Kind in Ada_Exception_Decl
                    | Ada_Generic_Package_Instantiation
                    | Ada_Generic_Subp_Instantiation
@@ -353,15 +353,21 @@ package body GNATdoc.Comments.Extractor is
 
          when Ada_Generic_Package_Instantiation =>
             Extract_Simple_Declaration_Documentation
-              (Node.As_Generic_Package_Instantiation, Options, Documentation);
+              (Node.As_Generic_Package_Instantiation,
+               Options,
+               Documentation.Sections);
 
          when Ada_Generic_Subp_Instantiation =>
             Extract_Simple_Declaration_Documentation
-              (Node.As_Generic_Subp_Instantiation, Options, Documentation);
+              (Node.As_Generic_Subp_Instantiation,
+               Options,
+               Documentation.Sections);
 
          when Ada_Package_Renaming_Decl =>
             Extract_Simple_Declaration_Documentation
-              (Node.As_Package_Renaming_Decl, Options, Documentation);
+              (Node.As_Package_Renaming_Decl,
+               Options,
+               Documentation.Sections);
 
          when Ada_Subp_Renaming_Decl =>
             Extract_Subprogram_Documentation
@@ -377,7 +383,7 @@ package body GNATdoc.Comments.Extractor is
             case Node.As_Type_Decl.F_Type_Def.Kind is
                when Ada_Array_Type_Def =>
                   Extract_Simple_Declaration_Documentation
-                    (Node.As_Type_Decl, Options, Documentation);
+                    (Node.As_Type_Decl, Options, Documentation.Sections);
 
                when Ada_Enum_Type_Def =>
                   Extract_Enumeration_Type_Documentation
@@ -388,7 +394,7 @@ package body GNATdoc.Comments.Extractor is
                        .F_Record_Extension.Is_Null
                   then
                      Extract_Simple_Declaration_Documentation
-                       (Node.As_Type_Decl, Options, Documentation);
+                       (Node.As_Type_Decl, Options, Documentation.Sections);
 
                   else
                      Extract_Record_Type_Documentation
@@ -397,11 +403,11 @@ package body GNATdoc.Comments.Extractor is
 
                when Ada_Interface_Type_Def =>
                   Extract_Simple_Declaration_Documentation
-                    (Node.As_Type_Decl, Options, Documentation);
+                    (Node.As_Type_Decl, Options, Documentation.Sections);
 
                when Ada_Mod_Int_Type_Def | Ada_Signed_Int_Type_Def =>
                   Extract_Simple_Declaration_Documentation
-                    (Node.As_Type_Decl, Options, Documentation);
+                    (Node.As_Type_Decl, Options, Documentation.Sections);
 
                when Ada_Record_Type_Def =>
                   Extract_Record_Type_Documentation
@@ -413,7 +419,7 @@ package body GNATdoc.Comments.Extractor is
 
                when Ada_Type_Access_Def =>
                   Extract_Simple_Declaration_Documentation
-                    (Node.As_Type_Decl, Options, Documentation);
+                    (Node.As_Type_Decl, Options, Documentation.Sections);
 
                when Ada_Access_To_Subp_Def =>
                   Extract_Subprogram_Documentation
@@ -432,19 +438,19 @@ package body GNATdoc.Comments.Extractor is
 
          when Ada_Subtype_Decl =>
             Extract_Simple_Declaration_Documentation
-              (Node.As_Subtype_Decl, Options, Documentation);
+              (Node.As_Subtype_Decl, Options, Documentation.Sections);
 
          when Ada_Object_Decl =>
             Extract_Simple_Declaration_Documentation
-              (Node.As_Object_Decl, Options, Documentation);
+              (Node.As_Object_Decl, Options, Documentation.Sections);
 
          when Ada_Number_Decl =>
             Extract_Simple_Declaration_Documentation
-              (Node.As_Number_Decl, Options, Documentation);
+              (Node.As_Number_Decl, Options, Documentation.Sections);
 
          when Ada_Exception_Decl =>
             Extract_Simple_Declaration_Documentation
-              (Node.As_Exception_Decl, Options, Documentation);
+              (Node.As_Exception_Decl, Options, Documentation.Sections);
 
          when Ada_Single_Task_Decl =>
             Extract_Single_Task_Decl_Documentation
@@ -1616,9 +1622,9 @@ package body GNATdoc.Comments.Extractor is
    ----------------------------------------------
 
    procedure Extract_Simple_Declaration_Documentation
-     (Node          : Libadalang.Analysis.Basic_Decl'Class;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Documentation : out Structured_Comment'Class)
+     (Node     : Libadalang.Analysis.Basic_Decl'Class;
+      Options  : GNATdoc.Comments.Options.Extractor_Options;
+      Sections : in out Section_Vectors.Vector)
    is
       Leading_Section   : Section_Access;
       Trailing_Section  : Section_Access;
@@ -1629,15 +1635,12 @@ package body GNATdoc.Comments.Extractor is
          Options          => Options,
          Last_Section     => null,
          Minimum_Indent   => 0,
-         Sections         => Documentation.Sections,
+         Sections         => Sections,
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
-      Fill_Code_Snippet
-        (Node, Node.Token_Start, Node.Token_End, Documentation.Sections);
-
-      Remove_Comment_Start_And_Indentation
-        (Documentation.Sections, Options.Pattern);
+      Fill_Code_Snippet (Node, Node.Token_Start, Node.Token_End, Sections);
+      Remove_Comment_Start_And_Indentation (Sections, Options.Pattern);
 
       declare
          Raw_Section : Section_Access;
@@ -1668,8 +1671,7 @@ package body GNATdoc.Comments.Extractor is
                end if;
          end case;
 
-         Parse_Raw_Section
-           (Raw_Section, (others => False), Documentation.Sections);
+         Parse_Raw_Section (Raw_Section, (others => False), Sections);
       end;
    end Extract_Simple_Declaration_Documentation;
 
