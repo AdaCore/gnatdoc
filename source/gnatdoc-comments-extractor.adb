@@ -240,12 +240,17 @@ package body GNATdoc.Comments.Extractor is
    --  Token_Start ('is' or 'with') and before any other declarations.
 
    procedure Fill_Code_Snippet
-     (Node          : Ada_Node'Class;
-      First_Token   : Token_Reference;
-      Last_Token    : Token_Reference;
-      Documentation : in out Structured_Comment'Class);
+     (Node        : Ada_Node'Class;
+      First_Token : Token_Reference;
+      Last_Token  : Token_Reference;
+      Sections    : in out Section_Vectors.Vector);
    --  Extract code snippet between given tokens, remove all comments from it,
    --  and create code snippet section of the structured comment.
+   --
+   --  @param Node         Declaration or specification node
+   --  @param First_Token  First token of the range to be processed
+   --  @param Last_Token   Last token of the range to be processed
+   --  @param Sections     List of sections to append new section.
 
    procedure Remove_Comment_Start_And_Indentation
      (Documentation : in out Structured_Comment'Class;
@@ -935,7 +940,10 @@ package body GNATdoc.Comments.Extractor is
          end loop;
 
          Fill_Code_Snippet
-           (Decl_Node, Decl_Node.Token_Start, Last_Token, Documentation);
+           (Decl_Node,
+            Decl_Node.Token_Start,
+            Last_Token,
+            Documentation.Sections);
       end;
 
       --  Postprocess extracted text, for each group of lines, separated
@@ -1033,7 +1041,7 @@ package body GNATdoc.Comments.Extractor is
          Trailing_Section => Trailing_Section);
 
       Fill_Code_Snippet
-        (Node, Node.Token_Start, Node.Token_End, Documentation);
+        (Node, Node.Token_Start, Node.Token_End, Documentation.Sections);
 
       Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
 
@@ -1326,7 +1334,7 @@ package body GNATdoc.Comments.Extractor is
          Trailing_Section => Trailing_Section);
 
       Fill_Code_Snippet
-        (Node, Node.Token_Start, Node.Token_End, Documentation);
+        (Node, Node.Token_Start, Node.Token_End, Documentation.Sections);
 
       Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
 
@@ -1551,7 +1559,7 @@ package body GNATdoc.Comments.Extractor is
          Trailing_Section => Trailing_Section);
 
       Fill_Code_Snippet
-        (Node, Node.Token_Start, Node.Token_End, Documentation);
+        (Node, Node.Token_Start, Node.Token_End, Documentation.Sections);
 
       Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
 
@@ -1614,7 +1622,7 @@ package body GNATdoc.Comments.Extractor is
          Trailing_Section => Trailing_Section);
 
       Fill_Code_Snippet
-        (Node, Node.Token_Start, Node.Token_End, Documentation);
+        (Node, Node.Token_Start, Node.Token_End, Documentation.Sections);
 
       Remove_Comment_Start_And_Indentation (Documentation, Options.Pattern);
 
@@ -1949,14 +1957,14 @@ package body GNATdoc.Comments.Extractor is
            (Decl_Node,
             Decl_Node.Token_Start,
             Decl_Node.Token_End,
-            Documentation);
+            Documentation.Sections);
 
       else
          Fill_Code_Snippet
            (Spec_Node,
             Spec_Node.Token_Start,
             Spec_Node.Token_End,
-            Documentation);
+            Documentation.Sections);
       end if;
 
       --  Postprocess extracted text, for each group of lines, separated
@@ -2090,10 +2098,10 @@ package body GNATdoc.Comments.Extractor is
    -----------------------
 
    procedure Fill_Code_Snippet
-     (Node          : Ada_Node'Class;
-      First_Token   : Token_Reference;
-      Last_Token    : Token_Reference;
-      Documentation : in out Structured_Comment'Class)
+     (Node        : Ada_Node'Class;
+      First_Token : Token_Reference;
+      Last_Token  : Token_Reference;
+      Sections    : in out Section_Vectors.Vector)
    is
 
       procedure Remove_Leading_Spaces
@@ -2394,7 +2402,7 @@ package body GNATdoc.Comments.Extractor is
       Snippet_Section :=
         new Section'
           (Kind => Snippet, Symbol => "ada", Text => Text, others => <>);
-      Documentation.Sections.Append (Snippet_Section);
+      Sections.Append (Snippet_Section);
    end Fill_Code_Snippet;
 
    ----------------------
