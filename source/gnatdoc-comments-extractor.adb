@@ -257,12 +257,21 @@ package body GNATdoc.Comments.Extractor is
    procedure Parse_Raw_Section
      (Raw_Section   : Section_Access;
       Allowed_Tags  : Section_Tag_Flags;
-      Documentation : in out Structured_Comment'Class);
+      Sections      : in out Section_Vectors.Vector;
+      Is_Private    : in out Boolean);
    --  Process raw documentation, fill sections and create description section.
    --
    --  @param Raw_Section    Raw section to process
    --  @param Allowed_Tags   Set of section tags to be processed
-   --  @param Documentation  Structured comment to fill
+   --  @param Sections       Sections of the structured comment
+   --  @param Is_Private     Check to True when private tag found
+
+   procedure Parse_Raw_Section
+     (Raw_Section   : Section_Access;
+      Allowed_Tags  : Section_Tag_Flags;
+      Sections      : in out Section_Vectors.Vector)
+     with Pre => not Allowed_Tags (Private_Tag);
+   --  Wrapper around Parse_Raw_Section when private tag is not allowed
 
    function Is_Ada_Separator (Item : Virtual_Character) return Boolean;
    --  Return True when given character is Ada's separator.
@@ -726,7 +735,8 @@ package body GNATdoc.Comments.Extractor is
             (Private_Tag => True,
              Formal_Tag  => Basic_Decl_Node /= Base_Package_Decl_Node,
              others      => False),
-            Documentation);
+            Documentation.Sections,
+            Documentation.Is_Private);
       end;
    end Extract_Base_Package_Decl_Documentation;
 
@@ -982,7 +992,7 @@ package body GNATdoc.Comments.Extractor is
            (Raw_Section,
             (Param_Tag | Return_Tag | Exception_Tag => True,
              others                                 => False),
-            Documentation);
+            Documentation.Sections);
       end;
    end Extract_Entry_Body_Documentation;
 
@@ -1059,7 +1069,7 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (Raw_Section,
             (Enum_Tag => True, others => False),
-            Documentation);
+            Documentation.Sections);
       end;
    end Extract_Enumeration_Type_Documentation;
 
@@ -1350,7 +1360,9 @@ package body GNATdoc.Comments.Extractor is
          end case;
 
          Parse_Raw_Section
-           (Raw_Section, (Member_Tag => True, others => False), Documentation);
+           (Raw_Section,
+            (Member_Tag => True, others => False),
+            Documentation.Sections);
       end;
    end Extract_Private_Type_Documentation;
 
@@ -1421,7 +1433,8 @@ package body GNATdoc.Comments.Extractor is
             (Private_Tag => True,
              Member_Tag  => True,
              others      => False),
-            Documentation);
+            Documentation.Sections,
+            Documentation.Is_Private);
       end;
    end Extract_Protected_Body_Documentation;
 
@@ -1499,7 +1512,8 @@ package body GNATdoc.Comments.Extractor is
             (Private_Tag => True,
              Member_Tag  => True,
              others      => False),
-            Documentation);
+            Documentation.Sections,
+            Documentation.Is_Private);
       end;
    end Extract_Protected_Decl_Documentation;
 
@@ -1573,7 +1587,7 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (Raw_Section,
             (Member_Tag => True, others => False),
-            Documentation);
+            Documentation.Sections);
       end;
    end Extract_Record_Type_Documentation;
 
@@ -1633,7 +1647,8 @@ package body GNATdoc.Comments.Extractor is
                end if;
          end case;
 
-         Parse_Raw_Section (Raw_Section, (others => False), Documentation);
+         Parse_Raw_Section
+           (Raw_Section, (others => False), Documentation.Sections);
       end;
    end Extract_Simple_Declaration_Documentation;
 
@@ -1736,7 +1751,8 @@ package body GNATdoc.Comments.Extractor is
             (Private_Tag => True,
              Member_Tag  => True,
              others      => False),
-            Documentation);
+            Documentation.Sections,
+            Documentation.Is_Private);
       end;
    end Extract_Single_Task_Decl_Documentation;
 
@@ -1997,7 +2013,7 @@ package body GNATdoc.Comments.Extractor is
            (Raw_Section,
             (Param_Tag | Return_Tag | Exception_Tag => True,
              others                                 => False),
-            Documentation);
+            Documentation.Sections);
       end;
    end Extract_Subprogram_Documentation;
 
@@ -2397,7 +2413,23 @@ package body GNATdoc.Comments.Extractor is
    procedure Parse_Raw_Section
      (Raw_Section   : Section_Access;
       Allowed_Tags  : Section_Tag_Flags;
-      Documentation : in out Structured_Comment'Class)
+      Sections      : in out Section_Vectors.Vector)
+   is
+      Aux : Boolean := False;
+
+   begin
+      Parse_Raw_Section (Raw_Section, Allowed_Tags, Sections, Aux);
+   end Parse_Raw_Section;
+
+   -----------------------
+   -- Parse_Raw_Section --
+   -----------------------
+
+   procedure Parse_Raw_Section
+     (Raw_Section   : Section_Access;
+      Allowed_Tags  : Section_Tag_Flags;
+      Sections      : in out Section_Vectors.Vector;
+      Is_Private    : in out Boolean)
    is
       Tag_Matcher       : constant Regular_Expression :=
         To_Regular_Expression
@@ -2427,7 +2459,7 @@ package body GNATdoc.Comments.Extractor is
 
       Current_Section :=
         new Section'(Kind => Description, others => <>);
-      Documentation.Sections.Append (Current_Section);
+      Sections.Append (Current_Section);
 
       --  Return when there is no raw section to parse
 
@@ -2481,7 +2513,7 @@ package body GNATdoc.Comments.Extractor is
             Line_Tail := Line.Tail_After (Match.Last_Marker);
 
             if Tag = Private_Tag then
-               Documentation.Is_Private := True;
+               Is_Private := True;
 
                goto Skip;
 
@@ -2513,7 +2545,7 @@ package body GNATdoc.Comments.Extractor is
                Found : Boolean := False;
 
             begin
-               for Section of Documentation.Sections loop
+               for Section of Sections loop
                   if Section.Kind = Kind and Section.Symbol = Symbol then
                      Current_Section := Section;
                      Found := True;
@@ -2530,7 +2562,7 @@ package body GNATdoc.Comments.Extractor is
                           Name   => Name,
                           Symbol => Symbol,
                           others => <>);
-                     Documentation.Sections.Append (Current_Section);
+                     Sections.Append (Current_Section);
 
                   else
                      goto Default;
@@ -2561,7 +2593,7 @@ package body GNATdoc.Comments.Extractor is
 
       --  Remove empty lines at the end of text of all sections
 
-      for Section of Documentation.Sections loop
+      for Section of Sections loop
          while not Section.Text.Is_Empty
            and then Section.Text.Last_Element.Is_Empty
          loop
