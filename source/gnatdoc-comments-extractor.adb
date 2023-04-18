@@ -180,7 +180,7 @@ package body GNATdoc.Comments.Extractor is
       Pattern          : VSS.Regular_Expressions.Regular_Expression;
       Last_Section     : Section_Access;
       Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
-      Documentation    : in out Structured_Comment'Class;
+      Sections         : in out Section_Vectors.Vector;
       Trailing_Section : out not null Section_Access);
    --  Creates leading documetation section of the structured comment
    --  and extracts leading documentation follow general rules (there are
@@ -197,7 +197,7 @@ package body GNATdoc.Comments.Extractor is
    --    of the Minimum_Indent parameter, this section is filled by these
    --    comments.
    --  @param Minimum_Indent   Minimum indentation to fill last section.
-   --  @param Documentation    Structured comment to add and fill section
+   --  @param Sections         List of sections to add new section
    --  @param Trailing_Section Trailing raw text.
 
    procedure Extract_General_Leading_Trailing_Documentation
@@ -1111,7 +1111,7 @@ package body GNATdoc.Comments.Extractor is
          Options.Pattern,
          Last_Section,
          Minimum_Indent,
-         Documentation,
+         Documentation.Sections,
          Trailing_Section);
    end Extract_General_Leading_Trailing_Documentation;
 
@@ -1124,7 +1124,7 @@ package body GNATdoc.Comments.Extractor is
       Pattern          : VSS.Regular_Expressions.Regular_Expression;
       Last_Section     : Section_Access;
       Minimum_Indent   : Langkit_Support.Slocs.Column_Number;
-      Documentation    : in out Structured_Comment'Class;
+      Sections         : in out Section_Vectors.Vector;
       Trailing_Section : out not null Section_Access) is
    begin
       --  Create and add trailing section.
@@ -1136,7 +1136,7 @@ package body GNATdoc.Comments.Extractor is
            Name             => <>,
            Text             => <>,
            others           => <>);
-      Documentation.Sections.Append (Trailing_Section);
+      Sections.Append (Trailing_Section);
 
       --  Process tokens after the declaration node.
 
@@ -1700,7 +1700,12 @@ package body GNATdoc.Comments.Extractor is
          --  tailing section.
 
          Extract_General_Trailing_Documentation
-           (Node, Options.Pattern, null, 0, Documentation, Trailing_Section);
+           (Node,
+            Options.Pattern,
+            null,
+            0,
+            Documentation.Sections,
+            Trailing_Section);
 
       else
          --  Overwise, documentation may be provided inside task definition
