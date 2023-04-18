@@ -123,9 +123,9 @@ package body GNATdoc.Comments.Extractor is
    --  Extract documentation for record type declaration.
 
    procedure Extract_Private_Type_Documentation
-     (Node          : Libadalang.Analysis.Type_Decl'Class;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Documentation : out Structured_Comment'Class)
+     (Node     : Libadalang.Analysis.Type_Decl'Class;
+      Options  : GNATdoc.Comments.Options.Extractor_Options;
+      Sections : in out Section_Vectors.Vector)
      with Pre =>
        Node.Kind in Ada_Type_Decl
          and then Node.As_Type_Decl.F_Type_Def.Kind = Ada_Private_Type_Def;
@@ -409,7 +409,7 @@ package body GNATdoc.Comments.Extractor is
 
                when Ada_Private_Type_Def =>
                   Extract_Private_Type_Documentation
-                    (Node.As_Type_Decl, Options, Documentation);
+                    (Node.As_Type_Decl, Options, Documentation.Sections);
 
                when Ada_Type_Access_Def =>
                   Extract_Simple_Declaration_Documentation
@@ -1306,9 +1306,9 @@ package body GNATdoc.Comments.Extractor is
    ----------------------------------------
 
    procedure Extract_Private_Type_Documentation
-     (Node          : Libadalang.Analysis.Type_Decl'Class;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Documentation : out Structured_Comment'Class)
+     (Node     : Libadalang.Analysis.Type_Decl'Class;
+      Options  : GNATdoc.Comments.Options.Extractor_Options;
+      Sections : in out Section_Vectors.Vector)
    is
       Last_Section      : Section_Access;
       Leading_Section   : Section_Access;
@@ -1320,7 +1320,7 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Component_Builder.Build
-        (Documentation.Sections'Unchecked_Access,
+        (Sections'Unchecked_Access,
          Options,
          Node,
          Last_Section,
@@ -1331,15 +1331,13 @@ package body GNATdoc.Comments.Extractor is
          Options          => Options,
          Last_Section     => Last_Section,
          Minimum_Indent   => Minimum_Indent,
-         Sections         => Documentation.Sections,
+         Sections         => Sections,
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
-      Fill_Code_Snippet
-        (Node, Node.Token_Start, Node.Token_End, Documentation.Sections);
+      Fill_Code_Snippet (Node, Node.Token_Start, Node.Token_End, Sections);
 
-      Remove_Comment_Start_And_Indentation
-        (Documentation.Sections, Options.Pattern);
+      Remove_Comment_Start_And_Indentation (Sections, Options.Pattern);
 
       declare
          Raw_Section : Section_Access;
@@ -1373,7 +1371,7 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (Raw_Section,
             (Member_Tag => True, others => False),
-            Documentation.Sections);
+            Sections);
       end;
    end Extract_Private_Type_Documentation;
 
