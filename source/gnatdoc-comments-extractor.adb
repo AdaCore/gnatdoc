@@ -215,7 +215,7 @@ package body GNATdoc.Comments.Extractor is
      (Token_Start       : Token_Reference;
       Options           : GNATdoc.Comments.Options.Extractor_Options;
       Separator_Allowed : Boolean;
-      Documentation     : in out Structured_Comment'Class;
+      Sections          : in out Section_Vectors.Vector;
       Section           : out not null Section_Access);
    --  Creates leading documetation section of the structured comment
    --  and extracts leading documentation.
@@ -226,7 +226,7 @@ package body GNATdoc.Comments.Extractor is
    --    Whether empty line is allowed between line that contains Token_Start
    --    and comment. It is the case for packages, tasks and protected
    --    objects.
-   --  @param Documentation   Structured comment to add and fill section
+   --  @param Sections        List of sections to add new section
    --  @param Section         Created section
 
    procedure Extract_Upper_Intermediate_Section
@@ -621,7 +621,7 @@ package body GNATdoc.Comments.Extractor is
            (Basic_Decl_Node.Token_Start,
             Options,
             True,
-            Documentation,
+            Documentation.Sections,
             Leading_Section);
       end if;
 
@@ -1104,7 +1104,7 @@ package body GNATdoc.Comments.Extractor is
         (Decl_Node.Token_Start,
          Options,
          False,
-         Documentation,
+         Documentation.Sections,
          Leading_Section);
       Extract_General_Trailing_Documentation
         (Decl_Node,
@@ -1239,7 +1239,7 @@ package body GNATdoc.Comments.Extractor is
      (Token_Start       : Token_Reference;
       Options           : GNATdoc.Comments.Options.Extractor_Options;
       Separator_Allowed : Boolean;
-      Documentation     : in out Structured_Comment'Class;
+      Sections          : in out Section_Vectors.Vector;
       Section           : out not null Section_Access) is
    begin
       --  Create and add leading section
@@ -1251,7 +1251,7 @@ package body GNATdoc.Comments.Extractor is
            Name             => <>,
            Text             => <>,
            others           => <>);
-      Documentation.Sections.Append (Section);
+      Sections.Append (Section);
 
       --  Process tokens before the start token.
 
@@ -1398,7 +1398,11 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Extract_Leading_Section
-        (Node.Token_Start, Options, True, Documentation, Leading_Section);
+        (Node.Token_Start,
+         Options,
+         True,
+         Documentation.Sections,
+         Leading_Section);
 
       --  Lookup for 'is' token that begins protected body.
 
@@ -1475,7 +1479,11 @@ package body GNATdoc.Comments.Extractor is
         (Documentation.Sections'Unchecked_Access, Options, Node);
 
       Extract_Leading_Section
-        (Node.Token_Start, Options, True, Documentation, Leading_Section);
+        (Node.Token_Start,
+         Options,
+         True,
+         Documentation.Sections,
+         Leading_Section);
 
       --  Lookup for 'is' token that begins protected definition, or 'with'
       --  token that ends interface part.
@@ -1691,7 +1699,11 @@ package body GNATdoc.Comments.Extractor is
 
    begin
       Extract_Leading_Section
-        (Node.Token_Start, Options, True, Documentation, Leading_Section);
+        (Node.Token_Start,
+         Options,
+         True,
+         Documentation.Sections,
+         Leading_Section);
 
       if Definition.Is_Null then
          --  It is the case of the entry-less and definition-less task
