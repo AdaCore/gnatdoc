@@ -74,12 +74,12 @@ package body GNATdoc.Comments.Extractor is
       Documentation : out Structured_Comment'Class);
 
    procedure Extract_Subprogram_Documentation
-     (Decl_Node     : Libadalang.Analysis.Basic_Decl'Class;
-      Spec_Node     : Libadalang.Analysis.Base_Subp_Spec'Class;
-      Expr_Node     : Expr'Class;
-      Aspects_Node  : Aspect_Spec'Class;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Documentation : out Structured_Comment'Class)
+     (Decl_Node    : Libadalang.Analysis.Basic_Decl'Class;
+      Spec_Node    : Libadalang.Analysis.Base_Subp_Spec'Class;
+      Expr_Node    : Expr'Class;
+      Aspects_Node : Aspect_Spec'Class;
+      Options      : GNATdoc.Comments.Options.Extractor_Options;
+      Sections     : in out Section_Vectors.Vector)
      with Pre =>
        Spec_Node.Kind in Ada_Subp_Spec | Ada_Entry_Spec;
    --  Extracts subprogram's documentation.
@@ -316,39 +316,39 @@ package body GNATdoc.Comments.Extractor is
 
          when Ada_Abstract_Subp_Decl | Ada_Subp_Decl =>
             Extract_Subprogram_Documentation
-              (Decl_Node     => Node,
-               Spec_Node     => Node.As_Classic_Subp_Decl.F_Subp_Spec,
-               Expr_Node     => No_Expr,
-               Aspects_Node  => Node.F_Aspects,
-               Options       => Options,
-               Documentation => Documentation);
+              (Decl_Node    => Node,
+               Spec_Node    => Node.As_Classic_Subp_Decl.F_Subp_Spec,
+               Expr_Node    => No_Expr,
+               Aspects_Node => Node.F_Aspects,
+               Options      => Options,
+               Sections     => Documentation.Sections);
 
          when Ada_Expr_Function =>
             Extract_Subprogram_Documentation
-              (Decl_Node     => Node,
-               Spec_Node     => Node.As_Base_Subp_Body.F_Subp_Spec,
-               Expr_Node     => Node.As_Expr_Function.F_Expr,
-               Aspects_Node  => Node.F_Aspects,
-               Options       => Options,
-               Documentation => Documentation);
+              (Decl_Node    => Node,
+               Spec_Node    => Node.As_Base_Subp_Body.F_Subp_Spec,
+               Expr_Node    => Node.As_Expr_Function.F_Expr,
+               Aspects_Node => Node.F_Aspects,
+               Options      => Options,
+               Sections     => Documentation.Sections);
 
          when Ada_Null_Subp_Decl =>
             Extract_Subprogram_Documentation
-              (Decl_Node     => Node,
-               Spec_Node     => Node.As_Base_Subp_Body.F_Subp_Spec,
-               Expr_Node     => No_Expr,
-               Aspects_Node  => Node.F_Aspects,
-               Options       => Options,
-               Documentation => Documentation);
+              (Decl_Node    => Node,
+               Spec_Node    => Node.As_Base_Subp_Body.F_Subp_Spec,
+               Expr_Node    => No_Expr,
+               Aspects_Node => Node.F_Aspects,
+               Options      => Options,
+               Sections => Documentation.Sections);
 
          when Ada_Subp_Body =>
             Extract_Subprogram_Documentation
-              (Decl_Node     => Node,
-               Spec_Node     => Node.As_Base_Subp_Body.F_Subp_Spec,
-               Expr_Node     => No_Expr,
-               Aspects_Node  => No_Aspect_Spec,
-               Options       => Options,
-               Documentation => Documentation);
+              (Decl_Node    => Node,
+               Spec_Node    => Node.As_Base_Subp_Body.F_Subp_Spec,
+               Expr_Node    => No_Expr,
+               Aspects_Node => No_Aspect_Spec,
+               Options      => Options,
+               Sections     => Documentation.Sections);
 
          when Ada_Generic_Package_Decl =>
             Extract_Generic_Package_Decl_Documentation
@@ -374,12 +374,12 @@ package body GNATdoc.Comments.Extractor is
 
          when Ada_Subp_Renaming_Decl =>
             Extract_Subprogram_Documentation
-              (Decl_Node     => Node,
-               Spec_Node     => Node.As_Subp_Renaming_Decl.F_Subp_Spec,
-               Expr_Node     => No_Expr,
-               Aspects_Node  => No_Aspect_Spec,
-               Options       => Options,
-               Documentation => Documentation);
+              (Decl_Node    => Node,
+               Spec_Node    => Node.As_Subp_Renaming_Decl.F_Subp_Spec,
+               Expr_Node    => No_Expr,
+               Aspects_Node => No_Aspect_Spec,
+               Options      => Options,
+               Sections     => Documentation.Sections);
 
          when Ada_Type_Decl =>
             --  Print (Node);
@@ -431,14 +431,14 @@ package body GNATdoc.Comments.Extractor is
 
                when Ada_Access_To_Subp_Def =>
                   Extract_Subprogram_Documentation
-                    (Decl_Node     => Node,
-                     Spec_Node     =>
+                    (Decl_Node    => Node,
+                     Spec_Node    =>
                         Node.As_Type_Decl.F_Type_Def
                           .As_Access_To_Subp_Def.F_Subp_Spec,
-                     Expr_Node     => No_Expr,
-                     Aspects_Node  => No_Aspect_Spec,
-                     Options       => Options,
-                     Documentation => Documentation);
+                     Expr_Node    => No_Expr,
+                     Aspects_Node => No_Aspect_Spec,
+                     Options      => Options,
+                     Sections     => Documentation.Sections);
 
                when others =>
                   raise Program_Error;
@@ -494,12 +494,12 @@ package body GNATdoc.Comments.Extractor is
 
          when Ada_Entry_Decl =>
             Extract_Subprogram_Documentation
-              (Decl_Node     => Node,
-               Spec_Node     => Node.As_Entry_Decl.F_Spec,
-               Expr_Node     => No_Expr,
-               Aspects_Node  => No_Aspect_Spec,
-               Options       => Options,
-               Documentation => Documentation);
+              (Decl_Node    => Node,
+               Spec_Node    => Node.As_Entry_Decl.F_Spec,
+               Expr_Node    => No_Expr,
+               Aspects_Node => No_Aspect_Spec,
+               Options      => Options,
+               Sections     => Documentation.Sections);
 
          when Ada_Entry_Body =>
             Extract_Entry_Body_Documentation
@@ -1802,12 +1802,12 @@ package body GNATdoc.Comments.Extractor is
    --------------------------------------
 
    procedure Extract_Subprogram_Documentation
-     (Decl_Node      : Libadalang.Analysis.Basic_Decl'Class;
-      Spec_Node      : Libadalang.Analysis.Base_Subp_Spec'Class;
-      Expr_Node      : Expr'Class;
-      Aspects_Node   : Aspect_Spec'Class;
-      Options        : GNATdoc.Comments.Options.Extractor_Options;
-      Documentation  : out Structured_Comment'Class)
+     (Decl_Node    : Libadalang.Analysis.Basic_Decl'Class;
+      Spec_Node    : Libadalang.Analysis.Base_Subp_Spec'Class;
+      Expr_Node    : Expr'Class;
+      Aspects_Node : Aspect_Spec'Class;
+      Options      : GNATdoc.Comments.Options.Extractor_Options;
+      Sections     : in out Section_Vectors.Vector)
    is
 
       --------------------------------
@@ -1954,13 +1954,13 @@ package body GNATdoc.Comments.Extractor is
          Intermediate_Upper_Section.Exact_End_Line,
          Intermediate_Lower_Section.Exact_Start_Line,
          Intermediate_Lower_Section.Exact_End_Line);
-      Documentation.Sections.Append (Intermediate_Upper_Section);
-      Documentation.Sections.Append (Intermediate_Lower_Section);
+      Sections.Append (Intermediate_Upper_Section);
+      Sections.Append (Intermediate_Lower_Section);
 
       --  Create sections for parameters and return value.
 
       Components_Builder.Build
-        (Sections       => Documentation.Sections'Unchecked_Access,
+        (Sections       => Sections'Unchecked_Access,
          Options        => Options,
          Node           => Decl_Node,
          Spec_Node      => Spec_Node,
@@ -1976,7 +1976,7 @@ package body GNATdoc.Comments.Extractor is
          Options          => Options,
          Last_Section     => Last_Section,
          Minimum_Indent   => Minimum_Indent,
-         Sections         => Documentation.Sections,
+         Sections         => Sections,
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
@@ -1987,25 +1987,18 @@ package body GNATdoc.Comments.Extractor is
          --  Access to subprogram type
 
          Fill_Code_Snippet
-           (Decl_Node,
-            Decl_Node.Token_Start,
-            Decl_Node.Token_End,
-            Documentation.Sections);
+           (Decl_Node, Decl_Node.Token_Start, Decl_Node.Token_End, Sections);
 
       else
          Fill_Code_Snippet
-           (Spec_Node,
-            Spec_Node.Token_Start,
-            Spec_Node.Token_End,
-            Documentation.Sections);
+           (Spec_Node, Spec_Node.Token_Start, Spec_Node.Token_End, Sections);
       end if;
 
       --  Postprocess extracted text, for each group of lines, separated
       --  by empty line by remove of two minus signs and common leading
       --  whitespaces
 
-      Remove_Comment_Start_And_Indentation
-        (Documentation.Sections, Options.Pattern);
+      Remove_Comment_Start_And_Indentation (Sections, Options.Pattern);
 
       --  Process raw documentation for subprogram, fill sections and create
       --  description section.
@@ -2055,7 +2048,7 @@ package body GNATdoc.Comments.Extractor is
            (Raw_Section,
             (Param_Tag | Return_Tag | Exception_Tag => True,
              others                                 => False),
-            Documentation.Sections);
+            Sections);
       end;
    end Extract_Subprogram_Documentation;
 
