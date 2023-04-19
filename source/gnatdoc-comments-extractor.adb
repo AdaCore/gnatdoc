@@ -123,12 +123,16 @@ package body GNATdoc.Comments.Extractor is
    --  Extract documentation for record type declaration.
 
    procedure Extract_Private_Type_Documentation
-     (Node     : Libadalang.Analysis.Type_Decl'Class;
+     (Node     : Libadalang.Analysis.Basic_Decl'Class;
+      Decl     : Libadalang.Analysis.Type_Decl'Class;
       Options  : GNATdoc.Comments.Options.Extractor_Options;
       Sections : in out Section_Vectors.Vector)
      with Pre =>
-       Node.Kind in Ada_Type_Decl
-         and then Node.As_Type_Decl.F_Type_Def.Kind = Ada_Private_Type_Def;
+       (Decl.Kind in Ada_Type_Decl
+          and then Decl.As_Type_Decl.F_Type_Def.Kind = Ada_Private_Type_Def)
+       or else (Decl.Kind in Ada_Formal_Type_Decl
+                  and then Decl.As_Formal_Type_Decl.F_Type_Def.Kind
+                             = Ada_Private_Type_Def);
    --  Extract documentation for private type declaration.
 
    procedure Extract_Simple_Declaration_Documentation
@@ -154,7 +158,20 @@ package body GNATdoc.Comments.Extractor is
      or (Node.Kind in Ada_Type_Decl
          and then Node.As_Type_Decl.F_Type_Def.Kind = Ada_Derived_Type_Def
          and then Node.As_Type_Decl.F_Type_Def.As_Derived_Type_Def
-                    .F_Record_Extension.Is_Null);
+                    .F_Record_Extension.Is_Null)
+     or (Node.Kind in Ada_Generic_Formal_Type_Decl
+         and then Node.As_Generic_Formal_Type_Decl.F_Decl.As_Formal_Type_Decl
+                    .F_Type_Def.Kind in Ada_Type_Access_Def
+                      | Ada_Array_Type_Def
+                      | Ada_Decimal_Fixed_Point_Def
+                      | Ada_Derived_Type_Def
+                      | Ada_Floating_Point_Def
+                      | Ada_Formal_Discrete_Type_Def
+                      | Ada_Interface_Type_Def
+                      | Ada_Ordinary_Fixed_Point_Def
+                      | Ada_Mod_Int_Type_Def
+                      | Ada_Signed_Int_Type_Def)
+     or Node.Kind = Ada_Generic_Formal_Obj_Decl;
    --  Extract documentation for simple declaration (declarations that doesn't
    --  contains components).
 
@@ -423,7 +440,7 @@ package body GNATdoc.Comments.Extractor is
 
                when Ada_Private_Type_Def =>
                   Extract_Private_Type_Documentation
-                    (Node.As_Type_Decl, Options, Documentation.Sections);
+                    (Node, Node.As_Type_Decl, Options, Documentation.Sections);
 
                when Ada_Type_Access_Def =>
                   Extract_Simple_Declaration_Documentation
@@ -756,7 +773,7 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (Raw_Section,
             (Private_Tag => True,
-             Formal_Tag  => Basic_Decl_Node /= Base_Package_Decl_Node,
+             Formal_Tag  => Basic_Decl_Node.Kind in Ada_Generic_Decl,
              others      => False),
             Documentation.Sections,
             Documentation.Is_Private);
@@ -1228,6 +1245,30 @@ package body GNATdoc.Comments.Extractor is
    is
       Component_Builder :
         GNATdoc.Comments.Builders.Generics.Generic_Components_Builder;
+      --  Formal_Section    : Section_Access;
+
+      function Lookup_Formal_Section
+        (Name : Defining_Name'Class) return not null Section_Access;
+
+      ---------------------------
+      -- Lookup_Formal_Section --
+      ---------------------------
+
+      function Lookup_Formal_Section
+        (Name : Defining_Name'Class) return not null Section_Access
+      is
+         Symbol : constant VSS.Strings.Virtual_String :=
+           GNATdoc.Comments.Utilities.To_Symbol (Name);
+
+      begin
+         for Section of Documentation.Sections loop
+            if Section.Kind = Formal and Section.Symbol = Symbol then
+               return Section;
+            end if;
+         end loop;
+
+         raise Program_Error;
+      end Lookup_Formal_Section;
 
    begin
       Component_Builder.Build
@@ -1239,6 +1280,100 @@ package body GNATdoc.Comments.Extractor is
 
       Extract_Base_Package_Decl_Documentation
         (Node, Node.F_Package_Decl, Options, Documentation);
+
+      for Item of Node.F_Formal_Part.F_Decls loop
+         case Item.Kind is
+            when Ada_Generic_Formal_Type_Decl =>
+               declare
+                  Type_Decl       : constant Formal_Type_Decl :=
+                    Item.As_Generic_Formal_Type_Decl.F_Decl
+                      .As_Formal_Type_Decl;
+                  Formal_Type_Def : constant Type_Def := Type_Decl.F_Type_Def;
+                  Formal_Name     : constant Defining_Name :=
+                    Type_Decl.F_Name;
+
+               begin
+                  case Formal_Type_Def.Kind is
+                     when Ada_Private_Type_Def =>
+                        Extract_Private_Type_Documentation
+                          (Item.As_Generic_Formal_Type_Decl,
+                           Type_Decl,
+                           Options,
+                           Lookup_Formal_Section (Formal_Name).Sections);
+
+                     when Ada_Type_Access_Def
+                        | Ada_Array_Type_Def
+                        | Ada_Decimal_Fixed_Point_Def
+                        | Ada_Derived_Type_Def
+                        | Ada_Floating_Point_Def
+                        | Ada_Formal_Discrete_Type_Def
+                        | Ada_Interface_Type_Def
+                        | Ada_Mod_Int_Type_Def
+                        | Ada_Ordinary_Fixed_Point_Def
+                        | Ada_Signed_Int_Type_Def
+                     =>
+                        Extract_Simple_Declaration_Documentation
+                          (Item.As_Generic_Formal_Type_Decl,
+                           Options,
+                           Lookup_Formal_Section (Formal_Name).Sections);
+
+                     when Ada_Access_To_Subp_Def =>
+                        Extract_Subprogram_Documentation
+                          (Decl_Node    => Item.As_Generic_Formal_Type_Decl,
+                           Spec_Node    =>
+                              Formal_Type_Def.As_Access_To_Subp_Def
+                                .F_Subp_Spec,
+                           Expr_Node    => No_Expr,
+                           Aspects_Node => No_Aspect_Spec,
+                           Options      => Options,
+                           Sections     =>
+                              Lookup_Formal_Section (Formal_Name).Sections);
+
+                     when others =>
+                        raise Program_Error;
+                  end case;
+               end;
+
+            when Ada_Generic_Formal_Subp_Decl =>
+               declare
+                  Subp_Decl        : constant Concrete_Formal_Subp_Decl :=
+                    Item.As_Generic_Formal_Subp_Decl.F_Decl
+                      .As_Concrete_Formal_Subp_Decl;
+                  Formal_Subp_Spec : constant Subp_Spec :=
+                    Subp_Decl.F_Subp_Spec;
+                  Formal_Name      : constant Defining_Name :=
+                    Formal_Subp_Spec.F_Subp_Name;
+
+               begin
+                  Extract_Subprogram_Documentation
+                    (Decl_Node    => Item.As_Generic_Formal_Subp_Decl,
+                     Spec_Node    => Formal_Subp_Spec,
+                     Expr_Node    => No_Expr,
+                     Aspects_Node => No_Aspect_Spec,
+                     Options      => Options,
+                     Sections     =>
+                       Lookup_Formal_Section (Formal_Name).Sections);
+               end;
+
+            when Ada_Generic_Formal_Obj_Decl =>
+               declare
+                  Ids : constant Defining_Name_List :=
+                    Item.As_Generic_Formal_Obj_Decl.F_Decl
+                      .As_Object_Decl.F_Ids;
+
+               begin
+                  for Id of Ids loop
+                     Extract_Simple_Declaration_Documentation
+                       (Item.As_Generic_Formal_Obj_Decl,
+                        Options,
+                        Lookup_Formal_Section (Id).Sections);
+                  end loop;
+               end;
+
+            when others =>
+               raise Program_Error;
+         end case;
+      end loop;
    end Extract_Generic_Package_Decl_Documentation;
 
    -----------------------------
@@ -1320,7 +1455,8 @@ package body GNATdoc.Comments.Extractor is
    ----------------------------------------
 
    procedure Extract_Private_Type_Documentation
-     (Node     : Libadalang.Analysis.Type_Decl'Class;
+     (Node     : Libadalang.Analysis.Basic_Decl'Class;
+      Decl     : Libadalang.Analysis.Type_Decl'Class;
       Options  : GNATdoc.Comments.Options.Extractor_Options;
       Sections : in out Section_Vectors.Vector)
    is
@@ -1336,7 +1472,7 @@ package body GNATdoc.Comments.Extractor is
       Component_Builder.Build
         (Sections'Unchecked_Access,
          Options,
-         Node,
+         Decl,
          Last_Section,
          Minimum_Indent);
 
@@ -2555,7 +2691,8 @@ package body GNATdoc.Comments.Extractor is
                goto Skip;
 
             elsif Kind
-                 in Parameter | Raised_Exception | Enumeration_Literal | Field
+              in Parameter | Raised_Exception | Enumeration_Literal | Field
+                   | Formal
             then
                --  Lookup for name of the parameter/exception. Convert
                --  found name to canonical form.
