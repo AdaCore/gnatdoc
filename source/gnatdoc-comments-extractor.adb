@@ -2191,51 +2191,53 @@ package body GNATdoc.Comments.Extractor is
 
       --  Remove comments
 
-      declare
-         Line_Offset : constant Line_Number :=
-           First_Token_Location.Start_Line - 1;
-         Token       : Token_Reference      := Last_Token;
+      if First_Token /= Last_Token then
+         declare
+            Line_Offset : constant Line_Number :=
+              First_Token_Location.Start_Line - 1;
+            Token       : Token_Reference      := Last_Token;
 
-      begin
-         loop
-            Token := Previous (Token);
+         begin
+            loop
+               Token := Previous (Token);
 
-            exit when Token = First_Token or Token = No_Token;
+               exit when Token = First_Token or Token = No_Token;
 
-            if Kind (Data (Token)) = Ada_Comment then
-               declare
-                  Location : constant Source_Location_Range :=
-                    Sloc_Range (Data (Token));
-                  Index    : constant Positive :=
-                    Positive (Location.Start_Line - Line_Offset);
-                  Line     : Virtual_String := Text (Index);
-                  Iterator : Character_Iterator :=
-                    Line.After_Last_Character;
+               if Kind (Data (Token)) = Ada_Comment then
+                  declare
+                     Location : constant Source_Location_Range :=
+                       Sloc_Range (Data (Token));
+                     Index    : constant Positive :=
+                       Positive (Location.Start_Line - Line_Offset);
+                     Line     : Virtual_String := Text (Index);
+                     Iterator : Character_Iterator :=
+                       Line.After_Last_Character;
 
-               begin
-                  --  Move iterator till first character before the
-                  --  comment's start column.
+                  begin
+                     --  Move iterator till first character before the
+                     --  comment's start column.
 
-                  while Iterator.Backward loop
-                     exit when
-                       Iterator.Character_Index
-                         < Character_Index (Location.Start_Column);
-                  end loop;
+                     while Iterator.Backward loop
+                        exit when
+                          Iterator.Character_Index
+                            < Character_Index (Location.Start_Column);
+                     end loop;
 
-                  --  Rewind all whitespaces before the comment
+                     --  Rewind all whitespaces before the comment
 
-                  while Iterator.Backward loop
-                     exit when not Is_Ada_Separator (Iterator.Element);
-                  end loop;
+                     while Iterator.Backward loop
+                        exit when not Is_Ada_Separator (Iterator.Element);
+                     end loop;
 
-                  --  Remove comment and spaces before it from the line.
+                     --  Remove comment and spaces before it from the line.
 
-                  Line := Line.Slice (Line.At_First_Character, Iterator);
-                  Text.Replace (Index, Line);
-               end;
-            end if;
-         end loop;
-      end;
+                     Line := Line.Slice (Line.At_First_Character, Iterator);
+                     Text.Replace (Index, Line);
+                  end;
+               end if;
+            end loop;
+         end;
+      end if;
 
       --  For enumeration types with large number of defined enumeration
       --  literals, limit text for few first literals and last literal.
