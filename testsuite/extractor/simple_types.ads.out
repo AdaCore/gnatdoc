@@ -1,0 +1,79 @@
+<CompilationUnit simple_types.ads:9:1-26:18>
+<AdaNodeList simple_types.ads:9:1-9:1>
+<LibraryItem simple_types.ads:9:1-26:18>
+<PrivateAbsent simple_types.ads:9:1-9:1>
+<PackageDecl ["Simple_Types"] simple_types.ads:9:1-26:18>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+Test of documentation extraction for the simple types:
+  - signed integer
+  - modular
+  - floating point
+  - ordinary fixed point
+  - decimal fixed point
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+Test of documentation extraction for the simple types:
+  - signed integer
+  - modular
+  - floating point
+  - ordinary fixed point
+  - decimal fixed point
+**************************
+<DefiningName "Simple_Types" simple_types.ads:9:9-9:21>
+<Id "Simple_Types" simple_types.ads:9:9-9:21>
+<PublicPart simple_types.ads:9:24-26:1>
+<AdaNodeList simple_types.ads:11:4-23:45>
+<ConcreteTypeDecl ["Integer_Type"] simple_types.ads:11:4-11:43>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the signed integer type
+\/ SNIPPET ada ()  0 0 0 0
+type Integer_Type is range -100 .. 100;
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the signed integer type
+**************************
+<ConcreteTypeDecl ["Modular_Type"] simple_types.ads:14:4-14:35>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the modular type
+\/ SNIPPET ada ()  0 0 0 0
+type Modular_Type is mod 2**16;
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the modular type
+**************************
+<ConcreteTypeDecl ["Float_Type"] simple_types.ads:17:4-17:33>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the floating point type
+\/ SNIPPET ada ()  0 0 0 0
+type Float_Type is digits 10;
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the floating point type
+**************************
+<ConcreteTypeDecl ["Fixed_Type"] simple_types.ads:20:4-20:52>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the ordinary fixed point type
+\/ SNIPPET ada ()  0 0 0 0
+type Fixed_Type is delta 0.001 range 0.0 .. 1.0;
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the ordinary fixed point type
+**************************
+<ConcreteTypeDecl ["Decimal_Type"] simple_types.ads:23:4-23:45>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the decimal fixed point type
+\/ SNIPPET ada ()  0 0 0 0
+type Decimal_Type is delta 0.01 digits 7;
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the decimal fixed point type
+**************************
+<EndName simple_types.ads:26:5-26:17>
+<Id "Simple_Types" simple_types.ads:26:5-26:17>
+<PragmaNodeList simple_types.ads:26:18-26:18>

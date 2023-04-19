@@ -22,6 +22,7 @@ check_extractor:
 	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json subprograms_gnat.ads | diff -u --strip-trailing-cr subprograms_gnat.ads.out -)
 	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json test_vb10_011.ads | diff -u --strip-trailing-cr test_vb10_011.ads.out -)
 	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json enumerations.ads | diff -u --strip-trailing-cr enumerations.ads.out -)
+	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json simple_types.ads | diff -u --strip-trailing-cr simple_types.ads.out -)
 
 check_gnatdoc:
 	make -C testsuite/gnatdoc.RB16-013.gpt_tool
