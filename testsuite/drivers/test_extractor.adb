@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -147,6 +147,11 @@ procedure Test_Extractor is
 
             return Over;
 
+         when Ada_Generic_Package_Decl =>
+            Extract_And_Dump;
+
+            return Into;
+
          when Ada_Record_Rep_Clause =>
             --  These nodes doesn't have own documentation, ignore them.
 
@@ -159,6 +164,12 @@ procedure Test_Extractor is
             Extract_And_Dump;
 
             return Into;
+
+         when Ada_Generic_Formal_Part =>
+            --  Formal part of the generic is processed in generic
+            --  declaration processing.
+
+            return Over;
 
          when others =>
             return Into;
