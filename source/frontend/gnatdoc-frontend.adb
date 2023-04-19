@@ -60,7 +60,8 @@ package body GNATdoc.Frontend is
    procedure Process_Simple_Type_Def
      (Node      : Type_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
-   --  Process simple data types: Enum_Type_Def, Mod_Int_Type_Def,
+   --  Process simple data types: Enum_Type_Def, Decimal_Fixed_Point_Def,
+   --  Ada_Floating_Point_Def, Mod_Int_Type_Def, Ada_Ordinary_Fixed_Point_Def,
    --  Signed_Int_Type_Def
 
    procedure Process_Array_Type_Def
@@ -315,7 +316,10 @@ package body GNATdoc.Frontend is
                      Process_Record_Type_Def (Node.As_Type_Decl, Enclosing);
 
                   when Ada_Enum_Type_Def
+                     | Ada_Decimal_Fixed_Point_Def
+                     | Ada_Floating_Point_Def
                      | Ada_Mod_Int_Type_Def
+                     | Ada_Ordinary_Fixed_Point_Def
                      | Ada_Signed_Int_Type_Def
                      =>
                      Process_Simple_Type_Def (Node.As_Type_Decl, Enclosing);

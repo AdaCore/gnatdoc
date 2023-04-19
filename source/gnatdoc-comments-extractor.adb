@@ -144,8 +144,11 @@ package body GNATdoc.Comments.Extractor is
                    | Ada_Subtype_Decl
      or (Node.Kind in Ada_Type_Decl
          and then Node.As_Type_Decl.F_Type_Def.Kind in Ada_Array_Type_Def
+                    | Ada_Decimal_Fixed_Point_Def
+                    | Ada_Floating_Point_Def
                     | Ada_Interface_Type_Def
                     | Ada_Mod_Int_Type_Def
+                    | Ada_Ordinary_Fixed_Point_Def
                     | Ada_Signed_Int_Type_Def
                     | Ada_Type_Access_Def)
      or (Node.Kind in Ada_Type_Decl
@@ -405,7 +408,12 @@ package body GNATdoc.Comments.Extractor is
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl, Options, Documentation.Sections);
 
-               when Ada_Mod_Int_Type_Def | Ada_Signed_Int_Type_Def =>
+               when Ada_Decimal_Fixed_Point_Def
+                  | Ada_Floating_Point_Def
+                  | Ada_Mod_Int_Type_Def
+                  | Ada_Ordinary_Fixed_Point_Def
+                  | Ada_Signed_Int_Type_Def
+               =>
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl, Options, Documentation.Sections);
 
