@@ -37,6 +37,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Expr_Function
                       | Ada_Generic_Package_Decl
                       | Ada_Generic_Package_Instantiation
+                      | Ada_Generic_Subp_Decl
                       | Ada_Generic_Subp_Instantiation
                       | Ada_Null_Subp_Decl
                       | Ada_Number_Decl
@@ -81,6 +82,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Expr_Function
                       | Ada_Generic_Package_Decl
                       | Ada_Generic_Package_Instantiation
+                      | Ada_Generic_Subp_Decl
                       | Ada_Generic_Subp_Instantiation
                       | Ada_Null_Subp_Decl
                       | Ada_Number_Decl
@@ -125,6 +127,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Expr_Function
                       | Ada_Generic_Package_Decl
                       | Ada_Generic_Package_Instantiation
+                      | Ada_Generic_Subp_Decl
                       | Ada_Generic_Subp_Instantiation
                       | Ada_Null_Subp_Decl
                       | Ada_Number_Decl

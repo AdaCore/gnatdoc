@@ -32,7 +32,7 @@ package body GNATdoc.Comments.Builders.Generics is
      (Self             : in out Generic_Components_Builder;
       Sections         : not null GNATdoc.Comments.Sections_Access;
       Options          : GNATdoc.Comments.Options.Extractor_Options;
-      Node             : Libadalang.Analysis.Generic_Package_Decl'Class;
+      Node             : Libadalang.Analysis.Generic_Decl'Class;
       Formal_Part_Node : Libadalang.Analysis.Generic_Formal_Part'Class;
       Basic_Decl_Node  : Libadalang.Analysis.Basic_Decl'Class) is
    begin
@@ -73,7 +73,8 @@ package body GNATdoc.Comments.Builders.Generics is
                     .As_Generic_Package_Instantiation.F_Name);
 
             when others =>
-               Ada.Text_IO.Put_Line (Image (Item));
+               Ada.Text_IO.Put_Line
+                 (Ada.Text_IO.Standard_Error, Image (Item));
          end case;
       end loop;
 

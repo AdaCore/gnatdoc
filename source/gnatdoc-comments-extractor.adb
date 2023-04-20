@@ -68,8 +68,8 @@ package body GNATdoc.Comments.Extractor is
    --  Common code to extract documentation for ordinary and generic package
    --  declarations.
 
-   procedure Extract_Generic_Package_Decl_Documentation
-     (Node          : Libadalang.Analysis.Generic_Package_Decl'Class;
+   procedure Extract_Generic_Decl_Documentation
+     (Node          : Libadalang.Analysis.Generic_Decl'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class);
 
@@ -368,9 +368,13 @@ package body GNATdoc.Comments.Extractor is
                Options      => Options,
                Sections     => Documentation.Sections);
 
-         when Ada_Generic_Package_Decl =>
-            Extract_Generic_Package_Decl_Documentation
-              (Node.As_Generic_Package_Decl, Options, Documentation);
+         when Ada_Generic_Package_Decl | Ada_Generic_Subp_Decl =>
+            Extract_Generic_Decl_Documentation
+              (Node.As_Generic_Decl, Options, Documentation);
+
+         --  when Ada_Generic_Subp_Decl =>
+         --     Extract_Generic_Decl_Documentation
+         --       (Node.As_Generic_Subp_Decl, Options, Documentation);
 
          when Ada_Generic_Package_Instantiation =>
             Extract_Simple_Declaration_Documentation
@@ -1235,19 +1239,15 @@ package body GNATdoc.Comments.Extractor is
       end;
    end Extract_General_Trailing_Documentation;
 
-   ------------------------------------------------
-   -- Extract_Generic_Package_Decl_Documentation --
-   ------------------------------------------------
+   ----------------------------------------
+   -- Extract_Generic_Decl_Documentation --
+   ----------------------------------------
 
-   procedure Extract_Generic_Package_Decl_Documentation
-     (Node          : Libadalang.Analysis.Generic_Package_Decl'Class;
+   procedure Extract_Generic_Decl_Documentation
+     (Node          : Libadalang.Analysis.Generic_Decl'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
       Documentation : out Structured_Comment'Class)
    is
-      Component_Builder :
-        GNATdoc.Comments.Builders.Generics.Generic_Components_Builder;
-      --  Formal_Section    : Section_Access;
-
       function Lookup_Formal_Section
         (Name : Defining_Name'Class) return not null Section_Access;
 
@@ -1271,16 +1271,44 @@ package body GNATdoc.Comments.Extractor is
          raise Program_Error;
       end Lookup_Formal_Section;
 
+      Component_Builder :
+        GNATdoc.Comments.Builders.Generics.Generic_Components_Builder;
+      Decl              : constant Basic_Decl'Class :=
+        (case Node.Kind is
+            when Ada_Generic_Package_Decl =>
+              Node.As_Generic_Package_Decl.F_Package_Decl,
+            when Ada_Generic_Subp_Decl    =>
+              Node.As_Generic_Subp_Decl.F_Subp_Decl,
+            when others                   => raise Program_Error);
+
    begin
       Component_Builder.Build
         (Documentation.Sections'Unchecked_Access,
          Options,
          Node,
          Node.F_Formal_Part,
-         Node.F_Package_Decl);
+         Decl);
 
-      Extract_Base_Package_Decl_Documentation
-        (Node, Node.F_Package_Decl, Options, Documentation);
+      case Node.Kind is
+         when Ada_Generic_Package_Decl =>
+            Extract_Base_Package_Decl_Documentation
+              (Node,
+               Node.As_Generic_Package_Decl.F_Package_Decl,
+               Options,
+               Documentation);
+
+         when Ada_Generic_Subp_Decl =>
+            Extract_Subprogram_Documentation
+              (Decl.As_Generic_Subp_Internal,
+               Decl.As_Generic_Subp_Internal.F_Subp_Spec,
+               No_Expr,
+               No_Aspect_Spec,
+               Options,
+               Documentation.Sections);
+
+         when others =>
+            raise Program_Error;
+      end case;
 
       for Item of Node.F_Formal_Part.F_Decls loop
          case Item.Kind is
@@ -1383,7 +1411,7 @@ package body GNATdoc.Comments.Extractor is
                raise Program_Error;
          end case;
       end loop;
-   end Extract_Generic_Package_Decl_Documentation;
+   end Extract_Generic_Decl_Documentation;
 
    -----------------------------
    -- Extract_Leading_Section --
