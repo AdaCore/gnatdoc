@@ -140,6 +140,7 @@ package body GNATdoc.Comments.Extractor is
       Options  : GNATdoc.Comments.Options.Extractor_Options;
       Sections : in out Section_Vectors.Vector)
      with Pre => Node.Kind in Ada_Exception_Decl
+                   | Ada_Generic_Formal_Package
                    | Ada_Generic_Package_Instantiation
                    | Ada_Generic_Subp_Instantiation
                    | Ada_Number_Decl
@@ -1369,6 +1370,14 @@ package body GNATdoc.Comments.Extractor is
                         Lookup_Formal_Section (Id).Sections);
                   end loop;
                end;
+
+            when Ada_Generic_Formal_Package =>
+               Extract_Simple_Declaration_Documentation
+                 (Item.As_Generic_Formal_Package,
+                  Options,
+                  Lookup_Formal_Section
+                    (Item.As_Generic_Formal_Package.F_Decl
+                       .As_Generic_Package_Instantiation.F_Name).Sections);
 
             when others =>
                raise Program_Error;

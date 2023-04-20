@@ -66,6 +66,12 @@ package body GNATdoc.Comments.Builders.Generics is
                   Self.Process_Defining_Name (Formal, Id);
                end loop;
 
+            when Ada_Generic_Formal_Package =>
+               Self.Process_Defining_Name
+                 (Formal,
+                  Item.As_Generic_Formal_Package.F_Decl
+                    .As_Generic_Package_Instantiation.F_Name);
+
             when others =>
                Ada.Text_IO.Put_Line (Image (Item));
          end case;
