@@ -36,7 +36,17 @@ package body GNATdoc.Comments.Helpers is
      (Documentation : Structured_Comment;
       Name          : Defining_Name'Class)
       return VSS.String_Vectors.Virtual_String_Vector;
-   --  Return description as plain text.
+   --  Return description as plain text. Name is the defining name of the
+   --  documented entity.
+
+   function Get_Plain_Text_Description
+     (Documentation : Structured_Comment;
+      Name          : Defining_Name'Class;
+      Subname       : Defining_Name'Class)
+      return VSS.String_Vectors.Virtual_String_Vector;
+   --  Return description as plain text. Name and Subname are defining
+   --  names of the documented entity. This hierarhy is used for generic
+   --  declarations only.
 
    --------------------------
    -- Get_Ada_Code_Snippet --
@@ -249,6 +259,37 @@ package body GNATdoc.Comments.Helpers is
       return Empty_Virtual_String_Vector;
    end Get_Plain_Text_Description;
 
+   --------------------------------
+   -- Get_Plain_Text_Description --
+   --------------------------------
+
+   function Get_Plain_Text_Description
+     (Documentation : Structured_Comment;
+      Name          : Defining_Name'Class;
+      Subname       : Defining_Name'Class)
+      return VSS.String_Vectors.Virtual_String_Vector
+   is
+      Symbol    : constant VSS.Strings.Virtual_String :=
+        GNATdoc.Comments.Utilities.To_Symbol (Name);
+      Subsymbol : constant VSS.Strings.Virtual_String :=
+        GNATdoc.Comments.Utilities.To_Symbol (Subname);
+
+   begin
+      for Section of Documentation.Sections loop
+         if Section.Kind = Formal and then Section.Symbol = Symbol then
+            for Subsection of Section.Sections loop
+               if Subsection.Kind in Component
+                 and then Subsection.Symbol = Subsymbol
+               then
+                  return Get_Plain_Text_Description (Section);
+               end if;
+            end loop;
+         end if;
+      end loop;
+
+      return Empty_Virtual_String_Vector;
+   end Get_Plain_Text_Description;
+
    ----------------------------------
    -- Get_Plain_Text_Documentation --
    ----------------------------------
@@ -259,14 +300,50 @@ package body GNATdoc.Comments.Helpers is
       Code_Snippet  : out VSS.String_Vectors.Virtual_String_Vector;
       Documentation : out VSS.String_Vectors.Virtual_String_Vector)
    is
-      Decl            : constant Basic_Decl := Name.P_Basic_Decl;
-      Decl_To_Extract : Basic_Decl;
-      Name_To_Extract : Defining_Name;
-
-      Extracted : Structured_Comment;
+      Decl               : constant Basic_Decl := Name.P_Basic_Decl;
+      Parent_Basic_Decl  : constant Basic_Decl := Decl.P_Parent_Basic_Decl;
+      Decl_To_Extract    : Basic_Decl;
+      Name_To_Extract    : Defining_Name;
+      Subname_To_Extract : Defining_Name;
+      Extracted          : Structured_Comment;
 
    begin
-      if Decl.Kind in Ada_Abstract_Subp_Decl
+      if Decl.Kind in Ada_Concrete_Formal_Subp_Decl | Ada_Formal_Type_Decl
+        or else (Decl.Kind = Ada_Object_Decl
+                   and then Decl.Parent.Kind = Ada_Generic_Formal_Obj_Decl)
+      then
+         --  Formal of the generic declaration.
+
+         Decl_To_Extract := Parent_Basic_Decl;
+         Name_To_Extract := Name.As_Defining_Name;
+
+      elsif Decl.Kind = Ada_Param_Spec
+        and Parent_Basic_Decl.Kind
+              in Ada_Concrete_Formal_Subp_Decl | Ada_Formal_Type_Decl
+      then
+         --  Parameter of the formal subprogram or formal access to subprogram
+         --  type of the generic declaration.
+
+         Decl_To_Extract := Parent_Basic_Decl.P_Parent_Basic_Decl;
+
+         if Parent_Basic_Decl.Kind = Ada_Formal_Type_Decl then
+            Name_To_Extract :=
+              Parent_Basic_Decl.As_Formal_Type_Decl.F_Name;
+
+         elsif Parent_Basic_Decl.Kind = Ada_Concrete_Formal_Subp_Decl then
+            Name_To_Extract :=
+              Parent_Basic_Decl.As_Concrete_Formal_Subp_Decl.F_Subp_Spec
+                .F_Subp_Name;
+         end if;
+
+         Subname_To_Extract := Name.As_Defining_Name;
+
+      elsif Parent_Basic_Decl.Kind = Ada_Generic_Package_Decl then
+         --  Generic package declarations
+
+         Decl_To_Extract := Parent_Basic_Decl;
+
+      elsif Decl.Kind in Ada_Abstract_Subp_Decl
                     | Ada_Entry_Decl
                     | Ada_Exception_Decl
                     | Ada_Expr_Function
@@ -301,25 +378,25 @@ package body GNATdoc.Comments.Helpers is
          Decl_To_Extract := Decl;
 
       elsif Decl.Kind = Ada_Single_Task_Type_Decl then
-         Decl_To_Extract := Decl.P_Parent_Basic_Decl;
+         Decl_To_Extract := Parent_Basic_Decl;
 
       elsif Decl.Kind in Ada_Param_Spec | Ada_Entry_Index_Spec
-        and then Decl.P_Parent_Basic_Decl.Kind
+        and then Parent_Basic_Decl.Kind
                    in Ada_Subp_Decl | Ada_Entry_Decl | Ada_Entry_Body
       then
          --  Parameters of the subprograms and entries, family index of
          --  entries.
 
-         Decl_To_Extract := Decl.P_Parent_Basic_Decl;
+         Decl_To_Extract := Parent_Basic_Decl;
          Name_To_Extract := Name.As_Defining_Name;
 
       elsif Decl.Kind in Ada_Discriminant_Spec | Ada_Component_Decl
-        and then Decl.P_Parent_Basic_Decl.Kind
+        and then Parent_Basic_Decl.Kind
                    in Ada_Protected_Type_Decl | Ada_Single_Protected_Decl
       then
          --  Discriminants and components of the protected types/objects.
 
-         Decl_To_Extract := Decl.P_Parent_Basic_Decl;
+         Decl_To_Extract := Parent_Basic_Decl;
          Name_To_Extract := Name.As_Defining_Name;
 
       elsif Decl.Kind = Ada_Enum_Literal_Decl then
@@ -328,11 +405,11 @@ package body GNATdoc.Comments.Helpers is
          Name_To_Extract := Name.As_Defining_Name;
 
       elsif Decl.Kind in Ada_Discriminant_Spec | Ada_Component_Decl
-        and then Decl.P_Parent_Basic_Decl.Kind in Ada_Type_Decl
-        and then Decl.P_Parent_Basic_Decl.As_Type_Decl.F_Type_Def.Kind
+        and then Parent_Basic_Decl.Kind in Ada_Type_Decl
+        and then Parent_Basic_Decl.As_Type_Decl.F_Type_Def.Kind
                    = Ada_Record_Type_Def
       then
-         Decl_To_Extract := Decl.P_Parent_Basic_Decl;
+         Decl_To_Extract := Parent_Basic_Decl;
          Name_To_Extract := Name.As_Defining_Name;
       end if;
 
@@ -343,12 +420,17 @@ package body GNATdoc.Comments.Helpers is
          if Name_To_Extract.Is_Null then
             Documentation := Get_Plain_Text_Description (Extracted);
 
-         else
+         elsif Subname_To_Extract.Is_Null then
             Documentation :=
               Get_Plain_Text_Description (Extracted, Name_To_Extract);
+
+         else
+            Documentation :=
+              Get_Plain_Text_Description
+                (Extracted, Name_To_Extract, Subname_To_Extract);
          end if;
 
-         Code_Snippet  := Get_Ada_Code_Snippet (Extracted);
+         Code_Snippet := Get_Ada_Code_Snippet (Extracted);
       end if;
    end Get_Plain_Text_Documentation;
 
