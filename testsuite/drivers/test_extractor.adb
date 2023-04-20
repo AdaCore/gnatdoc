@@ -147,7 +147,7 @@ procedure Test_Extractor is
 
             return Over;
 
-         when Ada_Generic_Package_Decl =>
+         when Ada_Generic_Package_Decl | Ada_Generic_Subp_Decl =>
             Extract_And_Dump;
 
             return Into;
