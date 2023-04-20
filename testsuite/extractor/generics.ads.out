@@ -1,8 +1,8 @@
-<CompilationUnit generics.ads:4:1-104:14>
+<CompilationUnit generics.ads:4:1-126:14>
 <AdaNodeList generics.ads:4:1-4:1>
-<LibraryItem generics.ads:4:1-104:14>
+<LibraryItem generics.ads:4:1-126:14>
 <PrivateAbsent generics.ads:4:1-4:1>
-<PackageDecl ["Generics"] generics.ads:4:1-104:14>
+<PackageDecl ["Generics"] generics.ads:4:1-126:14>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
 Test cases for generics declarations
@@ -13,8 +13,8 @@ This generic package has set of formal parameters of all types.
 **************************
 <DefiningName "Generics" generics.ads:4:9-4:17>
 <Id "Generics" generics.ads:4:9-4:17>
-<PublicPart generics.ads:4:20-104:1>
-<AdaNodeList generics.ads:8:4-102:17>
+<PublicPart generics.ads:4:20-126:1>
+<AdaNodeList generics.ads:8:4-118:47>
 <GenericPackageDecl ["All_Types"] generics.ads:8:4-50:18>
 **************************
 \/ FORMAL private_type (Private_Type)  0 0 0 0
@@ -289,6 +289,80 @@ with package Types is new All_Types (<>);
 <AdaNodeList generics.ads:100:23-100:23>
 <EndName generics.ads:102:8-102:16>
 <Id "My_Types" generics.ads:102:8-102:16>
-<EndName generics.ads:104:5-104:13>
-<Id "Generics" generics.ads:104:5-104:13>
-<PragmaNodeList generics.ads:104:14-104:14>
+<GenericSubpDecl ["Generic_Procedure"] generics.ads:106:4-110:40>
+**************************
+\/ FORMAL t (T)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the formal parameter.
+  \/ SNIPPET ada ()  0 0 0 0
+type T is private;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the formal parameter.
+\/ RAW <<INTERMEDIATE UPPER>> ()  111 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER x (X)  110 110 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure Generic_Procedure (X : T)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<GenericFormalPart generics.ads:106:4-107:25>
+<GenericSubpInternal ["Generic_Procedure"] generics.ads:110:4-110:39>
+<SubpSpec generics.ads:110:4-110:39>
+<SubpKindProcedure generics.ads:110:4-110:13>
+<DefiningName "Generic_Procedure" generics.ads:110:14-110:31>
+<Id "Generic_Procedure" generics.ads:110:14-110:31>
+<Params generics.ads:110:32-110:39>
+<ParamSpecList generics.ads:110:33-110:38>
+<ParamSpec ["X"] generics.ads:110:33-110:38>
+<DefiningNameList generics.ads:110:33-110:34>
+<DefiningName "X" generics.ads:110:33-110:34>
+<Id "X" generics.ads:110:33-110:34>
+<AliasedAbsent generics.ads:110:36-110:36>
+<ModeDefault generics.ads:110:36-110:36>
+<SubtypeIndication generics.ads:110:37-110:38>
+<NotNullAbsent generics.ads:110:36-110:36>
+<Id "T" generics.ads:110:37-110:38>
+<GenericSubpDecl ["Generic_Function"] generics.ads:115:4-118:47>
+**************************
+\/ FORMAL t (T)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+type T is private;
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  119 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER x (X)  118 118 119 117
+\/ RETURNS  ()  118 118 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+function Generic_Function (X : T) return T
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<GenericFormalPart generics.ads:115:4-116:25>
+<GenericSubpInternal ["Generic_Function"] generics.ads:118:4-118:46>
+<SubpSpec generics.ads:118:4-118:46>
+<SubpKindFunction generics.ads:118:4-118:12>
+<DefiningName "Generic_Function" generics.ads:118:13-118:29>
+<Id "Generic_Function" generics.ads:118:13-118:29>
+<Params generics.ads:118:30-118:37>
+<ParamSpecList generics.ads:118:31-118:36>
+<ParamSpec ["X"] generics.ads:118:31-118:36>
+<DefiningNameList generics.ads:118:31-118:32>
+<DefiningName "X" generics.ads:118:31-118:32>
+<Id "X" generics.ads:118:31-118:32>
+<AliasedAbsent generics.ads:118:34-118:34>
+<ModeDefault generics.ads:118:34-118:34>
+<SubtypeIndication generics.ads:118:35-118:36>
+<NotNullAbsent generics.ads:118:34-118:34>
+<Id "T" generics.ads:118:35-118:36>
+<SubtypeIndication generics.ads:118:45-118:46>
+<NotNullAbsent generics.ads:118:44-118:44>
+<Id "T" generics.ads:118:45-118:46>
+<EndName generics.ads:126:5-126:13>
+<Id "Generics" generics.ads:126:5-126:13>
+<PragmaNodeList generics.ads:126:14-126:14>

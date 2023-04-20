@@ -101,4 +101,26 @@ package Generics is
 
    end My_Types;
 
+   --  Generic procedure
+
+   generic
+      type T is private;
+      --  Description of the formal parameter.
+
+   procedure Generic_Procedure (X : T);
+   --  Description of the generic procedure
+
+   --  Generic function
+
+   generic
+      type T is private;
+
+   function Generic_Function (X : T) return T;
+   --  Description of the generic function
+   --
+   --  @param X Description of the parameter
+   --  @returns Description of the return value
+   --
+   --  @formal T Description of the formal type
+
 end Generics;
