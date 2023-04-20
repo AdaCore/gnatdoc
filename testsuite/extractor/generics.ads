@@ -94,4 +94,11 @@ package Generics is
 
    end Objects;
 
+   generic
+      with package Types is new All_Types (<>);
+
+   package My_Types is
+
+   end My_Types;
+
 end Generics;

@@ -1,8 +1,8 @@
-<CompilationUnit generics.ads:4:1-97:14>
+<CompilationUnit generics.ads:4:1-104:14>
 <AdaNodeList generics.ads:4:1-4:1>
-<LibraryItem generics.ads:4:1-97:14>
+<LibraryItem generics.ads:4:1-104:14>
 <PrivateAbsent generics.ads:4:1-4:1>
-<PackageDecl ["Generics"] generics.ads:4:1-97:14>
+<PackageDecl ["Generics"] generics.ads:4:1-104:14>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
 Test cases for generics declarations
@@ -13,8 +13,8 @@ This generic package has set of formal parameters of all types.
 **************************
 <DefiningName "Generics" generics.ads:4:9-4:17>
 <Id "Generics" generics.ads:4:9-4:17>
-<PublicPart generics.ads:4:20-97:1>
-<AdaNodeList generics.ads:8:4-95:16>
+<PublicPart generics.ads:4:20-104:1>
+<AdaNodeList generics.ads:8:4-102:17>
 <GenericPackageDecl ["All_Types"] generics.ads:8:4-50:18>
 **************************
 \/ FORMAL private_type (Private_Type)  0 0 0 0
@@ -269,6 +269,26 @@ Formal objects
 <AdaNodeList generics.ads:93:22-93:22>
 <EndName generics.ads:95:8-95:15>
 <Id "Objects" generics.ads:95:8-95:15>
-<EndName generics.ads:97:5-97:13>
-<Id "Generics" generics.ads:97:5-97:13>
-<PragmaNodeList generics.ads:97:14-97:14>
+<GenericPackageDecl ["My_Types"] generics.ads:97:4-102:17>
+**************************
+\/ FORMAL types (Types)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+with package Types is new All_Types (<>);
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<GenericFormalPart generics.ads:97:4-98:48>
+<GenericPackageInternal ["My_Types"] generics.ads:100:4-102:17>
+<DefiningName "My_Types" generics.ads:100:12-100:20>
+<Id "My_Types" generics.ads:100:12-100:20>
+<PublicPart generics.ads:100:23-102:4>
+<AdaNodeList generics.ads:100:23-100:23>
+<EndName generics.ads:102:8-102:16>
+<Id "My_Types" generics.ads:102:8-102:16>
+<EndName generics.ads:104:5-104:13>
+<Id "Generics" generics.ads:104:5-104:13>
+<PragmaNodeList generics.ads:104:14-104:14>
