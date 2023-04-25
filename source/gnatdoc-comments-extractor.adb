@@ -298,7 +298,7 @@ package body GNATdoc.Comments.Extractor is
    --  @param Raw_Section    Raw section to process
    --  @param Allowed_Tags   Set of section tags to be processed
    --  @param Sections       Sections of the structured comment
-   --  @param Is_Private     Check to True when private tag found
+   --  @param Is_Private     Set to True when private tag found
 
    procedure Parse_Raw_Section
      (Raw_Section   : Section_Access;
