@@ -123,4 +123,13 @@ package Generics is
    --
    --  @formal T Description of the formal type
 
+   generic
+      type Private_Unknown_Discriminants_Type (<>) is private;
+
+      type Private_Known_Discriminants_Type (X : Integer) is private;
+
+   package Discriminanted_Types is
+
+   end Discriminanted_Types;
+
 end Generics;
