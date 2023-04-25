@@ -280,6 +280,12 @@ package body GNATdoc.Comments.Builders is
             Done    := True;
             Control := Over;
 
+         when Ada_Unknown_Discriminant_Part =>
+            --  Discriminants are unknown, nothing to do.
+
+            Done    := True;
+            Control := Over;
+
          when others =>
             null;
       end case;
