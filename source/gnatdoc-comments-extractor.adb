@@ -161,6 +161,11 @@ package body GNATdoc.Comments.Extractor is
          and then Node.As_Type_Decl.F_Type_Def.As_Derived_Type_Def
                     .F_Record_Extension.Is_Null)
      or (Node.Kind in Ada_Generic_Formal_Type_Decl
+         and then Node.As_Generic_Formal_Type_Decl.F_Decl.Kind
+           = Ada_Incomplete_Formal_Type_Decl)
+     or (Node.Kind in Ada_Generic_Formal_Type_Decl
+         and then Node.As_Generic_Formal_Type_Decl.F_Decl.Kind
+           = Ada_Formal_Type_Decl
          and then Node.As_Generic_Formal_Type_Decl.F_Decl.As_Formal_Type_Decl
                     .F_Type_Def.Kind in Ada_Type_Access_Def
                       | Ada_Array_Type_Def
@@ -1313,55 +1318,77 @@ package body GNATdoc.Comments.Extractor is
       for Item of Node.F_Formal_Part.F_Decls loop
          case Item.Kind is
             when Ada_Generic_Formal_Type_Decl =>
-               declare
-                  Type_Decl       : constant Formal_Type_Decl :=
-                    Item.As_Generic_Formal_Type_Decl.F_Decl
-                      .As_Formal_Type_Decl;
-                  Formal_Type_Def : constant Type_Def := Type_Decl.F_Type_Def;
-                  Formal_Name     : constant Defining_Name :=
-                    Type_Decl.F_Name;
+               case Item.As_Generic_Formal_Type_Decl.F_Decl.Kind is
+                  when Ada_Incomplete_Formal_Type_Decl =>
+                     declare
+                        Formal_Name : constant Defining_Name :=
+                          Item.As_Generic_Formal_Type_Decl.F_Decl
+                            .As_Incomplete_Formal_Type_Decl.F_Name;
 
-               begin
-                  case Formal_Type_Def.Kind is
-                     when Ada_Private_Type_Def =>
-                        Extract_Private_Type_Documentation
-                          (Item.As_Generic_Formal_Type_Decl,
-                           Type_Decl,
-                           Options,
-                           Lookup_Formal_Section (Formal_Name).Sections);
-
-                     when Ada_Type_Access_Def
-                        | Ada_Array_Type_Def
-                        | Ada_Decimal_Fixed_Point_Def
-                        | Ada_Derived_Type_Def
-                        | Ada_Floating_Point_Def
-                        | Ada_Formal_Discrete_Type_Def
-                        | Ada_Interface_Type_Def
-                        | Ada_Mod_Int_Type_Def
-                        | Ada_Ordinary_Fixed_Point_Def
-                        | Ada_Signed_Int_Type_Def
-                     =>
+                     begin
                         Extract_Simple_Declaration_Documentation
                           (Item.As_Generic_Formal_Type_Decl,
                            Options,
                            Lookup_Formal_Section (Formal_Name).Sections);
+                     end;
 
-                     when Ada_Access_To_Subp_Def =>
-                        Extract_Subprogram_Documentation
-                          (Decl_Node    => Item.As_Generic_Formal_Type_Decl,
-                           Spec_Node    =>
-                              Formal_Type_Def.As_Access_To_Subp_Def
-                                .F_Subp_Spec,
-                           Expr_Node    => No_Expr,
-                           Aspects_Node => No_Aspect_Spec,
-                           Options      => Options,
-                           Sections     =>
-                              Lookup_Formal_Section (Formal_Name).Sections);
+                  when Ada_Formal_Type_Decl =>
+                     declare
+                        Type_Decl       : constant Formal_Type_Decl :=
+                          Item.As_Generic_Formal_Type_Decl.F_Decl
+                            .As_Formal_Type_Decl;
+                        Formal_Type_Def : constant Type_Def :=
+                          Type_Decl.F_Type_Def;
+                        Formal_Name     : constant Defining_Name :=
+                          Type_Decl.F_Name;
 
-                     when others =>
-                        raise Program_Error;
-                  end case;
-               end;
+                     begin
+                        case Formal_Type_Def.Kind is
+                           when Ada_Private_Type_Def =>
+                              Extract_Private_Type_Documentation
+                                (Item.As_Generic_Formal_Type_Decl,
+                                 Type_Decl,
+                                 Options,
+                                 Lookup_Formal_Section (Formal_Name).Sections);
+
+                           when Ada_Type_Access_Def
+                              | Ada_Array_Type_Def
+                              | Ada_Decimal_Fixed_Point_Def
+                              | Ada_Derived_Type_Def
+                              | Ada_Floating_Point_Def
+                              | Ada_Formal_Discrete_Type_Def
+                              | Ada_Interface_Type_Def
+                              | Ada_Mod_Int_Type_Def
+                              | Ada_Ordinary_Fixed_Point_Def
+                              | Ada_Signed_Int_Type_Def
+                           =>
+                              Extract_Simple_Declaration_Documentation
+                                (Item.As_Generic_Formal_Type_Decl,
+                                 Options,
+                                 Lookup_Formal_Section (Formal_Name).Sections);
+
+                           when Ada_Access_To_Subp_Def =>
+                              Extract_Subprogram_Documentation
+                                (Decl_Node    =>
+                                   Item.As_Generic_Formal_Type_Decl,
+                                 Spec_Node    =>
+                                   Formal_Type_Def.As_Access_To_Subp_Def
+                                     .F_Subp_Spec,
+                                 Expr_Node    => No_Expr,
+                                 Aspects_Node => No_Aspect_Spec,
+                                 Options      => Options,
+                                 Sections     =>
+                                   Lookup_Formal_Section
+                                     (Formal_Name).Sections);
+
+                           when others =>
+                              raise Program_Error;
+                        end case;
+                     end;
+
+                  when others =>
+                     raise Program_Error;
+               end case;
 
             when Ada_Generic_Formal_Subp_Decl =>
                declare
