@@ -1434,6 +1434,11 @@ package body GNATdoc.Comments.Extractor is
                     (Item.As_Generic_Formal_Package.F_Decl
                        .As_Generic_Package_Instantiation.F_Name).Sections);
 
+            when Ada_Pragma_Node =>
+               --  Nothing to do for pragmas.
+
+               null;
+
             when others =>
                raise Program_Error;
          end case;
