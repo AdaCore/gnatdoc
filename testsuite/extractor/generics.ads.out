@@ -1,8 +1,8 @@
-<CompilationUnit generics.ads:4:1-135:14>
+<CompilationUnit generics.ads:4:1-142:14>
 <AdaNodeList generics.ads:4:1-4:1>
-<LibraryItem generics.ads:4:1-135:14>
+<LibraryItem generics.ads:4:1-142:14>
 <PrivateAbsent generics.ads:4:1-4:1>
-<PackageDecl ["Generics"] generics.ads:4:1-135:14>
+<PackageDecl ["Generics"] generics.ads:4:1-142:14>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
 Test cases for generics declarations
@@ -13,8 +13,8 @@ This generic package has set of formal parameters of all types.
 **************************
 <DefiningName "Generics" generics.ads:4:9-4:17>
 <Id "Generics" generics.ads:4:9-4:17>
-<PublicPart generics.ads:4:20-135:1>
-<AdaNodeList generics.ads:8:4-133:29>
+<PublicPart generics.ads:4:20-142:1>
+<AdaNodeList generics.ads:8:4-140:24>
 <GenericPackageDecl ["All_Types"] generics.ads:8:4-50:18>
 **************************
 \/ FORMAL private_type (Private_Type)  0 0 0 0
@@ -390,6 +390,26 @@ type Private_Known_Discriminants_Type (X : Integer) is private;
 <AdaNodeList generics.ads:131:35-131:35>
 <EndName generics.ads:133:8-133:28>
 <Id "Discriminanted_Types" generics.ads:133:8-133:28>
-<EndName generics.ads:135:5-135:13>
-<Id "Generics" generics.ads:135:5-135:13>
-<PragmaNodeList generics.ads:135:14-135:14>
+<GenericPackageDecl ["Incomplete_Type"] generics.ads:135:4-140:24>
+**************************
+\/ FORMAL cursor (Cursor)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+type Cursor;
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<GenericFormalPart generics.ads:135:4-136:19>
+<GenericPackageInternal ["Incomplete_Type"] generics.ads:138:4-140:24>
+<DefiningName "Incomplete_Type" generics.ads:138:12-138:27>
+<Id "Incomplete_Type" generics.ads:138:12-138:27>
+<PublicPart generics.ads:138:30-140:4>
+<AdaNodeList generics.ads:138:30-138:30>
+<EndName generics.ads:140:8-140:23>
+<Id "Incomplete_Type" generics.ads:140:8-140:23>
+<EndName generics.ads:142:5-142:13>
+<Id "Generics" generics.ads:142:5-142:13>
+<PragmaNodeList generics.ads:142:14-142:14>

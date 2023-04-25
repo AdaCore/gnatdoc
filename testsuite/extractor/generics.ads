@@ -132,4 +132,11 @@ package Generics is
 
    end Discriminanted_Types;
 
+   generic
+      type Cursor;
+
+   package Incomplete_Type is
+
+   end Incomplete_Type;
+
 end Generics;
