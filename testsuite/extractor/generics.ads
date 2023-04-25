@@ -132,8 +132,13 @@ package Generics is
 
    end Discriminanted_Types;
 
+   --  Generic package with incomplete formal type declaration and use of
+   --  pragma in formal part.
+
    generic
       type Cursor;
+      with function Has_Element (Self : Cursor) return Boolean;
+      pragma Unreferenced (Has_Element);
 
    package Incomplete_Type is
 
