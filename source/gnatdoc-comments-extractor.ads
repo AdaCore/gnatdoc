@@ -37,6 +37,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Expr_Function
                       | Ada_Generic_Package_Decl
                       | Ada_Generic_Package_Instantiation
+                      | Ada_Generic_Subp_Decl
                       | Ada_Generic_Subp_Instantiation
                       | Ada_Null_Subp_Decl
                       | Ada_Number_Decl
@@ -56,10 +57,13 @@ package GNATdoc.Comments.Extractor is
                and then Node.As_Type_Decl.F_Type_Def.Kind
                           in Ada_Access_To_Subp_Def
                                | Ada_Array_Type_Def
+                               | Ada_Decimal_Fixed_Point_Def
                                | Ada_Derived_Type_Def
                                | Ada_Enum_Type_Def
+                               | Ada_Floating_Point_Def
                                | Ada_Interface_Type_Def
                                | Ada_Mod_Int_Type_Def
+                               | Ada_Ordinary_Fixed_Point_Def
                                | Ada_Private_Type_Def
                                | Ada_Record_Type_Def
                                | Ada_Signed_Int_Type_Def
@@ -78,6 +82,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Expr_Function
                       | Ada_Generic_Package_Decl
                       | Ada_Generic_Package_Instantiation
+                      | Ada_Generic_Subp_Decl
                       | Ada_Generic_Subp_Instantiation
                       | Ada_Null_Subp_Decl
                       | Ada_Number_Decl
@@ -97,10 +102,13 @@ package GNATdoc.Comments.Extractor is
                and then Node.As_Type_Decl.F_Type_Def.Kind
                           in Ada_Access_To_Subp_Def
                                | Ada_Array_Type_Def
+                               | Ada_Decimal_Fixed_Point_Def
                                | Ada_Derived_Type_Def
                                | Ada_Enum_Type_Def
+                               | Ada_Floating_Point_Def
                                | Ada_Interface_Type_Def
                                | Ada_Mod_Int_Type_Def
+                               | Ada_Ordinary_Fixed_Point_Def
                                | Ada_Private_Type_Def
                                | Ada_Record_Type_Def
                                | Ada_Signed_Int_Type_Def
@@ -119,6 +127,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Expr_Function
                       | Ada_Generic_Package_Decl
                       | Ada_Generic_Package_Instantiation
+                      | Ada_Generic_Subp_Decl
                       | Ada_Generic_Subp_Instantiation
                       | Ada_Null_Subp_Decl
                       | Ada_Number_Decl
@@ -138,10 +147,13 @@ package GNATdoc.Comments.Extractor is
                and then Node.As_Type_Decl.F_Type_Def.Kind
                           in Ada_Access_To_Subp_Def
                                | Ada_Array_Type_Def
+                               | Ada_Decimal_Fixed_Point_Def
                                | Ada_Derived_Type_Def
                                | Ada_Enum_Type_Def
+                               | Ada_Floating_Point_Def
                                | Ada_Interface_Type_Def
                                | Ada_Mod_Int_Type_Def
+                               | Ada_Ordinary_Fixed_Point_Def
                                | Ada_Private_Type_Def
                                | Ada_Record_Type_Def
                                | Ada_Signed_Int_Type_Def

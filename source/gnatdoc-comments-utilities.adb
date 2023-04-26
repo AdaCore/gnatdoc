@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -17,6 +17,10 @@
 
 with VSS.Regular_Expressions;         use VSS.Regular_Expressions;
 with VSS.Strings;                     use VSS.Strings;
+with VSS.Strings.Conversions;         use VSS.Strings.Conversions;
+
+with Langkit_Support.Symbols;
+with Libadalang.Common;
 
 package body GNATdoc.Comments.Utilities is
 
@@ -44,5 +48,47 @@ package body GNATdoc.Comments.Utilities is
          Text.Append (L);
       end if;
    end Append_Documentation_Line;
+
+   ---------------
+   -- To_Symbol --
+   ---------------
+
+   function To_Symbol
+     (Name : Libadalang.Analysis.Defining_Name'Class)
+      return VSS.Strings.Virtual_String
+   is
+      use Langkit_Support.Text;
+      use Libadalang.Common;
+
+   begin
+      return
+        --  To_Virtual_String (Node.F_Name.P_Canonical_Text),
+        VSS.Strings.Conversions.To_Virtual_String
+          ((if Name.F_Name.Kind = Ada_Char_Literal
+              then To_Unbounded_Text (Text (Name.Token_Start))
+              else Name.F_Name.P_Canonical_Text));
+      --  LAL: P_Canonical_Text do case conversion which makes lowercase and
+      --  uppercase character literals undistingushable.
+   end To_Symbol;
+
+   ---------------
+   -- To_Symbol --
+   ---------------
+
+   function To_Symbol
+     (Name : VSS.Strings.Virtual_String) return VSS.Strings.Virtual_String
+   is
+      use Langkit_Support.Symbols;
+
+   begin
+      --  Compute symbol name. For character literals it is equal to name, for
+      --  identifiers it is canonicalized name.
+
+      return
+        (if Name.Starts_With ("'")
+           then Name
+           else To_Virtual_String
+                  (Fold_Case (To_Wide_Wide_String (Name)).Symbol));
+   end To_Symbol;
 
 end GNATdoc.Comments.Utilities;

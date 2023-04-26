@@ -1,0 +1,429 @@
+<CompilationUnit generics.ads:4:1-147:14>
+<AdaNodeList generics.ads:4:1-4:1>
+<LibraryItem generics.ads:4:1-147:14>
+<PrivateAbsent generics.ads:4:1-4:1>
+<PackageDecl ["Generics"] generics.ads:4:1-147:14>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+Test cases for generics declarations
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+This generic package has set of formal parameters of all types.
+\/ DESCRIPTION  ()  0 0 0 0
+This generic package has set of formal parameters of all types.
+**************************
+<DefiningName "Generics" generics.ads:4:9-4:17>
+<Id "Generics" generics.ads:4:9-4:17>
+<PublicPart generics.ads:4:20-147:1>
+<AdaNodeList generics.ads:8:4-145:24>
+<GenericPackageDecl ["All_Types"] generics.ads:8:4-50:18>
+**************************
+\/ FORMAL private_type (Private_Type)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the formal private type.
+  \/ SNIPPET ada ()  0 0 0 0
+type Private_Type is abstract tagged limited private;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the formal private type.
+\/ FORMAL derived_type (Derived_Type)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the formal derived type.
+  \/ SNIPPET ada ()  0 0 0 0
+type Derived_Type is abstract limited new Private_Type with private;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the formal derived type.
+\/ FORMAL discrete_type (Discrete_Type)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the formal discrete type.
+  \/ SNIPPET ada ()  0 0 0 0
+type Discrete_Type is (<>);
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the formal discrete type.
+\/ FORMAL signed_integer_type (Signed_Integer_Type)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the formal signed integer type.
+  \/ SNIPPET ada ()  0 0 0 0
+type Signed_Integer_Type is range <>;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the formal signed integer type.
+\/ FORMAL modular_type (Modular_Type)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the formal modular type.
+  \/ SNIPPET ada ()  0 0 0 0
+type Modular_Type is mod <>;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the formal modular type.
+\/ FORMAL floating_point_type (Floating_Point_Type)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the formal floating point type.
+  \/ SNIPPET ada ()  0 0 0 0
+type Floating_Point_Type is digits <>;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the formal floating point type.
+\/ FORMAL ordinary_fixed_point_type (Ordinary_Fixed_Point_Type)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the ordinary fixed point type.
+  \/ SNIPPET ada ()  0 0 0 0
+type Ordinary_Fixed_Point_Type is delta <>;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the ordinary fixed point type.
+\/ FORMAL decimal_fixed_point_type (Decimal_Fixed_Point_Type)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the decimal fixed point type.
+  \/ SNIPPET ada ()  0 0 0 0
+type Decimal_Fixed_Point_Type is delta <> digits <>;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the decimal fixed point type.
+\/ FORMAL array_type (Array_Type)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the array type.
+  \/ SNIPPET ada ()  0 0 0 0
+type Array_Type is array (Signed_Integer_Type range <>) of Modular_Type;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the array type.
+\/ FORMAL object_access_type (Object_Access_Type)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the object access type.
+  \/ SNIPPET ada ()  0 0 0 0
+type Object_Access_Type is access all Derived_Type'Class;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the object access type.
+\/ FORMAL procedure_access_type (Procedure_Access_Type)  0 0 0 0
+  \/ RAW <<INTERMEDIATE UPPER>> ()  40 0 0 0
+  \/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the access to parameterless procedure type.
+  \/ SNIPPET ada ()  0 0 0 0
+procedure
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the access to parameterless procedure type.
+\/ FORMAL function_access_type (Function_Access_Type)  0 0 0 0
+  \/ RAW <<INTERMEDIATE UPPER>> ()  43 0 0 0
+  \/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+  \/ RETURNS  ()  42 42 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the access to parameterless function type.
+  \/ SNIPPET ada ()  0 0 0 0
+function return Floating_Point_Type
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the access to parameterless function type.
+\/ FORMAL interface_type (Interface_Type)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the interface type.
+  \/ SNIPPET ada ()  0 0 0 0
+type Interface_Type is synchronized interface;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the interface type.
+\/ RAW <<LEADING>> ()  0 0 0 0
+This generic package has set of formal parameters of all types.
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+This generic package has set of formal parameters of all types.
+**************************
+<GenericFormalPart generics.ads:8:4-45:53>
+<GenericPackageInternal ["All_Types"] generics.ads:48:4-50:18>
+<DefiningName "All_Types" generics.ads:48:12-48:21>
+<Id "All_Types" generics.ads:48:12-48:21>
+<PublicPart generics.ads:48:24-50:4>
+<AdaNodeList generics.ads:48:24-48:24>
+<EndName generics.ads:50:8-50:17>
+<Id "All_Types" generics.ads:50:8-50:17>
+<GenericPackageDecl ["All_Subprograms"] generics.ads:60:4-82:24>
+**************************
+\/ FORMAL procedure_access_type (Procedure_Access_Type)  0 0 0 0
+Access to procedure
+  \/ RAW <<INTERMEDIATE UPPER>> ()  65 0 0 0
+  \/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+  \/ PARAMETER x (X)  63 63 64 63
+Value of X
+  \/ PARAMETER y (Y)  64 64 0 0
+Value of Y
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+                                   procedure
+(X : Integer;
+ Y : Integer)
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ FORMAL function_access_type (Function_Access_Type)  0 0 0 0
+Access to function
+  \/ RAW <<INTERMEDIATE UPPER>> ()  70 0 0 0
+  \/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+  \/ PARAMETER x (X)  67 67 68 67
+Value of X
+  \/ PARAMETER y (Y)  68 68 69 68
+Value of Y
+  \/ RETURNS  ()  69 69 0 0
+Return value
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+                                  function
+(X : Integer;
+ Y : Integer)
+ return Integer
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ FORMAL procedure_p (Procedure_P)  0 0 0 0
+Formal procedure
+  \/ RAW <<INTERMEDIATE UPPER>> ()  74 0 0 0
+  \/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+  \/ PARAMETER x (X)  72 72 73 72
+Value of X
+  \/ PARAMETER y (Y)  73 73 0 0
+Value of Y
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+   procedure Procedure_P
+(X : Integer;
+ Y : Integer)
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ FORMAL function_f (Function_F)  0 0 0 0
+Formal function
+  \/ RAW <<INTERMEDIATE UPPER>> ()  79 0 0 0
+  \/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+  \/ PARAMETER x (X)  76 76 77 76
+Value of X
+  \/ PARAMETER y (Y)  77 77 78 77
+Value of Y
+  \/ RETURNS  ()  78 78 0 0
+Return value
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+   function Function_F
+(X : Integer;
+ Y : Integer)
+ return Integer
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+This generic package has set of formal parameters of access to
+subprogram and subprogram.
+
+@formal Procedure_Access_Type Access to procedure
+@formal Function_Access_Type Access to function
+@formal Procedure_P Formal procedure
+@formal Function_F Formal function
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+This generic package has set of formal parameters of access to
+subprogram and subprogram.
+**************************
+<GenericFormalPart generics.ads:60:4-78:25>
+<GenericPackageInternal ["All_Subprograms"] generics.ads:80:4-82:24>
+<DefiningName "All_Subprograms" generics.ads:80:12-80:27>
+<Id "All_Subprograms" generics.ads:80:12-80:27>
+<PublicPart generics.ads:80:30-82:4>
+<AdaNodeList generics.ads:80:30-80:30>
+<EndName generics.ads:82:8-82:23>
+<Id "All_Subprograms" generics.ads:82:8-82:23>
+<GenericPackageDecl ["Objects"] generics.ads:86:4-95:16>
+**************************
+\/ FORMAL x (X)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the X and Y formal objects.
+  \/ SNIPPET ada ()  0 0 0 0
+X, Y : Integer;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the X and Y formal objects.
+\/ FORMAL y (Y)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the X and Y formal objects.
+  \/ SNIPPET ada ()  0 0 0 0
+X, Y : Integer;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the X and Y formal objects.
+\/ FORMAL z (Z)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the Z formal object.
+  \/ SNIPPET ada ()  0 0 0 0
+Z : Integer;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the Z formal object.
+\/ RAW <<LEADING>> ()  0 0 0 0
+Formal objects
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+Formal objects
+**************************
+<GenericFormalPart generics.ads:86:4-90:19>
+<GenericPackageInternal ["Objects"] generics.ads:93:4-95:16>
+<DefiningName "Objects" generics.ads:93:12-93:19>
+<Id "Objects" generics.ads:93:12-93:19>
+<PublicPart generics.ads:93:22-95:4>
+<AdaNodeList generics.ads:93:22-93:22>
+<EndName generics.ads:95:8-95:15>
+<Id "Objects" generics.ads:95:8-95:15>
+<GenericPackageDecl ["My_Types"] generics.ads:97:4-102:17>
+**************************
+\/ FORMAL types (Types)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+with package Types is new All_Types (<>);
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<GenericFormalPart generics.ads:97:4-98:48>
+<GenericPackageInternal ["My_Types"] generics.ads:100:4-102:17>
+<DefiningName "My_Types" generics.ads:100:12-100:20>
+<Id "My_Types" generics.ads:100:12-100:20>
+<PublicPart generics.ads:100:23-102:4>
+<AdaNodeList generics.ads:100:23-100:23>
+<EndName generics.ads:102:8-102:16>
+<Id "My_Types" generics.ads:102:8-102:16>
+<GenericSubpDecl ["Generic_Procedure"] generics.ads:106:4-110:40>
+**************************
+\/ FORMAL t (T)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+Description of the formal parameter.
+  \/ SNIPPET ada ()  0 0 0 0
+type T is private;
+  \/ DESCRIPTION  ()  0 0 0 0
+Description of the formal parameter.
+\/ RAW <<INTERMEDIATE UPPER>> ()  111 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER x (X)  110 110 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+procedure Generic_Procedure (X : T)
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<GenericFormalPart generics.ads:106:4-107:25>
+<GenericSubpInternal ["Generic_Procedure"] generics.ads:110:4-110:39>
+<SubpSpec generics.ads:110:4-110:39>
+<SubpKindProcedure generics.ads:110:4-110:13>
+<DefiningName "Generic_Procedure" generics.ads:110:14-110:31>
+<Id "Generic_Procedure" generics.ads:110:14-110:31>
+<Params generics.ads:110:32-110:39>
+<ParamSpecList generics.ads:110:33-110:38>
+<ParamSpec ["X"] generics.ads:110:33-110:38>
+<DefiningNameList generics.ads:110:33-110:34>
+<DefiningName "X" generics.ads:110:33-110:34>
+<Id "X" generics.ads:110:33-110:34>
+<AliasedAbsent generics.ads:110:36-110:36>
+<ModeDefault generics.ads:110:36-110:36>
+<SubtypeIndication generics.ads:110:37-110:38>
+<NotNullAbsent generics.ads:110:36-110:36>
+<Id "T" generics.ads:110:37-110:38>
+<GenericSubpDecl ["Generic_Function"] generics.ads:115:4-118:47>
+**************************
+\/ FORMAL t (T)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+type T is private;
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  119 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ PARAMETER x (X)  118 118 119 117
+\/ RETURNS  ()  118 118 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+function Generic_Function (X : T) return T
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<GenericFormalPart generics.ads:115:4-116:25>
+<GenericSubpInternal ["Generic_Function"] generics.ads:118:4-118:46>
+<SubpSpec generics.ads:118:4-118:46>
+<SubpKindFunction generics.ads:118:4-118:12>
+<DefiningName "Generic_Function" generics.ads:118:13-118:29>
+<Id "Generic_Function" generics.ads:118:13-118:29>
+<Params generics.ads:118:30-118:37>
+<ParamSpecList generics.ads:118:31-118:36>
+<ParamSpec ["X"] generics.ads:118:31-118:36>
+<DefiningNameList generics.ads:118:31-118:32>
+<DefiningName "X" generics.ads:118:31-118:32>
+<Id "X" generics.ads:118:31-118:32>
+<AliasedAbsent generics.ads:118:34-118:34>
+<ModeDefault generics.ads:118:34-118:34>
+<SubtypeIndication generics.ads:118:35-118:36>
+<NotNullAbsent generics.ads:118:34-118:34>
+<Id "T" generics.ads:118:35-118:36>
+<SubtypeIndication generics.ads:118:45-118:46>
+<NotNullAbsent generics.ads:118:44-118:44>
+<Id "T" generics.ads:118:45-118:46>
+<GenericPackageDecl ["Discriminanted_Types"] generics.ads:126:4-133:29>
+**************************
+\/ FORMAL private_unknown_discriminants_type (Private_Unknown_Discriminants_Type)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+type Private_Unknown_Discriminants_Type (<>) is private;
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ FORMAL private_known_discriminants_type (Private_Known_Discriminants_Type)  0 0 0 0
+  \/ FIELD x (X)  129 129 130 128
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+type Private_Known_Discriminants_Type (X : Integer) is private;
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<GenericFormalPart generics.ads:126:4-129:70>
+<GenericPackageInternal ["Discriminanted_Types"] generics.ads:131:4-133:29>
+<DefiningName "Discriminanted_Types" generics.ads:131:12-131:32>
+<Id "Discriminanted_Types" generics.ads:131:12-131:32>
+<PublicPart generics.ads:131:35-133:4>
+<AdaNodeList generics.ads:131:35-131:35>
+<EndName generics.ads:133:8-133:28>
+<Id "Discriminanted_Types" generics.ads:133:8-133:28>
+<GenericPackageDecl ["Incomplete_Type"] generics.ads:138:4-145:24>
+**************************
+\/ FORMAL cursor (Cursor)  0 0 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+type Cursor;
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ FORMAL has_element (Has_Element)  0 0 0 0
+  \/ RAW <<INTERMEDIATE UPPER>> ()  141 0 0 0
+  \/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+  \/ PARAMETER self (Self)  140 140 141 139
+  \/ RETURNS  ()  140 140 0 0
+  \/ RAW <<LEADING>> ()  0 0 0 0
+  \/ RAW <<TRAILING>> ()  0 0 0 0
+  \/ SNIPPET ada ()  0 0 0 0
+function Has_Element (Self : Cursor) return Boolean
+  \/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+Generic package with incomplete formal type declaration and use of
+pragma in formal part.
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ DESCRIPTION  ()  0 0 0 0
+Generic package with incomplete formal type declaration and use of
+pragma in formal part.
+**************************
+<GenericFormalPart generics.ads:138:4-141:41>
+<GenericPackageInternal ["Incomplete_Type"] generics.ads:143:4-145:24>
+<DefiningName "Incomplete_Type" generics.ads:143:12-143:27>
+<Id "Incomplete_Type" generics.ads:143:12-143:27>
+<PublicPart generics.ads:143:30-145:4>
+<AdaNodeList generics.ads:143:30-143:30>
+<EndName generics.ads:145:8-145:23>
+<Id "Incomplete_Type" generics.ads:145:8-145:23>
+<EndName generics.ads:147:5-147:13>
+<Id "Generics" generics.ads:147:5-147:13>
+<PragmaNodeList generics.ads:147:14-147:14>

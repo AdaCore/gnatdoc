@@ -19,17 +19,31 @@ with Ada.Unchecked_Deallocation;
 
 package body GNATdoc.Comments is
 
+   procedure Free is
+     new Ada.Unchecked_Deallocation (Section'Class, Section_Access);
+
+   --------------
+   -- Finalize --
+   --------------
+
+   not overriding procedure Finalize (Self : in out Section) is
+   begin
+      for Section of Self.Sections loop
+         Finalize (Section.all);
+         Free (Section);
+      end loop;
+
+      Self.Sections.Clear;
+   end Finalize;
+
    --------------
    -- Finalize --
    --------------
 
    overriding procedure Finalize (Self : in out Structured_Comment) is
-
-      procedure Free is
-        new Ada.Unchecked_Deallocation (Section'Class, Section_Access);
-
    begin
       for Section of Self.Sections loop
+         Finalize (Section.all);
          Free (Section);
       end loop;
 

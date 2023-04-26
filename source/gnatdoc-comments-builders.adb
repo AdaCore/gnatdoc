@@ -16,10 +16,8 @@
 ------------------------------------------------------------------------------
 
 with VSS.Strings;                use VSS.Strings;
-with VSS.Strings.Conversions;    use VSS.Strings.Conversions;
 
 with Langkit_Support.Slocs;      use Langkit_Support.Slocs;
-with Langkit_Support.Text;       use Langkit_Support.Text;
 with Libadalang.Analysis;        use Libadalang.Analysis;
 with Libadalang.Common;          use Libadalang.Common;
 
@@ -215,29 +213,29 @@ package body GNATdoc.Comments.Builders is
       Kind : GNATdoc.Comments.Section_Kind;
       Node : Libadalang.Analysis.Defining_Name'Class)
    is
+      Start_Line : constant Libadalang.Slocs.Line_Number :=
+        (if Kind = Formal then 0 else Self.Location.Start_Line);
+      End_Line   : constant Libadalang.Slocs.Line_Number :=
+        (if Kind = Formal then 0 else Self.Location.End_Line);
+      --  For the formal parameters only sections are created, text around
+      --  declaration of each formal parameter is extracted in the same way
+      --  as for ordinary entity of corresponding kind.
+
       New_Section : constant not null Section_Access :=
         new Section'
           (Kind             => Kind,
            Name             => To_Virtual_String (Text (Node.Token_Start)),
-           Symbol           =>
-             --  To_Virtual_String (Node.F_Name.P_Canonical_Text),
-             To_Virtual_String
-               ((if Node.F_Name.Kind = Ada_Char_Literal
-                   then To_Unbounded_Text (Text (Node.Token_Start))
-                   else Node.F_Name.P_Canonical_Text)),
-           --  LAL: P_Canonical_Text do case conversion which
-           --  makes lowercase and uppercase character literals
-           --  undistingushable.
+           Symbol           => GNATdoc.Comments.Utilities.To_Symbol (Node),
            Text             => <>,
-           Exact_Start_Line => Self.Location.Start_Line,
-           Exact_End_Line   => Self.Location.End_Line,
+           Exact_Start_Line => Start_Line,
+           Exact_End_Line   => End_Line,
            others           => <>);
 
    begin
       Self.Sections.Append (New_Section);
       Self.Previous_Group.Append (New_Section);
 
-      if Self.Style = Leading then
+      if Kind /= Formal and Self.Style = Leading then
          --  In leading style, set range to lookup additional comments for
          --  group.
 
@@ -282,6 +280,12 @@ package body GNATdoc.Comments.Builders is
             Done    := True;
             Control := Over;
 
+         when Ada_Unknown_Discriminant_Part =>
+            --  Discriminants are unknown, nothing to do.
+
+            Done    := True;
+            Control := Over;
+
          when others =>
             null;
       end case;
@@ -299,8 +303,10 @@ package body GNATdoc.Comments.Builders is
          when GNAT =>
             if Self.Next_Start_Line /= 0 then
                for Item of Self.Previous_Group loop
-                  Item.Group_Start_Line := Self.Next_Start_Line;
-                  Item.Group_End_Line   := Start_Line - 1;
+                  if Item.Kind /= Formal then
+                     Item.Group_Start_Line := Self.Next_Start_Line;
+                     Item.Group_End_Line   := Start_Line - 1;
+                  end if;
                end loop;
 
                Self.Previous_Group.Clear;
