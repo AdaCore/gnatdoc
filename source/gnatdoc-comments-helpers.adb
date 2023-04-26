@@ -46,8 +46,9 @@ package body GNATdoc.Comments.Helpers is
       return VSS.String_Vectors.Virtual_String_Vector;
    --  Return description as plain text. Name and Subname are defining names
    --  of the documented entity. This hierarhy is used for generic declarations
-   --  only (name is a name of the formal and subname is a name of the component
-   --  depends from the kind of formal (name of parameter, discriminant, etc.)).
+   --  only (name is a name of the formal and subname is a name of the
+   --  component depends from the kind of formal (name of parameter,
+   --  discriminant, etc.)).
 
    --------------------------
    -- Get_Ada_Code_Snippet --
