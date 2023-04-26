@@ -1332,9 +1332,49 @@ package body GNATdoc.Frontend is
 
             for Param of Params.F_Params loop
                declare
-                  Ids : constant Defining_Name_List := Param.F_Ids;
+                  Ids            : constant Defining_Name_List := Param.F_Ids;
+                  Type_Decl_Node : constant Type_Expr := Param.F_Type_Expr;
+                  Type_Name      : VSS.Strings.Virtual_String;
 
                begin
+                  case Type_Decl_Node.Kind is
+                     when Ada_Anonymous_Type =>
+                        declare
+                           Type_Def_Node : constant Type_Def :=
+                             Type_Decl_Node.As_Anonymous_Type.F_Type_Decl
+                               .F_Type_Def;
+
+                        begin
+                           case Type_Def_Node.Kind is
+                              when Ada_Type_Access_Def =>
+                                 Type_Name :=
+                                   VSS.Strings.To_Virtual_String
+                                     (Type_Def_Node.As_Type_Access_Def
+                                        .F_Subtype_Indication.F_Name
+                                          .P_Referenced_Defining_Name
+                                            .P_Fully_Qualified_Name);
+
+                              when Ada_Access_To_Subp_Def =>
+                                 Type_Name := "access subprogram";
+
+                              when others =>
+                                 raise Program_Error;
+                                 --  Should not happened.
+                           end case;
+                        end;
+
+                     when Ada_Subtype_Indication =>
+                        Type_Name :=
+                          VSS.Strings.To_Virtual_String
+                            (Type_Decl_Node.As_Subtype_Indication.F_Name
+                               .P_Referenced_Defining_Name
+                                 .P_Fully_Qualified_Name);
+
+                     when others =>
+                        raise Program_Error;
+                        --  Should not happened.
+                  end case;
+
                   for Id of Ids loop
                      if First then
                         First := False;
@@ -1346,11 +1386,7 @@ package body GNATdoc.Frontend is
                      Result.Append
                        (VSS.Strings.To_Virtual_String (Id.F_Name.Text));
                      Result.Append (" : ");
-                     Result.Append
-                       (VSS.Strings.To_Virtual_String
-                          (Param.F_Type_Expr.P_Type_Name
-                             .P_Referenced_Defining_Name
-                               .P_Fully_Qualified_Name));
+                     Result.Append (Type_Name);
                   end loop;
                end;
             end loop;
