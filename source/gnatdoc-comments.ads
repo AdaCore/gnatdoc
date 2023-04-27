@@ -61,6 +61,11 @@ private
 
    subtype Component is Section_Kind range Formal .. Raised_Exception;
 
+   package Section_Vectors is
+     new Ada.Containers.Vectors (Positive, Section_Access);
+
+   type Sections_Access is access all Section_Vectors.Vector;
+
    type Section is tagged limited record
       Kind             : Section_Kind;
       Name             : VSS.Strings.Virtual_String;
@@ -80,12 +85,12 @@ private
       --  but group documentation is for few grouped parameters. Exact range
       --  is used to fill raw documentation located "inside" the subprogram
       --  declaration (when aspects are present).
+
+      Sections         : Section_Vectors.Vector;
+      --  Nested sections for formal parameters.
    end record;
 
-   package Section_Vectors is
-     new Ada.Containers.Vectors (Positive, Section_Access);
-
-   type Sections_Access is access all Section_Vectors.Vector;
+   not overriding procedure Finalize (Self : in out Section);
 
    type Structured_Comment is
      new Ada.Finalization.Limited_Controlled with record

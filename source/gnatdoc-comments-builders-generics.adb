@@ -32,7 +32,7 @@ package body GNATdoc.Comments.Builders.Generics is
      (Self             : in out Generic_Components_Builder;
       Sections         : not null GNATdoc.Comments.Sections_Access;
       Options          : GNATdoc.Comments.Options.Extractor_Options;
-      Node             : Libadalang.Analysis.Generic_Package_Decl'Class;
+      Node             : Libadalang.Analysis.Generic_Decl'Class;
       Formal_Part_Node : Libadalang.Analysis.Generic_Formal_Part'Class;
       Basic_Decl_Node  : Libadalang.Analysis.Basic_Decl'Class) is
    begin
@@ -42,16 +42,24 @@ package body GNATdoc.Comments.Builders.Generics is
       --  Advanced groups is not supported for generic formal parameters.
 
       for Item of Formal_Part_Node.F_Decls loop
-         --  Item.Print;
-         --  Ada.Text_IO.Put_Line (Image (Item));
          Self.Process_Component_Declaration (Item);
 
          case Item.Kind is
             when Ada_Generic_Formal_Type_Decl =>
-               Self.Process_Defining_Name
-                 (Formal,
-                  Item.As_Generic_Formal_Type_Decl.F_Decl
-                    .As_Type_Decl.F_Name);
+               declare
+                  Decl : constant Basic_Decl :=
+                    Item.As_Generic_Formal_Type_Decl.F_Decl;
+                  Name : constant Defining_Name :=
+                    (case Decl.Kind is
+                        when Ada_Incomplete_Formal_Type_Decl =>
+                          Decl.As_Incomplete_Formal_Type_Decl.F_Name,
+                        when Ada_Formal_Type_Decl =>
+                          Decl.As_Formal_Type_Decl.F_Name,
+                        when others => raise Program_Error);
+
+               begin
+                  Self.Process_Defining_Name (Formal, Name);
+               end;
 
             when Ada_Generic_Formal_Subp_Decl =>
                Self.Process_Defining_Name
@@ -66,8 +74,15 @@ package body GNATdoc.Comments.Builders.Generics is
                   Self.Process_Defining_Name (Formal, Id);
                end loop;
 
+            when Ada_Generic_Formal_Package =>
+               Self.Process_Defining_Name
+                 (Formal,
+                  Item.As_Generic_Formal_Package.F_Decl
+                    .As_Generic_Package_Instantiation.F_Name);
+
             when others =>
-               Ada.Text_IO.Put_Line (Image (Item));
+               Ada.Text_IO.Put_Line
+                 (Ada.Text_IO.Standard_Error, Image (Item));
          end case;
       end loop;
 
