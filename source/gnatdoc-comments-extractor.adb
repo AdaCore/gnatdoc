@@ -369,7 +369,7 @@ package body GNATdoc.Comments.Extractor is
               (Decl_Node    => Node,
                Spec_Node    => Node.As_Base_Subp_Body.F_Subp_Spec,
                Expr_Node    => No_Expr,
-               Aspects_Node => No_Aspect_Spec,
+               Aspects_Node => Node.As_Subp_Body.F_Aspects,
                Options      => Options,
                Sections     => Documentation.Sections);
 
@@ -2121,6 +2121,7 @@ package body GNATdoc.Comments.Extractor is
       Leading_Section            : Section_Access;
       Intermediate_Upper_Section : Section_Access;
       Intermediate_Lower_Section : Section_Access;
+      Declarative_Section        : Section_Access;
       Trailing_Section           : Section_Access;
       Last_Section               : Section_Access;
       Minimum_Indent             : Column_Number;
@@ -2176,14 +2177,112 @@ package body GNATdoc.Comments.Extractor is
          Last_Section   => Last_Section,
          Minimum_Indent => Minimum_Indent);
 
-      Extract_General_Leading_Trailing_Documentation
-        (Decl_Node        => Decl_Node,
-         Options          => Options,
-         Last_Section     => Last_Section,
-         Minimum_Indent   => Minimum_Indent,
-         Sections         => Sections,
-         Leading_Section  => Leading_Section,
-         Trailing_Section => Trailing_Section);
+      Extract_Leading_Section
+        (Decl_Node.Token_Start, Options, False, Sections, Leading_Section);
+
+      if Decl_Node.Kind = Ada_Subp_Body then
+         --  Extract comments before and after 'is' keyword.
+
+         Declarative_Section :=
+           new Section'
+             (Kind   => Raw,
+              Symbol => "<<DECLARATIVE>>",
+              Name   => <>,
+              Text   => <>,
+              others => <>);
+         Sections.Append (Declarative_Section);
+
+         declare
+            Token : Token_Reference :=
+              Decl_Node.As_Subp_Body.F_Decls.Token_Start;
+            Reset : Boolean := False;
+
+         begin
+            --  Process comments on top of declarative section.
+
+            loop
+               Token := Previous (Token);
+
+               exit when Token = No_Token;
+
+               case Kind (Data (Token)) is
+                  when Ada_Comment =>
+                     if Reset then
+                        Reset := False;
+                        Declarative_Section.Text.Clear;
+                     end if;
+
+                     Prepend_Documentation_Line
+                       (Declarative_Section.Text,
+                        Text (Token),
+                        Options.Pattern);
+
+                  when Ada_Whitespace =>
+                     declare
+                        Location : constant Source_Location_Range :=
+                          Sloc_Range (Data (Token));
+
+                     begin
+                        if Location.End_Line - Location.Start_Line > 1 then
+                           Reset := True;
+                        end if;
+                     end;
+
+                  when others =>
+                     exit;
+               end case;
+            end loop;
+
+            --  Process lower intermediate section.
+
+            Reset := False;
+
+            loop
+               Token := Previous (Token);
+
+               exit when Token = No_Token;
+
+               case Kind (Data (Token)) is
+                  when Ada_Comment =>
+                     if Reset then
+                        Reset := False;
+                        Intermediate_Lower_Section.Text.Clear;
+                     end if;
+
+                     Prepend_Documentation_Line
+                       (Intermediate_Lower_Section.Text,
+                        Text (Token),
+                        Options.Pattern);
+
+                  when Ada_Whitespace =>
+                     declare
+                        Location : constant Source_Location_Range :=
+                          Sloc_Range (Data (Token));
+
+                     begin
+                        if Location.End_Line - Location.Start_Line > 1 then
+                           --  exit;
+                           Reset := True;
+                        end if;
+                     end;
+
+                  when others =>
+                     exit;
+               end case;
+            end loop;
+         end;
+
+      else
+         --  Extract comments after the subprogram declaration.
+
+         Extract_General_Trailing_Documentation
+           (Decl_Node,
+            Options.Pattern,
+            Last_Section,
+            Minimum_Indent,
+            Sections,
+            Trailing_Section);
+      end if;
 
       --  Extract code snippet of declaration and remove all comments from
       --  it.
@@ -2223,6 +2322,11 @@ package body GNATdoc.Comments.Extractor is
                elsif not Intermediate_Lower_Section.Text.Is_Empty then
                   Raw_Section := Intermediate_Lower_Section;
 
+               elsif Declarative_Section /= null
+                 and then not Declarative_Section.Text.Is_Empty
+               then
+                  Raw_Section := Declarative_Section;
+
                elsif not Trailing_Section.Text.Is_Empty then
                   Raw_Section := Trailing_Section;
 
@@ -2242,6 +2346,11 @@ package body GNATdoc.Comments.Extractor is
 
                   elsif not Intermediate_Lower_Section.Text.Is_Empty then
                      Raw_Section := Intermediate_Lower_Section;
+
+                  elsif Declarative_Section /= null
+                    and then not Declarative_Section.Text.Is_Empty
+                  then
+                     Raw_Section := Declarative_Section;
 
                   elsif not Trailing_Section.Text.Is_Empty then
                      Raw_Section := Trailing_Section;
