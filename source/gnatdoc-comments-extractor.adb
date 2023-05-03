@@ -369,7 +369,7 @@ package body GNATdoc.Comments.Extractor is
               (Decl_Node    => Node,
                Spec_Node    => Node.As_Base_Subp_Body.F_Subp_Spec,
                Expr_Node    => No_Expr,
-               Aspects_Node => No_Aspect_Spec,
+               Aspects_Node => Node.As_Subp_Body.F_Aspects,
                Options      => Options,
                Sections     => Documentation.Sections);
 
