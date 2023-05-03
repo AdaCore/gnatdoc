@@ -2176,14 +2176,20 @@ package body GNATdoc.Comments.Extractor is
          Last_Section   => Last_Section,
          Minimum_Indent => Minimum_Indent);
 
-      Extract_General_Leading_Trailing_Documentation
-        (Decl_Node        => Decl_Node,
-         Options          => Options,
-         Last_Section     => Last_Section,
-         Minimum_Indent   => Minimum_Indent,
-         Sections         => Sections,
-         Leading_Section  => Leading_Section,
-         Trailing_Section => Trailing_Section);
+      Extract_Leading_Section
+        (Decl_Node.Token_Start, Options, False, Sections, Leading_Section);
+
+      if Decl_Node.Kind /= Ada_Subp_Body then
+         --  Don't extract comments after the subprogram body.
+
+         Extract_General_Trailing_Documentation
+           (Decl_Node,
+            Options.Pattern,
+            Last_Section,
+            Minimum_Indent,
+            Sections,
+            Trailing_Section);
+      end if;
 
       --  Extract code snippet of declaration and remove all comments from
       --  it.
