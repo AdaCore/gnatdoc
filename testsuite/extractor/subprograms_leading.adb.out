@@ -1,0 +1,41 @@
+<CompilationUnit subprograms_leading.adb:2:1-28:25>
+<AdaNodeList subprograms_leading.adb:2:1-2:1>
+<LibraryItem subprograms_leading.adb:2:1-28:25>
+<PrivateAbsent subprograms_leading.adb:2:1-2:1>
+<PackageBody ["Subprograms_Leading"] subprograms_leading.adb:2:1-28:25>
+<DefiningName "Subprograms_Leading" subprograms_leading.adb:2:14-2:33>
+<Id "Subprograms_Leading" subprograms_leading.adb:2:14-2:33>
+<DeclarativePart subprograms_leading.adb:2:36-28:1>
+<AdaNodeList subprograms_leading.adb:5:4-24:20>
+<SubpBody ["Hello_World"] subprograms_leading.adb:5:4-11:20>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  5 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+Lower place to put description of the implementation.
+\/ RAW <<LEADING>> ()  0 0 0 0
+Description of the implementation of the procedure Hello_World.
+\/ RAW <<DECLARATIVE>> ()  0 0 0 0
+Declarative place to put description of the implementation.
+\/ SNIPPET ada ()  0 0 0 0
+procedure Hello_World
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the implementation of the procedure Hello_World.
+**************************
+<SubpBody ["Hello_World_Advanced"] subprograms_leading.adb:16:4-24:20>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  16 17 0 0
+Upper place to put description of the implementation.
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+Lower place to put description of the implementation.
+\/ RAW <<LEADING>> ()  0 0 0 0
+Description of the implementation of the procedure Hello_World.
+\/ RAW <<DECLARATIVE>> ()  0 0 0 0
+Declarative place to put description of the implementation.
+\/ SNIPPET ada ()  0 0 0 0
+procedure Hello_World_Advanced
+\/ DESCRIPTION  ()  0 0 0 0
+Description of the implementation of the procedure Hello_World.
+**************************
+<EndName subprograms_leading.adb:28:5-28:24>
+<Id "Subprograms_Leading" subprograms_leading.adb:28:5-28:24>
+<PragmaNodeList subprograms_leading.adb:28:25-28:25>
