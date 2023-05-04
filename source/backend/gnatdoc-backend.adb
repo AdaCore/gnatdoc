@@ -85,6 +85,7 @@ package body GNATdoc.Backend is
            and not GNATdoc.Options.Frontend_Options.Generate_Private)
         or Entity.Documentation.Is_Private
         or (not Entity.Enclosing.Is_Empty
+              and then GNATdoc.Entities.To_Entity.Contains (Entity.Enclosing)
               and then Is_Private_Entity
                          (GNATdoc.Entities.To_Entity (Entity.Enclosing)));
    end Is_Private_Entity;
