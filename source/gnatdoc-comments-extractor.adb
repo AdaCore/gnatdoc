@@ -2327,7 +2327,9 @@ package body GNATdoc.Comments.Extractor is
                then
                   Raw_Section := Declarative_Section;
 
-               elsif not Trailing_Section.Text.Is_Empty then
+               elsif Trailing_Section /= null
+                 and then not Trailing_Section.Text.Is_Empty
+               then
                   Raw_Section := Trailing_Section;
 
                elsif Options.Fallback
@@ -2352,7 +2354,9 @@ package body GNATdoc.Comments.Extractor is
                   then
                      Raw_Section := Declarative_Section;
 
-                  elsif not Trailing_Section.Text.Is_Empty then
+                  elsif Trailing_Section /= null
+                    and then not Trailing_Section.Text.Is_Empty
+                  then
                      Raw_Section := Trailing_Section;
                   end if;
                end if;
