@@ -25,7 +25,8 @@ project LibGNATdoc is
    for Source_Dirs use ("../source");
 
    package Compiler is
-      for Switches ("Ada") use ("-g", "-gnatW8", "-gnatygO", "-gnata", "-gnatwa");
+      for Switches ("Ada") use
+        ("-g", "-gnat2022", "-gnatW8", "-gnatygO", "-gnata", "-gnatwa");
    end Compiler;
 
 end LibGNATdoc;

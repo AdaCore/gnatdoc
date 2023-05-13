@@ -187,9 +187,10 @@ package body GNATdoc.Backend.HTML_Markup is
       Tag    : VSS.Strings.Virtual_String) is
    begin
       Result.Append
-        ((VSS.XML.Events.End_Element,
-         VSS.XML.Namespaces.HTML_Namespace,
-         Tag));
+        (VSS.XML.Events.XML_Event'
+           (VSS.XML.Events.End_Element,
+            VSS.XML.Namespaces.HTML_Namespace,
+            Tag));
    end Write_End_Element;
 
    -------------------------
@@ -201,9 +202,10 @@ package body GNATdoc.Backend.HTML_Markup is
       Tag    : VSS.Strings.Virtual_String) is
    begin
       Result.Append
-        ((VSS.XML.Events.Start_Element,
-         VSS.XML.Namespaces.HTML_Namespace,
-         Tag));
+        (VSS.XML.Events.XML_Event'
+           (VSS.XML.Events.Start_Element,
+            VSS.XML.Namespaces.HTML_Namespace,
+            Tag));
    end Write_Start_Element;
 
    ----------------
@@ -214,7 +216,7 @@ package body GNATdoc.Backend.HTML_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Text   : VSS.Strings.Virtual_String) is
    begin
-      Result.Append ((VSS.XML.Events.Text, Text));
+      Result.Append (VSS.XML.Events.XML_Event'(VSS.XML.Events.Text, Text));
    end Write_Text;
 
    ----------------
@@ -225,7 +227,9 @@ package body GNATdoc.Backend.HTML_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Text   : VSS.String_Vectors.Virtual_String_Vector) is
    begin
-      Result.Append ((VSS.XML.Events.Text, Text.Join_Lines (VSS.Strings.LF)));
+      Result.Append
+        (VSS.XML.Events.XML_Event'
+           (VSS.XML.Events.Text, Text.Join_Lines (VSS.Strings.LF)));
    end Write_Text;
 
 end GNATdoc.Backend.HTML_Markup;
