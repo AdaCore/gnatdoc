@@ -30,7 +30,7 @@ package body GNATdoc.Backend.RST is
      (Entity : Entity_Information) return VSS.Strings.Virtual_String;
 
    procedure Generate_Documentation
-     (Self   : in out RST_Backend'Class;
+     (Self   : in out RST_Backend_Base'Class;
       Entity : Entity_Information);
    --  Generate RTS file for given entity.
 
@@ -95,7 +95,7 @@ package body GNATdoc.Backend.RST is
    -- Generate --
    --------------
 
-   overriding procedure Generate (Self : in out RST_Backend) is
+   overriding procedure Generate (Self : in out RST_Backend_Base) is
    begin
       for Item of Globals.Packages loop
          if not Is_Private_Entity (Item) then
@@ -109,7 +109,7 @@ package body GNATdoc.Backend.RST is
    ----------------------------
 
    procedure Generate_Documentation
-     (Self   : in out RST_Backend'Class;
+     (Self   : in out RST_Backend_Base'Class;
       Entity : Entity_Information)
    is
       Name    : constant GNATCOLL.VFS.Virtual_File :=
@@ -140,7 +140,7 @@ package body GNATdoc.Backend.RST is
 
       File.Put_Lines
         (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
-           ("", Entity.Documentation),
+           ("", Entity.Documentation, Self.Pass_Through),
          Success);
       File.New_Line (Success);
 
@@ -178,7 +178,7 @@ package body GNATdoc.Backend.RST is
 
                File.Put_Lines
                  (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
-                    ("    ", Item.Documentation),
+                    ("    ", Item.Documentation, Self.Pass_Through),
                   Success);
                File.New_Line (Success);
             end loop;
@@ -216,7 +216,7 @@ package body GNATdoc.Backend.RST is
 
                File.Put_Lines
                  (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
-                    ("    ", Item.Documentation),
+                    ("    ", Item.Documentation, Self.Pass_Through),
                   Success);
                File.New_Line (Success);
             end loop;
@@ -230,7 +230,7 @@ package body GNATdoc.Backend.RST is
    -- Initialize --
    ----------------
 
-   overriding procedure Initialize (Self : in out RST_Backend) is
+   overriding procedure Initialize (Self : in out RST_Backend_Base) is
    begin
       Abstract_Backend (Self).Initialize;
    end Initialize;

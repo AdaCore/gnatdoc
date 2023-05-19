@@ -21,13 +21,17 @@ package GNATdoc.Backend.RST is
 
 private
 
-   type RST_Backend is new Abstract_Backend with null record;
+   type RST_Backend_Base (Pass_Through : Boolean) is
+     abstract new Abstract_Backend with null record;
+
+   overriding procedure Initialize (Self : in out RST_Backend_Base);
+
+   overriding procedure Generate (Self : in out RST_Backend_Base);
+
+   type RST_Backend is
+     new RST_Backend_Base (False) with null record;
 
    overriding function Name
      (Self : in out RST_Backend) return VSS.Strings.Virtual_String;
-
-   overriding procedure Initialize (Self : in out RST_Backend);
-
-   overriding procedure Generate (Self : in out RST_Backend);
 
 end GNATdoc.Backend.RST;
