@@ -854,6 +854,40 @@ package body GNATdoc.Frontend is
      (Node      : Generic_Package_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
    is
+      procedure Create_Formal
+        (Enclosing      : not null GNATdoc.Entities.Entity_Information_Access;
+         Enclosing_Name : Libadalang.Analysis.Defining_Name'Class;
+         Name           : Libadalang.Analysis.Defining_Name'Class);
+      --  Extract documentation for formal with given name.
+
+      -------------------
+      -- Create_Formal --
+      -------------------
+
+      procedure Create_Formal
+        (Enclosing      : not null GNATdoc.Entities.Entity_Information_Access;
+         Enclosing_Name : Libadalang.Analysis.Defining_Name'Class;
+         Name           : Libadalang.Analysis.Defining_Name'Class)
+      is
+         Entity :
+           constant not null GNATdoc.Entities.Entity_Information_Access :=
+             new GNATdoc.Entities.Entity_Information'
+               (Location       => Location (Name),
+                Name           => To_Virtual_String (Name.F_Name.Text),
+                Qualified_Name =>
+                  To_Virtual_String (Name.P_Fully_Qualified_Name),
+                Signature      => Signature (Name),
+                Enclosing      => Signature (Enclosing_Name),
+                Is_Private     => False,
+                Documentation  =>
+                  GNATdoc.Comments.Extractor.Extract_Formal_Section
+                    (Enclosing.Documentation, Name),
+                others         => <>);
+
+      begin
+         Enclosing.Formals.Insert (Entity);
+      end Create_Formal;
+
       Name   : constant Defining_Name := Node.F_Package_Decl.F_Package_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
@@ -884,6 +918,51 @@ package body GNATdoc.Frontend is
       if GNATdoc.Options.Frontend_Options.Generate_Private then
          Process_Children (Node.F_Package_Decl.F_Private_Part, Entity);
       end if;
+
+      for Item of Node.F_Formal_Part.F_Decls loop
+         case Item.Kind is
+            when Ada_Generic_Formal_Type_Decl =>
+               declare
+                  Decl        : constant Basic_Decl :=
+                    Item.As_Generic_Formal_Type_Decl.F_Decl;
+                  Formal_Name : constant Defining_Name :=
+                    (case Decl.Kind is
+                        when Ada_Incomplete_Formal_Type_Decl =>
+                          Decl.As_Incomplete_Formal_Type_Decl.F_Name,
+                        when Ada_Formal_Type_Decl =>
+                          Decl.As_Formal_Type_Decl.F_Name,
+                        when others => raise Program_Error);
+
+               begin
+                  Create_Formal (Entity, Name, Formal_Name);
+               end;
+
+            when Ada_Generic_Formal_Subp_Decl =>
+               Create_Formal
+                 (Entity,
+                  Name,
+                  Item.As_Generic_Formal_Subp_Decl.F_Decl
+                    .As_Concrete_Formal_Subp_Decl.F_Subp_Spec.F_Subp_Name);
+
+            when Ada_Generic_Formal_Obj_Decl =>
+               for Id of
+                 Item.As_Generic_Formal_Obj_Decl.F_Decl.As_Object_Decl.F_Ids
+               loop
+                  Create_Formal (Entity, Name, Id);
+               end loop;
+
+            when Ada_Generic_Formal_Package =>
+               Create_Formal
+                 (Entity,
+                  Name,
+                  Item.As_Generic_Formal_Package.F_Decl
+                    .As_Generic_Package_Instantiation.F_Name);
+
+            when others =>
+               Ada.Text_IO.Put_Line
+                 (Ada.Text_IO.Standard_Error, Image (Item));
+         end case;
+      end loop;
    end Process_Generic_Package_Decl;
 
    --------------------------------
@@ -1455,6 +1534,7 @@ package body GNATdoc.Frontend is
                | Ada_Single_Task_Type_Decl | Ada_Task_Type_Decl
                | Ada_Single_Protected_Decl | Ada_Protected_Type_Decl
                | Ada_Entry_Decl
+               | Ada_Concrete_Formal_Subp_Decl
             =>
                null;
 

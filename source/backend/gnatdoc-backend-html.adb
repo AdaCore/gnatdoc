@@ -193,6 +193,11 @@ package body GNATdoc.Backend.HTML is
                 (Index_Entities =>
                    Self.Entity.Generic_Instantiations'Unchecked_Access);
 
+         elsif Name = "formals" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Formals'Unchecked_Access);
+
          elsif Name = "name" then
             return
               VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
@@ -418,6 +423,7 @@ package body GNATdoc.Backend.HTML is
          Path   : VSS.String_Vectors.Virtual_String_Vector;
 
       begin
+         Nested.Union (Entity.Formals);
          Nested.Union (Entity.Exceptions);
          Nested.Union (Entity.Simple_Types);
          Nested.Union (Entity.Array_Types);

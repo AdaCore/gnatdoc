@@ -7,6 +7,15 @@
     <h1 tal:content='gnatdoc/entity/qualified_name'>Entity Name</h1>
     <h2>Entities</h2>
 
+    <div tal:omit-tag='' tal:condition='gnatdoc/entity/formals'>
+      <h3>Generic formal parameters</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/formals'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+
     <div tal:omit-tag="" tal:condition="gnatdoc/entity/exceptions">
       <h3>Exceptions</h3>
       <ul>
