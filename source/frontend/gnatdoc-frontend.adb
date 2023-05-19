@@ -109,6 +109,11 @@ package body GNATdoc.Frontend is
      (Node      : Generic_Package_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
+   procedure Process_Generic_Subp_Decl
+     (Node      : Generic_Subp_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Global    : GNATdoc.Entities.Entity_Information_Access);
+
    procedure Process_Generic_Instantiation
      (Node      : Generic_Instantiation'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
@@ -153,6 +158,13 @@ package body GNATdoc.Frontend is
    --  Process children nodes, filter out important nodes, and dispatch to
    --  corresponding documentation extraction and entity creation subprograms.
 
+   procedure Construct_Generic_Formals
+     (Entity  : not null GNATdoc.Entities.Entity_Information_Access;
+      Name    : Libadalang.Analysis.Defining_Name'Class;
+      Formals : Generic_Formal_Part);
+   --  Constructs entities for formal parameters of the generic from the
+   --  structured comment of the generic.
+
    function Location
      (Name : Ada_Node'Class) return GNATdoc.Entities.Entity_Location;
    --  Return location of the given node.
@@ -181,6 +193,96 @@ package body GNATdoc.Frontend is
            (Entity.Location, Entity.Name, Entity.Documentation);
       end if;
    end Check_Undocumented;
+
+   -------------------------------
+   -- Construct_Generic_Formals --
+   -------------------------------
+
+   procedure Construct_Generic_Formals
+     (Entity  : not null GNATdoc.Entities.Entity_Information_Access;
+      Name    : Libadalang.Analysis.Defining_Name'Class;
+      Formals : Generic_Formal_Part)
+   is
+      procedure Create_Formal
+        (Enclosing      : not null GNATdoc.Entities.Entity_Information_Access;
+         Enclosing_Name : Libadalang.Analysis.Defining_Name'Class;
+         Name           : Libadalang.Analysis.Defining_Name'Class);
+      --  Extract documentation for formal with given name.
+
+      -------------------
+      -- Create_Formal --
+      -------------------
+
+      procedure Create_Formal
+        (Enclosing      : not null GNATdoc.Entities.Entity_Information_Access;
+         Enclosing_Name : Libadalang.Analysis.Defining_Name'Class;
+         Name           : Libadalang.Analysis.Defining_Name'Class)
+      is
+         Entity :
+           constant not null GNATdoc.Entities.Entity_Information_Access :=
+             new GNATdoc.Entities.Entity_Information'
+               (Location       => Location (Name),
+                Name           => To_Virtual_String (Name.F_Name.Text),
+                Qualified_Name =>
+                  To_Virtual_String (Name.P_Fully_Qualified_Name),
+                Signature      => Signature (Name),
+                Enclosing      => Signature (Enclosing_Name),
+                Is_Private     => False,
+                Documentation  =>
+                  GNATdoc.Comments.Extractor.Extract_Formal_Section
+                    (Enclosing.Documentation, Name),
+                others         => <>);
+
+      begin
+         Enclosing.Formals.Insert (Entity);
+      end Create_Formal;
+
+   begin
+      for Item of Formals.F_Decls loop
+         case Item.Kind is
+            when Ada_Generic_Formal_Type_Decl =>
+               declare
+                  Decl        : constant Basic_Decl :=
+                    Item.As_Generic_Formal_Type_Decl.F_Decl;
+                  Formal_Name : constant Defining_Name :=
+                    (case Decl.Kind is
+                        when Ada_Incomplete_Formal_Type_Decl =>
+                          Decl.As_Incomplete_Formal_Type_Decl.F_Name,
+                        when Ada_Formal_Type_Decl =>
+                          Decl.As_Formal_Type_Decl.F_Name,
+                        when others => raise Program_Error);
+
+               begin
+                  Create_Formal (Entity, Name, Formal_Name);
+               end;
+
+            when Ada_Generic_Formal_Subp_Decl =>
+               Create_Formal
+                 (Entity,
+                  Name,
+                  Item.As_Generic_Formal_Subp_Decl.F_Decl
+                    .As_Concrete_Formal_Subp_Decl.F_Subp_Spec.F_Subp_Name);
+
+            when Ada_Generic_Formal_Obj_Decl =>
+               for Id of
+                 Item.As_Generic_Formal_Obj_Decl.F_Decl.As_Object_Decl.F_Ids
+               loop
+                  Create_Formal (Entity, Name, Id);
+               end loop;
+
+            when Ada_Generic_Formal_Package =>
+               Create_Formal
+                 (Entity,
+                  Name,
+                  Item.As_Generic_Formal_Package.F_Decl
+                    .As_Generic_Package_Instantiation.F_Name);
+
+            when others =>
+               Ada.Text_IO.Put_Line
+                 (Ada.Text_IO.Standard_Error, Image (Item));
+         end case;
+      end loop;
+   end Construct_Generic_Formals;
 
    --------------
    -- Location --
@@ -397,7 +499,8 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Generic_Subp_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Generic_Subp_Decl
+                 (Node.As_Generic_Subp_Decl, Enclosing, null);
 
                return Over;
 
@@ -679,6 +782,14 @@ package body GNATdoc.Frontend is
 
                return Over;
 
+            when Ada_Generic_Subp_Decl =>
+               Process_Generic_Subp_Decl
+                 (Node.As_Generic_Subp_Decl,
+                  GNATdoc.Entities.Globals'Access,
+                  GNATdoc.Entities.Globals'Access);
+
+               return Over;
+
             when Ada_Generic_Package_Decl =>
                Process_Generic_Package_Decl
                  (Node.As_Generic_Package_Decl,
@@ -846,6 +957,46 @@ package body GNATdoc.Frontend is
       Check_Undocumented (Entity);
    end Process_Generic_Instantiation;
 
+   -------------------------------
+   -- Process_Generic_Subp_Decl --
+   -------------------------------
+
+   procedure Process_Generic_Subp_Decl
+     (Node      : Generic_Subp_Decl'Class;
+      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Global    : GNATdoc.Entities.Entity_Information_Access)
+   is
+      Decl   : constant Generic_Subp_Internal := Node.F_Subp_Decl;
+      Spec   : constant Subp_Spec := Decl.F_Subp_Spec;
+      Name   : constant Defining_Name := Spec.F_Subp_Name;
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        new GNATdoc.Entities.Entity_Information'
+          (Location       => Location (Name),
+           Kind           =>
+             (case Spec.F_Subp_Kind is
+                 when Ada_Subp_Kind_Function  =>
+                   GNATdoc.Entities.Ada_Function,
+                 when Ada_Subp_Kind_Procedure =>
+                   GNATdoc.Entities.Ada_Procedure),
+           Name           => To_Virtual_String (Name.Text),
+           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
+           Signature      => Signature (Name),
+           RST_Profile    => RST_Profile (Spec),
+           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
+           others         => <>);
+
+   begin
+      Enclosing.Subprograms.Insert (Entity);
+
+      if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
+         Global.Subprograms.Insert (Entity);
+      end if;
+
+      Check_Undocumented (Entity);
+
+      Construct_Generic_Formals (Entity, Name, Node.F_Formal_Part);
+   end Process_Generic_Subp_Decl;
+
    ----------------------------------
    -- Process_Generic_Package_Decl --
    ----------------------------------
@@ -854,40 +1005,6 @@ package body GNATdoc.Frontend is
      (Node      : Generic_Package_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
    is
-      procedure Create_Formal
-        (Enclosing      : not null GNATdoc.Entities.Entity_Information_Access;
-         Enclosing_Name : Libadalang.Analysis.Defining_Name'Class;
-         Name           : Libadalang.Analysis.Defining_Name'Class);
-      --  Extract documentation for formal with given name.
-
-      -------------------
-      -- Create_Formal --
-      -------------------
-
-      procedure Create_Formal
-        (Enclosing      : not null GNATdoc.Entities.Entity_Information_Access;
-         Enclosing_Name : Libadalang.Analysis.Defining_Name'Class;
-         Name           : Libadalang.Analysis.Defining_Name'Class)
-      is
-         Entity :
-           constant not null GNATdoc.Entities.Entity_Information_Access :=
-             new GNATdoc.Entities.Entity_Information'
-               (Location       => Location (Name),
-                Name           => To_Virtual_String (Name.F_Name.Text),
-                Qualified_Name =>
-                  To_Virtual_String (Name.P_Fully_Qualified_Name),
-                Signature      => Signature (Name),
-                Enclosing      => Signature (Enclosing_Name),
-                Is_Private     => False,
-                Documentation  =>
-                  GNATdoc.Comments.Extractor.Extract_Formal_Section
-                    (Enclosing.Documentation, Name),
-                others         => <>);
-
-      begin
-         Enclosing.Formals.Insert (Entity);
-      end Create_Formal;
-
       Name   : constant Defining_Name := Node.F_Package_Decl.F_Package_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
@@ -919,50 +1036,7 @@ package body GNATdoc.Frontend is
          Process_Children (Node.F_Package_Decl.F_Private_Part, Entity);
       end if;
 
-      for Item of Node.F_Formal_Part.F_Decls loop
-         case Item.Kind is
-            when Ada_Generic_Formal_Type_Decl =>
-               declare
-                  Decl        : constant Basic_Decl :=
-                    Item.As_Generic_Formal_Type_Decl.F_Decl;
-                  Formal_Name : constant Defining_Name :=
-                    (case Decl.Kind is
-                        when Ada_Incomplete_Formal_Type_Decl =>
-                          Decl.As_Incomplete_Formal_Type_Decl.F_Name,
-                        when Ada_Formal_Type_Decl =>
-                          Decl.As_Formal_Type_Decl.F_Name,
-                        when others => raise Program_Error);
-
-               begin
-                  Create_Formal (Entity, Name, Formal_Name);
-               end;
-
-            when Ada_Generic_Formal_Subp_Decl =>
-               Create_Formal
-                 (Entity,
-                  Name,
-                  Item.As_Generic_Formal_Subp_Decl.F_Decl
-                    .As_Concrete_Formal_Subp_Decl.F_Subp_Spec.F_Subp_Name);
-
-            when Ada_Generic_Formal_Obj_Decl =>
-               for Id of
-                 Item.As_Generic_Formal_Obj_Decl.F_Decl.As_Object_Decl.F_Ids
-               loop
-                  Create_Formal (Entity, Name, Id);
-               end loop;
-
-            when Ada_Generic_Formal_Package =>
-               Create_Formal
-                 (Entity,
-                  Name,
-                  Item.As_Generic_Formal_Package.F_Decl
-                    .As_Generic_Package_Instantiation.F_Name);
-
-            when others =>
-               Ada.Text_IO.Put_Line
-                 (Ada.Text_IO.Standard_Error, Image (Item));
-         end case;
-      end loop;
+      Construct_Generic_Formals (Entity, Name, Node.F_Formal_Part);
    end Process_Generic_Package_Decl;
 
    --------------------------------
@@ -1527,6 +1601,7 @@ package body GNATdoc.Frontend is
                | Ada_Subp_Decl | Ada_Null_Subp_Decl
                | Ada_Generic_Package_Instantiation
                | Ada_Generic_Package_Internal
+               | Ada_Generic_Subp_Internal
                | Ada_Object_Decl
                | Ada_Number_Decl
                | Ada_Subtype_Decl
