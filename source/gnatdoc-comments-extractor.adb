@@ -51,7 +51,7 @@ package body GNATdoc.Comments.Extractor is
    type Section_Tag_Flags is array (Section_Tag) of Boolean with Pack;
 
    Ada_New_Line_Function             : constant Line_Terminator_Set :=
-     (CR | LF | CRLF => True, others => False);
+     [CR | LF | CRLF => True, others => False];
 
    Ada_Identifier_Expression         : constant Virtual_String :=
      "[\p{L}\p{Nl}][\p{L}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}]*";
@@ -782,9 +782,9 @@ package body GNATdoc.Comments.Extractor is
 
          Parse_Raw_Section
            (Raw_Section,
-            (Private_Tag => True,
+            [Private_Tag => True,
              Formal_Tag  => Basic_Decl_Node.Kind in Ada_Generic_Decl,
-             others      => False),
+             others      => False],
             Documentation.Sections,
             Documentation.Is_Private);
       end;
@@ -1044,8 +1044,8 @@ package body GNATdoc.Comments.Extractor is
 
          Parse_Raw_Section
            (Raw_Section,
-            (Param_Tag | Return_Tag | Exception_Tag => True,
-             others                                 => False),
+            [Param_Tag | Return_Tag | Exception_Tag => True,
+             others                                 => False],
             Documentation.Sections);
       end;
    end Extract_Entry_Body_Documentation;
@@ -1123,7 +1123,7 @@ package body GNATdoc.Comments.Extractor is
 
          Parse_Raw_Section
            (Raw_Section,
-            (Enum_Tag => True, others => False),
+            [Enum_Tag => True, others => False],
             Documentation.Sections);
       end;
    end Extract_Enumeration_Type_Documentation;
@@ -1589,7 +1589,7 @@ package body GNATdoc.Comments.Extractor is
 
          Parse_Raw_Section
            (Raw_Section,
-            (Member_Tag => True, others => False),
+            [Member_Tag => True, others => False],
             Sections);
       end;
    end Extract_Private_Type_Documentation;
@@ -1663,9 +1663,9 @@ package body GNATdoc.Comments.Extractor is
 
          Parse_Raw_Section
            (Raw_Section,
-            (Private_Tag => True,
+            [Private_Tag => True,
              Member_Tag  => True,
-             others      => False),
+             others      => False],
             Documentation.Sections,
             Documentation.Is_Private);
       end;
@@ -1747,9 +1747,9 @@ package body GNATdoc.Comments.Extractor is
 
          Parse_Raw_Section
            (Raw_Section,
-            (Private_Tag => True,
+            [Private_Tag => True,
              Member_Tag  => True,
-             others      => False),
+             others      => False],
             Documentation.Sections,
             Documentation.Is_Private);
       end;
@@ -1825,7 +1825,7 @@ package body GNATdoc.Comments.Extractor is
 
          Parse_Raw_Section
            (Raw_Section,
-            (Member_Tag => True, others => False),
+            [Member_Tag => True, others => False],
             Documentation.Sections);
       end;
    end Extract_Record_Type_Documentation;
@@ -1884,7 +1884,7 @@ package body GNATdoc.Comments.Extractor is
                end if;
          end case;
 
-         Parse_Raw_Section (Raw_Section, (others => False), Sections);
+         Parse_Raw_Section (Raw_Section, [others => False], Sections);
       end;
    end Extract_Simple_Declaration_Documentation;
 
@@ -1994,9 +1994,9 @@ package body GNATdoc.Comments.Extractor is
 
          Parse_Raw_Section
            (Raw_Section,
-            (Private_Tag => True,
+            [Private_Tag => True,
              Member_Tag  => True,
-             others      => False),
+             others      => False],
             Documentation.Sections,
             Documentation.Is_Private);
       end;
@@ -2364,8 +2364,8 @@ package body GNATdoc.Comments.Extractor is
 
          Parse_Raw_Section
            (Raw_Section,
-            (Param_Tag | Return_Tag | Exception_Tag => True,
-             others                                 => False),
+            [Param_Tag | Return_Tag | Exception_Tag => True,
+             others                                 => False],
             Sections);
       end;
    end Extract_Subprogram_Documentation;
