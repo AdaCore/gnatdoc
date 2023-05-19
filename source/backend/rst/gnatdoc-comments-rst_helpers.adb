@@ -23,7 +23,8 @@ package body GNATdoc.Comments.RST_Helpers is
 
    function Get_RST_Documentation
      (Indent        : VSS.Strings.Virtual_String;
-      Documentation : Structured_Comment)
+      Documentation : Structured_Comment;
+      Pass_Through  : Boolean)
       return VSS.String_Vectors.Virtual_String_Vector
    is
       use type VSS.Strings.Virtual_String;
@@ -60,35 +61,40 @@ package body GNATdoc.Comments.RST_Helpers is
          end if;
       end loop;
 
-      --  Append parameters and return value
+      --  In pass-throuh mode documentation for parameters, return values, etc.
+      --  is included in the description section.
 
-      for Section of Documentation.Sections loop
-         if Section.Kind = Parameter then
-            Text.Append (VSS.Strings.Empty_Virtual_String);
-            Text.Append (Indent & ":parameter " & Section.Name & ":");
+      if not Pass_Through then
+         --  Append parameters and return value
 
-            for Line of Section.Text loop
-               Text.Append (Indent & "    " & Line);
-            end loop;
+         for Section of Documentation.Sections loop
+            if Section.Kind = Parameter then
+               Text.Append (VSS.Strings.Empty_Virtual_String);
+               Text.Append (Indent & ":parameter " & Section.Name & ":");
 
-            Text.Append (VSS.Strings.Empty_Virtual_String);
-         end if;
-      end loop;
+               for Line of Section.Text loop
+                  Text.Append (Indent & "    " & Line);
+               end loop;
 
-      for Section of Documentation.Sections loop
-         if Section.Kind = Returns then
-            Text.Append (VSS.Strings.Empty_Virtual_String);
-            Text.Append (Indent & ":returnvalue:");
+               Text.Append (VSS.Strings.Empty_Virtual_String);
+            end if;
+         end loop;
 
-            for Line of Section.Text loop
-               Text.Append (Indent & "    " & Line);
-            end loop;
+         for Section of Documentation.Sections loop
+            if Section.Kind = Returns then
+               Text.Append (VSS.Strings.Empty_Virtual_String);
+               Text.Append (Indent & ":returnvalue:");
 
-            Text.Append (VSS.Strings.Empty_Virtual_String);
+               for Line of Section.Text loop
+                  Text.Append (Indent & "    " & Line);
+               end loop;
 
-            exit;
-         end if;
-      end loop;
+               Text.Append (VSS.Strings.Empty_Virtual_String);
+
+               exit;
+            end if;
+         end loop;
+      end if;
 
       return Text;
    end Get_RST_Documentation;

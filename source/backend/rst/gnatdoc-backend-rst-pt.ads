@@ -15,24 +15,17 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.Strings;
-with VSS.String_Vectors;
+--  Pass-through variant of the RST backend.
 
-package GNATdoc.Comments.RST_Helpers is
+package GNATdoc.Backend.RST.PT is
 
-   function Get_RST_Documentation
-     (Indent        : VSS.Strings.Virtual_String;
-      Documentation : Structured_Comment;
-      Pass_Through  : Boolean)
-      return VSS.String_Vectors.Virtual_String_Vector;
-   --  Return description as RST text.
-   --
-   --  @param Indent
-   --    String to be used for lines indentation in generated text.
-   --  @param Documentation Structured comment to format as RST.
-   --  @param Pass_Through
-   --    When True only entry for entity, code snippet of the declaration and
-   --    description is added to the generated text. Description of other
-   --    components is expected to be present in the description.
+   type PT_RST_Backend is new Abstract_Backend with private;
 
-end GNATdoc.Comments.RST_Helpers;
+private
+
+   type PT_RST_Backend is new RST_Backend_Base (True) with null record;
+
+   overriding function Name
+     (Self : in out PT_RST_Backend) return VSS.Strings.Virtual_String;
+
+end GNATdoc.Backend.RST.PT;
