@@ -1,5 +1,55 @@
 stages:
   - build_and_test
+  - build_dependents
+
+.detect-branches:
+  #  Version 1.
+  #  Detects source and target branches. Checkout necessary branch for
+  #  repository when run downstream pipeline is detected.
+  #    ACI_SOURCE_BRANCH is set to source branch (merge request, pull)
+  #    ACI_TARGET_BRANCH is set to target branch of merge request, or 'master'/'edge' for pull
+  #    ACI_REPOSITORY_NAME_EDGE_SUFFIX is set to '-edge' when target repository is 'edge'
+  #    ACI_ANOD_QUALIFIER is set to 'edge' when target repository is 'edge'
+  #    ACI_SUBPROJECTS_ROOT is set to '/tmp' and may be overritten by script
+  - |
+      if [[ -n "$ACI_UPSTREAM_SOURCE_BRANCH" ]]; then
+        ACI_SOURCE_BRANCH="$ACI_UPSTREAM_SOURCE_BRANCH";
+      elif [[ -n "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" ]]; then
+        ACI_SOURCE_BRANCH="$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME";
+      else
+        ACI_SOURCE_BRANCH="$CI_COMMIT_BRANCH";
+      fi;
+      if [[ -n "$ACI_UPSTREAM_TARGET_BRANCH" ]]; then
+        ACI_TARGET_BRANCH=$ACI_UPSTREAM_TARGET_BRANCH;
+      elif [[ -n "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ]]; then
+        ACI_TARGET_BRANCH="$CI_MERGE_REQUEST_TARGET_BRANCH_NAME";
+      elif [[ "x$CI_COMMIT_BRANCH" == "xedge" ]]; then
+        ACI_TARGET_BRANCH="edge";
+      else
+        ACI_TARGET_BRANCH="master";
+      fi;
+      if [[ "$ACI_TARGET_BRANCH" == "edge" ]]; then
+        ACI_REPOSITORY_NAME_EDGE_SUFFIX="-edge";
+        ACI_ANOD_QUALIFIER="edge"
+      else
+        ACI_REPOSITORY_NAME_EDGE_SUFFIX="";
+        ACI_ANOD_QUALIFIER=""
+      fi
+      ACI_SUBPROJECTS_ROOT=/tmp
+      echo "Source branch: $ACI_SOURCE_BRANCH"
+      echo "Target branch: $ACI_TARGET_BRANCH"
+      echo "Name suffix:   $ACI_REPOSITORY_NAME_EDGE_SUFFIX"
+      echo "Qualifier:     $ACI_ANOD_QUALIFIER"
+      echo "Subprojects:   $ACI_SUBPROJECTS_ROOT"
+
+  #  On downstream pipeline checkout the necessary branch
+  - if [[ "$CI_PIPELINE_SOURCE" == 'pipeline' ]]; then
+       if `git -C $CI_PROJECT_DIR show-ref $ACI_SOURCE_BRANCH > /dev/null`; then
+        git -C $CI_PROJECT_DIR checkout $ACI_SOURCE_BRANCH;
+      elif `git -C $CI_PROJECT_DIR show-ref $ACI_TARGET_BRANCH > /dev/null`; then
+        git -C $CI_PROJECT_DIR checkout $ACI_TARGET_BRANCH;
+      fi
+    fi
 
 #########
 # BUILD #
@@ -11,27 +61,27 @@ build_and_test:
      - cpu:8
      - mem:16
   stage: build_and_test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_PIPELINE_SOURCE == 'pipeline'
+    - if: $CI_COMMIT_BRANCH == 'master' && $CI_COMMIT_TITLE =~ /Merge branch.*/
+    - if: $CI_COMMIT_BRANCH == 'edge' && $CI_COMMIT_TITLE =~ /Merge branch.*/
   script:
-    - . ~/.aws_container_credentials
-    - export PATH=/it/e3/bin:$PATH
+    - !reference [.detect-branches]
 
     # Tell the anod sandbox to use our repository
     - cd /it/wave
-    - anod vcs --add-repo gnatdoc $CI_PROJECT_DIR
+    - anod vcs --add-repo gnatdoc$ACI_REPOSITORY_NAME_EDGE_SUFFIX $CI_PROJECT_DIR
 
     # Build gnatdoc
-    - anod build gnatdoc4
-
-    # Build the ALS as an extra test
-    - anod build als
+    - anod build gnatdoc4 --qualifier=$ACI_ANOD_QUALIFIER
 
     # Test gnatdoc
-    - anod test gnatdoc4
+    - anod test gnatdoc4 --qualifier=$ACI_ANOD_QUALIFIER
 
     # At the moment the gnatdoc4 anod spec runs only one test
     # and does not support e3-testsuite.
     # TODO: when this is fixed, read the report using e3-testsuite-report
-
 
 # Activate this section when we have support for e3-testsuite
 #
@@ -41,3 +91,20 @@ build_and_test:
 #      - xunit_output.xml
 #    reports:
 #      junit: xunit_output.xml
+
+run_als_ci:
+  stage: build_dependents
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      when: manual
+  trigger:
+    project: eng/ide/ada_language_server
+    strategy: depend
+  allow_failure: true
+  inherit:
+    variables: false
+  variables:
+    ACI_UPSTREAM_PROJECT_PATH: $CI_PROJECT_PATH
+    ACI_UPSTREAM_REF_NAME: $CI_COMMIT_REF_NAME
+    ACI_UPSTREAM_SOURCE_BRANCH: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+    ACI_UPSTREAM_TARGET_BRANCH: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
