@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -21,6 +21,40 @@ package body GNATdoc.Comments is
 
    procedure Free is
      new Ada.Unchecked_Deallocation (Section'Class, Section_Access);
+
+   -----------
+   -- Clone --
+   -----------
+
+   function Clone
+     (Section : not null Section_Access) return not null Section_Access is
+   begin
+      return
+        new GNATdoc.Comments.Section'
+             (Kind             => Section.Kind,
+              Name             => Section.Name,
+              Symbol           => Section.Symbol,
+              Text             => Section.Text,
+              Exact_Start_Line => 0,
+              Exact_End_Line   => 0,
+              Group_Start_Line => 0,
+              Group_End_Line   => 0,
+              Sections         => Clone (Section.Sections));
+   end Clone;
+
+   -----------
+   -- Clone --
+   -----------
+
+   function Clone
+     (Sections : Section_Vectors.Vector) return Section_Vectors.Vector is
+   begin
+      return Result : Section_Vectors.Vector do
+         for Section of Sections loop
+            Result.Append (Clone (Section));
+         end loop;
+      end return;
+   end Clone;
 
    --------------
    -- Finalize --

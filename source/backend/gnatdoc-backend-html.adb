@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -193,6 +193,11 @@ package body GNATdoc.Backend.HTML is
                 (Index_Entities =>
                    Self.Entity.Generic_Instantiations'Unchecked_Access);
 
+         elsif Name = "formals" then
+            return
+              Entity_Information_Set_Proxy'
+                (Index_Entities => Self.Entity.Formals'Unchecked_Access);
+
          elsif Name = "name" then
             return
               VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
@@ -212,8 +217,8 @@ package body GNATdoc.Backend.HTML is
 
          elsif Name = "documentation" then
             return
-              GNATdoc.Comments.Proxies.Structured_Comment_Proxy'
-                (Documentation => Self.Entity.Documentation'Unchecked_Access);
+              GNATdoc.Comments.Proxies.Create
+                (Self.Entity.Documentation'Unchecked_Access);
 
          elsif Name = "id" then
             return
@@ -418,6 +423,7 @@ package body GNATdoc.Backend.HTML is
          Path   : VSS.String_Vectors.Virtual_String_Vector;
 
       begin
+         Nested.Union (Entity.Formals);
          Nested.Union (Entity.Exceptions);
          Nested.Union (Entity.Simple_Types);
          Nested.Union (Entity.Array_Types);

@@ -100,4 +100,11 @@ private
 
    overriding procedure Finalize (Self : in out Structured_Comment);
 
+   function Clone
+     (Section : not null Section_Access) return not null Section_Access;
+   --  Creates deep copy of the given section. Lines information is reset.
+
+   function Clone
+     (Sections : Section_Vectors.Vector) return Section_Vectors.Vector;
+
 end GNATdoc.Comments;

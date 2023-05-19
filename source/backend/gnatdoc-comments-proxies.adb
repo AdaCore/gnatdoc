@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -100,7 +100,7 @@ package body GNATdoc.Comments.Proxies is
          Sections : Section_Vectors.Vector;
 
       begin
-         for Section of Self.Documentation.Sections loop
+         for Section of Self.Sections loop
             if Section.Kind = Kind then
                Sections.Append (Section);
             end if;
@@ -115,7 +115,7 @@ package body GNATdoc.Comments.Proxies is
             Text : VSS.String_Vectors.Virtual_String_Vector;
 
          begin
-            for Section of Self.Documentation.Sections loop
+            for Section of Self.Sections loop
                if Section.Kind = Description then
                   Text := Section.Text;
                end if;
@@ -181,6 +181,17 @@ package body GNATdoc.Comments.Proxies is
              (Message => "unknown component '" & Name & "'");
       end if;
    end Component;
+
+   ------------
+   -- Create --
+   ------------
+
+   function Create
+     (Documentation : Structured_Comment_Access)
+      return Structured_Comment_Proxy'Class is
+   begin
+      return Structured_Comment_Proxy'(Sections => Documentation.Sections);
+   end Create;
 
    -------------
    -- Element --
