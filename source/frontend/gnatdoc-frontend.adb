@@ -1540,7 +1540,8 @@ package body GNATdoc.Frontend is
 
             when others =>
                Ada.Text_IO.Put_Line
-                 (Image (Name) & ": signature of "
+                 (Ada.Text_IO.Standard_Error,
+                  Image (Name) & ": signature of "
                   & Image (Name.P_Basic_Decl)
                   & " => " & VSS.Strings.Conversions.To_UTF_8_String (Result));
 
