@@ -81,6 +81,7 @@ package GNATdoc.Entities is
       --  Renamings of the packages. Renamings of the subprograms is in
       --  the Subprograms field.
 
+      Formals                : aliased Entity_Information_Sets.Set;
       Simple_Types           : aliased Entity_Information_Sets.Set;
       Array_Types            : aliased Entity_Information_Sets.Set;
       Record_Types           : aliased Entity_Information_Sets.Set;
@@ -95,7 +96,7 @@ package GNATdoc.Entities is
       Exceptions             : aliased Entity_Information_Sets.Set;
 
       --  Access_Types      : EInfo_List.Vector;  +++
-      --  Generic_Formals   : EInfo_List.Vector;
+      --  Generic_Formals   : EInfo_List.Vector;  +++
       --  Interface_Types   : EInfo_List.Vector;  +++
       --  Methods           : EInfo_List.Vector;  ???
       --  Pkgs              : EInfo_List.Vector;  +++

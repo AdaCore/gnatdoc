@@ -19,7 +19,7 @@ with VSS.Application;
 with VSS.Strings.Conversions;
 
 with GNATdoc.Backend.HTML;
-with GNATdoc.Backend.RST;
+with GNATdoc.Backend.RST.PT;
 with GNATdoc.Configuration;
 with GNATdoc.Options;
 
@@ -36,6 +36,9 @@ package body GNATdoc.Backend is
 
       elsif Name = "rst" then
          return new GNATdoc.Backend.RST.RST_Backend;
+
+      elsif Name = "rstpt" then
+         return new GNATdoc.Backend.RST.PT.PT_RST_Backend;
       end if;
 
       return null;

@@ -160,4 +160,11 @@ package GNATdoc.Comments.Extractor is
                                | Ada_Type_Access_Def);
    --  Extract documentation for supported kinds of nodes.
 
+   function Extract_Formal_Section
+     (Documentation : Structured_Comment;
+      Name          : Libadalang.Analysis.Defining_Name'Class)
+      return Structured_Comment;
+   --  Create new structured comment from the section for the formal parameter
+   --  of the generic with the given name.
+
 end GNATdoc.Comments.Extractor;
