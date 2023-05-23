@@ -15,36 +15,46 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with Ada.Strings.Wide_Wide_Fixed;
 with Ada.Wide_Wide_Text_IO;
 
 with GNATCOLL.VFS;
 
 with VSS.Strings.Conversions;
+with VSS.Strings.Formatters.Generic_Integers;
+with VSS.Strings.Formatters.Strings;
+with VSS.Strings.Templates;
 with VSS.String_Vectors;
 
 package body GNATdoc.Messages is
 
-   use Ada.Strings;
-   use Ada.Strings.Wide_Wide_Fixed;
    use Ada.Wide_Wide_Text_IO;
    use VSS.Strings.Conversions;
+   use VSS.Strings.Formatters.Strings;
+   use VSS.Strings.Templates;
 
    function File_Name
-     (File : VSS.Strings.Virtual_String) return Wide_Wide_String;
+     (File : VSS.Strings.Virtual_String) return VSS.Strings.Virtual_String;
+
+   package Character_Count_Formatters is
+     new VSS.Strings.Formatters.Generic_Integers (VSS.Strings.Character_Count);
+   use Character_Count_Formatters;
+
+   package Line_Count_Formatters is
+     new VSS.Strings.Formatters.Generic_Integers (VSS.Strings.Line_Count);
+   use Line_Count_Formatters;
 
    ---------------
    -- File_Name --
    ---------------
 
    function File_Name
-     (File : VSS.Strings.Virtual_String) return Wide_Wide_String
+     (File : VSS.Strings.Virtual_String) return VSS.Strings.Virtual_String
    is
       F : constant GNATCOLL.VFS.Virtual_File :=
         GNATCOLL.VFS.Create_From_UTF8 (To_UTF_8_String (File));
 
    begin
-      return To_Wide_Wide_String (To_Virtual_String (F.Display_Base_Name));
+      return To_Virtual_String (F.Display_Base_Name);
    end File_Name;
 
    ------------------
@@ -53,19 +63,19 @@ package body GNATdoc.Messages is
 
    procedure Report_Error
      (Location : GNATdoc.Entities.Entity_Location;
-      Message  : VSS.Strings.Virtual_String) is
+      Message  : VSS.Strings.Virtual_String)
+   is
+      Template : Virtual_String_Template := "{}:{}:{}: {}";
+
    begin
       Put_Line
         (Standard_Error,
-         File_Name (Location.File)
-         & ':'
-         & Trim (VSS.Strings.Line_Count'Wide_Wide_Image (Location.Line), Both)
-         & ':'
-         & Trim
-           (VSS.Strings.Character_Count'Wide_Wide_Image (Location.Column),
-            Both)
-         & ": "
-         & To_Wide_Wide_String (Message));
+         To_Wide_Wide_String
+           (Template.Format
+                (Image (File_Name (Location.File)),
+                 Image (Location.Line),
+                 Image (Location.Column),
+                 Image (Message))));
    end Report_Error;
 
    ---------------------------
@@ -102,19 +112,19 @@ package body GNATdoc.Messages is
 
    procedure Report_Warning
      (Location : GNATdoc.Entities.Entity_Location;
-      Message  : VSS.Strings.Virtual_String) is
+      Message  : VSS.Strings.Virtual_String)
+   is
+      Template : Virtual_String_Template := "{}:{}:{}: warning: {}";
+
    begin
       Put_Line
         (Standard_Error,
-         File_Name (Location.File)
-         & ':'
-         & Trim (VSS.Strings.Line_Count'Wide_Wide_Image (Location.Line), Both)
-         & ':'
-         & Trim
-           (VSS.Strings.Character_Count'Wide_Wide_Image (Location.Column),
-            Both)
-         & ": warning: "
-         & To_Wide_Wide_String (Message));
+         To_Wide_Wide_String
+           (Template.Format
+                (Image (File_Name (Location.File)),
+                 Image (Location.Line),
+                 Image (Location.Column),
+                 Image (Message))));
    end Report_Warning;
 
 end GNATdoc.Messages;
