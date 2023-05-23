@@ -15,8 +15,6 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with Ada.Wide_Wide_Text_IO;
-
 with GNATCOLL.VFS;
 
 with VSS.Strings.Conversions;
@@ -24,10 +22,10 @@ with VSS.Strings.Formatters.Generic_Integers;
 with VSS.Strings.Formatters.Strings;
 with VSS.Strings.Templates;
 with VSS.String_Vectors;
+with VSS.Text_Streams.Standards;
 
 package body GNATdoc.Messages is
 
-   use Ada.Wide_Wide_Text_IO;
    use VSS.Strings.Conversions;
    use VSS.Strings.Formatters.Strings;
    use VSS.Strings.Templates;
@@ -66,16 +64,18 @@ package body GNATdoc.Messages is
       Message  : VSS.Strings.Virtual_String)
    is
       Template : Virtual_String_Template := "{}:{}:{}: {}";
+      Success  : Boolean := True;
+      Stream   : VSS.Text_Streams.Output_Text_Stream'Class
+        renames VSS.Text_Streams.Standards.Standard_Error;
 
    begin
-      Put_Line
-        (Standard_Error,
-         To_Wide_Wide_String
-           (Template.Format
-                (Image (File_Name (Location.File)),
-                 Image (Location.Line),
-                 Image (Location.Column),
-                 Image (Message))));
+      Stream.Put_Line
+        (Template.Format
+           (Image (File_Name (Location.File)),
+            Image (Location.Line),
+            Image (Location.Column),
+            Image (Message)),
+        Success);
    end Report_Error;
 
    ---------------------------
@@ -115,16 +115,18 @@ package body GNATdoc.Messages is
       Message  : VSS.Strings.Virtual_String)
    is
       Template : Virtual_String_Template := "{}:{}:{}: warning: {}";
+      Success  : Boolean := True;
+      Stream   : VSS.Text_Streams.Output_Text_Stream'Class
+        renames VSS.Text_Streams.Standards.Standard_Error;
 
    begin
-      Put_Line
-        (Standard_Error,
-         To_Wide_Wide_String
-           (Template.Format
-                (Image (File_Name (Location.File)),
-                 Image (Location.Line),
-                 Image (Location.Column),
-                 Image (Message))));
+      Stream.Put_Line
+        (Template.Format
+           (Image (File_Name (Location.File)),
+            Image (Location.Line),
+            Image (Location.Column),
+            Image (Message)),
+        Success);
    end Report_Warning;
 
 end GNATdoc.Messages;
