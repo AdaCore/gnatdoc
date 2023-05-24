@@ -56,13 +56,13 @@ stages:
     fi
 
 .checkout-subproject:
-  #  Version 1.
+  #  Version 1.1
   #  Input variables:
   #    ACI_SUBPROJECTS_ROOT  - root directory to checkout repositories.
   #    ACI_SUBPROJECT_REPOSITORY_URL_PATH - path component of the repository's URL.
   #    ACI_SUBPROJECT_NAME - name of the directory for subproject.
   - |
-    git -C $ACI_SUBPROJECTS_ROOT clone $GIT_CLONE_BASE/$ACI_SUBPROJECT_REPOSITORY_URL_PATH $ACI_SUBPROJECT_NAME
+    git -C $ACI_SUBPROJECTS_ROOT clone --depth=20 --no-single-branch $GIT_CLONE_BASE/$ACI_SUBPROJECT_REPOSITORY_URL_PATH $ACI_SUBPROJECT_NAME
     if `git -C $ACI_SUBPROJECTS_ROOT -C $ACI_SUBPROJECT_NAME show-ref $ACI_SOURCE_BRANCH > /dev/null`; then
       git -C $ACI_SUBPROJECTS_ROOT -C $ACI_SUBPROJECT_NAME checkout $ACI_SOURCE_BRANCH;
     elif `git -C $ACI_SUBPROJECTS_ROOT -C $ACI_SUBPROJECT_NAME show-ref $ACI_TARGET_BRANCH > /dev/null`; then
