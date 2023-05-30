@@ -29,6 +29,7 @@ with VSS.HTML.Writers;
 with VSS.Strings.Conversions;
 with VSS.String_Vectors;
 with VSS.XML.Templates.Processors;
+with VSS.XML.Templates.Proxies.Booleans;
 with VSS.XML.Templates.Proxies.Strings;
 with VSS.XML.XmlAda_Readers;
 
@@ -488,6 +489,14 @@ package body GNATdoc.Backend.HTML is
            (Path,
             new Proxies.Entity_Information_Proxy'
               (Entity => Entity, Nested => Nested));
+
+         Path.Clear;
+         Path.Append ("gnatdoc");
+         Path.Append ("oop_mode");
+         Filter.Bind
+           (Path,
+            new VSS.XML.Templates.Proxies.Booleans.Boolean_Proxy'
+              (Value => Self.OOP_Mode));
 
          --  Process template
 
