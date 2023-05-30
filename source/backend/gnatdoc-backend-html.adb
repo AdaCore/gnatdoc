@@ -48,6 +48,12 @@ package body GNATdoc.Backend.HTML is
    procedure Generate_Unit_Documentation_Page
      (Self   : in out HTML_Backend'Class;
       Entity : not null Entity_Information_Access);
+   --  Generate unit-style documentation page for given entity.
+
+   procedure Generate_Class_Documentation_Page
+     (Self   : in out HTML_Backend'Class;
+      Entity : not null Entity_Information_Access);
+   --  Generate class-style documentation page for given entity.
 
    package Proxies is
 
@@ -420,10 +426,94 @@ package body GNATdoc.Backend.HTML is
 
       if Self.OOP_Mode then
          for Item of Class_Index_Entities loop
-            Self.Generate_Unit_Documentation_Page (Item);
+            Self.Generate_Class_Documentation_Page (Item);
          end loop;
       end if;
    end Generate;
+
+   ---------------------------------------
+   -- Generate_Class_Documentation_Page --
+   ---------------------------------------
+
+   procedure Generate_Class_Documentation_Page
+     (Self   : in out HTML_Backend'Class;
+      Entity : not null Entity_Information_Access)
+   is
+      Name : constant String :=
+        Digest (To_UTF_8_String (Entity.Signature)) & ".html";
+
+   begin
+      declare
+         Input  : Input_Sources.File.File_Input;
+         Reader : VSS.XML.XmlAda_Readers.XmlAda_Reader;
+         Filter : aliased VSS.XML.Templates.Processors.XML_Template_Processor;
+         Writer : aliased VSS.HTML.Writers.HTML5_Writer;
+         Output : aliased Streams.Output_Text_Stream;
+         Nested : Entity_Information_Sets.Set;
+         Path   : VSS.String_Vectors.Virtual_String_Vector;
+
+      begin
+         Nested.Union (Entity.Formals);
+         Nested.Union (Entity.Exceptions);
+         Nested.Union (Entity.Simple_Types);
+         Nested.Union (Entity.Array_Types);
+         Nested.Union (Entity.Record_Types);
+         Nested.Union (Entity.Interface_Types);
+         Nested.Union (Entity.Tagged_Types);
+         Nested.Union (Entity.Access_Types);
+         Nested.Union (Entity.Subtypes);
+         Nested.Union (Entity.Constants);
+         Nested.Union (Entity.Variables);
+         Nested.Union (Entity.Subprograms);
+         Nested.Union (Entity.Entries);
+         Nested.Union (Entity.Generic_Instantiations);
+
+         --  Open input and output files.
+
+         Path.Clear;
+         Path.Append ("template");
+         Path.Append ("class.xhtml");
+         Input_Sources.File.Open
+           (String (Self.Lookup_Resource_File (Path).Full_Name.all),
+            Input);
+         Output.Open
+           (GNATCOLL.VFS.Create_From_Dir
+              (Self.Output_Root, Filesystem_String (Name)));
+
+         --  Connect components
+
+         Writer.Set_Output_Stream (Output'Unchecked_Access);
+         Filter.Set_Content_Handler (Writer'Unchecked_Access);
+         Reader.Set_Content_Handler (Filter'Unchecked_Access);
+
+         --  Bind information
+
+         Path.Clear;
+         Path.Append ("gnatdoc");
+         Path.Append ("entity");
+         Filter.Bind
+           (Path,
+            new Proxies.Entity_Information_Proxy'
+              (Entity => Entity, Nested => Nested));
+
+         Path.Clear;
+         Path.Append ("gnatdoc");
+         Path.Append ("oop_mode");
+         Filter.Bind
+           (Path,
+            new VSS.XML.Templates.Proxies.Booleans.Boolean_Proxy'
+              (Value => Self.OOP_Mode));
+
+         --  Process template
+
+         Reader.Parse (Input);
+
+         --  Close input and output files.
+
+         Input.Close;
+         Output.Close;
+      end;
+   end Generate_Class_Documentation_Page;
 
    --------------------------------------
    -- Generate_Unit_Documentation_Page --

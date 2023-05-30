@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html class='main' xmlns="http://www.w3.org/1999/xhtml" xmlns:tal="http://xml.adacore.com/namespaces/tal">
+  <head>
+    <link rel='stylesheet' href='gnatdoc.css'/>
+  </head>
+  <body class='content'>
+    <h1 tal:content='gnatdoc/entity/qualified_name'>Entity Name</h1>
+    <h2>Entities</h2>
+
+          <!--
+    <div tal:omit-tag='' tal:condition='item/documentation/fields'>
+      <h5>Record fields</h5>
+      <dl>
+        <div tal:omit-tag='' tal:repeat='formal item/documentation/fields'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </div>
+      </dl>
+    </div>
+
+    <div tal:omit-tag="" tal:condition="gnatdoc/entity/subprograms">
+      <h3>Subprograms</h3>
+      <ul>
+        <li tal:repeat='item gnatdoc/entity/subprograms'>
+          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        </li>
+      </ul>
+    </div>
+          -->
+
+    <h2>Description</h2>
+    <div tal:omit-tag='' tal:content='gnatdoc/entity/documentation/description'>Description of the entity</div>
+
+          <!--
+    <div tal:omit-tag='' tal:condition='gnatdoc/entity/documentation/fields'>
+      <h5>Record fields</h5>
+      <dl>
+        <div tal:omit-tag='' tal:repeat='component gnatdoc/entity/documentation/fields'>
+          <a href='#' tal:attributes='href component/local_href' tal:content='component/name'/>
+          <dt tal:content='component/name'>Name of the field</dt>
+          <dd tal:content='component/description'>Description of the field</dd>
+        </div>
+      </dl>
+    </div>
+          -->
+
+      <!--
+    <div tal:omit-tag='' tal:repeat='item gnatdoc/entity/all'>
+      <h4 tal:content='item/name' tal:attributes='id item/id'>Entity Name</h4>
+      <pre class='ada-code-snippet'><code xml:space='preserve' tal:content='item/code'>Source code of the entity declaration</code></pre>
+      <div tal:omit-tag='' tal:content='item/documentation/description'>Description of the entity</div>
+
+      <div tal:omit-tag='' tal:condition='item/documentation/parameters'>
+        <h5>Parameters</h5>
+        <dl>
+          <div tal:omit-tag='' tal:repeat='parameter item/documentation/parameters'>
+            <dt tal:content='parameter/name'>Name of the parameter</dt>
+            <dd tal:content='parameter/description'>Description of the parameter</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div tal:omit-tag='' tal:condition='item/documentation/returns'>
+        <h5>Return Value</h5>
+        <dl>
+          <div tal:omit-tag='' tal:repeat='return item/documentation/returns'>
+            <dd tal:content='return/description'>Description of the return value</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div tal:omit-tag='' tal:condition='item/documentation/exceptions'>
+        <h5>Raised exceptions</h5>
+        <dl>
+          <div tal:omit-tag='' tal:repeat='exception item/documentation/exceptions'>
+            <dt tal:content='exception/name'>name of the exception</dt>
+            <dd tal:content='exception/description'>description of the exception</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+      -->
+  </body>
+</html>
