@@ -830,7 +830,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Kind           => GNATdoc.Entities.Ada_Tagged_Type,
+           Location       => Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1051,7 +1052,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Kind           => GNATdoc.Entities.Ada_Interface_Type,
+           Location       => Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),

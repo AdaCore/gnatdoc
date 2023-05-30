@@ -242,6 +242,16 @@ package body GNATdoc.Backend.HTML is
               VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
                 (Text => "#" & Digest (Self.Entity.Signature));
 
+         elsif Name = "is_interface_type" then
+            return
+              VSS.XML.Templates.Proxies.Booleans.Boolean_Proxy'
+                (Value => Self.Entity.Kind = Ada_Interface_Type);
+
+         elsif Name = "is_tagged_type" then
+            return
+              VSS.XML.Templates.Proxies.Booleans.Boolean_Proxy'
+                (Value => Self.Entity.Kind = Ada_Tagged_Type);
+
          else
             return
               VSS.XML.Templates.Proxies.Error_Proxy'

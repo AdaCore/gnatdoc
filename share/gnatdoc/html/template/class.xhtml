@@ -4,7 +4,11 @@
     <link rel='stylesheet' href='gnatdoc.css'/>
   </head>
   <body class='content'>
-    <h1 tal:content='gnatdoc/entity/qualified_name'>Entity Name</h1>
+    <header>
+      <h1 tal:condition='gnatdoc/entity/is_tagged_type'>Tagged Type <span tal:omit-tag='' tal:content='gnatdoc/entity/name'>NAME</span></h1>
+      <h1 tal:condition='gnatdoc/entity/is_interface_type'>Interface Type <span tal:omit-tag='' tal:content='gnatdoc/entity/name'>NAME</span></h1>
+    </header>
+
     <h2>Entities</h2>
 
           <!--
