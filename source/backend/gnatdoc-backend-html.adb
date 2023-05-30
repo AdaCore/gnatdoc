@@ -312,8 +312,9 @@ package body GNATdoc.Backend.HTML is
    --------------
 
    overriding procedure Generate (Self : in out HTML_Backend) is
-      Index_Entities     : aliased Entity_Information_Sets.Set;
-      Non_Index_Entities : aliased Entity_Information_Sets.Set;
+      Index_Entities       : aliased Entity_Information_Sets.Set;
+      Non_Index_Entities   : aliased Entity_Information_Sets.Set;
+      Class_Index_Entities : aliased Entity_Information_Sets.Set;
 
    begin
       for Item of Globals.Packages loop
@@ -344,6 +345,14 @@ package body GNATdoc.Backend.HTML is
          if not Is_Private_Entity (Item) then
             Non_Index_Entities.Insert (Item);
          end if;
+      end loop;
+
+      for Item of Globals.Interface_Types loop
+         Class_Index_Entities.Insert (Item);
+      end loop;
+
+      for Item of Globals.Tagged_Types loop
+         Class_Index_Entities.Insert (Item);
       end loop;
 
       declare
@@ -382,6 +391,14 @@ package body GNATdoc.Backend.HTML is
             new Proxies.Entity_Information_Set_Proxy'
               (Index_Entities => Index_Entities'Unchecked_Access));
 
+         Path.Clear;
+         Path.Append ("gnatdoc");
+         Path.Append ("classes_toc");
+         Filter.Bind
+           (Path,
+            new Proxies.Entity_Information_Set_Proxy'
+              (Index_Entities => Class_Index_Entities'Unchecked_Access));
+
          --  Process template
 
          Reader.Parse (Input);
@@ -399,6 +416,12 @@ package body GNATdoc.Backend.HTML is
       for Item of Non_Index_Entities loop
          Self.Generate_Entity_Documentation_Page (Item);
       end loop;
+
+      if Self.OOP_Mode then
+         for Item of Class_Index_Entities loop
+            Self.Generate_Entity_Documentation_Page (Item);
+         end loop;
+      end if;
    end Generate;
 
    ----------------------------------------

@@ -842,6 +842,7 @@ package body GNATdoc.Frontend is
         or not Node.F_Type_Def.As_Derived_Type_Def.F_Record_Extension.Is_Null
       then
          Enclosing.Tagged_Types.Insert (Entity);
+         GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
 
       else
          Enclosing.Simple_Types.Insert (Entity);
@@ -1059,6 +1060,7 @@ package body GNATdoc.Frontend is
 
    begin
       Enclosing.Interface_Types.Insert (Entity);
+      GNATdoc.Entities.Globals.Interface_Types.Insert (Entity);
       Check_Undocumented (Entity);
    end Process_Interface_Type_Def;
 

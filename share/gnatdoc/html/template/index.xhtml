@@ -5,8 +5,15 @@
   </head>
   <body class='main'>
     <div class='side-navigation'>
+      <h2>Compilation Units</h2>
       <ul>
         <li tal:repeat='item gnatdoc/toc'>
+          <a href='error.html' target='document-content' tal:content='item/qualified_name' tal:attributes='href item/full_href'/>
+        </li>
+      </ul>
+      <h2>Tagged types</h2>
+      <ul>
+        <li tal:repeat='item gnatdoc/classes_toc'>
           <a href='error.html' target='document-content' tal:content='item/qualified_name' tal:attributes='href item/full_href'/>
         </li>
       </ul>
