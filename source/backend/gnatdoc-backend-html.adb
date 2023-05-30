@@ -44,7 +44,7 @@ package body GNATdoc.Backend.HTML is
    use GNATdoc.Entities;
    use VSS.Strings.Conversions;
 
-   procedure Generate_Entity_Documentation_Page
+   procedure Generate_Unit_Documentation_Page
      (Self   : in out HTML_Backend'Class;
       Entity : not null Entity_Information_Access);
 
@@ -410,25 +410,25 @@ package body GNATdoc.Backend.HTML is
       end;
 
       for Item of Index_Entities loop
-         Self.Generate_Entity_Documentation_Page (Item);
+         Self.Generate_Unit_Documentation_Page (Item);
       end loop;
 
       for Item of Non_Index_Entities loop
-         Self.Generate_Entity_Documentation_Page (Item);
+         Self.Generate_Unit_Documentation_Page (Item);
       end loop;
 
       if Self.OOP_Mode then
          for Item of Class_Index_Entities loop
-            Self.Generate_Entity_Documentation_Page (Item);
+            Self.Generate_Unit_Documentation_Page (Item);
          end loop;
       end if;
    end Generate;
 
-   ----------------------------------------
-   -- Generate_Entity_Documentation_Page --
-   ----------------------------------------
+   --------------------------------------
+   -- Generate_Unit_Documentation_Page --
+   --------------------------------------
 
-   procedure Generate_Entity_Documentation_Page
+   procedure Generate_Unit_Documentation_Page
      (Self   : in out HTML_Backend'Class;
       Entity : not null Entity_Information_Access)
    is
@@ -465,7 +465,7 @@ package body GNATdoc.Backend.HTML is
 
          Path.Clear;
          Path.Append ("template");
-         Path.Append ("doc.xhtml");
+         Path.Append ("unit.xhtml");
          Input_Sources.File.Open
            (String (Self.Lookup_Resource_File (Path).Full_Name.all),
             Input);
@@ -498,7 +498,7 @@ package body GNATdoc.Backend.HTML is
          Input.Close;
          Output.Close;
       end;
-   end Generate_Entity_Documentation_Page;
+   end Generate_Unit_Documentation_Page;
 
    ----------------
    -- Initialize --
