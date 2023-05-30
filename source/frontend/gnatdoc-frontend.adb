@@ -828,6 +828,8 @@ package body GNATdoc.Frontend is
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
    is
       Name   : constant Defining_Name := Node.F_Name;
+      Def    : constant Derived_Type_Def :=
+        Node.F_Type_Def.As_Derived_Type_Def;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
           (Kind           => GNATdoc.Entities.Ada_Tagged_Type,
@@ -839,11 +841,38 @@ package body GNATdoc.Frontend is
            others         => <>);
 
    begin
-      if Node.F_Type_Def.As_Derived_Type_Def.F_Has_With_Private
-        or not Node.F_Type_Def.As_Derived_Type_Def.F_Record_Extension.Is_Null
-      then
+      if Def.F_Has_With_Private or not Def.F_Record_Extension.Is_Null then
          Enclosing.Tagged_Types.Insert (Entity);
          GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
+         GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+
+         declare
+            Parent_Decl : constant Type_Decl :=
+              Def.F_Subtype_Indication.F_Name.P_Referenced_Decl.As_Type_Decl;
+            Parent_Def  : Type_Def;
+
+         begin
+            case Parent_Decl.Kind is
+               when Ada_Formal_Type_Decl =>
+                  null;
+
+               when Ada_Concrete_Type_Decl =>
+                  Parent_Def := Parent_Decl.As_Concrete_Type_Decl.F_Type_Def;
+
+                  if Parent_Def.Kind in Ada_Interface_Kind then
+                     Def.F_Subtype_Indication.F_Name.P_Referenced_Decl.Print;
+
+                  else
+                     Entity.Parent_Type :=
+                       (VSS.Strings.To_Virtual_String
+                          (Parent_Decl.F_Name.P_Fully_Qualified_Name),
+                        Signature (Parent_Decl.F_Name));
+                  end if;
+
+               when others =>
+                  raise Program_Error;
+            end case;
+         end;
 
       else
          Enclosing.Simple_Types.Insert (Entity);
@@ -1063,6 +1092,7 @@ package body GNATdoc.Frontend is
    begin
       Enclosing.Interface_Types.Insert (Entity);
       GNATdoc.Entities.Globals.Interface_Types.Insert (Entity);
+      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Check_Undocumented (Entity);
    end Process_Interface_Type_Def;
 

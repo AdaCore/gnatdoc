@@ -91,6 +91,17 @@ package body GNATdoc.Backend.HTML is
 
       use type VSS.Strings.Virtual_String;
 
+      type Entity_Reference_Proxy is
+        limited new VSS.XML.Templates.Proxies.Abstract_Composite_Proxy with
+      record
+         Entity : Entity_Reference;
+      end record;
+
+      overriding function Component
+        (Self : in out Entity_Reference_Proxy;
+         Name : VSS.Strings.Virtual_String)
+         return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
+
       type TOC_Iterator is
         limited new VSS.XML.Templates.Proxies.Abstract_Proxy
           and VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator
@@ -242,6 +253,11 @@ package body GNATdoc.Backend.HTML is
               VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
                 (Text => "#" & Digest (Self.Entity.Signature));
 
+         elsif Name = "is_documented" then
+            return
+              VSS.XML.Templates.Proxies.Booleans.Boolean_Proxy'
+                (Value => True);
+
          elsif Name = "is_interface_type" then
             return
               VSS.XML.Templates.Proxies.Booleans.Boolean_Proxy'
@@ -252,11 +268,57 @@ package body GNATdoc.Backend.HTML is
               VSS.XML.Templates.Proxies.Booleans.Boolean_Proxy'
                 (Value => Self.Entity.Kind = Ada_Tagged_Type);
 
-         else
-            return
-              VSS.XML.Templates.Proxies.Error_Proxy'
-                (Message => "unknown component '" & Name & "'");
+         elsif Name = "parent_type" then
+            if GNATdoc.Entities.To_Entity.Contains
+                 (Self.Entity.Parent_Type.Signature)
+            then
+               return
+                 Entity_Information_Proxy'
+                   (Entity =>
+                      GNATdoc.Entities.To_Entity
+                        (Self.Entity.Parent_Type.Signature),
+                    others => <>);
+
+            elsif not Self.Entity.Parent_Type.Signature.Is_Empty then
+               return
+                 Entity_Reference_Proxy'(Entity => Self.Entity.Parent_Type);
+            end if;
+
          end if;
+
+         return
+           VSS.XML.Templates.Proxies.Error_Proxy'
+             (Message => "unknown component '" & Name & "'");
+      end Component;
+
+      ---------------
+      -- Component --
+      ---------------
+
+      overriding function Component
+        (Self : in out Entity_Reference_Proxy;
+         Name : VSS.Strings.Virtual_String)
+         return VSS.XML.Templates.Proxies.Abstract_Proxy'Class is
+      begin
+         if Name = "is_documented" then
+            return
+              VSS.XML.Templates.Proxies.Booleans.Boolean_Proxy'
+                (Value => False);
+
+         elsif Name = "name" then
+            return
+              VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
+                (Text => Self.Entity.Qualified_Name.Split ('.').Last_Element);
+
+         elsif Name = "qualified_name" then
+            return
+              VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
+                (Text => Self.Entity.Qualified_Name);
+         end if;
+
+         return
+           VSS.XML.Templates.Proxies.Error_Proxy'
+             (Message => "unknown component '" & Name & "'");
       end Component;
 
       -------------

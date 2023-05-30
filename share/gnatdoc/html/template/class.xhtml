@@ -9,6 +9,11 @@
       <h1 tal:condition='gnatdoc/entity/is_interface_type'>Interface Type <span tal:omit-tag='' tal:content='gnatdoc/entity/name'>NAME</span></h1>
     </header>
 
+    <p tal:condition='exists:gnatdoc/entity/parent_type' xml:space='preserve'>Parent type:
+      <a tal:condition='gnatdoc/entity/parent_type/is_documented' tal:attributes='href gnatdoc/entity/parent_type/full_href' tal:content='gnatdoc/entity/parent_type/name'>PARENT TYPE NAME</a>
+      <span tal:condition='not:gnatdoc/entity/parent_type/is_documented' tal:content='gnatdoc/entity/parent_type/name'>PARENT TYPE NAME</span>
+    </p>
+
     <h2>Entities</h2>
 
           <!--

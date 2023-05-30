@@ -55,6 +55,11 @@ package GNATdoc.Entities is
         VSS.Strings.Hash,
         VSS.Strings."=");
 
+   type Entity_Reference is record
+      Qualified_Name : VSS.Strings.Virtual_String;
+      Signature      : VSS.Strings.Virtual_String;
+   end record;
+
    type Entity_Information is record
       Location               : Entity_Location;
       Kind                   : Entity_Kind := Undefined;
@@ -117,6 +122,8 @@ package GNATdoc.Entities is
       --  Protected_Objects : EInfo_List.Vector;  +++
       --  Entries           : EInfo_List.Vector;  +++
 
+      Parent_Type            : Entity_Reference;
+      --  Reference to parent tagged type.
    end record;
 
    Globals   : aliased Entity_Information;
