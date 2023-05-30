@@ -849,6 +849,8 @@ package body GNATdoc.Frontend is
          declare
             Parent_Decl : constant Type_Decl :=
               Def.F_Subtype_Indication.F_Name.P_Referenced_Decl.As_Type_Decl;
+            Parent_Name : constant Defining_Name :=
+              Def.F_Subtype_Indication.F_Name.P_Referenced_Defining_Name;
             Parent_Def  : Type_Def;
 
          begin
@@ -859,20 +861,37 @@ package body GNATdoc.Frontend is
                when Ada_Concrete_Type_Decl =>
                   Parent_Def := Parent_Decl.As_Concrete_Type_Decl.F_Type_Def;
 
-                  if Parent_Def.Kind in Ada_Interface_Kind then
-                     Def.F_Subtype_Indication.F_Name.P_Referenced_Decl.Print;
+                  case Parent_Def.Kind is
+                     when Ada_Interface_Type_Def =>
+                        Entity.Progenitor_Types.Insert
+                          ((VSS.Strings.To_Virtual_String
+                             (Parent_Name.P_Fully_Qualified_Name),
+                           Signature (Parent_Name)));
 
-                  else
-                     Entity.Parent_Type :=
-                       (VSS.Strings.To_Virtual_String
-                          (Parent_Decl.F_Name.P_Fully_Qualified_Name),
-                        Signature (Parent_Decl.F_Name));
-                  end if;
+                     when Ada_Derived_Type_Def
+                        | Ada_Private_Type_Def
+                        | Ada_Record_Type_Def
+                     =>
+                        Entity.Parent_Type :=
+                          (VSS.Strings.To_Virtual_String
+                             (Parent_Name.P_Fully_Qualified_Name),
+                           Signature (Parent_Name));
+
+                     when others =>
+                        raise Program_Error;
+                  end case;
 
                when others =>
                   raise Program_Error;
             end case;
          end;
+
+         for Item of Def.F_Interfaces loop
+            Entity.Progenitor_Types.Insert
+              ((VSS.Strings.To_Virtual_String
+               (Item.P_Referenced_Defining_Name.P_Fully_Qualified_Name),
+               Signature (Item.P_Referenced_Defining_Name)));
+         end loop;
 
       else
          Enclosing.Simple_Types.Insert (Entity);
@@ -1079,6 +1098,8 @@ package body GNATdoc.Frontend is
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
    is
       Name   : constant Defining_Name := Node.F_Name;
+      Def    : constant Interface_Type_Def :=
+        Node.F_Type_Def.As_Interface_Type_Def;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
           (Kind           => GNATdoc.Entities.Ada_Interface_Type,
@@ -1093,6 +1114,14 @@ package body GNATdoc.Frontend is
       Enclosing.Interface_Types.Insert (Entity);
       GNATdoc.Entities.Globals.Interface_Types.Insert (Entity);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+
+      for Item of Def.F_Interfaces loop
+         Entity.Progenitor_Types.Insert
+           ((VSS.Strings.To_Virtual_String
+            (Item.P_Referenced_Defining_Name.P_Fully_Qualified_Name),
+            Signature (Item.P_Referenced_Defining_Name)));
+      end loop;
+
       Check_Undocumented (Entity);
    end Process_Interface_Type_Def;
 

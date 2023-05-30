@@ -116,6 +116,33 @@ package body GNATdoc.Backend.HTML is
         (Self : in out TOC_Iterator)
          return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
 
+      type Entity_Reference_Set_Proxy is
+        new VSS.XML.Templates.Proxies.Abstract_Iterable_Proxy with record
+         Entities : not null access Entity_Reference_Sets.Set;
+      end record;
+
+      overriding function Iterator
+        (Self : in out Entity_Reference_Set_Proxy)
+         return VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator'Class;
+
+      overriding function Is_Empty
+        (Self : Entity_Reference_Set_Proxy) return Boolean;
+
+      type Entity_Reference_Set_Iterator is
+        limited new VSS.XML.Templates.Proxies.Abstract_Proxy
+          and VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator
+      with record
+         Entities : not null access Entity_Reference_Sets.Set;
+         Position : Entity_Reference_Sets.Cursor;
+      end record;
+
+      overriding function Next
+        (Self : in out Entity_Reference_Set_Iterator) return Boolean;
+
+      overriding function Element
+        (Self : in out Entity_Reference_Set_Iterator)
+         return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
+
       function Digest
         (Item : VSS.Strings.Virtual_String) return VSS.Strings.Virtual_String;
 
@@ -284,6 +311,12 @@ package body GNATdoc.Backend.HTML is
                  Entity_Reference_Proxy'(Entity => Self.Entity.Parent_Type);
             end if;
 
+         elsif Name = "progenitor_types" then
+            if not Self.Entity.Progenitor_Types.Is_Empty then
+               return
+                 Entity_Reference_Set_Proxy'
+                   (Entities => Self.Entity.Progenitor_Types'Unchecked_Access);
+            end if;
          end if;
 
          return
@@ -335,6 +368,36 @@ package body GNATdoc.Backend.HTML is
               Nested => <>);
       end Element;
 
+      -------------
+      -- Element --
+      -------------
+
+      overriding function Element
+        (Self : in out Entity_Reference_Set_Iterator)
+         return VSS.XML.Templates.Proxies.Abstract_Proxy'Class is
+      begin
+         if GNATdoc.Entities.To_Entity.Contains
+           (Entity_Reference_Sets.Element (Self.Position).Signature)
+         then
+            return
+              Entity_Information_Proxy'
+                (Entity =>
+                   GNATdoc.Entities.To_Entity
+                     (Entity_Reference_Sets.Element (Self.Position).Signature),
+                 others => <>);
+
+         elsif not Entity_Reference_Sets.Element
+                     (Self.Position).Signature.Is_Empty
+         then
+            return
+              Entity_Reference_Proxy'
+                (Entity => Entity_Reference_Sets.Element (Self.Position));
+
+         else
+            raise Program_Error;
+         end if;
+      end Element;
+
       ------------
       -- Digest --
       ------------
@@ -357,6 +420,16 @@ package body GNATdoc.Backend.HTML is
       end Is_Empty;
 
       --------------
+      -- Is_Empty --
+      --------------
+
+      overriding function Is_Empty
+        (Self : Entity_Reference_Set_Proxy) return Boolean is
+      begin
+         return Self.Entities.Is_Empty;
+      end Is_Empty;
+
+      --------------
       -- Iterator --
       --------------
 
@@ -365,6 +438,19 @@ package body GNATdoc.Backend.HTML is
          return VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator'Class is
       begin
          return TOC_Iterator'(Entities => Self.Index_Entities, Position => <>);
+      end Iterator;
+
+      --------------
+      -- Iterator --
+      --------------
+
+      overriding function Iterator
+        (Self : in out Entity_Reference_Set_Proxy)
+         return VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator'Class is
+      begin
+         return
+           Entity_Reference_Set_Iterator'
+             (Entities => Self.Entities, Position => <>);
       end Iterator;
 
       ----------
@@ -382,6 +468,24 @@ package body GNATdoc.Backend.HTML is
          end if;
 
          return Entity_Information_Sets.Has_Element (Self.Position);
+      end Next;
+
+      ----------
+      -- Next --
+      ----------
+
+      overriding function Next
+        (Self : in out Entity_Reference_Set_Iterator) return Boolean is
+      begin
+         if Entity_Reference_Sets.Has_Element (Self.Position) then
+            Entity_Reference_Sets.Next (Self.Position);
+
+         else
+            Self.Position :=
+              Entity_Reference_Sets.First (Self.Entities.all);
+         end if;
+
+         return Entity_Reference_Sets.Has_Element (Self.Position);
       end Next;
 
    end Proxies;

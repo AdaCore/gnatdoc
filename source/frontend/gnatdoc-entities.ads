@@ -60,6 +60,17 @@ package GNATdoc.Entities is
       Signature      : VSS.Strings.Virtual_String;
    end record;
 
+   overriding function "="
+     (Left  : Entity_Reference;
+      Right : Entity_Reference) return Boolean;
+
+   function "<"
+     (Left  : Entity_Reference;
+      Right : Entity_Reference) return Boolean;
+
+   package Entity_Reference_Sets is
+     new Ada.Containers.Ordered_Sets (Entity_Reference);
+
    type Entity_Information is record
       Location               : Entity_Location;
       Kind                   : Entity_Kind := Undefined;
@@ -124,6 +135,9 @@ package GNATdoc.Entities is
 
       Parent_Type            : Entity_Reference;
       --  Reference to parent tagged type.
+
+      Progenitor_Types       : aliased Entity_Reference_Sets.Set;
+      --  References to progenitor types.
    end record;
 
    Globals   : aliased Entity_Information;

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -30,6 +30,34 @@ package body GNATdoc.Entities is
    begin
       return Left.Signature < Right.Signature;
    end "<";
+
+   ---------
+   -- "<" --
+   ---------
+
+   function "<"
+     (Left  : Entity_Reference;
+      Right : Entity_Reference) return Boolean
+   is
+      use type VSS.Strings.Virtual_String;
+
+   begin
+      return Left.Signature < Right.Signature;
+   end "<";
+
+   ---------
+   -- "=" --
+   ---------
+
+   overriding function "="
+     (Left  : Entity_Reference;
+      Right : Entity_Reference) return Boolean
+   is
+      use type VSS.Strings.Virtual_String;
+
+   begin
+      return Left.Signature = Right.Signature;
+   end "=";
 
    ------------------
    -- All_Entities --

@@ -14,6 +14,13 @@
       <span tal:condition='not:gnatdoc/entity/parent_type/is_documented' tal:content='gnatdoc/entity/parent_type/name'>PARENT TYPE NAME</span>
     </p>
 
+    <p tal:condition='exists:gnatdoc/entity/progenitor_types' xml:space='preserve'>Progenitor types:
+      <div tal:omit-tag='' tal:repeat='progenitor gnatdoc/entity/progenitor_types'>
+        <a tal:condition='progenitor/is_documented' tal:attributes='href progenitor/full_href' tal:content='progenitor/name'>PROGENIOTOR TYPE NAME</a>
+        <span tal:condition='not:progenitor/is_documented' tal:content='progenitor/name'>PROGENITOR TYPE NAME</span>
+      </div>
+    </p>
+
     <h2>Entities</h2>
 
           <!--
