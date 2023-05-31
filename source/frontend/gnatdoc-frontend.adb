@@ -457,7 +457,7 @@ package body GNATdoc.Frontend is
                   | Ada_Pragma_Node
                   | Ada_Subtype_Decl
                   | Ada_Use_Type_Clause
-                  =>
+               =>
                   return Over;
 
                when Ada_Generic_Subp_Instantiation =>
@@ -466,10 +466,11 @@ package body GNATdoc.Frontend is
                   return Over;
 
                when Ada_Abstract_Subp_Decl
+                  | Ada_Expr_Function
                   | Ada_Null_Subp_Decl
                   | Ada_Subp_Decl
                   | Ada_Subp_Renaming_Decl
-                  =>
+               =>
                   null;
 
                when others =>
