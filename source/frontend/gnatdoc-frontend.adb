@@ -1320,7 +1320,10 @@ package body GNATdoc.Frontend is
 
    begin
       if Node.F_Type_Def.As_Private_Type_Def.F_Has_Tagged then
+         Entity.Kind := GNATdoc.Entities.Ada_Tagged_Type;
          Enclosing.Tagged_Types.Insert (Entity);
+         GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
+         GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
       else
          Enclosing.Simple_Types.Insert (Entity);
