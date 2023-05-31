@@ -84,6 +84,11 @@ package GNATdoc.Entities is
       Is_Private             : Boolean := False;
       --  Private entities are excluded from the documentartion.
 
+      Is_Method              : Boolean := False;
+      --  True means that this subprogram is a "method" of some tagged type,
+      --  thus, it should be documented in "class" documentation; otherwise,
+      --  it is documented in "unit" documentation.
+
       RST_Profile            : VSS.Strings.Virtual_String;
       --  Subprogram's profile in fortmat to use by RST backend
 

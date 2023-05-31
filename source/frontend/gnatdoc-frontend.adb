@@ -190,6 +190,9 @@ package body GNATdoc.Frontend is
      (Node : Libadalang.Analysis.Subp_Spec'Class)
       return VSS.Strings.Virtual_String;
 
+   Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
+   --  All methods was found during processing of compilation units.
+
    ------------------------
    -- Check_Undocumented --
    ------------------------
@@ -310,6 +313,19 @@ package body GNATdoc.Frontend is
          Line   => VSS.Strings.Line_Count (Aux.Start_Line),
          Column => VSS.Strings.Character_Count (Aux.Start_Column));
    end Location;
+
+   -----------------
+   -- Postprocess --
+   -----------------
+
+   procedure Postprocess is
+   begin
+      for Method of Methods loop
+         if GNATdoc.Entities.To_Entity.Contains (Method.Signature) then
+            GNATdoc.Entities.To_Entity (Method.Signature).Is_Method := True;
+         end if;
+      end loop;
+   end Postprocess;
 
    -----------------------------
    -- Process_Access_Type_Def --
@@ -752,10 +768,14 @@ package body GNATdoc.Frontend is
 
    begin
       for Subprogram of Primitives loop
+         Methods.Include
+           ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
+             Signature (Subprogram.P_Defining_Name)));
+
          if Node.P_Is_Inherited_Primitive (Subprogram) then
             Entity.Dispatching_Inherited.Insert
               ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
-               Signature (Subprogram.P_Defining_Name)));
+                Signature (Subprogram.P_Defining_Name)));
 
          else
             declare
@@ -765,12 +785,12 @@ package body GNATdoc.Frontend is
                if Decls'Length > 1 then
                   Entity.Dispatching_Overrided.Insert
                     ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
-                     Signature (Subprogram.P_Defining_Name)));
+                      Signature (Subprogram.P_Defining_Name)));
 
                else
                   Entity.Dispatching_Declared.Insert
                     ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
-                     Signature (Subprogram.P_Defining_Name)));
+                      Signature (Subprogram.P_Defining_Name)));
                end if;
             end;
          end if;

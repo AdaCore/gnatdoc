@@ -52,6 +52,7 @@ begin
 
    GNATdoc.Projects.Process_Compilation_Units
      (GNATdoc.Frontend.Process_Compilation_Unit'Access);
+   GNATdoc.Frontend.Postprocess;
 
    --  Generate documentation
 

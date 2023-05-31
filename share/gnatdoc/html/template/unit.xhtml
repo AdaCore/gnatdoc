@@ -56,7 +56,8 @@
       <h3>Interface Types</h3>
       <ul>
         <li tal:repeat='item gnatdoc/entity/interface_types'>
-          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+          <a href='#' tal:condition='not:gnatdoc/oop_mode' tal:attributes='href item/local_href' tal:content='item/name'/>
+          <a href='#' tal:condition='gnatdoc/oop_mode' tal:attributes='href item/full_href' tal:content='item/name'/>
         </li>
       </ul>
     </div>
@@ -65,7 +66,8 @@
       <h3>Tagged Types</h3>
       <ul>
         <li tal:repeat='item gnatdoc/entity/tagged_types'>
-          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+          <a href='#' tal:condition='not:gnatdoc/oop_mode' tal:attributes='href item/local_href' tal:content='item/name'/>
+          <a href='#' tal:condition='gnatdoc/oop_mode' tal:attributes='href item/full_href' tal:content='item/name'/>
         </li>
       </ul>
     </div>
@@ -136,8 +138,8 @@
     <div tal:omit-tag="" tal:condition="gnatdoc/entity/subprograms">
       <h3>Subprograms</h3>
       <ul>
-        <li tal:repeat='item gnatdoc/entity/subprograms'>
-          <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+        <li tal:repeat='subprogram gnatdoc/entity/subprograms'>
+          <a href='#' tal:attributes='href subprogram/local_href' tal:content='subprogram/name'/>
         </li>
       </ul>
     </div>

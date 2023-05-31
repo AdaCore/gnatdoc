@@ -59,7 +59,9 @@ package body GNATdoc.Backend.HTML is
 
       type Entity_Information_Set_Proxy is limited
         new VSS.XML.Templates.Proxies.Abstract_Iterable_Proxy with record
-         Index_Entities : not null access Entity_Information_Sets.Set;
+         Entities  : not null access Entity_Information_Sets.Set;
+         Container : aliased Entity_Information_Sets.Set;
+         OOP_Mode  : Boolean;
       end record;
 
       overriding function Iterator
@@ -72,8 +74,9 @@ package body GNATdoc.Backend.HTML is
       type Entity_Information_Proxy is limited
         new VSS.XML.Templates.Proxies.Abstract_Composite_Proxy
       with record
-         Entity : Entity_Information_Access;
-         Nested : aliased Entity_Information_Sets.Set;
+         Entity   : Entity_Information_Access;
+         Nested   : aliased Entity_Information_Sets.Set;
+         OOP_Mode : Boolean;
       end record;
 
       overriding function Component
@@ -108,6 +111,7 @@ package body GNATdoc.Backend.HTML is
       with record
          Entities : not null access Entity_Information_Sets.Set;
          Position : Entity_Information_Sets.Cursor;
+         OOP_Mode : Boolean;
       end record;
 
       overriding function Next (Self : in out TOC_Iterator) return Boolean;
@@ -157,92 +161,150 @@ package body GNATdoc.Backend.HTML is
          return VSS.XML.Templates.Proxies.Abstract_Proxy'Class is
       begin
          if Name = "all" then
-            return
-              Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Nested'Unchecked_Access);
+            return Result : Entity_Information_Set_Proxy :=
+              (Entities  => Self.Nested'Unchecked_Access,
+               Container => <>,
+               OOP_Mode  => Self.OOP_Mode)
+            do
+               if Self.OOP_Mode then
+                  Result.Entities := Result.Container'Unchecked_Access;
+
+                  for Item of Self.Nested loop
+                     if (Item.Kind not in Ada_Function | Ada_Procedure
+                           or not Item.Is_Method)
+                       and Item.Kind
+                             not in Ada_Tagged_Type | Ada_Interface_Type
+                     then
+                        Result.Container.Insert (Item);
+                     end if;
+                  end loop;
+               end if;
+            end return;
 
          elsif Name = "simple_types" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Simple_Types'Unchecked_Access);
+                (Entities  => Self.Entity.Simple_Types'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "array_types" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Array_Types'Unchecked_Access);
+                (Entities  => Self.Entity.Array_Types'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "record_types" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Record_Types'Unchecked_Access);
+                (Entities  => Self.Entity.Record_Types'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "interface_types" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities =>
-                   Self.Entity.Interface_Types'Unchecked_Access);
+                (Entities  => Self.Entity.Interface_Types'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "tagged_types" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Tagged_Types'Unchecked_Access);
+                (Entities  => Self.Entity.Tagged_Types'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "access_types" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Access_Types'Unchecked_Access);
+                (Entities  => Self.Entity.Access_Types'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "subtypes" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Subtypes'Unchecked_Access);
+                (Entities  => Self.Entity.Subtypes'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "task_types" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Task_Types'Unchecked_Access);
+                (Entities  => Self.Entity.Task_Types'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "protected_types" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities =>
-                   Self.Entity.Protected_Types'Unchecked_Access);
+                (Entities  => Self.Entity.Protected_Types'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "constants" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Constants'Unchecked_Access);
+                (Entities  => Self.Entity.Constants'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "variables" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Variables'Unchecked_Access);
+                (Entities  => Self.Entity.Variables'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "subprograms" then
-            return
-              Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Subprograms'Unchecked_Access);
+            return Result : Entity_Information_Set_Proxy :=
+              (Entities  => Self.Entity.Subprograms'Unchecked_Access,
+               Container => <>,
+               OOP_Mode  => Self.OOP_Mode)
+            do
+               if Self.OOP_Mode then
+                  --  Rebuild list of subprograms by remove of methods.
+
+                  Result.Entities := Result.Container'Unchecked_Access;
+
+                  for Item of Self.Entity.Subprograms loop
+                     if not Item.Is_Method then
+                        Result.Container.Insert (Item);
+                     end if;
+                  end loop;
+               end if;
+            end return;
 
          elsif Name = "entries" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Entries'Unchecked_Access);
+                (Entities => Self.Entity.Entries'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "exceptions" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Exceptions'Unchecked_Access);
+                (Entities => Self.Entity.Exceptions'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "generic_instantiations" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities =>
-                   Self.Entity.Generic_Instantiations'Unchecked_Access);
+                (Entities =>
+                   Self.Entity.Generic_Instantiations'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "formals" then
             return
               Entity_Information_Set_Proxy'
-                (Index_Entities => Self.Entity.Formals'Unchecked_Access);
+                (Entities => Self.Entity.Formals'Unchecked_Access,
+                 Container => <>,
+                 OOP_Mode  => Self.OOP_Mode);
 
          elsif Name = "declared_dispatching_subprograms" then
             return
@@ -328,6 +390,13 @@ package body GNATdoc.Backend.HTML is
               VSS.XML.Templates.Proxies.Booleans.Boolean_Proxy'
                 (Value => Self.Entity.Kind = Ada_Tagged_Type);
 
+         elsif Name = "is_method" then
+            if Self.Entity.Kind in Ada_Function | Ada_Procedure then
+               return
+                 VSS.XML.Templates.Proxies.Booleans.Boolean_Proxy'
+                   (Value => Self.Entity.Is_Method);
+            end if;
+
          elsif Name = "parent_type" then
             if GNATdoc.Entities.To_Entity.Contains
                  (Self.Entity.Parent_Type.Signature)
@@ -398,8 +467,9 @@ package body GNATdoc.Backend.HTML is
       begin
          return
            Entity_Information_Proxy'
-             (Entity => Entity_Information_Sets.Element (Self.Position),
-              Nested => <>);
+             (Entity   => Entity_Information_Sets.Element (Self.Position),
+              Nested   => <>,
+              OOP_Mode => Self.OOP_Mode);
       end Element;
 
       -------------
@@ -450,7 +520,7 @@ package body GNATdoc.Backend.HTML is
       overriding function Is_Empty
         (Self : Entity_Information_Set_Proxy) return Boolean is
       begin
-         return Self.Index_Entities.Is_Empty;
+         return Self.Entities.Is_Empty;
       end Is_Empty;
 
       --------------
@@ -471,7 +541,11 @@ package body GNATdoc.Backend.HTML is
         (Self : in out Entity_Information_Set_Proxy)
          return VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator'Class is
       begin
-         return TOC_Iterator'(Entities => Self.Index_Entities, Position => <>);
+         return
+           TOC_Iterator'
+             (Entities => Self.Entities,
+              Position => <>,
+              OOP_Mode => Self.OOP_Mode);
       end Iterator;
 
       --------------
@@ -606,7 +680,9 @@ package body GNATdoc.Backend.HTML is
          Filter.Bind
            (Path,
             new Proxies.Entity_Information_Set_Proxy'
-              (Index_Entities => Index_Entities'Unchecked_Access));
+              (Entities  => Index_Entities'Unchecked_Access,
+               Container => <>,
+               OOP_Mode  => Self.OOP_Mode));
 
          Path.Clear;
          Path.Append ("gnatdoc");
@@ -614,7 +690,9 @@ package body GNATdoc.Backend.HTML is
          Filter.Bind
            (Path,
             new Proxies.Entity_Information_Set_Proxy'
-              (Index_Entities => Class_Index_Entities'Unchecked_Access));
+              (Entities  => Class_Index_Entities'Unchecked_Access,
+               Container => <>,
+               OOP_Mode  => Self.OOP_Mode));
 
          --  Process template
 
@@ -704,7 +782,9 @@ package body GNATdoc.Backend.HTML is
          Filter.Bind
            (Path,
             new Proxies.Entity_Information_Proxy'
-              (Entity => Entity, Nested => Nested));
+              (Entity   => Entity,
+               Nested   => Nested,
+               OOP_Mode => Self.OOP_Mode));
 
          Path.Clear;
          Path.Append ("gnatdoc");
@@ -788,7 +868,9 @@ package body GNATdoc.Backend.HTML is
          Filter.Bind
            (Path,
             new Proxies.Entity_Information_Proxy'
-              (Entity => Entity, Nested => Nested));
+              (Entity   => Entity,
+               Nested   => Nested,
+               OOP_Mode => Self.OOP_Mode));
 
          Path.Clear;
          Path.Append ("gnatdoc");
