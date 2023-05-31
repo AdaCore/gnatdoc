@@ -119,6 +119,7 @@ package body GNATdoc.Backend.HTML is
       type Entity_Reference_Set_Proxy is
         new VSS.XML.Templates.Proxies.Abstract_Iterable_Proxy with record
          Entities : not null access Entity_Reference_Sets.Set;
+         Nested   : aliased Entity_Reference_Sets.Set;
       end record;
 
       overriding function Iterator
@@ -243,6 +244,38 @@ package body GNATdoc.Backend.HTML is
               Entity_Information_Set_Proxy'
                 (Index_Entities => Self.Entity.Formals'Unchecked_Access);
 
+         elsif Name = "declared_dispatching_subprograms" then
+            return
+              Entity_Reference_Set_Proxy'
+                (Entities =>
+                   Self.Entity.Dispatching_Declared'Unchecked_Access,
+                 Nested   => <>);
+
+         elsif Name = "overrided_dispatching_subprograms" then
+            return
+              Entity_Reference_Set_Proxy'
+                (Entities =>
+                   Self.Entity.Dispatching_Overrided'Unchecked_Access,
+                 Nested   => <>);
+
+         elsif Name = "inherited_dispatching_subprograms" then
+            return
+              Entity_Reference_Set_Proxy'
+                (Entities =>
+                   Self.Entity.Dispatching_Inherited'Unchecked_Access,
+                 Nested   => <>);
+
+         elsif Name = "class_subprograms" then
+            return Result : Entity_Reference_Set_Proxy :=
+                (Entities =>
+                   Self.Entity.Dispatching_Inherited'Unchecked_Access,
+                 Nested   => <>)
+            do
+               Result.Entities := Result.Nested'Unchecked_Access;
+               Result.Nested.Union (Self.Entity.Dispatching_Declared);
+               Result.Nested.Union (Self.Entity.Dispatching_Overrided);
+            end return;
+
          elsif Name = "name" then
             return
               VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
@@ -315,7 +348,8 @@ package body GNATdoc.Backend.HTML is
             if not Self.Entity.Progenitor_Types.Is_Empty then
                return
                  Entity_Reference_Set_Proxy'
-                   (Entities => Self.Entity.Progenitor_Types'Unchecked_Access);
+                   (Entities => Self.Entity.Progenitor_Types'Unchecked_Access,
+                    Nested   => <>);
             end if;
          end if;
 

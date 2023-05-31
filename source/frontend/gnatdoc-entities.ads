@@ -138,6 +138,15 @@ package GNATdoc.Entities is
 
       Progenitor_Types       : aliased Entity_Reference_Sets.Set;
       --  References to progenitor types.
+
+      Dispatching_Declared   : aliased Entity_Reference_Sets.Set;
+      --  Displatching operations declared by the type.
+
+      Dispatching_Overrided  : aliased Entity_Reference_Sets.Set;
+      --  Dispatching operations overrided by the type.
+
+      Dispatching_Inherited  : aliased Entity_Reference_Sets.Set;
+      --  Dispatching operations inherited by the type.
    end record;
 
    Globals   : aliased Entity_Information;

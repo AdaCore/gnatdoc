@@ -47,14 +47,16 @@ package body GNATdoc.Frontend is
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
    procedure Process_Classic_Subp_Decl
-     (Node      : Classic_Subp_Decl'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
-      Global    : GNATdoc.Entities.Entity_Information_Access);
+     (Node       : Classic_Subp_Decl'Class;
+      Enclosing  : not null GNATdoc.Entities.Entity_Information_Access;
+      Global     : GNATdoc.Entities.Entity_Information_Access;
+      In_Private : Boolean);
 
    procedure Process_Base_Subp_Body
-     (Node      : Base_Subp_Body'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
-      Global    : GNATdoc.Entities.Entity_Information_Access);
+     (Node       : Base_Subp_Body'Class;
+      Enclosing  : not null GNATdoc.Entities.Entity_Information_Access;
+      Global     : GNATdoc.Entities.Entity_Information_Access;
+      In_Private : Boolean);
    --  Process subprogram body: Subp_Body, Null_Subp_Decl.
 
    procedure Process_Simple_Type_Def
@@ -153,10 +155,17 @@ package body GNATdoc.Frontend is
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
 
    procedure Process_Children
-     (Parent    : Ada_Node'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access);
+     (Parent     : Ada_Node'Class;
+      Enclosing  : not null GNATdoc.Entities.Entity_Information_Access;
+      In_Private : Boolean);
    --  Process children nodes, filter out important nodes, and dispatch to
    --  corresponding documentation extraction and entity creation subprograms.
+
+   procedure Process_Class_Operations
+     (Node   : Type_Decl'Class;
+      Entity : in out GNATdoc.Entities.Entity_Information);
+   --  Process delaration of the tagged/interface type and constructs sets of
+   --  dispatching operations.
 
    procedure Construct_Generic_Formals
      (Entity  : not null GNATdoc.Entities.Entity_Information_Access;
@@ -353,9 +362,10 @@ package body GNATdoc.Frontend is
    ----------------------------
 
    procedure Process_Base_Subp_Body
-     (Node      : Base_Subp_Body'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
-      Global    : GNATdoc.Entities.Entity_Information_Access)
+     (Node       : Base_Subp_Body'Class;
+      Enclosing  : not null GNATdoc.Entities.Entity_Information_Access;
+      Global     : GNATdoc.Entities.Entity_Information_Access;
+      In_Private : Boolean)
    is
       Name   : constant Defining_Name := Node.F_Subp_Spec.F_Subp_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
@@ -375,10 +385,18 @@ package body GNATdoc.Frontend is
            others         => <>);
 
    begin
-      Enclosing.Subprograms.Insert (Entity);
+      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
-      if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
-         Global.Subprograms.Insert (Entity);
+      if not In_Private
+        or GNATdoc.Options.Frontend_Options.Generate_Private
+      then
+         Enclosing.Subprograms.Insert (Entity);
+
+         if Global /= null
+           and GNATdoc.Entities.Globals'Access /= Enclosing
+         then
+            Global.Subprograms.Insert (Entity);
+         end if;
       end if;
 
       Check_Undocumented (Entity);
@@ -389,8 +407,9 @@ package body GNATdoc.Frontend is
    ----------------------
 
    procedure Process_Children
-     (Parent    : Ada_Node'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
+     (Parent     : Ada_Node'Class;
+      Enclosing  : not null GNATdoc.Entities.Entity_Information_Access;
+      In_Private : Boolean)
    is
 
       function Process_Node (Node : Ada_Node'Class) return Visit_Status;
@@ -401,6 +420,51 @@ package body GNATdoc.Frontend is
 
       function Process_Node (Node : Ada_Node'Class) return Visit_Status is
       begin
+         if not GNATdoc.Options.Frontend_Options.Generate_Private
+           and In_Private
+         then
+            --  Dispatching subprograms for tagged types may be declared
+            --  inside private type, so precess some nodes when documentation
+            --  generation for private parts is disabled.
+
+            case Node.Kind is
+               when Ada_Private_Part | Ada_Ada_Node_List =>
+                  return Into;
+
+               when Ada_Attribute_Def_Clause
+                  | Ada_Concrete_Type_Decl
+                  | Ada_Incomplete_Tagged_Type_Decl
+                  | Ada_Generic_Package_Instantiation
+                  | Ada_Number_Decl
+                  | Ada_Object_Decl
+                  | Ada_Package_Renaming_Decl
+                  | Ada_Pragma_Node
+                  | Ada_Subtype_Decl
+                  | Ada_Use_Type_Clause
+                  =>
+                  return Over;
+
+               when Ada_Generic_Subp_Instantiation =>
+                  --  ??? It is not clear should it be processed or not.
+
+                  return Over;
+
+               when Ada_Abstract_Subp_Decl
+                  | Ada_Null_Subp_Decl
+                  | Ada_Subp_Decl
+                  | Ada_Subp_Renaming_Decl
+                  =>
+                  null;
+
+               when others =>
+                  Ada.Text_IO.Put_Line
+                    (Ada.Text_IO.Standard_Error,
+                     ">>>>>>>>>>>>>>>>>>>>>>>>> " & Node.Image);
+
+                  raise Program_Error;
+            end case;
+         end if;
+
          case Node.Kind is
             when Ada_Type_Decl =>
                case Node.As_Type_Decl.F_Type_Def.Kind is
@@ -472,29 +536,32 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Subp_Decl =>
-               Process_Classic_Subp_Decl (Node.As_Subp_Decl, Enclosing, null);
+               Process_Classic_Subp_Decl
+                 (Node.As_Subp_Decl, Enclosing, null, In_Private);
 
                return Over;
 
             when Ada_Abstract_Subp_Decl =>
                Process_Classic_Subp_Decl
-                 (Node.As_Abstract_Subp_Decl, Enclosing, null);
+                 (Node.As_Abstract_Subp_Decl, Enclosing, null, In_Private);
 
                return Over;
 
             when Ada_Null_Subp_Decl =>
                Process_Base_Subp_Body
-                 (Node.As_Null_Subp_Decl, Enclosing, null);
+                 (Node.As_Null_Subp_Decl, Enclosing, null, In_Private);
 
                return Over;
 
             when Ada_Subp_Body =>
-               Process_Base_Subp_Body (Node.As_Subp_Body, Enclosing, null);
+               Process_Base_Subp_Body
+                 (Node.As_Subp_Body, Enclosing, null, In_Private);
 
                return Over;
 
             when Ada_Expr_Function =>
-               Process_Base_Subp_Body (Node.As_Expr_Function, Enclosing, null);
+               Process_Base_Subp_Body
+                 (Node.As_Expr_Function, Enclosing, null, In_Private);
 
                return Over;
 
@@ -524,7 +591,7 @@ package body GNATdoc.Frontend is
 
             when Ada_Subp_Renaming_Decl =>
                Process_Base_Subp_Body
-                 (Node.As_Subp_Renaming_Decl, Enclosing, null);
+                 (Node.As_Subp_Renaming_Decl, Enclosing, null, In_Private);
 
                return Over;
 
@@ -673,14 +740,52 @@ package body GNATdoc.Frontend is
       end if;
    end Process_Children;
 
+   ------------------------------
+   -- Process_Class_Operations --
+   ------------------------------
+
+   procedure Process_Class_Operations
+     (Node   : Type_Decl'Class;
+      Entity : in out GNATdoc.Entities.Entity_Information)
+   is
+      Primitives : constant Basic_Decl_Array := Node.P_Get_Primitives;
+
+   begin
+      for Subprogram of Primitives loop
+         if Node.P_Is_Inherited_Primitive (Subprogram) then
+            Entity.Dispatching_Inherited.Insert
+              ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
+               Signature (Subprogram.P_Defining_Name)));
+
+         else
+            declare
+               Decls : constant Basic_Decl_Array :=
+                 Subprogram.P_Base_Subp_Declarations;
+            begin
+               if Decls'Length > 1 then
+                  Entity.Dispatching_Overrided.Insert
+                    ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
+                     Signature (Subprogram.P_Defining_Name)));
+
+               else
+                  Entity.Dispatching_Declared.Insert
+                    ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
+                     Signature (Subprogram.P_Defining_Name)));
+               end if;
+            end;
+         end if;
+      end loop;
+   end Process_Class_Operations;
+
    -------------------------------
    -- Process_Classic_Subp_Decl --
    -------------------------------
 
    procedure Process_Classic_Subp_Decl
-     (Node      : Classic_Subp_Decl'Class;
-      Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
-      Global    : GNATdoc.Entities.Entity_Information_Access)
+     (Node       : Classic_Subp_Decl'Class;
+      Enclosing  : not null GNATdoc.Entities.Entity_Information_Access;
+      Global     : GNATdoc.Entities.Entity_Information_Access;
+      In_Private : Boolean)
    is
       Name   : constant Defining_Name := Node.F_Subp_Spec.F_Subp_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
@@ -700,10 +805,18 @@ package body GNATdoc.Frontend is
            others         => <>);
 
    begin
-      Enclosing.Subprograms.Insert (Entity);
+      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
-      if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
-         Global.Subprograms.Insert (Entity);
+      if not In_Private
+        or else GNATdoc.Options.Frontend_Options.Generate_Private
+      then
+         Enclosing.Subprograms.Insert (Entity);
+
+         if Global /= null
+           and GNATdoc.Entities.Globals'Access /= Enclosing
+         then
+            Global.Subprograms.Insert (Entity);
+         end if;
       end if;
 
       Check_Undocumented (Entity);
@@ -746,7 +859,8 @@ package body GNATdoc.Frontend is
                Process_Classic_Subp_Decl
                  (Node.As_Subp_Decl,
                   GNATdoc.Entities.Globals'Access,
-                  GNATdoc.Entities.Globals'Access);
+                  GNATdoc.Entities.Globals'Access,
+                  False);
 
                return Over;
 
@@ -763,7 +877,8 @@ package body GNATdoc.Frontend is
                   Process_Base_Subp_Body
                     (Node.As_Subp_Body,
                      GNATdoc.Entities.Globals'Access,
-                     GNATdoc.Entities.Globals'Access);
+                     GNATdoc.Entities.Globals'Access,
+                     False);
                end if;
 
                return Over;
@@ -842,9 +957,9 @@ package body GNATdoc.Frontend is
 
    begin
       if Def.F_Has_With_Private or not Def.F_Record_Extension.Is_Null then
+         GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
          Enclosing.Tagged_Types.Insert (Entity);
          GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
-         GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
          declare
             Parent_Decl : constant Type_Decl :=
@@ -892,6 +1007,8 @@ package body GNATdoc.Frontend is
                (Item.P_Referenced_Defining_Name.P_Fully_Qualified_Name),
                Signature (Item.P_Referenced_Defining_Name)));
          end loop;
+
+         Process_Class_Operations (Node, Entity.all);
 
       else
          Enclosing.Simple_Types.Insert (Entity);
@@ -1071,8 +1188,8 @@ package body GNATdoc.Frontend is
            others         => <>);
 
    begin
-      Enclosing.Packages.Insert (Entity);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+      Enclosing.Packages.Insert (Entity);
 
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
@@ -1080,11 +1197,8 @@ package body GNATdoc.Frontend is
 
       Check_Undocumented (Entity);
 
-      Process_Children (Node.F_Package_Decl.F_Public_Part, Entity);
-
-      if GNATdoc.Options.Frontend_Options.Generate_Private then
-         Process_Children (Node.F_Package_Decl.F_Private_Part, Entity);
-      end if;
+      Process_Children (Node.F_Package_Decl.F_Public_Part, Entity, False);
+      Process_Children (Node.F_Package_Decl.F_Private_Part, Entity, True);
 
       Construct_Generic_Formals (Entity, Name, Node.F_Formal_Part);
    end Process_Generic_Package_Decl;
@@ -1111,9 +1225,9 @@ package body GNATdoc.Frontend is
            others         => <>);
 
    begin
+      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Interface_Types.Insert (Entity);
       GNATdoc.Entities.Globals.Interface_Types.Insert (Entity);
-      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
       for Item of Def.F_Interfaces loop
          Entity.Progenitor_Types.Insert
@@ -1121,6 +1235,8 @@ package body GNATdoc.Frontend is
             (Item.P_Referenced_Defining_Name.P_Fully_Qualified_Name),
             Signature (Item.P_Referenced_Defining_Name)));
       end loop;
+
+      Process_Class_Operations (Node, Entity.all);
 
       Check_Undocumented (Entity);
    end Process_Interface_Type_Def;
@@ -1213,8 +1329,8 @@ package body GNATdoc.Frontend is
            others         => <>);
 
    begin
-      Enclosing.Packages.Insert (Entity);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+      Enclosing.Packages.Insert (Entity);
 
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
@@ -1222,11 +1338,8 @@ package body GNATdoc.Frontend is
 
       Check_Undocumented (Entity);
 
-      Process_Children (Node.F_Public_Part, Entity);
-
-      if GNATdoc.Options.Frontend_Options.Generate_Private then
-         Process_Children (Node.F_Private_Part, Entity);
-      end if;
+      Process_Children (Node.F_Public_Part, Entity, False);
+      Process_Children (Node.F_Private_Part, Entity, True);
    end Process_Package_Decl;
 
    --------------------------
@@ -1258,8 +1371,8 @@ package body GNATdoc.Frontend is
            others         => <>);
 
    begin
-      Enclosing.Packages.Insert (Entity);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+      Enclosing.Packages.Insert (Entity);
 
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
@@ -1267,7 +1380,7 @@ package body GNATdoc.Frontend is
 
       Check_Undocumented (Entity);
 
-      Process_Children (Node.F_Decls, Entity);
+      Process_Children (Node.F_Decls, Entity, True);
    end Process_Package_Body;
 
    -----------------------------------
@@ -1321,9 +1434,12 @@ package body GNATdoc.Frontend is
    begin
       if Node.F_Type_Def.As_Private_Type_Def.F_Has_Tagged then
          Entity.Kind := GNATdoc.Entities.Ada_Tagged_Type;
+
+         GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
          Enclosing.Tagged_Types.Insert (Entity);
          GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
-         GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+
+         Process_Class_Operations (Node, Entity.all);
 
       else
          Enclosing.Simple_Types.Insert (Entity);
@@ -1354,8 +1470,8 @@ package body GNATdoc.Frontend is
            others         => <>);
 
    begin
-      Enclosing.Protected_Types.Insert (Entity);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+      Enclosing.Protected_Types.Insert (Entity);
 
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
@@ -1363,7 +1479,7 @@ package body GNATdoc.Frontend is
 
       Check_Undocumented (Entity);
 
-      Process_Children (Node.F_Decls, Entity);
+      Process_Children (Node.F_Decls, Entity, True);
    end Process_Protected_Body;
 
    ----------------------------
@@ -1391,8 +1507,8 @@ package body GNATdoc.Frontend is
            others         => <>);
 
    begin
-      Enclosing.Protected_Types.Insert (Entity);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+      Enclosing.Protected_Types.Insert (Entity);
 
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Protected_Types.Insert (Entity);
@@ -1400,10 +1516,10 @@ package body GNATdoc.Frontend is
 
       Check_Undocumented (Entity);
 
-      Process_Children (Definition.F_Public_Part, Entity);
+      Process_Children (Definition.F_Public_Part, Entity, False);
 
       if GNATdoc.Options.Frontend_Options.Generate_Private then
-         Process_Children (Definition.F_Private_Part, Entity);
+         Process_Children (Definition.F_Private_Part, Entity, True);
       end if;
    end Process_Protected_Decl;
 
@@ -1501,8 +1617,8 @@ package body GNATdoc.Frontend is
            others         => <>);
 
    begin
-      Enclosing.Task_Types.Insert (Entity);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+      Enclosing.Task_Types.Insert (Entity);
 
       if GNATdoc.Entities.Globals'Access /= Enclosing then
          GNATdoc.Entities.Globals.Task_Types.Insert (Entity);
@@ -1511,10 +1627,10 @@ package body GNATdoc.Frontend is
       Check_Undocumented (Entity);
 
       if not Decl.F_Definition.Is_Null then
-         Process_Children (Decl.F_Definition.F_Public_Part, Entity);
+         Process_Children (Decl.F_Definition.F_Public_Part, Entity, False);
 
          if GNATdoc.Options.Frontend_Options.Generate_Private then
-            Process_Children (Decl.F_Definition.F_Private_Part, Entity);
+            Process_Children (Decl.F_Definition.F_Private_Part, Entity, True);
          end if;
       end if;
    end Process_Task_Decl;
