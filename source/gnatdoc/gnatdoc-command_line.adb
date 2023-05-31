@@ -16,7 +16,6 @@
 ------------------------------------------------------------------------------
 
 with VSS.Command_Line;
-with VSS.String_Vectors;
 with VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Options;
@@ -70,7 +69,10 @@ package body GNATdoc.Command_Line is
      (Name        => "project_file",
       Description => "Project file to process");
 
+   Backend_Argument          : VSS.Strings.Virtual_String;
    Backend_Name_Argument     : VSS.Strings.Virtual_String;
+   Backend_Options_Argument  : VSS.String_Vectors.Virtual_String_Vector;
+   Backend_Options_Specified : Boolean := False;
    Output_Dir_Argument       : GNATCOLL.VFS.Virtual_File;
    Project_File_Argument     : VSS.Strings.Virtual_String;
    Project_Context_Arguments : GPR2.Context.Object;
@@ -84,6 +86,15 @@ package body GNATdoc.Command_Line is
    begin
       return Backend_Name_Argument;
    end Backend_Name;
+
+   ---------------------
+   -- Backend_Options --
+   ---------------------
+
+   function Backend_Options return VSS.String_Vectors.Virtual_String_Vector is
+   begin
+      return Backend_Options_Argument;
+   end Backend_Options;
 
    ----------------
    -- Initialize --
@@ -202,15 +213,44 @@ package body GNATdoc.Command_Line is
       --  Check configured backend.
 
       if VSS.Command_Line.Is_Specified (Backend_Option) then
-         Backend_Name_Argument := VSS.Command_Line.Value (Backend_Option);
+         Backend_Argument := VSS.Command_Line.Value (Backend_Option);
 
-         if Backend_Name_Argument.Is_Empty then
-            VSS.Command_Line.Report_Error ("empty name of the backend");
-         end if;
+         --  if Backend_Argument.Is_Empty then
+         --     VSS.Command_Line.Report_Error ("empty name of the backend");
+         --  end if;
 
-         --  XXX check whether backend name is know should be added here.
+         declare
+            Parts : constant VSS.String_Vectors.Virtual_String_Vector :=
+              Backend_Argument.Split (':');
+
+         begin
+            if Parts (1).Is_Empty then
+               VSS.Command_Line.Report_Error ("empty name of the backend");
+            end if;
+
+            Backend_Name_Argument := Parts (1);
+
+            --  XXX check whether backend name is know should be added here.
+
+            if Parts.Length > 2 then
+               VSS.Command_Line.Report_Error ("invalid backend options set");
+            end if;
+
+            Backend_Options_Specified := Parts.Length = 2;
+            Backend_Options_Argument :=
+              Parts (2).Split (',', Keep_Empty_Segments => False);
+         end;
       end if;
    end Initialize;
+
+   ----------------------------------
+   -- Is_Backend_Options_Specified --
+   ----------------------------------
+
+   function Is_Backend_Options_Specified return Boolean is
+   begin
+      return Backend_Options_Specified;
+   end Is_Backend_Options_Specified;
 
    ----------------------
    -- Output_Directory --

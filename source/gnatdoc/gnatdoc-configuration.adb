@@ -33,6 +33,22 @@ package body GNATdoc.Configuration is
       end if;
    end Backend_Name;
 
+   ---------------------
+   -- Backend_Options --
+   ---------------------
+
+   not overriding function Backend_Options
+     (Self : Abstract_Configuration_Provider)
+      return VSS.String_Vectors.Virtual_String_Vector is
+   begin
+      if Self.Child /= null then
+         return Self.Child.Backend_Options;
+
+      else
+         return VSS.String_Vectors.Empty_Virtual_String_Vector;
+      end if;
+   end Backend_Options;
+
    --------------------------------
    -- Custom_Resources_Directory --
    --------------------------------

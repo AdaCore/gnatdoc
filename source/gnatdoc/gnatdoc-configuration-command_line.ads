@@ -31,6 +31,10 @@ private
      (Self : Command_Line_Configuration_Provider)
       return VSS.Strings.Virtual_String;
 
+   overriding function Backend_Options
+     (Self : Command_Line_Configuration_Provider)
+      return VSS.String_Vectors.Virtual_String_Vector;
+
    overriding function Output_Directory
      (Self         : Command_Line_Configuration_Provider;
       Backend_Name : VSS.Strings.Virtual_String)

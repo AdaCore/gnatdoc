@@ -20,6 +20,7 @@ with GNATCOLL.VFS;
 with GPR2.Context;
 
 with VSS.Strings;
+with VSS.String_Vectors;
 
 package GNATdoc.Command_Line is
 
@@ -42,5 +43,9 @@ package GNATdoc.Command_Line is
 
    function Backend_Name return VSS.Strings.Virtual_String;
    --  Return name of the backend if specified.
+
+   function Is_Backend_Options_Specified return Boolean;
+
+   function Backend_Options return VSS.String_Vectors.Virtual_String_Vector;
 
 end GNATdoc.Command_Line;

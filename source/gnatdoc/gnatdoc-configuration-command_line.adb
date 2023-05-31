@@ -39,6 +39,23 @@ package body GNATdoc.Configuration.Command_Line is
       end if;
    end Backend_Name;
 
+   ---------------------
+   -- Backend_Options --
+   ---------------------
+
+   overriding function Backend_Options
+     (Self : Command_Line_Configuration_Provider)
+      return VSS.String_Vectors.Virtual_String_Vector
+   is
+   begin
+      if GNATdoc.Command_Line.Is_Backend_Options_Specified then
+         return GNATdoc.Command_Line.Backend_Options;
+
+      else
+         return Abstract_Configuration_Provider (Self).Backend_Options;
+      end if;
+   end Backend_Options;
+
    ----------------------
    -- Output_Directory --
    ----------------------

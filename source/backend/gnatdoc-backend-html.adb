@@ -35,6 +35,7 @@ with VSS.XML.XmlAda_Readers;
 
 with GNATdoc.Comments.Helpers;
 with GNATdoc.Comments.Proxies;
+with GNATdoc.Configuration;
 with GNATdoc.Entities;
 with Streams;
 
@@ -916,6 +917,9 @@ package body GNATdoc.Backend.HTML is
 
    begin
       Abstract_Backend (Self).Initialize;
+
+      Self.OOP_Mode :=
+        GNATdoc.Configuration.Provider.Backend_Options.Contains ("oop");
 
       Copy_Static (Self.System_Resources_Root);
       Copy_Static (Self.Project_Resources_Root);
