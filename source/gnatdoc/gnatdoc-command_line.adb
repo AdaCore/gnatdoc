@@ -114,6 +114,7 @@ package body GNATdoc.Command_Line is
       VSS.Command_Line.Add_Option (Warnings_Option);
       VSS.Command_Line.Add_Option (Scenario_Option);
       VSS.Command_Line.Add_Option (Positional_Project_Option);
+      VSS.Command_Line.Add_Help_Option;
 
       VSS.Command_Line.Process;
       Positional := VSS.Command_Line.Positional_Arguments;
