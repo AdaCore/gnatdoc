@@ -627,6 +627,12 @@ package body GNATdoc.Backend.HTML is
          end if;
       end loop;
 
+      for Item of Globals.Generic_Instantiations loop
+         if not Is_Private_Entity (Item) then
+            Index_Entities.Insert (Item);
+         end if;
+      end loop;
+
       for Item of Globals.Task_Types loop
          if not Is_Private_Entity (Item) then
             Non_Index_Entities.Insert (Item);

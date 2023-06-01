@@ -933,8 +933,13 @@ package body GNATdoc.Frontend is
 
                return Over;
 
-            when Ada_Generic_Package_Instantiation =>
-               Ada.Text_IO.Put_Line (Image (Node));
+            when Ada_Generic_Package_Instantiation
+               | Ada_Generic_Subp_Instantiation
+            =>
+               Process_Generic_Instantiation
+                 (Node.As_Generic_Instantiation,
+                  GNATdoc.Entities.Globals'Access,
+                  GNATdoc.Entities.Globals'Access);
 
                return Over;
 
