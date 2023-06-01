@@ -174,8 +174,7 @@ package body GNATdoc.Frontend is
    --  Constructs entities for formal parameters of the generic from the
    --  structured comment of the generic.
 
-   function Location
-     (Name : Ada_Node'Class) return GNATdoc.Entities.Entity_Location;
+   function Location (Name : Ada_Node'Class) return GNATdoc.Source_Location;
    --  Return location of the given node.
 
    function Signature (Name : Defining_Name'Class) return Virtual_String;
@@ -300,9 +299,7 @@ package body GNATdoc.Frontend is
    -- Location --
    --------------
 
-   function Location
-     (Name : Ada_Node'Class) return GNATdoc.Entities.Entity_Location
-   is
+   function Location (Name : Ada_Node'Class) return GNATdoc.Source_Location is
       Aux : constant Langkit_Support.Slocs.Source_Location_Range :=
         Name.Sloc_Range;
 

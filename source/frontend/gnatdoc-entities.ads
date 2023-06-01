@@ -31,12 +31,6 @@ package GNATdoc.Entities is
       Ada_Function,
       Ada_Procedure);
 
-   type Entity_Location is record
-      File   : VSS.Strings.Virtual_String;
-      Line   : VSS.Strings.Line_Count      := 0;
-      Column : VSS.Strings.Character_Count := 0;
-   end record;
-
    type Entity_Information;
 
    type Entity_Information_Access is access all Entity_Information;
@@ -72,7 +66,7 @@ package GNATdoc.Entities is
      new Ada.Containers.Ordered_Sets (Entity_Reference);
 
    type Entity_Information is record
-      Location               : Entity_Location;
+      Location               : Source_Location;
       Kind                   : Entity_Kind := Undefined;
       Name                   : VSS.Strings.Virtual_String;
       Qualified_Name         : VSS.Strings.Virtual_String;

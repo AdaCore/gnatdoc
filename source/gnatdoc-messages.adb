@@ -60,7 +60,7 @@ package body GNATdoc.Messages is
    ------------------
 
    procedure Report_Error
-     (Location : GNATdoc.Entities.Entity_Location;
+     (Location : GNATdoc.Source_Location;
       Message  : VSS.Strings.Virtual_String)
    is
       Template : Virtual_String_Template := "{}:{}:{}: {}";
@@ -83,7 +83,7 @@ package body GNATdoc.Messages is
    ---------------------------
 
    procedure Report_Internal_Error
-     (Location   : GNATdoc.Entities.Entity_Location;
+     (Location   : GNATdoc.Source_Location;
       Occurrence : Ada.Exceptions.Exception_Occurrence)
    is
       use type VSS.Strings.Virtual_String;
@@ -111,7 +111,7 @@ package body GNATdoc.Messages is
    --------------------
 
    procedure Report_Warning
-     (Location : GNATdoc.Entities.Entity_Location;
+     (Location : GNATdoc.Source_Location;
       Message  : VSS.Strings.Virtual_String)
    is
       Template : Virtual_String_Template := "{}:{}:{}: warning: {}";
