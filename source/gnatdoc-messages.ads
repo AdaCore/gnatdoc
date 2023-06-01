@@ -17,6 +17,8 @@
 
 with Ada.Exceptions;
 
+with GNAT.Source_Info;
+
 package GNATdoc.Messages is
 
    procedure Report_Warning
@@ -30,5 +32,9 @@ package GNATdoc.Messages is
    procedure Report_Internal_Error
      (Location   : GNATdoc.Source_Location;
       Occurrence : Ada.Exceptions.Exception_Occurrence);
+
+   procedure Raise_Not_Implemented
+     (Message  : String;
+      Location : String := GNAT.Source_Info.Source_Location);
 
 end GNATdoc.Messages;
