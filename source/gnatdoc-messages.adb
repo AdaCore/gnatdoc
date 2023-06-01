@@ -55,12 +55,25 @@ package body GNATdoc.Messages is
       return To_Virtual_String (F.Display_Base_Name);
    end File_Name;
 
+   ---------------------------
+   -- Raise_Not_Implemented --
+   ---------------------------
+
+   procedure Raise_Not_Implemented
+     (Message  : String;
+      Location : String := GNAT.Source_Info.Source_Location) is
+   begin
+      raise GNATdoc.Not_Implemented
+        with "at " & Location
+               & (if Message'Length = 0 then "" else " ") & Message;
+   end Raise_Not_Implemented;
+
    ------------------
    -- Report_Error --
    ------------------
 
    procedure Report_Error
-     (Location : GNATdoc.Entities.Entity_Location;
+     (Location : GNATdoc.Source_Location;
       Message  : VSS.Strings.Virtual_String)
    is
       Template : Virtual_String_Template := "{}:{}:{}: {}";
@@ -83,7 +96,7 @@ package body GNATdoc.Messages is
    ---------------------------
 
    procedure Report_Internal_Error
-     (Location   : GNATdoc.Entities.Entity_Location;
+     (Location   : GNATdoc.Source_Location;
       Occurrence : Ada.Exceptions.Exception_Occurrence)
    is
       use type VSS.Strings.Virtual_String;
@@ -111,7 +124,7 @@ package body GNATdoc.Messages is
    --------------------
 
    procedure Report_Warning
-     (Location : GNATdoc.Entities.Entity_Location;
+     (Location : GNATdoc.Source_Location;
       Message  : VSS.Strings.Virtual_String)
    is
       Template : Virtual_String_Template := "{}:{}:{}: warning: {}";

@@ -24,7 +24,7 @@ package body GNATdoc.Comments.Undocumented_Checker is
    ------------------------
 
    procedure Check_Undocumented
-     (Location      : GNATdoc.Entities.Entity_Location;
+     (Location      : GNATdoc.Source_Location;
       Name          : VSS.Strings.Virtual_String;
       Documentation : GNATdoc.Comments.Structured_Comment)
    is

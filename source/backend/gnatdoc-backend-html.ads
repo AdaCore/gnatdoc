@@ -21,7 +21,9 @@ package GNATdoc.Backend.HTML is
 
 private
 
-   type HTML_Backend is new Abstract_Backend with null record;
+   type HTML_Backend is new Abstract_Backend with record
+      OOP_Mode : Boolean := False;
+   end record;
 
    overriding function Name
      (Self : in out HTML_Backend) return VSS.Strings.Virtual_String;

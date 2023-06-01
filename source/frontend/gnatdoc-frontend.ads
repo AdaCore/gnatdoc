@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -21,5 +21,8 @@ package GNATdoc.Frontend is
 
    procedure Process_Compilation_Unit
      (Unit : Libadalang.Analysis.Compilation_Unit'Class);
+
+   procedure Postprocess;
+   --  Do postprocessing of the collected information.
 
 end GNATdoc.Frontend;

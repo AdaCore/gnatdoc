@@ -17,22 +17,24 @@
 
 with Ada.Exceptions;
 
-with VSS.Strings;
-
-with GNATdoc.Entities;
+with GNAT.Source_Info;
 
 package GNATdoc.Messages is
 
    procedure Report_Warning
-     (Location : GNATdoc.Entities.Entity_Location;
+     (Location : GNATdoc.Source_Location;
       Message  : VSS.Strings.Virtual_String);
 
    procedure Report_Error
-     (Location : GNATdoc.Entities.Entity_Location;
+     (Location : GNATdoc.Source_Location;
       Message  : VSS.Strings.Virtual_String);
 
    procedure Report_Internal_Error
-     (Location   : GNATdoc.Entities.Entity_Location;
+     (Location   : GNATdoc.Source_Location;
       Occurrence : Ada.Exceptions.Exception_Occurrence);
+
+   procedure Raise_Not_Implemented
+     (Message  : String;
+      Location : String := GNAT.Source_Info.Source_Location);
 
 end GNATdoc.Messages;
