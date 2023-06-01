@@ -60,18 +60,15 @@
     <h2>Description</h2>
     <div tal:omit-tag='' tal:content='gnatdoc/entity/documentation/description'>Description of the entity</div>
 
-          <!--
     <div tal:omit-tag='' tal:condition='gnatdoc/entity/documentation/fields'>
-      <h5>Record fields</h5>
+      <h5>Components and Discriminants</h5>
       <dl>
         <div tal:omit-tag='' tal:repeat='component gnatdoc/entity/documentation/fields'>
-          <a href='#' tal:attributes='href component/local_href' tal:content='component/name'/>
           <dt tal:content='component/name'>Name of the field</dt>
           <dd tal:content='component/description'>Description of the field</dd>
         </div>
       </dl>
     </div>
-          -->
 
     <div tal:omit-tag='' tal:repeat='subprogram gnatdoc/entity/class_subprograms'>
       <p tal:condition='not:subprogram/is_documented'>NOT_DOCUMENTED <span tal:content='subprogram/name'>NAME</span></p>
