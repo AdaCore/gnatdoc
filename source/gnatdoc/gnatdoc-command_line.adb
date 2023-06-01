@@ -215,10 +215,6 @@ package body GNATdoc.Command_Line is
       if VSS.Command_Line.Is_Specified (Backend_Option) then
          Backend_Argument := VSS.Command_Line.Value (Backend_Option);
 
-         --  if Backend_Argument.Is_Empty then
-         --     VSS.Command_Line.Report_Error ("empty name of the backend");
-         --  end if;
-
          declare
             Parts : constant VSS.String_Vectors.Virtual_String_Vector :=
               Backend_Argument.Split (':');
