@@ -61,7 +61,7 @@
     <div tal:omit-tag='' tal:content='gnatdoc/entity/documentation/description'>Description of the entity</div>
 
     <div tal:omit-tag='' tal:condition='gnatdoc/entity/documentation/fields'>
-      <h5>Components and Discriminants</h5>
+      <h3>Components and Discriminants</h3>
       <dl>
         <div tal:omit-tag='' tal:repeat='component gnatdoc/entity/documentation/fields'>
           <dt tal:content='component/name'>Name of the field</dt>
@@ -69,6 +69,8 @@
         </div>
       </dl>
     </div>
+
+    <h3 tal:condition='gnatdoc/entity/class_subprograms'>Subprograms</h3>
 
     <div tal:omit-tag='' tal:repeat='subprogram gnatdoc/entity/class_subprograms'>
       <p tal:condition='not:subprogram/is_documented'>NOT_DOCUMENTED <span tal:content='subprogram/name'>NAME</span></p>
