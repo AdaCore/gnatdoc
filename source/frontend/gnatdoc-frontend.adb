@@ -446,13 +446,17 @@ package body GNATdoc.Frontend is
 
                when Ada_Attribute_Def_Clause
                   | Ada_Concrete_Type_Decl
+                  | Ada_Enum_Rep_Clause
                   | Ada_Incomplete_Tagged_Type_Decl
+                  | Ada_Incomplete_Type_Decl
                   | Ada_Generic_Package_Instantiation
                   | Ada_Number_Decl
                   | Ada_Object_Decl
                   | Ada_Package_Renaming_Decl
                   | Ada_Pragma_Node
+                  | Ada_Record_Rep_Clause
                   | Ada_Subtype_Decl
+                  | Ada_Use_Package_Clause
                   | Ada_Use_Type_Clause
                =>
                   return Over;
@@ -471,11 +475,7 @@ package body GNATdoc.Frontend is
                   null;
 
                when others =>
-                  Ada.Text_IO.Put_Line
-                    (Ada.Text_IO.Standard_Error,
-                     ">>>>>>>>>>>>>>>>>>>>>>>>> " & Node.Image);
-
-                  raise Program_Error;
+                  GNATdoc.Messages.Raise_Not_Implemented (Node.Image);
             end case;
          end if;
 
