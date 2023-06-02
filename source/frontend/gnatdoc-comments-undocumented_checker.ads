@@ -15,14 +15,10 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.Strings;
-
-with GNATdoc.Entities;
-
 package GNATdoc.Comments.Undocumented_Checker is
 
    procedure Check_Undocumented
-     (Location      : GNATdoc.Entities.Entity_Location;
+     (Location      : GNATdoc.Source_Location;
       Name          : VSS.Strings.Virtual_String;
       Documentation : GNATdoc.Comments.Structured_Comment);
    --  Check presense of the documentation for all components and report

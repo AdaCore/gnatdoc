@@ -21,7 +21,6 @@ private with Ada.Finalization;
 private with Langkit_Support.Slocs;
 
 private with VSS.String_Vectors;
-private with VSS.Strings;
 
 package GNATdoc.Comments is
 

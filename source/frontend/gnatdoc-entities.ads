@@ -26,14 +26,10 @@ package GNATdoc.Entities is
 
    type Entity_Kind is
      (Undefined,
+      Ada_Tagged_Type,
+      Ada_Interface_Type,
       Ada_Function,
       Ada_Procedure);
-
-   type Entity_Location is record
-      File   : VSS.Strings.Virtual_String;
-      Line   : VSS.Strings.Line_Count      := 0;
-      Column : VSS.Strings.Character_Count := 0;
-   end record;
 
    type Entity_Information;
 
@@ -53,8 +49,24 @@ package GNATdoc.Entities is
         VSS.Strings.Hash,
         VSS.Strings."=");
 
+   type Entity_Reference is record
+      Qualified_Name : VSS.Strings.Virtual_String;
+      Signature      : VSS.Strings.Virtual_String;
+   end record;
+
+   overriding function "="
+     (Left  : Entity_Reference;
+      Right : Entity_Reference) return Boolean;
+
+   function "<"
+     (Left  : Entity_Reference;
+      Right : Entity_Reference) return Boolean;
+
+   package Entity_Reference_Sets is
+     new Ada.Containers.Ordered_Sets (Entity_Reference);
+
    type Entity_Information is record
-      Location               : Entity_Location;
+      Location               : Source_Location;
       Kind                   : Entity_Kind := Undefined;
       Name                   : VSS.Strings.Virtual_String;
       Qualified_Name         : VSS.Strings.Virtual_String;
@@ -65,6 +77,11 @@ package GNATdoc.Entities is
       --  Signature of the enclosing entity.
       Is_Private             : Boolean := False;
       --  Private entities are excluded from the documentartion.
+
+      Is_Method              : Boolean := False;
+      --  True means that this subprogram is a "method" of some tagged type,
+      --  thus, it should be documented in "class" documentation; otherwise,
+      --  it is documented in "unit" documentation.
 
       RST_Profile            : VSS.Strings.Virtual_String;
       --  Subprogram's profile in fortmat to use by RST backend
@@ -115,6 +132,20 @@ package GNATdoc.Entities is
       --  Protected_Objects : EInfo_List.Vector;  +++
       --  Entries           : EInfo_List.Vector;  +++
 
+      Parent_Type            : Entity_Reference;
+      --  Reference to parent tagged type.
+
+      Progenitor_Types       : aliased Entity_Reference_Sets.Set;
+      --  References to progenitor types.
+
+      Dispatching_Declared   : aliased Entity_Reference_Sets.Set;
+      --  Displatching operations declared by the type.
+
+      Dispatching_Overrided  : aliased Entity_Reference_Sets.Set;
+      --  Dispatching operations overrided by the type.
+
+      Dispatching_Inherited  : aliased Entity_Reference_Sets.Set;
+      --  Dispatching operations inherited by the type.
    end record;
 
    Globals   : aliased Entity_Information;

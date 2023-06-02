@@ -15,9 +15,9 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with Ada.Text_IO; use Ada.Text_IO;
-
 with Libadalang.Common;
+
+with GNATdoc.Messages;
 
 package body GNATdoc.Comments.Builders.Records is
 
@@ -82,6 +82,9 @@ package body GNATdoc.Comments.Builders.Records is
 
                return Over;
 
+            when Ada_Pragma_Node =>
+               return Over;
+
             when Ada_Component_Decl =>
                Self.Process_Component_Declaration (Node.As_Component_Decl);
 
@@ -92,9 +95,7 @@ package body GNATdoc.Comments.Builders.Records is
                return Over;
 
             when others =>
-               Put_Line (Standard_Error, Image (Node));
-
-               raise Program_Error with Ada_Node_Kind_Type'Image (Node.Kind);
+               GNATdoc.Messages.Raise_Not_Implemented (Image (Node));
          end case;
       end Process;
 
