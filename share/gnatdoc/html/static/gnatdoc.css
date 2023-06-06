@@ -78,6 +78,17 @@ iframe
   border: 0;
 }
 
+h4
+{
+  padding: .25em;
+}
+
+h4:target
+{
+  transition-duration: .5s;
+  transition-property: background;
+  background: #E8E8E8;
+}
 
 .content
 {
