@@ -657,11 +657,15 @@ package body GNATdoc.Backend.HTML is
       end loop;
 
       for Item of Globals.Interface_Types loop
-         Class_Index_Entities.Insert (Item);
+         if not Is_Private_Entity (Item) then
+            Class_Index_Entities.Insert (Item);
+         end if;
       end loop;
 
       for Item of Globals.Tagged_Types loop
-         Class_Index_Entities.Insert (Item);
+         if not Is_Private_Entity (Item) then
+            Class_Index_Entities.Insert (Item);
+         end if;
       end loop;
 
       declare
