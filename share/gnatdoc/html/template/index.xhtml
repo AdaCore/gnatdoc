@@ -5,18 +5,24 @@
   </head>
   <body class='main'>
     <div class='side-navigation'>
-      <h2>Compilation Units</h2>
-      <ul>
-        <li tal:repeat='item gnatdoc/toc'>
-          <a href='error.html' target='document-content' tal:content='item/qualified_name' tal:attributes='href item/full_href'/>
-        </li>
+      <ul class='tab-bar'>
+        <li class='tab'><a href='#compilation-units'>Compilation Units</a></li>
+        <li class='tab'><a href='#tagged-types'>Tagged Types</a></li>
       </ul>
-      <h2>Tagged types</h2>
-      <ul>
-        <li tal:repeat='item gnatdoc/classes_toc'>
-          <a href='error.html' target='document-content' tal:content='item/qualified_name' tal:attributes='href item/full_href'/>
-        </li>
-      </ul>
+      <div class='content-column'>
+        <h2 id='compilation-units'>Compilation Units</h2>
+        <ul>
+          <li tal:repeat='item gnatdoc/toc'>
+            <a href='error.html' target='document-content' tal:content='item/qualified_name' tal:attributes='href item/full_href'/>
+          </li>
+        </ul>
+        <h2 id='tagged-types'>Tagged types</h2>
+        <ul>
+          <li tal:repeat='item gnatdoc/classes_toc'>
+            <a href='error.html' target='document-content' tal:content='item/qualified_name' tal:attributes='href item/full_href'/>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class='document-content'>
       <iframe name='document-content'/>

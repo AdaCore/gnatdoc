@@ -25,10 +25,29 @@ body.main
 
 .side-navigation
 {
-  overflow: scroll;
   border-right: 1px solid #bfbfbf;
   padding: .5rem 1rem;
   background-color: #f5f5f5;
+  display: flex;
+}
+
+.side-navigation > .tab-bar
+{
+  display: flex;
+  writing-mode: vertical-lr;
+  margin: 1.5em .5em 0 0;
+}
+
+.side-navigation > .tab-bar > .tab
+{
+  rotate: 180deg;
+  padding: .5em;
+  margin: .25em 0 .25em 0;
+}
+
+.side-navigation > .content-column
+{
+  overflow: scroll;
 }
 
 .side-navigation > ul
