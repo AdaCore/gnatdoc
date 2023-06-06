@@ -367,6 +367,17 @@ package body GNATdoc.Backend.HTML is
                 (Text => Digest (Self.Entity.Signature));
 
          elsif Name = "full_href" then
+            if Self.Entity.Kind in Ada_Tagged_Type | Ada_Interface_Type
+              and not Self.OOP_Mode
+            then
+               return
+                 VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
+                   (Text =>
+                      Digest (Self.Entity.Enclosing)
+                        & ".html#"
+                        & Digest (Self.Entity.Signature));
+            end if;
+
             return
               VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
                 (Text => Digest (Self.Entity.Signature) & ".html");

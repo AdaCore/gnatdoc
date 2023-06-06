@@ -975,6 +975,8 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
+           Enclosing      =>
+             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
@@ -1244,6 +1246,8 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
+           Enclosing      =>
+             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
@@ -1451,6 +1455,8 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
+           Enclosing      =>
+             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
