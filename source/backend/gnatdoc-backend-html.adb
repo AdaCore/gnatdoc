@@ -453,6 +453,24 @@ package body GNATdoc.Backend.HTML is
                     Nested   => <>,
                     OOP_Mode => Self.OOP_Mode);
             end if;
+
+         elsif Name = "all_parent_types" then
+            if not Self.Entity.All_Parent_Types.Is_Empty then
+               return
+                 Entity_Reference_Set_Proxy'
+                   (Entities => Self.Entity.All_Parent_Types'Unchecked_Access,
+                    Nested   => <>,
+                    OOP_Mode => Self.OOP_Mode);
+            end if;
+
+         elsif Name = "all_derived_types" then
+            if not Self.Entity.All_Derived_Types.Is_Empty then
+               return
+                 Entity_Reference_Set_Proxy'
+                   (Entities => Self.Entity.All_Derived_Types'Unchecked_Access,
+                    Nested   => <>,
+                    OOP_Mode => Self.OOP_Mode);
+            end if;
          end if;
 
          return

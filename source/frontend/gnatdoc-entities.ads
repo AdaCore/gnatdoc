@@ -135,11 +135,15 @@ package GNATdoc.Entities is
       Parent_Type            : Entity_Reference;
       --  Reference to parent tagged type.
 
+      Progenitor_Types       : aliased Entity_Reference_Sets.Set;
+      --  References to progenitor types.
+
       Derived_Types          : aliased Entity_Reference_Sets.Set;
       --  References to known derived types.
 
-      Progenitor_Types       : aliased Entity_Reference_Sets.Set;
-      --  References to progenitor types.
+      All_Parent_Types       : aliased Entity_Reference_Sets.Set;
+      All_Derived_Types      : aliased Entity_Reference_Sets.Set;
+      --  References to all known direct or indirect parent and derived types.
 
       Dispatching_Declared   : aliased Entity_Reference_Sets.Set;
       --  Displatching operations declared by the type.

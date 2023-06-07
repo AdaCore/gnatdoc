@@ -324,6 +324,31 @@ package body GNATdoc.Frontend is
         (Entity : not null GNATdoc.Entities.Entity_Information_Access)
          return GNATdoc.Entities.Entity_Reference;
 
+      procedure Establish_Parent_Derived_Relation
+        (Parent  : not null GNATdoc.Entities.Entity_Information_Access;
+         Derived : not null GNATdoc.Entities.Entity_Information_Access);
+
+      ---------------------------------------
+      -- Establish_Parent_Derived_Relation --
+      ---------------------------------------
+
+      procedure Establish_Parent_Derived_Relation
+        (Parent  : not null GNATdoc.Entities.Entity_Information_Access;
+         Derived : not null GNATdoc.Entities.Entity_Information_Access) is
+      begin
+         Parent.All_Derived_Types.Include (To_Entity_Reference (Derived));
+         Derived.All_Parent_Types.Include (To_Entity_Reference (Parent));
+
+         if GNATdoc.Entities.To_Entity.Contains
+           (Parent.Parent_Type.Signature)
+         then
+            Establish_Parent_Derived_Relation
+              (Parent  =>
+                 GNATdoc.Entities.To_Entity (Parent.Parent_Type.Signature),
+               Derived => Derived);
+         end if;
+      end Establish_Parent_Derived_Relation;
+
       -------------------------
       -- To_Entity_Reference --
       -------------------------
@@ -338,23 +363,26 @@ package body GNATdoc.Frontend is
       end To_Entity_Reference;
 
    begin
-      --  Construct sets of derived types.
-
       for Item of GNATdoc.Entities.Globals.Tagged_Types loop
          declare
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 GNATdoc.Entities.To_Entity (Item.Signature);
+            Parent : GNATdoc.Entities.Entity_Information_Access;
 
          begin
             if GNATdoc.Entities.To_Entity.Contains
               (Entity.Parent_Type.Signature)
             then
-               GNATdoc.Entities.To_Entity
-                 (Entity.Parent_Type.Signature).Derived_Types.Insert
-                 (To_Entity_Reference (Item));
+               Parent :=
+                 GNATdoc.Entities.To_Entity (Entity.Parent_Type.Signature);
+
+               --  Construct references between parent/derived types.
+
+               Parent.Derived_Types.Insert (To_Entity_Reference (Item));
+               Establish_Parent_Derived_Relation
+                 (Parent => Parent, Derived => Entity);
             end if;
-            null;
          end;
       end loop;
 
