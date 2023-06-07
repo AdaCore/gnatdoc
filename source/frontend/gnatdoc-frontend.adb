@@ -434,6 +434,21 @@ package body GNATdoc.Frontend is
          end;
       end loop;
 
+      for Item of GNATdoc.Entities.Globals.Interface_Types loop
+         declare
+            Entity : constant not null
+              GNATdoc.Entities.Entity_Information_Access :=
+                GNATdoc.Entities.To_Entity (Item.Signature);
+
+         begin
+            for Progenitor of Entity.Progenitor_Types loop
+               Establish_Progenitor_Relation
+                 (Progenitor => Progenitor,
+                  Derived    => Entity);
+            end loop;
+         end;
+      end loop;
+
       --  Mark all subprograms that are documented as part of the class's
       --  documentation.
 
