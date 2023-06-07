@@ -436,6 +436,15 @@ package body GNATdoc.Backend.HTML is
                  Entity_Reference_Proxy'(Entity => Self.Entity.Parent_Type);
             end if;
 
+         elsif Name = "derived_types" then
+            if not Self.Entity.Derived_Types.Is_Empty then
+               return
+                 Entity_Reference_Set_Proxy'
+                   (Entities => Self.Entity.Derived_Types'Unchecked_Access,
+                    Nested   => <>,
+                    OOP_Mode => Self.OOP_Mode);
+            end if;
+
          elsif Name = "progenitor_types" then
             if not Self.Entity.Progenitor_Types.Is_Empty then
                return

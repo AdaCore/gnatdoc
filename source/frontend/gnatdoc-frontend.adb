@@ -192,6 +192,9 @@ package body GNATdoc.Frontend is
    Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
    --  All methods was found during processing of compilation units.
 
+   --  Classes : GNATdoc.Entities.Entity_Reference_Sets.Set;
+   --  --  All known tagged types
+
    ------------------------
    -- Check_Undocumented --
    ------------------------
@@ -316,7 +319,48 @@ package body GNATdoc.Frontend is
    -----------------
 
    procedure Postprocess is
+
+      function To_Entity_Reference
+        (Entity : not null GNATdoc.Entities.Entity_Information_Access)
+         return GNATdoc.Entities.Entity_Reference;
+
+      -------------------------
+      -- To_Entity_Reference --
+      -------------------------
+
+      function To_Entity_Reference
+        (Entity : not null GNATdoc.Entities.Entity_Information_Access)
+         return GNATdoc.Entities.Entity_Reference is
+      begin
+         return
+           (Qualified_Name => Entity.Qualified_Name,
+            Signature      => Entity.Signature);
+      end To_Entity_Reference;
+
    begin
+      --  Construct sets of derived types.
+
+      for Item of GNATdoc.Entities.Globals.Tagged_Types loop
+         declare
+            Entity : constant not null
+              GNATdoc.Entities.Entity_Information_Access :=
+                GNATdoc.Entities.To_Entity (Item.Signature);
+
+         begin
+            if GNATdoc.Entities.To_Entity.Contains
+              (Entity.Parent_Type.Signature)
+            then
+               GNATdoc.Entities.To_Entity
+                 (Entity.Parent_Type.Signature).Derived_Types.Insert
+                 (To_Entity_Reference (Item));
+            end if;
+            null;
+         end;
+      end loop;
+
+      --  Mark all subprograms that are documented as part of the class's
+      --  documentation.
+
       for Method of Methods loop
          if GNATdoc.Entities.To_Entity.Contains (Method.Signature) then
             GNATdoc.Entities.To_Entity (Method.Signature).Is_Method := True;
