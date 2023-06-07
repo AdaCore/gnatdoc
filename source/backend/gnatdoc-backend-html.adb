@@ -125,6 +125,7 @@ package body GNATdoc.Backend.HTML is
         new VSS.XML.Templates.Proxies.Abstract_Iterable_Proxy with record
          Entities : not null access Entity_Reference_Sets.Set;
          Nested   : aliased Entity_Reference_Sets.Set;
+         OOP_Mode : Boolean;
       end record;
 
       overriding function Iterator
@@ -140,6 +141,7 @@ package body GNATdoc.Backend.HTML is
       with record
          Entities : not null access Entity_Reference_Sets.Set;
          Position : Entity_Reference_Sets.Cursor;
+         OOP_Mode : Boolean;
       end record;
 
       overriding function Next
@@ -312,27 +314,31 @@ package body GNATdoc.Backend.HTML is
               Entity_Reference_Set_Proxy'
                 (Entities =>
                    Self.Entity.Dispatching_Declared'Unchecked_Access,
-                 Nested   => <>);
+                 Nested   => <>,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "overrided_dispatching_subprograms" then
             return
               Entity_Reference_Set_Proxy'
                 (Entities =>
                    Self.Entity.Dispatching_Overrided'Unchecked_Access,
-                 Nested   => <>);
+                 Nested   => <>,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "inherited_dispatching_subprograms" then
             return
               Entity_Reference_Set_Proxy'
                 (Entities =>
                    Self.Entity.Dispatching_Inherited'Unchecked_Access,
-                 Nested   => <>);
+                 Nested   => <>,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "class_subprograms" then
             return Result : Entity_Reference_Set_Proxy :=
                 (Entities =>
                    Self.Entity.Dispatching_Inherited'Unchecked_Access,
-                 Nested   => <>)
+                 Nested   => <>,
+                 OOP_Mode => Self.OOP_Mode)
             do
                Result.Entities := Result.Nested'Unchecked_Access;
                Result.Nested.Union (Self.Entity.Dispatching_Declared);
@@ -367,6 +373,10 @@ package body GNATdoc.Backend.HTML is
                 (Text => Digest (Self.Entity.Signature));
 
          elsif Name = "full_href" then
+            if not Self.OOP_Mode then
+               raise Program_Error;
+            end if;
+
             if Self.Entity.Kind in Ada_Tagged_Type | Ada_Interface_Type
               and not Self.OOP_Mode
             then
@@ -415,10 +425,11 @@ package body GNATdoc.Backend.HTML is
             then
                return
                  Entity_Information_Proxy'
-                   (Entity =>
+                   (Entity   =>
                       GNATdoc.Entities.To_Entity
                         (Self.Entity.Parent_Type.Signature),
-                    others => <>);
+                    Nested   => <>,
+                    OOP_Mode => Self.OOP_Mode);
 
             elsif not Self.Entity.Parent_Type.Signature.Is_Empty then
                return
@@ -430,7 +441,8 @@ package body GNATdoc.Backend.HTML is
                return
                  Entity_Reference_Set_Proxy'
                    (Entities => Self.Entity.Progenitor_Types'Unchecked_Access,
-                    Nested   => <>);
+                    Nested   => <>,
+                    OOP_Mode => Self.OOP_Mode);
             end if;
          end if;
 
@@ -497,10 +509,11 @@ package body GNATdoc.Backend.HTML is
          then
             return
               Entity_Information_Proxy'
-                (Entity =>
+                (Entity   =>
                    GNATdoc.Entities.To_Entity
                      (Entity_Reference_Sets.Element (Self.Position).Signature),
-                 others => <>);
+                 Nested   => <>,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif not Entity_Reference_Sets.Element
                      (Self.Position).Signature.Is_Empty
@@ -570,7 +583,9 @@ package body GNATdoc.Backend.HTML is
       begin
          return
            Entity_Reference_Set_Iterator'
-             (Entities => Self.Entities, Position => <>);
+             (Entities => Self.Entities,
+              Position => <>,
+              OOP_Mode => Self.OOP_Mode);
       end Iterator;
 
       ----------
