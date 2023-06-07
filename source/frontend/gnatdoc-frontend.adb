@@ -328,6 +328,10 @@ package body GNATdoc.Frontend is
         (Parent  : GNATdoc.Entities.Entity_Reference;
          Derived : not null GNATdoc.Entities.Entity_Information_Access);
 
+      procedure Establish_Progenitor_Relation
+        (Progenitor : GNATdoc.Entities.Entity_Reference;
+         Derived    : not null GNATdoc.Entities.Entity_Information_Access);
+
       ---------------------------------------
       -- Establish_Parent_Derived_Relation --
       ---------------------------------------
@@ -358,6 +362,33 @@ package body GNATdoc.Frontend is
             end if;
          end if;
       end Establish_Parent_Derived_Relation;
+
+      -----------------------------------
+      -- Establish_Progenitor_Relation --
+      -----------------------------------
+
+      procedure Establish_Progenitor_Relation
+        (Progenitor : GNATdoc.Entities.Entity_Reference;
+         Derived    : not null GNATdoc.Entities.Entity_Information_Access)
+      is
+         Progenitor_Entity : GNATdoc.Entities.Entity_Information_Access;
+
+      begin
+         if GNATdoc.Entities.To_Entity.Contains (Progenitor.Signature) then
+            Progenitor_Entity :=
+              GNATdoc.Entities.To_Entity (Progenitor.Signature);
+         end if;
+
+         Derived.All_Progenitor_Types.Include (Progenitor);
+
+         if Progenitor_Entity /= null then
+            for Progenitor of Progenitor_Entity.Progenitor_Types loop
+               Establish_Progenitor_Relation
+                 (Progenitor => Progenitor,
+                  Derived    => Derived);
+            end loop;
+         end if;
+      end Establish_Progenitor_Relation;
 
       -------------------------
       -- To_Entity_Reference --
@@ -394,6 +425,12 @@ package body GNATdoc.Frontend is
                Establish_Parent_Derived_Relation
                  (Parent => Entity.Parent_Type, Derived => Entity);
             end if;
+
+            for Progenitor of Entity.Progenitor_Types loop
+               Establish_Progenitor_Relation
+                 (Progenitor => Progenitor,
+                  Derived    => Entity);
+            end loop;
          end;
       end loop;
 

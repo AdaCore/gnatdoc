@@ -35,6 +35,13 @@
       </div>
     </p>
 
+    <p tal:condition='exists:gnatdoc/entity/all_progenitor_types' xml:space='preserve'>All progenitor types:
+      <div tal:omit-tag='' tal:repeat='type gnatdoc/entity/all_progenitor_types'>
+        <a tal:condition='type/is_documented' tal:attributes='href type/full_href' tal:content='type/name'>PARENT TYPE NAME</a>
+        <span tal:condition='not:type/is_documented' tal:content='type/name'>PARENT TYPE NAME</span>
+      </div>
+    </p>
+
     <p tal:condition='exists:gnatdoc/entity/all_derived_types' xml:space='preserve'>All derived types:
       <div tal:omit-tag='' tal:repeat='derived gnatdoc/entity/all_derived_types'>
         <a tal:condition='derived/is_documented' tal:attributes='href derived/full_href' tal:content='derived/name'>DERIVED TYPE NAME</a>
