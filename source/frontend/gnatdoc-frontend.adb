@@ -192,6 +192,9 @@ package body GNATdoc.Frontend is
    Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
    --  All methods was found during processing of compilation units.
 
+   --  Classes : GNATdoc.Entities.Entity_Reference_Sets.Set;
+   --  --  All known tagged types
+
    ------------------------
    -- Check_Undocumented --
    ------------------------
@@ -316,7 +319,139 @@ package body GNATdoc.Frontend is
    -----------------
 
    procedure Postprocess is
+
+      function To_Entity_Reference
+        (Entity : not null GNATdoc.Entities.Entity_Information_Access)
+         return GNATdoc.Entities.Entity_Reference;
+
+      procedure Establish_Parent_Derived_Relation
+        (Parent  : GNATdoc.Entities.Entity_Reference;
+         Derived : not null GNATdoc.Entities.Entity_Information_Access);
+
+      procedure Establish_Progenitor_Relation
+        (Progenitor : GNATdoc.Entities.Entity_Reference;
+         Derived    : not null GNATdoc.Entities.Entity_Information_Access);
+
+      ---------------------------------------
+      -- Establish_Parent_Derived_Relation --
+      ---------------------------------------
+
+      procedure Establish_Parent_Derived_Relation
+        (Parent  : GNATdoc.Entities.Entity_Reference;
+         Derived : not null GNATdoc.Entities.Entity_Information_Access)
+      is
+         Parent_Entity : GNATdoc.Entities.Entity_Information_Access;
+
+      begin
+         if GNATdoc.Entities.To_Entity.Contains (Parent.Signature) then
+            Parent_Entity := GNATdoc.Entities.To_Entity (Parent.Signature);
+         end if;
+
+         Derived.All_Parent_Types.Include (Parent);
+
+         if Parent_Entity /= null then
+            Parent_Entity.All_Derived_Types.Include
+              (To_Entity_Reference (Derived));
+
+            if GNATdoc.Entities.To_Entity.Contains
+                 (Parent_Entity.Parent_Type.Signature)
+            then
+               Establish_Parent_Derived_Relation
+                 (Parent  => Parent_Entity.Parent_Type,
+                  Derived => Derived);
+            end if;
+         end if;
+      end Establish_Parent_Derived_Relation;
+
+      -----------------------------------
+      -- Establish_Progenitor_Relation --
+      -----------------------------------
+
+      procedure Establish_Progenitor_Relation
+        (Progenitor : GNATdoc.Entities.Entity_Reference;
+         Derived    : not null GNATdoc.Entities.Entity_Information_Access)
+      is
+         Progenitor_Entity : GNATdoc.Entities.Entity_Information_Access;
+
+      begin
+         if GNATdoc.Entities.To_Entity.Contains (Progenitor.Signature) then
+            Progenitor_Entity :=
+              GNATdoc.Entities.To_Entity (Progenitor.Signature);
+         end if;
+
+         Derived.All_Progenitor_Types.Include (Progenitor);
+
+         if Progenitor_Entity /= null then
+            for Progenitor of Progenitor_Entity.Progenitor_Types loop
+               Establish_Progenitor_Relation
+                 (Progenitor => Progenitor,
+                  Derived    => Derived);
+            end loop;
+         end if;
+      end Establish_Progenitor_Relation;
+
+      -------------------------
+      -- To_Entity_Reference --
+      -------------------------
+
+      function To_Entity_Reference
+        (Entity : not null GNATdoc.Entities.Entity_Information_Access)
+         return GNATdoc.Entities.Entity_Reference is
+      begin
+         return
+           (Qualified_Name => Entity.Qualified_Name,
+            Signature      => Entity.Signature);
+      end To_Entity_Reference;
+
    begin
+      for Item of GNATdoc.Entities.Globals.Tagged_Types loop
+         declare
+            Entity : constant not null
+              GNATdoc.Entities.Entity_Information_Access :=
+                GNATdoc.Entities.To_Entity (Item.Signature);
+
+         begin
+            if not Entity.Parent_Type.Signature.Is_Empty then
+               --  Construct references between parent/derived types.
+
+               if GNATdoc.Entities.To_Entity.Contains
+                    (Entity.Parent_Type.Signature)
+               then
+                  GNATdoc.Entities.To_Entity
+                    (Entity.Parent_Type.Signature).Derived_Types.Insert
+                      (To_Entity_Reference (Item));
+               end if;
+
+               Establish_Parent_Derived_Relation
+                 (Parent => Entity.Parent_Type, Derived => Entity);
+            end if;
+
+            for Progenitor of Entity.Progenitor_Types loop
+               Establish_Progenitor_Relation
+                 (Progenitor => Progenitor,
+                  Derived    => Entity);
+            end loop;
+         end;
+      end loop;
+
+      for Item of GNATdoc.Entities.Globals.Interface_Types loop
+         declare
+            Entity : constant not null
+              GNATdoc.Entities.Entity_Information_Access :=
+                GNATdoc.Entities.To_Entity (Item.Signature);
+
+         begin
+            for Progenitor of Entity.Progenitor_Types loop
+               Establish_Progenitor_Relation
+                 (Progenitor => Progenitor,
+                  Derived    => Entity);
+            end loop;
+         end;
+      end loop;
+
+      --  Mark all subprograms that are documented as part of the class's
+      --  documentation.
+
       for Method of Methods loop
          if GNATdoc.Entities.To_Entity.Contains (Method.Signature) then
             GNATdoc.Entities.To_Entity (Method.Signature).Is_Method := True;
@@ -446,13 +581,17 @@ package body GNATdoc.Frontend is
 
                when Ada_Attribute_Def_Clause
                   | Ada_Concrete_Type_Decl
+                  | Ada_Enum_Rep_Clause
                   | Ada_Incomplete_Tagged_Type_Decl
+                  | Ada_Incomplete_Type_Decl
                   | Ada_Generic_Package_Instantiation
                   | Ada_Number_Decl
                   | Ada_Object_Decl
                   | Ada_Package_Renaming_Decl
                   | Ada_Pragma_Node
+                  | Ada_Record_Rep_Clause
                   | Ada_Subtype_Decl
+                  | Ada_Use_Package_Clause
                   | Ada_Use_Type_Clause
                =>
                   return Over;
@@ -471,11 +610,7 @@ package body GNATdoc.Frontend is
                   null;
 
                when others =>
-                  Ada.Text_IO.Put_Line
-                    (Ada.Text_IO.Standard_Error,
-                     ">>>>>>>>>>>>>>>>>>>>>>>>> " & Node.Image);
-
-                  raise Program_Error;
+                  GNATdoc.Messages.Raise_Not_Implemented (Node.Image);
             end case;
          end if;
 
@@ -975,6 +1110,8 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
+           Enclosing      =>
+             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
@@ -1244,6 +1381,8 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
+           Enclosing      =>
+             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
@@ -1451,6 +1590,8 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
+           Enclosing      =>
+             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 

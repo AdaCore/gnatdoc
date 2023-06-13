@@ -35,6 +35,8 @@ package GNATdoc.Messages is
 
    procedure Raise_Not_Implemented
      (Message  : String;
-      Location : String := GNAT.Source_Info.Source_Location);
+      Location : String := GNAT.Source_Info.Source_Location)
+     with No_Return;
+   --  Raises GNATdoc.Not_Implemented exception with provided message.
 
 end GNATdoc.Messages;
