@@ -9,6 +9,8 @@ This package contains test cases of documentation extraction for protected
 types. Coverage of tests of procedures/functions/entries are limited to few
 cases only (this code is tested by subprograms tests).
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+package Protecteds
 \/ DESCRIPTION  ()  0 0 0 0
 This package contains test cases of documentation extraction for protected
 types. Coverage of tests of procedures/functions/entries are limited to few

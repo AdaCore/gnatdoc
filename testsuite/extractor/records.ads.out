@@ -18,6 +18,8 @@
 **************************
 \/ RAW <<HEADER>> ()  0 0 0 0
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+package Records
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <DefiningName "Records" records.ads:6:9-6:16>

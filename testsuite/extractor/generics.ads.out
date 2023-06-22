@@ -8,6 +8,8 @@
 Test cases for generics declarations
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 This generic package has set of formal parameters of all types.
+\/ SNIPPET ada ()  0 0 0 0
+package Generics
 \/ DESCRIPTION  ()  0 0 0 0
 This generic package has set of formal parameters of all types.
 **************************
@@ -126,6 +128,9 @@ Description of the interface type.
 type Interface_Type is synchronized interface;
   \/ DESCRIPTION  ()  0 0 0 0
 Description of the interface type.
+\/ RAW <<LEADING>> ()  0 0 0 0
+This generic package has set of formal parameters of all types.
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ SNIPPET ada ()  0 0 0 0
 generic
    type Private_Type is abstract tagged limited private;
@@ -142,9 +147,6 @@ generic
    type Function_Access_Type is access function return Floating_Point_Type;
    type Interface_Type is synchronized interface;
 package All_Types
-\/ RAW <<LEADING>> ()  0 0 0 0
-This generic package has set of formal parameters of all types.
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 This generic package has set of formal parameters of all types.
 **************************
@@ -224,6 +226,15 @@ Return value
  Y : Integer)
  return Integer
   \/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+This generic package has set of formal parameters of access to
+subprogram and subprogram.
+
+@formal Procedure_Access_Type Access to procedure
+@formal Function_Access_Type Access to function
+@formal Procedure_P Formal procedure
+@formal Function_F Formal function
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ SNIPPET ada ()  0 0 0 0
 generic
    type Procedure_Access_Type is access procedure
@@ -241,15 +252,6 @@ generic
       Y : Integer)
       return Integer;
 package All_Subprograms
-\/ RAW <<LEADING>> ()  0 0 0 0
-This generic package has set of formal parameters of access to
-subprogram and subprogram.
-
-@formal Procedure_Access_Type Access to procedure
-@formal Function_Access_Type Access to function
-@formal Procedure_P Formal procedure
-@formal Function_F Formal function
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 This generic package has set of formal parameters of access to
 subprogram and subprogram.
@@ -288,14 +290,14 @@ Description of the Z formal object.
 Z : Integer;
   \/ DESCRIPTION  ()  0 0 0 0
 Description of the Z formal object.
+\/ RAW <<LEADING>> ()  0 0 0 0
+Formal objects
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ SNIPPET ada ()  0 0 0 0
 generic
    X, Y : Integer;
    Z : Integer;
 package Objects
-\/ RAW <<LEADING>> ()  0 0 0 0
-Formal objects
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 Formal objects
 **************************
@@ -315,12 +317,12 @@ Formal objects
   \/ SNIPPET ada ()  0 0 0 0
 with package Types is new All_Types (<>);
   \/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ SNIPPET ada ()  0 0 0 0
 generic
    with package Types is new All_Types (<>);
 package My_Types
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <GenericFormalPart generics.ads:97:4-98:48>
@@ -424,13 +426,13 @@ type Private_Unknown_Discriminants_Type (<>) is private;
   \/ SNIPPET ada ()  0 0 0 0
 type Private_Known_Discriminants_Type (X : Integer) is private;
   \/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ SNIPPET ada ()  0 0 0 0
 generic
    type Private_Unknown_Discriminants_Type (<>) is private;
    type Private_Known_Discriminants_Type (X : Integer) is private;
 package Discriminanted_Types
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
 <GenericFormalPart generics.ads:126:4-129:70>
@@ -459,16 +461,16 @@ type Cursor;
   \/ SNIPPET ada ()  0 0 0 0
 function Has_Element (Self : Cursor) return Boolean
   \/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+Generic package with incomplete formal type declaration and use of
+pragma in formal part.
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ SNIPPET ada ()  0 0 0 0
 generic
    type Cursor;
    with function Has_Element (Self : Cursor) return Boolean;
    pragma Unreferenced (Has_Element);
 package Incomplete_Type
-\/ RAW <<LEADING>> ()  0 0 0 0
-Generic package with incomplete formal type declaration and use of
-pragma in formal part.
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
 Generic package with incomplete formal type declaration and use of
 pragma in formal part.

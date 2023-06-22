@@ -7,6 +7,8 @@
 \/ RAW <<LEADING>> ()  0 0 0 0
 This is description of the package.
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+package Documentation_Pattern
 \/ DESCRIPTION  ()  0 0 0 0
 This is description of the package.
 **************************

@@ -8,6 +8,8 @@
 Test of extraction of the code snippet for subprograms with overriding
 keyword.
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+package Overriding_Indicator
 \/ DESCRIPTION  ()  0 0 0 0
 Test of extraction of the code snippet for subprograms with overriding
 keyword.
