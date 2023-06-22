@@ -752,6 +752,12 @@ package body GNATdoc.Comments.Extractor is
          end;
       end if;
 
+      Fill_Code_Snippet
+        (Basic_Decl_Node,
+         Basic_Decl_Node.Token_Start,
+         Base_Package_Decl_Node.F_Package_Name.Token_End,
+         Documentation.Sections);
+
       Remove_Comment_Start_And_Indentation
         (Documentation.Sections, Options.Pattern);
 
@@ -1319,13 +1325,6 @@ package body GNATdoc.Comments.Extractor is
 
       case Node.Kind is
          when Ada_Generic_Package_Decl =>
-            Fill_Code_Snippet
-              (Node,
-               Node.Token_Start,
-               Node.As_Generic_Package_Decl.F_Package_Decl.F_Package_Name
-                 .Token_End,
-               Documentation.Sections);
-
             Extract_Base_Package_Decl_Documentation
               (Node,
                Node.As_Generic_Package_Decl.F_Package_Decl,
