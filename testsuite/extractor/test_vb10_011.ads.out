@@ -12,6 +12,10 @@ Item.
 type Item_T is private;
   \/ DESCRIPTION  ()  0 0 0 0
 Item.
+\/ SNIPPET ada ()  0 0 0 0
+generic
+   type Item_T is private;
+package Test_VB10_011
 \/ RAW <<LEADING>> ()  0 0 0 0
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ DESCRIPTION  ()  0 0 0 0
