@@ -1319,6 +1319,13 @@ package body GNATdoc.Comments.Extractor is
 
       case Node.Kind is
          when Ada_Generic_Package_Decl =>
+            Fill_Code_Snippet
+              (Node,
+               Node.Token_Start,
+               Node.As_Generic_Package_Decl.F_Package_Decl.F_Package_Name
+                 .Token_End,
+               Documentation.Sections);
+
             Extract_Base_Package_Decl_Documentation
               (Node,
                Node.As_Generic_Package_Decl.F_Package_Decl,
@@ -2315,6 +2322,16 @@ package body GNATdoc.Comments.Extractor is
 
          Fill_Code_Snippet
            (Decl_Node, Decl_Node.Token_Start, Decl_Node.Token_End, Sections);
+
+      elsif Decl_Node.Kind in Ada_Generic_Subp_Internal then
+         --  Generic subprogram declaration includes generic formals
+         --  declarations.
+
+         Fill_Code_Snippet
+           (Spec_Node,
+            Decl_Node.Parent.Token_Start,
+            Spec_Node.Token_End,
+            Sections);
 
       else
          Fill_Code_Snippet
