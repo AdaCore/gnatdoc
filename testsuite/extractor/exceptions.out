@@ -7,6 +7,8 @@
 \/ RAW <<LEADING>> ()  0 0 0 0
 Test of documentation extraction for exceptions.
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+package Exceptions
 \/ DESCRIPTION  ()  0 0 0 0
 Test of documentation extraction for exceptions.
 **************************

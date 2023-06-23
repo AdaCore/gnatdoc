@@ -752,6 +752,12 @@ package body GNATdoc.Comments.Extractor is
          end;
       end if;
 
+      Fill_Code_Snippet
+        (Basic_Decl_Node,
+         Basic_Decl_Node.Token_Start,
+         Base_Package_Decl_Node.F_Package_Name.Token_End,
+         Documentation.Sections);
+
       Remove_Comment_Start_And_Indentation
         (Documentation.Sections, Options.Pattern);
 
@@ -2315,6 +2321,16 @@ package body GNATdoc.Comments.Extractor is
 
          Fill_Code_Snippet
            (Decl_Node, Decl_Node.Token_Start, Decl_Node.Token_End, Sections);
+
+      elsif Decl_Node.Kind in Ada_Generic_Subp_Internal then
+         --  Generic subprogram declaration includes generic formals
+         --  declarations.
+
+         Fill_Code_Snippet
+           (Spec_Node,
+            Decl_Node.Parent.Token_Start,
+            Spec_Node.Token_End,
+            Sections);
 
       else
          Fill_Code_Snippet

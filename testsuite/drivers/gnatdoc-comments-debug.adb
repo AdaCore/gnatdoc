@@ -25,15 +25,22 @@ package body GNATdoc.Comments.Debug is
 
    procedure Dump
      (Sections : Section_Vectors.Vector;
-      Indent   : Wide_Wide_String);
+      Indent   : Wide_Wide_String;
+      Text     : in out VSS.String_Vectors.Virtual_String_Vector);
 
    ----------
    -- Dump --
    ----------
 
    procedure Dump (Comment : Structured_Comment'Class) is
+      Text : VSS.String_Vectors.Virtual_String_Vector;
+
    begin
-      Dump (Comment.Sections, "");
+      Dump (Comment.Sections, "", Text);
+
+      for Line of Text loop
+         Put_Line (To_Wide_Wide_String (Line));
+      end loop;
    end Dump;
 
    ----------
@@ -42,29 +49,44 @@ package body GNATdoc.Comments.Debug is
 
    procedure Dump
      (Sections : Section_Vectors.Vector;
-      Indent   : Wide_Wide_String) is
+      Indent   : Wide_Wide_String;
+      Text     : in out VSS.String_Vectors.Virtual_String_Vector) is
    begin
       for Section of Sections loop
-         Put_Line
-           (Indent
-            & "\/ "
-            & Section_Kind'Wide_Wide_Image (Section.Kind)
-            & " "
-            & To_Wide_Wide_String (Section.Symbol)
-            & " ("
-            & To_Wide_Wide_String (Section.Name)
-            & ") "
-            & Line_Number'Wide_Wide_Image (Section.Exact_Start_Line)
-            & Line_Number'Wide_Wide_Image (Section.Exact_End_Line)
-            & Line_Number'Wide_Wide_Image (Section.Group_Start_Line)
-            & Line_Number'Wide_Wide_Image (Section.Group_End_Line));
+         Text.Append
+           (VSS.Strings.To_Virtual_String
+              (Indent
+               & "\/ "
+               & Section_Kind'Wide_Wide_Image (Section.Kind)
+               & " "
+               & To_Wide_Wide_String (Section.Symbol)
+               & " ("
+               & To_Wide_Wide_String (Section.Name)
+               & ") "
+               & Line_Number'Wide_Wide_Image (Section.Exact_Start_Line)
+               & Line_Number'Wide_Wide_Image (Section.Exact_End_Line)
+               & Line_Number'Wide_Wide_Image (Section.Group_Start_Line)
+               & Line_Number'Wide_Wide_Image (Section.Group_End_Line)));
 
          for Line of Section.Text loop
-            Put_Line (To_Wide_Wide_String (Line));
+            Text.Append (Line);
          end loop;
 
-         Dump (Section.Sections, Indent & "  ");
+         Dump (Section.Sections, Indent & "  ", Text);
       end loop;
+   end Dump;
+
+   ----------
+   -- Dump --
+   ----------
+
+   function Dump (Comment : Structured_Comment'Class) return String is
+      Text : VSS.String_Vectors.Virtual_String_Vector;
+
+   begin
+      Dump (Comment.Sections, "", Text);
+
+      return To_UTF_8_String (Text.Join_Lines (VSS.Strings.LF));
    end Dump;
 
 end GNATdoc.Comments.Debug;

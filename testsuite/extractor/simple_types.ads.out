@@ -12,6 +12,8 @@ Test of documentation extraction for the simple types:
   - ordinary fixed point
   - decimal fixed point
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+package Simple_Types
 \/ DESCRIPTION  ()  0 0 0 0
 Test of documentation extraction for the simple types:
   - signed integer
