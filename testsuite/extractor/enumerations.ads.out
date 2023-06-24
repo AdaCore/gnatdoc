@@ -7,6 +7,8 @@
 \/ RAW <<LEADING>> ()  0 0 0 0
 Test cases for enumeration types.
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+package Enumerations
 \/ DESCRIPTION  ()  0 0 0 0
 Test cases for enumeration types.
 **************************

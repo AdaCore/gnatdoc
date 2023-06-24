@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2023, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,12 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+--  Subprograms to simplify debug.
+
 package GNATdoc.Comments.Debug is
 
    procedure Dump (Comment : Structured_Comment'Class);
+
+   function Dump (Comment : Structured_Comment'Class) return String;
 
 end GNATdoc.Comments.Debug;

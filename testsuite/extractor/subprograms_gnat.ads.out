@@ -13,6 +13,8 @@
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
 This is description of the package at the top of the specification.
+\/ SNIPPET ada ()  0 0 0 0
+package Subprograms_GNAT
 \/ DESCRIPTION  ()  0 0 0 0
 This is description of the package at the top of the specification.
 **************************
