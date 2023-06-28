@@ -23,6 +23,7 @@ with Ada.Wide_Wide_Text_IO;   use Ada.Wide_Wide_Text_IO;
 
 with VSS.Application;         use VSS.Application;
 with VSS.JSON.Pull_Readers.Simple;
+with VSS.JSON.Streams;
 with VSS.Regular_Expressions;
 with VSS.Strings;             use VSS.Strings;
 with VSS.Strings.Conversions; use VSS.Strings.Conversions;
@@ -48,7 +49,7 @@ procedure Test_Extractor is
    ------------------
 
    procedure Load_Options is
-      use all type VSS.JSON.Pull_Readers.JSON_Event_Kind;
+      use all type VSS.JSON.Streams.JSON_Stream_Element_Kind;
 
       Stream : aliased VSS.Text_Streams.File_Input.File_Input_Text_Stream;
       Reader : VSS.JSON.Pull_Readers.Simple.JSON_Simple_Pull_Reader;
@@ -90,8 +91,8 @@ procedure Test_Extractor is
 
             when others =>
                raise Program_Error
-                 with VSS.JSON.Pull_Readers.JSON_Event_Kind'Image
-                        (Reader.Event_Kind);
+                 with VSS.JSON.Streams.JSON_Stream_Element_Kind'Image
+                        (Reader.Element_Kind);
          end case;
       end loop;
    end Load_Options;
