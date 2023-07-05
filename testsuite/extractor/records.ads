@@ -121,4 +121,10 @@ package Records is
    --  This is example of the record type with discriminant of integer type and
    --  variant part that depends from few kind of values.
 
+   --  Remove of aspects from the code snippet.
+   type My_Record is tagged record
+      I : Integer := 1;
+   end record
+     with Alignment => (8);
+
 end Records;
