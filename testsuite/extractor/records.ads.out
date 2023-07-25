@@ -1,4 +1,4 @@
-<CompilationUnit records.ads:2:1-124:13>
+<CompilationUnit records.ads:2:1-130:13>
 <AdaNodeList records.ads:2:1-4:23>
 <WithClause records.ads:2:1-2:30>
 <LimitedAbsent records.ads:2:1-2:1>
@@ -12,9 +12,9 @@
 <PrivateAbsent records.ads:2:30-2:30>
 <NameList records.ads:4:6-4:22>
 <Id "All_Enumerations" records.ads:4:6-4:22>
-<LibraryItem records.ads:6:1-124:13>
+<LibraryItem records.ads:6:1-130:13>
 <PrivateAbsent records.ads:4:23-4:23>
-<PackageDecl ["Records"] records.ads:6:1-124:13>
+<PackageDecl ["Records"] records.ads:6:1-130:13>
 **************************
 \/ RAW <<HEADER>> ()  0 0 0 0
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
@@ -24,8 +24,8 @@ package Records
 **************************
 <DefiningName "Records" records.ads:6:9-6:16>
 <Id "Records" records.ads:6:9-6:16>
-<PublicPart records.ads:6:19-124:1>
-<AdaNodeList records.ads:8:4-120:15>
+<PublicPart records.ads:6:19-130:1>
+<AdaNodeList records.ads:8:4-128:28>
 <ConcreteTypeDecl ["Record_Type_1"] records.ads:8:4-10:15>
 **************************
 \/ FIELD a (A)  8 8 9 8
@@ -216,6 +216,18 @@ end record;
 This is example of the record type with discriminant of integer type and
 variant part that depends from few kind of values.
 **************************
-<EndName records.ads:124:5-124:12>
-<Id "Records" records.ads:124:5-124:12>
-<PragmaNodeList records.ads:124:13-124:13>
+<ConcreteTypeDecl ["My_Record"] records.ads:125:4-128:28>
+**************************
+\/ FIELD i (I)  126 126 127 127
+\/ RAW <<LEADING>> ()  0 0 0 0
+Remove of aspects from the code snippet.
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type My_Record is tagged record
+   I : Integer := 1;
+end record;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<EndName records.ads:130:5-130:12>
+<Id "Records" records.ads:130:5-130:12>
+<PragmaNodeList records.ads:130:13-130:13>
