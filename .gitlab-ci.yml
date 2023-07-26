@@ -4,87 +4,27 @@ variables:
 
 stages:
   - build_and_test
-  - build_dependents
-
-.detect-branches:
-  #  Version 2.
-  #  Detects source and target branches. Checkout necessary branch for
-  #  repository when run downstream pipeline is detected.
-  #    ACI_SOURCE_BRANCH is set to source branch (merge request, pull)
-  #    ACI_TARGET_BRANCH is set to target branch of merge request, or 'master'/'edge' for pull
-  #    ACI_REPOSITORY_NAME_EDGE_SUFFIX is set to '-edge' when target repository is 'edge'
-  #    ACI_ANOD_QUALIFIER is set to 'edge' when target repository is 'edge'
-  #    ACI_SUBPROJECTS_ROOT is set to '/tmp' and may be overritten by script
-  - |
-      if [[ -n "$ACI_UPSTREAM_SOURCE_BRANCH" ]]; then
-        ACI_SOURCE_BRANCH="$ACI_UPSTREAM_SOURCE_BRANCH";
-      elif [[ -n "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" ]]; then
-        ACI_SOURCE_BRANCH="$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME";
-      else
-        ACI_SOURCE_BRANCH="$CI_COMMIT_BRANCH";
-      fi;
-      if [[ -n "$ACI_UPSTREAM_TARGET_BRANCH" ]]; then
-        ACI_TARGET_BRANCH=$ACI_UPSTREAM_TARGET_BRANCH;
-      elif [[ -n "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ]]; then
-        ACI_TARGET_BRANCH="$CI_MERGE_REQUEST_TARGET_BRANCH_NAME";
-      elif [[ "x$CI_COMMIT_BRANCH" == "xedge" ]]; then
-        ACI_TARGET_BRANCH="edge";
-      else
-        ACI_TARGET_BRANCH="master";
-      fi;
-      if [[ "$ACI_TARGET_BRANCH" == "edge" ]]; then
-        ACI_REPOSITORY_NAME_EDGE_SUFFIX="-edge";
-        ACI_ANOD_QUALIFIER="edge"
-      else
-        ACI_REPOSITORY_NAME_EDGE_SUFFIX="";
-        ACI_ANOD_QUALIFIER=""
-      fi
-      ACI_SUBPROJECTS_ROOT=/tmp
-      echo "Source branch: $ACI_SOURCE_BRANCH"
-      echo "Target branch: $ACI_TARGET_BRANCH"
-      echo "Name suffix:   $ACI_REPOSITORY_NAME_EDGE_SUFFIX"
-      echo "Qualifier:     $ACI_ANOD_QUALIFIER"
-      echo "Subprojects:   $ACI_SUBPROJECTS_ROOT"
-
-  #  On downstream pipeline checkout the necessary branch
-  - if [[ "$CI_PIPELINE_SOURCE" == 'pipeline' ]]; then
-      if git -C "$CI_PROJECT_DIR" show-ref --quiet -- "$ACI_SOURCE_BRANCH"; then
-        git -C "$CI_PROJECT_DIR" checkout "$ACI_SOURCE_BRANCH";
-      elif git -C "$CI_PROJECT_DIR" ls-remote --exit-code -- origin "$ACI_SOURCE_BRANCH"; then
-        git -C "$CI_PROJECT_DIR" config remote.origin.fetch "+refs/heads/$ACI_SOURCE_BRANCH:refs/remotes/origin/$ACI_SOURCE_BRANCH";
-        git -C "$CI_PROJECT_DIR" remote update;
-        git -C "$CI_PROJECT_DIR" checkout "$ACI_SOURCE_BRANCH";
-      elif git -C "$CI_PROJECT_DIR" show-ref --quiet -- "$ACI_TARGET_BRANCH"; then
-        git -C "$CI_PROJECT_DIR" checkout "$ACI_TARGET_BRANCH";
-      elif git -C "$CI_PROJECT_DIR" ls-remote --exit-code -- origin "$ACI_TARGET_BRANCH"; then
-        git -C "$CI_PROJECT_DIR" config remote.origin.fetch "+refs/heads/$ACI_TARGET_BRANCH:refs/remotes/origin/$ACI_TARGET_BRANCH";
-        git -C "$CI_PROJECT_DIR" remote update;
-        git -C "$CI_PROJECT_DIR" checkout "$ACI_TARGET_BRANCH";
-      fi
-    fi
-
-.checkout-subproject:
-  #  Version 1.1
-  #  Input variables:
-  #    ACI_SUBPROJECTS_ROOT  - root directory to checkout repositories.
-  #    ACI_SUBPROJECT_REPOSITORY_URL_PATH - path component of the repository's URL.
-  #    ACI_SUBPROJECT_NAME - name of the directory for subproject.
-  - |
-    git -C $ACI_SUBPROJECTS_ROOT clone --depth=20 --no-single-branch $GIT_CLONE_BASE/$ACI_SUBPROJECT_REPOSITORY_URL_PATH $ACI_SUBPROJECT_NAME
-    if `git -C $ACI_SUBPROJECTS_ROOT -C $ACI_SUBPROJECT_NAME show-ref $ACI_SOURCE_BRANCH > /dev/null`; then
-      git -C $ACI_SUBPROJECTS_ROOT -C $ACI_SUBPROJECT_NAME checkout $ACI_SOURCE_BRANCH;
-    elif `git -C $ACI_SUBPROJECTS_ROOT -C $ACI_SUBPROJECT_NAME show-ref $ACI_TARGET_BRANCH > /dev/null`; then
-      git -C $ACI_SUBPROJECTS_ROOT -C $ACI_SUBPROJECT_NAME checkout $ACI_TARGET_BRANCH;
-    fi
-    anod vcs --sandbox-dir /it/wave --add-repo $ACI_SUBPROJECT_NAME $ACI_SUBPROJECTS_ROOT/$ACI_SUBPROJECT_NAME
+  - downstream_ci
 
 #########
 # BUILD #
 #########
 
+.basic-setup:
+    # Temporary: clone the specific branch of ci-fragments
+    # TODO: remove the next 4 lines when this version of ci-fragments is available in the image
+    - cd /tmp
+    - git clone $GIT_CLONE_BASE/eng/it/ci-fragments -b topic/generic_ci_phase_2 --depth 1
+    - export PATH=/tmp/ci-fragments:$PATH
+    - cd -
+    # Use generic_anod_ci here.
+    - generic_anod_ci
+    - cat /tmp/ci_env.sh
+    - . /tmp/ci_env.sh
+
 build_and_test:
   services:
-     - image:sandbox
+     - image:e3
      - cpu:8
      - mem:16
   stage: build_and_test
@@ -94,27 +34,13 @@ build_and_test:
     - if: $CI_COMMIT_BRANCH == 'master' && $CI_COMMIT_TITLE =~ /Merge branch.*/
     - if: $CI_COMMIT_BRANCH == 'edge' && $CI_COMMIT_TITLE =~ /Merge branch.*/
   script:
-    - !reference [.detect-branches]
-
-    - ACI_SUBPROJECT_REPOSITORY_URL_PATH=/eng/ide/vss.git
-    - ACI_SUBPROJECT_NAME=vss
-    - !reference [.checkout-subproject]
-
-    - ACI_SUBPROJECT_REPOSITORY_URL_PATH=/eng/ide/markdown.git
-    - ACI_SUBPROJECT_NAME=markdown
-    - !reference [.checkout-subproject]
-
-    # Tell the anod sandbox to use our repository
-    - cd /it/wave
-    - anod vcs --add-repo gnatdoc$ACI_REPOSITORY_NAME_EDGE_SUFFIX $CI_PROJECT_DIR
-
-    - anod vcs
+    - !reference [.basic-setup]
 
     # Build gnatdoc
-    - anod build gnatdoc4 --qualifier=$ACI_ANOD_QUALIFIER
+    - anod build gnatdoc4 $ACI_TRACK_QUALIFIER
 
     # Test gnatdoc
-    - anod test gnatdoc4 --qualifier=$ACI_ANOD_QUALIFIER
+    - anod test gnatdoc4 $ACI_TRACK_QUALIFIER
 
     # At the moment the gnatdoc4 anod spec runs only one test
     # and does not support e3-testsuite.
@@ -129,19 +55,19 @@ build_and_test:
 #    reports:
 #      junit: xunit_output.xml
 
-run_als_ci:
-  stage: build_dependents
+downstream_ci:
+  stage: downstream_ci
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       when: manual
-  trigger:
-    project: eng/ide/ada_language_server
-    strategy: depend
-  allow_failure: true
   inherit:
     variables: false
   variables:
-    ACI_UPSTREAM_PROJECT_PATH: $CI_PROJECT_PATH
-    ACI_UPSTREAM_REF_NAME: $CI_COMMIT_REF_NAME
-    ACI_UPSTREAM_SOURCE_BRANCH: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
-    ACI_UPSTREAM_TARGET_BRANCH: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+    ACI_UPSTREAM_PROJECT_ID: $CI_PROJECT_ID
+    ACI_UPSTREAM_MERGE_REQUEST_IID: $CI_MERGE_REQUEST_IID
+  parallel:
+    matrix:
+      - PROJECT: ["eng/ide/ada_language_server"]
+  trigger:
+    strategy: depend
+    project: $PROJECT

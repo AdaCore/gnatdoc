@@ -1818,7 +1818,10 @@ package body GNATdoc.Comments.Extractor is
          Trailing_Section => Trailing_Section);
 
       Fill_Code_Snippet
-        (Node, Node.Token_Start, Node.Token_End, Documentation.Sections);
+        (Node,
+         Node.Token_Start,
+         Node.F_Type_Def.Token_End,
+         Documentation.Sections);
 
       Remove_Comment_Start_And_Indentation
         (Documentation.Sections, Options.Pattern);
@@ -2716,6 +2719,15 @@ package body GNATdoc.Comments.Extractor is
                end loop;
             end if;
          end;
+      end if;
+
+      --  For record type add ';' at the end
+
+      if Node.Kind = Ada_Concrete_Type_Decl
+        and then Node.As_Concrete_Type_Decl.F_Type_Def.Kind
+                  in Ada_Record_Type_Def | Ada_Derived_Type_Def
+      then
+         Text.Replace (Text.Length, Text.Last_Element & ";");
       end if;
 
       --  Remove all empty lines
