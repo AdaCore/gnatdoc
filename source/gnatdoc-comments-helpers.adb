@@ -340,10 +340,10 @@ package body GNATdoc.Comments.Helpers is
 
          Subname_To_Extract := Name.As_Defining_Name;
 
-      elsif Parent_Basic_Decl.Kind
-              in Ada_Generic_Package_Decl | Ada_Generic_Subp_Decl
+      elsif Decl.Kind
+              in Ada_Generic_Package_Internal | Ada_Generic_Subp_Internal
       then
-         --  Generic package and subprogram declarations
+         --  Generic package or generic subprogram declarations
 
          Decl_To_Extract := Parent_Basic_Decl;
 
