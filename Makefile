@@ -14,19 +14,7 @@ build_tests:
 check: build_tests check_extractor check_gnatdoc
 
 check_extractor:
-	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json overriding_indicator.ads | diff -u --strip-trailing-cr overriding_indicator.out -)
-	(cd testsuite/extractor && ../../.objs/test_extractor pattern.json documentation_pattern.ads | diff -u --strip-trailing-cr documentation_pattern.out -)
-	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json exceptions.ads | diff -u --strip-trailing-cr exceptions.out -)
-	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json records.ads | diff -u --strip-trailing-cr records.ads.out -)
-	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json tasks.ads | diff -u --strip-trailing-cr tasks.out -)
-	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json protecteds.ads | diff -u --strip-trailing-cr protecteds.ads.out -)
-	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json protecteds.adb | diff -u --strip-trailing-cr protecteds.adb.out -)
-	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json subprograms_gnat.ads | diff -u --strip-trailing-cr subprograms_gnat.ads.out -)
-	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json test_vb10_011.ads | diff -u --strip-trailing-cr test_vb10_011.ads.out -)
-	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json enumerations.ads | diff -u --strip-trailing-cr enumerations.ads.out -)
-	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json simple_types.ads | diff -u --strip-trailing-cr simple_types.ads.out -)
-	(cd testsuite/extractor && ../../.objs/test_extractor gnat.json generics.ads | diff -u --strip-trailing-cr generics.ads.out -)
-	(cd testsuite/extractor && ../../.objs/test_extractor leading.json subprograms_leading.adb | diff -u --strip-trailing-cr subprograms_leading.adb.out -)
+	make -C testsuite
 
 check_gnatdoc:
 	make -C testsuite/gnatdoc.RB16-013.gpr_tool
