@@ -29,4 +29,4 @@ check_extractor:
 	(cd testsuite/extractor && ../../.objs/test_extractor leading.json subprograms_leading.adb | diff -u --strip-trailing-cr subprograms_leading.adb.out -)
 
 check_gnatdoc:
-	make -C testsuite/gnatdoc.RB16-013.gpt_tool
+	make -C testsuite/gnatdoc.RB16-013.gpr_tool
