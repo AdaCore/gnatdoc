@@ -42,18 +42,20 @@ build_and_test:
     # Test gnatdoc
     - anod test gnatdoc4 $ACI_TRACK_QUALIFIER
 
-    # At the moment the gnatdoc4 anod spec runs only one test
-    # and does not support e3-testsuite.
-    # TODO: when this is fixed, read the report using e3-testsuite-report
+    # Process the report
+    - BUILD_SPACE_NAME=`anod eval gnatdoc4 build_space_name --primitive test $ACI_TRACK_QUALIFIER | tr -d "'"`
+    - SB_BASE=$ANOD_DEFAULT_SANDBOX_DIR/x86_64-linux/$BUILD_SPACE_NAME
+    - e3-testsuite-report
+       --failure-exit-code 1
+       --xunit-output $CI_PROJECT_DIR/xunit_output.xml
+       $SB_BASE//results/new/ || FAILED=true
 
-# Activate this section when we have support for e3-testsuite
-#
-#  artifacts:
-#    when: always
-#    paths:
-#      - xunit_output.xml
-#    reports:
-#      junit: xunit_output.xml
+    - if [ ! -z ${FAILED+x} ]; then echo "There was at least one testcase failure" && exit 1; fi
+
+  artifacts:
+    when: always
+    reports:
+      junit: xunit_output.xml
 
 downstream_ci:
   stage: downstream_ci
