@@ -161,7 +161,7 @@ package body GNATdoc.Frontend is
    --  Process children nodes, filter out important nodes, and dispatch to
    --  corresponding documentation extraction and entity creation subprograms.
 
-   procedure Process_Class_Operations
+   procedure Analyze_Primitive_Operations
      (Node   : Type_Decl'Class;
       Entity : in out GNATdoc.Entities.Entity_Information);
    --  Process delaration of the tagged/interface type and constructs sets of
@@ -194,6 +194,47 @@ package body GNATdoc.Frontend is
 
    --  Classes : GNATdoc.Entities.Entity_Reference_Sets.Set;
    --  --  All known tagged types
+
+   ------------------------------
+   -- Analyze_Class_Operations --
+   ------------------------------
+
+   procedure Analyze_Primitive_Operations
+     (Node   : Type_Decl'Class;
+      Entity : in out GNATdoc.Entities.Entity_Information)
+   is
+      Primitives : constant Basic_Decl_Array := Node.P_Get_Primitives;
+
+   begin
+      for Subprogram of Primitives loop
+         declare
+            Subprogram_Ref : constant GNATdoc.Entities.Entity_Reference :=
+              (To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
+               Signature (Subprogram.P_Defining_Name));
+
+         begin
+            Methods.Include (Subprogram_Ref);
+
+            if Node.P_Is_Inherited_Primitive (Subprogram) then
+               Entity.Dispatching_Inherited.Insert (Subprogram_Ref);
+
+            else
+               declare
+                  Decls : constant Basic_Decl_Array :=
+                    Subprogram.P_Base_Subp_Declarations;
+
+               begin
+                  if Decls'Length > 1 then
+                     Entity.Dispatching_Overrided.Insert (Subprogram_Ref);
+
+                  else
+                     Entity.Dispatching_Declared.Insert (Subprogram_Ref);
+                  end if;
+               end;
+            end if;
+         end;
+      end loop;
+   end Analyze_Primitive_Operations;
 
    ------------------------
    -- Check_Undocumented --
@@ -889,47 +930,6 @@ package body GNATdoc.Frontend is
       end if;
    end Process_Children;
 
-   ------------------------------
-   -- Process_Class_Operations --
-   ------------------------------
-
-   procedure Process_Class_Operations
-     (Node   : Type_Decl'Class;
-      Entity : in out GNATdoc.Entities.Entity_Information)
-   is
-      Primitives : constant Basic_Decl_Array := Node.P_Get_Primitives;
-
-   begin
-      for Subprogram of Primitives loop
-         Methods.Include
-           ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
-             Signature (Subprogram.P_Defining_Name)));
-
-         if Node.P_Is_Inherited_Primitive (Subprogram) then
-            Entity.Dispatching_Inherited.Insert
-              ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
-                Signature (Subprogram.P_Defining_Name)));
-
-         else
-            declare
-               Decls : constant Basic_Decl_Array :=
-                 Subprogram.P_Base_Subp_Declarations;
-            begin
-               if Decls'Length > 1 then
-                  Entity.Dispatching_Overrided.Insert
-                    ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
-                      Signature (Subprogram.P_Defining_Name)));
-
-               else
-                  Entity.Dispatching_Declared.Insert
-                    ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
-                      Signature (Subprogram.P_Defining_Name)));
-               end if;
-            end;
-         end if;
-      end loop;
-   end Process_Class_Operations;
-
    -------------------------------
    -- Process_Classic_Subp_Decl --
    -------------------------------
@@ -1168,7 +1168,7 @@ package body GNATdoc.Frontend is
                Signature (Item.P_Referenced_Defining_Name)));
          end loop;
 
-         Process_Class_Operations (Node, Entity.all);
+         Analyze_Primitive_Operations (Node, Entity.all);
 
       else
          Enclosing.Simple_Types.Insert (Entity);
@@ -1398,7 +1398,7 @@ package body GNATdoc.Frontend is
             Signature (Item.P_Referenced_Defining_Name)));
       end loop;
 
-      Process_Class_Operations (Node, Entity.all);
+      Analyze_Primitive_Operations (Node, Entity.all);
 
       Check_Undocumented (Entity);
    end Process_Interface_Type_Def;
@@ -1603,7 +1603,7 @@ package body GNATdoc.Frontend is
          Enclosing.Tagged_Types.Insert (Entity);
          GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
 
-         Process_Class_Operations (Node, Entity.all);
+         Analyze_Primitive_Operations (Node, Entity.all);
 
       else
          Enclosing.Simple_Types.Insert (Entity);
