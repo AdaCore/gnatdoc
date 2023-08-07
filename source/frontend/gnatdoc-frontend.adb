@@ -167,6 +167,13 @@ package body GNATdoc.Frontend is
    --  Process delaration of the tagged/interface type and constructs sets of
    --  dispatching operations.
 
+   procedure Analyze_Non_Dispatching_Method
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access;
+      Node   : Basic_Decl'Class;
+      Spec   : Subp_Spec);
+   --  Analyze subprogram to detect cases when it is available via prefixed
+   --  notation.
+
    procedure Construct_Generic_Formals
      (Entity  : not null GNATdoc.Entities.Entity_Information_Access;
       Name    : Libadalang.Analysis.Defining_Name'Class;
@@ -192,8 +199,88 @@ package body GNATdoc.Frontend is
    Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
    --  All methods was found during processing of compilation units.
 
-   --  Classes : GNATdoc.Entities.Entity_Reference_Sets.Set;
-   --  --  All known tagged types
+   ------------------------------------
+   -- Analyze_Non_Dispatching_Method --
+   ------------------------------------
+
+   procedure Analyze_Non_Dispatching_Method
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access;
+      Node   : Basic_Decl'Class;
+      Spec   : Subp_Spec)
+   is
+      Name   : constant Defining_Name := Spec.F_Subp_Name;
+
+   begin
+      if Spec.F_Subp_Params.Is_Null then
+         --  Parameterless subprogram.
+
+         return;
+      end if;
+
+      declare
+         Parameter                 : constant Param_Spec :=
+           Spec.F_Subp_Params.F_Params.First_Child.As_Param_Spec;
+         Parameter_Type_Expression : constant Type_Expr :=
+           Parameter.F_Type_Expr;
+         Parameter_Type_Name       : Libadalang.Analysis.Name;
+         Parameter_Type            : Base_Type_Decl;
+         Subprogram_Scope          : Declarative_Part;
+         Parameter_Type_Scope      : Declarative_Part;
+
+      begin
+         if Parameter_Type_Expression.Kind = Ada_Subtype_Indication then
+            Parameter_Type_Name :=
+              Parameter_Type_Expression.As_Subtype_Indication.F_Name;
+
+         else
+            pragma Assert
+                     (Parameter_Type_Expression.Kind = Ada_Anonymous_Type);
+
+            Parameter_Type_Name :=
+              Parameter_Type_Expression.As_Anonymous_Type.F_Type_Decl
+                .F_Type_Def.As_Type_Access_Def.F_Subtype_Indication.F_Name;
+         end if;
+
+         if Parameter_Type_Name.Kind = Ada_Attribute_Ref then
+            --  Dereference attributes ('Class/'Base)
+
+            Parameter_Type_Name :=
+              Parameter_Type_Name.As_Attribute_Ref.F_Prefix;
+         end if;
+
+         Parameter_Type := Parameter_Type_Name.P_Name_Designated_Type;
+
+         Subprogram_Scope := Node.P_Declarative_Scope;
+         --  Is null for subprogram as compilation unit.
+
+         Parameter_Type_Scope := Parameter_Type.P_Declarative_Scope;
+         --  Is null for formal parameter of the generic.
+
+         if Parameter_Type.P_Is_Tagged_Type
+           and then not Subprogram_Scope.Is_Null
+           and then not Parameter_Type_Scope.Is_Null
+           and then Subprogram_Scope.P_Semantic_Parent
+                      = Parameter_Type_Scope.P_Semantic_Parent
+           and then GNATdoc.Entities.To_Entity.Contains
+                      (Signature
+                         (Parameter_Type_Name.P_Referenced_Defining_Name))
+         then
+            GNATdoc.Entities.To_Entity
+              (Signature (Parameter_Type_Name.P_Referenced_Defining_Name))
+                .Non_Dispatching_Declared.Insert
+                  ((To_Virtual_String (Name.P_Canonical_Fully_Qualified_Name),
+                    Signature (Name)));
+
+            Entity.Is_Method := True;
+            Entity.Owner_Class :=
+              ((To_Virtual_String
+                 (Parameter_Type_Name.P_Referenced_Defining_Name
+                    .P_Canonical_Fully_Qualified_Name),
+                Signature
+                  (Parameter_Type_Name.P_Referenced_Defining_Name)));
+         end if;
+      end;
+   end Analyze_Non_Dispatching_Method;
 
    ------------------------------
    -- Analyze_Class_Operations --
@@ -588,6 +675,10 @@ package body GNATdoc.Frontend is
          end if;
       end if;
 
+      --  Detect whether subprogram can be called by "prefix notation".
+
+      Analyze_Non_Dispatching_Method (Entity, Node, Node.F_Subp_Spec);
+
       Check_Undocumented (Entity);
    end Process_Base_Subp_Body;
 
@@ -940,12 +1031,13 @@ package body GNATdoc.Frontend is
       Global     : GNATdoc.Entities.Entity_Information_Access;
       In_Private : Boolean)
    is
-      Name   : constant Defining_Name := Node.F_Subp_Spec.F_Subp_Name;
+      Spec   : constant Subp_Spec     := Node.F_Subp_Spec;
+      Name   : constant Defining_Name := Spec.F_Subp_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
           (Location       => Location (Name),
            Kind           =>
-             (case Node.F_Subp_Spec.F_Subp_Kind is
+             (case Spec.F_Subp_Kind is
                  when Ada_Subp_Kind_Function  =>
                    GNATdoc.Entities.Ada_Function,
                  when Ada_Subp_Kind_Procedure =>
@@ -953,7 +1045,7 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
-           RST_Profile    => RST_Profile (Node.F_Subp_Spec),
+           RST_Profile    => RST_Profile (Spec),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
@@ -971,6 +1063,10 @@ package body GNATdoc.Frontend is
             Global.Subprograms.Insert (Entity);
          end if;
       end if;
+
+      --  Detect whether subprogram can be called by "prefix notation".
+
+      Analyze_Non_Dispatching_Method (Entity, Node, Spec);
 
       Check_Undocumented (Entity);
    end Process_Classic_Subp_Decl;
