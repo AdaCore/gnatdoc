@@ -354,6 +354,14 @@ package body GNATdoc.Backend.HTML is
                  Nested   => <>,
                  OOP_Mode => Self.OOP_Mode);
 
+         elsif Name = "inherited_non_dispatching_subprograms" then
+            return
+              Entity_Reference_Set_Proxy'
+                (Entities =>
+                   Self.Entity.Non_Dispatching_Inherited'Unchecked_Access,
+                 Nested   => <>,
+                 OOP_Mode => Self.OOP_Mode);
+
          elsif Name = "name" then
             return
               VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
@@ -393,6 +401,14 @@ package body GNATdoc.Backend.HTML is
                  VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
                    (Text =>
                       Digest (Self.Entity.Enclosing)
+                        & ".html#"
+                        & Digest (Self.Entity.Signature));
+
+            elsif not Self.Entity.Owner_Class.Signature.Is_Empty then
+               return
+                 VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
+                   (Text =>
+                      Digest (Self.Entity.Owner_Class.Signature)
                         & ".html#"
                         & Digest (Self.Entity.Signature));
             end if;

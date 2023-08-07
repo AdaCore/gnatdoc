@@ -460,6 +460,65 @@ package body GNATdoc.Frontend is
         (Progenitor : GNATdoc.Entities.Entity_Reference;
          Derived    : not null GNATdoc.Entities.Entity_Information_Access);
 
+      procedure Build_Non_Dispatching_Methods
+        (Entity : not null GNATdoc.Entities.Entity_Information_Access);
+
+      -----------------------------------
+      -- Build_Non_Dispatching_Methods --
+      -----------------------------------
+
+      procedure Build_Non_Dispatching_Methods
+        (Entity : not null GNATdoc.Entities.Entity_Information_Access) is
+      begin
+         if not Entity.Non_Dispatching_Inherited.Is_Empty then
+            --  Set of non-dispatching subprograms was built.
+
+            return;
+         end if;
+
+         --  Build sets of subprograms for progenitors and parent types.
+
+         for Item of Entity.Progenitor_Types loop
+            if GNATdoc.Entities.To_Entity.Contains (Item.Signature) then
+               Build_Non_Dispatching_Methods
+                 (GNATdoc.Entities.To_Entity (Item.Signature));
+            end if;
+         end loop;
+
+         if not Entity.Parent_Type.Signature.Is_Empty
+           and then GNATdoc.Entities.To_Entity.Contains
+                      (Entity.Parent_Type.Signature)
+         then
+            Build_Non_Dispatching_Methods
+              (GNATdoc.Entities.To_Entity (Entity.Parent_Type.Signature));
+         end if;
+
+         --  Build set of subprograms for given type.
+
+         for Item of Entity.Progenitor_Types loop
+            if GNATdoc.Entities.To_Entity.Contains (Item.Signature) then
+               Entity.Non_Dispatching_Inherited.Union
+                 (GNATdoc.Entities.To_Entity
+                    (Item.Signature).Non_Dispatching_Declared);
+               Entity.Non_Dispatching_Inherited.Union
+                 (GNATdoc.Entities.To_Entity
+                    (Item.Signature).Non_Dispatching_Inherited);
+            end if;
+         end loop;
+
+         if not Entity.Parent_Type.Signature.Is_Empty
+           and then GNATdoc.Entities.To_Entity.Contains
+                      (Entity.Parent_Type.Signature)
+         then
+            Entity.Non_Dispatching_Inherited.Union
+              (GNATdoc.Entities.To_Entity
+                 (Entity.Parent_Type.Signature).Non_Dispatching_Declared);
+            Entity.Non_Dispatching_Inherited.Union
+              (GNATdoc.Entities.To_Entity
+                 (Entity.Parent_Type.Signature).Non_Dispatching_Inherited);
+         end if;
+      end Build_Non_Dispatching_Methods;
+
       ---------------------------------------
       -- Establish_Parent_Derived_Relation --
       ---------------------------------------
@@ -532,6 +591,8 @@ package body GNATdoc.Frontend is
       end To_Entity_Reference;
 
    begin
+      --  Build inheritance information
+
       for Item of GNATdoc.Entities.Globals.Tagged_Types loop
          declare
             Entity : constant not null
@@ -575,6 +636,16 @@ package body GNATdoc.Frontend is
                   Derived    => Entity);
             end loop;
          end;
+      end loop;
+
+      --  Build list of all non-dispatching operations.
+
+      for Item of GNATdoc.Entities.Globals.Interface_Types loop
+         Build_Non_Dispatching_Methods (Item);
+      end loop;
+
+      for Item of GNATdoc.Entities.Globals.Tagged_Types loop
+         Build_Non_Dispatching_Methods (Item);
       end loop;
 
       --  Mark all subprograms that are documented as part of the class's

@@ -96,6 +96,17 @@
       </ul>
     </div>
 
+    <div tal:omit-tag='' tal:condition='gnatdoc/entity/inherited_non_dispatching_subprograms'>
+      <h3>Inherited non-dispatching subprograms</h3>
+
+      <ul>
+        <li tal:repeat='subprogram gnatdoc/entity/inherited_non_dispatching_subprograms'>
+          <a tal:condition='subprogram/is_documented' tal:attributes='href subprogram/full_href' tal:content='subprogram/name'>SUBPROGRAM NAME</a>
+          <span tal:condition='not:subprogram/is_documented' tal:content='subprogram/name'>SUBPROGRAM NAME</span>
+        </li>
+      </ul>
+    </div>
+
     <h2>Description</h2>
     <div tal:omit-tag='' tal:content='gnatdoc/entity/documentation/description'>Description of the entity</div>
 
