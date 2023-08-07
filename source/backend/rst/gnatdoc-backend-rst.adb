@@ -141,6 +141,8 @@ package body GNATdoc.Backend.RST is
          use type VSS.Strings.Virtual_String;
 
       begin
+         File.New_Line (Success);
+
          case Entity.Kind is
             when Ada_Function =>
                File.Put (Indent, Success);
