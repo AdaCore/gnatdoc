@@ -774,9 +774,9 @@ package body GNATdoc.Frontend is
          if not GNATdoc.Options.Frontend_Options.Generate_Private
            and In_Private
          then
-            --  Dispatching subprograms for tagged types may be declared
-            --  inside private type, so precess some nodes when documentation
-            --  generation for private parts is disabled.
+            --  Dispatching subprograms for tagged types may be declared inside
+            --  private part of the package, so process some nodes even when
+            --  documentation generation for private parts is disabled.
 
             case Node.Kind is
                when Ada_Private_Part | Ada_Ada_Node_List =>
@@ -785,9 +785,10 @@ package body GNATdoc.Frontend is
                when Ada_Attribute_Def_Clause
                   | Ada_Concrete_Type_Decl
                   | Ada_Enum_Rep_Clause
+                  | Ada_Exception_Decl
+                  | Ada_Generic_Package_Instantiation
                   | Ada_Incomplete_Tagged_Type_Decl
                   | Ada_Incomplete_Type_Decl
-                  | Ada_Generic_Package_Instantiation
                   | Ada_Number_Decl
                   | Ada_Object_Decl
                   | Ada_Package_Renaming_Decl
