@@ -232,6 +232,14 @@ package body GNATdoc.Frontend is
             Parameter_Type_Name :=
               Parameter_Type_Expression.As_Subtype_Indication.F_Name;
 
+         elsif Parameter_Type_Expression.As_Anonymous_Type.F_Type_Decl
+                 .F_Type_Def.Kind = Ada_Access_To_Subp_Def
+         then
+            --  First parameter has an access to subprogram type, it is not
+            --  a prefix-callable subprogram.
+
+            return;
+
          else
             pragma Assert
                      (Parameter_Type_Expression.Kind = Ada_Anonymous_Type);
