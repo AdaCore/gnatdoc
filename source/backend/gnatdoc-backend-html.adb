@@ -390,10 +390,6 @@ package body GNATdoc.Backend.HTML is
                 (Text => Digest (Self.Entity.Signature));
 
          elsif Name = "full_href" then
-            if not Self.OOP_Mode then
-               raise Program_Error;
-            end if;
-
             if Self.Entity.Kind in Ada_Tagged_Type | Ada_Interface_Type
               and not Self.OOP_Mode
             then

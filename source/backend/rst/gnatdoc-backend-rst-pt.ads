@@ -28,4 +28,6 @@ private
    overriding function Name
      (Self : in out PT_RST_Backend) return VSS.Strings.Virtual_String;
 
+   overriding procedure Initialize (Self : in out PT_RST_Backend);
+
 end GNATdoc.Backend.RST.PT;

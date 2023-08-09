@@ -22,7 +22,9 @@ package GNATdoc.Backend.RST is
 private
 
    type RST_Backend_Base (Pass_Through : Boolean) is
-     abstract new Abstract_Backend with null record;
+     abstract new Abstract_Backend with record
+      OOP_Mode : Boolean := False;
+   end record;
 
    overriding procedure Initialize (Self : in out RST_Backend_Base);
 
