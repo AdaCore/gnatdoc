@@ -237,7 +237,7 @@ package body GNATdoc.Backend.RST is
                   begin
                      Methods.Union (Item.Dispatching_Declared);
                      Methods.Union (Item.Dispatching_Overrided);
-                     Methods.Union (Item.Non_Dispatching_Declared);
+                     Methods.Union (Item.Prefix_Callable_Declared);
 
                      for Method of Methods loop
                         Generate_Subprogram_Documentation

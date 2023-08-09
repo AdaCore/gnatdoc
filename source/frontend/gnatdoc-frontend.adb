@@ -280,7 +280,7 @@ package body GNATdoc.Frontend is
          then
             GNATdoc.Entities.To_Entity
               (Signature (Parameter_Type_Name.P_Referenced_Defining_Name))
-                .Non_Dispatching_Declared.Insert
+                .Prefix_Callable_Declared.Insert
                   ((To_Virtual_String (Name.P_Canonical_Fully_Qualified_Name),
                     Signature (Name)));
 
@@ -485,8 +485,8 @@ package body GNATdoc.Frontend is
       procedure Build_Non_Dispatching_Methods
         (Entity : not null GNATdoc.Entities.Entity_Information_Access) is
       begin
-         if not Entity.Non_Dispatching_Inherited.Is_Empty then
-            --  Set of non-dispatching subprograms was built.
+         if not Entity.Prefix_Callable_Inherited.Is_Empty then
+            --  Set of prefix-callable subprograms was built.
 
             return;
          end if;
@@ -512,12 +512,12 @@ package body GNATdoc.Frontend is
 
          for Item of Entity.Progenitor_Types loop
             if GNATdoc.Entities.To_Entity.Contains (Item.Signature) then
-               Entity.Non_Dispatching_Inherited.Union
+               Entity.Prefix_Callable_Inherited.Union
                  (GNATdoc.Entities.To_Entity
-                    (Item.Signature).Non_Dispatching_Declared);
-               Entity.Non_Dispatching_Inherited.Union
+                    (Item.Signature).Prefix_Callable_Declared);
+               Entity.Prefix_Callable_Inherited.Union
                  (GNATdoc.Entities.To_Entity
-                    (Item.Signature).Non_Dispatching_Inherited);
+                    (Item.Signature).Prefix_Callable_Inherited);
             end if;
          end loop;
 
@@ -525,12 +525,12 @@ package body GNATdoc.Frontend is
            and then GNATdoc.Entities.To_Entity.Contains
                       (Entity.Parent_Type.Signature)
          then
-            Entity.Non_Dispatching_Inherited.Union
+            Entity.Prefix_Callable_Inherited.Union
               (GNATdoc.Entities.To_Entity
-                 (Entity.Parent_Type.Signature).Non_Dispatching_Declared);
-            Entity.Non_Dispatching_Inherited.Union
+                 (Entity.Parent_Type.Signature).Prefix_Callable_Declared);
+            Entity.Prefix_Callable_Inherited.Union
               (GNATdoc.Entities.To_Entity
-                 (Entity.Parent_Type.Signature).Non_Dispatching_Inherited);
+                 (Entity.Parent_Type.Signature).Prefix_Callable_Inherited);
          end if;
       end Build_Non_Dispatching_Methods;
 

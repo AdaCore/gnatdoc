@@ -158,13 +158,11 @@ package GNATdoc.Entities is
       Owner_Class               : Entity_Reference;
       --  Reference to the type that "declare" non dispatching subprogram.
 
-      Non_Dispatching_Declared  : aliased Entity_Reference_Sets.Set;
-      --  Non dispatching operations declared by the type, and can be called
-      --  with prefixed notation.
+      Prefix_Callable_Declared  : aliased Entity_Reference_Sets.Set;
+      --  Prefix callable subprograms declared by the type.
 
-      Non_Dispatching_Inherited : aliased Entity_Reference_Sets.Set;
-      --  Non dispatching operations inherited by the type, and can be called
-      --  with prefixed notation.
+      Prefix_Callable_Inherited : aliased Entity_Reference_Sets.Set;
+      --  Non dispatching operations inherited by the type.
    end record;
 
    Globals   : aliased Entity_Information;

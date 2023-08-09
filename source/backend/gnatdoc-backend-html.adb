@@ -343,22 +343,22 @@ package body GNATdoc.Backend.HTML is
                Result.Entities := Result.Nested'Unchecked_Access;
                Result.Nested.Union (Self.Entity.Dispatching_Declared);
                Result.Nested.Union (Self.Entity.Dispatching_Overrided);
-               Result.Nested.Union (Self.Entity.Non_Dispatching_Declared);
+               Result.Nested.Union (Self.Entity.Prefix_Callable_Declared);
             end return;
 
-         elsif Name = "declared_non_dispatching_subprograms" then
+         elsif Name = "declared_prefix_callable_subprograms" then
             return
               Entity_Reference_Set_Proxy'
                 (Entities =>
-                   Self.Entity.Non_Dispatching_Declared'Unchecked_Access,
+                   Self.Entity.Prefix_Callable_Declared'Unchecked_Access,
                  Nested   => <>,
                  OOP_Mode => Self.OOP_Mode);
 
-         elsif Name = "inherited_non_dispatching_subprograms" then
+         elsif Name = "inherited_prefix_callable_subprograms" then
             return
               Entity_Reference_Set_Proxy'
                 (Entities =>
-                   Self.Entity.Non_Dispatching_Inherited'Unchecked_Access,
+                   Self.Entity.Prefix_Callable_Inherited'Unchecked_Access,
                  Nested   => <>,
                  OOP_Mode => Self.OOP_Mode);
 
