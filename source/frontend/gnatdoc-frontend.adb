@@ -187,6 +187,11 @@ package body GNATdoc.Frontend is
    function Signature (Name : Defining_Name'Class) return Virtual_String;
    --  Computes unique signature of the given entity.
 
+   function Subprogram_Primary_View
+     (Node : Basic_Decl'Class) return Basic_Decl;
+   --  Returns subprogram specification node when given node is subprogram body
+   --  is any. Returns given node overwise.
+
    procedure Check_Undocumented
      (Entity : not null GNATdoc.Entities.Entity_Information_Access);
    --  Check whether entiry and all components of the entity are documented.
@@ -208,7 +213,7 @@ package body GNATdoc.Frontend is
       Node   : Basic_Decl'Class;
       Spec   : Subp_Spec)
    is
-      Name   : constant Defining_Name := Spec.F_Subp_Name;
+      Name : constant Defining_Name := Spec.F_Subp_Name;
 
    begin
       if Spec.F_Subp_Params.Is_Null then
@@ -303,9 +308,11 @@ package body GNATdoc.Frontend is
    begin
       for Subprogram of Primitives loop
          declare
-            Subprogram_Ref : constant GNATdoc.Entities.Entity_Reference :=
-              (To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
-               Signature (Subprogram.P_Defining_Name));
+            Subprogram_View : constant Basic_Decl :=
+              Subprogram_Primary_View (Subprogram);
+            Subprogram_Ref  : constant GNATdoc.Entities.Entity_Reference :=
+              (To_Virtual_String (Subprogram_View.P_Fully_Qualified_Name),
+               Signature (Subprogram_View.P_Defining_Name));
 
          begin
             Methods.Include (Subprogram_Ref);
@@ -756,7 +763,12 @@ package body GNATdoc.Frontend is
 
       --  Detect whether subprogram can be called by "prefix notation".
 
-      Analyze_Non_Dispatching_Method (Entity, Node, Node.F_Subp_Spec);
+      if Subprogram_Primary_View (Node) = Node then
+         --  Analyze subprogram body when there is no separate subprogram
+         --  specification.
+
+         Analyze_Non_Dispatching_Method (Entity, Node, Node.F_Subp_Spec);
+      end if;
 
       Check_Undocumented (Entity);
    end Process_Base_Subp_Body;
@@ -2145,5 +2157,33 @@ package body GNATdoc.Frontend is
          end case;
       end return;
    end Signature;
+
+   -----------------------------
+   -- Subprogram_Primary_View --
+   -----------------------------
+
+   function Subprogram_Primary_View
+     (Node : Basic_Decl'Class) return Basic_Decl
+   is
+      Aux : Basic_Decl;
+
+   begin
+      case Node.Kind is
+         when Ada_Subp_Decl | Ada_Abstract_Subp_Decl =>
+            null;
+
+         when Ada_Expr_Function
+            | Ada_Null_Subp_Decl
+            | Ada_Subp_Renaming_Decl
+         =>
+            Aux := Node.As_Base_Subp_Body.P_Decl_Part;
+
+         when others =>
+            GNATdoc.Messages.Raise_Not_Implemented
+              (Libadalang.Analysis.Image (Node) & " not supported");
+      end case;
+
+      return (if Aux.Is_Null then Node.As_Basic_Decl else Aux);
+   end Subprogram_Primary_View;
 
 end GNATdoc.Frontend;
