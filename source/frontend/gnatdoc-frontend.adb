@@ -898,13 +898,8 @@ package body GNATdoc.Frontend is
 
                return Over;
 
-            when Ada_Incomplete_Type_Decl =>
+            when Ada_Incomplete_Type_Decl | Ada_Incomplete_Tagged_Type_Decl =>
                --  Nothing to do for incomplete types.
-
-               return Over;
-
-            when Ada_Incomplete_Tagged_Type_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
 
                return Over;
 
