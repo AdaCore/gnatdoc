@@ -343,7 +343,24 @@ package body GNATdoc.Backend.HTML is
                Result.Entities := Result.Nested'Unchecked_Access;
                Result.Nested.Union (Self.Entity.Dispatching_Declared);
                Result.Nested.Union (Self.Entity.Dispatching_Overrided);
+               Result.Nested.Union (Self.Entity.Prefix_Callable_Declared);
             end return;
+
+         elsif Name = "declared_prefix_callable_subprograms" then
+            return
+              Entity_Reference_Set_Proxy'
+                (Entities =>
+                   Self.Entity.Prefix_Callable_Declared'Unchecked_Access,
+                 Nested   => <>,
+                 OOP_Mode => Self.OOP_Mode);
+
+         elsif Name = "inherited_prefix_callable_subprograms" then
+            return
+              Entity_Reference_Set_Proxy'
+                (Entities =>
+                   Self.Entity.Prefix_Callable_Inherited'Unchecked_Access,
+                 Nested   => <>,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "name" then
             return
@@ -384,6 +401,14 @@ package body GNATdoc.Backend.HTML is
                  VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
                    (Text =>
                       Digest (Self.Entity.Enclosing)
+                        & ".html#"
+                        & Digest (Self.Entity.Signature));
+
+            elsif not Self.Entity.Owner_Class.Signature.Is_Empty then
+               return
+                 VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
+                   (Text =>
+                      Digest (Self.Entity.Owner_Class.Signature)
                         & ".html#"
                         & Digest (Self.Entity.Signature));
             end if;

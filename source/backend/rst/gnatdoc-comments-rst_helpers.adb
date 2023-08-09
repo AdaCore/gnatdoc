@@ -44,6 +44,7 @@ package body GNATdoc.Comments.RST_Helpers is
             end loop;
 
             Text.Append (VSS.Strings.Empty_Virtual_String);
+            Text.Append (VSS.Strings.Empty_Virtual_String);
 
             exit;
          end if;
