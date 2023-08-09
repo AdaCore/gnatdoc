@@ -230,7 +230,9 @@ package body GNATdoc.Backend.RST is
                     ("    ", Item.Documentation, Self.Pass_Through),
                   Success);
 
-               if Item.Kind in Ada_Interface_Type | Ada_Tagged_Type then
+               if Self.OOP_Mode
+                 and then Item.Kind in Ada_Interface_Type | Ada_Tagged_Type
+               then
                   declare
                      Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
 
@@ -259,7 +261,7 @@ package body GNATdoc.Backend.RST is
 
          begin
             for Subprogram of Entity.Subprograms loop
-               if not Subprogram.Is_Method then
+               if not Self.OOP_Mode and then not Subprogram.Is_Method then
                   Subprograms.Insert (Subprogram);
                end if;
             end loop;
