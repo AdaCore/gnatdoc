@@ -161,11 +161,18 @@ package body GNATdoc.Frontend is
    --  Process children nodes, filter out important nodes, and dispatch to
    --  corresponding documentation extraction and entity creation subprograms.
 
-   procedure Process_Class_Operations
+   procedure Analyze_Primitive_Operations
      (Node   : Type_Decl'Class;
       Entity : in out GNATdoc.Entities.Entity_Information);
    --  Process delaration of the tagged/interface type and constructs sets of
    --  dispatching operations.
+
+   procedure Analyze_Non_Dispatching_Method
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access;
+      Node   : Basic_Decl'Class;
+      Spec   : Subp_Spec);
+   --  Analyze subprogram to detect cases when it is available via prefixed
+   --  notation.
 
    procedure Construct_Generic_Formals
      (Entity  : not null GNATdoc.Entities.Entity_Information_Access;
@@ -180,6 +187,11 @@ package body GNATdoc.Frontend is
    function Signature (Name : Defining_Name'Class) return Virtual_String;
    --  Computes unique signature of the given entity.
 
+   function Subprogram_Primary_View
+     (Node : Basic_Decl'Class) return Basic_Decl;
+   --  Returns subprogram specification node when given node is subprogram body
+   --  is any. Returns given node overwise.
+
    procedure Check_Undocumented
      (Entity : not null GNATdoc.Entities.Entity_Information_Access);
    --  Check whether entiry and all components of the entity are documented.
@@ -192,8 +204,139 @@ package body GNATdoc.Frontend is
    Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
    --  All methods was found during processing of compilation units.
 
-   --  Classes : GNATdoc.Entities.Entity_Reference_Sets.Set;
-   --  --  All known tagged types
+   ------------------------------------
+   -- Analyze_Non_Dispatching_Method --
+   ------------------------------------
+
+   procedure Analyze_Non_Dispatching_Method
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access;
+      Node   : Basic_Decl'Class;
+      Spec   : Subp_Spec)
+   is
+      Name : constant Defining_Name := Spec.F_Subp_Name;
+
+   begin
+      if Spec.F_Subp_Params.Is_Null then
+         --  Parameterless subprogram.
+
+         return;
+      end if;
+
+      declare
+         Parameter                 : constant Param_Spec :=
+           Spec.F_Subp_Params.F_Params.First_Child.As_Param_Spec;
+         Parameter_Type_Expression : constant Type_Expr :=
+           Parameter.F_Type_Expr;
+         Parameter_Type_Name       : Libadalang.Analysis.Name;
+         Parameter_Type            : Base_Type_Decl;
+         Subprogram_Scope          : Declarative_Part;
+         Parameter_Type_Scope      : Declarative_Part;
+
+      begin
+         if Parameter_Type_Expression.Kind = Ada_Subtype_Indication then
+            Parameter_Type_Name :=
+              Parameter_Type_Expression.As_Subtype_Indication.F_Name;
+
+         elsif Parameter_Type_Expression.As_Anonymous_Type.F_Type_Decl
+                 .F_Type_Def.Kind = Ada_Access_To_Subp_Def
+         then
+            --  First parameter has an access to subprogram type, it is not
+            --  a prefix-callable subprogram.
+
+            return;
+
+         else
+            pragma Assert
+                     (Parameter_Type_Expression.Kind = Ada_Anonymous_Type);
+
+            Parameter_Type_Name :=
+              Parameter_Type_Expression.As_Anonymous_Type.F_Type_Decl
+                .F_Type_Def.As_Type_Access_Def.F_Subtype_Indication.F_Name;
+         end if;
+
+         if Parameter_Type_Name.Kind = Ada_Attribute_Ref then
+            --  Dereference attributes ('Class/'Base)
+
+            Parameter_Type_Name :=
+              Parameter_Type_Name.As_Attribute_Ref.F_Prefix;
+         end if;
+
+         Parameter_Type := Parameter_Type_Name.P_Name_Designated_Type;
+
+         Subprogram_Scope := Node.P_Declarative_Scope;
+         --  Is null for subprogram as compilation unit.
+
+         Parameter_Type_Scope := Parameter_Type.P_Declarative_Scope;
+         --  Is null for formal parameter of the generic.
+
+         if Parameter_Type.P_Is_Tagged_Type
+           and then not Subprogram_Scope.Is_Null
+           and then not Parameter_Type_Scope.Is_Null
+           and then Subprogram_Scope.P_Semantic_Parent
+                      = Parameter_Type_Scope.P_Semantic_Parent
+           and then GNATdoc.Entities.To_Entity.Contains
+                      (Signature
+                         (Parameter_Type_Name.P_Referenced_Defining_Name))
+         then
+            GNATdoc.Entities.To_Entity
+              (Signature (Parameter_Type_Name.P_Referenced_Defining_Name))
+                .Prefix_Callable_Declared.Insert
+                  ((To_Virtual_String (Name.P_Canonical_Fully_Qualified_Name),
+                    Signature (Name)));
+
+            Entity.Is_Method := True;
+            Entity.Owner_Class :=
+              ((To_Virtual_String
+                 (Parameter_Type_Name.P_Referenced_Defining_Name
+                    .P_Canonical_Fully_Qualified_Name),
+                Signature
+                  (Parameter_Type_Name.P_Referenced_Defining_Name)));
+         end if;
+      end;
+   end Analyze_Non_Dispatching_Method;
+
+   ------------------------------
+   -- Analyze_Class_Operations --
+   ------------------------------
+
+   procedure Analyze_Primitive_Operations
+     (Node   : Type_Decl'Class;
+      Entity : in out GNATdoc.Entities.Entity_Information)
+   is
+      Primitives : constant Basic_Decl_Array := Node.P_Get_Primitives;
+
+   begin
+      for Subprogram of Primitives loop
+         declare
+            Subprogram_View : constant Basic_Decl :=
+              Subprogram_Primary_View (Subprogram);
+            Subprogram_Ref  : constant GNATdoc.Entities.Entity_Reference :=
+              (To_Virtual_String (Subprogram_View.P_Fully_Qualified_Name),
+               Signature (Subprogram_View.P_Defining_Name));
+
+         begin
+            Methods.Include (Subprogram_Ref);
+
+            if Node.P_Is_Inherited_Primitive (Subprogram) then
+               Entity.Dispatching_Inherited.Insert (Subprogram_Ref);
+
+            else
+               declare
+                  Decls : constant Basic_Decl_Array :=
+                    Subprogram.P_Base_Subp_Declarations;
+
+               begin
+                  if Decls'Length > 1 then
+                     Entity.Dispatching_Overrided.Insert (Subprogram_Ref);
+
+                  else
+                     Entity.Dispatching_Declared.Insert (Subprogram_Ref);
+                  end if;
+               end;
+            end if;
+         end;
+      end loop;
+   end Analyze_Primitive_Operations;
 
    ------------------------
    -- Check_Undocumented --
@@ -332,6 +475,65 @@ package body GNATdoc.Frontend is
         (Progenitor : GNATdoc.Entities.Entity_Reference;
          Derived    : not null GNATdoc.Entities.Entity_Information_Access);
 
+      procedure Build_Non_Dispatching_Methods
+        (Entity : not null GNATdoc.Entities.Entity_Information_Access);
+
+      -----------------------------------
+      -- Build_Non_Dispatching_Methods --
+      -----------------------------------
+
+      procedure Build_Non_Dispatching_Methods
+        (Entity : not null GNATdoc.Entities.Entity_Information_Access) is
+      begin
+         if not Entity.Prefix_Callable_Inherited.Is_Empty then
+            --  Set of prefix-callable subprograms was built.
+
+            return;
+         end if;
+
+         --  Build sets of subprograms for progenitors and parent types.
+
+         for Item of Entity.Progenitor_Types loop
+            if GNATdoc.Entities.To_Entity.Contains (Item.Signature) then
+               Build_Non_Dispatching_Methods
+                 (GNATdoc.Entities.To_Entity (Item.Signature));
+            end if;
+         end loop;
+
+         if not Entity.Parent_Type.Signature.Is_Empty
+           and then GNATdoc.Entities.To_Entity.Contains
+                      (Entity.Parent_Type.Signature)
+         then
+            Build_Non_Dispatching_Methods
+              (GNATdoc.Entities.To_Entity (Entity.Parent_Type.Signature));
+         end if;
+
+         --  Build set of subprograms for given type.
+
+         for Item of Entity.Progenitor_Types loop
+            if GNATdoc.Entities.To_Entity.Contains (Item.Signature) then
+               Entity.Prefix_Callable_Inherited.Union
+                 (GNATdoc.Entities.To_Entity
+                    (Item.Signature).Prefix_Callable_Declared);
+               Entity.Prefix_Callable_Inherited.Union
+                 (GNATdoc.Entities.To_Entity
+                    (Item.Signature).Prefix_Callable_Inherited);
+            end if;
+         end loop;
+
+         if not Entity.Parent_Type.Signature.Is_Empty
+           and then GNATdoc.Entities.To_Entity.Contains
+                      (Entity.Parent_Type.Signature)
+         then
+            Entity.Prefix_Callable_Inherited.Union
+              (GNATdoc.Entities.To_Entity
+                 (Entity.Parent_Type.Signature).Prefix_Callable_Declared);
+            Entity.Prefix_Callable_Inherited.Union
+              (GNATdoc.Entities.To_Entity
+                 (Entity.Parent_Type.Signature).Prefix_Callable_Inherited);
+         end if;
+      end Build_Non_Dispatching_Methods;
+
       ---------------------------------------
       -- Establish_Parent_Derived_Relation --
       ---------------------------------------
@@ -404,6 +606,8 @@ package body GNATdoc.Frontend is
       end To_Entity_Reference;
 
    begin
+      --  Build inheritance information
+
       for Item of GNATdoc.Entities.Globals.Tagged_Types loop
          declare
             Entity : constant not null
@@ -447,6 +651,16 @@ package body GNATdoc.Frontend is
                   Derived    => Entity);
             end loop;
          end;
+      end loop;
+
+      --  Build list of all non-dispatching operations.
+
+      for Item of GNATdoc.Entities.Globals.Interface_Types loop
+         Build_Non_Dispatching_Methods (Item);
+      end loop;
+
+      for Item of GNATdoc.Entities.Globals.Tagged_Types loop
+         Build_Non_Dispatching_Methods (Item);
       end loop;
 
       --  Mark all subprograms that are documented as part of the class's
@@ -547,6 +761,15 @@ package body GNATdoc.Frontend is
          end if;
       end if;
 
+      --  Detect whether subprogram can be called by "prefix notation".
+
+      if Subprogram_Primary_View (Node) = Node then
+         --  Analyze subprogram body when there is no separate subprogram
+         --  specification.
+
+         Analyze_Non_Dispatching_Method (Entity, Node, Node.F_Subp_Spec);
+      end if;
+
       Check_Undocumented (Entity);
    end Process_Base_Subp_Body;
 
@@ -571,9 +794,9 @@ package body GNATdoc.Frontend is
          if not GNATdoc.Options.Frontend_Options.Generate_Private
            and In_Private
          then
-            --  Dispatching subprograms for tagged types may be declared
-            --  inside private type, so precess some nodes when documentation
-            --  generation for private parts is disabled.
+            --  Dispatching subprograms for tagged types may be declared inside
+            --  private part of the package, so process some nodes even when
+            --  documentation generation for private parts is disabled.
 
             case Node.Kind is
                when Ada_Private_Part | Ada_Ada_Node_List =>
@@ -582,9 +805,10 @@ package body GNATdoc.Frontend is
                when Ada_Attribute_Def_Clause
                   | Ada_Concrete_Type_Decl
                   | Ada_Enum_Rep_Clause
+                  | Ada_Exception_Decl
+                  | Ada_Generic_Package_Instantiation
                   | Ada_Incomplete_Tagged_Type_Decl
                   | Ada_Incomplete_Type_Decl
-                  | Ada_Generic_Package_Instantiation
                   | Ada_Number_Decl
                   | Ada_Object_Decl
                   | Ada_Package_Renaming_Decl
@@ -674,13 +898,8 @@ package body GNATdoc.Frontend is
 
                return Over;
 
-            when Ada_Incomplete_Type_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
-
-               return Over;
-
-            when Ada_Incomplete_Tagged_Type_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
+            when Ada_Incomplete_Type_Decl | Ada_Incomplete_Tagged_Type_Decl =>
+               --  Nothing to do for incomplete types.
 
                return Over;
 
@@ -889,47 +1108,6 @@ package body GNATdoc.Frontend is
       end if;
    end Process_Children;
 
-   ------------------------------
-   -- Process_Class_Operations --
-   ------------------------------
-
-   procedure Process_Class_Operations
-     (Node   : Type_Decl'Class;
-      Entity : in out GNATdoc.Entities.Entity_Information)
-   is
-      Primitives : constant Basic_Decl_Array := Node.P_Get_Primitives;
-
-   begin
-      for Subprogram of Primitives loop
-         Methods.Include
-           ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
-             Signature (Subprogram.P_Defining_Name)));
-
-         if Node.P_Is_Inherited_Primitive (Subprogram) then
-            Entity.Dispatching_Inherited.Insert
-              ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
-                Signature (Subprogram.P_Defining_Name)));
-
-         else
-            declare
-               Decls : constant Basic_Decl_Array :=
-                 Subprogram.P_Base_Subp_Declarations;
-            begin
-               if Decls'Length > 1 then
-                  Entity.Dispatching_Overrided.Insert
-                    ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
-                      Signature (Subprogram.P_Defining_Name)));
-
-               else
-                  Entity.Dispatching_Declared.Insert
-                    ((To_Virtual_String (Subprogram.P_Fully_Qualified_Name),
-                      Signature (Subprogram.P_Defining_Name)));
-               end if;
-            end;
-         end if;
-      end loop;
-   end Process_Class_Operations;
-
    -------------------------------
    -- Process_Classic_Subp_Decl --
    -------------------------------
@@ -940,12 +1118,13 @@ package body GNATdoc.Frontend is
       Global     : GNATdoc.Entities.Entity_Information_Access;
       In_Private : Boolean)
    is
-      Name   : constant Defining_Name := Node.F_Subp_Spec.F_Subp_Name;
+      Spec   : constant Subp_Spec     := Node.F_Subp_Spec;
+      Name   : constant Defining_Name := Spec.F_Subp_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
           (Location       => Location (Name),
            Kind           =>
-             (case Node.F_Subp_Spec.F_Subp_Kind is
+             (case Spec.F_Subp_Kind is
                  when Ada_Subp_Kind_Function  =>
                    GNATdoc.Entities.Ada_Function,
                  when Ada_Subp_Kind_Procedure =>
@@ -953,7 +1132,7 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
-           RST_Profile    => RST_Profile (Node.F_Subp_Spec),
+           RST_Profile    => RST_Profile (Spec),
            Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
@@ -971,6 +1150,10 @@ package body GNATdoc.Frontend is
             Global.Subprograms.Insert (Entity);
          end if;
       end if;
+
+      --  Detect whether subprogram can be called by "prefix notation".
+
+      Analyze_Non_Dispatching_Method (Entity, Node, Spec);
 
       Check_Undocumented (Entity);
    end Process_Classic_Subp_Decl;
@@ -1168,7 +1351,7 @@ package body GNATdoc.Frontend is
                Signature (Item.P_Referenced_Defining_Name)));
          end loop;
 
-         Process_Class_Operations (Node, Entity.all);
+         Analyze_Primitive_Operations (Node, Entity.all);
 
       else
          Enclosing.Simple_Types.Insert (Entity);
@@ -1398,7 +1581,7 @@ package body GNATdoc.Frontend is
             Signature (Item.P_Referenced_Defining_Name)));
       end loop;
 
-      Process_Class_Operations (Node, Entity.all);
+      Analyze_Primitive_Operations (Node, Entity.all);
 
       Check_Undocumented (Entity);
    end Process_Interface_Type_Def;
@@ -1603,7 +1786,7 @@ package body GNATdoc.Frontend is
          Enclosing.Tagged_Types.Insert (Entity);
          GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
 
-         Process_Class_Operations (Node, Entity.all);
+         Analyze_Primitive_Operations (Node, Entity.all);
 
       else
          Enclosing.Simple_Types.Insert (Entity);
@@ -1969,5 +2152,33 @@ package body GNATdoc.Frontend is
          end case;
       end return;
    end Signature;
+
+   -----------------------------
+   -- Subprogram_Primary_View --
+   -----------------------------
+
+   function Subprogram_Primary_View
+     (Node : Basic_Decl'Class) return Basic_Decl
+   is
+      Aux : Basic_Decl;
+
+   begin
+      case Node.Kind is
+         when Ada_Subp_Decl | Ada_Abstract_Subp_Decl =>
+            null;
+
+         when Ada_Expr_Function
+            | Ada_Null_Subp_Decl
+            | Ada_Subp_Renaming_Decl
+         =>
+            Aux := Node.As_Base_Subp_Body.P_Decl_Part;
+
+         when others =>
+            GNATdoc.Messages.Raise_Not_Implemented
+              (Libadalang.Analysis.Image (Node) & " not supported");
+      end case;
+
+      return (if Aux.Is_Null then Node.As_Basic_Decl else Aux);
+   end Subprogram_Primary_View;
 
 end GNATdoc.Frontend;

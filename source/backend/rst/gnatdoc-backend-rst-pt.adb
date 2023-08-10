@@ -17,6 +17,17 @@
 
 package body GNATdoc.Backend.RST.PT is
 
+   ----------------
+   -- Initialize --
+   ----------------
+
+   overriding procedure Initialize (Self : in out PT_RST_Backend) is
+   begin
+      RST_Backend_Base (Self).Initialize;
+
+      Self.OOP_Mode := True;
+   end Initialize;
+
    ----------
    -- Name --
    ----------

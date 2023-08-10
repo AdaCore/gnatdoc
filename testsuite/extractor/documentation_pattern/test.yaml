@@ -1,0 +1,2 @@
+extractor_configuration: ../pattern.json
+extractor_source: documentation_pattern.ads

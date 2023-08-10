@@ -123,6 +123,55 @@ package body GNATdoc.Backend.RST is
       File    : Streams.Output_Text_Stream;
       Success : Boolean := True;
 
+      procedure Generate_Subprogram_Documentation
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String);
+      --  Generate documentation for the given subprogram.
+
+      ---------------------------------------
+      -- Generate_Subprogram_Documentation --
+      ---------------------------------------
+
+      procedure Generate_Subprogram_Documentation
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String)
+      is
+         use type VSS.Strings.Virtual_String;
+
+      begin
+         File.New_Line (Success);
+
+         case Entity.Kind is
+            when Ada_Function =>
+               File.Put (Indent, Success);
+               File.Put (".. ada:function:: ", Success);
+
+            when Ada_Procedure =>
+               File.Put (Indent, Success);
+               File.Put (".. ada:procedure:: ", Success);
+
+            when others =>
+               raise Program_Error;
+         end case;
+
+         File.Put (Indent, Success);
+         File.Put (Entity.RST_Profile, Success);
+         File.New_Line (Success);
+         File.Put (Indent, Success);
+         File.Put ("    :package: ", Success);
+         File.Put (Package_Name, Success);
+         File.New_Line (Success);
+         File.New_Line (Success);
+
+         File.Put_Lines
+           (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
+              (Indent & "    ", Entity.Documentation, Self.Pass_Through),
+            Success);
+         File.New_Line (Success);
+      end Generate_Subprogram_Documentation;
+
    begin
       File.Open (Name);
 
@@ -180,47 +229,58 @@ package body GNATdoc.Backend.RST is
                  (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
                     ("    ", Item.Documentation, Self.Pass_Through),
                   Success);
+
+               if Self.OOP_Mode
+                 and then Item.Kind in Ada_Interface_Type | Ada_Tagged_Type
+               then
+                  declare
+                     Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
+
+                  begin
+                     Methods.Union (Item.Dispatching_Declared);
+                     Methods.Union (Item.Dispatching_Overrided);
+                     Methods.Union (Item.Prefix_Callable_Declared);
+
+                     for Method of Methods loop
+                        Generate_Subprogram_Documentation
+                          ("    ",
+                           GNATdoc.Entities.To_Entity (Method.Signature).all,
+                           Entity.Qualified_Name);
+                     end loop;
+                  end;
+               end if;
+
                File.New_Line (Success);
             end loop;
          end if;
       end;
 
       begin
-         if not Entity.Subprograms.Is_Empty then
-            File.Put ("-----------", Success);
-            File.New_Line (Success);
-            File.Put ("Subprograms", Success);
-            File.New_Line (Success);
-            File.Put ("-----------", Success);
-            File.New_Line (Success);
-            File.New_Line (Success);
+         declare
+            Subprograms : GNATdoc.Entities.Entity_Information_Sets.Set;
 
-            for Item of Entity.Subprograms loop
-               case Item.Kind is
-                  when Ada_Function =>
-                     File.Put (".. ada:function:: ", Success);
-
-                  when Ada_Procedure =>
-                     File.Put (".. ada:procedure:: ", Success);
-
-                  when others =>
-                     raise Program_Error;
-               end case;
-
-               File.Put (Item.RST_Profile, Success);
-               File.New_Line (Success);
-               File.Put ("    :package: ", Success);
-               File.Put (Entity.Qualified_Name, Success);
-               File.New_Line (Success);
-               File.New_Line (Success);
-
-               File.Put_Lines
-                 (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
-                    ("    ", Item.Documentation, Self.Pass_Through),
-                  Success);
-               File.New_Line (Success);
+         begin
+            for Subprogram of Entity.Subprograms loop
+               if not Self.OOP_Mode and then not Subprogram.Is_Method then
+                  Subprograms.Insert (Subprogram);
+               end if;
             end loop;
-         end if;
+
+            if not Subprograms.Is_Empty then
+               File.Put ("-----------", Success);
+               File.New_Line (Success);
+               File.Put ("Subprograms", Success);
+               File.New_Line (Success);
+               File.Put ("-----------", Success);
+               File.New_Line (Success);
+               File.New_Line (Success);
+
+               for Item of Subprograms loop
+                  Generate_Subprogram_Documentation
+                    ("", Item.all, Entity.Qualified_Name);
+               end loop;
+            end if;
+         end;
       end;
 
       File.Close;

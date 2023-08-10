@@ -1,0 +1,2 @@
+extractor_configuration: ../leading.json
+extractor_source: subprograms_leading.adb
