@@ -3,20 +3,22 @@ Introduction
 ************
 
 GNATdoc is a documentation tool for Ada which processes source files, extracts
-documentation directly from the sources, and generates annotated HTML files.
-It also relies on standard comments that it extracts from the source code. The
-engine in charge of extracting them coupled with the cross-reference engine
-gives GNATdoc all the flexibility needed to generate accurate documentation,
-and report errors in case of wrong documentation.
+documentation from the sources, and generates either annotated HTML files or
+Restructured Text (.rst) files.
+
+It relies on documentation comments that it extracts from the source code. The
+engine in charge of extracting these comments, coupled with a cross-reference
+engine, gives GNATdoc all the flexibility needed to generate accurate documentation,
+and report errors in cases of missing documentation.
 
 
 Installation
 ------------
 
-GNATdoc is shipped as part of the GNAT Studio package. To install it, simply
+GNATdoc is shipped as part of the GNAT Studio package. To install it,
 launch the GNAT Studio installer.
 
-After the installation place
+After the installation, place
 :file:`<gnatstudio_installation_prefix>/bin/` in your PATH environment
 variable.
 
@@ -29,23 +31,23 @@ files (.gpr).
 
 To launch GNATdoc, execute::
 
-      gnatdoc <your_project>
+      gnatdoc -P <your_project>
 
 where :file:`<your_project>` is the .gpr file at the root of your project
-hierarchy (your root project).
+hierarchy (referred to here as the root project).
 
 GNATdoc generates an HTML report in the :file:`gnatdoc` directory of the object
-directory of the main project.
+directory of the root project.
 
 
 Command line interface
 ----------------------
 
 A brief description of the supported switches is available through the
-switch --help::
+`--help` switch::
 
   $ gnatdoc --help
-  Usage: gnatdoc4 [options] project_file
+  Usage: gnatdoc [options] project_file
 
   Options:
     --backend <name>           Backend to use to generate output
@@ -62,41 +64,42 @@ switch --help::
   Arguments:
     project_file               Project file to process
 
+Here is the list of supported switches:
 
-*Output format (--backend=<name>)*
+*  `-P, --project=<file>`: specify the project file
 
-  At current stage GNATdoc generates HTML files (*--backend=html*), or ReST
-  files (*--backend=rst*).
+   Specify the path name of the main project file. The space between -P and
+   the project file name is optional.
 
+* `-X <NAME>=<VALUE>`: Project external references
 
-*Subset of entities to be included into the documentation (*--generate=<part>)*
+  Specify an external reference in the project. This can be used multiple times.
 
-  *public* 
-    Entities declared in the public part of the package specification. Is it
+* `--backend=<name>`: select the output format
+
+  GNATdoc generates HTML files (*--backend=html*), or ReST
+  files (*--backend=rst*). The default is HTML.
+
+* `--generate=<part>`: Select the of entities to be included into the documentation
+
+  *public*
+    Entities declared in the public part of the package specification. This is the
     default.
 
   *private*
-    Entities declared in the package specification, in both public and private
+    Entities declared in the package specifications, in both public and private
     parts.
 
   *body*
-    All entities declared in the both package specification and library level
-    of the package body.
+    All entities declared in the both package specifications and at library level
+    in package bodies.
 
+* `-O, --output-dir=<path>`: Output directory
 
-*Output directory (-O, --output-dir=<path>)*
-
-  Directory to output generated documentation. This option overrides value of
+  Directory to output generated documentation. This option overrides the value of
   the Documentation'Output_Dir attribute defined in the project file.
 
-
-*Project (-P, --project=<file>)*
-
-  Specify the path name of the main project file. The space between -P and
-  the project file name is optional.
-
-
-*Documentation comments style (--style=<style>)*
+* `--style=<style>`: Documentation comments style
 
   *leading*
     Documentation is extracted from the comment before the entity declaration.
@@ -109,14 +112,10 @@ switch --help::
     and additional features of the GNAT style are enabled.
 
 
-*Enable warnings for missing documentation (--warnings)*
+* `--warnings`: Enable warnings for missing documentation
 
-  Emit warnings for fields, parameters or subprograms which do not have
-  documentation.
-
-*External reference (-X NAME=VALUE)*
-
-  Specify an external reference in the project.
+   Emit warnings for fields, parameters or subprograms which do not have
+   documentation.
 
 
 ..  GNAT Studio interface

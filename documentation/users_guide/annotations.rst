@@ -7,23 +7,23 @@ files for your project. Special tags present in the comments are interpreted
 by GNATdoc.
 
 Documentation is extracted from the comment blocks at different locations,
-depending of the entity kind and documentation style. Description below
-provides list of all blocks for each entity kind.
+depending of the entity kind and documentation style. The description below
+provides a list of all supported blocks for each entity kind.
 
 
 Documenting packages
 --------------------
 
 The documentation attached to each package is the block of comment from one of
-the locations:
+the following locations:
 
- * directly preceeding context clauses
+* directly preceeding context clauses
 
- * directly preceeding the package declaration
+* directly preceeding the package declaration
 
- * directly following 'is' keyword of the package declaration
+* directly following 'is' keyword of the package declaration
 
- * directly following the block of 'pragma' directives and 'use' context
+* directly following the block of 'pragma' directives and 'use' context
    clauses at the beginning of the package declaration
 
 For example::
@@ -39,9 +39,9 @@ Documenting enumeration types
 -----------------------------
 
 The documentation attached to each enumeration type is the block of comment
-directly preceeing, or directly following enumeration type declaration and has
-same indentation as the enumeration type declaration (to distinguish it from
-the multiline in line documentation of the enumeration literal)
+directly preceding, or directly following, the enumeration type declaration; it should
+have the same indentation as the enumeration type declaration, to distinguish it from
+the multiline in line documentation of the enumeration literal itself.
 
 The following tag is supported when annotating enumeration literals:
 
@@ -72,9 +72,9 @@ For example::
   --  @enum Green The green color is the default color of the border
   type Colors is (Black, White, Green);
 
-Enumeration literals can also be documented in line, with the documentation for
+Enumeration literals can also be documented inline, with the documentation for
 each literal directly following its declaration (or directly preceding the
-component declaration, if leading style is used). In this case, the
+component declaration, if the *leading* style is used). In this case, the
 tag *@enum* is not required::
 
   --  Colors supported by this drawing application
@@ -88,7 +88,7 @@ tag *@enum* is not required::
 
 As shown above, a combined approach of documentation is also supported (see
 that the general description of the enumeration type *Colors* is located
-before its declaration and the documentation of its literals is located
+before its declaration, and the documentation of its literals is located
 after their declaration).
 
 
@@ -131,10 +131,10 @@ For example::
       Y : Integer;
    end record;
 
-Record components can also be documented in line, with the documentation for
+Record components can also be documented inline, with the documentation for
 each component directly following its declaration (or directly preceding the
-component declaration, if the leading style of the documentation is specified).
-In this case, the tag *@field* is not required::
+component declaration, if the *leading* style of the documentation is specified).
+In this case, the *@field* tag is not required::
 
   --  A point representing a location in integer precision.
   type Point is
@@ -156,7 +156,7 @@ Documenting subprograms
 
 The documentation attached to each subprogram is the block of comment
 directly following the subprogram declaration, or directly preceding it
-if the option *-l* was specified.
+if the *leading* style was specified.
 
 The following tags are supported when annotating subprograms:
 
@@ -223,10 +223,10 @@ For example::
    --     if Minutes = 0 or Minutes > 300
    --  @return True iff the alarm was successfully registered
 
-The parameters can also be documented in line, with the documentation for each
+The parameters can also be documented inline, with the documentation for each
 parameter directly following the parameter type declaration (or directly
-preceding the parameter declaration, if leading stype of the documentation was
-specified). In this case, the tag *@param* is not required::
+preceding the parameter declaration, if the *leading* style of the documentation was
+specified). In this case, the *@param* tag is not required::
 
    function Set_Alarm
      (Message : String;
@@ -243,12 +243,11 @@ specified). In this case, the tag *@param* is not required::
 Text markup
 -----------
 
-GNATdoc recognizes several markup constructs inside description text, that can
+GNATdoc recognizes several markup constructs inside the description text, which can
 be used to better control the format of the generated documentation. GNATdoc's
-markup syntax is based on the MarkDown syntax (see `Common Mark
-<https://commonmark.org/>` for detailed description).
+markup syntax is based on the MarkDown syntax (see `Common Mark <https://commonmark.org/>`_ for a detailed description).
 
-GNATdoc supports following MarkDown features:
+GNATdoc supports the following MarkDown features:
 
   * paragraphs
 
@@ -260,7 +259,7 @@ GNATdoc supports following MarkDown features:
 Excluding entities
 ------------------
 
-The tag *@private* notifies GNATdoc that no documentation must be generated
+The *@private* tag indicates that no documentation should be generated
 on a given entity. For example::
 
    type Calculator is tagged ...
@@ -272,5 +271,5 @@ on a given entity. For example::
    --  @private No information is generated in the output about this
    --  primitive because it is internally used for debugging.
 
-Note: specifing *@private* tag for the packages removes the package and all its
-children packages from the generated documentation.
+Note: specifing the *@private* tag for the packages removes the package and all its
+child packages from the generated documentation.
