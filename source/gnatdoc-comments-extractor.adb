@@ -666,19 +666,6 @@ package body GNATdoc.Comments.Extractor is
             Leading_Section);
       end if;
 
-      --  Looukp last use clause or pragma declarations at the beginning of the
-      --  public part of the package.
-
-      for N of Base_Package_Decl_Node.F_Public_Part.F_Decls loop
-         case N.Kind is
-            when Ada_Pragma_Node | Ada_Use_Clause =>
-               Last_Pragma_Or_Use := N.As_Ada_Node;
-
-            when others =>
-               exit;
-         end case;
-      end loop;
-
       --  Upper intermediate section: after 'is' and before any declarations.
 
       declare
@@ -702,7 +689,20 @@ package body GNATdoc.Comments.Extractor is
             Intermediate_Upper_Section);
       end;
 
-      --  Lower intermediate section: after 'is' and before any declarations.
+      --  Lower intermediate section: after any 'pragma' and 'use' clauses.
+
+      --  Looukp last use clause or pragma declarations at the beginning of the
+      --  public part of the package.
+
+      for N of Base_Package_Decl_Node.F_Public_Part.F_Decls loop
+         case N.Kind is
+            when Ada_Pragma_Node | Ada_Use_Clause =>
+               Last_Pragma_Or_Use := N.As_Ada_Node;
+
+            when others =>
+               exit;
+         end case;
+      end loop;
 
       if not Last_Pragma_Or_Use.Is_Null then
          Intermediate_Lower_Section :=
