@@ -2,9 +2,7 @@
 Configuration
 *************
 
-GNATdoc uses some attributes of the *Documentation* package of the root project
-file.
-
+GNATdoc can be configured via some attributes in the *Documentation* package of the root project file.
 
 Documentation pattern
 ---------------------
@@ -25,7 +23,7 @@ Excluded project files
 ----------------------
 
 By default GNATdoc recursively processes all the projects on which your root
-project depends, except externally build library projects.
+project depends, except externally built projects.
 This behavior can be modified by specifying the *Excluded_Project_Files*
 attribute in the *Documentation* package of the root project::
 
@@ -35,7 +33,7 @@ attribute in the *Documentation* package of the root project::
          "vss_gnat.gpr");
    end Documentation;
 
-This list may include any project files directly or undirectly used by
+This list may include any project files directly or indirectly used by
 the root project.
 
 
@@ -55,13 +53,13 @@ behavior can be modified by specifying the attribute *Output_Dir* in the
 Output customization
 --------------------
 
-GNATdoc' backends can use a set of static resources and templates files to control the final
-rendering. Modifying these static resources and templates you can control the
+The GNATdoc backends can use a set of static resources and templates files to control the final
+rendering. By modifying these static resources and templates, you can control the
 rendering of the generated documentation. The files used for generating the
 documentation can be found under
 :file:`<install_dir>/share/gnatdoc/<backend>`.
 If you need a different layout from the proposed one, you can override those
-files and provides new files. The directory for user defined static resources
+files and provides your own set of files. The directory for user defined static resources
 and templates can be specified via the string attribute *Resources_Dir* of the
 *Documentation* package in the project file::
 
@@ -69,5 +67,5 @@ and templates can be specified via the string attribute *Resources_Dir* of the
       for Resources_Dir ("html") use "docs/gnatdoc_html";
    end Documentation;
 
-Each backend has own conventions on layout of the resources directory, see
-documentation of the particular backend.
+Each backend has own conventions on the layout of the resources directory: see
+the documentation of the particular backend.
