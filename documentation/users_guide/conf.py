@@ -195,7 +195,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'gnatdoc.tex', 'GNATdoc User Guide',
+  ('index', 'gnatdoc_ug.tex', 'GNATdoc User Guide',
    'AdaCore', 'manual'),
 ]
 
