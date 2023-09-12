@@ -445,7 +445,6 @@ package Discriminanted_Types
 <Id "Discriminanted_Types" generics.ads:133:8-133:28>
 <GenericPackageDecl ["Incomplete_Type"] generics.ads:138:4-145:24>
 **************************
-<PragmaNode generics.ads:141:7-141:41>
 \/ FORMAL cursor (Cursor)  0 0 0 0
   \/ RAW <<LEADING>> ()  0 0 0 0
   \/ RAW <<TRAILING>> ()  0 0 0 0

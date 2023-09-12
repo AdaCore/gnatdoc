@@ -15,9 +15,9 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with Ada.Text_IO;
-
 with Libadalang.Common;
+
+with GNATdoc.Messages;
 
 package body GNATdoc.Comments.Builders.Generics is
 
@@ -80,9 +80,13 @@ package body GNATdoc.Comments.Builders.Generics is
                   Item.As_Generic_Formal_Package.F_Decl
                     .As_Generic_Package_Instantiation.F_Name);
 
+            when Ada_Pragma_Node =>
+               --  Ignore all pragmas.
+
+               null;
+
             when others =>
-               Ada.Text_IO.Put_Line
-                 (Ada.Text_IO.Standard_Error, Image (Item));
+               GNATdoc.Messages.Raise_Not_Implemented (Image (Item));
          end case;
       end loop;
 
