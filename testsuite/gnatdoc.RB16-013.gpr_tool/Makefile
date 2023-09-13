@@ -2,7 +2,7 @@
 all: clean run
 
 run:
-	../../bin/gnatdoc4 test.gpr
+	../../bin/gnatdoc test.gpr
 	test -d .docs
 
 clean:
