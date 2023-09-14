@@ -47,6 +47,29 @@ build_and_test:
     reports:
       junit: xunit_output.xml
 
+build_doc:
+  services:
+     - image:e3
+  stage: build_and_test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      changes:
+        - documentation/users_guide/*
+    - if: $CI_PIPELINE_SOURCE == 'pipeline'
+      changes:
+        - documentation/users_guide/*
+    - if: $CI_COMMIT_BRANCH == 'master' && $CI_COMMIT_TITLE =~ /Merge branch.*/
+      changes:
+        - documentation/users_guide/*
+    - if: $CI_COMMIT_BRANCH == 'edge' && $CI_COMMIT_TITLE =~ /Merge branch.*/
+      changes:
+        - documentation/users_guide/*
+  script:
+    - !reference [.basic-setup]
+
+    # Build gnatdoc
+    - anod build gnatdoc4-doc $ACI_TRACK_QUALIFIER
+
 downstream_ci:
   stage: downstream_ci
   rules:
