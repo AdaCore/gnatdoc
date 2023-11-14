@@ -1,0 +1,47 @@
+<CompilationUnit concrete_types.ads:1:1-12:20>
+<AdaNodeList concrete_types.ads:1:1-1:1>
+<LibraryItem concrete_types.ads:1:1-12:20>
+<PrivateAbsent concrete_types.ads:1:1-1:1>
+<PackageDecl ["Concrete_Types"] concrete_types.ads:1:1-12:20>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+package Concrete_Types
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<DefiningName "Concrete_Types" concrete_types.ads:1:9-1:23>
+<Id "Concrete_Types" concrete_types.ads:1:9-1:23>
+<PublicPart concrete_types.ads:1:26-12:1>
+<AdaNodeList concrete_types.ads:3:5-10:16>
+<ConcreteTypeDecl ["Parent_Type"] concrete_types.ads:3:5-3:57>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type Parent_Type is abstract tagged limited private;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<ConcreteTypeDecl ["Child_Type"] concrete_types.ads:5:5-5:66>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type Child_Type is abstract new Parent_Type with null record;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<ConcreteTypeDecl ["Great_Child_Type"] concrete_types.ads:7:5-10:16>
+**************************
+\/ FIELD field_one (Field_One)  8 8 9 9
+A simple integer field.
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type Great_Child_Type is new Text_Document with record
+    Field_One : Integer;
+end record;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<EndName concrete_types.ads:12:5-12:19>
+<Id "Concrete_Types" concrete_types.ads:12:5-12:19>
+<PragmaNodeList concrete_types.ads:12:20-12:20>
