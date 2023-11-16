@@ -410,9 +410,10 @@ package body GNATdoc.Comments.Helpers is
          Name_To_Extract := Name.As_Defining_Name;
 
       elsif Decl.Kind in Ada_Discriminant_Spec | Ada_Component_Decl
-        and then Parent_Basic_Decl.Kind in Ada_Type_Decl
+        and then Parent_Basic_Decl.Kind
+      in Ada_Type_Decl | Ada_Concrete_Type_Decl_Range
         and then Parent_Basic_Decl.As_Type_Decl.F_Type_Def.Kind
-                   = Ada_Record_Type_Def
+      in Ada_Record_Type_Def | Ada_Derived_Type_Def
       then
          Decl_To_Extract := Parent_Basic_Decl;
          Name_To_Extract := Name.As_Defining_Name;
