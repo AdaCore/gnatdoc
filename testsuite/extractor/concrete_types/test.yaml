@@ -1,0 +1,3 @@
+# Test that components from types deriving from abstract types
+# are correctly extracted.
+extractor_source: concrete_types.ads
