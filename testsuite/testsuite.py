@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from os import environ
 from os.path import abspath, dirname, join
 import sys
 
@@ -21,10 +22,26 @@ class LibGNATdocExtractorDriver(DiffTestDriver):
         self.shell([exe_path, configuration_file, source_file])
 
 
+class GNATdocExecutableDriver(DiffTestDriver):
+    def set_up(self):
+        super().set_up()
+
+        self.test_environ = environ
+        self.test_environ["GNATDOC4"] = "gnatdoc"
+
+    def run(self):
+        script_path = join(self.test_env["test_dir"], "test.sh")
+
+        self.shell(args=[script_path], env=self.test_environ)
+
+
 class LibGNATdocTestsuite(Testsuite):
     """Testsuite for the LibGNATdoc library"""
 
-    test_driver_map = {"extractor": LibGNATdocExtractorDriver}
+    test_driver_map = {
+        "extractor": LibGNATdocExtractorDriver,
+        "executable": GNATdocExecutableDriver,
+    }
     default_driver = "extractor"
 
 
