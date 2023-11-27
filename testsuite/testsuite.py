@@ -23,6 +23,10 @@ class LibGNATdocExtractorDriver(DiffTestDriver):
 
 
 class GNATdocExecutableDriver(DiffTestDriver):
+    """This driver runs 'test.sh' script in the test directory and compares
+    output with test.out file.
+    """
+
     def set_up(self):
         super().set_up()
 
