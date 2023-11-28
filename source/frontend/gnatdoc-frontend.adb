@@ -2169,6 +2169,7 @@ package body GNATdoc.Frontend is
 
          when Ada_Expr_Function
             | Ada_Null_Subp_Decl
+            | Ada_Subp_Body
             | Ada_Subp_Renaming_Decl
          =>
             Aux := Node.As_Base_Subp_Body.P_Decl_Part;
