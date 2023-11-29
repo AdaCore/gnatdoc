@@ -43,11 +43,6 @@ fi
 
 pip install --user subprojects/langkit/
 
-# Python used in GitHub CI on Windows can't understand
-# make's notation of absolute path in form of /d/PATH,
-# where /d is drive D: Let's use relative path instead
-sed -i -e '/langkit/s/.{CURDIR}/../' subprojects/gpr/Makefile
-
 make all check
 
 tar cfz gnatdoc-$RUNNER_OS.tar.gz bin share
