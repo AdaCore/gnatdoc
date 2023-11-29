@@ -36,7 +36,7 @@ class GNATdocExecutableDriver(DiffTestDriver):
     def run(self):
         script_path = join(self.test_env["test_dir"], "test.sh")
 
-        self.shell(args=[script_path], env=self.test_environ)
+        self.shell(args=["bash", script_path], env=self.test_environ)
 
 
 class LibGNATdocTestsuite(Testsuite):
