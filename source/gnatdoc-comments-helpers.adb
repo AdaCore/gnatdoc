@@ -320,7 +320,7 @@ package body GNATdoc.Comments.Helpers is
          Name_To_Extract := Name.As_Defining_Name;
 
       elsif Decl.Kind = Ada_Param_Spec
-        and Parent_Basic_Decl.Kind
+        and then Parent_Basic_Decl.Kind
               in Ada_Concrete_Formal_Subp_Decl | Ada_Formal_Type_Decl
       then
          --  Parameter of the formal subprogram or formal access to subprogram
