@@ -41,7 +41,8 @@ else
     export BUILD_MODE=prod
 fi
 
-pip install --user subprojects/langkit/
+pip3 install --user subprojects/langkit/
+pip3 install --user e3-testsuite
 
 make all check
 
