@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                       Copyright (C) 2024, AdaCore                        --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -22,6 +22,9 @@ with Libadalang.Analysis;
 with VSS.Strings;
 
 package GNATdoc.Projects is
+
+   procedure Register_Attributes;
+   --  Register GPR2 documentation attributes.
 
    procedure Initialize;
    --  Initialize project support, load and process project tree.

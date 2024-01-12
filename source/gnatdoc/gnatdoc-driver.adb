@@ -37,8 +37,14 @@ begin
    GNATdoc.Configuration.Provider := CL_Provider'Unchecked_Access;
 
    --  Initialize command line.
-
    GNATdoc.Command_Line.Initialize;
+
+   --  Register Documentation package & attribute.
+   --  Should be done before print-gpr-registry option handling.
+
+   GNATdoc.Projects.Register_Attributes;
+
+
 
    --  Create backend.
 
