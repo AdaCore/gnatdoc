@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -35,6 +35,11 @@ begin
    --  Configure configuration options provider.
 
    GNATdoc.Configuration.Provider := CL_Provider'Unchecked_Access;
+
+   --  Register Documentation package & attribute.
+   --  Should be done before print-gpr-registry option handling.
+
+   GNATdoc.Projects.Register_Attributes;
 
    --  Initialize command line and project.
 
