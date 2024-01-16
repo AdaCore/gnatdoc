@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -20,6 +20,9 @@ with VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Options;
 with GNATdoc.Options;
+
+with GPR2.Options;
+with GPR2.Project.Registry.Exchange;
 
 package body GNATdoc.Command_Line is
 
@@ -69,6 +72,14 @@ package body GNATdoc.Command_Line is
      (Name        => "project_file",
       Description => "Project file to process");
 
+   Print_Gpr_Registry_Option : constant VSS.Command_Line.Binary_Option :=
+     (Short_Name  => <>,
+      Long_Name   => VSS.Strings.Conversions.To_Virtual_String
+        (GPR2.Options.Print_GPR_Registry_Option
+             (GPR2.Options.Print_GPR_Registry_Option'First + 2 ..
+                  GPR2.Options.Print_GPR_Registry_Option'Last)),
+      Description => "Print GPR Documentation attributes and exit");
+
    Backend_Argument          : VSS.Strings.Virtual_String;
    Backend_Name_Argument     : VSS.Strings.Virtual_String;
    Backend_Options_Argument  : VSS.String_Vectors.Virtual_String_Vector;
@@ -114,10 +125,33 @@ package body GNATdoc.Command_Line is
       VSS.Command_Line.Add_Option (Warnings_Option);
       VSS.Command_Line.Add_Option (Scenario_Option);
       VSS.Command_Line.Add_Option (Positional_Project_Option);
+      VSS.Command_Line.Add_Option (Print_Gpr_Registry_Option);
       VSS.Command_Line.Add_Help_Option;
 
       VSS.Command_Line.Process;
       Positional := VSS.Command_Line.Positional_Arguments;
+
+      if VSS.Command_Line.Is_Specified (Print_Gpr_Registry_Option) then
+         declare
+            Message : VSS.Strings.Virtual_String;
+
+            procedure Output (Item : String);
+            --  Export registry callback
+
+            ------------
+            -- Output --
+            ------------
+
+            procedure Output (Item : String) is
+            begin
+               Message.Append
+                 (VSS.Strings.Conversions.To_Virtual_String (Item));
+            end Output;
+         begin
+            GPR2.Project.Registry.Exchange.Export (Output => Output'Access);
+            VSS.Command_Line.Report_Message (Message);
+         end;
+      end if;
 
       --  Extract name of the project file from the option or positional
       --  argument.
