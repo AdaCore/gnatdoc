@@ -18,7 +18,6 @@
 private with GNATCOLL.VFS;
 
 with VSS.Command_Line.Parsers;
-with VSS.Strings;
 private with VSS.String_Vectors;
 
 private with GNATdoc.Entities;
@@ -50,9 +49,6 @@ package GNATdoc.Backend is
       return VSS.Strings.Virtual_String is abstract;
 
    procedure Generate (Self : in out Abstract_Backend) is abstract;
-
-   function Create_Backend
-     (Name : VSS.Strings.Virtual_String) return Backend_Access;
 
 private
 

@@ -18,7 +18,7 @@
 with GNATdoc.Command_Line;
 with GNATdoc.Configuration.Command_Line;
 with GNATdoc.Configuration.Project;
-with GNATdoc.Backend;
+with GNATdoc.Backend.Registry;
 with GNATdoc.Frontend;
 with GNATdoc.Projects;
 
@@ -43,7 +43,7 @@ begin
    --  Create backend.
 
    Backend :=
-     GNATdoc.Backend.Create_Backend
+     GNATdoc.Backend.Registry.Create_Backend
        (GNATdoc.Configuration.Provider.Backend_Name);
 
    --  Register backend's options.
