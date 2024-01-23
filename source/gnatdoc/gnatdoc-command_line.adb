@@ -32,13 +32,13 @@ package body GNATdoc.Command_Line is
    Backend_Option            : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => <>,
       Long_Name   => "backend",
-      Value_Name  => "name",
+      Value_Name  => "html|rst",
       Description => "Backend to use to generate output");
 
    Generate_Option           : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => <>,
       Long_Name   => "generate",
-      Value_Name  => "part",
+      Value_Name  => "public|private|body",
       Description => "Part of code to generate documentation");
 
    Output_Dir_Option         : constant VSS.Command_Line.Value_Option :=
@@ -63,7 +63,7 @@ package body GNATdoc.Command_Line is
    Style_Option              : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => <>,
       Long_Name   => "style",
-      Value_Name  => "style",
+      Value_Name  => "leading|trailing|gnat",
       Description => "Use given style of documentation");
 
    Warnings_Option           : constant VSS.Command_Line.Binary_Option :=
@@ -110,11 +110,11 @@ package body GNATdoc.Command_Line is
    procedure Initialize is
    begin
       Parser.Add_Option (Help_Option);
+      Parser.Add_Option (Style_Option);
       Parser.Add_Option (Backend_Option);
       Parser.Add_Option (Generate_Option);
       Parser.Add_Option (Output_Dir_Option);
       Parser.Add_Option (Project_Option);
-      Parser.Add_Option (Style_Option);
       Parser.Add_Option (Warnings_Option);
       Parser.Add_Option (Scenario_Option);
       Parser.Add_Option (Positional_Project_Option);
