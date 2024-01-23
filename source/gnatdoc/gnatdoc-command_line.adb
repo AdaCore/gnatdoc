@@ -56,7 +56,7 @@ package body GNATdoc.Command_Line is
    Scenario_Option           : constant VSS.Command_Line.Name_Value_Option :=
      (Short_Name  => "X",
       Long_Name   => <>,
-      Name_Name   => "variable",
+      Name_Name   => "name",
       Value_Name  => "value",
       Description => "Set scenario variable");
 
