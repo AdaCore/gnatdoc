@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2023, AdaCore                        --
+--                     Copyright (C) 2023-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -39,6 +39,14 @@ package body GNATdoc.Backend.RST is
       Item  : VSS.Characters.Virtual_Character)
       return VSS.Strings.Virtual_String;
 
+   OOP_Style_Option : constant VSS.Command_Line.Binary_Option :=
+     (Short_Name  => <>,
+      Long_Name   => "rst-oop-style",
+      Description =>
+        VSS.Strings.To_Virtual_String
+          ("Group subprograms by tagged type and generate page for each"
+           & " tagged type"));
+
    ---------
    -- "*" --
    ---------
@@ -54,6 +62,17 @@ package body GNATdoc.Backend.RST is
          end loop;
       end return;
    end "*";
+
+   ------------------------------
+   -- Add_Command_Line_Options --
+   ------------------------------
+
+   overriding procedure Add_Command_Line_Options
+     (Self   : RST_Backend_Base;
+      Parser : in out VSS.Command_Line.Parsers.Command_Line_Parser'Class) is
+   begin
+      Parser.Add_Option (OOP_Style_Option);
+   end Add_Command_Line_Options;
 
    -----------------------------
    -- Documentation_File_Name --
@@ -304,5 +323,18 @@ package body GNATdoc.Backend.RST is
    begin
       return "rst";
    end Name;
+
+   ----------------------------------
+   -- Process_Command_Line_Options --
+   ----------------------------------
+
+   overriding procedure Process_Command_Line_Options
+     (Self   : in out RST_Backend_Base;
+      Parser : VSS.Command_Line.Parsers.Command_Line_Parser'Class) is
+   begin
+      if Parser.Is_Specified (OOP_Style_Option) then
+         Self.OOP_Mode := True;
+      end if;
+   end Process_Command_Line_Options;
 
 end GNATdoc.Backend.RST;

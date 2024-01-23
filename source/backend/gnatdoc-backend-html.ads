@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -27,6 +27,14 @@ private
 
    overriding function Name
      (Self : in out HTML_Backend) return VSS.Strings.Virtual_String;
+
+   overriding procedure Add_Command_Line_Options
+     (Self   : HTML_Backend;
+      Parser : in out VSS.Command_Line.Parsers.Command_Line_Parser'Class);
+
+   overriding procedure Process_Command_Line_Options
+     (Self   : in out HTML_Backend;
+      Parser : VSS.Command_Line.Parsers.Command_Line_Parser'Class);
 
    overriding procedure Initialize (Self : in out HTML_Backend);
 
