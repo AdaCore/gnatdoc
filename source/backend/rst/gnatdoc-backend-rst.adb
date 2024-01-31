@@ -44,7 +44,7 @@ package body GNATdoc.Backend.RST is
       Long_Name   => "rst-oop-style",
       Description =>
         VSS.Strings.To_Virtual_String
-          ("Group subprograms by tagged type and generate page for each"
+          ("Group subprograms by tagged types, generating a page for each"
            & " tagged type"));
 
    ---------
