@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -30,10 +30,6 @@ private
    overriding function Backend_Name
      (Self : Command_Line_Configuration_Provider)
       return VSS.Strings.Virtual_String;
-
-   overriding function Backend_Options
-     (Self : Command_Line_Configuration_Provider)
-      return VSS.String_Vectors.Virtual_String_Vector;
 
    overriding function Output_Directory
      (Self         : Command_Line_Configuration_Provider;
