@@ -91,7 +91,7 @@ package body GNATdoc.Backend.HTML is
       Long_Name   => "html-oop-style",
       Description =>
         VSS.Strings.To_Virtual_String
-          ("Group subprograms by tagged type and generate page for each"
+          ("Group subprograms by tagged types, generating a page for each"
            & " tagged type"));
 
    -------------
