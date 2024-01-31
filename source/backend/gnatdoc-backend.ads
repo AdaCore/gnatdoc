@@ -39,8 +39,8 @@ package GNATdoc.Backend is
    procedure Process_Command_Line_Options
      (Self   : in out Abstract_Backend;
       Parser : VSS.Command_Line.Parsers.Command_Line_Parser'Class) is abstract;
-   --  Obtain values of the options specified in command line. In case of the
-   --  some configuration error VSS.Command_Line.Report_Error should be called.
+   --  Obtain values of the options specified in command line. In case of
+   --  some configuration error, VSS.Command_Line.Report_Error should be called.
 
    procedure Initialize (Self : in out Abstract_Backend);
 
