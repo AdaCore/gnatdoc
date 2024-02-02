@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -35,7 +35,6 @@ with VSS.XML.XmlAda_Readers;
 
 with GNATdoc.Comments.Helpers;
 with GNATdoc.Comments.Proxies;
-with GNATdoc.Configuration;
 with GNATdoc.Entities;
 with Streams;
 
@@ -86,6 +85,14 @@ package body GNATdoc.Backend.HTML is
          return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
 
    end Proxies;
+
+   OOP_Style_Option : constant VSS.Command_Line.Binary_Option :=
+     (Short_Name  => <>,
+      Long_Name   => "html-oop-style",
+      Description =>
+        VSS.Strings.To_Virtual_String
+          ("Group subprograms by tagged types, generating a page for each"
+           & " tagged type"));
 
    -------------
    -- Proxies --
@@ -683,6 +690,17 @@ package body GNATdoc.Backend.HTML is
 
    end Proxies;
 
+   ------------------------------
+   -- Add_Command_Line_Options --
+   ------------------------------
+
+   overriding procedure Add_Command_Line_Options
+     (Self   : HTML_Backend;
+      Parser : in out VSS.Command_Line.Parsers.Command_Line_Parser'Class) is
+   begin
+      Parser.Add_Option (OOP_Style_Option);
+   end Add_Command_Line_Options;
+
    --------------
    -- Generate --
    --------------
@@ -1012,9 +1030,6 @@ package body GNATdoc.Backend.HTML is
    begin
       Abstract_Backend (Self).Initialize;
 
-      Self.OOP_Mode :=
-        GNATdoc.Configuration.Provider.Backend_Options.Contains ("oop");
-
       Copy_Static (Self.System_Resources_Root);
       Copy_Static (Self.Project_Resources_Root);
    end Initialize;
@@ -1028,5 +1043,18 @@ package body GNATdoc.Backend.HTML is
    begin
       return "html";
    end Name;
+
+   ----------------------------------
+   -- Process_Command_Line_Options --
+   ----------------------------------
+
+   overriding procedure Process_Command_Line_Options
+     (Self   : in out HTML_Backend;
+      Parser : VSS.Command_Line.Parsers.Command_Line_Parser'Class) is
+   begin
+      if Parser.Is_Specified (OOP_Style_Option) then
+         Self.OOP_Mode := True;
+      end if;
+   end Process_Command_Line_Options;
 
 end GNATdoc.Backend.HTML;

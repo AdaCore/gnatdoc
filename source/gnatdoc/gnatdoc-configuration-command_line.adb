@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -38,23 +38,6 @@ package body GNATdoc.Configuration.Command_Line is
          return Abstract_Configuration_Provider (Self).Backend_Name;
       end if;
    end Backend_Name;
-
-   ---------------------
-   -- Backend_Options --
-   ---------------------
-
-   overriding function Backend_Options
-     (Self : Command_Line_Configuration_Provider)
-      return VSS.String_Vectors.Virtual_String_Vector
-   is
-   begin
-      if GNATdoc.Command_Line.Is_Backend_Options_Specified then
-         return GNATdoc.Command_Line.Backend_Options;
-
-      else
-         return Abstract_Configuration_Provider (Self).Backend_Options;
-      end if;
-   end Backend_Options;
 
    ----------------------
    -- Output_Directory --
