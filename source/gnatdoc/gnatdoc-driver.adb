@@ -18,7 +18,7 @@
 with GNATdoc.Command_Line;
 with GNATdoc.Configuration.Command_Line;
 with GNATdoc.Configuration.Project;
-with GNATdoc.Backend;
+with GNATdoc.Backend.Registry;
 with GNATdoc.Frontend;
 with GNATdoc.Projects;
 
@@ -41,16 +41,30 @@ begin
 
    GNATdoc.Projects.Register_Attributes;
 
-   --  Initialize command line and project.
+   --  Initialize command line.
 
    GNATdoc.Command_Line.Initialize;
-   GNATdoc.Projects.Initialize;
 
-   --  Create and initialize backend.
+   --  Create backend.
 
    Backend :=
-     GNATdoc.Backend.Create_Backend
+     GNATdoc.Backend.Registry.Create_Backend
        (GNATdoc.Configuration.Provider.Backend_Name);
+
+   --  Register backend's options.
+
+   GNATdoc.Command_Line.Add_Backend_Options (Backend.all);
+
+   --  Process command line.
+
+   GNATdoc.Command_Line.Process (Backend.all);
+
+   --  Initialize projects support.
+
+   GNATdoc.Projects.Initialize;
+
+   --  Initialize backend.
+
    Backend.Initialize;
 
    --  Process files

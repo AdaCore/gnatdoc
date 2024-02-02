@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -20,12 +20,21 @@ with GNATCOLL.VFS;
 with GPR2.Context;
 
 with VSS.Strings;
-with VSS.String_Vectors;
+
+with GNATdoc.Backend;
 
 package GNATdoc.Command_Line is
 
    procedure Initialize;
-   --  Process command line
+   --  Configure command line parser and do the first pass of the command line
+   --  parsing to detect backend.
+
+   procedure Add_Backend_Options
+     (Backend : GNATdoc.Backend.Abstract_Backend'Class);
+   --  Register backend's options.
+
+   procedure Process (Backend : in out GNATdoc.Backend.Abstract_Backend'Class);
+   --  Parse command line and process command line options.
 
    function Project_File return VSS.Strings.Virtual_String;
    --  Return path to the project file.
@@ -43,9 +52,5 @@ package GNATdoc.Command_Line is
 
    function Backend_Name return VSS.Strings.Virtual_String;
    --  Return name of the backend if specified.
-
-   function Is_Backend_Options_Specified return Boolean;
-
-   function Backend_Options return VSS.String_Vectors.Virtual_String_Vector;
 
 end GNATdoc.Command_Line;
