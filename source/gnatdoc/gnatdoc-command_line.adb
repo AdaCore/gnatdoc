@@ -22,6 +22,9 @@ with VSS.Strings.Conversions;
 with GNATdoc.Comments.Options;
 with GNATdoc.Options;
 
+with GPR2.Options;
+with GPR2.Project.Registry.Exchange;
+
 package body GNATdoc.Command_Line is
 
    Help_Option               : constant VSS.Command_Line.Binary_Option :=
@@ -75,6 +78,14 @@ package body GNATdoc.Command_Line is
      (Name        => "project_file",
       Description => "Project file to process");
 
+   Print_Gpr_Registry_Option : constant VSS.Command_Line.Binary_Option :=
+     (Short_Name  => <>,
+      Long_Name   => VSS.Strings.Conversions.To_Virtual_String
+        (GPR2.Options.Print_GPR_Registry_Option
+             (GPR2.Options.Print_GPR_Registry_Option'First + 2 ..
+                  GPR2.Options.Print_GPR_Registry_Option'Last)),
+      Description => "Print GPR Documentation attributes and exit");
+
    Backend_Name_Argument     : VSS.Strings.Virtual_String;
    Output_Dir_Argument       : GNATCOLL.VFS.Virtual_File;
    Project_File_Argument     : VSS.Strings.Virtual_String;
@@ -118,6 +129,7 @@ package body GNATdoc.Command_Line is
       Parser.Add_Option (Warnings_Option);
       Parser.Add_Option (Scenario_Option);
       Parser.Add_Option (Positional_Project_Option);
+      Parser.Add_Option (Print_Gpr_Registry_Option);
 
       if not Parser.Parse (VSS.Application.Arguments) then
          VSS.Command_Line.Report_Error (Parser.Error_Message);
@@ -159,6 +171,28 @@ package body GNATdoc.Command_Line is
 
       if Parser.Is_Specified (Help_Option) then
          VSS.Command_Line.Report_Message (Parser.Help_Text);
+      end if;
+
+      if VSS.Command_Line.Is_Specified (Print_Gpr_Registry_Option) then
+         declare
+            Message : VSS.Strings.Virtual_String;
+
+            procedure Output (Item : String);
+            --  Export registry callback
+
+            ------------
+            -- Output --
+            ------------
+
+            procedure Output (Item : String) is
+            begin
+               Message.Append
+                 (VSS.Strings.Conversions.To_Virtual_String (Item));
+            end Output;
+         begin
+            GPR2.Project.Registry.Exchange.Export (Output => Output'Access);
+            VSS.Command_Line.Report_Message (Message);
+         end;
       end if;
 
       --  Extract name of the project file from the option or positional
