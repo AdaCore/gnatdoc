@@ -121,6 +121,7 @@ package body GNATdoc.Command_Line is
    procedure Initialize is
    begin
       Parser.Add_Option (Help_Option);
+      Parser.Add_Option (Print_Gpr_Registry_Option);
       Parser.Add_Option (Style_Option);
       Parser.Add_Option (Backend_Option);
       Parser.Add_Option (Generate_Option);
@@ -129,7 +130,6 @@ package body GNATdoc.Command_Line is
       Parser.Add_Option (Warnings_Option);
       Parser.Add_Option (Scenario_Option);
       Parser.Add_Option (Positional_Project_Option);
-      Parser.Add_Option (Print_Gpr_Registry_Option);
 
       if not Parser.Parse (VSS.Application.Arguments) then
          VSS.Command_Line.Report_Error (Parser.Error_Message);
@@ -173,7 +173,9 @@ package body GNATdoc.Command_Line is
          VSS.Command_Line.Report_Message (Parser.Help_Text);
       end if;
 
-      if VSS.Command_Line.Is_Specified (Print_Gpr_Registry_Option) then
+      --  Process `--print-gpr-registry` if specified
+
+      if Parser.Is_Specified (Print_Gpr_Registry_Option) then
          declare
             Message : VSS.Strings.Virtual_String;
 
