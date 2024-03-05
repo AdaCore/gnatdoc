@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -39,5 +39,9 @@ project GNATdoc is
    package Builder is
       for Executable ("gnatdoc-driver.adb") use "gnatdoc";
    end Builder;
+
+   package Install is
+      for Artifacts ("share") use ("../share");
+   end Install;
 
 end GNATdoc;
