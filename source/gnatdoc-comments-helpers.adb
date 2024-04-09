@@ -409,6 +409,21 @@ package body GNATdoc.Comments.Helpers is
            Decl.As_Enum_Literal_Decl.P_Enum_Type.As_Basic_Decl;
          Name_To_Extract := Name.As_Defining_Name;
 
+      elsif Decl.Kind = Ada_Incomplete_Type_Decl then
+         --  We are looking at an incomplete type declaration. Check the
+         --  complete part, and use it for doc if it's not private.
+         declare
+            Next_Part : constant Basic_Decl :=
+              P_Next_Part_For_Decl (Decl);
+         begin
+            if not (Next_Part.Is_Null
+                    or else As_Type_Decl (Next_Part).P_Is_Private)
+            then
+               Decl_To_Extract := As_Basic_Decl (Next_Part);
+               Name_To_Extract := Name.As_Defining_Name;
+            end if;
+         end;
+
       elsif Decl.Kind in Ada_Discriminant_Spec | Ada_Component_Decl
         and then Parent_Basic_Decl.Kind
       in Ada_Type_Decl | Ada_Concrete_Type_Decl_Range
