@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,9 +15,11 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with VSS.Strings.Character_Iterators;
 with VSS.XML.Events;
 with VSS.XML.Namespaces;
 
+with Markdown.Annotations;
 with Markdown.Block_Containers;
 with Markdown.Blocks.Indented_Code;
 with Markdown.Blocks.Lists;
@@ -26,6 +28,10 @@ with Markdown.Documents;
 with Markdown.Parsers.GNATdoc_Enable;
 
 package body GNATdoc.Backend.HTML_Markup is
+
+   procedure Build_Annotated_Text
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      Item   : Markdown.Annotations.Annotated_Text'Class);
 
    procedure Build_Block
      (Result : in out VSS.XML.Event_Vectors.Vector;
@@ -62,6 +68,127 @@ package body GNATdoc.Backend.HTML_Markup is
    procedure Write_Text
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Text   : VSS.String_Vectors.Virtual_String_Vector);
+
+   --------------------------
+   -- Build_Annotated_Text --
+   --------------------------
+
+   procedure Build_Annotated_Text
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      Item   : Markdown.Annotations.Annotated_Text'Class)
+   is
+      use type VSS.Strings.Character_Count;
+
+      procedure Build_Annotation
+        (From  : in out Positive;
+         Next  : in out VSS.Strings.Character_Iterators.Character_Iterator;
+         Limit : VSS.Strings.Character_Count);
+      --  From is an index in Text.Annotation to start from
+      --  Next is a not printed yet character in Text.Plain_Text
+      --  Dont go after Limit position in Text.Plain_Text
+
+      ----------------------
+      -- Build_Annotation --
+      ----------------------
+
+      procedure Build_Annotation
+        (From  : in out Positive;
+         Next  : in out VSS.Strings.Character_Iterators.Character_Iterator;
+         Limit : VSS.Strings.Character_Count)
+      is
+         function Before
+           (From : VSS.Strings.Character_Index)
+              return VSS.Strings.Character_Iterators.Character_Iterator;
+
+         ------------
+         -- Before --
+         ------------
+
+         function Before
+           (From : VSS.Strings.Character_Index)
+            return VSS.Strings.Character_Iterators.Character_Iterator is
+         begin
+            return Iter : VSS.Strings.Character_Iterators.Character_Iterator do
+               Iter.Set_At (Next);
+
+               while Iter.Character_Index >= From and then Iter.Backward loop
+                  null;
+               end loop;
+
+               while Iter.Character_Index + 1 < From and then Iter.Forward loop
+                  null;
+               end loop;
+            end return;
+         end Before;
+
+         Ignore : Boolean;
+
+      begin
+         while From <= Item.Annotation.Last_Index and then
+           Item.Annotation (From).To <= Limit
+         loop
+            declare
+               Annotation : constant Markdown.Annotations.Annotation :=
+                 Item.Annotation (From);
+               Last       : constant
+                 VSS.Strings.Character_Iterators.Character_Iterator :=
+                   Before (Annotation.From);
+
+            begin
+               From := From + 1;
+
+               Write_Text (Result, Item.Plain_Text.Slice (Next, Last));
+
+               Next.Set_At (Last);
+               Ignore := Next.Forward;
+
+               case Annotation.Kind is
+                  when Markdown.Annotations.Emphasis =>
+                     Write_Start_Element (Result, "em");
+                     Build_Annotation (From, Next, Annotation.To);
+                     Write_End_Element (Result, "em");
+
+                  when Markdown.Annotations.Strong =>
+                     Write_Start_Element (Result, "strong");
+                     Build_Annotation (From, Next, Annotation.To);
+                     Write_End_Element (Result, "strong");
+
+                  when Markdown.Annotations.Code_Span =>
+                     Write_Start_Element (Result, "code");
+                     Build_Annotation (From, Next, Annotation.To);
+                     Write_End_Element (Result, "code");
+
+                  when others =>
+                     null;
+               end case;
+            end;
+         end loop;
+
+         if Next.Character_Index <= Limit then
+            declare
+               Last : constant
+                 VSS.Strings.Character_Iterators.Character_Iterator :=
+                   Before (Limit + 1);
+
+            begin
+               Write_Text (Result, Item.Plain_Text.Slice (Next, Last));
+
+               Next.Set_At (Last);
+               Ignore := Next.Forward;
+            end;
+         end if;
+      end Build_Annotation;
+
+      From  : Positive := Item.Annotation.First_Index;
+      Next  : VSS.Strings.Character_Iterators.Character_Iterator :=
+        Item.Plain_Text.At_First_Character;
+
+   begin
+      Build_Annotation
+        (From  => From,
+         Next  => Next,
+         Limit => Item.Plain_Text.Character_Length);
+   end Build_Annotated_Text;
 
    -----------------
    -- Build_Block --
@@ -174,7 +301,7 @@ package body GNATdoc.Backend.HTML_Markup is
       Item   : Markdown.Blocks.Paragraphs.Paragraph) is
    begin
       Write_Start_Element (Result, "p");
-      Write_Text (Result, Item.Text.Plain_Text);
+      Build_Annotated_Text (Result, Item.Text);
       Write_End_Element (Result, "p");
    end Build_Paragraph;
 

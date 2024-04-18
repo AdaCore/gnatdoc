@@ -255,6 +255,10 @@ GNATdoc supports the following MarkDown features:
 
   * indented code blocks (code blocks are indented by three or more spaces)
 
+  * emphasis/strong emphasis inlines
+
+  * code span inline
+
 
 Excluding entities
 ------------------
