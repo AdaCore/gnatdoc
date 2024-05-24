@@ -579,6 +579,33 @@ package body GNATdoc.Comments.Extractor is
       Options                : GNATdoc.Comments.Options.Extractor_Options;
       Documentation          : in out Structured_Comment'Class)
    is
+      --  Structure of the documentation for the package specification:
+      --
+      --  ===================================================================
+      --  --  File header (ignored)
+      --
+      --  --  Package description (HEADER section)
+      --
+      --  pragma Ada_2022;
+      --  with Ada.Numerics;
+      --  --  It defines "PI" constant (ignored)
+      --
+      --  --  Package description (LEADING section)
+      --
+      --  package Name is
+      --
+      --     --  Package description (INTERMEDIATE UPPER section)
+      --
+      --     pragma Preelaborate;
+      --     --  This package is preelaborated (ignored)
+      --
+      --     --  Package description (INTERMEDIATE LOWER section)
+      --
+      --     type My_Float is digits 9;
+      --
+      --     ...
+      --  ===================================================================
+
       Prelude                    : Ada_Node_List;
       Header_Section             : Section_Access;
       Leading_Section            : Section_Access;
@@ -717,6 +744,9 @@ package body GNATdoc.Comments.Extractor is
          declare
             Token : Token_Reference := Last_Pragma_Or_Use.Token_End;
             Found : Boolean := False;
+            --  This flag is set to True when comment section separator (empty
+            --  line) is found; so any comments that are written directly
+            --  below pragma/use clauses are ignored.
 
          begin
             loop
@@ -726,11 +756,12 @@ package body GNATdoc.Comments.Extractor is
 
                case Kind (Data (Token)) is
                   when Ada_Comment =>
-                     Found := True;
-                     Append_Documentation_Line
-                       (Intermediate_Lower_Section.Text,
-                        Text (Token),
-                        Options.Pattern);
+                     if Found then
+                        Append_Documentation_Line
+                          (Intermediate_Lower_Section.Text,
+                           Text (Token),
+                           Options.Pattern);
+                     end if;
 
                   when Ada_Whitespace =>
                      declare
