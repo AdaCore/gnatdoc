@@ -1,0 +1,48 @@
+<CompilationUnit package_pragma_only.ads:1:1-5:15>
+<AdaNodeList package_pragma_only.ads:1:1-1:1>
+<LibraryItem package_pragma_only.ads:1:1-5:15>
+<PrivateAbsent package_pragma_only.ads:1:1-1:1>
+<PackageDecl ["MyPackage"] package_pragma_only.ads:1:1-5:15>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+package MyPackage
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<DefiningName "MyPackage" package_pragma_only.ads:1:9-1:18>
+<Id "MyPackage" package_pragma_only.ads:1:9-1:18>
+<PublicPart package_pragma_only.ads:1:21-5:1>
+<AdaNodeList package_pragma_only.ads:2:3-2:15>
+<PragmaNode package_pragma_only.ads:2:3-2:15>
+<Id "Pure" package_pragma_only.ads:2:10-2:14>
+<BaseAssocList package_pragma_only.ads:2:9-2:9>
+<EndName package_pragma_only.ads:5:5-5:14>
+<Id "MyPackage" package_pragma_only.ads:5:5-5:14>
+<PragmaNodeList package_pragma_only.ads:5:15-5:15>
+<CompilationUnit package_pragma_package.ads:1:1-7:16>
+<AdaNodeList package_pragma_package.ads:1:1-1:1>
+<LibraryItem package_pragma_package.ads:1:1-7:16>
+<PrivateAbsent package_pragma_package.ads:1:1-1:1>
+<PackageDecl ["MyPackage2"] package_pragma_package.ads:1:1-7:16>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+This is documentation of the MyPackage2 package.
+\/ SNIPPET ada ()  0 0 0 0
+package MyPackage2
+\/ DESCRIPTION  ()  0 0 0 0
+This is documentation of the MyPackage2 package.
+**************************
+<DefiningName "MyPackage2" package_pragma_package.ads:1:9-1:19>
+<Id "MyPackage2" package_pragma_package.ads:1:9-1:19>
+<PublicPart package_pragma_package.ads:1:22-7:1>
+<AdaNodeList package_pragma_package.ads:2:3-2:15>
+<PragmaNode package_pragma_package.ads:2:3-2:15>
+<Id "Pure" package_pragma_package.ads:2:10-2:14>
+<BaseAssocList package_pragma_package.ads:2:9-2:9>
+<EndName package_pragma_package.ads:7:5-7:15>
+<Id "MyPackage2" package_pragma_package.ads:7:5-7:15>
+<PragmaNodeList package_pragma_package.ads:7:16-7:16>
