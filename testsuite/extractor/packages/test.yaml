@@ -1,0 +1,3 @@
+extractor_sources:
+  - package_pragma_only.ads
+  - package_pragma_package.ads

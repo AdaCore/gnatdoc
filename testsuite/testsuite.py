@@ -13,13 +13,24 @@ class LibGNATdocExtractorDriver(DiffTestDriver):
         exe_path = join(dirname(dirname(abspath(__file__))), ".objs", "test_extractor")
         configuration_file = join(
             self.test_env["test_dir"],
-            "gnat.json"
-            if "extractor_configuration" not in self.test_env
-            else self.test_env["extractor_configuration"],
+            (
+                "gnat.json"
+                if "extractor_configuration" not in self.test_env
+                else self.test_env["extractor_configuration"]
+            ),
         )
-        source_file = join(self.test_env["test_dir"], self.test_env["extractor_source"])
+        source_files = []
+        if "extractor_sources" in self.test_env:
+            source_files = self.test_env["extractor_sources"]
 
-        self.shell([exe_path, configuration_file, source_file])
+        else:
+            source_files.append(self.test_env["extractor_source"])
+
+        # Resolve full path to source file
+        source_files = [join(self.test_env["test_dir"], file) for file in source_files]
+
+        for source_file in source_files:
+            self.shell([exe_path, configuration_file, source_file])
 
 
 class GNATdocExecutableDriver(DiffTestDriver):
