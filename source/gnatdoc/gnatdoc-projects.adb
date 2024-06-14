@@ -17,14 +17,15 @@
 
 with Ada.Containers.Hashed_Sets;
 with Ada.Strings.Hash;
-with Ada.Text_IO;
 
 with Langkit_Support.Text;
 with Libadalang.Common;
 with Libadalang.Iterators;
 with Libadalang.Project_Provider;
 
+with GPR2;
 with GPR2.Context;
+with GPR2.Options;
 with GPR2.Path_Name;
 with GPR2.Project.Attribute;
 with GPR2.Project.Attribute_Index;
@@ -33,6 +34,15 @@ with GPR2.Project.Registry.Attribute;
 with GPR2.Project.Registry.Attribute.Description;
 with GPR2.Project.Registry.Pack;
 with GPR2.Project.Registry.Pack.Description;
+
+--  Compiler glitch: we do need this "with" to avoid an issue
+--  in Process_Compilation_Unit where the compiler says
+--  error: cannot call function that returns limited view of type
+--     "Object" defined at gpr2-build-source-sets.ads:28
+--  error: there must be a regular with_clause for package
+--     "Sets" in the current unit, or in some unit in its context
+pragma Warnings (Off, "unit ""GPR2.Build.Source.Sets"" is not referenced");
+with GPR2.Build.Source.Sets;
 
 with VSS.Application;
 with VSS.Command_Line;
@@ -43,9 +53,9 @@ with GNATdoc.Command_Line;
 with GNATdoc.Messages;
 with GNATdoc.Options;
 
-package body GNATdoc.Projects is
+with GNATCOLL.VFS; use GNATCOLL.VFS;
 
-   use type GNATCOLL.VFS.Virtual_File;
+package body GNATdoc.Projects is
 
    Documentation_Package                : constant GPR2.Package_Id :=
      GPR2."+" ("documentation");
@@ -169,24 +179,20 @@ package body GNATdoc.Projects is
 
       --  Load project file
 
+      declare
+         Opt : GPR2.Options.Object;
       begin
-         Project_Tree.Load_Autoconf
-           (GPR2.Path_Name.Create_File
-              (GPR2.Filename_Type
-                   (VSS.Strings.Conversions.To_UTF_8_String
-                        (GNATdoc.Command_Line.Project_File))),
-            Project_Context);
-
-         Project_Tree.Update_Sources (With_Runtime => True);
-
-      exception
-         when GPR2.Project_Error =>
-            for Message of Project_Tree.Log_Messages.all loop
-               Ada.Text_IO.Put_Line
-                 (Ada.Text_IO.Standard_Error, Message.Format);
-            end loop;
-
-            raise;
+         --  TODO: use the GPR2 options parser to support all the
+         --  project loading switches (-X, etc.)
+         Opt.Add_Switch
+           (GPR2.Options.P,
+            VSS.Strings.Conversions.To_UTF_8_String
+             (GNATdoc.Command_Line.Project_File));
+         if not Project_Tree.Load (Opt, With_Runtime => True) then
+            Project_Tree.Log_Messages.Output_Messages;
+            VSS.Command_Line.Report_Error ("Unable to load the project");
+         end if;
+         Project_Tree.Update_Sources;
       end;
 
       --  Create Libadalang context and unit provider
@@ -213,24 +219,32 @@ package body GNATdoc.Projects is
               Project_Tree.Root_Project.Attribute
                 (Documentation_Excluded_Project_Files);
 
+            Project_Names : Virtual_File_Sets.Set;
+            This_File     : GNATCOLL.VFS.Virtual_File;
+
          begin
+            --  Create a set containing all valid project names
+            for View of Project_Tree.Root_Project.Closure
+              (Include_Self => True)
+            loop
+               Project_Names.Include
+                 (Create (View.Path_Name.Filesystem_String));
+            end loop;
+
             for Item of Attribute.Values loop
                if Item.Text'Length = 0 then
                   VSS.Command_Line.Report_Error
                     ("empty name of the project file");
                end if;
 
-               if Project_Tree.Get_File
-                    (GPR2.Filename_Type
-                       (Item.Text)).Virtual_File = GNATCOLL.VFS.No_File
-               then
+               This_File := Create (Filesystem_String (Item.Text));
+
+               if not Project_Names.Contains (This_File) then
                   VSS.Command_Line.Report_Error
                     ("unable to resolve project file path");
                end if;
 
-               Exclude_Project_Files.Insert
-                 (Project_Tree.Get_File
-                    (GPR2.Filename_Type (Item.Text)).Virtual_File);
+               Exclude_Project_Files.Insert (This_File);
             end loop;
          end;
       end if;
@@ -308,7 +322,9 @@ package body GNATdoc.Projects is
 
    procedure Process_Compilation_Units
      (Handler : not null access procedure
-        (Node : Libadalang.Analysis.Compilation_Unit'Class)) is
+        (Node : Libadalang.Analysis.Compilation_Unit'Class))
+   is
+      use type GPR2.Language_Id;
    begin
       for View of Project_Tree loop
          if not View.Is_Externally_Built
@@ -316,7 +332,7 @@ package body GNATdoc.Projects is
                           (View.Path_Name.Virtual_File)
          then
             for Source of View.Sources loop
-               if Source.Is_Ada then
+               if Source.Language = GPR2.Ada_Language then
                   Missing_Files.Clear;
 
                   declare
