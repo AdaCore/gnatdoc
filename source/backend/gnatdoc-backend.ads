@@ -40,7 +40,8 @@ package GNATdoc.Backend is
      (Self   : in out Abstract_Backend;
       Parser : VSS.Command_Line.Parsers.Command_Line_Parser'Class) is abstract;
    --  Obtain values of the options specified in command line. In case of
-   --  some configuration error, VSS.Command_Line.Report_Error should be called.
+   --  some configuration error, VSS.Command_Line.Report_Error should be
+   --  called.
 
    procedure Initialize (Self : in out Abstract_Backend);
 
