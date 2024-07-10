@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2023, AdaCore                        --
+--                     Copyright (C) 2023-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -84,7 +84,7 @@ package body GNATdoc.Comments.RST_Helpers is
          for Section of Documentation.Sections loop
             if Section.Kind = Returns then
                Text.Append (VSS.Strings.Empty_Virtual_String);
-               Text.Append (Indent & ":returnvalue:");
+               Text.Append (Indent & ":returns:");
 
                for Line of Section.Text loop
                   Text.Append (Indent & "    " & Line);
