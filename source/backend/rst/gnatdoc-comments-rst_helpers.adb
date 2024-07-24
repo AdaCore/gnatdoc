@@ -95,6 +95,21 @@ package body GNATdoc.Comments.RST_Helpers is
                exit;
             end if;
          end loop;
+
+         for Section of Documentation.Sections loop
+            if Section.Kind = Raised_Exception then
+               Text.Append (VSS.Strings.Empty_Virtual_String);
+               Text.Append (Indent & ":exception " & Section.Name & ":");
+
+               for Line of Section.Text loop
+                  Text.Append (Indent & "    " & Line);
+               end loop;
+
+               Text.Append (VSS.Strings.Empty_Virtual_String);
+
+               exit;
+            end if;
+         end loop;
       end if;
 
       return Text;
