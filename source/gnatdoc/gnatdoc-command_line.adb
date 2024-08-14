@@ -225,7 +225,7 @@ package body GNATdoc.Command_Line is
          end if;
 
          Project_Context_Arguments.Insert
-           (GPR2.Name_Type
+           (GPR2.External_Name_Type
               (VSS.Strings.Conversions.To_UTF_8_String (NV.Name)),
             VSS.Strings.Conversions.To_UTF_8_String (NV.Value));
       end loop;
