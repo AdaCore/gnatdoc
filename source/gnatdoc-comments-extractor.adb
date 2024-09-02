@@ -2871,6 +2871,10 @@ package body GNATdoc.Comments.Extractor is
       if Node.Kind = Ada_Concrete_Type_Decl
         and then Node.As_Concrete_Type_Decl.F_Type_Def.Kind
                   in Ada_Record_Type_Def | Ada_Derived_Type_Def
+        and then not
+          (Node.As_Concrete_Type_Decl.F_Type_Def.Kind = Ada_Derived_Type_Def
+             and then Node.As_Concrete_Type_Decl.F_Type_Def.As_Derived_Type_Def
+                        .F_Record_Extension.Is_Null)
       then
          Text.Replace (Text.Length, Text.Last_Element & ";");
       end if;

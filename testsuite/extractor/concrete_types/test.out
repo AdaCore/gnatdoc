@@ -1,8 +1,8 @@
-<CompilationUnit concrete_types.ads:1:1-12:20>
+<CompilationUnit concrete_types.ads:1:1-14:20>
 <AdaNodeList concrete_types.ads:1:1-1:1>
-<LibraryItem concrete_types.ads:1:1-12:20>
+<LibraryItem concrete_types.ads:1:1-14:20>
 <PrivateAbsent concrete_types.ads:1:1-1:1>
-<PackageDecl ["Concrete_Types"] concrete_types.ads:1:1-12:20>
+<PackageDecl ["Concrete_Types"] concrete_types.ads:1:1-14:20>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
 \/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
@@ -12,8 +12,8 @@ package Concrete_Types
 **************************
 <DefiningName "Concrete_Types" concrete_types.ads:1:9-1:23>
 <Id "Concrete_Types" concrete_types.ads:1:9-1:23>
-<PublicPart concrete_types.ads:1:26-12:1>
-<AdaNodeList concrete_types.ads:3:5-10:16>
+<PublicPart concrete_types.ads:1:26-14:1>
+<AdaNodeList concrete_types.ads:3:5-12:29>
 <ConcreteTypeDecl ["Parent_Type"] concrete_types.ads:3:5-3:57>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
@@ -42,6 +42,14 @@ type Great_Child_Type is new Text_Document with record
 end record;
 \/ DESCRIPTION  ()  0 0 0 0
 **************************
-<EndName concrete_types.ads:12:5-12:19>
-<Id "Concrete_Types" concrete_types.ads:12:5-12:19>
-<PragmaNodeList concrete_types.ads:12:20-12:20>
+<ConcreteTypeDecl ["int"] concrete_types.ads:12:5-12:29>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+type int is new Integer;
+\/ DESCRIPTION  ()  0 0 0 0
+**************************
+<EndName concrete_types.ads:14:5-14:19>
+<Id "Concrete_Types" concrete_types.ads:14:5-14:19>
+<PragmaNodeList concrete_types.ads:14:20-14:20>
