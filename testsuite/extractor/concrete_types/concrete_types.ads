@@ -9,4 +9,6 @@ package Concrete_Types is
         --  A simple integer field.
     end record;
 
+    type int is new Integer;
+
 end Concrete_Types;

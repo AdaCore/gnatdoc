@@ -1,1 +1,3 @@
-extractor_source: generics.ads
+extractor_sources:
+  - generics.ads
+  - unchecked_conversion.ads

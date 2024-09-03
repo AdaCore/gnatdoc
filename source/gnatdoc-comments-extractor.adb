@@ -265,6 +265,41 @@ package body GNATdoc.Comments.Extractor is
    --  Extract documentation from the upper intermediate section: after
    --  Token_Start ('is' or 'with') and before any other declarations.
 
+   procedure Extract_Compilation_Unit_Documentation
+     (Node            : Libadalang.Analysis.Basic_Decl'Class;
+      Options         : GNATdoc.Comments.Options.Extractor_Options;
+      Sections        : in out Section_Vectors.Vector;
+      Header_Section  : out Section_Access;
+      Leading_Section : out Section_Access)
+     with Pre => Node.Kind in Ada_Generic_Package_Decl
+                                | Ada_Generic_Subp_Decl
+                                | Ada_Package_Decl
+                                | Ada_Subp_Body
+                                | Ada_Subp_Decl
+                                | Ada_Null_Subp_Decl
+                                --  null procedure can't be declared at
+                                --  library level by language rules, however,
+                                --  it is added to provide documentation for
+                                --  IDE in invalid code.
+                   and Node.P_Is_Compilation_Unit_Root;
+   --  Extracts header and leading sections of the enclosing compilation unit.
+   --
+   --  Structure of the documentation for the compilation unit:
+   --
+   --  ======================================================================
+   --  --  File header (ignored)
+   --
+   --  --  Package description (HEADER section)
+   --
+   --  pragma Ada_2022;
+   --  with Ada.Numerics;
+   --  --  It defines "PI" constant (ignored)
+   --
+   --  --  Package description (LEADING section)
+   --
+   --  <library item>
+   --  ======================================================================
+
    procedure Fill_Code_Snippet
      (Node        : Ada_Node'Class;
       First_Token : Token_Reference;
@@ -606,7 +641,6 @@ package body GNATdoc.Comments.Extractor is
       --     ...
       --  ===================================================================
 
-      Prelude                    : Ada_Node_List;
       Header_Section             : Section_Access;
       Leading_Section            : Section_Access;
       Intermediate_Upper_Section : Section_Access;
@@ -614,77 +648,18 @@ package body GNATdoc.Comments.Extractor is
       Last_Pragma_Or_Use         : Ada_Node;
 
    begin
-      --  Header section: before context clauses of compilation unit
-
       if Basic_Decl_Node.P_Is_Compilation_Unit_Root then
-         Prelude := Basic_Decl_Node.P_Enclosing_Compilation_Unit.F_Prelude;
+         Extract_Compilation_Unit_Documentation
+           (Node            => Basic_Decl_Node,
+            Options         => Options,
+            Sections        => Documentation.Sections,
+            Header_Section  => Header_Section,
+            Leading_Section => Leading_Section);
 
-         if Prelude.Sloc_Range.Start_Line = Prelude.Sloc_Range.End_Line
-           and Prelude.Sloc_Range.Start_Column = Prelude.Sloc_Range.End_Column
-         then
-            Prelude := No_Ada_Node_List;
-         end if;
+      else
+         --  Leading section: before the package declaration and after context
+         --  clauses of the compilation unit
 
-         if not Prelude.Is_Null then
-            Header_Section :=
-              new Section'
-                (Kind             => Raw,
-                 Symbol           => "<<HEADER>>",
-                 Name             => <>,
-                 Text             => <>,
-                 others           => <>);
-            Documentation.Sections.Append (Header_Section);
-
-            --  Going from the line before the first line of prelude to find
-            --  an empty line and append all text till the next empty line to
-            --  the header section.
-
-            declare
-               Token : Token_Reference := Prelude.Token_Start;
-               Found : Boolean         := False;
-
-            begin
-               loop
-                  Token := Previous (Token);
-
-                  exit when Token = No_Token;
-
-                  case Kind (Data (Token)) is
-                     when Ada_Comment =>
-                        if Found then
-                           Prepend_Documentation_Line
-                             (Header_Section.Text,
-                              Text (Token),
-                              Options.Pattern);
-                        end if;
-
-                     when Ada_Whitespace =>
-                        declare
-                           Location : constant Source_Location_Range :=
-                             Sloc_Range (Data (Token));
-
-                        begin
-                           if Location.End_Line - Location.Start_Line > 1 then
-                              exit when Found;
-
-                              Found := True;
-                           end if;
-                        end;
-
-                     when others =>
-                        --  No tokens of other kinds are possible.
-
-                        raise Program_Error;
-                  end case;
-               end loop;
-            end;
-         end if;
-      end if;
-
-      --  Leading section: before the package declaration and after context
-      --  clauses of the compilation unit
-
-      if not Basic_Decl_Node.P_Is_Compilation_Unit_Root or Prelude.Is_Null then
          Extract_Leading_Section
            (Basic_Decl_Node.Token_Start,
             Options,
@@ -826,6 +801,97 @@ package body GNATdoc.Comments.Extractor is
             Documentation.Is_Private);
       end;
    end Extract_Base_Package_Decl_Documentation;
+
+   --------------------------------------------
+   -- Extract_Compilation_Unit_Documentation --
+   --------------------------------------------
+
+   procedure Extract_Compilation_Unit_Documentation
+     (Node            : Libadalang.Analysis.Basic_Decl'Class;
+      Options         : GNATdoc.Comments.Options.Extractor_Options;
+      Sections        : in out Section_Vectors.Vector;
+      Header_Section  : out Section_Access;
+      Leading_Section : out Section_Access)
+   is
+      Prelude : Ada_Node_List;
+
+   begin
+      Prelude := Node.P_Enclosing_Compilation_Unit.F_Prelude;
+
+      if Prelude.Sloc_Range.Start_Line = Prelude.Sloc_Range.End_Line
+        and Prelude.Sloc_Range.Start_Column = Prelude.Sloc_Range.End_Column
+      then
+         Prelude := No_Ada_Node_List;
+      end if;
+
+      if not Prelude.Is_Null then
+         --  Header section: before context clauses of compilation unit
+
+         Header_Section :=
+           new Section'
+             (Kind             => Raw,
+              Symbol           => "<<HEADER>>",
+              Name             => <>,
+              Text             => <>,
+              others           => <>);
+         Sections.Append (Header_Section);
+
+         --  Going from the line before the first line of prelude to find
+         --  an empty line and append all text till the next empty line to
+         --  the header section.
+
+         declare
+            Token : Token_Reference := Prelude.Token_Start;
+            Found : Boolean         := False;
+
+         begin
+            loop
+               Token := Previous (Token);
+
+               exit when Token = No_Token;
+
+               case Kind (Data (Token)) is
+                  when Ada_Comment =>
+                     if Found then
+                        Prepend_Documentation_Line
+                          (Header_Section.Text,
+                           Text (Token),
+                           Options.Pattern);
+                     end if;
+
+                  when Ada_Whitespace =>
+                     declare
+                        Location : constant Source_Location_Range :=
+                          Sloc_Range (Data (Token));
+
+                     begin
+                        if Location.End_Line - Location.Start_Line > 1 then
+                           exit when Found;
+
+                           Found := True;
+                        end if;
+                     end;
+
+                  when others =>
+                     --  No tokens of other kinds are possible.
+
+                     raise Program_Error;
+               end case;
+            end loop;
+         end;
+
+      else
+         --  Leading section: before the library item and after context clauses
+         --  of the compilation unit
+
+         Extract_Leading_Section
+           (Node.Token_Start,
+            Options,
+            True,
+            Sections,
+            Leading_Section);
+      end if;
+   end Extract_Compilation_Unit_Documentation;
 
    --------------------------------------
    -- Extract_Entry_Body_Documentation --
@@ -2181,6 +2247,23 @@ package body GNATdoc.Comments.Extractor is
             when Ada_Entry_Spec => No_Type_Expr,
             when others         => raise Program_Error);
 
+      Root_Node                  : constant Basic_Decl'Class :=
+        (case Decl_Node.Kind is
+            when Ada_Abstract_Subp_Decl       => Decl_Node,
+            when Ada_Concrete_Type_Decl       => Decl_Node,
+            --  access to subprogram type
+            when Ada_Entry_Decl               => Decl_Node,
+            when Ada_Expr_Function            => Decl_Node,
+            when Ada_Generic_Formal_Subp_Decl => Decl_Node,
+            when Ada_Generic_Formal_Type_Decl => Decl_Node,
+            when Ada_Generic_Subp_Internal    =>
+              Decl_Node.Parent.As_Basic_Decl,
+            when Ada_Null_Subp_Decl           => Decl_Node,
+            when Ada_Subp_Body                => Decl_Node,
+            when Ada_Subp_Decl                => Decl_Node,
+            when others                       => raise Program_Error);
+
+      Header_Section             : Section_Access;
       Leading_Section            : Section_Access;
       Intermediate_Upper_Section : Section_Access;
       Intermediate_Lower_Section : Section_Access;
@@ -2240,8 +2323,20 @@ package body GNATdoc.Comments.Extractor is
          Last_Section   => Last_Section,
          Minimum_Indent => Minimum_Indent);
 
-      Extract_Leading_Section
-        (Decl_Node.Token_Start, Options, False, Sections, Leading_Section);
+      if Root_Node.P_Is_Compilation_Unit_Root then
+         Extract_Compilation_Unit_Documentation
+           (Node            => Root_Node,
+            Options         => Options,
+            Sections        => Sections,
+            Header_Section  => Header_Section,
+            Leading_Section => Leading_Section);
+
+      else
+         --  Leading section: before the subprogram declaration
+
+         Extract_Leading_Section
+           (Decl_Node.Token_Start, Options, False, Sections, Leading_Section);
+      end if;
 
       if Decl_Node.Kind = Ada_Subp_Body then
          --  Extract comments before and after 'is' keyword.
@@ -2400,6 +2495,18 @@ package body GNATdoc.Comments.Extractor is
                then
                   Raw_Section := Declarative_Section;
 
+               elsif Root_Node.P_Is_Compilation_Unit_Root
+                 and then Leading_Section /= null
+                 and then not Leading_Section.Text.Is_Empty
+               then
+                  Raw_Section := Leading_Section;
+
+               elsif Root_Node.P_Is_Compilation_Unit_Root
+                 and then Header_Section /= null
+                 and then not Header_Section.Text.Is_Empty
+               then
+                  Raw_Section := Header_Section;
+
                elsif Trailing_Section /= null
                  and then not Trailing_Section.Text.Is_Empty
                then
@@ -2412,8 +2519,15 @@ package body GNATdoc.Comments.Extractor is
                end if;
 
             when Leading =>
-               if not Leading_Section.Text.Is_Empty then
+               if Leading_Section /= null
+                 and then not Leading_Section.Text.Is_Empty
+               then
                   Raw_Section := Leading_Section;
+
+               elsif Header_Section /= null
+                 and then not Header_Section.Text.Is_Empty
+               then
+                  Raw_Section := Header_Section;
 
                elsif Options.Fallback then
                   if Intermediate_Upper_Section.Text.Is_Empty then
@@ -2757,6 +2871,10 @@ package body GNATdoc.Comments.Extractor is
       if Node.Kind = Ada_Concrete_Type_Decl
         and then Node.As_Concrete_Type_Decl.F_Type_Def.Kind
                   in Ada_Record_Type_Def | Ada_Derived_Type_Def
+        and then not
+          (Node.As_Concrete_Type_Decl.F_Type_Def.Kind = Ada_Derived_Type_Def
+             and then Node.As_Concrete_Type_Decl.F_Type_Def.As_Derived_Type_Def
+                        .F_Record_Extension.Is_Null)
       then
          Text.Replace (Text.Length, Text.Last_Element & ";");
       end if;

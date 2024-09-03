@@ -2129,8 +2129,8 @@ package body GNATdoc.Frontend is
             when Ada_Package_Decl | Ada_Type_Decl | Ada_Abstract_Subp_Decl
                | Ada_Subp_Decl | Ada_Null_Subp_Decl
                | Ada_Generic_Package_Instantiation
-               | Ada_Generic_Package_Internal
-               | Ada_Generic_Subp_Internal
+               | Ada_Generic_Package_Decl
+               | Ada_Generic_Subp_Decl
                | Ada_Object_Decl
                | Ada_Number_Decl
                | Ada_Subtype_Decl
