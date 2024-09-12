@@ -189,7 +189,6 @@ package body GNATdoc.Projects is
             VSS.Strings.Conversions.To_UTF_8_String
              (GNATdoc.Command_Line.Project_File));
          if not Project_Tree.Load (Opt, With_Runtime => True) then
-            Project_Tree.Log_Messages.Output_Messages;
             VSS.Command_Line.Report_Error ("Unable to load the project");
          end if;
          Project_Tree.Update_Sources;
