@@ -2513,6 +2513,7 @@ package body GNATdoc.Comments.Extractor is
                   Raw_Section := Trailing_Section;
 
                elsif Options.Fallback
+                 and Leading_Section /= null
                  and not Leading_Section.Text.Is_Empty
                then
                   Raw_Section := Leading_Section;
