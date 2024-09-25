@@ -18,6 +18,7 @@
 with Ada.Containers.Hashed_Sets;
 with Ada.Strings.Hash;
 
+with GNATCOLL.Utils;
 with Langkit_Support.Text;
 with Libadalang.Common;
 with Libadalang.Iterators;
@@ -222,6 +223,33 @@ package body GNATdoc.Projects is
             Project_Names : Virtual_File_Sets.Set;
             This_File     : GNATCOLL.VFS.Virtual_File;
 
+            procedure Report_Error_On_Attribute (Message : String);
+            --  Report the given Message on the
+            --  Documentation.Excluded_Project_Files attraibute and
+            --  terminate application with appropriate error status.
+            --  The error message is prepended by the attribute's sloc
+            --  (e.g: "project.gpr:3:11: example of error message" if the
+            --  attribute has been specified at line 3, column 11).
+
+            -------------------------------
+            -- Report_Error_On_Attribute --
+            -------------------------------
+
+            procedure Report_Error_On_Attribute (Message : String) is
+               GPR_File  : constant Virtual_File :=
+                 Create (Filesystem_String (Attribute.Filename));
+               Error_Msg : constant String :=
+                 GPR_File.Display_Base_Name
+                 & ":" & GNATCOLL.Utils.Image (Attribute.Line, 1)
+                 & ":" & GNATCOLL.Utils.Image (Attribute.Column, 1)
+                 & ": error:"
+                 & Message;
+            begin
+               VSS.Command_Line.Report_Error
+                 (VSS.Strings.Conversions.To_Virtual_String
+                    (Error_Msg));
+            end Report_Error_On_Attribute;
+
          begin
             --  Create a set containing all valid project names
             for View of Project_Tree.Root_Project.Closure
@@ -233,15 +261,26 @@ package body GNATdoc.Projects is
 
             for Item of Attribute.Values loop
                if Item.Text'Length = 0 then
-                  VSS.Command_Line.Report_Error
-                    ("empty name of the project file");
+                  Report_Error_On_Attribute
+                    ("empty name specified in the "
+                     & "'Documentation.Excluded_Project_Files' "
+                     & "project attribute");
                end if;
 
-               This_File := Create (Filesystem_String (Item.Text));
+               --  The excluded projects can be listed as paths relative to the
+               --  root project, so make sure to create them relatively from
+               --  the project's root directory.
+               This_File := Create_From_Base
+                 (Base_Name => Filesystem_String (Item.Text),
+                  Base_Dir  =>
+                    Project_Tree.Root_Project.Dir_Name.Filesystem_String);
 
                if not Project_Names.Contains (This_File) then
-                  VSS.Command_Line.Report_Error
-                    ("unable to resolve project file path");
+                  Report_Error_On_Attribute
+                    ("unable to resolve project file path specified in "
+                     & "the 'Documentation.Excluded_Project_Files' "
+                     & "project attribute: "
+                     & Item.Text);
                end if;
 
                Exclude_Project_Files.Insert (This_File);
