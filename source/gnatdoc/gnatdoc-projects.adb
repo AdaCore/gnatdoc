@@ -18,7 +18,6 @@
 with Ada.Containers.Hashed_Sets;
 with Ada.Strings.Hash;
 
-with GNATCOLL.Utils;
 with Langkit_Support.Text;
 with Libadalang.Common;
 with Libadalang.Iterators;
@@ -49,14 +48,18 @@ with VSS.Application;
 with VSS.Command_Line;
 with VSS.Regular_Expressions;
 with VSS.Strings.Conversions;
+with VSS.Strings.Formatters.Integers;
+with VSS.Strings.Formatters.Strings;
+with VSS.Strings.Formatters.Virtual_Files;
+with VSS.Strings.Templates;
 
 with GNATdoc.Command_Line;
 with GNATdoc.Messages;
 with GNATdoc.Options;
 
-with GNATCOLL.VFS; use GNATCOLL.VFS;
-
 package body GNATdoc.Projects is
+
+   use type GNATCOLL.VFS.Virtual_File;
 
    Documentation_Package                : constant GPR2.Package_Id :=
      GPR2."+" ("documentation");
@@ -100,7 +103,7 @@ package body GNATdoc.Projects is
 
    package Virtual_File_Sets is
      new Ada.Containers.Hashed_Sets
-       (GNATCOLL.VFS.Virtual_File, Hash, GNATCOLL.VFS."=");
+       (GNATCOLL.VFS.Virtual_File, Hash, GNATCOLL.VFS."=", GNATCOLL.VFS."=");
 
    Project_Tree          : GPR2.Project.Tree.Object;
    Exclude_Project_Files : Virtual_File_Sets.Set;
@@ -216,6 +219,8 @@ package body GNATdoc.Projects is
         (Documentation_Excluded_Project_Files)
       then
          declare
+            use type VSS.Strings.Virtual_String;
+
             Attribute : constant GPR2.Project.Attribute.Object :=
               Project_Tree.Root_Project.Attribute
                 (Documentation_Excluded_Project_Files);
@@ -223,7 +228,10 @@ package body GNATdoc.Projects is
             Project_Names : Virtual_File_Sets.Set;
             This_File     : GNATCOLL.VFS.Virtual_File;
 
-            procedure Report_Error_On_Attribute (Message : String);
+            procedure Report_Error_On_Attribute
+              (Message : VSS.Strings.Virtual_String;
+               Text    : VSS.Strings.Virtual_String :=
+                 VSS.Strings.Empty_Virtual_String);
             --  Report the given Message on the
             --  Documentation.Excluded_Project_Files attraibute and
             --  terminate application with appropriate error status.
@@ -235,28 +243,34 @@ package body GNATdoc.Projects is
             -- Report_Error_On_Attribute --
             -------------------------------
 
-            procedure Report_Error_On_Attribute (Message : String) is
-               GPR_File  : constant Virtual_File :=
-                 Create (Filesystem_String (Attribute.Filename));
-               Error_Msg : constant String :=
-                 GPR_File.Display_Base_Name
-                 & ":" & GNATCOLL.Utils.Image (Attribute.Line, 1)
-                 & ":" & GNATCOLL.Utils.Image (Attribute.Column, 1)
-                 & ": error:"
-                 & Message;
+            procedure Report_Error_On_Attribute
+              (Message : VSS.Strings.Virtual_String;
+               Text    : VSS.Strings.Virtual_String :=
+                 VSS.Strings.Empty_Virtual_String)
+            is
+               File           : constant GNATCOLL.VFS.Virtual_File :=
+                 GNATCOLL.VFS.Create_From_UTF8 (String (Attribute.Filename));
+               Error_Template : constant
+                 VSS.Strings.Templates.Virtual_String_Template :=
+                   "{}:{}:{}: error: {}{}";
+
             begin
                VSS.Command_Line.Report_Error
-                 (VSS.Strings.Conversions.To_Virtual_String
-                    (Error_Msg));
+                 (Error_Template.Format
+                    (VSS.Strings.Formatters.Virtual_Files.Image (File),
+                     VSS.Strings.Formatters.Integers.Image (Attribute.Line),
+                     VSS.Strings.Formatters.Integers.Image (Attribute.Column),
+                     VSS.Strings.Formatters.Strings.Image (Message),
+                     VSS.Strings.Formatters.Strings.Image (Text)));
             end Report_Error_On_Attribute;
 
          begin
             --  Create a set containing all valid project names
+
             for View of Project_Tree.Root_Project.Closure
               (Include_Self => True)
             loop
-               Project_Names.Include
-                 (Create (View.Path_Name.Filesystem_String));
+               Project_Names.Include (View.Path_Name.Virtual_File);
             end loop;
 
             for Item of Attribute.Values loop
@@ -270,17 +284,19 @@ package body GNATdoc.Projects is
                --  The excluded projects can be listed as paths relative to the
                --  root project, so make sure to create them relatively from
                --  the project's root directory.
-               This_File := Create_From_Base
-                 (Base_Name => Filesystem_String (Item.Text),
-                  Base_Dir  =>
-                    Project_Tree.Root_Project.Dir_Name.Filesystem_String);
+
+               This_File :=
+                 GNATCOLL.VFS.Create_From_Base
+                   (Base_Name => GNATCOLL.VFS.Filesystem_String (Item.Text),
+                    Base_Dir  =>
+                      Project_Tree.Root_Project.Dir_Name.Filesystem_String);
 
                if not Project_Names.Contains (This_File) then
                   Report_Error_On_Attribute
                     ("unable to resolve project file path specified in "
                      & "the 'Documentation.Excluded_Project_Files' "
-                     & "project attribute: "
-                     & Item.Text);
+                     & "project attribute: ",
+                     VSS.Strings.Conversions.To_Virtual_String (Item.Text));
                end if;
 
                Exclude_Project_Files.Insert (This_File);
