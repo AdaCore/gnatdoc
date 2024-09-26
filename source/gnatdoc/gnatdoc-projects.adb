@@ -267,9 +267,7 @@ package body GNATdoc.Projects is
          begin
             --  Create a set containing all valid project names
 
-            for View of Project_Tree.Root_Project.Closure
-              (Include_Self => True)
-            loop
+            for View of Project_Tree.Ordered_Views loop
                Project_Names.Include (View.Path_Name.Virtual_File);
             end loop;
 
@@ -290,7 +288,6 @@ package body GNATdoc.Projects is
                    (Base_Name => GNATCOLL.VFS.Filesystem_String (Item.Text),
                     Base_Dir  =>
                       Project_Tree.Root_Project.Dir_Name.Filesystem_String);
-
                if not Project_Names.Contains (This_File) then
                   Report_Error_On_Attribute
                     ("unable to resolve project file path specified in "
