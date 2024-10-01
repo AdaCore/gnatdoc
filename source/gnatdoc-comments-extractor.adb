@@ -142,7 +142,9 @@ package body GNATdoc.Comments.Extractor is
      with Pre => Node.Kind in Ada_Exception_Decl
                    | Ada_Generic_Formal_Package
                    | Ada_Generic_Package_Instantiation
+                   | Ada_Generic_Package_Renaming_Decl
                    | Ada_Generic_Subp_Instantiation
+                   | Ada_Generic_Subp_Renaming_Decl
                    | Ada_Number_Decl
                    | Ada_Object_Decl
                    | Ada_Package_Renaming_Decl
@@ -422,9 +424,21 @@ package body GNATdoc.Comments.Extractor is
                Options,
                Documentation.Sections);
 
+         when Ada_Generic_Package_Renaming_Decl =>
+            Extract_Simple_Declaration_Documentation
+              (Node.As_Generic_Package_Renaming_Decl,
+               Options,
+               Documentation.Sections);
+
          when Ada_Generic_Subp_Instantiation =>
             Extract_Simple_Declaration_Documentation
               (Node.As_Generic_Subp_Instantiation,
+               Options,
+               Documentation.Sections);
+
+         when Ada_Generic_Subp_Renaming_Decl =>
+            Extract_Simple_Declaration_Documentation
+              (Node.As_Generic_Subp_Renaming_Decl,
                Options,
                Documentation.Sections);
 
@@ -2261,6 +2275,7 @@ package body GNATdoc.Comments.Extractor is
             when Ada_Null_Subp_Decl           => Decl_Node,
             when Ada_Subp_Body                => Decl_Node,
             when Ada_Subp_Decl                => Decl_Node,
+            when Ada_Subp_Renaming_Decl       => Decl_Node,
             when others                       => raise Program_Error);
 
       Header_Section             : Section_Access;
