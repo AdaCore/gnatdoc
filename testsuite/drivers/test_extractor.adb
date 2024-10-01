@@ -141,6 +141,7 @@ procedure Test_Extractor is
             | Ada_Expr_Function | Ada_Subp_Body
             | Ada_Concrete_Type_Decl
             | Ada_Exception_Decl
+            | Ada_Object_Decl
             | Ada_Entry_Decl
             | Ada_Entry_Body
          =>
@@ -169,6 +170,14 @@ procedure Test_Extractor is
          when Ada_Generic_Formal_Part =>
             --  Formal part of the generic is processed in generic
             --  declaration processing.
+
+            return Over;
+
+         when Ada_Package_Renaming_Decl | Ada_Subp_Renaming_Decl
+            | Ada_Generic_Package_Renaming_Decl
+            | Ada_Generic_Subp_Renaming_Decl
+         =>
+            Extract_And_Dump;
 
             return Over;
 
