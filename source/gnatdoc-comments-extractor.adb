@@ -2261,6 +2261,7 @@ package body GNATdoc.Comments.Extractor is
             when Ada_Null_Subp_Decl           => Decl_Node,
             when Ada_Subp_Body                => Decl_Node,
             when Ada_Subp_Decl                => Decl_Node,
+            when Ada_Subp_Renaming_Decl       => Decl_Node,
             when others                       => raise Program_Error);
 
       Header_Section             : Section_Access;
