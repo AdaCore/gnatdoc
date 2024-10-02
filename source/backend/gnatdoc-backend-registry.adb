@@ -17,6 +17,7 @@
 
 with GNATdoc.Backend.HTML;
 with GNATdoc.Backend.RST.PT;
+with GNATdoc.Backend.Test;
 
 package body GNATdoc.Backend.Registry is
 
@@ -38,6 +39,9 @@ package body GNATdoc.Backend.Registry is
 
       elsif Name = "rstpt" then
          return new GNATdoc.Backend.RST.PT.PT_RST_Backend;
+
+      elsif Name = "test" then
+         return new GNATdoc.Backend.Test.Test_Backend;
       end if;
 
       return null;

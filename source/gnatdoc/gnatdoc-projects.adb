@@ -47,11 +47,13 @@ with GPR2.Build.Source.Sets;
 with VSS.Application;
 with VSS.Command_Line;
 with VSS.Regular_Expressions;
+with VSS.String_Vectors;
 with VSS.Strings.Conversions;
 with VSS.Strings.Formatters.Integers;
 with VSS.Strings.Formatters.Strings;
 with VSS.Strings.Formatters.Virtual_Files;
 with VSS.Strings.Templates;
+with VSS.Text_Streams.Standards;
 
 with GNATdoc.Command_Line;
 with GNATdoc.Messages;
@@ -288,6 +290,7 @@ package body GNATdoc.Projects is
                    (Base_Name => GNATCOLL.VFS.Filesystem_String (Item.Text),
                     Base_Dir  =>
                       Project_Tree.Root_Project.Dir_Name.Filesystem_String);
+
                if not Project_Names.Contains (This_File) then
                   Report_Error_On_Attribute
                     ("unable to resolve project file path specified in "
@@ -513,6 +516,55 @@ package body GNATdoc.Projects is
            "This list may include any project files directly or indirectly " &
            "used by the root project.");
    end Register_Attributes;
+
+   ------------------------
+   -- Test_Dump_Projects --
+   ------------------------
+
+   procedure Test_Dump_Projects is
+      Output    : VSS.Text_Streams.Output_Text_Stream'Class
+        renames VSS.Text_Streams.Standards.Standard_Output;
+      Template  : VSS.Strings.Templates.Virtual_String_Template :=
+        "{}{}";
+      Success   : Boolean := True;
+
+   begin
+      for View of Project_Tree loop
+         declare
+            File  : constant GNATCOLL.VFS.Virtual_File :=
+              View.Path_Name.Virtual_File;
+            List  : VSS.String_Vectors.Virtual_String_Vector;
+            Image : VSS.Strings.Virtual_String;
+
+         begin
+            if View.Is_Externally_Built then
+               List.Append ("externally build");
+            end if;
+
+            if Exclude_Project_Files.Contains (File) then
+               List.Append ("exclude list");
+            end if;
+
+            if not List.Is_Empty then
+               Image := " [";
+               Image.Append (List.First_Element);
+
+               for J in List.First_Index + 1 .. List.Last_Index loop
+                  Image.Append (", ");
+                  Image.Append (List (J));
+               end loop;
+
+               Image.Append (']');
+            end if;
+
+            Output.Put_Line
+              (Template.Format
+                 (VSS.Strings.Formatters.Virtual_Files.Image (File),
+                  VSS.Strings.Formatters.Strings.Image (Image)),
+               Success);
+         end;
+      end loop;
+   end Test_Dump_Projects;
 
    -----------------------------
    -- Unit_Requested_Callback --
