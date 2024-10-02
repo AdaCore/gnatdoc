@@ -17,41 +17,31 @@
 
 with GNATCOLL.VFS;
 
-with Libadalang.Analysis;
+package VSS.Strings.Formatters.Virtual_Files is
 
-with VSS.Strings;
+   type Formatter is
+     new VSS.Strings.Formatters.Abstract_Formatter with private;
 
-package GNATdoc.Projects is
+   function Image (Item : GNATCOLL.VFS.Virtual_File) return Formatter;
 
-   procedure Register_Attributes;
-   --  Register GPR2 documentation attributes.
+   function Image
+     (Name : VSS.Strings.Virtual_String;
+      Item : GNATCOLL.VFS.Virtual_File) return Formatter;
 
-   procedure Initialize;
-   --  Initialize project support, load and process project tree.
+private
 
-   procedure Process_Compilation_Units
-     (Handler : not null access procedure
-        (Node : Libadalang.Analysis.Compilation_Unit'Class));
+   type Formatter is
+     new VSS.Strings.Formatters.Abstract_Formatter with record
+      Name  : VSS.Strings.Virtual_String;
+      Value : GNATCOLL.VFS.Virtual_File;
+   end record;
 
-   function Output_Directory
-     (Backend_Name : VSS.Strings.Virtual_String)
-      return GNATCOLL.VFS.Virtual_File;
-   --  Return output directory to generate documentation. It is computed
-   --  from the
-   --   - value of Documentation'Output_Directory attribute for given backend
-   --   - value of Documentation'Output_Directory attribute for any backend
-   --     with backend's name subdirectory
-   --   - value of Project'Object_Dir with 'gnatdoc' and backend's name
-   --     subdirectories.
+   overriding function Name
+     (Self : Formatter) return VSS.Strings.Virtual_String;
 
-   function Custom_Resources_Directory
-     (Backend_Name : VSS.Strings.Virtual_String)
-      return GNATCOLL.VFS.Virtual_File;
-   --  Return custom resources directory if specified.
+   overriding function Format
+     (Self   : Formatter;
+      Format : VSS.Strings.Formatters.Format_Information)
+      return VSS.Strings.Virtual_String;
 
-   procedure Test_Dump_Projects;
-   --  Dump projects to be processed.
-   --
-   --  This subprogram is intended to be used for testing purpose.
-
-end GNATdoc.Projects;
+end VSS.Strings.Formatters.Virtual_Files;

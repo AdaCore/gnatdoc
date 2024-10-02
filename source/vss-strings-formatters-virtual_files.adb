@@ -15,36 +15,52 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATdoc.Backend.HTML;
-with GNATdoc.Backend.RST.PT;
-with GNATdoc.Backend.Test;
+with VSS.Strings.Conversions;
 
-package body GNATdoc.Backend.Registry is
+package body VSS.Strings.Formatters.Virtual_Files is
 
-   --------------------
-   -- Create_Backend --
-   --------------------
+   ------------
+   -- Format --
+   ------------
 
-   function Create_Backend
-     (Name : VSS.Strings.Virtual_String) return Backend_Access
-   is
-      use type VSS.Strings.Virtual_String;
-
+   overriding function Format
+     (Self   : Formatter;
+      Format : VSS.Strings.Formatters.Format_Information)
+      return VSS.Strings.Virtual_String is
    begin
-      if Name = "html" then
-         return new GNATdoc.Backend.HTML.HTML_Backend;
+      return
+        VSS.Strings.Conversions.To_Virtual_String
+          (Self.Value.Display_Base_Name);
+   end Format;
 
-      elsif Name = "rst" then
-         return new GNATdoc.Backend.RST.RST_Backend;
+   -----------
+   -- Image --
+   -----------
 
-      elsif Name = "rstpt" then
-         return new GNATdoc.Backend.RST.PT.PT_RST_Backend;
+   function Image (Item : GNATCOLL.VFS.Virtual_File) return Formatter is
+   begin
+      return (Name => <>, Value => Item);
+   end Image;
 
-      elsif Name = "test" then
-         return new GNATdoc.Backend.Test.Test_Backend;
-      end if;
+   -----------
+   -- Image --
+   -----------
 
-      return null;
-   end Create_Backend;
+   function Image
+     (Name : VSS.Strings.Virtual_String;
+      Item : GNATCOLL.VFS.Virtual_File) return Formatter is
+   begin
+      return (Name => Name, Value => Item);
+   end Image;
 
-end GNATdoc.Backend.Registry;
+   ----------
+   -- Name --
+   ----------
+
+   overriding function Name
+     (Self : Formatter) return VSS.Strings.Virtual_String is
+   begin
+      return Self.Name;
+   end Name;
+
+end VSS.Strings.Formatters.Virtual_Files;

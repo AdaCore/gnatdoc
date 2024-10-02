@@ -47,15 +47,21 @@ with GPR2.Build.Source.Sets;
 with VSS.Application;
 with VSS.Command_Line;
 with VSS.Regular_Expressions;
+with VSS.String_Vectors;
 with VSS.Strings.Conversions;
+with VSS.Strings.Formatters.Integers;
+with VSS.Strings.Formatters.Strings;
+with VSS.Strings.Formatters.Virtual_Files;
+with VSS.Strings.Templates;
+with VSS.Text_Streams.Standards;
 
 with GNATdoc.Command_Line;
 with GNATdoc.Messages;
 with GNATdoc.Options;
 
-with GNATCOLL.VFS; use GNATCOLL.VFS;
-
 package body GNATdoc.Projects is
+
+   use type GNATCOLL.VFS.Virtual_File;
 
    Documentation_Package                : constant GPR2.Package_Id :=
      GPR2."+" ("documentation");
@@ -99,7 +105,7 @@ package body GNATdoc.Projects is
 
    package Virtual_File_Sets is
      new Ada.Containers.Hashed_Sets
-       (GNATCOLL.VFS.Virtual_File, Hash, GNATCOLL.VFS."=");
+       (GNATCOLL.VFS.Virtual_File, Hash, GNATCOLL.VFS."=", GNATCOLL.VFS."=");
 
    Project_Tree          : GPR2.Project.Tree.Object;
    Exclude_Project_Files : Virtual_File_Sets.Set;
@@ -215,6 +221,8 @@ package body GNATdoc.Projects is
         (Documentation_Excluded_Project_Files)
       then
          declare
+            use type VSS.Strings.Virtual_String;
+
             Attribute : constant GPR2.Project.Attribute.Object :=
               Project_Tree.Root_Project.Attribute
                 (Documentation_Excluded_Project_Files);
@@ -222,26 +230,73 @@ package body GNATdoc.Projects is
             Project_Names : Virtual_File_Sets.Set;
             This_File     : GNATCOLL.VFS.Virtual_File;
 
+            procedure Report_Error_On_Attribute
+              (Message : VSS.Strings.Virtual_String;
+               Text    : VSS.Strings.Virtual_String :=
+                 VSS.Strings.Empty_Virtual_String);
+            --  Report the given Message on the
+            --  Documentation.Excluded_Project_Files attraibute and
+            --  terminate application with appropriate error status.
+            --  The error message is prepended by the attribute's sloc
+            --  (e.g: "project.gpr:3:11: example of error message" if the
+            --  attribute has been specified at line 3, column 11).
+
+            -------------------------------
+            -- Report_Error_On_Attribute --
+            -------------------------------
+
+            procedure Report_Error_On_Attribute
+              (Message : VSS.Strings.Virtual_String;
+               Text    : VSS.Strings.Virtual_String :=
+                 VSS.Strings.Empty_Virtual_String)
+            is
+               File           : constant GNATCOLL.VFS.Virtual_File :=
+                 GNATCOLL.VFS.Create_From_UTF8 (String (Attribute.Filename));
+               Error_Template : constant
+                 VSS.Strings.Templates.Virtual_String_Template :=
+                   "{}:{}:{}: error: {}{}";
+
+            begin
+               VSS.Command_Line.Report_Error
+                 (Error_Template.Format
+                    (VSS.Strings.Formatters.Virtual_Files.Image (File),
+                     VSS.Strings.Formatters.Integers.Image (Attribute.Line),
+                     VSS.Strings.Formatters.Integers.Image (Attribute.Column),
+                     VSS.Strings.Formatters.Strings.Image (Message),
+                     VSS.Strings.Formatters.Strings.Image (Text)));
+            end Report_Error_On_Attribute;
+
          begin
             --  Create a set containing all valid project names
-            for View of Project_Tree.Root_Project.Closure
-              (Include_Self => True)
-            loop
-               Project_Names.Include
-                 (Create (View.Path_Name.Filesystem_String));
+
+            for View of Project_Tree.Ordered_Views loop
+               Project_Names.Include (View.Path_Name.Virtual_File);
             end loop;
 
             for Item of Attribute.Values loop
                if Item.Text'Length = 0 then
-                  VSS.Command_Line.Report_Error
-                    ("empty name of the project file");
+                  Report_Error_On_Attribute
+                    ("empty name specified in the "
+                     & "'Documentation.Excluded_Project_Files' "
+                     & "project attribute");
                end if;
 
-               This_File := Create (Filesystem_String (Item.Text));
+               --  The excluded projects can be listed as paths relative to the
+               --  root project, so make sure to create them relatively from
+               --  the project's root directory.
+
+               This_File :=
+                 GNATCOLL.VFS.Create_From_Base
+                   (Base_Name => GNATCOLL.VFS.Filesystem_String (Item.Text),
+                    Base_Dir  =>
+                      Project_Tree.Root_Project.Dir_Name.Filesystem_String);
 
                if not Project_Names.Contains (This_File) then
-                  VSS.Command_Line.Report_Error
-                    ("unable to resolve project file path");
+                  Report_Error_On_Attribute
+                    ("unable to resolve project file path specified in "
+                     & "the 'Documentation.Excluded_Project_Files' "
+                     & "project attribute: ",
+                     VSS.Strings.Conversions.To_Virtual_String (Item.Text));
                end if;
 
                Exclude_Project_Files.Insert (This_File);
@@ -461,6 +516,55 @@ package body GNATdoc.Projects is
            "This list may include any project files directly or indirectly " &
            "used by the root project.");
    end Register_Attributes;
+
+   ------------------------
+   -- Test_Dump_Projects --
+   ------------------------
+
+   procedure Test_Dump_Projects is
+      Output    : VSS.Text_Streams.Output_Text_Stream'Class
+        renames VSS.Text_Streams.Standards.Standard_Output;
+      Template  : VSS.Strings.Templates.Virtual_String_Template :=
+        "{}{}";
+      Success   : Boolean := True;
+
+   begin
+      for View of Project_Tree loop
+         declare
+            File  : constant GNATCOLL.VFS.Virtual_File :=
+              View.Path_Name.Virtual_File;
+            List  : VSS.String_Vectors.Virtual_String_Vector;
+            Image : VSS.Strings.Virtual_String;
+
+         begin
+            if View.Is_Externally_Built then
+               List.Append ("externally build");
+            end if;
+
+            if Exclude_Project_Files.Contains (File) then
+               List.Append ("exclude list");
+            end if;
+
+            if not List.Is_Empty then
+               Image := " [";
+               Image.Append (List.First_Element);
+
+               for J in List.First_Index + 1 .. List.Last_Index loop
+                  Image.Append (", ");
+                  Image.Append (List (J));
+               end loop;
+
+               Image.Append (']');
+            end if;
+
+            Output.Put_Line
+              (Template.Format
+                 (VSS.Strings.Formatters.Virtual_Files.Image (File),
+                  VSS.Strings.Formatters.Strings.Image (Image)),
+               Success);
+         end;
+      end loop;
+   end Test_Dump_Projects;
 
    -----------------------------
    -- Unit_Requested_Callback --
