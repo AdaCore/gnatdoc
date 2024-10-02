@@ -15,43 +15,29 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATCOLL.VFS;
+package GNATdoc.Backend.Test is
 
-with Libadalang.Analysis;
+   type Test_Backend is new Abstract_Backend with private;
 
-with VSS.Strings;
+private
 
-package GNATdoc.Projects is
+   type Test_Backend is new Abstract_Backend with record
+      Dump_Projects : Boolean := False;
+   end record;
 
-   procedure Register_Attributes;
-   --  Register GPR2 documentation attributes.
+   overriding function Name
+     (Self : in out Test_Backend) return VSS.Strings.Virtual_String;
 
-   procedure Initialize;
-   --  Initialize project support, load and process project tree.
+   overriding procedure Add_Command_Line_Options
+     (Self   : Test_Backend;
+      Parser : in out VSS.Command_Line.Parsers.Command_Line_Parser'Class);
 
-   procedure Process_Compilation_Units
-     (Handler : not null access procedure
-        (Node : Libadalang.Analysis.Compilation_Unit'Class));
+   overriding procedure Process_Command_Line_Options
+     (Self   : in out Test_Backend;
+      Parser : VSS.Command_Line.Parsers.Command_Line_Parser'Class);
 
-   function Output_Directory
-     (Backend_Name : VSS.Strings.Virtual_String)
-      return GNATCOLL.VFS.Virtual_File;
-   --  Return output directory to generate documentation. It is computed
-   --  from the
-   --   - value of Documentation'Output_Directory attribute for given backend
-   --   - value of Documentation'Output_Directory attribute for any backend
-   --     with backend's name subdirectory
-   --   - value of Project'Object_Dir with 'gnatdoc' and backend's name
-   --     subdirectories.
+   overriding procedure Initialize (Self : in out Test_Backend);
 
-   function Custom_Resources_Directory
-     (Backend_Name : VSS.Strings.Virtual_String)
-      return GNATCOLL.VFS.Virtual_File;
-   --  Return custom resources directory if specified.
+   overriding procedure Generate (Self : in out Test_Backend);
 
-   procedure Test_Dump_Projects;
-   --  Dump projects to be processed.
-   --
-   --  This subprogram is intended to be used for testing purpose.
-
-end GNATdoc.Projects;
+end GNATdoc.Backend.Test;

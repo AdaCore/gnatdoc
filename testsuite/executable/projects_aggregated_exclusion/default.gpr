@@ -1,0 +1,15 @@
+
+aggregate project Default is
+
+   for Project_Files use
+     ("a/a.gpr",
+      "b/b.gpr",
+      "c/c.gpr");
+
+   package Documentation is
+      for Output_Dir (others) use ".docs";
+      --for Excluded_Projects use ("b.gpr");
+      --for Excluded_Project_Files use ("b.gpr");
+   end Documentation;
+
+end Default;
