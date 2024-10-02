@@ -1,0 +1,114 @@
+<CompilationUnit renamings.ads:4:1-35:15>
+<AdaNodeList renamings.ads:4:1-4:10>
+<WithClause renamings.ads:4:1-4:10>
+<LimitedAbsent renamings.ads:4:1-4:1>
+<PrivateAbsent renamings.ads:4:1-4:1>
+<NameList renamings.ads:4:6-4:9>
+<Id "Pkg" renamings.ads:4:6-4:9>
+<LibraryItem renamings.ads:6:1-35:15>
+<PrivateAbsent renamings.ads:4:10-4:10>
+<PackageDecl ["Renamings"] renamings.ads:6:1-35:15>
+**************************
+\/ RAW <<HEADER>> ()  0 0 0 0
+This is test data for test of documentation extraction for renamings.
+\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ SNIPPET ada ()  0 0 0 0
+package Renamings
+\/ DESCRIPTION  ()  0 0 0 0
+This is test data for test of documentation extraction for renamings.
+**************************
+<DefiningName "Renamings" renamings.ads:6:9-6:18>
+<Id "Renamings" renamings.ads:6:9-6:18>
+<PublicPart renamings.ads:6:21-35:1>
+<AdaNodeList renamings.ads:8:4-32:32>
+<ExceptionDecl ["RE"] renamings.ads:8:4-8:33>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Documentation for exception renaming
+\/ SNIPPET ada ()  0 0 0 0
+RE : exception renames Pkg.E;
+\/ DESCRIPTION  ()  0 0 0 0
+Documentation for exception renaming
+**************************
+<ObjectDecl ["RK"] renamings.ads:11:4-11:31>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Documentation for object renaming
+\/ SNIPPET ada ()  0 0 0 0
+RK : Integer renames Pkg.K;
+\/ DESCRIPTION  ()  0 0 0 0
+Documentation for object renaming
+**************************
+<PackageRenamingDecl ["RPkg"] renamings.ads:14:4-14:29>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Documentation for package renaming
+\/ SNIPPET ada ()  0 0 0 0
+package RPkg renames Pkg;
+\/ DESCRIPTION  ()  0 0 0 0
+Documentation for package renaming
+**************************
+<SubpRenamingDecl ["RP"] renamings.ads:17:4-17:31>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  17 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Documentation for procedure renaming
+\/ SNIPPET ada ()  0 0 0 0
+procedure RP
+\/ DESCRIPTION  ()  0 0 0 0
+Documentation for procedure renaming
+**************************
+<SubpRenamingDecl ["RF"] renamings.ads:20:4-20:45>
+**************************
+\/ RAW <<INTERMEDIATE UPPER>> ()  21 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RETURNS  ()  20 20 0 0
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Documentation for function renaming
+\/ SNIPPET ada ()  0 0 0 0
+function RF return Integer
+\/ DESCRIPTION  ()  0 0 0 0
+Documentation for function renaming
+**************************
+<GenericPackageRenamingDecl ["RGPkg"] renamings.ads:23:4-24:35>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Documentation for generic package renaming
+\/ SNIPPET ada ()  0 0 0 0
+generic
+package RGPkg renames Pkg.GPkg;
+\/ DESCRIPTION  ()  0 0 0 0
+Documentation for generic package renaming
+**************************
+<GenericSubpRenamingDecl ["RGP"] renamings.ads:27:4-28:33>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Documentation for generic procedure renaming
+\/ SNIPPET ada ()  0 0 0 0
+generic
+procedure RGP renames Pkg.GP;
+\/ DESCRIPTION  ()  0 0 0 0
+Documentation for generic procedure renaming
+**************************
+<GenericSubpRenamingDecl ["RGF"] renamings.ads:31:4-32:32>
+**************************
+\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<TRAILING>> ()  0 0 0 0
+Documentation for generic function renaming
+\/ SNIPPET ada ()  0 0 0 0
+generic
+function RGF renames Pkg.GF;
+\/ DESCRIPTION  ()  0 0 0 0
+Documentation for generic function renaming
+**************************
+<EndName renamings.ads:35:5-35:14>
+<Id "Renamings" renamings.ads:35:5-35:14>
+<PragmaNodeList renamings.ads:35:15-35:15>
