@@ -140,6 +140,7 @@ procedure Test_Extractor is
          when Ada_Subp_Decl | Ada_Null_Subp_Decl | Ada_Abstract_Subp_Decl
             | Ada_Expr_Function | Ada_Subp_Body
             | Ada_Concrete_Type_Decl
+            | Ada_Subtype_Decl
             | Ada_Exception_Decl
             | Ada_Object_Decl
             | Ada_Entry_Decl
