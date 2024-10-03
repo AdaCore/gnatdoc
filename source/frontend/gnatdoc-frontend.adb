@@ -1305,13 +1305,24 @@ package body GNATdoc.Frontend is
          GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
 
          declare
-            Parent_Decl : constant Type_Decl :=
-              Def.F_Subtype_Indication.F_Name.P_Referenced_Decl.As_Type_Decl;
-            Parent_Name : constant Defining_Name :=
-              Def.F_Subtype_Indication.F_Name.P_Referenced_Defining_Name;
+            Parent_Decl : Base_Type_Decl :=
+              Def.F_Subtype_Indication.F_Name.P_Referenced_Decl
+                .As_Base_Type_Decl;
+            Parent_Name : Defining_Name;
             Parent_Def  : Type_Def;
 
          begin
+            --  Unwind sequence of subtypes if any
+
+            loop
+               exit when Parent_Decl.Kind /= Ada_Subtype_Decl;
+
+               Parent_Decl := @.As_Subtype_Decl.P_Get_Type;
+            end loop;
+
+            Parent_Name :=
+              Def.F_Subtype_Indication.F_Name.P_Referenced_Defining_Name;
+
             case Parent_Decl.Kind is
                when Ada_Formal_Type_Decl =>
                   null;

@@ -22,7 +22,8 @@ package GNATdoc.Backend.Test is
 private
 
    type Test_Backend is new Abstract_Backend with record
-      Dump_Projects : Boolean := False;
+      Dump_Projects      : Boolean := False;
+      Dump_Entities_Tree : Boolean := False;
    end record;
 
    overriding function Name
