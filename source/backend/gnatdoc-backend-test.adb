@@ -15,6 +15,12 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with VSS.Strings.Formatters.Generic_Enumerations;
+with VSS.Strings.Formatters.Strings;
+with VSS.Strings.Templates;
+with VSS.Text_Streams.Standards;
+
+with GNATdoc.Entities;
 with GNATdoc.Projects;
 
 package body GNATdoc.Backend.Test is
@@ -23,6 +29,17 @@ package body GNATdoc.Backend.Test is
      (Short_Name  => <>,
       Long_Name   => "test-dump-projects",
       Description => "Dump list of projects to be processed/excluded");
+
+   Dump_Entities_Tree_Option : constant VSS.Command_Line.Binary_Option :=
+     (Short_Name  => <>,
+      Long_Name   => "test-dump-entities-tree",
+      Description => "Dump tree of processed entities");
+
+   procedure Dump_Entities_Tree;
+
+   package Entity_Kind_Formatters is
+     new VSS.Strings.Formatters.Generic_Enumerations
+           (GNATdoc.Entities.Entity_Kind);
 
    ------------------------------
    -- Add_Command_Line_Options --
@@ -33,7 +50,186 @@ package body GNATdoc.Backend.Test is
       Parser : in out VSS.Command_Line.Parsers.Command_Line_Parser'Class) is
    begin
       Parser.Add_Option (Dump_Projects_Option);
+      Parser.Add_Option (Dump_Entities_Tree_Option);
    end Add_Command_Line_Options;
+
+   ------------------------
+   -- Dump_Entities_Tree --
+   ------------------------
+
+   procedure Dump_Entities_Tree is
+      Output    : VSS.Text_Streams.Output_Text_Stream'Class
+        renames VSS.Text_Streams.Standards.Standard_Output;
+
+      Offset : VSS.Strings.Character_Count := 0;
+
+      procedure Dump (Entity : GNATdoc.Entities.Entity_Information);
+
+      ----------
+      -- Dump --
+      ----------
+
+      procedure Dump (Entity : GNATdoc.Entities.Entity_Information) is
+         use type VSS.Strings.Character_Count;
+         use type VSS.Strings.Virtual_String;
+
+         Entity_Template  : constant
+           VSS.Strings.Templates.Virtual_String_Template :=
+             "{}{} ({}) '{}'";
+         Section_Template : constant
+           VSS.Strings.Templates.Virtual_String_Template :=
+             "{}{}:";
+         Parent_Template  : constant
+           VSS.Strings.Templates.Virtual_String_Template :=
+             "{}Parent type: '{}'";
+
+         Success  : Boolean := True;
+
+      begin
+         Output.Put_Line
+           (Entity_Template.Format
+              (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+               VSS.Strings.Formatters.Strings.Image (Entity.Name),
+               Entity_Kind_Formatters.Image (Entity.Kind),
+               VSS.Strings.Formatters.Strings.Image (Entity.Signature)),
+            Success);
+
+         if not Entity.Packages.Is_Empty then
+            Offset := @ + 2;
+
+            Output.Put_Line
+              (Section_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+                  VSS.Strings.Formatters.Strings.Image ("Packages")),
+               Success);
+
+            Offset := @ + 2;
+
+            for E of Entity.Packages loop
+               Dump (E.all);
+            end loop;
+
+            Offset := @ - 2;
+            Offset := @ - 2;
+         end if;
+
+         if not Entity.Record_Types.Is_Empty then
+            Offset := @ + 2;
+
+            Output.Put_Line
+              (Section_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+                  VSS.Strings.Formatters.Strings.Image ("Record Types")),
+               Success);
+
+            Offset := @ + 2;
+
+            for E of Entity.Record_Types loop
+               if GNATdoc.Entities.To_Entity.Contains (E.Signature) then
+                  Dump (GNATdoc.Entities.To_Entity (E.Signature).all);
+
+               else
+                  Output.Put_Line
+                    (Entity_Template.Format
+                       (VSS.Strings.Formatters.Strings.Image
+                            (Offset * ' ' & "# "),
+                        VSS.Strings.Formatters.Strings.Image (E.Name),
+                        Entity_Kind_Formatters.Image (E.Kind),
+                        VSS.Strings.Formatters.Strings.Image (E.Signature)),
+                     Success);
+               end if;
+            end loop;
+
+            Offset := @ - 2;
+            Offset := @ - 2;
+         end if;
+
+         if not Entity.Interface_Types.Is_Empty then
+            Offset := @ + 2;
+
+            Output.Put_Line
+              (Section_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+                  VSS.Strings.Formatters.Strings.Image ("Interface Types")),
+               Success);
+
+            Offset := @ + 2;
+
+            for E of Entity.Interface_Types loop
+               Dump (GNATdoc.Entities.To_Entity (E.Signature).all);
+            end loop;
+
+            Offset := @ - 2;
+            Offset := @ - 2;
+         end if;
+
+         if not Entity.Tagged_Types.Is_Empty then
+            Offset := @ + 2;
+
+            Output.Put_Line
+              (Section_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+                  VSS.Strings.Formatters.Strings.Image ("Tagged Types")),
+               Success);
+
+            Offset := @ + 2;
+
+            for E of Entity.Tagged_Types loop
+               Dump (GNATdoc.Entities.To_Entity (E.Signature).all);
+            end loop;
+
+            Offset := @ - 2;
+            Offset := @ - 2;
+         end if;
+
+         if not Entity.Parent_Type.Signature.Is_Empty then
+            Offset := @ + 2;
+
+            Output.Put_Line
+              (Parent_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+                  VSS.Strings.Formatters.Strings.Image
+                    (Entity.Parent_Type.Signature)),
+               Success);
+
+            Offset := @ - 2;
+         end if;
+
+         if not Entity.Progenitor_Types.Is_Empty then
+            Offset := @ + 2;
+
+            Output.Put_Line
+              (Section_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+                  VSS.Strings.Formatters.Strings.Image ("Progenitor Types")),
+               Success);
+
+            Offset := @ + 2;
+
+            for E of Entity.Progenitor_Types loop
+               if GNATdoc.Entities.To_Entity.Contains (E.Signature) then
+                  Dump (GNATdoc.Entities.To_Entity (E.Signature).all);
+
+               else
+                  Output.Put_Line
+                    (Entity_Template.Format
+                       (VSS.Strings.Formatters.Strings.Image
+                            (Offset * ' ' & "# "),
+                        VSS.Strings.Formatters.Strings.Image
+                          (E.Qualified_Name),
+                        VSS.Strings.Formatters.Strings.Image (E.Signature)),
+                     Success);
+               end if;
+            end loop;
+
+            Offset := @ - 2;
+            Offset := @ - 2;
+         end if;
+      end Dump;
+
+   begin
+      Dump (GNATdoc.Entities.Globals);
+   end Dump_Entities_Tree;
 
    --------------
    -- Generate --
@@ -43,6 +239,10 @@ package body GNATdoc.Backend.Test is
    begin
       if Self.Dump_Projects then
          GNATdoc.Projects.Test_Dump_Projects;
+      end if;
+
+      if Self.Dump_Entities_Tree then
+         Dump_Entities_Tree;
       end if;
    end Generate;
 
@@ -74,6 +274,8 @@ package body GNATdoc.Backend.Test is
       Parser : VSS.Command_Line.Parsers.Command_Line_Parser'Class) is
    begin
       Self.Dump_Projects := Parser.Is_Specified (Dump_Projects_Option);
+      Self.Dump_Entities_Tree :=
+        Parser.Is_Specified (Dump_Entities_Tree_Option);
    end Process_Command_Line_Options;
 
 end GNATdoc.Backend.Test;
