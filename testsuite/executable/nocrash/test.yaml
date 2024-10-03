@@ -1,0 +1,2 @@
+description: Test to check that GNATdoc doesn't crash on constructs
+driver: executable
