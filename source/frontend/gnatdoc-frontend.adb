@@ -318,7 +318,7 @@ package body GNATdoc.Frontend is
             Methods.Include (Subprogram_Ref);
 
             if Node.P_Is_Inherited_Primitive (Subprogram) then
-               Entity.Dispatching_Inherited.Insert (Subprogram_Ref);
+               Entity.Dispatching_Inherited.Include (Subprogram_Ref);
 
             else
                declare
@@ -327,10 +327,10 @@ package body GNATdoc.Frontend is
 
                begin
                   if Decls'Length > 1 then
-                     Entity.Dispatching_Overrided.Insert (Subprogram_Ref);
+                     Entity.Dispatching_Overrided.Include (Subprogram_Ref);
 
                   else
-                     Entity.Dispatching_Declared.Insert (Subprogram_Ref);
+                     Entity.Dispatching_Declared.Include (Subprogram_Ref);
                   end if;
                end;
             end if;
