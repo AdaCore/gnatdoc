@@ -39,7 +39,7 @@ package body GNATdoc.Command_Line is
    Version_Option            : constant VSS.Command_Line.Binary_Option :=
      (Short_Name  => <>,
       Long_Name   => "version",
-      Description => "Display version");
+      Description => "Display the program version");
 
    Backend_Option            : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => <>,
