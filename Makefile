@@ -16,8 +16,6 @@ build-gnatdoc:
 clean:
 	rm -rf .objs bin
 
-build_tests: build-tests # for compatibility with ANOD specs
-
 build-tests:
 	gprbuild -j0 -p -P gnat/tests/test_drivers.gpr ${SCENARIO_VARIABLES}
 
