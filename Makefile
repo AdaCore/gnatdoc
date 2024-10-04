@@ -5,6 +5,8 @@ SCENARIO_VARIABLES=-XGPR_UNIT_PROVIDER_LIBRARY_TYPE=static -XGPR_UNIT_PROVIDER_B
 
 all: build-gnatdoc
 
+build-all: build-libgnatdoc build-gnatdoc build-tests
+
 build-libgnatdoc:
 	gprbuild -j0 -p -P gnat/libgnatdoc.gpr
 
@@ -13,8 +15,6 @@ build-gnatdoc:
 
 clean:
 	rm -rf .objs bin
-
-build_tests: build-tests # for compatibility with ANOD specs
 
 build-tests:
 	gprbuild -j0 -p -P gnat/tests/test_drivers.gpr ${SCENARIO_VARIABLES}
