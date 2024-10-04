@@ -5,6 +5,8 @@ SCENARIO_VARIABLES=-XGPR_UNIT_PROVIDER_LIBRARY_TYPE=static -XGPR_UNIT_PROVIDER_B
 
 all: build-gnatdoc
 
+build-all: build-libgnatdoc build-gnatdoc build-tests
+
 build-libgnatdoc:
 	gprbuild -j0 -p -P gnat/libgnatdoc.gpr
 
