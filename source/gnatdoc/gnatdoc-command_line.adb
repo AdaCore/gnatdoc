@@ -21,9 +21,13 @@ with VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Options;
 with GNATdoc.Options;
+with GNATdoc.Version;
 
 with GPR2.Options;
 with GPR2.Project.Registry.Exchange;
+with VSS.Strings.Formatters;
+with VSS.Strings.Formatters.Strings;
+with VSS.Strings.Templates;
 
 package body GNATdoc.Command_Line is
 
@@ -31,6 +35,11 @@ package body GNATdoc.Command_Line is
      (Short_Name  => "h",
       Long_Name   => "help",
       Description => "Display help information");
+
+   Version_Option            : constant VSS.Command_Line.Binary_Option :=
+     (Short_Name  => <>,
+      Long_Name   => "version",
+      Description => "Display the program version");
 
    Backend_Option            : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => <>,
@@ -121,6 +130,7 @@ package body GNATdoc.Command_Line is
    procedure Initialize is
    begin
       Parser.Add_Option (Help_Option);
+      Parser.Add_Option (Version_Option);
       Parser.Add_Option (Print_Gpr_Registry_Option);
       Parser.Add_Option (Style_Option);
       Parser.Add_Option (Backend_Option);
@@ -171,6 +181,20 @@ package body GNATdoc.Command_Line is
 
       if Parser.Is_Specified (Help_Option) then
          VSS.Command_Line.Report_Message (Parser.Help_Text);
+      end if;
+
+      if Parser.Is_Specified (Version_Option) then
+         declare
+            Template : constant
+              VSS.Strings.Templates.Virtual_String_Template :=
+                "GNATdoc {}";
+
+         begin
+            VSS.Command_Line.Report_Error
+              (Template.Format
+                 (VSS.Strings.Formatters.Strings.Image
+                      (GNATdoc.Version.Version_String)));
+         end;
       end if;
 
       --  Process `--print-gpr-registry` if specified
