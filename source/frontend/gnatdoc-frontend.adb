@@ -318,7 +318,7 @@ package body GNATdoc.Frontend is
             Methods.Include (Subprogram_Ref);
 
             if Node.P_Is_Inherited_Primitive (Subprogram) then
-               Entity.Dispatching_Inherited.Insert (Subprogram_Ref);
+               Entity.Dispatching_Inherited.Include (Subprogram_Ref);
 
             else
                declare
@@ -327,10 +327,10 @@ package body GNATdoc.Frontend is
 
                begin
                   if Decls'Length > 1 then
-                     Entity.Dispatching_Overrided.Insert (Subprogram_Ref);
+                     Entity.Dispatching_Overrided.Include (Subprogram_Ref);
 
                   else
-                     Entity.Dispatching_Declared.Insert (Subprogram_Ref);
+                     Entity.Dispatching_Declared.Include (Subprogram_Ref);
                   end if;
                end;
             end if;
@@ -1305,13 +1305,24 @@ package body GNATdoc.Frontend is
          GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
 
          declare
-            Parent_Decl : constant Type_Decl :=
-              Def.F_Subtype_Indication.F_Name.P_Referenced_Decl.As_Type_Decl;
-            Parent_Name : constant Defining_Name :=
-              Def.F_Subtype_Indication.F_Name.P_Referenced_Defining_Name;
+            Parent_Decl : Base_Type_Decl :=
+              Def.F_Subtype_Indication.F_Name.P_Referenced_Decl
+                .As_Base_Type_Decl;
+            Parent_Name : Defining_Name;
             Parent_Def  : Type_Def;
 
          begin
+            --  Unwind sequence of subtypes if any
+
+            loop
+               exit when Parent_Decl.Kind /= Ada_Subtype_Decl;
+
+               Parent_Decl := @.As_Subtype_Decl.P_Get_Type;
+            end loop;
+
+            Parent_Name :=
+              Def.F_Subtype_Indication.F_Name.P_Referenced_Defining_Name;
+
             case Parent_Decl.Kind is
                when Ada_Formal_Type_Decl =>
                   null;
