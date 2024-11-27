@@ -41,7 +41,7 @@ project GNATdoc is
    end Builder;
 
    package Install is
-      for Artifacts ("share") use ("../share");
+      for Artifacts (".") use ("../share");
    end Install;
 
 end GNATdoc;
