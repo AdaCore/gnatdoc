@@ -198,15 +198,14 @@ package body GNATdoc.Projects is
          begin
             return Result : VSS.String_Vectors.Virtual_String_Vector do
                for Message of Project_Tree.Log_Messages.all loop
-                  case Message.Level is
-                     when GPR2.Message.Error | GPR2.Message.Warning =>
-                        Result.Append
-                          (VSS.Strings.Conversions.To_Virtual_String
-                             (Message.Format));
-
-                     when others =>
-                        null;
-                  end case;
+                  if Message.Level in GPR2.Message.Error | GPR2.Message.Warning
+                    or GNATdoc.Command_Line.Output_Verbosity
+                         in GNATdoc.Command_Line.Verbose
+                  then
+                     Result.Append
+                       (VSS.Strings.Conversions.To_Virtual_String
+                          (Message.Format));
+                  end if;
                end loop;
             end return;
          end Messages;
