@@ -58,6 +58,7 @@ A brief description of the supported switches is available through the
                                Project file to process
     --style <style>            Use given style of documentation
     --warnings                 Report warnings for undocumented entities
+    -v, --verbose              Enable verbose output
     -X                         Set scenario variable
     -h, --help                 Display help information
 
@@ -111,6 +112,7 @@ Here is the list of supported switches:
     Documentation is extracted from the comment after the entity declaration
     and additional features of the GNAT style are enabled.
 
+* `-v`, `--verbose`: Enable verbose output
 
 * `--warnings`: Enable warnings for missing documentation
 
