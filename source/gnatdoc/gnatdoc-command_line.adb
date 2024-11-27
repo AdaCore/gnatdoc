@@ -83,6 +83,11 @@ package body GNATdoc.Command_Line is
       Long_Name   => "warnings",
       Description => "Report warnings for undocumented entities");
 
+   Verbose_Option            : constant VSS.Command_Line.Binary_Option :=
+     (Short_Name  => "v",
+      Long_Name   => "verbose",
+      Description => "Enable verbose output");
+
    Positional_Project_Option : constant VSS.Command_Line.Positional_Option :=
      (Name        => "project_file",
       Description => "Project file to process");
@@ -99,7 +104,8 @@ package body GNATdoc.Command_Line is
    Output_Dir_Argument       : GNATCOLL.VFS.Virtual_File;
    Project_File_Argument     : VSS.Strings.Virtual_String;
    Project_Context_Arguments : GPR2.Context.Object;
-   Warnings_Argument         : Boolean := False;
+   Warnings_Argument         : Boolean         := False;
+   Verbosity                 : Verbosity_Level := Normal;
 
    Parser                    : VSS.Command_Line.Parsers.Command_Line_Parser;
 
@@ -138,6 +144,7 @@ package body GNATdoc.Command_Line is
       Parser.Add_Option (Output_Dir_Option);
       Parser.Add_Option (Project_Option);
       Parser.Add_Option (Warnings_Option);
+      Parser.Add_Option (Verbose_Option);
       Parser.Add_Option (Scenario_Option);
       Parser.Add_Option (Positional_Project_Option);
 
@@ -160,6 +167,15 @@ package body GNATdoc.Command_Line is
    begin
       return Output_Dir_Argument;
    end Output_Directory;
+
+   ----------------------
+   -- Output_Verbosity --
+   ----------------------
+
+   function Output_Verbosity return Verbosity_Level is
+   begin
+      return Verbosity;
+   end Output_Verbosity;
 
    -------------
    -- Process --
@@ -310,6 +326,12 @@ package body GNATdoc.Command_Line is
 
       if Parser.Is_Specified (Warnings_Option) then
          Warnings_Argument := True;
+      end if;
+
+      --  Verbose output.
+
+      if Parser.Is_Specified (Verbose_Option) then
+         Verbosity := Verbose;
       end if;
 
       --  Call backend to process command line options.
