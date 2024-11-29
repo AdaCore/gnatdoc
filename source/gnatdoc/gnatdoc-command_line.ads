@@ -25,6 +25,8 @@ with GNATdoc.Backend;
 
 package GNATdoc.Command_Line is
 
+   type Verbosity_Level is (Quiet, Normal, Verbose);
+
    procedure Initialize;
    --  Configure command line parser and do the first pass of the command line
    --  parsing to detect backend.
@@ -52,5 +54,8 @@ package GNATdoc.Command_Line is
 
    function Backend_Name return VSS.Strings.Virtual_String;
    --  Return name of the backend if specified.
+
+   function Output_Verbosity return Verbosity_Level;
+   --  Verbosity of the output
 
 end GNATdoc.Command_Line;

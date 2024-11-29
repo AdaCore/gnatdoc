@@ -25,6 +25,7 @@ with Libadalang.Project_Provider;
 
 with GPR2;
 with GPR2.Context;
+with GPR2.Message;
 with GPR2.Options;
 with GPR2.Path_Name;
 with GPR2.Project.Attribute;
@@ -186,17 +187,55 @@ package body GNATdoc.Projects is
       --  Load project file
 
       declare
-         Opt : GPR2.Options.Object;
+
+         function Messages return VSS.String_Vectors.Virtual_String_Vector;
+
+         --------------
+         -- Messages --
+         --------------
+
+         function Messages return VSS.String_Vectors.Virtual_String_Vector is
+         begin
+            return Result : VSS.String_Vectors.Virtual_String_Vector do
+               for Message of Project_Tree.Log_Messages.all loop
+                  if Message.Level in GPR2.Message.Error | GPR2.Message.Warning
+                    or GNATdoc.Command_Line.Output_Verbosity
+                         in GNATdoc.Command_Line.Verbose
+                  then
+                     Result.Append
+                       (VSS.Strings.Conversions.To_Virtual_String
+                          (Message.Format));
+                  end if;
+               end loop;
+            end return;
+         end Messages;
+
+         Opt     : GPR2.Options.Object;
+         Msgs    : VSS.String_Vectors.Virtual_String_Vector;
+         Success : Boolean := True;
+         Stream  : VSS.Text_Streams.Output_Text_Stream'Class :=
+           VSS.Text_Streams.Standards.Standard_Error;
+
       begin
          --  TODO: use the GPR2 options parser to support all the
          --  project loading switches (-X, etc.)
+
          Opt.Add_Switch
            (GPR2.Options.P,
             VSS.Strings.Conversions.To_UTF_8_String
              (GNATdoc.Command_Line.Project_File));
+
          if not Project_Tree.Load (Opt, With_Runtime => True) then
-            VSS.Command_Line.Report_Error ("Unable to load the project");
+            Msgs := Messages;
+            Msgs.Append ("Unable to load the project");
+            VSS.Command_Line.Report_Error (Msgs);
+
+         else
+            for Message of Messages loop
+               Stream.Put_Line (Message, Success);
+            end loop;
          end if;
+
          Project_Tree.Update_Sources;
       end;
 
