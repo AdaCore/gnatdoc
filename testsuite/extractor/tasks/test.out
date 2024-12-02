@@ -76,7 +76,7 @@ T_Entryless_Leading.
 <DefiningName "T_Entryless_Leading" tasks.ads:21:9-21:28>
 <Id "T_Entryless_Leading" tasks.ads:21:9-21:28>
 <TaskDef tasks.ads:21:29-22:27>
-<ParentList tasks.ads:21:28-21:28>
+<ParentList tasks.ads:21:31-21:31>
 <PublicPart tasks.ads:21:31-22:4>
 <DeclList tasks.ads:21:31-21:31>
 <EndName tasks.ads:22:8-22:27>
@@ -95,7 +95,7 @@ T_Entryless_Intermediate.
 <DefiningName "T_Entryless_Intermediate" tasks.ads:24:9-24:33>
 <Id "T_Entryless_Intermediate" tasks.ads:24:9-24:33>
 <TaskDef tasks.ads:24:34-27:32>
-<ParentList tasks.ads:24:33-24:33>
+<ParentList tasks.ads:24:36-24:36>
 <PublicPart tasks.ads:24:36-27:4>
 <DeclList tasks.ads:24:36-24:36>
 <EndName tasks.ads:27:8-27:32>
@@ -150,7 +150,7 @@ T_Entryless_Inherited_Intermediate.
 <DefiningName "T_1" tasks.ads:39:9-39:12>
 <Id "T_1" tasks.ads:39:9-39:12>
 <TaskDef tasks.ads:39:13-42:11>
-<ParentList tasks.ads:39:12-39:12>
+<ParentList tasks.ads:39:15-39:15>
 <PublicPart tasks.ads:39:15-42:4>
 <DeclList tasks.ads:40:7-40:15>
 <EntryDecl ["E"] tasks.ads:40:7-40:15>
@@ -179,7 +179,7 @@ Leading comment for the entry
 <DefiningName "T_2" tasks.ads:44:9-44:12>
 <Id "T_2" tasks.ads:44:9-44:12>
 <TaskDef tasks.ads:44:13-47:11>
-<ParentList tasks.ads:44:12-44:12>
+<ParentList tasks.ads:44:15-44:15>
 <PublicPart tasks.ads:44:15-47:4>
 <DeclList tasks.ads:46:7-46:15>
 <EntryDecl ["E"] tasks.ads:46:7-46:15>
@@ -205,7 +205,7 @@ entry E
 <DefiningName "T_3" tasks.ads:49:9-49:12>
 <Id "T_3" tasks.ads:49:9-49:12>
 <TaskDef tasks.ads:49:13-52:11>
-<ParentList tasks.ads:49:12-49:12>
+<ParentList tasks.ads:49:15-49:15>
 <PublicPart tasks.ads:49:15-52:4>
 <DeclList tasks.ads:50:7-50:15>
 <EntryDecl ["E"] tasks.ads:50:7-50:15>
@@ -247,7 +247,7 @@ TT_Entryless_Leading.
 <DefiningName "TT_Entryless_Leading" tasks.ads:60:14-60:34>
 <Id "TT_Entryless_Leading" tasks.ads:60:14-60:34>
 <TaskDef tasks.ads:60:35-61:28>
-<ParentList tasks.ads:60:34-60:34>
+<ParentList tasks.ads:60:37-60:37>
 <PublicPart tasks.ads:60:37-61:4>
 <DeclList tasks.ads:60:37-60:37>
 <EndName tasks.ads:61:8-61:28>
@@ -265,7 +265,7 @@ TT_Entryless_Intermediate.
 <DefiningName "TT_Entryless_Intermediate" tasks.ads:63:14-63:39>
 <Id "TT_Entryless_Intermediate" tasks.ads:63:14-63:39>
 <TaskDef tasks.ads:63:40-66:33>
-<ParentList tasks.ads:63:39-63:39>
+<ParentList tasks.ads:63:42-63:42>
 <PublicPart tasks.ads:63:42-66:4>
 <DeclList tasks.ads:63:42-63:42>
 <EndName tasks.ads:66:8-66:33>
@@ -317,7 +317,7 @@ TT_Entryless_Inherited_Intermediate.
 <DefiningName "TT_1" tasks.ads:78:14-78:18>
 <Id "TT_1" tasks.ads:78:14-78:18>
 <TaskDef tasks.ads:78:19-81:12>
-<ParentList tasks.ads:78:18-78:18>
+<ParentList tasks.ads:78:21-78:21>
 <PublicPart tasks.ads:78:21-81:4>
 <DeclList tasks.ads:79:7-79:15>
 <EntryDecl ["E"] tasks.ads:79:7-79:15>
@@ -345,7 +345,7 @@ Leading comment for the entry
 <DefiningName "TT_2" tasks.ads:83:14-83:18>
 <Id "TT_2" tasks.ads:83:14-83:18>
 <TaskDef tasks.ads:83:19-86:12>
-<ParentList tasks.ads:83:18-83:18>
+<ParentList tasks.ads:83:21-83:21>
 <PublicPart tasks.ads:83:21-86:4>
 <DeclList tasks.ads:85:7-85:15>
 <EntryDecl ["E"] tasks.ads:85:7-85:15>
@@ -370,7 +370,7 @@ entry E
 <DefiningName "TT_3" tasks.ads:88:14-88:18>
 <Id "TT_3" tasks.ads:88:14-88:18>
 <TaskDef tasks.ads:88:19-91:12>
-<ParentList tasks.ads:88:18-88:18>
+<ParentList tasks.ads:88:21-88:21>
 <PublicPart tasks.ads:88:21-91:4>
 <DeclList tasks.ads:89:7-89:15>
 <EntryDecl ["E"] tasks.ads:89:7-89:15>
