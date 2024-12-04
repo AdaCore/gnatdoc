@@ -24,7 +24,8 @@ package body GNATdoc.Comments.RST_Helpers is
    function Get_RST_Documentation
      (Indent        : VSS.Strings.Virtual_String;
       Documentation : Structured_Comment;
-      Pass_Through  : Boolean)
+      Pass_Through  : Boolean;
+      Code_Snippet  : Boolean)
       return VSS.String_Vectors.Virtual_String_Vector
    is
       use type VSS.Strings.Virtual_String;
@@ -35,7 +36,10 @@ package body GNATdoc.Comments.RST_Helpers is
       --  Insert code block first
 
       for Section of Documentation.Sections loop
-         if Section.Kind = Snippet and Section.Symbol = "ada" then
+         if Code_Snippet
+           and Section.Kind = Snippet
+           and Section.Symbol = "ada"
+         then
             Text.Append (Indent & ".. code-block:: ada");
             Text.Append (VSS.Strings.Empty_Virtual_String);
 
