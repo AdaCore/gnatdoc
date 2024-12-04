@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2023, AdaCore                        --
+--                     Copyright (C) 2023-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -23,7 +23,8 @@ package GNATdoc.Comments.RST_Helpers is
    function Get_RST_Documentation
      (Indent        : VSS.Strings.Virtual_String;
       Documentation : Structured_Comment;
-      Pass_Through  : Boolean)
+      Pass_Through  : Boolean;
+      Code_Snippet  : Boolean)
       return VSS.String_Vectors.Virtual_String_Vector;
    --  Return description as RST text.
    --
@@ -34,5 +35,7 @@ package GNATdoc.Comments.RST_Helpers is
    --    When True only entry for entity, code snippet of the declaration and
    --    description is added to the generated text. Description of other
    --    components is expected to be present in the description.
+   --  @param Code_Snippet
+   --    When True code snippet is added to the documentation.
 
 end GNATdoc.Comments.RST_Helpers;
