@@ -186,7 +186,10 @@ package body GNATdoc.Backend.RST is
 
          File.Put_Lines
            (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
-              (Indent & "    ", Entity.Documentation, Self.Pass_Through),
+              (Indent        => Indent & "    ",
+               Documentation => Entity.Documentation,
+               Pass_Through  => Self.Pass_Through,
+               Code_Snippet  => False),
             Success);
          File.New_Line (Success);
       end Generate_Subprogram_Documentation;
@@ -208,7 +211,10 @@ package body GNATdoc.Backend.RST is
 
       File.Put_Lines
         (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
-           ("", Entity.Documentation, Self.Pass_Through),
+           (Indent        => "",
+            Documentation => Entity.Documentation,
+            Pass_Through  => Self.Pass_Through,
+            Code_Snippet  => True),
          Success);
       File.New_Line (Success);
 
@@ -246,7 +252,10 @@ package body GNATdoc.Backend.RST is
 
                File.Put_Lines
                  (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
-                    ("    ", Item.Documentation, Self.Pass_Through),
+                    (Indent        => "    ",
+                     Documentation => Item.Documentation,
+                     Pass_Through  => Self.Pass_Through,
+                     Code_Snippet  => True),
                   Success);
 
                if Self.OOP_Mode
