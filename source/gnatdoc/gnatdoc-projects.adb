@@ -21,7 +21,6 @@ with Ada.Strings.Hash;
 with Langkit_Support.Text;
 with Libadalang.Common;
 with Libadalang.Iterators;
-with Libadalang.Project_Provider;
 
 with GPR2;
 with GPR2.Context;
@@ -246,10 +245,8 @@ package body GNATdoc.Projects is
           (Missing_File_Event_Handler'(null record));
 
       LAL_Context :=
-        Libadalang.Analysis.Create_Context
-          (Unit_Provider =>
-             Libadalang.Project_Provider.Create_Project_Unit_Provider
-               (Project_Tree),
+        Libadalang.Analysis.Create_Context_From_Project
+          (Tree          => Project_Tree,
            Event_Handler => Event_Handler);
       LAL_Context.Discard_Errors_In_Populate_Lexical_Env (False);
 
