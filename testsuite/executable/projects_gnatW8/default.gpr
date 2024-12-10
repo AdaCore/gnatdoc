@@ -1,0 +1,8 @@
+
+project Default is
+
+   package Compiler is
+      for Switches ("Ada") use ("-gnatW8");
+   end Compiler;
+
+end Default;

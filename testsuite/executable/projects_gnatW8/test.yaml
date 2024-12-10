@@ -1,0 +1,2 @@
+description: Tests that GNATdoc doesn't generate errors when file is encoded as UTF-8 and `-gnatW8` compiler switch is present in the project file.
+driver: executable
