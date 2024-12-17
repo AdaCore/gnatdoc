@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2024, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -303,38 +303,50 @@ package body GNATdoc.Frontend is
      (Node   : Type_Decl'Class;
       Entity : in out GNATdoc.Entities.Entity_Information)
    is
+      use type Libadalang.Text.Unbounded_Text_Type;
+
       Primitives : constant Basic_Decl_Array := Node.P_Get_Primitives;
 
    begin
       for Subprogram of Primitives loop
-         declare
-            Subprogram_View : constant Basic_Decl :=
-              Subprogram_Primary_View (Subprogram);
-            Subprogram_Ref  : constant GNATdoc.Entities.Entity_Reference :=
-              (To_Virtual_String (Subprogram_View.P_Fully_Qualified_Name),
-               Signature (Subprogram_View.P_Defining_Name));
+         --  Libadalang synthesize "/=" operator, however, there is no such
+         --  operator in Ada, so ignore it.
 
-         begin
-            Methods.Include (Subprogram_Ref);
+         if not (Subprogram.Kind = Ada_Synthetic_Subp_Decl
+                   and Subprogram.P_Defining_Name.P_Canonical_Text = """/=""")
+         then
+            declare
+               Subprogram_View : constant Basic_Decl :=
+                 Subprogram_Primary_View (Subprogram);
+               Subprogram_Ref  : constant GNATdoc.Entities.Entity_Reference :=
+                 (To_Virtual_String (Subprogram_View.P_Fully_Qualified_Name),
+                  Signature (Subprogram_View.P_Defining_Name));
 
-            if Node.P_Is_Inherited_Primitive (Subprogram) then
-               Entity.Dispatching_Inherited.Include (Subprogram_Ref);
+            begin
+               Methods.Include (Subprogram_Ref);
 
-            else
-               declare
-                  Decls : constant Basic_Decl_Array :=
-                    Subprogram.P_Base_Subp_Declarations;
+               if Node.P_Is_Inherited_Primitive (Subprogram) then
+                  Entity.Dispatching_Inherited.Include (Subprogram_Ref);
 
-               begin
-                  if Decls'Length > 1 then
-                     Entity.Dispatching_Overrided.Include (Subprogram_Ref);
+               else
+                  declare
+                     Decls : constant Basic_Decl_Array :=
+                       Subprogram.P_Base_Subp_Declarations;
 
-                  else
-                     Entity.Dispatching_Declared.Include (Subprogram_Ref);
-                  end if;
-               end;
-            end if;
-         end;
+                  begin
+                     --  Classify whether subprogram is declared first time or
+                     --  overrides subprogram of the parent/progenitor type.
+
+                     if Decls'Length > 1 then
+                        Entity.Dispatching_Overrided.Include (Subprogram_Ref);
+
+                     else
+                        Entity.Dispatching_Declared.Include (Subprogram_Ref);
+                     end if;
+                  end;
+               end if;
+            end;
+         end if;
       end loop;
    end Analyze_Primitive_Operations;
 
