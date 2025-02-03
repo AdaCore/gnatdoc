@@ -57,7 +57,7 @@ Leading description of the protected type P_Leading.
 **************************
 <DefiningName "P_Leading" protecteds.ads:15:14-15:23>
 <Id "P_Leading" protecteds.ads:15:14-15:23>
-<ParentList protecteds.ads:15:23-15:23>
+<ParentList protecteds.ads:15:26-15:26>
 <ProtectedDef protecteds.ads:16:4-16:17>
 <PublicPart protecteds.ads:15:26-16:4>
 <DeclList protecteds.ads:15:26-15:26>
@@ -73,7 +73,7 @@ Intermediate description of the protected type P_Intermediate.
 **************************
 <DefiningName "P_Intermediate" protecteds.ads:18:14-18:28>
 <Id "P_Intermediate" protecteds.ads:18:14-18:28>
-<ParentList protecteds.ads:18:28-18:28>
+<ParentList protecteds.ads:18:31-18:31>
 <ProtectedDef protecteds.ads:20:4-20:22>
 <PublicPart protecteds.ads:18:31-20:4>
 <DeclList protecteds.ads:18:31-18:31>
@@ -89,7 +89,7 @@ Leading description of the protected type PT_Leading.
 **************************
 <DefiningName "PT_Leading" protecteds.ads:23:19-23:29>
 <Id "PT_Leading" protecteds.ads:23:19-23:29>
-<ParentList protecteds.ads:23:29-23:29>
+<ParentList protecteds.ads:23:32-23:32>
 <ProtectedDef protecteds.ads:24:4-24:18>
 <PublicPart protecteds.ads:23:32-24:4>
 <DeclList protecteds.ads:23:32-23:32>
@@ -105,7 +105,7 @@ Intermediate description of the protected type PT_Intermediate.
 **************************
 <DefiningName "PT_Intermediate" protecteds.ads:26:19-26:34>
 <Id "PT_Intermediate" protecteds.ads:26:19-26:34>
-<ParentList protecteds.ads:26:34-26:34>
+<ParentList protecteds.ads:26:37-26:37>
 <ProtectedDef protecteds.ads:28:4-28:23>
 <PublicPart protecteds.ads:26:37-28:4>
 <DeclList protecteds.ads:26:37-26:37>
@@ -132,7 +132,7 @@ Short description of the component
 <SubtypeIndication protecteds.ads:31:21-31:28>
 <NotNullAbsent protecteds.ads:31:20-31:20>
 <Id "Integer" protecteds.ads:31:21-31:28>
-<ParentList protecteds.ads:31:29-31:29>
+<ParentList protecteds.ads:32:6-32:6>
 <ProtectedDef protecteds.ads:33:4-35:39>
 <PublicPart protecteds.ads:32:6-33:4>
 <DeclList protecteds.ads:32:6-32:6>
@@ -171,7 +171,7 @@ Longer description of the component
 <SubtypeIndication protecteds.ads:38:21-38:28>
 <NotNullAbsent protecteds.ads:38:20-38:20>
 <Id "Integer" protecteds.ads:38:21-38:28>
-<ParentList protecteds.ads:38:29-38:29>
+<ParentList protecteds.ads:40:6-40:6>
 <ProtectedDef protecteds.ads:41:4-44:40>
 <PublicPart protecteds.ads:40:6-41:4>
 <DeclList protecteds.ads:40:6-40:6>
@@ -208,7 +208,7 @@ Longer description of the discriminant
 <SubtypeIndication protecteds.ads:47:21-47:28>
 <NotNullAbsent protecteds.ads:47:20-47:20>
 <Id "Integer" protecteds.ads:47:21-47:28>
-<ParentList protecteds.ads:47:29-47:29>
+<ParentList protecteds.ads:49:6-49:6>
 <ProtectedDef protecteds.ads:50:4-50:30>
 <PublicPart protecteds.ads:49:6-50:4>
 <DeclList protecteds.ads:49:6-49:6>
@@ -230,7 +230,7 @@ Protected type declaration with mix of components/subprograms in private part.
 **************************
 <DefiningName "P_Private_Components_Subprograms" protecteds.ads:52:14-52:46>
 <Id "P_Private_Components_Subprograms" protecteds.ads:52:14-52:46>
-<ParentList protecteds.ads:52:46-52:46>
+<ParentList protecteds.ads:52:49-52:49>
 <ProtectedDef protecteds.ads:55:4-75:40>
 <PublicPart protecteds.ads:52:49-55:4>
 <DeclList protecteds.ads:52:49-52:49>
@@ -315,7 +315,7 @@ Protected object with entry family.
 **************************
 <DefiningName "P_Entry_Family" protecteds.ads:77:14-77:28>
 <Id "P_Entry_Family" protecteds.ads:77:14-77:28>
-<ParentList protecteds.ads:77:28-77:28>
+<ParentList protecteds.ads:77:31-77:31>
 <ProtectedDef protecteds.ads:80:7-86:22>
 <PublicPart protecteds.ads:77:31-86:4>
 <DeclList protecteds.ads:80:7-84:32>

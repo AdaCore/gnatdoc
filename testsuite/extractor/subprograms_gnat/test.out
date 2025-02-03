@@ -24,7 +24,7 @@ This is description of the package at the top of the specification.
 <AdaNodeList subprograms_gnat.ads:9:4-225:22>
 <PragmaNode subprograms_gnat.ads:9:4-9:24>
 <Id "Preelaborate" subprograms_gnat.ads:9:11-9:23>
-<BaseAssocList subprograms_gnat.ads:9:10-9:10>
+<BaseAssocList subprograms_gnat.ads:9:23-9:23>
 <ConcreteTypeDecl ["Abstract_Type"] subprograms_gnat.ads:13:4-13:62>
 **************************
 \/ RAW <<LEADING>> ()  0 0 0 0
