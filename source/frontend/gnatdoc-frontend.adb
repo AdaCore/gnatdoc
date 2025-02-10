@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2024, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -2029,8 +2029,7 @@ package body GNATdoc.Frontend is
          end case;
 
          Result.Append
-           (VSS.Strings.Conversions.To_Virtual_String
-              (Node.F_Subp_Name.P_Canonical_Text));
+           (VSS.Strings.To_Virtual_String (Node.F_Subp_Name.Text));
 
          if not Params.Is_Null then
             Result.Append (" (");
