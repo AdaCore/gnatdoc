@@ -14,11 +14,16 @@ all: build-gnatdoc
 
 build-all: build-libgnatdoc build-gnatdoc build-tests
 
+install: install-gnatdoc
+
 build-libgnatdoc:
 	gprbuild -j0 -p -P gnat/libgnatdoc.gpr
 
 build-gnatdoc:
 	gprbuild -j0 -p -P gnat/gnatdoc.gpr ${SCENARIO_VARIABLES}
+
+install-gnatdoc:
+	gprinstall -p -P gnat/gnatdoc.gpr --prefix="${PREFIX}" --no-project ${SCENARIO_VARIABLES}
 
 clean:
 	rm -rf .objs bin
