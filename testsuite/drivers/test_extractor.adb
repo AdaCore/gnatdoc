@@ -115,11 +115,11 @@ procedure Test_Extractor is
          Put_Line ("**************************");
 
          declare
-            Comment : GNATdoc.Comments.Structured_Comment :=
-              GNATdoc.Comments.Extractor.Extract
-                (Node.As_Basic_Decl, Options);
+            Comment : GNATdoc.Comments.Structured_Comment;
 
          begin
+            GNATdoc.Comments.Extractor.Extract
+              (Node.As_Basic_Decl, Options, Comment);
             GNATdoc.Comments.Debug.Dump (Comment);
          end;
 

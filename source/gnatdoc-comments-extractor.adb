@@ -588,20 +588,6 @@ package body GNATdoc.Comments.Extractor is
       end case;
    end Extract;
 
-   -------------
-   -- Extract --
-   -------------
-
-   function Extract
-     (Node    : Libadalang.Analysis.Basic_Decl'Class;
-      Options : GNATdoc.Comments.Options.Extractor_Options)
-      return Structured_Comment is
-   begin
-      return Result : Structured_Comment do
-         Extract (Node, Options, Result);
-      end return;
-   end Extract;
-
    ---------------------------------------------
    -- Extract_Base_Package_Decl_Documentation --
    ---------------------------------------------
