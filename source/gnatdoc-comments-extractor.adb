@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -586,22 +586,6 @@ package body GNATdoc.Comments.Extractor is
          when others =>
             raise Program_Error;
       end case;
-   end Extract;
-
-   -------------
-   -- Extract --
-   -------------
-
-   function Extract
-     (Node    : Libadalang.Analysis.Basic_Decl'Class;
-      Options : GNATdoc.Comments.Options.Extractor_Options)
-      return not null Structured_Comment_Access is
-   begin
-      return Result : constant not null Structured_Comment_Access :=
-        new Structured_Comment
-      do
-         Extract (Node, Options, Result.all);
-      end return;
    end Extract;
 
    -------------
