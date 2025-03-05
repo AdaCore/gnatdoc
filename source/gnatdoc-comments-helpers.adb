@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -19,6 +19,7 @@ with Libadalang.Common;
 
 with GNATdoc.Comments.Extractor;
 with GNATdoc.Comments.Utilities;
+with GNATdoc.Messages;
 
 package body GNATdoc.Comments.Helpers is
 
@@ -308,6 +309,7 @@ package body GNATdoc.Comments.Helpers is
       Name_To_Extract    : Defining_Name;
       Subname_To_Extract : Defining_Name;
       Extracted          : Structured_Comment;
+      Messages           : GNATdoc.Messages.Message_Container;
 
    begin
       if Decl.Kind in Ada_Concrete_Formal_Subp_Decl | Ada_Formal_Type_Decl
@@ -436,7 +438,7 @@ package body GNATdoc.Comments.Helpers is
 
       if not Decl_To_Extract.Is_Null then
          GNATdoc.Comments.Extractor.Extract
-           (Decl_To_Extract, Options, Extracted);
+           (Decl_To_Extract, Options, Extracted, Messages);
 
          if Name_To_Extract.Is_Null then
             Documentation := Get_Plain_Text_Description (Extracted);

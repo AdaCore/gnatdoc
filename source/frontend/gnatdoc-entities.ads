@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -21,6 +21,7 @@ with Ada.Containers.Ordered_Sets;
 with VSS.Strings.Hash;
 
 with GNATdoc.Comments;
+with GNATdoc.Messages;
 
 package GNATdoc.Entities is
 
@@ -72,6 +73,7 @@ package GNATdoc.Entities is
       Qualified_Name         : VSS.Strings.Virtual_String;
       Signature              : VSS.Strings.Virtual_String;
       Documentation          : aliased GNATdoc.Comments.Structured_Comment;
+      Messages               : GNATdoc.Messages.Message_Container;
 
       Enclosing              : VSS.Strings.Virtual_String;
       --  Signature of the enclosing entity.

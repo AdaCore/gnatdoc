@@ -359,7 +359,14 @@ package body GNATdoc.Frontend is
    begin
       if GNATdoc.Configuration.Provider.Warnings_Enabled then
          GNATdoc.Comments.Undocumented_Checker.Check_Undocumented
-           (Entity.Location, Entity.Name, Entity.Documentation);
+           (Location      => Entity.Location,
+            Name          => Entity.Name,
+            Documentation => Entity.Documentation,
+            Messages      => Entity.Messages);
+
+         for Message of Entity.Messages loop
+            GNATdoc.Messages.Report_Warning (Message);
+         end loop;
       end if;
    end Check_Undocumented;
 
@@ -700,10 +707,14 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       Enclosing.Access_Types.Insert (Entity);
       Check_Undocumented (Entity);
    end Process_Access_Type_Def;
@@ -723,10 +734,14 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       Enclosing.Array_Types.Insert (Entity);
       Check_Undocumented (Entity);
    end Process_Array_Type_Def;
@@ -755,10 +770,14 @@ package body GNATdoc.Frontend is
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            RST_Profile    => RST_Profile (Node.F_Subp_Spec),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
       if not In_Private
@@ -1145,10 +1164,14 @@ package body GNATdoc.Frontend is
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            RST_Profile    => RST_Profile (Spec),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
       if not In_Private
@@ -1307,10 +1330,15 @@ package body GNATdoc.Frontend is
            Signature      => Signature (Name),
            Enclosing      =>
              Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
+
       if Def.F_Has_With_Private or not Def.F_Record_Extension.Is_Null then
          GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
          Enclosing.Tagged_Types.Insert (Entity);
@@ -1398,10 +1426,14 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       Enclosing.Entries.Insert (Entity);
       Check_Undocumented (Entity);
    end Process_Entry_Body;
@@ -1421,10 +1453,14 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       Enclosing.Entries.Insert (Entity);
       Check_Undocumented (Entity);
    end Process_Entry_Decl;
@@ -1447,11 +1483,14 @@ package body GNATdoc.Frontend is
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
-                   Documentation  =>
-                     Extract (Node, GNATdoc.Options.Extractor_Options),
                    others         => <>);
 
          begin
+            Extract
+              (Node          => Node,
+               Options       => GNATdoc.Options.Extractor_Options,
+               Documentation => Entity.Documentation,
+               Messages      => Entity.Messages);
             Enclosing.Exceptions.Insert (Entity);
             Check_Undocumented (Entity);
          end;
@@ -1477,10 +1516,14 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       Enclosing.Generic_Instantiations.Insert (Entity);
 
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
@@ -1515,10 +1558,14 @@ package body GNATdoc.Frontend is
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
            RST_Profile    => RST_Profile (Spec),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       Enclosing.Subprograms.Insert (Entity);
 
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
@@ -1550,10 +1597,14 @@ package body GNATdoc.Frontend is
            Is_Private     =>
              (Node.Parent.Kind = Ada_Library_Item
                 and then Node.Parent.As_Library_Item.F_Has_Private),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Packages.Insert (Entity);
 
@@ -1589,10 +1640,14 @@ package body GNATdoc.Frontend is
            Signature      => Signature (Name),
            Enclosing      =>
              Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Interface_Types.Insert (Entity);
       GNATdoc.Entities.Globals.Interface_Types.Insert (Entity);
@@ -1627,11 +1682,14 @@ package body GNATdoc.Frontend is
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
-                   Documentation  =>
-                     Extract (Node, GNATdoc.Options.Extractor_Options),
                    others         => <>);
 
          begin
+            Extract
+              (Node          => Node,
+               Options       => GNATdoc.Options.Extractor_Options,
+               Documentation => Entity.Documentation,
+               Messages      => Entity.Messages);
             Enclosing.Constants.Insert (Entity);
             Check_Undocumented (Entity);
          end;
@@ -1656,11 +1714,15 @@ package body GNATdoc.Frontend is
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
-                   Documentation  =>
-                     Extract (Node, GNATdoc.Options.Extractor_Options),
                    others         => <>);
 
          begin
+            Extract
+              (Node          => Node,
+               Options       => GNATdoc.Options.Extractor_Options,
+               Documentation => Entity.Documentation,
+               Messages      => Entity.Messages);
+
             if Node.F_Has_Constant then
                Enclosing.Constants.Insert (Entity);
 
@@ -1693,10 +1755,14 @@ package body GNATdoc.Frontend is
            Is_Private     =>
              (Node.Parent.Kind = Ada_Library_Item
                 and then Node.Parent.As_Library_Item.F_Has_Private),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Packages.Insert (Entity);
 
@@ -1768,10 +1834,14 @@ package body GNATdoc.Frontend is
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      =>
              To_Virtual_String (Name.P_Unique_Identifying_Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       Enclosing.Package_Renamings.Insert (Entity);
 
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
@@ -1798,10 +1868,15 @@ package body GNATdoc.Frontend is
            Signature      => Signature (Name),
            Enclosing      =>
              Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
+
       if Node.F_Type_Def.As_Private_Type_Def.F_Has_Tagged then
          Entity.Kind := GNATdoc.Entities.Ada_Tagged_Type;
 
@@ -1836,10 +1911,14 @@ package body GNATdoc.Frontend is
            Signature      => Signature (Name),
            Enclosing      =>
              Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Protected_Types.Insert (Entity);
 
@@ -1873,10 +1952,14 @@ package body GNATdoc.Frontend is
            Is_Private     =>
              (Node.Parent.Kind = Ada_Library_Item
                 and then Node.Parent.As_Library_Item.F_Has_Private),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Protected_Types.Insert (Entity);
 
@@ -1908,10 +1991,14 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       Enclosing.Record_Types.Insert (Entity);
       Check_Undocumented (Entity);
    end Process_Record_Type_Def;
@@ -1931,10 +2018,14 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       Enclosing.Simple_Types.Insert (Entity);
       Check_Undocumented (Entity);
    end Process_Simple_Type_Def;
@@ -1954,10 +2045,14 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       Enclosing.Subtypes.Insert (Entity);
       Check_Undocumented (Entity);
    end Process_Subtype_Decl;
@@ -1983,10 +2078,14 @@ package body GNATdoc.Frontend is
            Is_Private     =>
              (Node.Parent.Kind = Ada_Library_Item
                 and then Node.Parent.As_Library_Item.F_Has_Private),
-           Documentation  => Extract (Node, GNATdoc.Options.Extractor_Options),
            others         => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Task_Types.Insert (Entity);
 

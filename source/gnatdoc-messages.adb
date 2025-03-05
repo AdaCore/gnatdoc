@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2023, AdaCore                        --
+--                     Copyright (C) 2023-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,14 +15,14 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATCOLL.VFS;
-
 with VSS.Strings.Conversions;
 with VSS.Strings.Formatters.Generic_Integers;
 with VSS.Strings.Formatters.Strings;
 with VSS.Strings.Templates;
 with VSS.String_Vectors;
 with VSS.Text_Streams.Standards;
+
+with GNATCOLL.VFS;
 
 package body GNATdoc.Messages is
 
@@ -40,6 +40,18 @@ package body GNATdoc.Messages is
    package Line_Count_Formatters is
      new VSS.Strings.Formatters.Generic_Integers (VSS.Strings.Line_Count);
    use Line_Count_Formatters;
+
+   --------------------
+   -- Append_Message --
+   --------------------
+
+   procedure Append_Message
+     (Self     : in out Message_Container;
+      Location : GNATdoc.Source_Location;
+      Text     : VSS.Strings.Virtual_String) is
+   begin
+      Self.Append (Message'(Location, Text));
+   end Append_Message;
 
    ---------------
    -- File_Name --
@@ -123,10 +135,7 @@ package body GNATdoc.Messages is
    -- Report_Warning --
    --------------------
 
-   procedure Report_Warning
-     (Location : GNATdoc.Source_Location;
-      Message  : VSS.Strings.Virtual_String)
-   is
+   procedure Report_Warning (Message : GNATdoc.Messages.Message) is
       Template : Virtual_String_Template := "{}:{}:{}: warning: {}";
       Success  : Boolean := True;
       Stream   : VSS.Text_Streams.Output_Text_Stream'Class
@@ -135,10 +144,10 @@ package body GNATdoc.Messages is
    begin
       Stream.Put_Line
         (Template.Format
-           (Image (File_Name (Location.File)),
-            Image (Location.Line),
-            Image (Location.Column),
-            Image (Message)),
+           (Image (File_Name (Message.Location.File)),
+            Image (Message.Location.Line),
+            Image (Message.Location.Column),
+            Image (Message.Text)),
         Success);
    end Report_Warning;
 

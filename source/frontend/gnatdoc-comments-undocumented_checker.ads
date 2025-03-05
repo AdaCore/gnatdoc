@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2023, AdaCore                        --
+--                     Copyright (C) 2023-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,12 +15,15 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with GNATdoc.Messages;
+
 package GNATdoc.Comments.Undocumented_Checker is
 
    procedure Check_Undocumented
      (Location      : GNATdoc.Source_Location;
       Name          : VSS.Strings.Virtual_String;
-      Documentation : GNATdoc.Comments.Structured_Comment);
+      Documentation : GNATdoc.Comments.Structured_Comment;
+      Messages      : in out GNATdoc.Messages.Message_Container);
    --  Check presense of the documentation for all components and report
    --  warnings when necessary.
 
