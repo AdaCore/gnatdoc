@@ -17,7 +17,7 @@
 
 with Ada.Text_IO;
 
-with Langkit_Support.Slocs;
+with GNATdoc.Utilities;
 with Libadalang.Common;
 
 with VSS.Strings.Conversions;
@@ -180,9 +180,6 @@ package body GNATdoc.Frontend is
       Formals : Generic_Formal_Part);
    --  Constructs entities for formal parameters of the generic from the
    --  structured comment of the generic.
-
-   function Location (Name : Ada_Node'Class) return GNATdoc.Source_Location;
-   --  Return location of the given node.
 
    function Signature (Name : Defining_Name'Class) return Virtual_String;
    --  Computes unique signature of the given entity.
@@ -397,7 +394,7 @@ package body GNATdoc.Frontend is
          Entity :
            constant not null GNATdoc.Entities.Entity_Information_Access :=
              new GNATdoc.Entities.Entity_Information'
-               (Location       => Location (Name),
+               (Location       => GNATdoc.Utilities.Location (Name),
                 Name           => To_Virtual_String (Name.F_Name.Text),
                 Qualified_Name =>
                   To_Virtual_String (Name.P_Fully_Qualified_Name),
@@ -459,22 +456,6 @@ package body GNATdoc.Frontend is
          end case;
       end loop;
    end Construct_Generic_Formals;
-
-   --------------
-   -- Location --
-   --------------
-
-   function Location (Name : Ada_Node'Class) return GNATdoc.Source_Location is
-      Aux : constant Langkit_Support.Slocs.Source_Location_Range :=
-        Name.Sloc_Range;
-
-   begin
-      return
-        (File   =>
-           VSS.Strings.Conversions.To_Virtual_String (Name.Unit.Get_Filename),
-         Line   => VSS.Strings.Line_Count (Aux.Start_Line),
-         Column => VSS.Strings.Character_Count (Aux.Start_Column));
-   end Location;
 
    -----------------
    -- Postprocess --
@@ -703,7 +684,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -730,7 +711,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -759,7 +740,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Subp_Spec.F_Subp_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Kind           =>
              (case Node.F_Subp_Spec.F_Subp_Kind is
                  when Ada_Subp_Kind_Function  =>
@@ -1128,7 +1109,8 @@ package body GNATdoc.Frontend is
       exception
          when E : others =>
 
-            GNATdoc.Messages.Report_Internal_Error (Location (Node), E);
+            GNATdoc.Messages.Report_Internal_Error
+              (GNATdoc.Utilities.Location (Node), E);
 
             return Over;
       end Process_Node;
@@ -1153,7 +1135,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Spec.F_Subp_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Kind           =>
              (case Spec.F_Subp_Kind is
                  when Ada_Subp_Kind_Function  =>
@@ -1301,7 +1283,8 @@ package body GNATdoc.Frontend is
 
       exception
          when E : others =>
-            GNATdoc.Messages.Report_Internal_Error (Location (Node), E);
+            GNATdoc.Messages.Report_Internal_Error
+              (GNATdoc.Utilities.Location (Node), E);
 
             return Over;
       end Process_Node;
@@ -1324,7 +1307,7 @@ package body GNATdoc.Frontend is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
           (Kind           => GNATdoc.Entities.Ada_Tagged_Type,
-           Location       => Location (Name),
+           Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1422,7 +1405,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Entry_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1449,7 +1432,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Spec.F_Entry_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1478,7 +1461,7 @@ package body GNATdoc.Frontend is
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
-                  (Location       => Location (Name),
+                  (Location       => GNATdoc.Utilities.Location (Name),
                    Name           => To_Virtual_String (Name.Text),
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
@@ -1512,7 +1495,7 @@ package body GNATdoc.Frontend is
          else Node.As_Generic_Subp_Instantiation.F_Subp_Name);
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1547,7 +1530,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Spec.F_Subp_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Kind           =>
              (case Spec.F_Subp_Kind is
                  when Ada_Subp_Kind_Function  =>
@@ -1588,7 +1571,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Package_Decl.F_Package_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1634,7 +1617,7 @@ package body GNATdoc.Frontend is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
           (Kind           => GNATdoc.Entities.Ada_Interface_Type,
-           Location       => Location (Name),
+           Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1677,7 +1660,7 @@ package body GNATdoc.Frontend is
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
-                  (Location       => Location (Name),
+                  (Location       => GNATdoc.Utilities.Location (Name),
                    Name           => To_Virtual_String (Name.Text),
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
@@ -1709,7 +1692,7 @@ package body GNATdoc.Frontend is
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
-                  (Location       => Location (Name),
+                  (Location       => GNATdoc.Utilities.Location (Name),
                    Name           => To_Virtual_String (Name.Text),
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
@@ -1746,7 +1729,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Package_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1789,7 +1772,7 @@ package body GNATdoc.Frontend is
       Entity    : constant not null
         GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1829,7 +1812,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      =>
@@ -1862,7 +1845,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1905,7 +1888,7 @@ package body GNATdoc.Frontend is
       Entity : constant not null
         GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1943,7 +1926,7 @@ package body GNATdoc.Frontend is
    is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1987,7 +1970,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -2014,7 +1997,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -2041,7 +2024,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -2069,7 +2052,7 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Decl.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => Location (Name),
+          (Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.F_Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
