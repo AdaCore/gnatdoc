@@ -90,8 +90,8 @@ package body GNATdoc.Messages is
    is
       Template : Virtual_String_Template := "{}:{}:{}: {}";
       Success  : Boolean := True;
-      Stream   : VSS.Text_Streams.Output_Text_Stream'Class
-        renames VSS.Text_Streams.Standards.Standard_Error;
+      Stream   : VSS.Text_Streams.Output_Text_Stream'Class :=
+        VSS.Text_Streams.Standards.Standard_Error;
 
    begin
       Stream.Put_Line
@@ -138,8 +138,8 @@ package body GNATdoc.Messages is
    procedure Report_Warning (Message : GNATdoc.Messages.Message) is
       Template : Virtual_String_Template := "{}:{}:{}: warning: {}";
       Success  : Boolean := True;
-      Stream   : VSS.Text_Streams.Output_Text_Stream'Class
-        renames VSS.Text_Streams.Standards.Standard_Error;
+      Stream   : VSS.Text_Streams.Output_Text_Stream'Class :=
+        VSS.Text_Streams.Standards.Standard_Error;
 
    begin
       Stream.Put_Line
