@@ -1,86 +1,24 @@
+
 stages:
-  - build_and_test
-  - downstream_ci
+  - test
+  - downstream
+  - check
 
-#########
-# BUILD #
-#########
+include:
+  # Issue check
+  - component: $CI_SERVER_FQDN/eng/gitlab-templates/check-issue@~latest
 
-.basic-setup:
-    # Use generic_anod_ci here.
-    - generic_anod_ci
-    - cat /tmp/ci_env.sh
-    - . /tmp/ci_env.sh
+  - component: $CI_SERVER_FQDN/eng/gitlab-templates/test@~latest
+    inputs:
+      needs: []
+      anod-args: run build_and_test_gnatdoc4 --latest
 
-build_and_test:
-  services:
-     - image:e3
-     - cpu:8
-     - mem:16
-  stage: build_and_test
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_PIPELINE_SOURCE == 'pipeline'
-  script:
-    - !reference [.basic-setup]
-
-    # Build gnatdoc
-    - anod build gnatdoc4 $ACI_TRACK_QUALIFIER
-
-    # Test gnatdoc
-    - anod test gnatdoc4 $ACI_TRACK_QUALIFIER
-
-    # Process the report
-    - BUILD_SPACE_NAME=`anod eval gnatdoc4 build_space_name --primitive test $ACI_TRACK_QUALIFIER | tr -d "'"`
-    - SB_BASE=$ANOD_DEFAULT_SANDBOX_DIR/x86_64-linux/$BUILD_SPACE_NAME
-    - e3-testsuite-report
-       --failure-exit-code 1
-       --xunit-output $CI_PROJECT_DIR/xunit_output.xml
-       $SB_BASE//results/new/ || FAILED=true
-
-    - if [ ! -z ${FAILED+x} ]; then echo "There was at least one testcase failure" && exit 1; fi
-
-  artifacts:
-    when: always
-    reports:
-      junit: xunit_output.xml
-
-build_doc:
-  services:
-     - image:e3
-  stage: build_and_test
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-      changes:
-        - documentation/users_guide/*
-    - if: $CI_PIPELINE_SOURCE == 'pipeline'
-      changes:
-        - documentation/users_guide/*
-    - if: $CI_COMMIT_BRANCH == 'master' && $CI_COMMIT_TITLE =~ /Merge branch.*/
-      changes:
-        - documentation/users_guide/*
-    - if: $CI_COMMIT_BRANCH == 'edge' && $CI_COMMIT_TITLE =~ /Merge branch.*/
-      changes:
-        - documentation/users_guide/*
-  script:
-    - !reference [.basic-setup]
-
-    # Build gnatdoc
-    - anod build gnatdoc4-doc $ACI_TRACK_QUALIFIER
-
-downstream_ci:
-  stage: downstream_ci
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-      when: manual
-  inherit:
-    variables: false
-  variables:
-    ACI_UPSTREAM_PROJECT_ID: $CI_PROJECT_ID
-    ACI_UPSTREAM_MERGE_REQUEST_IID: $CI_MERGE_REQUEST_IID
-  parallel:
-    matrix:
-      - PROJECT: ["eng/ide/ada_language_server"]
-  trigger:
-    strategy: depend
-    project: $PROJECT
+  - component: $CI_SERVER_FQDN/eng/gitlab-templates/test@~latest
+    inputs:
+      job-name: als
+      stage: downstream
+      needs: []
+      anod-args: run build_and_test_als
+      rules:
+        - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+          when: manual
