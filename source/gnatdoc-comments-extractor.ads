@@ -19,6 +19,7 @@ with Libadalang.Analysis;
 with Libadalang.Common;
 
 with GNATdoc.Comments.Options;
+with GNATdoc.Messages;
 
 package GNATdoc.Comments.Extractor is
 
@@ -28,7 +29,8 @@ package GNATdoc.Comments.Extractor is
    procedure Extract
      (Node          : Libadalang.Analysis.Basic_Decl'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Documentation : out Structured_Comment'Class)
+      Documentation : out Structured_Comment'Class;
+      Messages      : out GNATdoc.Messages.Message_Container)
      with Pre =>
        Node.Kind in Ada_Abstract_Subp_Decl
                       | Ada_Entry_Body

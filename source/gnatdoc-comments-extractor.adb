@@ -364,8 +364,11 @@ package body GNATdoc.Comments.Extractor is
    procedure Extract
      (Node          : Libadalang.Analysis.Basic_Decl'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Documentation : out Structured_Comment'Class) is
+      Documentation : out Structured_Comment'Class;
+      Messages      : out GNATdoc.Messages.Message_Container) is
    begin
+      Messages.Clear;
+
       case Node.Kind is
          when Ada_Package_Decl =>
             Extract_Base_Package_Decl_Documentation

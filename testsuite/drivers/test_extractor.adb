@@ -21,6 +21,7 @@
 with Ada.Text_IO;
 with Ada.Wide_Wide_Text_IO;   use Ada.Wide_Wide_Text_IO;
 
+with GNATdoc.Messages;
 with VSS.Application;         use VSS.Application;
 with VSS.JSON.Pull_Readers.Simple;
 with VSS.JSON.Streams;
@@ -115,11 +116,12 @@ procedure Test_Extractor is
          Put_Line ("**************************");
 
          declare
-            Comment : GNATdoc.Comments.Structured_Comment;
+            Comment  : GNATdoc.Comments.Structured_Comment;
+            Messages : GNATdoc.Messages.Message_Container;
 
          begin
             GNATdoc.Comments.Extractor.Extract
-              (Node.As_Basic_Decl, Options, Comment);
+              (Node.As_Basic_Decl, Options, Comment, Messages);
             GNATdoc.Comments.Debug.Dump (Comment);
          end;
 
