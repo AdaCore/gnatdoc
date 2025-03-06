@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -21,6 +21,7 @@
 with Ada.Text_IO;
 with Ada.Wide_Wide_Text_IO;   use Ada.Wide_Wide_Text_IO;
 
+with GNATdoc.Messages;
 with VSS.Application;         use VSS.Application;
 with VSS.JSON.Pull_Readers.Simple;
 with VSS.JSON.Streams;
@@ -115,14 +116,13 @@ procedure Test_Extractor is
          Put_Line ("**************************");
 
          declare
-            Comment : GNATdoc.Comments.Structured_Comment_Access;
+            Comment  : GNATdoc.Comments.Structured_Comment;
+            Messages : GNATdoc.Messages.Message_Container;
 
          begin
-            Comment :=
-              GNATdoc.Comments.Extractor.Extract
-                (Node.As_Basic_Decl, Options);
-            GNATdoc.Comments.Debug.Dump (Comment.all);
-            GNATdoc.Comments.Free (Comment);
+            GNATdoc.Comments.Extractor.Extract
+              (Node.As_Basic_Decl, Options, Comment, Messages);
+            GNATdoc.Comments.Debug.Dump (Comment);
          end;
 
          Put_Line ("**************************");

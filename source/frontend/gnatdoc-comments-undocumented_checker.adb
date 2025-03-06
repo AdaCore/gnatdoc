@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2023, AdaCore                        --
+--                     Copyright (C) 2023-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,9 +15,22 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATdoc.Messages;
+with VSS.Strings.Formatters.Strings;
+with VSS.Strings.Templates;
 
 package body GNATdoc.Comments.Undocumented_Checker is
+
+   Entity_Not_Documented_Template :
+     VSS.Strings.Templates.Virtual_String_Template :=
+       "entity `{}` is not documented";
+
+   Named_Component_Not_Documented_Template :
+     VSS.Strings.Templates.Virtual_String_Template :=
+       "{} `{}` is not documented";
+
+   Unnamed_Component_Not_Documented_Template :
+     VSS.Strings.Templates.Virtual_String_Template :=
+       "{} is not documented";
 
    ------------------------
    -- Check_Undocumented --
@@ -26,16 +39,17 @@ package body GNATdoc.Comments.Undocumented_Checker is
    procedure Check_Undocumented
      (Location      : GNATdoc.Source_Location;
       Name          : VSS.Strings.Virtual_String;
-      Documentation : GNATdoc.Comments.Structured_Comment)
-   is
-      use type VSS.Strings.Virtual_String;
-
+      Documentation : GNATdoc.Comments.Structured_Comment;
+      Messages      : in out GNATdoc.Messages.Message_Container) is
    begin
       for Section of Documentation.Sections loop
          if Section.Kind in Description then
             if Section.Text.Is_Empty then
-               GNATdoc.Messages.Report_Warning
-                 (Location, "entity " & Name & " is not documented");
+               Messages.Append_Message
+                 (Location => Location,
+                  Text     =>
+                    Entity_Not_Documented_Template.Format
+                      (VSS.Strings.Formatters.Strings.Image (Name)));
             end if;
 
             exit;
@@ -46,20 +60,34 @@ package body GNATdoc.Comments.Undocumented_Checker is
          if Section.Kind in Component
            and then Section.Text.Is_Empty
          then
-            GNATdoc.Messages.Report_Warning
-              (Location,
-               VSS.Strings.To_Virtual_String
-                 (case Section.Kind is
-                     when Formal              => "generic formal",
-                     when Enumeration_Literal => "enumeration literal",
-                     when Field               => "component",
-                     when Parameter           => "parameter",
-                     when Returns             => "return value",
-                     when Raised_Exception    => "raised exception",
-                     when others              => raise Program_Error)
-               & (if Section.Kind /= Returns
-                    then " " & Section.Name else "")
-               & VSS.Strings.To_Virtual_String (" is not documented"));
+            declare
+               Text : VSS.Strings.Virtual_String;
+
+            begin
+               if Section.Kind = Returns then
+                  Text :=
+                    Unnamed_Component_Not_Documented_Template.Format
+                      (VSS.Strings.Formatters.Strings.Image ("return value"));
+
+               else
+                  Text :=
+                    Named_Component_Not_Documented_Template.Format
+                      (VSS.Strings.Formatters.Strings.Image
+                         (VSS.Strings.Virtual_String'
+                            (case Section.Kind is
+                             when Formal              => "generic formal",
+                             when Enumeration_Literal => "enumeration literal",
+                             when Field               => "component",
+                             when Parameter           => "parameter",
+                             when Raised_Exception    => "raised exception",
+                             when others              => raise Program_Error)),
+                       VSS.Strings.Formatters.Strings.Image (Section.Name));
+               end if;
+
+               Messages.Append_Message
+                 (Location => Location,
+                  Text     => Text);
+            end;
          end if;
       end loop;
    end Check_Undocumented;

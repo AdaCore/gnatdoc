@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2023, AdaCore                        --
+--                     Copyright (C) 2023-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,15 +15,30 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with Ada.Containers.Vectors;
 with Ada.Exceptions;
-
 with GNAT.Source_Info;
 
 package GNATdoc.Messages is
 
-   procedure Report_Warning
-     (Location : GNATdoc.Source_Location;
-      Message  : VSS.Strings.Virtual_String);
+   type Message is record
+      Location : Source_Location;
+      Text     : VSS.Strings.Virtual_String;
+   end record;
+
+   package Message_Vectors is new Ada.Containers.Vectors (Positive, Message);
+
+   type Message_Container is new Message_Vectors.Vector with null record;
+
+   procedure Append_Message
+     (Self     : in out Message_Container;
+      Location : GNATdoc.Source_Location;
+      Text     : VSS.Strings.Virtual_String);
+   --  Append message at given location and with given text to the list of
+   --  messages.
+
+   procedure Report_Warning (Message : GNATdoc.Messages.Message);
+   --  Output warning to standard error stream.
 
    procedure Report_Error
      (Location : GNATdoc.Source_Location;
