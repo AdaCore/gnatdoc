@@ -79,23 +79,29 @@ package body GNATdoc.Comments.Extractor is
       Messages      : in out GNATdoc.Messages.Message_Container);
 
    procedure Extract_Subprogram_Documentation
-     (Decl_Node    : Libadalang.Analysis.Basic_Decl'Class;
-      Spec_Node    : Libadalang.Analysis.Base_Subp_Spec'Class;
-      Expr_Node    : Expr'Class;
-      Aspects_Node : Aspect_Spec'Class;
-      Options      : GNATdoc.Comments.Options.Extractor_Options;
-      Sections     : in out Section_Vectors.Vector;
-      Messages     : in out GNATdoc.Messages.Message_Container)
+     (Decl_Node     : Libadalang.Analysis.Basic_Decl'Class;
+      Spec_Node     : Libadalang.Analysis.Base_Subp_Spec'Class;
+      Expr_Node     : Expr'Class;
+      Aspects_Node  : Aspect_Spec'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Sections      : in out Section_Vectors.Vector;
+      Messages      : in out GNATdoc.Messages.Message_Container;
+      Allow_Private : Boolean;
+      Is_Private    : out Boolean)
      with Pre =>
        Spec_Node.Kind in Ada_Subp_Spec | Ada_Entry_Spec;
    --  Extracts subprogram's documentation.
    --
-   --  @param Decl_Node       Whole declaration
-   --  @param Subp_Spec_Node  Subprogram specification
-   --  @param Expr_Node       Expression of expression function
-   --  @param Aspects_Node    List of aspects
-   --  @param Options         Documentataion extraction options
-   --  @param Documentation   Structured comment to fill
+   --  @param Decl_Node      Whole declaration
+   --  @param Spec_Node      Subprogram specification
+   --  @param Expr_Node      Expression of expression function
+   --  @param Aspects_Node   List of aspects
+   --  @param Options        Documentataion extraction options
+   --  @param Sections       List of sections to fill
+   --  @param Messages       Diagnostic messages
+   --  @param Allow_Private  Allow use of `@private` tag to hide subprogram
+   --  @param Is_Private     True when `@private` tag is allowed and set for
+   --                        entity
 
    procedure Extract_Entry_Body_Documentation
      (Decl_Node     : Libadalang.Analysis.Entry_Body'Class;
@@ -344,7 +350,7 @@ package body GNATdoc.Comments.Extractor is
       Raw_Section   : Section_Access;
       Allowed_Tags  : Section_Tag_Flags;
       Sections      : in out Section_Vectors.Vector;
-      Is_Private    : in out Boolean;
+      Is_Private    : out Boolean;
       Messages      : in out GNATdoc.Messages.Message_Container);
    --  Process raw documentation, fill sections and create description section.
    --
@@ -398,43 +404,51 @@ package body GNATdoc.Comments.Extractor is
 
          when Ada_Abstract_Subp_Decl | Ada_Subp_Decl =>
             Extract_Subprogram_Documentation
-              (Decl_Node    => Node,
-               Spec_Node    => Node.As_Classic_Subp_Decl.F_Subp_Spec,
-               Expr_Node    => No_Expr,
-               Aspects_Node => Node.F_Aspects,
-               Options      => Options,
-               Sections     => Documentation.Sections,
-               Messages     => Messages);
+              (Decl_Node     => Node,
+               Spec_Node     => Node.As_Classic_Subp_Decl.F_Subp_Spec,
+               Expr_Node     => No_Expr,
+               Aspects_Node  => Node.F_Aspects,
+               Options       => Options,
+               Sections      => Documentation.Sections,
+               Messages      => Messages,
+               Allow_Private => True,
+               Is_Private    => Documentation.Is_Private);
 
          when Ada_Expr_Function =>
             Extract_Subprogram_Documentation
-              (Decl_Node    => Node,
-               Spec_Node    => Node.As_Base_Subp_Body.F_Subp_Spec,
-               Expr_Node    => Node.As_Expr_Function.F_Expr,
-               Aspects_Node => Node.F_Aspects,
-               Options      => Options,
-               Sections     => Documentation.Sections,
-               Messages     => Messages);
+              (Decl_Node     => Node,
+               Spec_Node     => Node.As_Base_Subp_Body.F_Subp_Spec,
+               Expr_Node     => Node.As_Expr_Function.F_Expr,
+               Aspects_Node  => Node.F_Aspects,
+               Options       => Options,
+               Sections      => Documentation.Sections,
+               Messages      => Messages,
+               Allow_Private => True,
+               Is_Private    => Documentation.Is_Private);
 
          when Ada_Null_Subp_Decl =>
             Extract_Subprogram_Documentation
-              (Decl_Node    => Node,
-               Spec_Node    => Node.As_Base_Subp_Body.F_Subp_Spec,
-               Expr_Node    => No_Expr,
-               Aspects_Node => Node.F_Aspects,
-               Options      => Options,
-               Sections     => Documentation.Sections,
-               Messages     => Messages);
+              (Decl_Node     => Node,
+               Spec_Node     => Node.As_Base_Subp_Body.F_Subp_Spec,
+               Expr_Node     => No_Expr,
+               Aspects_Node  => Node.F_Aspects,
+               Options       => Options,
+               Sections      => Documentation.Sections,
+               Messages      => Messages,
+               Allow_Private => True,
+               Is_Private    => Documentation.Is_Private);
 
          when Ada_Subp_Body =>
             Extract_Subprogram_Documentation
-              (Decl_Node    => Node,
-               Spec_Node    => Node.As_Base_Subp_Body.F_Subp_Spec,
-               Expr_Node    => No_Expr,
-               Aspects_Node => Node.As_Subp_Body.F_Aspects,
-               Options      => Options,
-               Sections     => Documentation.Sections,
-               Messages     => Messages);
+              (Decl_Node     => Node,
+               Spec_Node     => Node.As_Base_Subp_Body.F_Subp_Spec,
+               Expr_Node     => No_Expr,
+               Aspects_Node  => Node.As_Subp_Body.F_Aspects,
+               Options       => Options,
+               Sections      => Documentation.Sections,
+               Messages      => Messages,
+               Allow_Private => True,
+               Is_Private    => Documentation.Is_Private);
 
          when Ada_Generic_Package_Decl | Ada_Generic_Subp_Decl =>
             Extract_Generic_Decl_Documentation
@@ -481,13 +495,15 @@ package body GNATdoc.Comments.Extractor is
 
          when Ada_Subp_Renaming_Decl =>
             Extract_Subprogram_Documentation
-              (Decl_Node    => Node,
-               Spec_Node    => Node.As_Subp_Renaming_Decl.F_Subp_Spec,
-               Expr_Node    => No_Expr,
-               Aspects_Node => No_Aspect_Spec,
-               Options      => Options,
-               Sections     => Documentation.Sections,
-               Messages     => Messages);
+              (Decl_Node     => Node,
+               Spec_Node     => Node.As_Subp_Renaming_Decl.F_Subp_Spec,
+               Expr_Node     => No_Expr,
+               Aspects_Node  => No_Aspect_Spec,
+               Options       => Options,
+               Sections      => Documentation.Sections,
+               Messages      => Messages,
+               Allow_Private => True,
+               Is_Private    => Documentation.Is_Private);
 
          when Ada_Type_Decl =>
             --  Print (Node);
@@ -557,16 +573,23 @@ package body GNATdoc.Comments.Extractor is
                      Messages);
 
                when Ada_Access_To_Subp_Def =>
-                  Extract_Subprogram_Documentation
-                    (Decl_Node    => Node,
-                     Spec_Node    =>
-                        Node.As_Type_Decl.F_Type_Def
-                          .As_Access_To_Subp_Def.F_Subp_Spec,
-                     Expr_Node    => No_Expr,
-                     Aspects_Node => No_Aspect_Spec,
-                     Options      => Options,
-                     Sections     => Documentation.Sections,
-                     Messages     => Messages);
+                  declare
+                     Aux : Boolean;
+
+                  begin
+                     Extract_Subprogram_Documentation
+                       (Decl_Node     => Node,
+                        Spec_Node     =>
+                          Node.As_Type_Decl.F_Type_Def
+                            .As_Access_To_Subp_Def.F_Subp_Spec,
+                        Expr_Node     => No_Expr,
+                        Aspects_Node  => No_Aspect_Spec,
+                        Options       => Options,
+                        Sections      => Documentation.Sections,
+                        Messages      => Messages,
+                        Allow_Private => False,
+                        Is_Private    => Aux);
+                  end;
 
                when others =>
                   raise Program_Error;
@@ -638,13 +661,15 @@ package body GNATdoc.Comments.Extractor is
 
          when Ada_Entry_Decl =>
             Extract_Subprogram_Documentation
-              (Decl_Node    => Node,
-               Spec_Node    => Node.As_Entry_Decl.F_Spec,
-               Expr_Node    => No_Expr,
-               Aspects_Node => No_Aspect_Spec,
-               Options      => Options,
-               Sections     => Documentation.Sections,
-               Messages     => Messages);
+              (Decl_Node     => Node,
+               Spec_Node     => Node.As_Entry_Decl.F_Spec,
+               Expr_Node     => No_Expr,
+               Aspects_Node  => No_Aspect_Spec,
+               Options       => Options,
+               Sections      => Documentation.Sections,
+               Messages      => Messages,
+               Allow_Private => True,
+               Is_Private    => Documentation.Is_Private);
 
          when Ada_Entry_Body =>
             Extract_Entry_Body_Documentation
@@ -1495,13 +1520,15 @@ package body GNATdoc.Comments.Extractor is
 
          when Ada_Generic_Subp_Decl =>
             Extract_Subprogram_Documentation
-              (Decl_Node    => Decl.As_Generic_Subp_Internal,
-               Spec_Node    => Decl.As_Generic_Subp_Internal.F_Subp_Spec,
-               Expr_Node    => No_Expr,
-               Aspects_Node => No_Aspect_Spec,
-               Options      => Options,
-               Sections     => Documentation.Sections,
-               Messages     => Messages);
+              (Decl_Node     => Decl.As_Generic_Subp_Internal,
+               Spec_Node     => Decl.As_Generic_Subp_Internal.F_Subp_Spec,
+               Expr_Node     => No_Expr,
+               Aspects_Node  => No_Aspect_Spec,
+               Options       => Options,
+               Sections      => Documentation.Sections,
+               Messages      => Messages,
+               Allow_Private => True,
+               Is_Private    => Documentation.Is_Private);
 
          when others =>
             raise Program_Error;
@@ -1563,19 +1590,26 @@ package body GNATdoc.Comments.Extractor is
                                  Messages);
 
                            when Ada_Access_To_Subp_Def =>
-                              Extract_Subprogram_Documentation
-                                (Decl_Node    =>
-                                   Item.As_Generic_Formal_Type_Decl,
-                                 Spec_Node    =>
-                                   Formal_Type_Def.As_Access_To_Subp_Def
-                                     .F_Subp_Spec,
-                                 Expr_Node    => No_Expr,
-                                 Aspects_Node => No_Aspect_Spec,
-                                 Options      => Options,
-                                 Sections     =>
-                                   Lookup_Formal_Section
-                                     (Formal_Name).Sections,
-                                 Messages     => Messages);
+                              declare
+                                 Aux : Boolean;
+
+                              begin
+                                 Extract_Subprogram_Documentation
+                                   (Decl_Node     =>
+                                      Item.As_Generic_Formal_Type_Decl,
+                                    Spec_Node     =>
+                                      Formal_Type_Def.As_Access_To_Subp_Def
+                                        .F_Subp_Spec,
+                                    Expr_Node     => No_Expr,
+                                    Aspects_Node  => No_Aspect_Spec,
+                                    Options       => Options,
+                                    Sections      =>
+                                      Lookup_Formal_Section
+                                        (Formal_Name).Sections,
+                                    Messages      => Messages,
+                                    Allow_Private => False,
+                                    Is_Private    => Aux);
+                              end;
 
                            when others =>
                               raise Program_Error;
@@ -1595,17 +1629,20 @@ package body GNATdoc.Comments.Extractor is
                     Subp_Decl.F_Subp_Spec;
                   Formal_Name      : constant Defining_Name :=
                     Formal_Subp_Spec.F_Subp_Name;
+                  Aux              : Boolean;
 
                begin
                   Extract_Subprogram_Documentation
-                    (Decl_Node    => Item.As_Generic_Formal_Subp_Decl,
-                     Spec_Node    => Formal_Subp_Spec,
-                     Expr_Node    => No_Expr,
-                     Aspects_Node => No_Aspect_Spec,
-                     Options      => Options,
-                     Sections     =>
+                    (Decl_Node     => Item.As_Generic_Formal_Subp_Decl,
+                     Spec_Node     => Formal_Subp_Spec,
+                     Expr_Node     => No_Expr,
+                     Aspects_Node  => No_Aspect_Spec,
+                     Options       => Options,
+                     Sections      =>
                        Lookup_Formal_Section (Formal_Name).Sections,
-                     Messages     => Messages);
+                     Messages      => Messages,
+                     Allow_Private => False,
+                     Is_Private    => Aux);
                end;
 
             when Ada_Generic_Formal_Obj_Decl =>
@@ -2230,13 +2267,15 @@ package body GNATdoc.Comments.Extractor is
    --------------------------------------
 
    procedure Extract_Subprogram_Documentation
-     (Decl_Node    : Libadalang.Analysis.Basic_Decl'Class;
-      Spec_Node    : Libadalang.Analysis.Base_Subp_Spec'Class;
-      Expr_Node    : Expr'Class;
-      Aspects_Node : Aspect_Spec'Class;
-      Options      : GNATdoc.Comments.Options.Extractor_Options;
-      Sections     : in out Section_Vectors.Vector;
-      Messages     : in out GNATdoc.Messages.Message_Container)
+     (Decl_Node     : Libadalang.Analysis.Basic_Decl'Class;
+      Spec_Node     : Libadalang.Analysis.Base_Subp_Spec'Class;
+      Expr_Node     : Expr'Class;
+      Aspects_Node  : Aspect_Spec'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Sections      : in out Section_Vectors.Vector;
+      Messages      : in out GNATdoc.Messages.Message_Container;
+      Allow_Private : Boolean;
+      Is_Private    : out Boolean)
    is
 
       --------------------------------
@@ -2650,8 +2689,10 @@ package body GNATdoc.Comments.Extractor is
            (GNATdoc.Utilities.Location (Spec_Node),
             Raw_Section,
             [Param_Tag | Return_Tag | Exception_Tag => True,
+             Private_Tag                            => Allow_Private,
              others                                 => False],
             Sections,
+            Is_Private,
             Messages);
       end;
    end Extract_Subprogram_Documentation;
@@ -3087,7 +3128,7 @@ package body GNATdoc.Comments.Extractor is
       Raw_Section   : Section_Access;
       Allowed_Tags  : Section_Tag_Flags;
       Sections      : in out Section_Vectors.Vector;
-      Is_Private    : in out Boolean;
+      Is_Private    : out Boolean;
       Messages      : in out GNATdoc.Messages.Message_Container)
    is
       Tag_Matcher       : constant Regular_Expression :=
@@ -3113,6 +3154,8 @@ package body GNATdoc.Comments.Extractor is
    begin
       pragma Assert (Tag_Matcher.Is_Valid);
       pragma Assert (Parameter_Matcher.Is_Valid);
+
+      Is_Private := False;
 
       --  Create "Description" section
 
