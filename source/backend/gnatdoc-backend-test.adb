@@ -75,7 +75,7 @@ package body GNATdoc.Backend.Test is
 
          Entity_Template  : constant
            VSS.Strings.Templates.Virtual_String_Template :=
-             "{}{} ({}) '{}'";
+             "{}{}{}{} ({}) '{}'";
          Section_Template : constant
            VSS.Strings.Templates.Virtual_String_Template :=
              "{}{}:";
@@ -89,6 +89,12 @@ package body GNATdoc.Backend.Test is
          Output.Put_Line
            (Entity_Template.Format
               (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+               VSS.Strings.Formatters.Strings.Image
+                 (VSS.Strings.Virtual_String'
+                      (if Entity.Is_Private then "-" else "+")),
+               VSS.Strings.Formatters.Strings.Image
+                 (VSS.Strings.Virtual_String'
+                      (if Entity.Documentation.Is_Private then "-" else "+")),
                VSS.Strings.Formatters.Strings.Image (Entity.Name),
                Entity_Kind_Formatters.Image (Entity.Kind),
                VSS.Strings.Formatters.Strings.Image (Entity.Signature)),
