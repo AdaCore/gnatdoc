@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2024, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -557,8 +557,8 @@ package body GNATdoc.Projects is
    ------------------------
 
    procedure Test_Dump_Projects is
-      Output    : VSS.Text_Streams.Output_Text_Stream'Class
-        renames VSS.Text_Streams.Standards.Standard_Output;
+      Output    : VSS.Text_Streams.Output_Text_Stream'Class :=
+        VSS.Text_Streams.Standards.Standard_Output;
       Template  : VSS.Strings.Templates.Virtual_String_Template :=
         "{}{}";
       Success   : Boolean := True;
