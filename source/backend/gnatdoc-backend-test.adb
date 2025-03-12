@@ -231,6 +231,37 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
             Offset := @ - 2;
          end if;
+
+         if not Entity.Subprograms.Is_Empty then
+            Offset := @ + 2;
+
+            Output.Put_Line
+              (Section_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+                  VSS.Strings.Formatters.Strings.Image ("Subprograms")),
+               Success);
+
+            Offset := @ + 2;
+
+            for E of Entity.Subprograms loop
+               if GNATdoc.Entities.To_Entity.Contains (E.Signature) then
+                  Dump (GNATdoc.Entities.To_Entity (E.Signature).all);
+
+               else
+                  Output.Put_Line
+                    (Entity_Template.Format
+                       (VSS.Strings.Formatters.Strings.Image
+                            (Offset * ' ' & "# "),
+                        VSS.Strings.Formatters.Strings.Image
+                          (E.Qualified_Name),
+                        VSS.Strings.Formatters.Strings.Image (E.Signature)),
+                     Success);
+               end if;
+            end loop;
+
+            Offset := @ - 2;
+            Offset := @ - 2;
+         end if;
       end Dump;
 
    begin
