@@ -36,7 +36,8 @@ package body GNATdoc.Frontend is
    use Libadalang.Common;
    use VSS.Strings;
 
-   use type  GNATdoc.Entities.Entity_Information_Access;
+   use type GNATdoc.Entities.Entity_Information_Access;
+   use type GNATdoc.Entities.Entity_Signature;
 
    procedure Process_Package_Decl
      (Node      : Package_Decl'Class;
@@ -168,9 +169,10 @@ package body GNATdoc.Frontend is
    --  dispatching operations.
 
    procedure Analyze_Non_Dispatching_Method
-     (Entity : not null GNATdoc.Entities.Entity_Information_Access;
-      Node   : Basic_Decl'Class;
-      Spec   : Subp_Spec);
+     (Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Entity    : not null GNATdoc.Entities.Entity_Information_Access;
+      Node      : Basic_Decl'Class;
+      Spec      : Subp_Spec);
    --  Analyze subprogram to detect cases when it is available via prefixed
    --  notation.
 
@@ -207,12 +209,10 @@ package body GNATdoc.Frontend is
    ------------------------------------
 
    procedure Analyze_Non_Dispatching_Method
-     (Entity : not null GNATdoc.Entities.Entity_Information_Access;
-      Node   : Basic_Decl'Class;
-      Spec   : Subp_Spec)
-   is
-      Name : constant Defining_Name := Spec.F_Subp_Name;
-
+     (Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Entity    : not null GNATdoc.Entities.Entity_Information_Access;
+      Node      : Basic_Decl'Class;
+      Spec      : Subp_Spec) is
    begin
       if Spec.F_Subp_Params.Is_Null then
          --  Parameterless subprogram.
@@ -276,19 +276,30 @@ package body GNATdoc.Frontend is
                       (Signature
                          (Parameter_Type_Name.P_Referenced_Defining_Name))
          then
-            GNATdoc.Entities.To_Entity
-              (Signature (Parameter_Type_Name.P_Referenced_Defining_Name))
-                .Prefix_Callable_Declared.Insert
-                  ((To_Virtual_String (Name.P_Canonical_Fully_Qualified_Name),
-                    Signature (Name)));
+            declare
+               Belongs_Reference : constant
+                 GNATdoc.Entities.Entity_Reference :=
+                   ((To_Virtual_String
+                      (Parameter_Type_Name.P_Referenced_Defining_Name
+                         .P_Canonical_Fully_Qualified_Name),
+                  Signature
+                    (Parameter_Type_Name.P_Referenced_Defining_Name)));
+               Belongs_Entity    : constant not null
+                 GNATdoc.Entities.Entity_Information_Access :=
+                   GNATdoc.Entities.To_Entity (Belongs_Reference.Signature);
 
-            Entity.Is_Method := True;
-            Entity.Owner_Class :=
-              ((To_Virtual_String
-                 (Parameter_Type_Name.P_Referenced_Defining_Name
-                    .P_Canonical_Fully_Qualified_Name),
-                Signature
-                  (Parameter_Type_Name.P_Referenced_Defining_Name)));
+            begin
+               Entity.Is_Method := True;
+               Entity.Owner_Class := Belongs_Reference;
+
+               if Enclosing.Belongs_Subprograms.Contains (Entity.Reference)
+               then
+                  Belongs_Entity.Prefix_Callable_Declared.Insert
+                    (Entity.Reference);
+                  Belongs_Entity.Belongs_Subprograms.Insert (Entity.Reference);
+                  Enclosing.Belongs_Subprograms.Delete (Entity.Reference);
+               end if;
+            end;
          end if;
       end;
    end Analyze_Non_Dispatching_Method;
@@ -322,6 +333,8 @@ package body GNATdoc.Frontend is
 
             begin
                Methods.Include (Subprogram_Ref);
+               --  Subprogram's entity is not created yet, store it to complete
+               --  processing later.
 
                if Node.P_Is_Inherited_Primitive (Subprogram) then
                   Entity.Dispatching_Inherited.Include (Subprogram_Ref);
@@ -651,7 +664,32 @@ package body GNATdoc.Frontend is
 
       for Method of Methods loop
          if GNATdoc.Entities.To_Entity.Contains (Method.Signature) then
-            GNATdoc.Entities.To_Entity (Method.Signature).Is_Method := True;
+            declare
+               Entity    : constant
+                 GNATdoc.Entities.Entity_Information_Access :=
+                   GNATdoc.Entities.To_Entity (Method.Signature);
+               Enclosing : constant
+                 GNATdoc.Entities.Entity_Information_Access :=
+                   GNATdoc.Entities.To_Entity (Entity.Enclosing);
+               Belongs   : constant
+                 GNATdoc.Entities.Entity_Information_Access :=
+                   (if Entity.Owner_Class.Signature.Image.Is_Empty
+                      then null
+                      else GNATdoc.Entities.To_Entity
+                             (Entity.Owner_Class.Signature));
+               --  `Owner_Class` might not be filled for subprograms excluded
+               --  from generation for some reason
+
+            begin
+               if Enclosing.Belongs_Subprograms.Contains (Entity.Reference)
+                 and Belongs /= null
+               then
+                  Enclosing.Belongs_Subprograms.Delete (Entity.Reference);
+                  Belongs.Belongs_Subprograms.Insert (Entity.Reference);
+               end if;
+
+               Entity.Is_Method := True;
+            end;
          end if;
       end loop;
    end Postprocess;
@@ -750,6 +788,7 @@ package body GNATdoc.Frontend is
         or GNATdoc.Options.Frontend_Options.Generate_Private
       then
          Enclosing.Subprograms.Insert (Entity);
+         Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
 
          if Global /= null
            and GNATdoc.Entities.Globals'Access /= Enclosing
@@ -764,7 +803,11 @@ package body GNATdoc.Frontend is
          --  Analyze subprogram body when there is no separate subprogram
          --  specification.
 
-         Analyze_Non_Dispatching_Method (Entity, Node, Node.F_Subp_Spec);
+         Analyze_Non_Dispatching_Method
+           (Enclosing => Enclosing,
+            Entity    => Entity,
+            Node      => Node,
+            Spec      => Node.F_Subp_Spec);
       end if;
 
       Check_Undocumented (Entity);
@@ -1147,6 +1190,7 @@ package body GNATdoc.Frontend is
         or else GNATdoc.Options.Frontend_Options.Generate_Private
       then
          Enclosing.Subprograms.Insert (Entity);
+         Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
 
          if Global /= null
            and GNATdoc.Entities.Globals'Access /= Enclosing
@@ -1157,7 +1201,11 @@ package body GNATdoc.Frontend is
 
       --  Detect whether subprogram can be called by "prefix notation".
 
-      Analyze_Non_Dispatching_Method (Entity, Node, Spec);
+      Analyze_Non_Dispatching_Method
+        (Enclosing => Enclosing,
+         Entity    => Entity,
+         Node      => Node,
+         Spec      => Spec);
 
       Check_Undocumented (Entity);
    end Process_Classic_Subp_Decl;
@@ -1539,6 +1587,7 @@ package body GNATdoc.Frontend is
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
       Enclosing.Subprograms.Insert (Entity);
+      Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
 
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Subprograms.Insert (Entity);

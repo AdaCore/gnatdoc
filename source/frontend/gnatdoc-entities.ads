@@ -84,7 +84,7 @@ package GNATdoc.Entities is
       Messages               : GNATdoc.Messages.Message_Container;
 
       Enclosing              : Entity_Signature;
-      --  Structural nclosing entity (package/task/protected object).
+      --  Structural enclosing entity (package/task/protected object).
       Is_Private             : Boolean := False;
       --  Private entities are excluded from the documentartion.
 
@@ -98,6 +98,10 @@ package GNATdoc.Entities is
 
       Packages               : Entity_Information_Sets.Set;
       Subprograms            : aliased Entity_Information_Sets.Set;
+      --  All subprograms declared in the entity (package)
+      Belongs_Subprograms    : aliased Entity_Reference_Sets.Set;
+      --  Subprograms that belongs to the entity (to interface/tagged type,
+      --  otherwise to the package)
       Entries                : aliased Entity_Information_Sets.Set;
       Generic_Instantiations : aliased Entity_Information_Sets.Set;
       --  Generic_Packages
