@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2024, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -159,7 +159,8 @@ package body GNATdoc.Backend.HTML is
          return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
 
       function Digest
-        (Item : VSS.Strings.Virtual_String) return VSS.Strings.Virtual_String;
+        (Item : GNATdoc.Entities.Entity_Signature)
+         return VSS.Strings.Virtual_String;
 
       ---------------
       -- Component --
@@ -407,7 +408,7 @@ package body GNATdoc.Backend.HTML is
                         & ".html#"
                         & Digest (Self.Entity.Signature));
 
-            elsif not Self.Entity.Owner_Class.Signature.Is_Empty then
+            elsif not Self.Entity.Owner_Class.Signature.Image.Is_Empty then
                return
                  VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
                    (Text =>
@@ -459,7 +460,7 @@ package body GNATdoc.Backend.HTML is
                     Nested   => <>,
                     OOP_Mode => Self.OOP_Mode);
 
-            elsif not Self.Entity.Parent_Type.Signature.Is_Empty then
+            elsif not Self.Entity.Parent_Type.Signature.Image.Is_Empty then
                return
                  Entity_Reference_Proxy'(Entity => Self.Entity.Parent_Type);
             end if;
@@ -581,7 +582,7 @@ package body GNATdoc.Backend.HTML is
                  OOP_Mode => Self.OOP_Mode);
 
          elsif not Entity_Reference_Sets.Element
-                     (Self.Position).Signature.Is_Empty
+                     (Self.Position).Signature.Image.Is_Empty
          then
             return
               Entity_Reference_Proxy'
@@ -597,10 +598,10 @@ package body GNATdoc.Backend.HTML is
       ------------
 
       function Digest
-        (Item : VSS.Strings.Virtual_String)
+        (Item : GNATdoc.Entities.Entity_Signature)
          return VSS.Strings.Virtual_String is
       begin
-         return To_Virtual_String (Digest (To_UTF_8_String (Item)));
+         return To_Virtual_String (Digest (To_UTF_8_String (Item.Image)));
       end Digest;
 
       --------------
@@ -841,7 +842,7 @@ package body GNATdoc.Backend.HTML is
       Entity : not null Entity_Information_Access)
    is
       Name : constant String :=
-        Digest (To_UTF_8_String (Entity.Signature)) & ".html";
+        Digest (To_UTF_8_String (Entity.Signature.Image)) & ".html";
 
    begin
       declare
@@ -927,7 +928,7 @@ package body GNATdoc.Backend.HTML is
       Entity : not null Entity_Information_Access)
    is
       Name : constant String :=
-        Digest (To_UTF_8_String (Entity.Signature)) & ".html";
+        Digest (To_UTF_8_String (Entity.Signature.Image)) & ".html";
 
    begin
       declare

@@ -181,7 +181,8 @@ package body GNATdoc.Frontend is
    --  Constructs entities for formal parameters of the generic from the
    --  structured comment of the generic.
 
-   function Signature (Name : Defining_Name'Class) return Virtual_String;
+   function Signature
+     (Name : Defining_Name'Class) return GNATdoc.Entities.Entity_Signature;
    --  Computes unique signature of the given entity.
 
    function Subprogram_Primary_View
@@ -496,7 +497,7 @@ package body GNATdoc.Frontend is
             end if;
          end loop;
 
-         if not Entity.Parent_Type.Signature.Is_Empty
+         if not Entity.Parent_Type.Signature.Image.Is_Empty
            and then GNATdoc.Entities.To_Entity.Contains
                       (Entity.Parent_Type.Signature)
          then
@@ -517,7 +518,7 @@ package body GNATdoc.Frontend is
             end if;
          end loop;
 
-         if not Entity.Parent_Type.Signature.Is_Empty
+         if not Entity.Parent_Type.Signature.Image.Is_Empty
            and then GNATdoc.Entities.To_Entity.Contains
                       (Entity.Parent_Type.Signature)
          then
@@ -597,7 +598,7 @@ package body GNATdoc.Frontend is
                 GNATdoc.Entities.To_Entity (Item.Signature);
 
          begin
-            if not Entity.Parent_Type.Signature.Is_Empty then
+            if not Entity.Parent_Type.Signature.Image.Is_Empty then
                --  Construct references between parent/derived types.
 
                if GNATdoc.Entities.To_Entity.Contains
@@ -1798,7 +1799,7 @@ package body GNATdoc.Frontend is
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      =>
-             To_Virtual_String (Name.P_Unique_Identifying_Name),
+             (Image => To_Virtual_String (Name.P_Unique_Identifying_Name)),
            others         => <>);
 
    begin
@@ -2192,23 +2193,24 @@ package body GNATdoc.Frontend is
    -- Signature --
    ---------------
 
-   function Signature (Name : Defining_Name'Class) return Virtual_String is
+   function Signature
+     (Name : Defining_Name'Class) return GNATdoc.Entities.Entity_Signature is
    begin
       if Name.Unit = Name.P_Standard_Unit then
-         return Empty_Virtual_String;
+         return (others => <>);
       end if;
 
-      return Result : Virtual_String :=
-        To_Virtual_String (Name.P_Unique_Identifying_Name)
+      return Result : GNATdoc.Entities.Entity_Signature :=
+        (Image => To_Virtual_String (Name.P_Unique_Identifying_Name))
       do
          case Name.P_Basic_Decl.Kind is
             when Ada_Package_Body | Ada_Subp_Body | Ada_Expr_Function
                | Ada_Subp_Renaming_Decl | Ada_Protected_Body | Ada_Entry_Body
             =>
-               Result.Append ('$');
+               Result.Image.Append ('$');
 
             when Ada_Generic_Subp_Instantiation =>
-               Result.Append (To_Virtual_String (Name.Full_Sloc_Image));
+               Result.Image.Append (To_Virtual_String (Name.Full_Sloc_Image));
                --  ??? LAL: bug in P_Unique_Identifying_Name for generic
                --  subprogram instantiations
 
@@ -2233,8 +2235,8 @@ package body GNATdoc.Frontend is
                  (Ada.Text_IO.Standard_Error,
                   Image (Name) & ": signature of "
                   & Image (Name.P_Basic_Decl)
-                  & " => " & VSS.Strings.Conversions.To_UTF_8_String (Result));
-
+                  & " => "
+                  & VSS.Strings.Conversions.To_UTF_8_String (Result.Image));
          end case;
       end return;
    end Signature;

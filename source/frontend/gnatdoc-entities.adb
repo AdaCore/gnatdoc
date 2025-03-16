@@ -15,6 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with VSS.Strings.Hash;
+
 package body GNATdoc.Entities is
 
    ---------
@@ -28,7 +30,7 @@ package body GNATdoc.Entities is
       use type VSS.Strings.Virtual_String;
 
    begin
-      return Left.Signature < Right.Signature;
+      return Left.Signature.Image < Right.Signature.Image;
    end "<";
 
    ---------
@@ -42,7 +44,7 @@ package body GNATdoc.Entities is
       use type VSS.Strings.Virtual_String;
 
    begin
-      return Left.Signature < Right.Signature;
+      return Left.Signature.Image < Right.Signature.Image;
    end "<";
 
    ---------
@@ -51,10 +53,7 @@ package body GNATdoc.Entities is
 
    overriding function "="
      (Left  : Entity_Reference;
-      Right : Entity_Reference) return Boolean
-   is
-      use type VSS.Strings.Virtual_String;
-
+      Right : Entity_Reference) return Boolean is
    begin
       return Left.Signature = Right.Signature;
    end "=";
@@ -71,6 +70,24 @@ package body GNATdoc.Entities is
          Result.Union (Self.Subprograms);
       end return;
    end All_Entities;
+
+   ----------
+   -- Hash --
+   ----------
+
+   function Hash (Self : Entity_Signature) return Ada.Containers.Hash_Type is
+   begin
+      return VSS.Strings.Hash (Self.Image);
+   end Hash;
+
+   ------------------
+   -- Is_Undefined --
+   ------------------
+
+   function Is_Undefined (Self : Entity_Reference) return Boolean is
+   begin
+      return Self.Signature.Image.Is_Empty;
+   end Is_Undefined;
 
    ---------------
    -- Reference --

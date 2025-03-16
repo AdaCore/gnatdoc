@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2024, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -68,7 +68,7 @@ package body GNATdoc.Backend is
         (Entity.Is_Private
            and not GNATdoc.Options.Frontend_Options.Generate_Private)
         or Entity.Documentation.Is_Private
-        or (not Entity.Enclosing.Is_Empty
+        or (not Entity.Enclosing.Image.Is_Empty
               and then GNATdoc.Entities.To_Entity.Contains (Entity.Enclosing)
               and then Is_Private_Entity
                          (GNATdoc.Entities.To_Entity (Entity.Enclosing)));

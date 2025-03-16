@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2024, AdaCore                        --
+--                     Copyright (C) 2024-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -97,7 +97,7 @@ package body GNATdoc.Backend.Test is
                       (if Entity.Documentation.Is_Private then "-" else "+")),
                VSS.Strings.Formatters.Strings.Image (Entity.Name),
                Entity_Kind_Formatters.Image (Entity.Kind),
-               VSS.Strings.Formatters.Strings.Image (Entity.Signature)),
+               VSS.Strings.Formatters.Strings.Image (Entity.Signature.Image)),
             Success);
 
          if not Entity.Packages.Is_Empty then
@@ -141,7 +141,8 @@ package body GNATdoc.Backend.Test is
                             (Offset * ' ' & "# "),
                         VSS.Strings.Formatters.Strings.Image (E.Name),
                         Entity_Kind_Formatters.Image (E.Kind),
-                        VSS.Strings.Formatters.Strings.Image (E.Signature)),
+                        VSS.Strings.Formatters.Strings.Image
+                          (E.Signature.Image)),
                      Success);
                end if;
             end loop;
@@ -188,14 +189,14 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
          end if;
 
-         if not Entity.Parent_Type.Signature.Is_Empty then
+         if not Entity.Parent_Type.Signature.Image.Is_Empty then
             Offset := @ + 2;
 
             Output.Put_Line
               (Parent_Template.Format
                  (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
                   VSS.Strings.Formatters.Strings.Image
-                    (Entity.Parent_Type.Signature)),
+                    (Entity.Parent_Type.Signature.Image)),
                Success);
 
             Offset := @ - 2;
@@ -223,7 +224,8 @@ package body GNATdoc.Backend.Test is
                             (Offset * ' ' & "# "),
                         VSS.Strings.Formatters.Strings.Image
                           (E.Qualified_Name),
-                        VSS.Strings.Formatters.Strings.Image (E.Signature)),
+                        VSS.Strings.Formatters.Strings.Image
+                          (E.Signature.Image)),
                      Success);
                end if;
             end loop;
@@ -254,7 +256,8 @@ package body GNATdoc.Backend.Test is
                             (Offset * ' ' & "# "),
                         VSS.Strings.Formatters.Strings.Image
                           (E.Qualified_Name),
-                        VSS.Strings.Formatters.Strings.Image (E.Signature)),
+                        VSS.Strings.Formatters.Strings.Image
+                          (E.Signature.Image)),
                      Success);
                end if;
             end loop;
