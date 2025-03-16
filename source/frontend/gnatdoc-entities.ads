@@ -66,7 +66,7 @@ package GNATdoc.Entities is
    package Entity_Reference_Sets is
      new Ada.Containers.Ordered_Sets (Entity_Reference);
 
-   type Entity_Information is record
+   type Entity_Information is tagged limited record
       Location               : Source_Location;
       Kind                   : Entity_Kind := Undefined;
       Name                   : VSS.Strings.Virtual_String;
@@ -176,6 +176,10 @@ package GNATdoc.Entities is
    --  Map to lookup entity's information by entity's signature.
 
    function All_Entities
-     (Self : Entity_Information) return Entity_Information_Sets.Set;
+     (Self : Entity_Information'Class) return Entity_Information_Sets.Set;
+
+   function Reference
+     (Self : Entity_Information'Class) return Entity_Reference;
+   --  Reference of entity
 
 end GNATdoc.Entities;

@@ -463,10 +463,6 @@ package body GNATdoc.Frontend is
 
    procedure Postprocess is
 
-      function To_Entity_Reference
-        (Entity : not null GNATdoc.Entities.Entity_Information_Access)
-         return GNATdoc.Entities.Entity_Reference;
-
       procedure Establish_Parent_Derived_Relation
         (Parent  : GNATdoc.Entities.Entity_Reference;
          Derived : not null GNATdoc.Entities.Entity_Information_Access);
@@ -552,8 +548,7 @@ package body GNATdoc.Frontend is
          Derived.All_Parent_Types.Include (Parent);
 
          if Parent_Entity /= null then
-            Parent_Entity.All_Derived_Types.Include
-              (To_Entity_Reference (Derived));
+            Parent_Entity.All_Derived_Types.Include (Derived.Reference);
 
             if GNATdoc.Entities.To_Entity.Contains
                  (Parent_Entity.Parent_Type.Signature)
@@ -592,19 +587,6 @@ package body GNATdoc.Frontend is
          end if;
       end Establish_Progenitor_Relation;
 
-      -------------------------
-      -- To_Entity_Reference --
-      -------------------------
-
-      function To_Entity_Reference
-        (Entity : not null GNATdoc.Entities.Entity_Information_Access)
-         return GNATdoc.Entities.Entity_Reference is
-      begin
-         return
-           (Qualified_Name => Entity.Qualified_Name,
-            Signature      => Entity.Signature);
-      end To_Entity_Reference;
-
    begin
       --  Build inheritance information
 
@@ -623,7 +605,7 @@ package body GNATdoc.Frontend is
                then
                   GNATdoc.Entities.To_Entity
                     (Entity.Parent_Type.Signature).Derived_Types.Insert
-                      (To_Entity_Reference (Item));
+                      (Item.Reference);
                end if;
 
                Establish_Parent_Derived_Relation
