@@ -37,7 +37,6 @@ package body GNATdoc.Frontend is
    use VSS.Strings;
 
    use type GNATdoc.Entities.Entity_Information_Access;
-   use type GNATdoc.Entities.Entity_Signature;
 
    procedure Process_Package_Decl
      (Node      : Package_Decl'Class;
