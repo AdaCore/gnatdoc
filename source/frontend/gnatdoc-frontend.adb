@@ -2082,7 +2082,11 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
+      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+
       Enclosing.Subtypes.Insert (Entity);
+      GNATdoc.Entities.Globals.Subtypes.Insert (Entity);
+
       Check_Undocumented (Entity);
    end Process_Subtype_Decl;
 
