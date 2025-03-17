@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2023-2024, AdaCore                     --
+--                     Copyright (C) 2023-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -288,11 +288,16 @@ package body GNATdoc.Backend.RST is
             Subprograms : GNATdoc.Entities.Entity_Information_Sets.Set;
 
          begin
-            for Subprogram of Entity.Subprograms loop
-               if not Self.OOP_Mode and then not Subprogram.Is_Method then
+            if Self.OOP_Mode then
+               for Subprogram of Entity.Belongs_Subprograms loop
+                  Subprograms.Insert (To_Entity (Subprogram.Signature));
+               end loop;
+
+            else
+               for Subprogram of Entity.Subprograms loop
                   Subprograms.Insert (Subprogram);
-               end if;
-            end loop;
+               end loop;
+            end if;
 
             if not Subprograms.Is_Empty then
                File.Put ("-----------", Success);
