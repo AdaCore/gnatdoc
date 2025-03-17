@@ -2019,7 +2019,16 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      Enclosing.Record_Types.Insert (Entity);
+      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
+
+      if Node.F_Type_Def.As_Record_Type_Def.F_Has_Tagged then
+         Enclosing.Tagged_Types.Insert (Entity);
+         GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
+
+      else
+         Enclosing.Record_Types.Insert (Entity);
+      end if;
+
       Check_Undocumented (Entity);
    end Process_Record_Type_Def;
 
