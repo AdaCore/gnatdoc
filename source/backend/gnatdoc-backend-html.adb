@@ -578,7 +578,13 @@ package body GNATdoc.Backend.HTML is
       overriding function Is_Empty
         (Self : Entity_Information_Set_Proxy) return Boolean is
       begin
-         return Self.Entities.Is_Empty;
+         for Entity of Self.Entities.all loop
+            if not Is_Private_Entity (Entity) then
+               return False;
+            end if;
+         end loop;
+
+         return True;
       end Is_Empty;
 
       --------------
@@ -588,7 +594,15 @@ package body GNATdoc.Backend.HTML is
       overriding function Is_Empty
         (Self : Entity_Reference_Set_Proxy) return Boolean is
       begin
-         return Self.Entities.Is_Empty;
+         for Entity of Self.Entities.all loop
+            if To_Entity.Contains (Entity.Signature)
+              and then not Is_Private_Entity (To_Entity (Entity.Signature))
+            then
+               return False;
+            end if;
+         end loop;
+
+         return True;
       end Is_Empty;
 
       --------------
@@ -635,6 +649,16 @@ package body GNATdoc.Backend.HTML is
               Entity_Information_Sets.First (Self.Entities.all);
          end if;
 
+         loop
+            exit when not Entity_Information_Sets.Has_Element (Self.Position);
+
+            exit when
+              not Is_Private_Entity
+                   (Entity_Information_Sets.Element (Self.Position));
+
+            Entity_Information_Sets.Next (Self.Position);
+         end loop;
+
          return Entity_Information_Sets.Has_Element (Self.Position);
       end Next;
 
@@ -652,6 +676,20 @@ package body GNATdoc.Backend.HTML is
             Self.Position :=
               Entity_Reference_Sets.First (Self.Entities.all);
          end if;
+
+         loop
+            exit when not Entity_Reference_Sets.Has_Element (Self.Position);
+
+            exit when
+              To_Entity.Contains
+                (Entity_Reference_Sets.Element (Self.Position).Signature)
+                and then not Is_Private_Entity
+                  (To_Entity
+                     (Entity_Reference_Sets.Element
+                        (Self.Position).Signature));
+
+            Entity_Reference_Sets.Next (Self.Position);
+         end loop;
 
          return Entity_Reference_Sets.Has_Element (Self.Position);
       end Next;
