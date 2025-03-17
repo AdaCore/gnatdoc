@@ -1,19 +1,25 @@
-++ (UNDEFINED) ''
++ ? (UNDEFINED) ''
   Packages:
-    ++Issue_93_Subtype_As_Parent (UNDEFINED) 'issue_93_subtype_as_parent'
-      Record Types:
-        # Unconstrained_ParentUNDEFINEDissue_93_subtype_as_parent.unconstrained_parent () ''
+    +  Issue_93_Subtype_As_Parent (UNDEFINED) 'issue_93_subtype_as_parent'
       Interface Types:
-        ++Progenitor (ADA_INTERFACE_TYPE) 'issue_93_subtype_as_parent.progenitor'
+        +  Progenitor (ADA_INTERFACE_TYPE) 'issue_93_subtype_as_parent.progenitor'
       Tagged Types:
-        ++Child (ADA_TAGGED_TYPE) 'issue_93_subtype_as_parent.child'
+        +  Child (ADA_TAGGED_TYPE) 'issue_93_subtype_as_parent.child'
           Parent type: 'issue_93_subtype_as_parent.constrained_parent'
           Progenitor Types:
-            # Issue_93_Subtype_As_Parent.Progenitor_Subtypeissue_93_subtype_as_parent.progenitor_subtype () ''
+            +  Progenitor_Subtype (UNDEFINED) 'issue_93_subtype_as_parent.progenitor_subtype'
+        +  Unconstrained_Parent (UNDEFINED) 'issue_93_subtype_as_parent.unconstrained_parent'
+      Subtypes:
+        +  Constrained_Parent (UNDEFINED) 'issue_93_subtype_as_parent.constrained_parent'
+        +  Progenitor_Subtype (UNDEFINED) 'issue_93_subtype_as_parent.progenitor_subtype'
   Interface Types:
-    ++Progenitor (ADA_INTERFACE_TYPE) 'issue_93_subtype_as_parent.progenitor'
+    +  Progenitor (ADA_INTERFACE_TYPE) 'issue_93_subtype_as_parent.progenitor'
   Tagged Types:
-    ++Child (ADA_TAGGED_TYPE) 'issue_93_subtype_as_parent.child'
+    +  Child (ADA_TAGGED_TYPE) 'issue_93_subtype_as_parent.child'
       Parent type: 'issue_93_subtype_as_parent.constrained_parent'
       Progenitor Types:
-        # Issue_93_Subtype_As_Parent.Progenitor_Subtypeissue_93_subtype_as_parent.progenitor_subtype () ''
+        +  Progenitor_Subtype (UNDEFINED) 'issue_93_subtype_as_parent.progenitor_subtype'
+    +  Unconstrained_Parent (UNDEFINED) 'issue_93_subtype_as_parent.unconstrained_parent'
+  Subtypes:
+    +  Constrained_Parent (UNDEFINED) 'issue_93_subtype_as_parent.constrained_parent'
+    +  Progenitor_Subtype (UNDEFINED) 'issue_93_subtype_as_parent.progenitor_subtype'
