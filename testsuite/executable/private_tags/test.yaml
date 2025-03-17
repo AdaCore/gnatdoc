@@ -1,0 +1,2 @@
+description: Detection of `@private` tag for entities
+driver: executable
