@@ -578,6 +578,9 @@ package body GNATdoc.Backend.HTML is
       overriding function Is_Empty
         (Self : Entity_Information_Set_Proxy) return Boolean is
       begin
+         --  Given set might contains entities excluded from documentation
+         --  (marked by `@private` tag), so ignore them.
+
          for Entity of Self.Entities.all loop
             if not Is_Private_Entity (Entity) then
                return False;
@@ -594,6 +597,12 @@ package body GNATdoc.Backend.HTML is
       overriding function Is_Empty
         (Self : Entity_Reference_Set_Proxy) return Boolean is
       begin
+         --  Given set might contains entities excluded from documentation
+         --  (marked by `@private` tag), and entities comes from outside of
+         --  the set of packages to be documented (for examples, entities that
+         --  comes from generic instantiations, and that comes from RTL), so
+         --  ignore them.
+
          for Entity of Self.Entities.all loop
             if To_Entity.Contains (Entity.Signature)
               and then not Is_Private_Entity (To_Entity (Entity.Signature))
