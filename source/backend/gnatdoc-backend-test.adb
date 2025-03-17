@@ -208,6 +208,25 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
          end if;
 
+         if not Entity.Subtypes.Is_Empty then
+            Offset := @ + 2;
+
+            Output.Put_Line
+              (Section_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+                  VSS.Strings.Formatters.Strings.Image ("Subtypes")),
+               Success);
+
+            Offset := @ + 2;
+
+            for E of Entity.Subtypes loop
+               Dump (E.all);
+            end loop;
+
+            Offset := @ - 2;
+            Offset := @ - 2;
+         end if;
+
          if not Entity.Subprograms.Is_Empty then
             Offset := @ + 2;
 
