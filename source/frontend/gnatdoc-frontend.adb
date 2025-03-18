@@ -21,6 +21,8 @@ with GNATdoc.Utilities;
 with Libadalang.Common;
 
 with VSS.Strings.Conversions;
+with VSS.Strings.Formatters.Strings;
+with VSS.Strings.Templates;
 
 with GNATdoc.Comments.Extractor;
 with GNATdoc.Comments.Undocumented_Checker;
@@ -169,6 +171,7 @@ package body GNATdoc.Frontend is
 
    procedure Analyze_Non_Dispatching_Method
      (Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Belongs   : GNATdoc.Entities.Entity_Information_Access;
       Entity    : not null GNATdoc.Entities.Entity_Information_Access;
       Node      : Basic_Decl'Class;
       Spec      : Subp_Spec);
@@ -200,6 +203,12 @@ package body GNATdoc.Frontend is
      (Node : Libadalang.Analysis.Subp_Spec'Class)
       return VSS.Strings.Virtual_String;
 
+   procedure Resolve_Belongs_To
+     (Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Belongs   : out GNATdoc.Entities.Entity_Information_Access;
+      Entity    : not null GNATdoc.Entities.Entity_Information_Access);
+   --  Process `@belongs-to` tag.
+
    Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
    --  All methods was found during processing of compilation units.
 
@@ -209,6 +218,7 @@ package body GNATdoc.Frontend is
 
    procedure Analyze_Non_Dispatching_Method
      (Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Belongs   : GNATdoc.Entities.Entity_Information_Access;
       Entity    : not null GNATdoc.Entities.Entity_Information_Access;
       Node      : Basic_Decl'Class;
       Spec      : Subp_Spec) is
@@ -285,19 +295,26 @@ package body GNATdoc.Frontend is
                     (Parameter_Type_Name.P_Referenced_Defining_Name)));
                Belongs_Entity    : constant not null
                  GNATdoc.Entities.Entity_Information_Access :=
-                   GNATdoc.Entities.To_Entity (Belongs_Reference.Signature);
+                   (if Belongs = null
+                      then GNATdoc.Entities.To_Entity
+                             (Belongs_Reference.Signature)
+                      else Belongs);
 
             begin
                Entity.Is_Method := True;
-               Entity.Owner_Class := Belongs_Reference;
 
-               if Enclosing.Belongs_Subprograms.Contains (Entity.Reference)
-               then
-                  Belongs_Entity.Prefix_Callable_Declared.Insert
-                    (Entity.Reference);
+               if Belongs = null then
+                  Entity.Owner_Class := Belongs_Reference;
                   Belongs_Entity.Belongs_Subprograms.Insert (Entity.Reference);
-                  Enclosing.Belongs_Subprograms.Delete (Entity.Reference);
+
+                  Enclosing.Belongs_Subprograms.Exclude (Entity.Reference);
+                  --  Subprograms declared in private part can be excluded
+                  --  from the set of subprograms, so use `Exclude` to prevent
+                  --  raise of exception.
                end if;
+
+               Belongs_Entity.Prefix_Callable_Declared.Insert
+                 (Entity.Reference);
             end;
          end if;
       end;
@@ -757,8 +774,8 @@ package body GNATdoc.Frontend is
       Global     : GNATdoc.Entities.Entity_Information_Access;
       In_Private : Boolean)
    is
-      Name   : constant Defining_Name := Node.F_Subp_Spec.F_Subp_Name;
-      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+      Name    : constant Defining_Name := Node.F_Subp_Spec.F_Subp_Name;
+      Entity  : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
           (Location       => GNATdoc.Utilities.Location (Name),
            Kind           =>
@@ -774,6 +791,7 @@ package body GNATdoc.Frontend is
              Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
            RST_Profile    => RST_Profile (Node.F_Subp_Spec),
            others         => <>);
+      Belongs : GNATdoc.Entities.Entity_Information_Access;
 
    begin
       Extract
@@ -783,11 +801,23 @@ package body GNATdoc.Frontend is
          Messages      => Entity.Messages);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
+      Resolve_Belongs_To
+        (Enclosing => Enclosing,
+         Belongs   => Belongs,
+         Entity    => Entity);
+
       if not In_Private
         or GNATdoc.Options.Frontend_Options.Generate_Private
       then
          Enclosing.Subprograms.Insert (Entity);
-         Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
+
+         if Belongs = null then
+            Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
+
+         else
+            Belongs.Belongs_Subprograms.Insert (Entity.Reference);
+            Entity.Owner_Class := Belongs.Reference;
+         end if;
 
          if Global /= null
            and GNATdoc.Entities.Globals'Access /= Enclosing
@@ -804,6 +834,7 @@ package body GNATdoc.Frontend is
 
          Analyze_Non_Dispatching_Method
            (Enclosing => Enclosing,
+            Belongs   => Belongs,
             Entity    => Entity,
             Node      => Node,
             Spec      => Node.F_Subp_Spec);
@@ -1158,9 +1189,9 @@ package body GNATdoc.Frontend is
       Global     : GNATdoc.Entities.Entity_Information_Access;
       In_Private : Boolean)
    is
-      Spec   : constant Subp_Spec     := Node.F_Subp_Spec;
-      Name   : constant Defining_Name := Spec.F_Subp_Name;
-      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+      Spec    : constant Subp_Spec     := Node.F_Subp_Spec;
+      Name    : constant Defining_Name := Spec.F_Subp_Name;
+      Entity  : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
           (Location       => GNATdoc.Utilities.Location (Name),
            Kind           =>
@@ -1176,6 +1207,7 @@ package body GNATdoc.Frontend is
              Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
            RST_Profile    => RST_Profile (Spec),
            others         => <>);
+      Belongs : GNATdoc.Entities.Entity_Information_Access;
 
    begin
       Extract
@@ -1185,11 +1217,20 @@ package body GNATdoc.Frontend is
          Messages      => Entity.Messages);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
+      Resolve_Belongs_To (Enclosing, Belongs, Entity);
+
       if not In_Private
         or else GNATdoc.Options.Frontend_Options.Generate_Private
       then
          Enclosing.Subprograms.Insert (Entity);
-         Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
+
+         if Belongs = null then
+            Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
+
+         else
+            Belongs.Belongs_Subprograms.Insert (Entity.Reference);
+            Entity.Owner_Class := Belongs.Reference;
+         end if;
 
          if Global /= null
            and GNATdoc.Entities.Globals'Access /= Enclosing
@@ -1202,6 +1243,7 @@ package body GNATdoc.Frontend is
 
       Analyze_Non_Dispatching_Method
         (Enclosing => Enclosing,
+         Belongs   => Belongs,
          Entity    => Entity,
          Node      => Node,
          Spec      => Spec);
@@ -2136,6 +2178,49 @@ package body GNATdoc.Frontend is
          end if;
       end if;
    end Process_Task_Decl;
+
+   ------------------------
+   -- Resolve_Belongs_To --
+   ------------------------
+
+   procedure Resolve_Belongs_To
+     (Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+      Belongs   : out GNATdoc.Entities.Entity_Information_Access;
+      Entity    : not null GNATdoc.Entities.Entity_Information_Access)
+   is
+      Template   : constant VSS.Strings.Templates.Virtual_String_Template :=
+        "unknown type `{}` is specified by `@belongs-to` tag";
+      Belongs_To : constant VSS.Strings.Virtual_String :=
+        Entity.Documentation.Belongs_To;
+
+   begin
+      Belongs := null;
+
+      if not Entity.Documentation.Has_Belongs_To then
+         return;
+      end if;
+
+      for E of Enclosing.Tagged_Types loop
+         if E.Name = Belongs_To then
+            Belongs := E;
+
+            return;
+         end if;
+      end loop;
+
+      for E of Enclosing.Interface_Types loop
+         if E.Name = Belongs_To then
+            Belongs := E;
+
+            return;
+         end if;
+      end loop;
+
+      Entity.Messages.Append_Message
+        (Entity.Location,
+         Template.Format
+           (VSS.Strings.Formatters.Strings.Image (Belongs_To)));
+   end Resolve_Belongs_To;
 
    -----------------
    -- RST_Profile --
