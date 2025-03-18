@@ -1,7 +1,7 @@
 
 package Package_Excluded_From_Documentation is
 
-   --  This package doesn't included into generated documentation.
+   --  This package should not be included in generated doc.
    --  @private
 
    procedure Procedure_Included_Into_Documentation;
