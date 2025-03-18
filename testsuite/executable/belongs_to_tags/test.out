@@ -1,0 +1,48 @@
++ ? (UNDEFINED) ''
+  Packages:
+    +  Belongs_To (UNDEFINED) 'belongs_to'
+      Interface Types:
+        +  I1 (ADA_INTERFACE_TYPE) 'belongs_to.i1'
+          Belongs Subprograms:
+            +  PI1 (ADA_FUNCTION) 'belongs_to.pi1((belongs_to.i1'class) -> belongs_to.i2)'
+            +  PI1 (ADA_FUNCTION) 'belongs_to.pi1((belongs_to.i1) -> belongs_to.i2'class)'
+        +  I2 (ADA_INTERFACE_TYPE) 'belongs_to.i2'
+          Belongs Subprograms:
+            +  PI2 (ADA_FUNCTION) 'belongs_to.pi2((belongs_to.i1'class) -> belongs_to.i2)'
+            +  PI2 (ADA_FUNCTION) 'belongs_to.pi2((belongs_to.i1) -> belongs_to.i2'class)'
+      Tagged Types:
+        +  T1 (UNDEFINED) 'belongs_to.t1'
+          Belongs Subprograms:
+            +  DT1 (ADA_FUNCTION) 'belongs_to.dt1((belongs_to.t1) -> belongs_to.t2'class)'
+            +  PT1 (ADA_FUNCTION) 'belongs_to.pt1((belongs_to.t1'class) -> belongs_to.t2)'
+        +  T2 (UNDEFINED) 'belongs_to.t2'
+          Belongs Subprograms:
+            +  DT2 (ADA_FUNCTION) 'belongs_to.dt2((belongs_to.t1) -> belongs_to.t2'class)'
+            +  PT2 (ADA_FUNCTION) 'belongs_to.pt2((belongs_to.t1'class) -> belongs_to.t2)'
+      Subprograms:
+        +  DT1 (ADA_FUNCTION) 'belongs_to.dt1((belongs_to.t1) -> belongs_to.t2'class)'
+        +  DT2 (ADA_FUNCTION) 'belongs_to.dt2((belongs_to.t1) -> belongs_to.t2'class)'
+        +  PI1 (ADA_FUNCTION) 'belongs_to.pi1((belongs_to.i1'class) -> belongs_to.i2)'
+        +  PI1 (ADA_FUNCTION) 'belongs_to.pi1((belongs_to.i1) -> belongs_to.i2'class)'
+        +  PI2 (ADA_FUNCTION) 'belongs_to.pi2((belongs_to.i1'class) -> belongs_to.i2)'
+        +  PI2 (ADA_FUNCTION) 'belongs_to.pi2((belongs_to.i1) -> belongs_to.i2'class)'
+        +  PT1 (ADA_FUNCTION) 'belongs_to.pt1((belongs_to.t1'class) -> belongs_to.t2)'
+        +  PT2 (ADA_FUNCTION) 'belongs_to.pt2((belongs_to.t1'class) -> belongs_to.t2)'
+  Interface Types:
+    +  I1 (ADA_INTERFACE_TYPE) 'belongs_to.i1'
+      Belongs Subprograms:
+        +  PI1 (ADA_FUNCTION) 'belongs_to.pi1((belongs_to.i1'class) -> belongs_to.i2)'
+        +  PI1 (ADA_FUNCTION) 'belongs_to.pi1((belongs_to.i1) -> belongs_to.i2'class)'
+    +  I2 (ADA_INTERFACE_TYPE) 'belongs_to.i2'
+      Belongs Subprograms:
+        +  PI2 (ADA_FUNCTION) 'belongs_to.pi2((belongs_to.i1'class) -> belongs_to.i2)'
+        +  PI2 (ADA_FUNCTION) 'belongs_to.pi2((belongs_to.i1) -> belongs_to.i2'class)'
+  Tagged Types:
+    +  T1 (UNDEFINED) 'belongs_to.t1'
+      Belongs Subprograms:
+        +  DT1 (ADA_FUNCTION) 'belongs_to.dt1((belongs_to.t1) -> belongs_to.t2'class)'
+        +  PT1 (ADA_FUNCTION) 'belongs_to.pt1((belongs_to.t1'class) -> belongs_to.t2)'
+    +  T2 (UNDEFINED) 'belongs_to.t2'
+      Belongs Subprograms:
+        +  DT2 (ADA_FUNCTION) 'belongs_to.dt2((belongs_to.t1) -> belongs_to.t2'class)'
+        +  PT2 (ADA_FUNCTION) 'belongs_to.pt2((belongs_to.t1'class) -> belongs_to.t2)'
