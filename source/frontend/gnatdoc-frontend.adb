@@ -304,7 +304,7 @@ package body GNATdoc.Frontend is
                Entity.Is_Method := True;
 
                if Belongs = null then
-                  Entity.Owner_Class := Belongs_Reference;
+                  Entity.Belongs := Belongs_Reference;
                   Belongs_Entity.Belongs_Subprograms.Insert (Entity.Reference);
 
                   Enclosing.Belongs_Subprograms.Exclude (Entity.Reference);
@@ -689,10 +689,10 @@ package body GNATdoc.Frontend is
                    GNATdoc.Entities.To_Entity (Entity.Enclosing);
                Belongs   : constant
                  GNATdoc.Entities.Entity_Information_Access :=
-                   (if Entity.Owner_Class.Signature.Image.Is_Empty
+                   (if Entity.Belongs.Signature.Image.Is_Empty
                       then null
                       else GNATdoc.Entities.To_Entity
-                             (Entity.Owner_Class.Signature));
+                             (Entity.Belongs.Signature));
                --  `Owner_Class` might not be filled for subprograms excluded
                --  from generation for some reason
 
@@ -816,7 +816,7 @@ package body GNATdoc.Frontend is
 
          else
             Belongs.Belongs_Subprograms.Insert (Entity.Reference);
-            Entity.Owner_Class := Belongs.Reference;
+            Entity.Belongs := Belongs.Reference;
          end if;
 
          if Global /= null
@@ -1229,7 +1229,7 @@ package body GNATdoc.Frontend is
 
          else
             Belongs.Belongs_Subprograms.Insert (Entity.Reference);
-            Entity.Owner_Class := Belongs.Reference;
+            Entity.Belongs := Belongs.Reference;
          end if;
 
          if Global /= null

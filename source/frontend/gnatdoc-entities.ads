@@ -85,6 +85,9 @@ package GNATdoc.Entities is
 
       Enclosing              : Entity_Signature;
       --  Structural enclosing entity (package/task/protected object).
+      Belongs                : Entity_Reference;
+      --  Reference to the entity it belongs. It is case of subprograms
+      --  that is grouped as operatons on tagged type.
       Is_Private             : Boolean := False;
       --  Private entities are excluded from the documentartion.
 
@@ -168,9 +171,6 @@ package GNATdoc.Entities is
 
       Dispatching_Inherited  : aliased Entity_Reference_Sets.Set;
       --  Dispatching operations inherited by the type.
-
-      Owner_Class               : Entity_Reference;
-      --  Reference to the type that "declare" non dispatching subprogram.
 
       Prefix_Callable_Declared  : aliased Entity_Reference_Sets.Set;
       --  Prefix callable subprograms declared by the type.
