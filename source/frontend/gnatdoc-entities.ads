@@ -132,26 +132,6 @@ package GNATdoc.Entities is
       Variables              : aliased Entity_Information_Sets.Set;
       Exceptions             : aliased Entity_Information_Sets.Set;
 
-      --  Access_Types      : EInfo_List.Vector;  +++
-      --  Generic_Formals   : EInfo_List.Vector;  +++
-      --  Interface_Types   : EInfo_List.Vector;  +++
-      --  Methods           : EInfo_List.Vector;  ???
-      --  Pkgs              : EInfo_List.Vector;  +++
-      --  --  Ordinary and generic packages.
-      --  Pkgs_Instances    : EInfo_List.Vector;  +++
-      --  --  Generic packages instantiations.
-      --  Record_Types      : EInfo_List.Vector;  +++
-      --  Simple_Types      : EInfo_List.Vector;  +++
-      --  Subprgs           : EInfo_List.Vector;  +++
-      --  --  Ordinary subprograms.
-      --  Subprgs_Instances : EInfo_List.Vector;  +++
-      --  --  Generic subprograms instantiations.
-      --  Tagged_Types      : EInfo_List.Vector;  +++
-      --  Variables         : EInfo_List.Vector;  +++
-      --  Tasks             : EInfo_List.Vector;  +++
-      --  Protected_Objects : EInfo_List.Vector;  +++
-      --  Entries           : EInfo_List.Vector;  +++
-
       Parent_Type            : Entity_Reference;
       --  Reference to parent tagged type.
 
