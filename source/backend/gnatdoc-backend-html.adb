@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2024, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,10 +15,7 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-pragma Warnings (Off);
-pragma Ada_2020;
 pragma Ada_2022;
-pragma Warnings (On);
 
 with GNAT.SHA256;
 with GNATCOLL.VFS;
@@ -59,9 +56,8 @@ package body GNATdoc.Backend.HTML is
 
       type Entity_Information_Set_Proxy is limited
         new VSS.XML.Templates.Proxies.Abstract_Iterable_Proxy with record
-         Entities  : not null access Entity_Information_Sets.Set;
-         Container : aliased Entity_Information_Sets.Set;
-         OOP_Mode  : Boolean;
+         Entities : not null access Entity_Information_Sets.Set;
+         OOP_Mode : Boolean;
       end record;
 
       overriding function Iterator
@@ -85,6 +81,10 @@ package body GNATdoc.Backend.HTML is
          return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
 
    end Proxies;
+
+   procedure Union
+     (Container : in out Entity_Information_Sets.Set;
+      Items     : Entity_Reference_Sets.Set);
 
    OOP_Style_Option : constant VSS.Command_Line.Binary_Option :=
      (Short_Name  => <>,
@@ -159,7 +159,8 @@ package body GNATdoc.Backend.HTML is
          return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
 
       function Digest
-        (Item : VSS.Strings.Virtual_String) return VSS.Strings.Virtual_String;
+        (Item : GNATdoc.Entities.Entity_Signature)
+         return VSS.Strings.Virtual_String;
 
       ---------------
       -- Component --
@@ -171,150 +172,117 @@ package body GNATdoc.Backend.HTML is
          return VSS.XML.Templates.Proxies.Abstract_Proxy'Class is
       begin
          if Name = "all" then
-            return Result : Entity_Information_Set_Proxy :=
-              (Entities  => Self.Nested'Unchecked_Access,
-               Container => <>,
-               OOP_Mode  => Self.OOP_Mode)
-            do
-               if Self.OOP_Mode then
-                  Result.Entities := Result.Container'Unchecked_Access;
-
-                  for Item of Self.Nested loop
-                     if (Item.Kind not in Ada_Function | Ada_Procedure
-                           or not Item.Is_Method)
-                       and Item.Kind
-                             not in Ada_Tagged_Type | Ada_Interface_Type
-                     then
-                        Result.Container.Insert (Item);
-                     end if;
-                  end loop;
-               end if;
-            end return;
+            return
+              Entity_Information_Set_Proxy'
+                (Entities => Self.Nested'Unchecked_Access,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "simple_types" then
             return
               Entity_Information_Set_Proxy'
-                (Entities  => Self.Entity.Simple_Types'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                (Entities => Self.Entity.Simple_Types'Unchecked_Access,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "array_types" then
             return
               Entity_Information_Set_Proxy'
-                (Entities  => Self.Entity.Array_Types'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                (Entities => Self.Entity.Array_Types'Unchecked_Access,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "record_types" then
             return
               Entity_Information_Set_Proxy'
-                (Entities  => Self.Entity.Record_Types'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                (Entities => Self.Entity.Record_Types'Unchecked_Access,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "interface_types" then
             return
               Entity_Information_Set_Proxy'
-                (Entities  => Self.Entity.Interface_Types'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                (Entities => Self.Entity.Interface_Types'Unchecked_Access,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "tagged_types" then
             return
               Entity_Information_Set_Proxy'
-                (Entities  => Self.Entity.Tagged_Types'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                (Entities => Self.Entity.Tagged_Types'Unchecked_Access,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "access_types" then
             return
               Entity_Information_Set_Proxy'
-                (Entities  => Self.Entity.Access_Types'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                (Entities => Self.Entity.Access_Types'Unchecked_Access,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "subtypes" then
             return
               Entity_Information_Set_Proxy'
-                (Entities  => Self.Entity.Subtypes'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                (Entities => Self.Entity.Subtypes'Unchecked_Access,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "task_types" then
             return
               Entity_Information_Set_Proxy'
-                (Entities  => Self.Entity.Task_Types'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                (Entities => Self.Entity.Task_Types'Unchecked_Access,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "protected_types" then
             return
               Entity_Information_Set_Proxy'
-                (Entities  => Self.Entity.Protected_Types'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                (Entities => Self.Entity.Protected_Types'Unchecked_Access,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "constants" then
             return
               Entity_Information_Set_Proxy'
-                (Entities  => Self.Entity.Constants'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                (Entities => Self.Entity.Constants'Unchecked_Access,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "variables" then
             return
               Entity_Information_Set_Proxy'
-                (Entities  => Self.Entity.Variables'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                (Entities => Self.Entity.Variables'Unchecked_Access,
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "subprograms" then
-            return Result : Entity_Information_Set_Proxy :=
-              (Entities  => Self.Entity.Subprograms'Unchecked_Access,
-               Container => <>,
-               OOP_Mode  => Self.OOP_Mode)
-            do
-               if Self.OOP_Mode then
-                  --  Rebuild list of subprograms by remove of methods.
+            if Self.OOP_Mode then
+               return
+                 Entity_Reference_Set_Proxy'
+                   (Entities =>
+                      Self.Entity.Belongs_Subprograms'Unchecked_Access,
+                    Nested   => <>,
+                    OOP_Mode => Self.OOP_Mode);
 
-                  Result.Entities := Result.Container'Unchecked_Access;
-
-                  for Item of Self.Entity.Subprograms loop
-                     if not Item.Is_Method then
-                        Result.Container.Insert (Item);
-                     end if;
-                  end loop;
-               end if;
-            end return;
+            else
+               return
+                 Entity_Information_Set_Proxy'
+                   (Entities => Self.Entity.Subprograms'Unchecked_Access,
+                    OOP_Mode => Self.OOP_Mode);
+            end if;
 
          elsif Name = "entries" then
             return
               Entity_Information_Set_Proxy'
                 (Entities => Self.Entity.Entries'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "exceptions" then
             return
               Entity_Information_Set_Proxy'
                 (Entities => Self.Entity.Exceptions'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "generic_instantiations" then
             return
               Entity_Information_Set_Proxy'
                 (Entities =>
                    Self.Entity.Generic_Instantiations'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "formals" then
             return
               Entity_Information_Set_Proxy'
                 (Entities => Self.Entity.Formals'Unchecked_Access,
-                 Container => <>,
-                 OOP_Mode  => Self.OOP_Mode);
+                 OOP_Mode => Self.OOP_Mode);
 
          elsif Name = "declared_dispatching_subprograms" then
             return
@@ -407,7 +375,7 @@ package body GNATdoc.Backend.HTML is
                         & ".html#"
                         & Digest (Self.Entity.Signature));
 
-            elsif not Self.Entity.Owner_Class.Signature.Is_Empty then
+            elsif not Self.Entity.Owner_Class.Signature.Image.Is_Empty then
                return
                  VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
                    (Text =>
@@ -459,7 +427,7 @@ package body GNATdoc.Backend.HTML is
                     Nested   => <>,
                     OOP_Mode => Self.OOP_Mode);
 
-            elsif not Self.Entity.Parent_Type.Signature.Is_Empty then
+            elsif not Self.Entity.Parent_Type.Signature.Image.Is_Empty then
                return
                  Entity_Reference_Proxy'(Entity => Self.Entity.Parent_Type);
             end if;
@@ -581,7 +549,7 @@ package body GNATdoc.Backend.HTML is
                  OOP_Mode => Self.OOP_Mode);
 
          elsif not Entity_Reference_Sets.Element
-                     (Self.Position).Signature.Is_Empty
+                     (Self.Position).Signature.Image.Is_Empty
          then
             return
               Entity_Reference_Proxy'
@@ -597,10 +565,10 @@ package body GNATdoc.Backend.HTML is
       ------------
 
       function Digest
-        (Item : VSS.Strings.Virtual_String)
+        (Item : GNATdoc.Entities.Entity_Signature)
          return VSS.Strings.Virtual_String is
       begin
-         return To_Virtual_String (Digest (To_UTF_8_String (Item)));
+         return To_Virtual_String (Digest (To_UTF_8_String (Item.Image)));
       end Digest;
 
       --------------
@@ -610,7 +578,16 @@ package body GNATdoc.Backend.HTML is
       overriding function Is_Empty
         (Self : Entity_Information_Set_Proxy) return Boolean is
       begin
-         return Self.Entities.Is_Empty;
+         --  Given set might contains entities excluded from documentation
+         --  (marked by `@private` tag), so ignore them.
+
+         for Entity of Self.Entities.all loop
+            if not Is_Private_Entity (Entity) then
+               return False;
+            end if;
+         end loop;
+
+         return True;
       end Is_Empty;
 
       --------------
@@ -620,7 +597,21 @@ package body GNATdoc.Backend.HTML is
       overriding function Is_Empty
         (Self : Entity_Reference_Set_Proxy) return Boolean is
       begin
-         return Self.Entities.Is_Empty;
+         --  Given set might contains entities excluded from documentation
+         --  (marked by `@private` tag), and entities comes from outside of
+         --  the set of packages to be documented (for examples, entities that
+         --  comes from generic instantiations, and that comes from RTL), so
+         --  ignore them.
+
+         for Entity of Self.Entities.all loop
+            if To_Entity.Contains (Entity.Signature)
+              and then not Is_Private_Entity (To_Entity (Entity.Signature))
+            then
+               return False;
+            end if;
+         end loop;
+
+         return True;
       end Is_Empty;
 
       --------------
@@ -667,6 +658,16 @@ package body GNATdoc.Backend.HTML is
               Entity_Information_Sets.First (Self.Entities.all);
          end if;
 
+         loop
+            exit when not Entity_Information_Sets.Has_Element (Self.Position);
+
+            exit when
+              not Is_Private_Entity
+                   (Entity_Information_Sets.Element (Self.Position));
+
+            Entity_Information_Sets.Next (Self.Position);
+         end loop;
+
          return Entity_Information_Sets.Has_Element (Self.Position);
       end Next;
 
@@ -684,6 +685,20 @@ package body GNATdoc.Backend.HTML is
             Self.Position :=
               Entity_Reference_Sets.First (Self.Entities.all);
          end if;
+
+         loop
+            exit when not Entity_Reference_Sets.Has_Element (Self.Position);
+
+            exit when
+              To_Entity.Contains
+                (Entity_Reference_Sets.Element (Self.Position).Signature)
+                and then not Is_Private_Entity
+                  (To_Entity
+                     (Entity_Reference_Sets.Element
+                        (Self.Position).Signature));
+
+            Entity_Reference_Sets.Next (Self.Position);
+         end loop;
 
          return Entity_Reference_Sets.Has_Element (Self.Position);
       end Next;
@@ -793,9 +808,8 @@ package body GNATdoc.Backend.HTML is
          Filter.Bind
            (Path,
             new Proxies.Entity_Information_Set_Proxy'
-              (Entities  => Index_Entities'Unchecked_Access,
-               Container => <>,
-               OOP_Mode  => Self.OOP_Mode));
+              (Entities => Index_Entities'Unchecked_Access,
+               OOP_Mode => Self.OOP_Mode));
 
          Path.Clear;
          Path.Append ("gnatdoc");
@@ -803,9 +817,8 @@ package body GNATdoc.Backend.HTML is
          Filter.Bind
            (Path,
             new Proxies.Entity_Information_Set_Proxy'
-              (Entities  => Class_Index_Entities'Unchecked_Access,
-               Container => <>,
-               OOP_Mode  => Self.OOP_Mode));
+              (Entities => Class_Index_Entities'Unchecked_Access,
+               OOP_Mode => Self.OOP_Mode));
 
          --  Process template
 
@@ -841,7 +854,7 @@ package body GNATdoc.Backend.HTML is
       Entity : not null Entity_Information_Access)
    is
       Name : constant String :=
-        Digest (To_UTF_8_String (Entity.Signature)) & ".html";
+        Digest (To_UTF_8_String (Entity.Signature.Image)) & ".html";
 
    begin
       declare
@@ -865,7 +878,7 @@ package body GNATdoc.Backend.HTML is
          Nested.Union (Entity.Subtypes);
          Nested.Union (Entity.Constants);
          Nested.Union (Entity.Variables);
-         Nested.Union (Entity.Subprograms);
+         Union (Nested, Entity.Belongs_Subprograms);
          Nested.Union (Entity.Entries);
          Nested.Union (Entity.Generic_Instantiations);
 
@@ -927,7 +940,7 @@ package body GNATdoc.Backend.HTML is
       Entity : not null Entity_Information_Access)
    is
       Name : constant String :=
-        Digest (To_UTF_8_String (Entity.Signature)) & ".html";
+        Digest (To_UTF_8_String (Entity.Signature.Image)) & ".html";
 
    begin
       declare
@@ -951,7 +964,14 @@ package body GNATdoc.Backend.HTML is
          Nested.Union (Entity.Subtypes);
          Nested.Union (Entity.Constants);
          Nested.Union (Entity.Variables);
-         Nested.Union (Entity.Subprograms);
+
+         if Self.OOP_Mode then
+            Union (Nested, Entity.Belongs_Subprograms);
+
+         else
+            Nested.Union (Entity.Subprograms);
+         end if;
+
          Nested.Union (Entity.Entries);
          Nested.Union (Entity.Generic_Instantiations);
 
@@ -1056,5 +1076,18 @@ package body GNATdoc.Backend.HTML is
          Self.OOP_Mode := True;
       end if;
    end Process_Command_Line_Options;
+
+   -----------
+   -- Union --
+   -----------
+
+   procedure Union
+     (Container : in out Entity_Information_Sets.Set;
+      Items     : Entity_Reference_Sets.Set) is
+   begin
+      for Item of Items loop
+         Container.Insert (To_Entity (Item.Signature));
+      end loop;
+   end Union;
 
 end GNATdoc.Backend.HTML;

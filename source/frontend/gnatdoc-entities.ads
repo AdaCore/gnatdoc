@@ -18,8 +18,6 @@
 with Ada.Containers.Hashed_Maps;
 with Ada.Containers.Ordered_Sets;
 
-with VSS.Strings.Hash;
-
 with GNATdoc.Comments;
 with GNATdoc.Messages;
 
@@ -31,6 +29,12 @@ package GNATdoc.Entities is
       Ada_Interface_Type,
       Ada_Function,
       Ada_Procedure);
+
+   type Entity_Signature is record
+      Image : VSS.Strings.Virtual_String;
+   end record;
+
+   function Hash (Self : Entity_Signature) return Ada.Containers.Hash_Type;
 
    type Entity_Information;
 
@@ -45,15 +49,19 @@ package GNATdoc.Entities is
 
    package Entity_Information_Maps is
      new Ada.Containers.Hashed_Maps
-       (VSS.Strings.Virtual_String,
-        Entity_Information_Access,
-        VSS.Strings.Hash,
-        VSS.Strings."=");
+       (Key_Type        => Entity_Signature,
+        Element_Type    => Entity_Information_Access,
+        Hash            => Hash,
+        Equivalent_Keys => "=");
 
    type Entity_Reference is record
       Qualified_Name : VSS.Strings.Virtual_String;
-      Signature      : VSS.Strings.Virtual_String;
+      Signature      : Entity_Signature;
    end record;
+
+   function Is_Undefined (Self : Entity_Reference) return Boolean;
+   --  Returns True when given reference doesn't point to any entity (its
+   --  signature is empty).
 
    overriding function "="
      (Left  : Entity_Reference;
@@ -66,17 +74,17 @@ package GNATdoc.Entities is
    package Entity_Reference_Sets is
      new Ada.Containers.Ordered_Sets (Entity_Reference);
 
-   type Entity_Information is record
+   type Entity_Information is tagged limited record
       Location               : Source_Location;
       Kind                   : Entity_Kind := Undefined;
       Name                   : VSS.Strings.Virtual_String;
       Qualified_Name         : VSS.Strings.Virtual_String;
-      Signature              : VSS.Strings.Virtual_String;
+      Signature              : Entity_Signature;
       Documentation          : aliased GNATdoc.Comments.Structured_Comment;
       Messages               : GNATdoc.Messages.Message_Container;
 
-      Enclosing              : VSS.Strings.Virtual_String;
-      --  Signature of the enclosing entity.
+      Enclosing              : Entity_Signature;
+      --  Structural enclosing entity (package/task/protected object).
       Is_Private             : Boolean := False;
       --  Private entities are excluded from the documentartion.
 
@@ -90,6 +98,10 @@ package GNATdoc.Entities is
 
       Packages               : Entity_Information_Sets.Set;
       Subprograms            : aliased Entity_Information_Sets.Set;
+      --  All subprograms declared in the entity (package)
+      Belongs_Subprograms    : aliased Entity_Reference_Sets.Set;
+      --  Subprograms that belongs to the entity (to interface/tagged type,
+      --  otherwise to the package)
       Entries                : aliased Entity_Information_Sets.Set;
       Generic_Instantiations : aliased Entity_Information_Sets.Set;
       --  Generic_Packages
@@ -176,6 +188,10 @@ package GNATdoc.Entities is
    --  Map to lookup entity's information by entity's signature.
 
    function All_Entities
-     (Self : Entity_Information) return Entity_Information_Sets.Set;
+     (Self : Entity_Information'Class) return Entity_Information_Sets.Set;
+
+   function Reference
+     (Self : Entity_Information'Class) return Entity_Reference;
+   --  Reference of entity
 
 end GNATdoc.Entities;
