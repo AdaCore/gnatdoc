@@ -86,8 +86,11 @@ package GNATdoc.Entities is
       Enclosing              : Entity_Signature;
       --  Structural enclosing entity (package/task/protected object).
       Belongs                : Entity_Reference;
-      --  Reference to the entity it belongs. It is case of subprograms
-      --  that is grouped as operatons on tagged type.
+      --  Reference to the entity it belongs. It is set then subprogram is:
+      --    * explicitly `@belongs-to` type
+      --    * can be called with prefix notation
+      --    * primitive operations of the tagged type
+
       Is_Private             : Boolean := False;
       --  Private entities are excluded from the documentartion.
 
