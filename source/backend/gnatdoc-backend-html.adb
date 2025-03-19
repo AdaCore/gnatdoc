@@ -375,11 +375,11 @@ package body GNATdoc.Backend.HTML is
                         & ".html#"
                         & Digest (Self.Entity.Signature));
 
-            elsif not Self.Entity.Owner_Class.Signature.Image.Is_Empty then
+            elsif not Self.Entity.Belongs.Signature.Image.Is_Empty then
                return
                  VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
                    (Text =>
-                      Digest (Self.Entity.Owner_Class.Signature)
+                      Digest (Self.Entity.Belongs.Signature)
                         & ".html#"
                         & Digest (Self.Entity.Signature));
             end if;

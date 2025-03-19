@@ -53,6 +53,13 @@ package GNATdoc.Comments is
    function Is_Private (Self : Structured_Comment'Class) return Boolean;
    --  Return True when entity is marked by @private tag
 
+   function Has_Belongs_To (Self : Structured_Comment'Class) return Boolean;
+   --  Return `True` when `@belongs-to` tag is specified.
+
+   function Belongs_To
+     (Self : Structured_Comment'Class) return VSS.Strings.Virtual_String;
+   --  Returns type entity (subprogram) belongs to.
+
    procedure Free (Item : in out Structured_Comment_Access);
    --  Deallocate memory occupied by structured comment.
 
@@ -95,6 +102,7 @@ private
      new Ada.Finalization.Limited_Controlled with record
       Sections   : aliased Section_Vectors.Vector;
       Is_Private : Boolean := False;
+      Belongs_To : VSS.Strings.Virtual_String;
    end record;
 
    overriding procedure Finalize (Self : in out Structured_Comment);
@@ -105,5 +113,12 @@ private
 
    function Clone
      (Sections : Section_Vectors.Vector) return Section_Vectors.Vector;
+
+   function Has_Belongs_To (Self : Structured_Comment'Class) return Boolean is
+     (not Self.Belongs_To.Is_Empty);
+
+   function Belongs_To
+     (Self : Structured_Comment'Class) return VSS.Strings.Virtual_String is
+       (Self.Belongs_To);
 
 end GNATdoc.Comments;

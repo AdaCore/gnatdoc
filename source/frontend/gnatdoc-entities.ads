@@ -85,6 +85,12 @@ package GNATdoc.Entities is
 
       Enclosing              : Entity_Signature;
       --  Structural enclosing entity (package/task/protected object).
+      Belongs                : Entity_Reference;
+      --  Reference to the entity it belongs. It is set then subprogram is:
+      --    * explicitly `@belongs-to` type
+      --    * can be called with prefix notation
+      --    * primitive operations of the tagged type
+
       Is_Private             : Boolean := False;
       --  Private entities are excluded from the documentartion.
 
@@ -126,26 +132,6 @@ package GNATdoc.Entities is
       Variables              : aliased Entity_Information_Sets.Set;
       Exceptions             : aliased Entity_Information_Sets.Set;
 
-      --  Access_Types      : EInfo_List.Vector;  +++
-      --  Generic_Formals   : EInfo_List.Vector;  +++
-      --  Interface_Types   : EInfo_List.Vector;  +++
-      --  Methods           : EInfo_List.Vector;  ???
-      --  Pkgs              : EInfo_List.Vector;  +++
-      --  --  Ordinary and generic packages.
-      --  Pkgs_Instances    : EInfo_List.Vector;  +++
-      --  --  Generic packages instantiations.
-      --  Record_Types      : EInfo_List.Vector;  +++
-      --  Simple_Types      : EInfo_List.Vector;  +++
-      --  Subprgs           : EInfo_List.Vector;  +++
-      --  --  Ordinary subprograms.
-      --  Subprgs_Instances : EInfo_List.Vector;  +++
-      --  --  Generic subprograms instantiations.
-      --  Tagged_Types      : EInfo_List.Vector;  +++
-      --  Variables         : EInfo_List.Vector;  +++
-      --  Tasks             : EInfo_List.Vector;  +++
-      --  Protected_Objects : EInfo_List.Vector;  +++
-      --  Entries           : EInfo_List.Vector;  +++
-
       Parent_Type            : Entity_Reference;
       --  Reference to parent tagged type.
 
@@ -168,9 +154,6 @@ package GNATdoc.Entities is
 
       Dispatching_Inherited  : aliased Entity_Reference_Sets.Set;
       --  Dispatching operations inherited by the type.
-
-      Owner_Class               : Entity_Reference;
-      --  Reference to the type that "declare" non dispatching subprogram.
 
       Prefix_Callable_Declared  : aliased Entity_Reference_Sets.Set;
       --  Prefix callable subprograms declared by the type.
