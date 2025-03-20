@@ -1,0 +1,2 @@
+description: Detection of `@belongs-to` tag for entities
+driver: executable
