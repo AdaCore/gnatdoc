@@ -15,35 +15,34 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with "gpr2";
-with "libgnatdoc";
-with "markdown";
-with "vss_xml_xmlada";
-with "vss_xml_templates";
+with VSS.XML.Templates.Proxies;
 
-project GNATdoc is
+package GNATdoc.Entities.Proxies is
 
-   for Object_Dir use "../.objs";
-   for Source_Dirs use
-     ("../config",
-      "../source/backend",
-      "../source/backend/rst",
-      "../source/backend/xml_templates",
-      "../source/frontend",
-      "../source/gnatdoc");
-   for Exec_Dir use "../bin";
-   for Main use ("gnatdoc-driver.adb");
+   type Entity_Information_Set_Proxy is limited
+     new VSS.XML.Templates.Proxies.Abstract_Iterable_Proxy with record
+      Entities : not null access GNATdoc.Entities.Entity_Information_Sets.Set;
+      OOP_Mode : Boolean;
+   end record;
 
-   package Compiler is
-      for Switches ("Ada") use ("-g", "-gnat2022", "-gnatygO", "-gnata", "-gnatwa");
-   end Compiler;
+   overriding function Iterator
+     (Self : in out Entity_Information_Set_Proxy)
+         return VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator'Class;
 
-   package Builder is
-      for Executable ("gnatdoc-driver.adb") use "gnatdoc";
-   end Builder;
+   overriding function Is_Empty
+     (Self : Entity_Information_Set_Proxy) return Boolean;
 
-   package Install is
-      for Artifacts (".") use ("../share");
-   end Install;
+   type Entity_Information_Proxy is limited
+     new VSS.XML.Templates.Proxies.Abstract_Composite_Proxy
+   with record
+      Entity   : GNATdoc.Entities.Entity_Information_Access;
+      Nested   : aliased GNATdoc.Entities.Entity_Information_Sets.Set;
+      OOP_Mode : Boolean;
+   end record;
 
-end GNATdoc;
+   overriding function Component
+     (Self : in out Entity_Information_Proxy;
+      Name : VSS.Strings.Virtual_String)
+      return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
+
+end GNATdoc.Entities.Proxies;
