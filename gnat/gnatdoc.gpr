@@ -27,6 +27,7 @@ project GNATdoc is
    for Source_Dirs use
      ("../config",
       "../source/backend",
+      "../source/backend/odf",
       "../source/backend/rst",
       "../source/backend/xml_templates",
       "../source/frontend",
