@@ -15,6 +15,14 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with Input_Sources.File;
+with VSS.XML.XmlAda_Readers;
+with VSS.XML.Templates.Processors;
+with VSS.XML.Writers.Simple;
+
+with GNATdoc.Entities.Proxies;
+with Streams;
+
 package body GNATdoc.Backend.ODF is
 
    ------------------------------
@@ -33,8 +41,81 @@ package body GNATdoc.Backend.ODF is
    --------------
 
    overriding procedure Generate (Self : in out ODF_Backend) is
+      Index_Entities : aliased GNATdoc.Entities.Entity_Information_Sets.Set;
+
+      Input     : Input_Sources.File.File_Input;
+      Reader    : VSS.XML.XmlAda_Readers.XmlAda_Reader;
+      Processor : aliased VSS.XML.Templates.Processors.XML_Template_Processor;
+      Writer    : aliased VSS.XML.Writers.Simple.Simple_XML_Writer;
+      Output    : aliased Streams.Output_Text_Stream;
+      Path      : VSS.String_Vectors.Virtual_String_Vector;
+
    begin
-      raise Program_Error;
+      for Item of GNATdoc.Entities.Globals.Packages loop
+         if not Is_Private_Entity (Item) then
+            Index_Entities.Insert (Item);
+         end if;
+      end loop;
+
+      for Item of GNATdoc.Entities.Globals.Subprograms loop
+         if not Is_Private_Entity (Item) then
+            Index_Entities.Insert (Item);
+         end if;
+      end loop;
+
+      for Item of GNATdoc.Entities.Globals.Package_Renamings loop
+         if not Is_Private_Entity (Item) then
+            Index_Entities.Insert (Item);
+         end if;
+      end loop;
+
+      for Item of GNATdoc.Entities.Globals.Generic_Instantiations loop
+         if not Is_Private_Entity (Item) then
+            Index_Entities.Insert (Item);
+         end if;
+      end loop;
+
+      --  Open input and output files.
+
+      Path.Clear;
+      Path.Append ("template");
+      Path.Append ("documentation.fodt");
+      Input_Sources.File.Open
+        (String (Self.Lookup_Resource_File (Path).Full_Name.all),
+         Input);
+      Output.Open
+        (GNATCOLL.VFS.Create_From_Dir
+           (Self.Output_Root, "documentation.fodt"));
+
+      --  Connect components
+
+      Writer.Set_Output_Stream (Output'Unchecked_Access);
+      Writer.Set_Attribute_Syntax (VSS.XML.Writers.Simple.Double_Quoted);
+      Processor.Set_Content_Handler (Writer'Unchecked_Access);
+      --  Processor.Set_Lexical_Handler (Writer'Unchecked_Access);
+      Reader.Set_Content_Handler (Processor'Unchecked_Access);
+      Reader.Enable_Namespace_Feature;
+      Reader.Enable_Namespace_Prefixes_Feature;
+
+      --  Bind information
+
+      Path.Clear;
+      Path.Append ("gnatdoc");
+      Path.Append ("toc");
+      Processor.Bind
+        (Path,
+         new GNATdoc.Entities.Proxies.Entity_Information_Set_Proxy'
+           (Entities => Index_Entities'Unchecked_Access,
+            OOP_Mode => False));  --  XXX Self.OOP_Mode));
+
+      --  Process template
+
+      Reader.Parse (Input);
+
+      --  Close input and output files.
+
+      Input.Close;
+      Output.Close;
    end Generate;
 
    ----------------------------------
