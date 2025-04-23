@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2024, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -26,7 +26,9 @@ project GNATdoc is
    for Object_Dir use "../.objs";
    for Source_Dirs use
      ("../source/backend",
+      "../source/backend/odf",
       "../source/backend/rst",
+      "../source/backend/xml_templates",
       "../source/frontend",
       "../source/gnatdoc");
    for Exec_Dir use "../bin";

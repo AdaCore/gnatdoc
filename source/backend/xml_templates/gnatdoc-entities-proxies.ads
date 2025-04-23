@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2024-2025, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,40 +15,34 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATdoc.Backend.HTML;
-with GNATdoc.Backend.ODF;
-with GNATdoc.Backend.RST.PT;
-with GNATdoc.Backend.Test;
+with VSS.XML.Templates.Proxies;
 
-package body GNATdoc.Backend.Registry is
+package GNATdoc.Entities.Proxies is
 
-   --------------------
-   -- Create_Backend --
-   --------------------
+   type Entity_Information_Set_Proxy is limited
+     new VSS.XML.Templates.Proxies.Abstract_Iterable_Proxy with record
+      Entities : not null access GNATdoc.Entities.Entity_Information_Sets.Set;
+      OOP_Mode : Boolean;
+   end record;
 
-   function Create_Backend
-     (Name : VSS.Strings.Virtual_String) return Backend_Access
-   is
-      use type VSS.Strings.Virtual_String;
+   overriding function Iterator
+     (Self : in out Entity_Information_Set_Proxy)
+         return VSS.XML.Templates.Proxies.Abstract_Iterable_Iterator'Class;
 
-   begin
-      if Name = "html" then
-         return new GNATdoc.Backend.HTML.HTML_Backend;
+   overriding function Is_Empty
+     (Self : Entity_Information_Set_Proxy) return Boolean;
 
-      elsif Name = "odf" then
-         return new GNATdoc.Backend.ODF.ODF_Backend;
+   type Entity_Information_Proxy is limited
+     new VSS.XML.Templates.Proxies.Abstract_Composite_Proxy
+   with record
+      Entity   : GNATdoc.Entities.Entity_Information_Access;
+      Nested   : aliased GNATdoc.Entities.Entity_Information_Sets.Set;
+      OOP_Mode : Boolean;
+   end record;
 
-      elsif Name = "rst" then
-         return new GNATdoc.Backend.RST.RST_Backend;
+   overriding function Component
+     (Self : in out Entity_Information_Proxy;
+      Name : VSS.Strings.Virtual_String)
+      return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
 
-      elsif Name = "rstpt" then
-         return new GNATdoc.Backend.RST.PT.PT_RST_Backend;
-
-      elsif Name = "test" then
-         return new GNATdoc.Backend.Test.Test_Backend;
-      end if;
-
-      return null;
-   end Create_Backend;
-
-end GNATdoc.Backend.Registry;
+end GNATdoc.Entities.Proxies;

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2024, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -44,7 +44,7 @@ package body GNATdoc.Command_Line is
    Backend_Option            : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => <>,
       Long_Name   => "backend",
-      Value_Name  => "html|rst",
+      Value_Name  => "html|odf|rst",
       Description => "Backend to use to generate output");
 
    Generate_Option           : constant VSS.Command_Line.Value_Option :=

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2024-2025, AdaCore                     --
+--                       Copyright (C) 2025, AdaCore                        --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,40 +15,29 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATdoc.Backend.HTML;
-with GNATdoc.Backend.ODF;
-with GNATdoc.Backend.RST.PT;
-with GNATdoc.Backend.Test;
+package GNATdoc.Backend.ODF is
 
-package body GNATdoc.Backend.Registry is
+   type ODF_Backend is new Abstract_Backend with private;
 
-   --------------------
-   -- Create_Backend --
-   --------------------
+private
 
-   function Create_Backend
-     (Name : VSS.Strings.Virtual_String) return Backend_Access
-   is
-      use type VSS.Strings.Virtual_String;
+   type ODF_Backend is new Abstract_Backend with record
+      null;
+   end record;
 
-   begin
-      if Name = "html" then
-         return new GNATdoc.Backend.HTML.HTML_Backend;
+   --  overriding procedure Initialize (Self : in out RST_Backend_Base);
 
-      elsif Name = "odf" then
-         return new GNATdoc.Backend.ODF.ODF_Backend;
+   overriding procedure Generate (Self : in out ODF_Backend);
 
-      elsif Name = "rst" then
-         return new GNATdoc.Backend.RST.RST_Backend;
+   overriding procedure Add_Command_Line_Options
+     (Self   : ODF_Backend;
+      Parser : in out VSS.Command_Line.Parsers.Command_Line_Parser'Class);
 
-      elsif Name = "rstpt" then
-         return new GNATdoc.Backend.RST.PT.PT_RST_Backend;
+   overriding procedure Process_Command_Line_Options
+     (Self   : in out ODF_Backend;
+      Parser : VSS.Command_Line.Parsers.Command_Line_Parser'Class);
 
-      elsif Name = "test" then
-         return new GNATdoc.Backend.Test.Test_Backend;
-      end if;
+   overriding function Name
+     (Self : in out ODF_Backend) return VSS.Strings.Virtual_String is ("odf");
 
-      return null;
-   end Create_Backend;
-
-end GNATdoc.Backend.Registry;
+end GNATdoc.Backend.ODF;
