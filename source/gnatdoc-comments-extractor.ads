@@ -92,4 +92,13 @@ private
    --  @param Item Character to be classified
    --  @return Whether given character is Ada's separator or not
 
+   function Count_Leading_Whitespaces
+     (Line : VSS.Strings.Virtual_String) return VSS.Strings.Character_Count;
+   --  Returns number of leading Ada whitespace characters in the given line.
+
+   function Remove_Leading_Whitespaces
+     (Line   : VSS.Strings.Virtual_String;
+      Indent : VSS.Strings.Character_Count) return VSS.Strings.Virtual_String;
+   --  Removes at most given number of leading whitespaces.
+
 end GNATdoc.Comments.Extractor;

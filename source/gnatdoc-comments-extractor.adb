@@ -35,6 +35,7 @@ with GNATdoc.Comments.Builders.Generics;
 with GNATdoc.Comments.Builders.Protecteds;
 with GNATdoc.Comments.Builders.Records;
 with GNATdoc.Comments.Builders.Subprograms;
+with GNATdoc.Comments.Extractor.Trailing;
 with GNATdoc.Comments.Utilities;      use GNATdoc.Comments.Utilities;
 with GNATdoc.Utilities;
 
@@ -387,6 +388,28 @@ package body GNATdoc.Comments.Extractor is
       Pattern : VSS.Regular_Expressions.Regular_Expression);
    --  Prepend given Line to the Text when Pattern is valid and Line match to
    --  Pattern. Always prepend Line when Pattern is invalid.
+
+   -------------------------------
+   -- Count_Leading_Whitespaces --
+   -------------------------------
+
+   function Count_Leading_Whitespaces
+     (Line : VSS.Strings.Virtual_String)
+      return VSS.Strings.Character_Count
+   is
+      Iterator  : VSS.Strings.Character_Iterators.Character_Iterator :=
+        Line.Before_First_Character;
+      Character : VSS.Characters.Virtual_Character'Base;
+
+   begin
+      return Result : VSS.Strings.Character_Count := 0 do
+         while Iterator.Forward (Character) loop
+            exit when not Is_Ada_Separator (Character);
+
+            Result := @ + 1;
+         end loop;
+      end return;
+   end Count_Leading_Whitespaces;
 
    -------------
    -- Extract --
@@ -2429,8 +2452,66 @@ package body GNATdoc.Comments.Extractor is
       Minimum_Indent             : Column_Number;
       Components_Builder         :
         GNATdoc.Comments.Builders.Subprograms.Subprogram_Components_Builder;
+      Raw_Section                : Section_Access;
 
    begin
+      if Options.Style = GNAT then
+         Extractor.Trailing.Process (Decl_Node, Sections);
+
+         --  Extract code snippet of declaration and remove all comments from
+         --  it.
+
+         if Decl_Node.Kind in Ada_Type_Decl then
+            --  Access to subprogram type
+
+            Fill_Code_Snippet
+              (Decl_Node,
+               Decl_Node.Token_Start,
+               Decl_Node.Token_End,
+               Sections);
+
+         elsif Decl_Node.Kind in Ada_Generic_Subp_Internal then
+            --  Generic subprogram declaration includes generic formals
+            --  declarations.
+
+            Fill_Code_Snippet
+              (Spec_Node,
+               Decl_Node.Parent.Token_Start,
+               Spec_Node.Token_End,
+               Sections);
+
+         else
+            Fill_Code_Snippet
+              (Spec_Node,
+               Spec_Node.Token_Start,
+               Spec_Node.Token_End,
+               Sections);
+         end if;
+
+         for Section of Sections loop
+            if Section.Kind = Raw then
+               Raw_Section := Section;
+
+               exit;
+            end if;
+         end loop;
+
+         Parse_Raw_Section
+           (Location     => GNATdoc.Utilities.Location (Spec_Node),
+            Raw_Section  => Raw_Section,
+            Allowed_Tags =>
+              [Param_Tag | Return_Tag | Exception_Tag => True,
+               Private_Tag                            => Allow_Private,
+               Belongs_To_Tag                         => True,
+               others                                 => False],
+            Sections    => Sections,
+            Belongs_To  => Belongs_To,
+            Is_Private  => Is_Private,
+            Messages    => Messages);
+
+         return;
+      end if;
+
       --  Create "raw" section to collect all documentation for subprogram,
       --  exact range is used to fill comments after the end of the
       --  subprogram specification and before the name of the first aspect
@@ -3110,6 +3191,19 @@ package body GNATdoc.Comments.Extractor is
          end;
       end if;
 
+      --  Remove indentation
+
+      declare
+         Indent : constant VSS.Strings.Character_Count :=
+           Count_Leading_Whitespaces (Text (1));
+
+      begin
+         for Index in Text.First_Index .. Text.Last_Index loop
+            Text.Replace
+              (Index, Remove_Leading_Whitespaces (Text (Index), Indent));
+         end loop;
+      end;
+
       Snippet_Section :=
         new Section'
           (Kind => Snippet, Symbol => "ada", Text => Text, others => <>);
@@ -3518,5 +3612,27 @@ package body GNATdoc.Comments.Extractor is
          end;
       end loop;
    end Remove_Comment_Start_And_Indentation;
+
+   --------------------------------
+   -- Remove_Leading_Whitespaces --
+   --------------------------------
+
+   function Remove_Leading_Whitespaces
+     (Line   : VSS.Strings.Virtual_String;
+      Indent : VSS.Strings.Character_Count) return VSS.Strings.Virtual_String
+   is
+      Iterator  : VSS.Strings.Character_Iterators.Character_Iterator :=
+        Line.Before_First_Character;
+      Character : VSS.Characters.Virtual_Character'Base;
+
+   begin
+      while Iterator.Forward (Character)
+        and then Iterator.Character_Index <= Indent
+      loop
+         exit when not Is_Ada_Separator (Iterator.Element);
+      end loop;
+
+      return Line.Tail_From (Iterator);
+   end Remove_Leading_Whitespaces;
 
 end GNATdoc.Comments.Extractor;
