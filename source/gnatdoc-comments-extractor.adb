@@ -381,12 +381,6 @@ package body GNATdoc.Comments.Extractor is
       Messages     : in out GNATdoc.Messages.Message_Container);
    --  Wrapper around `Parse_Raw_Section` when `@belongs-to` tag is not allowed
 
-   function Is_Ada_Separator (Item : Virtual_Character) return Boolean;
-   --  Return True when given character is Ada's separator.
-   --
-   --  @param Item Character to be classified
-   --  @return Whether given character is Ada's separator or not
-
    procedure Prepend_Documentation_Line
      (Text    : in out VSS.String_Vectors.Virtual_String_Vector;
       Line    : Langkit_Support.Text.Text_Type;
@@ -3126,7 +3120,8 @@ package body GNATdoc.Comments.Extractor is
    -- Is_Ada_Separator --
    ----------------------
 
-   function Is_Ada_Separator (Item : Virtual_Character) return Boolean is
+   function Is_Ada_Separator
+     (Item : VSS.Characters.Virtual_Character) return Boolean is
    begin
       return Get_General_Category (Item) in Space_Separator | Format;
    end Is_Ada_Separator;
