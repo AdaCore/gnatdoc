@@ -4,11 +4,11 @@
 <PrivateAbsent concrete_types.ads:1:1-1:1>
 <PackageDecl ["Concrete_Types"] concrete_types.ads:1:1-14:20>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
 package Concrete_Types
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <DefiningName "Concrete_Types" concrete_types.ads:1:9-1:23>
 <Id "Concrete_Types" concrete_types.ads:1:9-1:23>
@@ -16,39 +16,39 @@ package Concrete_Types
 <AdaNodeList concrete_types.ads:3:5-12:29>
 <ConcreteTypeDecl ["Parent_Type"] concrete_types.ads:3:5-3:57>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type Parent_Type is abstract tagged limited private;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <ConcreteTypeDecl ["Child_Type"] concrete_types.ads:5:5-5:66>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type Child_Type is abstract new Parent_Type with null record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <ConcreteTypeDecl ["Great_Child_Type"] concrete_types.ads:7:5-10:16>
 **************************
 \/ FIELD field_one (Field_One)  8 8 9 9
 A simple integer field.
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type Great_Child_Type is new Text_Document with record
     Field_One : Integer;
 end record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <ConcreteTypeDecl ["int"] concrete_types.ads:12:5-12:29>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type int is new Integer;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <EndName concrete_types.ads:14:5-14:19>
 <Id "Concrete_Types" concrete_types.ads:14:5-14:19>

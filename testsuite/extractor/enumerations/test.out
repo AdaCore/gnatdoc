@@ -4,12 +4,12 @@
 <PrivateAbsent enumerations.ads:4:1-4:1>
 <PackageDecl ["Enumerations"] enumerations.ads:4:1-337:18>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 Test cases for enumeration types.
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
 package Enumerations
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Test cases for enumeration types.
 **************************
 <DefiningName "Enumerations" enumerations.ads:4:9-4:21>
@@ -340,14 +340,14 @@ Test cases for enumeration types.
 \/ ENUMERATION_LITERAL ada_with_clause (Ada_With_Clause)  7 7 8 6
 \/ ENUMERATION_LITERAL ada_with_private_absent (Ada_With_Private_Absent)  7 7 8 6
 \/ ENUMERATION_LITERAL ada_with_private_present (Ada_With_Private_Present)  7 7 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Type for concrete nodes. All literals are written in the single line.
 Test check that onle few of literals will be presented in code snippet.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Ada_Node_Kind_Type_Single_Line is
   (Ada_Abort_Absent, Ada_Abort_Present, Ada_Abstract_Absent, Ada_Abstract_Present, Ada_Ada_Node_List, Ada_Abstract_State_Decl_List, Ada_Alternatives_List, Ada_Constraint_List, ["2026"], Ada_With_Private_Present);
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Type for concrete nodes. All literals are written in the single line.
 Test check that onle few of literals will be presented in code snippet.
 **************************
@@ -675,11 +675,11 @@ Test check that onle few of literals will be presented in code snippet.
 \/ ENUMERATION_LITERAL ada_with_clause (Ada_With_Clause)  331 331 332 331
 \/ ENUMERATION_LITERAL ada_with_private_absent (Ada_With_Private_Absent)  332 332 333 332
 \/ ENUMERATION_LITERAL ada_with_private_present (Ada_With_Private_Present)  333 333 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Type for concrete nodes. All literals are written on separate line.
 Test check that onle few of literals will be presented in code snippet.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Ada_Node_Kind_Type_Multiple_Line is
   (Ada_Abort_Absent,
    Ada_Abort_Present,
@@ -691,7 +691,7 @@ type Ada_Node_Kind_Type_Multiple_Line is
    Ada_Constraint_List,
    ["2026"],
    Ada_With_Private_Present);
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Type for concrete nodes. All literals are written on separate line.
 Test check that onle few of literals will be presented in code snippet.
 **************************

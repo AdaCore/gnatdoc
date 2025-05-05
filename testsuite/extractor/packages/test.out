@@ -4,12 +4,12 @@
 <PrivateAbsent package_pragma_only.ads:1:1-1:1>
 <PackageDecl ["MyPackage"] package_pragma_only.ads:1:1-5:15>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
 package MyPackage
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <DefiningName "MyPackage" package_pragma_only.ads:1:9-1:18>
 <Id "MyPackage" package_pragma_only.ads:1:9-1:18>
@@ -27,13 +27,13 @@ package MyPackage
 <PrivateAbsent package_pragma_package.ads:1:1-1:1>
 <PackageDecl ["MyPackage2"] package_pragma_package.ads:1:1-7:16>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
 This is documentation of the MyPackage2 package.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 package MyPackage2
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is documentation of the MyPackage2 package.
 **************************
 <DefiningName "MyPackage2" package_pragma_package.ads:1:9-1:19>

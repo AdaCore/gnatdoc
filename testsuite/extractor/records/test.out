@@ -16,11 +16,11 @@
 <PrivateAbsent records.ads:4:23-4:23>
 <PackageDecl ["Records"] records.ads:6:1-130:13>
 **************************
-\/ RAW <<HEADER>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<HEADER>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
 package Records
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <DefiningName "Records" records.ads:6:9-6:16>
 <Id "Records" records.ads:6:9-6:16>
@@ -32,17 +32,17 @@ package Records
 Discriminant
 \/ FIELD x (X)  9 9 10 9
 Value of X
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Record type with discriminant
 
 @field A Discriminant
 @field X Value of X
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Record_Type_1 (A : Boolean) is record
    X : Integer with Atomic, Volatile;
 end record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Record type with discriminant
 **************************
 <ConcreteTypeDecl ["Record_Type_2"] records.ads:16:4-39:15>
@@ -55,13 +55,13 @@ This is decsription of X component.
 This is description of Y component.
 \/ FIELD z (Z)  37 37 38 38
 Description of the Z member
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 This is complex declaration of the record type with discriminants and
 alternatives.
 
 @field Z  Description of the Z member
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Record_Type_2
   (K : All_Enumerations.Enumeration_Type_1) is
 record
@@ -80,42 +80,42 @@ record
          Z : Integer;
    end case;
 end record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is complex declaration of the record type with discriminants and
 alternatives.
 **************************
 <ConcreteTypeDecl ["Character_Offset"] records.ads:49:4-49:59>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type Character_Offset is range -2 ** 30 .. 2 ** 30 - 1;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <SubtypeDecl ["Character_Count"] records.ads:50:4-51:39>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 subtype Character_Count is Character_Offset
   range 0 .. Character_Offset'Last;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <ConcreteTypeDecl ["Abstract_String_Handler"] records.ads:53:4-53:54>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type Abstract_String_Handler is limited interface;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <ConcreteTypeDecl ["String_Handler_Access"] records.ads:55:4-55:75>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type String_Handler_Access is access all Abstract_String_Handler'Class;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <ConcreteTypeDecl ["String_Data"] records.ads:57:4-72:15>
 **************************
@@ -127,8 +127,8 @@ of dynamic memory analysis tools such as valgrind.
 \/ FIELD storage (Storage)  66 66 67 67
 \/ FIELD handler (Handler)  69 69 71 71
 \/ FIELD pointer (Pointer)  70 70 71 71
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 String_Data is a pair of Handler and pointer to the associated data.
 It is not defined how particular implementation of the String_Handler
 use pointer.
@@ -138,7 +138,7 @@ that special predefined handler is used to process Storage.
 
 Note: data layout is optimized for x86-64 CPU.
 Note: Storage has 4 bytes alignment.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type String_Data (In_Place : Boolean := False) is record
    Capacity : Character_Count := 0;
    Padding  : Boolean := False;
@@ -150,7 +150,7 @@ type String_Data (In_Place : Boolean := False) is record
          Pointer : System.Address;
    end case;
 end record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 String_Data is a pair of Handler and pointer to the associated data.
 It is not defined how particular implementation of the String_Handler
 use pointer.
@@ -168,15 +168,15 @@ Note: Storage has 4 bytes alignment.
 This is a comment for A
 \/ FIELD b (B)  98 98 99 99
 This is a comment for B
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Comments for both fields must be extracted from the comments around.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type My_Type is record
    A : Integer;
    B : Integer;
 end record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Comments for both fields must be extracted from the comments around.
 **************************
 <ConcreteTypeDecl ["Foo_1"] records.ads:107:4-120:15>
@@ -187,11 +187,11 @@ Comments for both fields must be extracted from the comments around.
 \/ FIELD c (C)  114 114 115 114
 \/ FIELD d (D)  116 116 117 116
 \/ FIELD e (E)  118 118 119 119
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 This is example of the record type with discriminant of integer type and
 variant part that depends from few kind of values.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Foo_1 (X : Integer) is record
    case X is
       when -6 =>
@@ -206,21 +206,21 @@ type Foo_1 (X : Integer) is record
          E : Integer;
    end case;
 end record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is example of the record type with discriminant of integer type and
 variant part that depends from few kind of values.
 **************************
 <ConcreteTypeDecl ["My_Record"] records.ads:125:4-128:28>
 **************************
 \/ FIELD i (I)  126 126 127 127
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 Remove of aspects from the code snippet.
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type My_Record is tagged record
    I : Integer := 1;
 end record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <EndName records.ads:130:5-130:12>
 <Id "Records" records.ads:130:5-130:12>
