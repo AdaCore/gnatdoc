@@ -4,14 +4,14 @@
 <PrivateAbsent protecteds.ads:6:1-6:1>
 <PackageDecl ["Protecteds"] protecteds.ads:6:1-88:16>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 This package contains test cases of documentation extraction for protected
 types. Coverage of tests of procedures/functions/entries are limited to few
 cases only (this code is tested by subprograms tests).
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
 package Protecteds
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This package contains test cases of documentation extraction for protected
 types. Coverage of tests of procedures/functions/entries are limited to few
 cases only (this code is tested by subprograms tests).
@@ -22,37 +22,37 @@ cases only (this code is tested by subprograms tests).
 <AdaNodeList protecteds.ads:8:4-86:23>
 <ConcreteTypeDecl ["IE"] protecteds.ads:8:4-8:38>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type IE is synchronized interface;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <ConcreteTypeDecl ["IP"] protecteds.ads:10:4-10:38>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type IP is synchronized interface;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <AbstractSubpDecl ["Process"] protecteds.ads:12:4-12:61>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  13 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER self (Self)  12 12 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 procedure Process (Self : IP)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <SingleProtectedDecl ["P_Leading"] protecteds.ads:15:4-16:18>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 Leading description of the protected type P_Leading.
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 Leading description of the protected type P_Leading.
 **************************
 <DefiningName "P_Leading" protecteds.ads:15:14-15:23>
@@ -65,10 +65,10 @@ Leading description of the protected type P_Leading.
 <Id "P_Leading" protecteds.ads:16:8-16:17>
 <SingleProtectedDecl ["P_Intermediate"] protecteds.ads:18:4-20:23>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
 Intermediate description of the protected type P_Intermediate.
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Intermediate description of the protected type P_Intermediate.
 **************************
 <DefiningName "P_Intermediate" protecteds.ads:18:14-18:28>
@@ -81,10 +81,10 @@ Intermediate description of the protected type P_Intermediate.
 <Id "P_Intermediate" protecteds.ads:20:8-20:22>
 <ProtectedTypeDecl ["PT_Leading"] protecteds.ads:23:4-24:19>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 Leading description of the protected type PT_Leading.
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 Leading description of the protected type PT_Leading.
 **************************
 <DefiningName "PT_Leading" protecteds.ads:23:19-23:29>
@@ -97,10 +97,10 @@ Leading description of the protected type PT_Leading.
 <Id "PT_Leading" protecteds.ads:24:8-24:18>
 <ProtectedTypeDecl ["PT_Intermediate"] protecteds.ads:26:4-28:24>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
 Intermediate description of the protected type PT_Intermediate.
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Intermediate description of the protected type PT_Intermediate.
 **************************
 <DefiningName "PT_Intermediate" protecteds.ads:26:19-26:34>
@@ -117,9 +117,9 @@ Intermediate description of the protected type PT_Intermediate.
 Short description of the discriminant
 \/ FIELD component (Component)  34 34 35 34
 Short description of the component
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 **************************
 <DefiningName "PT_Discriminant_Component_Short" protecteds.ads:30:19-30:50>
 <Id "PT_Discriminant_Component_Short" protecteds.ads:30:19-30:50>
@@ -156,9 +156,9 @@ Short description of the component
 Longer description of the discriminant
 \/ FIELD component (Component)  42 42 43 43
 Longer description of the component
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 **************************
 <DefiningName "PT_Discriminant_Component_Longer" protecteds.ads:37:19-37:51>
 <Id "PT_Discriminant_Component_Longer" protecteds.ads:37:19-37:51>
@@ -193,9 +193,9 @@ Longer description of the component
 **************************
 \/ FIELD discriminant (Discriminant)  47 47 48 49
 Longer description of the discriminant
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 **************************
 <DefiningName "PT_Discriminant_Longer" protecteds.ads:46:19-46:41>
 <Id "PT_Discriminant_Longer" protecteds.ads:46:19-46:41>
@@ -222,10 +222,10 @@ Description of the component X
 Description of the component Y
 \/ FIELD z (Z)  69 69 70 71
 Description of the component Z
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
 Protected type declaration with mix of components/subprograms in private part.
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Protected type declaration with mix of components/subprograms in private part.
 **************************
 <DefiningName "P_Private_Components_Subprograms" protecteds.ads:52:14-52:46>
@@ -249,13 +249,13 @@ Protected type declaration with mix of components/subprograms in private part.
 <SubpDecl ["P"] protecteds.ads:60:7-60:19>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  60 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Description of the procedure P
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure P
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Description of the procedure P
 **************************
 <ComponentDecl ["Y"] protecteds.ads:63:7-63:19>
@@ -271,14 +271,14 @@ Description of the procedure P
 <SubpDecl ["F"] protecteds.ads:66:7-66:33>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  67 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ RETURNS  ()  66 66 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Description of the function F
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 function F return Integer
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Description of the function F
 **************************
 <ComponentDecl ["Z"] protecteds.ads:69:7-69:19>
@@ -294,23 +294,23 @@ Description of the function F
 <EntryDecl ["E"] protecteds.ads:72:7-72:15>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  72 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Description of the entry E
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 entry E
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Description of the entry E
 **************************
 <EndName protecteds.ads:75:8-75:40>
 <Id "P_Private_Components_Subprograms" protecteds.ads:75:8-75:40>
 <SingleProtectedDecl ["P_Entry_Family"] protecteds.ads:77:4-86:23>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
 Protected object with entry family.
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Protected object with entry family.
 **************************
 <DefiningName "P_Entry_Family" protecteds.ads:77:14-77:28>
@@ -322,27 +322,27 @@ Protected object with entry family.
 <EntryDecl ["E1"] protecteds.ads:80:7-80:53>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  81 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER x (X)  80 80 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 First entry family.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 entry E1 (Positive range 1 .. 10) (X : Float)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 First entry family.
 **************************
 <EntryDecl ["E2"] protecteds.ads:83:7-84:32>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  84 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER x (X)  83 83 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Second entry family.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 entry E2 (Positive range 1 .. 10) (X : Float)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Second entry family.
 **************************
 <EndName protecteds.ads:86:8-86:22>
