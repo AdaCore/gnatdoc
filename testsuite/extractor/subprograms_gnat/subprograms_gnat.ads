@@ -227,6 +227,18 @@ package Subprograms_GNAT is
    -- Text 1
    -- @return Text 3
 
+   ---------------
+   -- CS0038741 --
+   ---------------
+
+   procedure Baz_CS0038741
+     (X : Integer;
+      -- X
+      Y : Integer
+      -- Y
+     );  
+   -- Baz
+
 private
 
    --  This is description of the package at the beginning of the private

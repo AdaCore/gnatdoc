@@ -1,13 +1,13 @@
-<CompilationUnit subprograms_gnat.ads:5:1-235:22>
+<CompilationUnit subprograms_gnat.ads:5:1-247:22>
 <AdaNodeList subprograms_gnat.ads:5:1-5:17>
 <WithClause subprograms_gnat.ads:5:1-5:17>
 <LimitedAbsent subprograms_gnat.ads:5:1-5:1>
 <PrivateAbsent subprograms_gnat.ads:5:1-5:1>
 <NameList subprograms_gnat.ads:5:6-5:16>
 <Id "Interfaces" subprograms_gnat.ads:5:6-5:16>
-<LibraryItem subprograms_gnat.ads:7:1-235:22>
+<LibraryItem subprograms_gnat.ads:7:1-247:22>
 <PrivateAbsent subprograms_gnat.ads:5:17-5:17>
-<PackageDecl ["Subprograms_GNAT"] subprograms_gnat.ads:7:1-235:22>
+<PackageDecl ["Subprograms_GNAT"] subprograms_gnat.ads:7:1-247:22>
 **************************
 \/ RAW <<HEADER>> ()
 \/ RAW <<INTERMEDIATE UPPER>> ()
@@ -20,8 +20,8 @@ This is description of the package at the top of the specification.
 **************************
 <DefiningName "Subprograms_GNAT" subprograms_gnat.ads:7:9-7:25>
 <Id "Subprograms_GNAT" subprograms_gnat.ads:7:9-7:25>
-<PublicPart subprograms_gnat.ads:7:28-230:1>
-<AdaNodeList subprograms_gnat.ads:9:4-226:22>
+<PublicPart subprograms_gnat.ads:7:28-242:1>
+<AdaNodeList subprograms_gnat.ads:9:4-239:8>
 <PragmaNode subprograms_gnat.ads:9:4-9:24>
 <Id "Preelaborate" subprograms_gnat.ads:9:11-9:23>
 <BaseAssocList subprograms_gnat.ads:9:23-9:23>
@@ -515,8 +515,24 @@ function Test_VC20_013_Baz3
 \/ DESCRIPTION  ()
 Text 1
 **************************
-<PrivatePart subprograms_gnat.ads:230:8-235:1>
-<AdaNodeList subprograms_gnat.ads:230:8-230:8>
-<EndName subprograms_gnat.ads:235:5-235:21>
-<Id "Subprograms_GNAT" subprograms_gnat.ads:235:5-235:21>
-<PragmaNodeList subprograms_gnat.ads:235:22-235:22>
+<SubpDecl ["Baz_CS0038741"] subprograms_gnat.ads:234:4-239:8>
+**************************
+\/ RAW <<CALLABLE>> ()
+Baz
+\/ PARAMETER x (X)
+X
+\/ PARAMETER y (Y)
+Y
+\/ SNIPPET ada ()
+procedure Baz_CS0038741
+  (X : Integer;
+   Y : Integer
+  )
+\/ DESCRIPTION  ()
+Baz
+**************************
+<PrivatePart subprograms_gnat.ads:242:8-247:1>
+<AdaNodeList subprograms_gnat.ads:242:8-242:8>
+<EndName subprograms_gnat.ads:247:5-247:21>
+<Id "Subprograms_GNAT" subprograms_gnat.ads:247:5-247:21>
+<PragmaNodeList subprograms_gnat.ads:247:22-247:22>
