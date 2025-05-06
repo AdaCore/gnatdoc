@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -53,20 +53,38 @@ package body GNATdoc.Comments.Debug is
       Text     : in out VSS.String_Vectors.Virtual_String_Vector) is
    begin
       for Section of Sections loop
-         Text.Append
-           (VSS.Strings.To_Virtual_String
-              (Indent
-               & "\/ "
-               & Section_Kind'Wide_Wide_Image (Section.Kind)
-               & " "
-               & To_Wide_Wide_String (Section.Symbol)
-               & " ("
-               & To_Wide_Wide_String (Section.Name)
-               & ") "
-               & Line_Number'Wide_Wide_Image (Section.Exact_Start_Line)
-               & Line_Number'Wide_Wide_Image (Section.Exact_End_Line)
-               & Line_Number'Wide_Wide_Image (Section.Group_Start_Line)
-               & Line_Number'Wide_Wide_Image (Section.Group_End_Line)));
+         if Section.Exact_Start_Line /= 0
+           or Section.Exact_End_Line /= 0
+           or Section.Group_Start_Line /= 0
+           or Section.Group_End_Line /= 0
+         then
+            Text.Append
+              (VSS.Strings.To_Virtual_String
+                 (Indent
+                  & "\/ "
+                  & Section_Kind'Wide_Wide_Image (Section.Kind)
+                  & " "
+                  & To_Wide_Wide_String (Section.Symbol)
+                  & " ("
+                  & To_Wide_Wide_String (Section.Name)
+                  & ") "
+                  & Line_Number'Wide_Wide_Image (Section.Exact_Start_Line)
+                  & Line_Number'Wide_Wide_Image (Section.Exact_End_Line)
+                  & Line_Number'Wide_Wide_Image (Section.Group_Start_Line)
+                  & Line_Number'Wide_Wide_Image (Section.Group_End_Line)));
+
+         else
+            Text.Append
+              (VSS.Strings.To_Virtual_String
+                 (Indent
+                  & "\/ "
+                  & Section_Kind'Wide_Wide_Image (Section.Kind)
+                  & " "
+                  & To_Wide_Wide_String (Section.Symbol)
+                  & " ("
+                  & To_Wide_Wide_String (Section.Name)
+                  & ")"));
+         end if;
 
          for Line of Section.Text loop
             Text.Append (Line);

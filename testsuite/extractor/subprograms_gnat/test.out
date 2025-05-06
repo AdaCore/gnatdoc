@@ -9,13 +9,13 @@
 <PrivateAbsent subprograms_gnat.ads:5:17-5:17>
 <PackageDecl ["Subprograms_GNAT"] subprograms_gnat.ads:7:1-234:22>
 **************************
-\/ RAW <<HEADER>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<HEADER>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
 This is description of the package at the top of the specification.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 package Subprograms_GNAT
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is description of the package at the top of the specification.
 **************************
 <DefiningName "Subprograms_GNAT" subprograms_gnat.ads:7:9-7:25>
@@ -27,65 +27,65 @@ This is description of the package at the top of the specification.
 <BaseAssocList subprograms_gnat.ads:9:23-9:23>
 <ConcreteTypeDecl ["Abstract_Type"] subprograms_gnat.ads:13:4-13:62>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Abstract tagged type to test abstract subprograms.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Abstract_Type is abstract tagged limited null record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Abstract tagged type to test abstract subprograms.
 **************************
 <SubpDecl ["Test_Procedure_Inline"] subprograms_gnat.ads:29:4-33:20>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  34 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER x (X)  30 30 31 30
 Value of X
 \/ PARAMETER y (Y)  31 31 32 32
 Value of Y
 \/ PARAMETER z (Z)  33 33 0 0
 Value of Z
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 This is description of the procedure with "inline" parameter's
 description.
 
 @exception Constraint_Error Raised on some error condition.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Test_Procedure_Inline
   (X : Interfaces.Integer_64;
    Y : Interfaces.IEEE_Float_64;
    Z : Integer)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is description of the procedure with "inline" parameter's
 description.
-\/ RAISED_EXCEPTION constraint_error (Constraint_Error)  0 0 0 0
+\/ RAISED_EXCEPTION constraint_error (Constraint_Error)
 Raised on some error condition.
 **************************
 <SubpDecl ["Test_Procedure_Inline_Aspects"] subprograms_gnat.ads:39:4-44:32>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  44 43 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER x (X)  40 40 41 40
 Value of X
 \/ PARAMETER y (Y)  41 41 42 42
 Value of Y
 \/ PARAMETER z (Z)  43 43 0 0
 Value of Z
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 This is description of the procedure with "inline" parameter's
 description and aspects.
 @exception Constraint_Error Raised on some error condition.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Test_Procedure_Inline_Aspects
   (X : Interfaces.Integer_64;
    Y : Interfaces.IEEE_Float_64;
    Z : Integer)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is description of the procedure with "inline" parameter's
 description and aspects.
-\/ RAISED_EXCEPTION constraint_error (Constraint_Error)  0 0 0 0
+\/ RAISED_EXCEPTION constraint_error (Constraint_Error)
 Raised on some error condition.
 **************************
 <SubpDecl ["Test_Procedure_Inline_Before_With_Aspects"] subprograms_gnat.ads:49:4-57:32>
@@ -94,24 +94,24 @@ Raised on some error condition.
 This is description of the procedure with "inline" parameter's
 description and aspects.
 @exception Constraint_Error Raised on some error condition.
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER x (X)  50 50 51 50
 Value of X
 \/ PARAMETER y (Y)  51 51 52 52
 Value of Y
 \/ PARAMETER z (Z)  53 53 0 0
 Value of Z
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 procedure Test_Procedure_Inline_Before_With_Aspects
   (X : Interfaces.Integer_64;
    Y : Interfaces.IEEE_Float_64;
    Z : Integer)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is description of the procedure with "inline" parameter's
 description and aspects.
-\/ RAISED_EXCEPTION constraint_error (Constraint_Error)  0 0 0 0
+\/ RAISED_EXCEPTION constraint_error (Constraint_Error)
 Raised on some error condition.
 **************************
 <SubpDecl ["Test_Procedure_Inline_Before_Aspects"] subprograms_gnat.ads:59:4-67:27>
@@ -120,52 +120,52 @@ Raised on some error condition.
 This is description of the procedure with "inline" parameter's
 description and aspects.
 @exception Constraint_Error Raised on some error condition.
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER x (X)  60 60 61 60
 Value of X
 \/ PARAMETER y (Y)  61 61 62 62
 Value of Y
 \/ PARAMETER z (Z)  63 63 0 0
 Value of Z
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 procedure Test_Procedure_Inline_Before_Aspects
   (X : Interfaces.Integer_64;
    Y : Interfaces.IEEE_Float_64;
    Z : Integer)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is description of the procedure with "inline" parameter's
 description and aspects.
-\/ RAISED_EXCEPTION constraint_error (Constraint_Error)  0 0 0 0
+\/ RAISED_EXCEPTION constraint_error (Constraint_Error)
 Raised on some error condition.
 **************************
 <SubpDecl ["Test_Procedure"] subprograms_gnat.ads:69:4-71:22>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  72 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER a (A)  70 70 71 70
 Value of A
 \/ PARAMETER b (B)  71 71 0 0
 Value of B
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 This is description of the procedure with description of the
 parameters in comment block.
 @param A Value of A
 @param B Value of B
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Test_Procedure
   (A : String;
    B : Character)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is description of the procedure with description of the
 parameters in comment block.
 **************************
 <SubpDecl ["Test_Procedure_Multiple_Parameters"] subprograms_gnat.ads:77:4-79:28>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  80 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER a (A)  78 78 79 78
 Values of strings
 
@@ -176,24 +176,24 @@ Values of strings
 Values of strings
 \/ PARAMETER d (D)  79 79 0 0
 Value of D
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 This is description of the procedure with description of the
 parameters in comment block.
 @param A Value of A
 @param D Value of D
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Test_Procedure_Multiple_Parameters
   (A, B, C : String;
    D       : Character)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is description of the procedure with description of the
 parameters in comment block.
 **************************
 <SubpDecl ["Test_Procedure_Grouped_Parameters"] subprograms_gnat.ads:85:4-91:22>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  92 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER a (A)  86 86 88 87
 Value of A
 \/ PARAMETER b (B)  87 87 88 87
@@ -202,26 +202,26 @@ Value of B
 Values of strings
 \/ PARAMETER d (D)  91 91 0 0
 Value of D
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 This is description of the procedure with description of the
 parameters in comment block.
 @param A Value of A
 @param D Value of D
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Test_Procedure_Grouped_Parameters
   (A : String;
    B : String;
    C : String;
    D : Character)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is description of the procedure with description of the
 parameters in comment block.
 **************************
 <SubpDecl ["Test_Procedure_Multiline_Parameters"] subprograms_gnat.ads:97:4-104:22>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  105 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER a (A)  98 98 99 99
 Value of A
 as well as more information about A.
@@ -234,74 +234,74 @@ Values of C
 as well as more information about C.
 \/ PARAMETER d (D)  104 104 0 0
 Value of D
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 This is description of the procedure with description of the
 parameters in comment block.
 @param A And even more about A.
 @param D Value of D
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Test_Procedure_Multiline_Parameters
   (A : String;
    B : String;
    C : String;
    D : Character)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is description of the procedure with description of the
 parameters in comment block.
 **************************
 <SubpDecl ["Test_Single_Line"] subprograms_gnat.ads:110:4-110:31>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  110 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 This is single line comment for subprogram
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Test_Single_Line
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is single line comment for subprogram
 **************************
 <SubpDecl ["Test"] subprograms_gnat.ads:112:4-112:33>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  113 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER x (X)  112 112 0 0
 Parameter X
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Procedure with parameter.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Test (X : Integer)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Procedure with parameter.
 **************************
 <SubpDecl ["Test"] subprograms_gnat.ads:124:4-124:60>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  125 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER x (X)  124 124 125 123
 Value of X
 \/ PARAMETER y (Y)  124 124 125 123
 Value of Y
 \/ RETURNS  ()  124 124 0 0
 Return value
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Function with two parameters
 
 @param X Value of X
 @param Y Value of Y
 @return Return value
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 function Test (X : Integer; Y : Integer) return Integer
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Function with two parameters
 **************************
 <SubpDecl ["Test_2"] subprograms_gnat.ads:131:4-133:16>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  134 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER x (X)  131 131 132 130
 Value of X
 \/ PARAMETER y (Y)  131 131 132 131
@@ -309,110 +309,110 @@ Value of Y
 \/ RETURNS  ()  132 133 0 0
 Multiline inlined description
 of the return value
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Function with two parameters
 
 @param X Value of X
 @param Y Value of Y
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 function Test_2 (X : Integer; Y : Integer)
   return
     Integer
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Function with two parameters
 **************************
 <SubpDecl ["Test_Aspects_1"] subprograms_gnat.ads:139:4-139:55>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  140 138 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ RETURNS  ()  139 139 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Parameterless single line function declaration.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 function Test_Aspects_1 return Integer
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Parameterless single line function declaration.
 **************************
 <SubpDecl ["Test_Aspects_2"] subprograms_gnat.ads:142:4-144:18>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  143 143 0 0
 Parameterless single line function declaration.
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ RETURNS  ()  142 142 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 function Test_Aspects_2 return Integer
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Parameterless single line function declaration.
 **************************
 <SubpDecl ["Test_Aspects_3"] subprograms_gnat.ads:146:4-148:24>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  147 147 0 0
 Parameterless single line function declaration.
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ RETURNS  ()  146 146 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 function Test_Aspects_3 return Integer
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Parameterless single line function declaration.
 **************************
 <SubpDecl ["Test_Aspects_4"] subprograms_gnat.ads:150:4-153:24>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  152 152 0 0
 Parameterless single line function declaration.
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ RETURNS  ()  151 151 0 0
 Retun value is always positive
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 function Test_Aspects_4
   return Integer
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Parameterless single line function declaration.
 **************************
 <NullSubpDecl ["Test_Null"] subprograms_gnat.ads:159:4-159:32>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  159 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Parameterless null subprogram.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Test_Null
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Parameterless null subprogram.
 **************************
 <AbstractSubpDecl ["Test_Abstract"] subprograms_gnat.ads:162:4-162:63>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  163 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER self (Self)  162 162 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Abstract procedure.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Test_Abstract (Self : Abstract_Type)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Abstract procedure.
 **************************
 <AbstractSubpDecl ["Test_Abstract"] subprograms_gnat.ads:165:4-165:77>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  166 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER self (Self)  165 165 166 164
 \/ RETURNS  ()  165 165 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Abstract function.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 function Test_Abstract (Self : Abstract_Type) return Boolean
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Abstract function.
 **************************
 <ExprFunction ["Test_Expression_1"] subprograms_gnat.ads:168:4-168:53>
@@ -420,12 +420,12 @@ Abstract function.
 \/ RAW <<INTERMEDIATE UPPER>> ()  169 167 0 0
 \/ RAW <<INTERMEDIATE LOWER>> ()  169 0 0 0
 \/ RETURNS  ()  168 168 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Expression function.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 function Test_Expression_1 return Integer
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Expression function.
 **************************
 <ExprFunction ["Test_Expression_2"] subprograms_gnat.ads:171:4-174:15>
@@ -434,12 +434,12 @@ Expression function.
 Multiline expression function, documentation before expression.
 \/ RAW <<INTERMEDIATE LOWER>> ()  175 0 0 0
 \/ RETURNS  ()  172 172 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 function Test_Expression_2
   return Integer
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Multiline expression function, documentation before expression.
 **************************
 <ExprFunction ["Test_Expression_3"] subprograms_gnat.ads:176:4-181:20>
@@ -449,12 +449,12 @@ Multiline expression function, documentation before expression, aspects
 present.
 \/ RAW <<INTERMEDIATE LOWER>> ()  181 180 0 0
 \/ RETURNS  ()  177 177 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 function Test_Expression_3
   return Integer
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Multiline expression function, documentation before expression, aspects
 present.
 **************************
@@ -465,25 +465,25 @@ present.
 Multiline expression function, documentation after expression, aspects
 present.
 \/ RETURNS  ()  184 184 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 function Test_Expression_4
   return Integer
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Multiline expression function, documentation after expression, aspects
 present.
 **************************
 <SubpDecl ["Test_Procedure_With_Pragma"] subprograms_gnat.ads:190:4-190:41>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  190 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Documentation of the procedure with applied pragma.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Test_Procedure_With_Pragma
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Documentation of the procedure with applied pragma.
 **************************
 <PragmaNode subprograms_gnat.ads:191:4-191:47>
@@ -494,101 +494,101 @@ Documentation of the procedure with applied pragma.
 <ConcreteTypeDecl ["Access_Procedure_1"] subprograms_gnat.ads:194:4-194:48>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  195 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Access to parameterless procedure.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Access_Procedure_1 is access procedure;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Access to parameterless procedure.
 **************************
 <ConcreteTypeDecl ["Access_Procedure_2"] subprograms_gnat.ads:197:4-197:62>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  198 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER x (X)  197 197 0 0
 Value of X
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Access to procedure.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Access_Procedure_2 is access procedure (X : Integer);
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Access to procedure.
 **************************
 <ConcreteTypeDecl ["Access_Procedure_3"] subprograms_gnat.ads:200:4-200:65>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  201 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER x (X)  200 200 0 0
 Value of X
 \/ PARAMETER y (Y)  200 200 0 0
 Value of Y
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Access to procedure with two parameters.
 
 @param X Value of X
 @param Y Value of Y
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Access_Procedure_3 is access procedure (X, Y : Integer);
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Access to procedure with two parameters.
 **************************
 <ConcreteTypeDecl ["Access_Function_1"] subprograms_gnat.ads:206:4-207:37>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  208 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ RETURNS  ()  207 207 0 0
 Return value
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Access to parameterless function.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Access_Function_1 is
   access function return Integer;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Access to parameterless function.
 **************************
 <ConcreteTypeDecl ["Access_Function_2"] subprograms_gnat.ads:210:4-211:49>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  212 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER x (X)  211 211 212 210
 Value of X
 \/ RETURNS  ()  211 211 0 0
 Return value
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Access to function
 
 @param X Value of X
 @return Return value
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Access_Function_2 is
   access function (X : Float) return Integer;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Access to function
 **************************
 <SubpDecl ["Test_VC20_013_Baz3"] subprograms_gnat.ads:221:4-225:22>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  226 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER arg (Arg)  222 222 223 224
 Text 2
 \/ RETURNS  ()  225 225 0 0
 Text 3
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Text 1
 @return Text 3
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 function Test_VC20_013_Baz3
    (Arg : Integer
    )
    return Integer
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Text 1
 **************************
 <PrivatePart subprograms_gnat.ads:229:8-234:1>

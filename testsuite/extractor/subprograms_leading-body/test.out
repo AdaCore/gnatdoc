@@ -10,30 +10,30 @@
 <SubpBody ["Hello_World"] subprograms_leading.adb:5:4-11:20>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  5 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 Lower place to put description of the implementation.
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 Description of the implementation of the procedure Hello_World.
-\/ RAW <<DECLARATIVE>> ()  0 0 0 0
+\/ RAW <<DECLARATIVE>> ()
 Declarative place to put description of the implementation.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Hello_World
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Description of the implementation of the procedure Hello_World.
 **************************
 <SubpBody ["Hello_World_Advanced"] subprograms_leading.adb:16:4-24:20>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  16 17 0 0
 Upper place to put description of the implementation.
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 Lower place to put description of the implementation.
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 Description of the implementation of the procedure Hello_World.
-\/ RAW <<DECLARATIVE>> ()  0 0 0 0
+\/ RAW <<DECLARATIVE>> ()
 Declarative place to put description of the implementation.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 procedure Hello_World_Advanced
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Description of the implementation of the procedure Hello_World.
 **************************
 <EndName subprograms_leading.adb:28:5-28:24>

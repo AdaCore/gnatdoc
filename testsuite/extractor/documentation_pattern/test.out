@@ -4,12 +4,12 @@
 <PrivateAbsent documentation_pattern.ads:8:1-8:1>
 <PackageDecl ["Documentation_Pattern"] documentation_pattern.ads:8:1-16:27>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 This is description of the package.
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
 package Documentation_Pattern
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is description of the package.
 **************************
 <DefiningName "Documentation_Pattern" documentation_pattern.ads:8:9-8:30>
@@ -19,13 +19,13 @@ This is description of the package.
 <SubpDecl ["P"] documentation_pattern.ads:14:3-14:15>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  14 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
 This is description of the subprogram.
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 procedure P
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is description of the subprogram.
 **************************
 <EndName documentation_pattern.ads:16:5-16:26>

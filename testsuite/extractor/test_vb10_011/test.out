@@ -4,21 +4,21 @@
 <PrivateAbsent test_vb10_011.ads:2:1-2:1>
 <GenericPackageDecl ["Test_VB10_011"] test_vb10_011.ads:2:1-63:19>
 **************************
-\/ FORMAL item_t (Item_T)  0 0 0 0
-  \/ RAW <<LEADING>> ()  0 0 0 0
-  \/ RAW <<TRAILING>> ()  0 0 0 0
+\/ FORMAL item_t (Item_T)
+  \/ RAW <<LEADING>> ()
+  \/ RAW <<TRAILING>> ()
 Item.
-  \/ SNIPPET ada ()  0 0 0 0
+  \/ SNIPPET ada ()
 type Item_T is private;
-  \/ DESCRIPTION  ()  0 0 0 0
+  \/ DESCRIPTION  ()
 Item.
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
 generic
    type Item_T is private;
 package Test_VB10_011
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <GenericFormalPart test_vb10_011.ads:2:1-3:27>
 <GenericPackageInternal ["Test_VB10_011"] test_vb10_011.ads:5:1-63:19>
@@ -30,72 +30,72 @@ package Test_VB10_011
 **************************
 \/ FIELD baz_1 (Baz_1)  8 8 9 9
 A baz.
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Foo type.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Foo_1_T
   (Baz_1 : Natural
   ) is private;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Foo type.
 **************************
 <ConcreteTypeDecl ["Foo_2_T"] test_vb10_011.ads:13:4-16:19>
 **************************
 \/ FIELD baz_2 (Baz_2)  14 14 15 15
 A baz.
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Foo type.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Foo_2_T
   (Baz_2 : Natural
   ) is private;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Foo type.
 **************************
 <ConcreteTypeDecl ["Foo_3_T"] test_vb10_011.ads:19:4-21:19>
 **************************
 \/ FIELD baz_3 (Baz_3)  20 20 21 20
 A baz.
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Foo type.
 @field Baz_3 A baz.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Foo_3_T
   (Baz_3 : Natural
   ) is private;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Foo type.
 **************************
 <ConcreteTypeDecl ["Foo_4_T"] test_vb10_011.ads:25:4-28:19>
 **************************
 \/ FIELD baz_4 (Baz_4)  26 26 27 27
 A baz.
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Foo type.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Foo_4_T
   (Baz_4 : Natural
   ) is private;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Foo type.
 **************************
 <ConcreteTypeDecl ["Foo_5_T"] test_vb10_011.ads:31:4-33:19>
 **************************
 \/ FIELD baz_5 (Baz_5)  32 32 33 32
 A baz.
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Foo type.
 @field Baz_5 A baz.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Foo_5_T
   (Baz_5 : Natural
   ) is private;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Foo type.
 **************************
 <PrivatePart test_vb10_011.ads:37:8-63:1>
@@ -103,63 +103,63 @@ Foo type.
 <ConcreteTypeDecl ["Foo_1_T"] test_vb10_011.ads:39:4-41:23>
 **************************
 \/ FIELD baz_1 (Baz_1)  40 40 41 40
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type Foo_1_T
   (Baz_1 : Natural
   ) is null record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <ConcreteTypeDecl ["Foo_2_T"] test_vb10_011.ads:43:4-46:23>
 **************************
 \/ FIELD baz_2 (Baz_2)  44 44 45 45
 A baz.
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type Foo_2_T
   (Baz_2 : Natural
   ) is null record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <ConcreteTypeDecl ["Foo_3_T"] test_vb10_011.ads:48:4-50:23>
 **************************
 \/ FIELD baz_3 (Baz_3)  49 49 50 49
 A baz.
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 @field Baz_3 A baz.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Foo_3_T
   (Baz_3 : Natural
   ) is null record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <ConcreteTypeDecl ["Foo_4_T"] test_vb10_011.ads:53:4-55:23>
 **************************
 \/ FIELD baz_4 (Baz_4)  54 54 55 54
 A baz.
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 @field Baz_4 A baz.
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 type Foo_4_T
   (Baz_4 : Natural
   ) is null record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <ConcreteTypeDecl ["Foo_5_T"] test_vb10_011.ads:58:4-61:23>
 **************************
 \/ FIELD baz_5 (Baz_5)  59 59 60 60
 A baz.
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type Foo_5_T
   (Baz_5 : Natural
   ) is null record;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <EndName test_vb10_011.ads:63:5-63:18>
 <Id "Test_VB10_011" test_vb10_011.ads:63:5-63:18>

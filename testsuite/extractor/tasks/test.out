@@ -4,15 +4,15 @@
 <PrivateAbsent tasks.ads:7:1-7:1>
 <PackageDecl ["Tasks"] tasks.ads:7:1-93:11>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 Test extraction of the documentation for tasks and task types.
 Note, documentation extraction code is almost common for subprograms and
 entries, thus, number of test cases for entries are minimal to check that
 it works and cover entries specific cases.
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
 package Tasks
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Test extraction of the documentation for tasks and task types.
 Note, documentation extraction code is almost common for subprograms and
 entries, thus, number of test cases for entries are minimal to check that
@@ -24,38 +24,38 @@ it works and cover entries specific cases.
 <AdaNodeList tasks.ads:9:4-91:13>
 <ConcreteTypeDecl ["IE"] tasks.ads:9:4-9:38>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type IE is synchronized interface;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <ConcreteTypeDecl ["IP"] tasks.ads:11:4-11:38>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 type IP is synchronized interface;
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <AbstractSubpDecl ["Process"] tasks.ads:13:4-13:61>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  14 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
 \/ PARAMETER self (Self)  13 13 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 procedure Process (Self : IP)
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <SingleTaskDecl ["T_Entryless_Empty_Trailing"] tasks.ads:15:4-15:36>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 This is trailing section of description of the task
 T_Entryless_Empty_Trailing.
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is trailing section of description of the task
 T_Entryless_Empty_Trailing.
 **************************
@@ -64,11 +64,11 @@ T_Entryless_Empty_Trailing.
 <Id "T_Entryless_Empty_Trailing" tasks.ads:15:9-15:35>
 <SingleTaskDecl ["T_Entryless_Leading"] tasks.ads:21:4-22:28>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 This is leading section of the description of the task
 T_Entryless_Leading.
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 This is leading section of the description of the task
 T_Entryless_Leading.
 **************************
@@ -83,11 +83,11 @@ T_Entryless_Leading.
 <Id "T_Entryless_Leading" tasks.ads:22:8-22:27>
 <SingleTaskDecl ["T_Entryless_Intermediate"] tasks.ads:24:4-27:33>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
 This is intermediate section of the description of the task
 T_Entryless_Intermediate.
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is intermediate section of the description of the task
 T_Entryless_Intermediate.
 **************************
@@ -102,11 +102,11 @@ T_Entryless_Intermediate.
 <Id "T_Entryless_Intermediate" tasks.ads:27:8-27:32>
 <SingleTaskDecl ["T_Entryless_Inherited_Leading"] tasks.ads:31:4-32:38>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 This is leading section of the description of the task
 T_Entryless_Inherited_Leading
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 This is leading section of the description of the task
 T_Entryless_Inherited_Leading
 **************************
@@ -122,11 +122,11 @@ T_Entryless_Inherited_Leading
 <Id "T_Entryless_Inherited_Leading" tasks.ads:32:8-32:37>
 <SingleTaskDecl ["T_Entryless_Inherited_Intermediate"] tasks.ads:34:4-37:43>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
 This is intermediate section of the description of the task
 T_Entryless_Inherited_Intermediate.
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is intermediate section of the description of the task
 T_Entryless_Inherited_Intermediate.
 **************************
@@ -142,9 +142,9 @@ T_Entryless_Inherited_Intermediate.
 <Id "T_Entryless_Inherited_Intermediate" tasks.ads:37:8-37:42>
 <SingleTaskDecl ["T_1"] tasks.ads:39:4-42:12>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 **************************
 <SingleTaskTypeDecl ["T_1"] tasks.ads:39:9-42:11>
 <DefiningName "T_1" tasks.ads:39:9-39:12>
@@ -156,23 +156,23 @@ T_Entryless_Inherited_Intermediate.
 <EntryDecl ["E"] tasks.ads:40:7-40:15>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  40 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Trailing comment for the entry
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 entry E
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Trailing comment for the entry
 **************************
 <EndName tasks.ads:42:8-42:11>
 <Id "T_1" tasks.ads:42:8-42:11>
 <SingleTaskDecl ["T_2"] tasks.ads:44:4-47:12>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
 Leading comment for the entry
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Leading comment for the entry
 **************************
 <SingleTaskTypeDecl ["T_2"] tasks.ads:44:9-47:11>
@@ -185,21 +185,21 @@ Leading comment for the entry
 <EntryDecl ["E"] tasks.ads:46:7-46:15>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  46 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
 Leading comment for the entry
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 entry E
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <EndName tasks.ads:47:8-47:11>
 <Id "T_2" tasks.ads:47:8-47:11>
 <SingleTaskDecl ["T_3"] tasks.ads:49:4-52:12>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 **************************
 <SingleTaskTypeDecl ["T_3"] tasks.ads:49:9-52:11>
 <DefiningName "T_3" tasks.ads:49:9-49:12>
@@ -211,24 +211,24 @@ entry E
 <EntryDecl ["E"] tasks.ads:50:7-50:15>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  50 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Trailing comment for the entry
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 entry E
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Trailing comment for the entry
 **************************
 <EndName tasks.ads:52:8-52:11>
 <Id "T_3" tasks.ads:52:8-52:11>
 <TaskTypeDecl ["TT_Entryless_Empty_Trailing"] tasks.ads:54:4-54:42>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 This is trailing section of description of the task
 TT_Entryless_Empty_Trailing.
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is trailing section of description of the task
 TT_Entryless_Empty_Trailing.
 **************************
@@ -236,11 +236,11 @@ TT_Entryless_Empty_Trailing.
 <Id "TT_Entryless_Empty_Trailing" tasks.ads:54:14-54:41>
 <TaskTypeDecl ["TT_Entryless_Leading"] tasks.ads:60:4-61:29>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 This is leading section of the description of the task
 TT_Entryless_Leading.
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 This is leading section of the description of the task
 TT_Entryless_Leading.
 **************************
@@ -254,11 +254,11 @@ TT_Entryless_Leading.
 <Id "TT_Entryless_Leading" tasks.ads:61:8-61:28>
 <TaskTypeDecl ["TT_Entryless_Intermediate"] tasks.ads:63:4-66:34>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
 This is intermediate section of the description of the task
 TT_Entryless_Intermediate.
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is intermediate section of the description of the task
 TT_Entryless_Intermediate.
 **************************
@@ -272,11 +272,11 @@ TT_Entryless_Intermediate.
 <Id "TT_Entryless_Intermediate" tasks.ads:66:8-66:33>
 <TaskTypeDecl ["TT_Entryless_Inherited_Leading"] tasks.ads:70:4-71:39>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
 This is leading section of the description of the task
 TT_Entryless_Inherited_Leading
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 This is leading section of the description of the task
 TT_Entryless_Inherited_Leading
 **************************
@@ -291,11 +291,11 @@ TT_Entryless_Inherited_Leading
 <Id "TT_Entryless_Inherited_Leading" tasks.ads:71:8-71:38>
 <TaskTypeDecl ["TT_Entryless_Inherited_Intermediate"] tasks.ads:73:4-76:44>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
 This is intermediate section of the description of the task
 TT_Entryless_Inherited_Intermediate.
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 This is intermediate section of the description of the task
 TT_Entryless_Inherited_Intermediate.
 **************************
@@ -310,9 +310,9 @@ TT_Entryless_Inherited_Intermediate.
 <Id "TT_Entryless_Inherited_Intermediate" tasks.ads:76:8-76:43>
 <TaskTypeDecl ["TT_1"] tasks.ads:78:4-81:13>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 **************************
 <DefiningName "TT_1" tasks.ads:78:14-78:18>
 <Id "TT_1" tasks.ads:78:14-78:18>
@@ -323,23 +323,23 @@ TT_Entryless_Inherited_Intermediate.
 <EntryDecl ["E"] tasks.ads:79:7-79:15>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  79 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Trailing comment for the entry
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 entry E
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Trailing comment for the entry
 **************************
 <EndName tasks.ads:81:8-81:12>
 <Id "TT_1" tasks.ads:81:8-81:12>
 <TaskTypeDecl ["TT_2"] tasks.ads:83:4-86:13>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
 Leading comment for the entry
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Leading comment for the entry
 **************************
 <DefiningName "TT_2" tasks.ads:83:14-83:18>
@@ -351,21 +351,21 @@ Leading comment for the entry
 <EntryDecl ["E"] tasks.ads:85:7-85:15>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  85 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
 Leading comment for the entry
-\/ RAW <<TRAILING>> ()  0 0 0 0
-\/ SNIPPET ada ()  0 0 0 0
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
 entry E
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 **************************
 <EndName tasks.ads:86:8-86:12>
 <Id "TT_2" tasks.ads:86:8-86:12>
 <TaskTypeDecl ["TT_3"] tasks.ads:88:4-91:13>
 **************************
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<INTERMEDIATE UPPER>> ()  0 0 0 0
-\/ DESCRIPTION  ()  0 0 0 0
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ DESCRIPTION  ()
 **************************
 <DefiningName "TT_3" tasks.ads:88:14-88:18>
 <Id "TT_3" tasks.ads:88:14-88:18>
@@ -376,13 +376,13 @@ entry E
 <EntryDecl ["E"] tasks.ads:89:7-89:15>
 **************************
 \/ RAW <<INTERMEDIATE UPPER>> ()  89 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  0 0 0 0
-\/ RAW <<LEADING>> ()  0 0 0 0
-\/ RAW <<TRAILING>> ()  0 0 0 0
+\/ RAW <<INTERMEDIATE LOWER>> ()
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
 Trailing comment for the entry
-\/ SNIPPET ada ()  0 0 0 0
+\/ SNIPPET ada ()
 entry E
-\/ DESCRIPTION  ()  0 0 0 0
+\/ DESCRIPTION  ()
 Trailing comment for the entry
 **************************
 <EndName tasks.ads:91:8-91:12>
