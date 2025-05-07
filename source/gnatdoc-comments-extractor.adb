@@ -999,18 +999,17 @@ package body GNATdoc.Comments.Extractor is
                end case;
             end loop;
          end;
-
-      else
-         --  Leading section: before the library item and after context clauses
-         --  of the compilation unit
-
-         Extract_Leading_Section
-           (Node.Token_Start,
-            Options,
-            True,
-            Sections,
-            Leading_Section);
       end if;
+
+      --  Leading section: before the library item and after context clauses of
+      --  the compilation unit
+
+      Extract_Leading_Section
+        (Node.Token_Start,
+         Options,
+         True,
+         Sections,
+         Leading_Section);
    end Extract_Compilation_Unit_Documentation;
 
    --------------------------------------
