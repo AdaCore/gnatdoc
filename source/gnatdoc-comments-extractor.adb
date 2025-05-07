@@ -2496,6 +2496,27 @@ package body GNATdoc.Comments.Extractor is
             end if;
          end loop;
 
+         if Raw_Section = null
+           or else (Raw_Section.Text.Is_Empty
+                    and then Root_Node.P_Is_Compilation_Unit_Root)
+         then
+            Extract_Compilation_Unit_Documentation
+              (Node            => Root_Node,
+               Options         => Options,
+               Sections        => Sections,
+               Header_Section  => Header_Section,
+               Leading_Section => Leading_Section);
+
+            if Leading_Section /= null
+              and then not Leading_Section.Text.Is_Empty
+            then
+               Raw_Section := Leading_Section;
+
+            elsif Header_Section /= null then
+               Raw_Section := Header_Section;
+            end if;
+         end if;
+
          Parse_Raw_Section
            (Location     => GNATdoc.Utilities.Location (Spec_Node),
             Raw_Section  => Raw_Section,
