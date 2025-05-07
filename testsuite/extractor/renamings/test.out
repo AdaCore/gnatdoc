@@ -11,6 +11,7 @@
 **************************
 \/ RAW <<HEADER>> ()
 This is test data for test of documentation extraction for renamings.
+\/ RAW <<LEADING>> ()
 \/ RAW <<INTERMEDIATE UPPER>> ()
 \/ SNIPPET ada ()
 package Renamings
@@ -53,10 +54,7 @@ Documentation for package renaming
 **************************
 <SubpRenamingDecl ["RP"] renamings.ads:17:4-17:31>
 **************************
-\/ RAW <<INTERMEDIATE UPPER>> ()  17 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()
-\/ RAW <<LEADING>> ()
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
 Documentation for procedure renaming
 \/ SNIPPET ada ()
 procedure RP
@@ -65,12 +63,9 @@ Documentation for procedure renaming
 **************************
 <SubpRenamingDecl ["RF"] renamings.ads:20:4-20:45>
 **************************
-\/ RAW <<INTERMEDIATE UPPER>> ()  21 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()
-\/ RETURNS  ()  20 20 0 0
-\/ RAW <<LEADING>> ()
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
 Documentation for function renaming
+\/ RETURNS  ()
 \/ SNIPPET ada ()
 function RF return Integer
 \/ DESCRIPTION  ()

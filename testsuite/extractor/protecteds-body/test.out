@@ -113,10 +113,7 @@ Protected type declaration with mix of components/subprograms in private part.
 <AdaNodeList protecteds.adb:42:7-52:13>
 <NullSubpDecl ["P"] protecteds.adb:42:7-42:27>
 **************************
-\/ RAW <<INTERMEDIATE UPPER>> ()  42 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()
-\/ RAW <<LEADING>> ()
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
 Description of the procedure P body
 \/ SNIPPET ada ()
 procedure P
@@ -125,12 +122,9 @@ Description of the procedure P body
 **************************
 <ExprFunction ["F"] protecteds.adb:45:7-45:40>
 **************************
-\/ RAW <<INTERMEDIATE UPPER>> ()  46 44 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()  46 0 0 0
-\/ RETURNS  ()  45 45 0 0
-\/ RAW <<LEADING>> ()
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
 Description of the function F body
+\/ RETURNS  ()
 \/ SNIPPET ada ()
 function F return Integer
 \/ DESCRIPTION  ()

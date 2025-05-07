@@ -100,22 +100,16 @@ type Object_Access_Type is access all Derived_Type'Class;
   \/ DESCRIPTION  ()
 Description of the object access type.
 \/ FORMAL procedure_access_type (Procedure_Access_Type)
-  \/ RAW <<INTERMEDIATE UPPER>> ()  40 0 0 0
-  \/ RAW <<INTERMEDIATE LOWER>> ()
-  \/ RAW <<LEADING>> ()
-  \/ RAW <<TRAILING>> ()
+  \/ RAW <<CALLABLE>> ()
 Description of the access to parameterless procedure type.
   \/ SNIPPET ada ()
 procedure
   \/ DESCRIPTION  ()
 Description of the access to parameterless procedure type.
 \/ FORMAL function_access_type (Function_Access_Type)
-  \/ RAW <<INTERMEDIATE UPPER>> ()  43 0 0 0
-  \/ RAW <<INTERMEDIATE LOWER>> ()
-  \/ RETURNS  ()  42 42 0 0
-  \/ RAW <<LEADING>> ()
-  \/ RAW <<TRAILING>> ()
+  \/ RAW <<CALLABLE>> ()
 Description of the access to parameterless function type.
+  \/ RETURNS  ()
   \/ SNIPPET ada ()
 function return Floating_Point_Type
   \/ DESCRIPTION  ()
@@ -162,69 +156,57 @@ This generic package has set of formal parameters of all types.
 **************************
 \/ FORMAL procedure_access_type (Procedure_Access_Type)
 Access to procedure
-  \/ RAW <<INTERMEDIATE UPPER>> ()  65 0 0 0
-  \/ RAW <<INTERMEDIATE LOWER>> ()
-  \/ PARAMETER x (X)  63 63 64 63
+  \/ RAW <<CALLABLE>> ()
+  \/ PARAMETER x (X)
 Value of X
-  \/ PARAMETER y (Y)  64 64 0 0
+  \/ PARAMETER y (Y)
 Value of Y
-  \/ RAW <<LEADING>> ()
-  \/ RAW <<TRAILING>> ()
   \/ SNIPPET ada ()
-                                   procedure
+procedure
 (X : Integer;
- Y : Integer)
+Y : Integer)
   \/ DESCRIPTION  ()
 \/ FORMAL function_access_type (Function_Access_Type)
 Access to function
-  \/ RAW <<INTERMEDIATE UPPER>> ()  70 0 0 0
-  \/ RAW <<INTERMEDIATE LOWER>> ()
-  \/ PARAMETER x (X)  67 67 68 67
+  \/ RAW <<CALLABLE>> ()
+  \/ PARAMETER x (X)
 Value of X
-  \/ PARAMETER y (Y)  68 68 69 68
+  \/ PARAMETER y (Y)
 Value of Y
-  \/ RETURNS  ()  69 69 0 0
+  \/ RETURNS  ()
 Return value
-  \/ RAW <<LEADING>> ()
-  \/ RAW <<TRAILING>> ()
   \/ SNIPPET ada ()
-                                  function
+function
 (X : Integer;
- Y : Integer)
- return Integer
+Y : Integer)
+return Integer
   \/ DESCRIPTION  ()
 \/ FORMAL procedure_p (Procedure_P)
 Formal procedure
-  \/ RAW <<INTERMEDIATE UPPER>> ()  74 0 0 0
-  \/ RAW <<INTERMEDIATE LOWER>> ()
-  \/ PARAMETER x (X)  72 72 73 72
+  \/ RAW <<CALLABLE>> ()
+  \/ PARAMETER x (X)
 Value of X
-  \/ PARAMETER y (Y)  73 73 0 0
+  \/ PARAMETER y (Y)
 Value of Y
-  \/ RAW <<LEADING>> ()
-  \/ RAW <<TRAILING>> ()
   \/ SNIPPET ada ()
-   procedure Procedure_P
+procedure Procedure_P
 (X : Integer;
- Y : Integer)
+Y : Integer)
   \/ DESCRIPTION  ()
 \/ FORMAL function_f (Function_F)
 Formal function
-  \/ RAW <<INTERMEDIATE UPPER>> ()  79 0 0 0
-  \/ RAW <<INTERMEDIATE LOWER>> ()
-  \/ PARAMETER x (X)  76 76 77 76
+  \/ RAW <<CALLABLE>> ()
+  \/ PARAMETER x (X)
 Value of X
-  \/ PARAMETER y (Y)  77 77 78 77
+  \/ PARAMETER y (Y)
 Value of Y
-  \/ RETURNS  ()  78 78 0 0
+  \/ RETURNS  ()
 Return value
-  \/ RAW <<LEADING>> ()
-  \/ RAW <<TRAILING>> ()
   \/ SNIPPET ada ()
-   function Function_F
+function Function_F
 (X : Integer;
- Y : Integer)
- return Integer
+Y : Integer)
+return Integer
   \/ DESCRIPTION  ()
 \/ RAW <<LEADING>> ()
 This generic package has set of formal parameters of access to
@@ -343,16 +325,15 @@ Description of the formal parameter.
 type T is private;
   \/ DESCRIPTION  ()
 Description of the formal parameter.
-\/ RAW <<INTERMEDIATE UPPER>> ()  111 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()
-\/ PARAMETER x (X)  110 110 0 0
-\/ RAW <<LEADING>> ()
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
+Description of the generic procedure
+\/ PARAMETER x (X)
 \/ SNIPPET ada ()
 generic
    type T is private;
 procedure Generic_Procedure (X : T)
 \/ DESCRIPTION  ()
+Description of the generic procedure
 **************************
 <GenericFormalPart generics.ads:106:4-107:25>
 <GenericSubpInternal ["Generic_Procedure"] generics.ads:110:4-110:39>
@@ -379,17 +360,25 @@ procedure Generic_Procedure (X : T)
   \/ SNIPPET ada ()
 type T is private;
   \/ DESCRIPTION  ()
-\/ RAW <<INTERMEDIATE UPPER>> ()  119 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()
-\/ PARAMETER x (X)  118 118 119 117
-\/ RETURNS  ()  118 118 0 0
-\/ RAW <<LEADING>> ()
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
+Description of the generic function
+
+@param X Description of the parameter
+@returns Description of the return value
+
+@formal T Description of the formal type
+\/ PARAMETER x (X)
+Description of the parameter
+\/ RETURNS  ()
+s Description of the return value
+
+@formal T Description of the formal type
 \/ SNIPPET ada ()
 generic
    type T is private;
 function Generic_Function (X : T) return T
 \/ DESCRIPTION  ()
+Description of the generic function
 **************************
 <GenericFormalPart generics.ads:115:4-116:25>
 <GenericSubpInternal ["Generic_Function"] generics.ads:118:4-118:46>
@@ -452,12 +441,9 @@ package Discriminanted_Types
 type Cursor;
   \/ DESCRIPTION  ()
 \/ FORMAL has_element (Has_Element)
-  \/ RAW <<INTERMEDIATE UPPER>> ()  141 0 0 0
-  \/ RAW <<INTERMEDIATE LOWER>> ()
-  \/ PARAMETER self (Self)  140 140 141 139
-  \/ RETURNS  ()  140 140 0 0
-  \/ RAW <<LEADING>> ()
-  \/ RAW <<TRAILING>> ()
+  \/ RAW <<CALLABLE>> ()
+  \/ PARAMETER self (Self)
+  \/ RETURNS  ()
   \/ SNIPPET ada ()
 function Has_Element (Self : Cursor) return Boolean
   \/ DESCRIPTION  ()
@@ -486,11 +472,11 @@ pragma in formal part.
 <EndName generics.ads:147:5-147:13>
 <Id "Generics" generics.ads:147:5-147:13>
 <PragmaNodeList generics.ads:147:14-147:14>
-<CompilationUnit unchecked_conversion.ads:4:1-12:49>
-<AdaNodeList unchecked_conversion.ads:4:1-4:1>
-<LibraryItem unchecked_conversion.ads:4:1-8:58>
-<PrivateAbsent unchecked_conversion.ads:4:1-4:1>
-<GenericSubpDecl ["Unchecked_Conversion"] unchecked_conversion.ads:4:1-8:58>
+<CompilationUnit unchecked_conversion.ads:6:1-14:49>
+<AdaNodeList unchecked_conversion.ads:6:1-6:1>
+<LibraryItem unchecked_conversion.ads:6:1-10:58>
+<PrivateAbsent unchecked_conversion.ads:6:1-6:1>
+<GenericSubpDecl ["Unchecked_Conversion"] unchecked_conversion.ads:6:1-10:58>
 **************************
 \/ FORMAL source (Source)
   \/ RAW <<LEADING>> ()
@@ -504,58 +490,56 @@ type Source (<>) is limited private;
   \/ SNIPPET ada ()
 type Target (<>) is limited private;
   \/ DESCRIPTION  ()
-\/ RAW <<INTERMEDIATE UPPER>> ()  9 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()
-\/ PARAMETER s (S)  8 8 9 7
-\/ RETURNS  ()  8 8 0 0
-\/ RAW <<LEADING>> ()
-An unchecked type conversion can be achieved by a call to an instance of 
-the generic function Unchecked_Conversion.
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
+\/ PARAMETER s (S)
+\/ RETURNS  ()
 \/ SNIPPET ada ()
 generic
    type Source (<>) is limited private;
    type Target (<>) is limited private;
 function Unchecked_Conversion (S : Source) return Target
+\/ RAW <<LEADING>> ()
+An unchecked type conversion can be achieved by a call to an instance of
+the generic function Unchecked_Conversion.
 \/ DESCRIPTION  ()
-An unchecked type conversion can be achieved by a call to an instance of 
+An unchecked type conversion can be achieved by a call to an instance of
 the generic function Unchecked_Conversion.
 **************************
-<GenericFormalPart unchecked_conversion.ads:4:1-6:40>
-<GenericSubpInternal ["Unchecked_Conversion"] unchecked_conversion.ads:8:1-8:57>
-<SubpSpec unchecked_conversion.ads:8:1-8:57>
-<SubpKindFunction unchecked_conversion.ads:8:1-8:9>
-<DefiningName "Unchecked_Conversion" unchecked_conversion.ads:8:10-8:30>
-<Id "Unchecked_Conversion" unchecked_conversion.ads:8:10-8:30>
-<Params unchecked_conversion.ads:8:31-8:43>
-<ParamSpecList unchecked_conversion.ads:8:32-8:42>
-<ParamSpec ["S"] unchecked_conversion.ads:8:32-8:42>
-<DefiningNameList unchecked_conversion.ads:8:32-8:33>
-<DefiningName "S" unchecked_conversion.ads:8:32-8:33>
-<Id "S" unchecked_conversion.ads:8:32-8:33>
-<AliasedAbsent unchecked_conversion.ads:8:35-8:35>
-<ModeDefault unchecked_conversion.ads:8:35-8:35>
-<SubtypeIndication unchecked_conversion.ads:8:36-8:42>
-<NotNullAbsent unchecked_conversion.ads:8:35-8:35>
-<Id "Source" unchecked_conversion.ads:8:36-8:42>
-<SubtypeIndication unchecked_conversion.ads:8:51-8:57>
-<NotNullAbsent unchecked_conversion.ads:8:50-8:50>
-<Id "Target" unchecked_conversion.ads:8:51-8:57>
-<PragmaNodeList unchecked_conversion.ads:10:1-12:49>
-<PragmaNode unchecked_conversion.ads:10:1-10:55>
-<Id "No_Elaboration_Code_All" unchecked_conversion.ads:10:8-10:31>
-<BaseAssocList unchecked_conversion.ads:10:33-10:53>
-<PragmaArgumentAssoc unchecked_conversion.ads:10:33-10:53>
-<Id "Unchecked_Conversion" unchecked_conversion.ads:10:33-10:53>
-<PragmaNode unchecked_conversion.ads:11:1-11:36>
-<Id "Pure" unchecked_conversion.ads:11:8-11:12>
-<BaseAssocList unchecked_conversion.ads:11:14-11:34>
-<PragmaArgumentAssoc unchecked_conversion.ads:11:14-11:34>
-<Id "Unchecked_Conversion" unchecked_conversion.ads:11:14-11:34>
-<PragmaNode unchecked_conversion.ads:12:1-12:49>
-<Id "Import" unchecked_conversion.ads:12:8-12:14>
-<BaseAssocList unchecked_conversion.ads:12:16-12:47>
-<PragmaArgumentAssoc unchecked_conversion.ads:12:16-12:25>
-<Id "Intrinsic" unchecked_conversion.ads:12:16-12:25>
-<PragmaArgumentAssoc unchecked_conversion.ads:12:27-12:47>
-<Id "Unchecked_Conversion" unchecked_conversion.ads:12:27-12:47>
+<GenericFormalPart unchecked_conversion.ads:6:1-8:40>
+<GenericSubpInternal ["Unchecked_Conversion"] unchecked_conversion.ads:10:1-10:57>
+<SubpSpec unchecked_conversion.ads:10:1-10:57>
+<SubpKindFunction unchecked_conversion.ads:10:1-10:9>
+<DefiningName "Unchecked_Conversion" unchecked_conversion.ads:10:10-10:30>
+<Id "Unchecked_Conversion" unchecked_conversion.ads:10:10-10:30>
+<Params unchecked_conversion.ads:10:31-10:43>
+<ParamSpecList unchecked_conversion.ads:10:32-10:42>
+<ParamSpec ["S"] unchecked_conversion.ads:10:32-10:42>
+<DefiningNameList unchecked_conversion.ads:10:32-10:33>
+<DefiningName "S" unchecked_conversion.ads:10:32-10:33>
+<Id "S" unchecked_conversion.ads:10:32-10:33>
+<AliasedAbsent unchecked_conversion.ads:10:35-10:35>
+<ModeDefault unchecked_conversion.ads:10:35-10:35>
+<SubtypeIndication unchecked_conversion.ads:10:36-10:42>
+<NotNullAbsent unchecked_conversion.ads:10:35-10:35>
+<Id "Source" unchecked_conversion.ads:10:36-10:42>
+<SubtypeIndication unchecked_conversion.ads:10:51-10:57>
+<NotNullAbsent unchecked_conversion.ads:10:50-10:50>
+<Id "Target" unchecked_conversion.ads:10:51-10:57>
+<PragmaNodeList unchecked_conversion.ads:12:1-14:49>
+<PragmaNode unchecked_conversion.ads:12:1-12:55>
+<Id "No_Elaboration_Code_All" unchecked_conversion.ads:12:8-12:31>
+<BaseAssocList unchecked_conversion.ads:12:33-12:53>
+<PragmaArgumentAssoc unchecked_conversion.ads:12:33-12:53>
+<Id "Unchecked_Conversion" unchecked_conversion.ads:12:33-12:53>
+<PragmaNode unchecked_conversion.ads:13:1-13:36>
+<Id "Pure" unchecked_conversion.ads:13:8-13:12>
+<BaseAssocList unchecked_conversion.ads:13:14-13:34>
+<PragmaArgumentAssoc unchecked_conversion.ads:13:14-13:34>
+<Id "Unchecked_Conversion" unchecked_conversion.ads:13:14-13:34>
+<PragmaNode unchecked_conversion.ads:14:1-14:49>
+<Id "Import" unchecked_conversion.ads:14:8-14:14>
+<BaseAssocList unchecked_conversion.ads:14:16-14:47>
+<PragmaArgumentAssoc unchecked_conversion.ads:14:16-14:25>
+<Id "Intrinsic" unchecked_conversion.ads:14:16-14:25>
+<PragmaArgumentAssoc unchecked_conversion.ads:14:27-14:47>
+<Id "Unchecked_Conversion" unchecked_conversion.ads:14:27-14:47>

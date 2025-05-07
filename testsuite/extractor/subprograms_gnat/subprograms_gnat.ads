@@ -27,40 +27,42 @@ package Subprograms_GNAT is
    --  end of this specification.
 
    procedure Test_Procedure_Inline
-     (X : Interfaces.Integer_64;  --  Value of X
-      Y : Interfaces.IEEE_Float_64;
-      --  Value of Y
-      Z : Integer);               --  Value of Z
+     (X : Interfaces.Integer_64;     --  Value of X
+      Y : Interfaces.IEEE_Float_64;  --  Value of Y
+      --  Values of X and Y
+      Z : Integer);                  --  Value of Z
    --  This is description of the procedure with "inline" parameter's
    --  description.
    --
    --  @exception Constraint_Error Raised on some error condition.
 
    procedure Test_Procedure_Inline_Aspects
-     (X : Interfaces.Integer_64;  --  Value of X
-      Y : Interfaces.IEEE_Float_64;
-      --  Value of Y
-      Z : Integer)                --  Value of Z
+     (X : Interfaces.Integer_64;     --  Value of X
+      Y : Interfaces.IEEE_Float_64;  --  Value of Y
+      Z : Integer)                   --  Value of Z
         with Convention => Ada;
    --  This is description of the procedure with "inline" parameter's
    --  description and aspects.
    --  @exception Constraint_Error Raised on some error condition.
 
    procedure Test_Procedure_Inline_Before_With_Aspects
-     (X : Interfaces.Integer_64;  --  Value of X
+     (X : Interfaces.Integer_64;
+      --  Value of X
       Y : Interfaces.IEEE_Float_64;
       --  Value of Y
-      Z : Integer)                --  Value of Z
+      Z : Integer)
+      --  Value of Z
    --  This is description of the procedure with "inline" parameter's
    --  description and aspects.
    --  @exception Constraint_Error Raised on some error condition.
         with Convention => Ada;
 
    procedure Test_Procedure_Inline_Before_Aspects
-     (X : Interfaces.Integer_64;  --  Value of X
-      Y : Interfaces.IEEE_Float_64;
-      --  Value of Y
-      Z : Integer) with           --  Value of Z
+     (X : Interfaces.Integer_64;    --  Value of X
+      --                                More about X
+      Y : Interfaces.IEEE_Float_64; --  Value of Y
+                                    --  More about Y
+      Z : Integer) with             --  Value of Z
    --  This is description of the procedure with "inline" parameter's
    --  description and aspects.
    --  @exception Constraint_Error Raised on some error condition.
@@ -96,11 +98,10 @@ package Subprograms_GNAT is
 
    procedure Test_Procedure_Multiline_Parameters
      (A : String;  --  Value of A
-      --  as well as more information about A.
+      --  As well as more information about A.
       B : String;  --  Value of B
-      C : String;
-      --  Values of C
-      --  as well as more information about C.
+      C : String;  --  Value of C
+      --  As well as more information about B and C.
       D : Character);
    --  This is description of the procedure with description of the
    --  parameters in comment block.
@@ -109,8 +110,7 @@ package Subprograms_GNAT is
 
    procedure Test_Single_Line;  --  This is single line comment for subprogram
 
-   procedure Test (X : Integer);  --  Parameter X
-   --  Procedure with parameter.
+   procedure Test (X : Integer);  --  Procedure with parameter.
 
    ---------------
    -- Functions --
@@ -194,7 +194,8 @@ package Subprograms_GNAT is
    type Access_Procedure_1 is access procedure;
    --  Access to parameterless procedure.
 
-   type Access_Procedure_2 is access procedure (X : Integer);  --  Value of X
+   type Access_Procedure_2 is
+     access procedure (X : Integer);  --  Value of X
    --  Access to procedure.
 
    type Access_Procedure_3 is access procedure (X, Y : Integer);
@@ -225,6 +226,18 @@ package Subprograms_GNAT is
       return Integer;
    -- Text 1
    -- @return Text 3
+
+   ---------------
+   -- CS0038741 --
+   ---------------
+
+   procedure Baz_CS0038741
+     (X : Integer;
+      -- X
+      Y : Integer
+      -- Y
+     );  
+   -- Baz
 
 private
 
