@@ -472,11 +472,11 @@ pragma in formal part.
 <EndName generics.ads:147:5-147:13>
 <Id "Generics" generics.ads:147:5-147:13>
 <PragmaNodeList generics.ads:147:14-147:14>
-<CompilationUnit unchecked_conversion.ads:4:1-12:49>
-<AdaNodeList unchecked_conversion.ads:4:1-4:1>
-<LibraryItem unchecked_conversion.ads:4:1-8:58>
-<PrivateAbsent unchecked_conversion.ads:4:1-4:1>
-<GenericSubpDecl ["Unchecked_Conversion"] unchecked_conversion.ads:4:1-8:58>
+<CompilationUnit unchecked_conversion.ads:6:1-14:49>
+<AdaNodeList unchecked_conversion.ads:6:1-6:1>
+<LibraryItem unchecked_conversion.ads:6:1-10:58>
+<PrivateAbsent unchecked_conversion.ads:6:1-6:1>
+<GenericSubpDecl ["Unchecked_Conversion"] unchecked_conversion.ads:6:1-10:58>
 **************************
 \/ FORMAL source (Source)
   \/ RAW <<LEADING>> ()
@@ -493,54 +493,53 @@ type Target (<>) is limited private;
 \/ RAW <<CALLABLE>> ()
 \/ PARAMETER s (S)
 \/ RETURNS  ()
-\/ RAW <<LEADING>> ()
-An unchecked type conversion can be achieved by a call to an instance of 
-the generic function Unchecked_Conversion.
-\/ RAW <<TRAILING>> ()
 \/ SNIPPET ada ()
 generic
    type Source (<>) is limited private;
    type Target (<>) is limited private;
 function Unchecked_Conversion (S : Source) return Target
+\/ RAW <<LEADING>> ()
+An unchecked type conversion can be achieved by a call to an instance of
+the generic function Unchecked_Conversion.
 \/ DESCRIPTION  ()
-An unchecked type conversion can be achieved by a call to an instance of 
+An unchecked type conversion can be achieved by a call to an instance of
 the generic function Unchecked_Conversion.
 **************************
-<GenericFormalPart unchecked_conversion.ads:4:1-6:40>
-<GenericSubpInternal ["Unchecked_Conversion"] unchecked_conversion.ads:8:1-8:57>
-<SubpSpec unchecked_conversion.ads:8:1-8:57>
-<SubpKindFunction unchecked_conversion.ads:8:1-8:9>
-<DefiningName "Unchecked_Conversion" unchecked_conversion.ads:8:10-8:30>
-<Id "Unchecked_Conversion" unchecked_conversion.ads:8:10-8:30>
-<Params unchecked_conversion.ads:8:31-8:43>
-<ParamSpecList unchecked_conversion.ads:8:32-8:42>
-<ParamSpec ["S"] unchecked_conversion.ads:8:32-8:42>
-<DefiningNameList unchecked_conversion.ads:8:32-8:33>
-<DefiningName "S" unchecked_conversion.ads:8:32-8:33>
-<Id "S" unchecked_conversion.ads:8:32-8:33>
-<AliasedAbsent unchecked_conversion.ads:8:35-8:35>
-<ModeDefault unchecked_conversion.ads:8:35-8:35>
-<SubtypeIndication unchecked_conversion.ads:8:36-8:42>
-<NotNullAbsent unchecked_conversion.ads:8:35-8:35>
-<Id "Source" unchecked_conversion.ads:8:36-8:42>
-<SubtypeIndication unchecked_conversion.ads:8:51-8:57>
-<NotNullAbsent unchecked_conversion.ads:8:50-8:50>
-<Id "Target" unchecked_conversion.ads:8:51-8:57>
-<PragmaNodeList unchecked_conversion.ads:10:1-12:49>
-<PragmaNode unchecked_conversion.ads:10:1-10:55>
-<Id "No_Elaboration_Code_All" unchecked_conversion.ads:10:8-10:31>
-<BaseAssocList unchecked_conversion.ads:10:33-10:53>
-<PragmaArgumentAssoc unchecked_conversion.ads:10:33-10:53>
-<Id "Unchecked_Conversion" unchecked_conversion.ads:10:33-10:53>
-<PragmaNode unchecked_conversion.ads:11:1-11:36>
-<Id "Pure" unchecked_conversion.ads:11:8-11:12>
-<BaseAssocList unchecked_conversion.ads:11:14-11:34>
-<PragmaArgumentAssoc unchecked_conversion.ads:11:14-11:34>
-<Id "Unchecked_Conversion" unchecked_conversion.ads:11:14-11:34>
-<PragmaNode unchecked_conversion.ads:12:1-12:49>
-<Id "Import" unchecked_conversion.ads:12:8-12:14>
-<BaseAssocList unchecked_conversion.ads:12:16-12:47>
-<PragmaArgumentAssoc unchecked_conversion.ads:12:16-12:25>
-<Id "Intrinsic" unchecked_conversion.ads:12:16-12:25>
-<PragmaArgumentAssoc unchecked_conversion.ads:12:27-12:47>
-<Id "Unchecked_Conversion" unchecked_conversion.ads:12:27-12:47>
+<GenericFormalPart unchecked_conversion.ads:6:1-8:40>
+<GenericSubpInternal ["Unchecked_Conversion"] unchecked_conversion.ads:10:1-10:57>
+<SubpSpec unchecked_conversion.ads:10:1-10:57>
+<SubpKindFunction unchecked_conversion.ads:10:1-10:9>
+<DefiningName "Unchecked_Conversion" unchecked_conversion.ads:10:10-10:30>
+<Id "Unchecked_Conversion" unchecked_conversion.ads:10:10-10:30>
+<Params unchecked_conversion.ads:10:31-10:43>
+<ParamSpecList unchecked_conversion.ads:10:32-10:42>
+<ParamSpec ["S"] unchecked_conversion.ads:10:32-10:42>
+<DefiningNameList unchecked_conversion.ads:10:32-10:33>
+<DefiningName "S" unchecked_conversion.ads:10:32-10:33>
+<Id "S" unchecked_conversion.ads:10:32-10:33>
+<AliasedAbsent unchecked_conversion.ads:10:35-10:35>
+<ModeDefault unchecked_conversion.ads:10:35-10:35>
+<SubtypeIndication unchecked_conversion.ads:10:36-10:42>
+<NotNullAbsent unchecked_conversion.ads:10:35-10:35>
+<Id "Source" unchecked_conversion.ads:10:36-10:42>
+<SubtypeIndication unchecked_conversion.ads:10:51-10:57>
+<NotNullAbsent unchecked_conversion.ads:10:50-10:50>
+<Id "Target" unchecked_conversion.ads:10:51-10:57>
+<PragmaNodeList unchecked_conversion.ads:12:1-14:49>
+<PragmaNode unchecked_conversion.ads:12:1-12:55>
+<Id "No_Elaboration_Code_All" unchecked_conversion.ads:12:8-12:31>
+<BaseAssocList unchecked_conversion.ads:12:33-12:53>
+<PragmaArgumentAssoc unchecked_conversion.ads:12:33-12:53>
+<Id "Unchecked_Conversion" unchecked_conversion.ads:12:33-12:53>
+<PragmaNode unchecked_conversion.ads:13:1-13:36>
+<Id "Pure" unchecked_conversion.ads:13:8-13:12>
+<BaseAssocList unchecked_conversion.ads:13:14-13:34>
+<PragmaArgumentAssoc unchecked_conversion.ads:13:14-13:34>
+<Id "Unchecked_Conversion" unchecked_conversion.ads:13:14-13:34>
+<PragmaNode unchecked_conversion.ads:14:1-14:49>
+<Id "Import" unchecked_conversion.ads:14:8-14:14>
+<BaseAssocList unchecked_conversion.ads:14:16-14:47>
+<PragmaArgumentAssoc unchecked_conversion.ads:14:16-14:25>
+<Id "Intrinsic" unchecked_conversion.ads:14:16-14:25>
+<PragmaArgumentAssoc unchecked_conversion.ads:14:27-14:47>
+<Id "Unchecked_Conversion" unchecked_conversion.ads:14:27-14:47>
