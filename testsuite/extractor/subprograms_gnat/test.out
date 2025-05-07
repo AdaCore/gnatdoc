@@ -10,6 +10,7 @@
 <PackageDecl ["Subprograms_GNAT"] subprograms_gnat.ads:7:1-247:22>
 **************************
 \/ RAW <<HEADER>> ()
+\/ RAW <<LEADING>> ()
 \/ RAW <<INTERMEDIATE UPPER>> ()
 \/ RAW <<INTERMEDIATE UPPER>> ()
 This is description of the package at the top of the specification.

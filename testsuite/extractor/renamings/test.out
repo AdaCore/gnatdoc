@@ -11,6 +11,7 @@
 **************************
 \/ RAW <<HEADER>> ()
 This is test data for test of documentation extraction for renamings.
+\/ RAW <<LEADING>> ()
 \/ RAW <<INTERMEDIATE UPPER>> ()
 \/ SNIPPET ada ()
 package Renamings
