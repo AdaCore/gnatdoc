@@ -1,5 +1,7 @@
--- An unchecked type conversion can be achieved by a call to an instance of 
--- the generic function Unchecked_Conversion.
+--  Copyright header
+
+--  An unchecked type conversion can be achieved by a call to an instance of
+--  the generic function Unchecked_Conversion.
 
 generic
    type Source (<>) is limited private;

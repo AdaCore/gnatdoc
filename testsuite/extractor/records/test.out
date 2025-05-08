@@ -17,6 +17,7 @@
 <PackageDecl ["Records"] records.ads:6:1-130:13>
 **************************
 \/ RAW <<HEADER>> ()
+\/ RAW <<LEADING>> ()
 \/ RAW <<INTERMEDIATE UPPER>> ()
 \/ SNIPPET ada ()
 package Records

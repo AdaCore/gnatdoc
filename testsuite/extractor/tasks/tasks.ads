@@ -46,11 +46,6 @@ package Tasks is
       entry E;
    end T_2;
 
-   task T_3 is
-      entry E;
-      --  Trailing comment for the entry
-   end T_3;
-
    task type TT_Entryless_Empty_Trailing;
    --  This is trailing section of description of the task
    --  TT_Entryless_Empty_Trailing.
@@ -84,10 +79,5 @@ package Tasks is
       --  Leading comment for the entry
       entry E;
    end TT_2;
-
-   task type TT_3 is
-      entry E;
-      --  Trailing comment for the entry
-   end TT_3;
 
 end Tasks;

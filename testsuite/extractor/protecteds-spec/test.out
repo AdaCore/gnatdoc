@@ -38,11 +38,8 @@ type IP is synchronized interface;
 **************************
 <AbstractSubpDecl ["Process"] protecteds.ads:12:4-12:61>
 **************************
-\/ RAW <<INTERMEDIATE UPPER>> ()  13 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()
-\/ PARAMETER self (Self)  12 12 0 0
-\/ RAW <<LEADING>> ()
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
+\/ PARAMETER self (Self)
 \/ SNIPPET ada ()
 procedure Process (Self : IP)
 \/ DESCRIPTION  ()
@@ -248,10 +245,7 @@ Protected type declaration with mix of components/subprograms in private part.
 <Id "Integer" protecteds.ads:57:11-57:18>
 <SubpDecl ["P"] protecteds.ads:60:7-60:19>
 **************************
-\/ RAW <<INTERMEDIATE UPPER>> ()  60 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()
-\/ RAW <<LEADING>> ()
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
 Description of the procedure P
 \/ SNIPPET ada ()
 procedure P
@@ -270,12 +264,9 @@ Description of the procedure P
 <Id "Integer" protecteds.ads:63:11-63:18>
 <SubpDecl ["F"] protecteds.ads:66:7-66:33>
 **************************
-\/ RAW <<INTERMEDIATE UPPER>> ()  67 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()
-\/ RETURNS  ()  66 66 0 0
-\/ RAW <<LEADING>> ()
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
 Description of the function F
+\/ RETURNS  ()
 \/ SNIPPET ada ()
 function F return Integer
 \/ DESCRIPTION  ()
@@ -293,10 +284,7 @@ Description of the function F
 <Id "Integer" protecteds.ads:69:11-69:18>
 <EntryDecl ["E"] protecteds.ads:72:7-72:15>
 **************************
-\/ RAW <<INTERMEDIATE UPPER>> ()  72 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()
-\/ RAW <<LEADING>> ()
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
 Description of the entry E
 \/ SNIPPET ada ()
 entry E
@@ -321,12 +309,9 @@ Protected object with entry family.
 <DeclList protecteds.ads:80:7-84:32>
 <EntryDecl ["E1"] protecteds.ads:80:7-80:53>
 **************************
-\/ RAW <<INTERMEDIATE UPPER>> ()  81 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()
-\/ PARAMETER x (X)  80 80 0 0
-\/ RAW <<LEADING>> ()
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
 First entry family.
+\/ PARAMETER x (X)
 \/ SNIPPET ada ()
 entry E1 (Positive range 1 .. 10) (X : Float)
 \/ DESCRIPTION  ()
@@ -334,12 +319,9 @@ First entry family.
 **************************
 <EntryDecl ["E2"] protecteds.ads:83:7-84:32>
 **************************
-\/ RAW <<INTERMEDIATE UPPER>> ()  84 0 0 0
-\/ RAW <<INTERMEDIATE LOWER>> ()
-\/ PARAMETER x (X)  83 83 0 0
-\/ RAW <<LEADING>> ()
-\/ RAW <<TRAILING>> ()
+\/ RAW <<CALLABLE>> ()
 Second entry family.
+\/ PARAMETER x (X)
 \/ SNIPPET ada ()
 entry E2 (Positive range 1 .. 10) (X : Float)
 \/ DESCRIPTION  ()
