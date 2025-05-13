@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -30,6 +30,18 @@ package body GNATdoc.Configuration.Project is
    begin
       return GNATdoc.Projects.Custom_Resources_Directory (Backend_Name);
    end Custom_Resources_Directory;
+
+   -----------------------
+   -- Image_Directories --
+   -----------------------
+
+   overriding function Image_Directories
+     (Self         : Project_Configuration_Provider;
+      Backend_Name : VSS.Strings.Virtual_String)
+      return GNATdoc.Virtual_File_Vectors.Vector is
+   begin
+      return GNATdoc.Projects.Image_Directories (Backend_Name);
+   end Image_Directories;
 
    ----------------------
    -- Output_Directory --
