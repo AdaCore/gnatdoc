@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2024, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -57,6 +57,11 @@ package body GNATdoc.Backend.HTML_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Tag    : VSS.Strings.Virtual_String);
 
+   procedure Write_Attribute
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      Name   : VSS.Strings.Virtual_String;
+      Value  : VSS.Strings.Virtual_String);
+
    procedure Write_End_Element
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Tag    : VSS.Strings.Virtual_String);
@@ -100,6 +105,31 @@ package body GNATdoc.Backend.HTML_Markup is
            (From : VSS.Strings.Character_Index)
               return VSS.Strings.Character_Iterators.Character_Iterator;
 
+         function After
+           (Index : VSS.Strings.Character_Index)
+              return VSS.Strings.Character_Iterators.Character_Iterator;
+
+         -----------
+         -- After --
+         -----------
+
+         function After
+           (Index : VSS.Strings.Character_Index)
+              return VSS.Strings.Character_Iterators.Character_Iterator is
+         begin
+            return Iter : VSS.Strings.Character_Iterators.Character_Iterator do
+               Iter.Set_At (Next);
+
+               while Iter.Character_Index > Index and then Iter.Backward loop
+                  null;
+               end loop;
+
+               while Iter.Character_Index <= Index and then Iter.Forward loop
+                  null;
+               end loop;
+            end return;
+         end After;
+
          ------------
          -- Before --
          ------------
@@ -128,6 +158,8 @@ package body GNATdoc.Backend.HTML_Markup is
            Item.Annotation (From).To <= Limit
          loop
             declare
+               use type VSS.Strings.Virtual_String;
+
                Annotation : constant Markdown.Annotations.Annotation :=
                  Item.Annotation (From);
                Last       : constant
@@ -157,6 +189,15 @@ package body GNATdoc.Backend.HTML_Markup is
                      Write_Start_Element (Result, "code");
                      Build_Annotation (From, Next, Annotation.To);
                      Write_End_Element (Result, "code");
+
+                  when Markdown.Annotations.Image =>
+                     Write_Start_Element (Result, "img");
+                     Write_Attribute
+                       (Result, "src", "images/" & Annotation.Destination);
+                     Write_End_Element (Result, "img");
+
+                     Next.Set_At (After (Annotation.To));
+                     --  Skip annotated text inside image inline.
 
                   when others =>
                      null;
@@ -304,6 +345,23 @@ package body GNATdoc.Backend.HTML_Markup is
       Build_Annotated_Text (Result, Item.Text);
       Write_End_Element (Result, "p");
    end Build_Paragraph;
+
+   ---------------------
+   -- Write_Attribute --
+   ---------------------
+
+   procedure Write_Attribute
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      Name   : VSS.Strings.Virtual_String;
+      Value  : VSS.Strings.Virtual_String) is
+   begin
+      Result.Append
+        (VSS.XML.Events.XML_Event'
+           (Kind  => VSS.XML.Events.Attribute,
+            URI   => <>,
+            Name  => Name,
+            Value => Value));
+   end Write_Attribute;
 
    -----------------------
    -- Write_End_Element --
