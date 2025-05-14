@@ -244,6 +244,17 @@ package Subprograms_GNAT is
      );  
    -- Baz
 
+   -------------------------
+   -- LAL broken comments --
+   -------------------------
+
+   procedure Test_Procedure_With_Broken_Comments
+     (X : Integer);
+   --  Documentation of the subprogram.
+      --  Wrong indentation for subprogram documentation continuation, line 1
+      --  Wrong indentation for subprogram documentation continuation, line 2
+   --  This line must not be included into the documentation.
+
 private
 
    --  This is description of the package at the beginning of the private
