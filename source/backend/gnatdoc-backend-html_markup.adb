@@ -15,6 +15,7 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with VSS.IRIs;
 with VSS.XML.Events;
 with VSS.XML.Namespaces;
 
@@ -101,6 +102,12 @@ package body GNATdoc.Backend.HTML_Markup is
       Name   : VSS.Strings.Virtual_String;
       Value  : VSS.Strings.Virtual_String);
 
+   procedure Write_Attribute
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      URI    : VSS.IRIs.IRI;
+      Name   : VSS.Strings.Virtual_String;
+      Value  : VSS.Strings.Virtual_String);
+
    procedure Write_End_Element
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Tag    : VSS.Strings.Virtual_String);
@@ -175,6 +182,8 @@ package body GNATdoc.Backend.HTML_Markup is
    begin
       Write_Start_Element (Result, "pre");
       Write_Start_Element (Result, "code");
+      Write_Attribute
+        (Result, VSS.XML.Namespaces.XML_Namespace, "space", "preserve");
       Write_Text (Result, Item.Text);
       Write_End_Element (Result, "code");
       Write_End_Element (Result, "pre");
@@ -411,6 +420,24 @@ package body GNATdoc.Backend.HTML_Markup is
         (VSS.XML.Events.XML_Event'
            (Kind  => VSS.XML.Events.Attribute,
             URI   => <>,
+            Name  => Name,
+            Value => Value));
+   end Write_Attribute;
+
+   ---------------------
+   -- Write_Attribute --
+   ---------------------
+
+   procedure Write_Attribute
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      URI    : VSS.IRIs.IRI;
+      Name   : VSS.Strings.Virtual_String;
+      Value  : VSS.Strings.Virtual_String) is
+   begin
+      Result.Append
+        (VSS.XML.Events.XML_Event'
+           (Kind  => VSS.XML.Events.Attribute,
+            URI   => URI,
             Name  => Name,
             Value => Value));
    end Write_Attribute;
