@@ -23,6 +23,7 @@ with Libadalang.Common;
 with Libadalang.Iterators;
 
 with GPR2;
+with GPR2.Containers;
 with GPR2.Context;
 with GPR2.Message;
 with GPR2.Options;
@@ -70,6 +71,8 @@ package body GNATdoc.Projects is
      GPR2."+" ("documentation_pattern");
    Excluded_Project_Files_Attribute     : constant GPR2.Attribute_Id :=
      GPR2."+" ("excluded_project_files");
+   Image_Dirs_Attribute                 : constant GPR2.Attribute_Id :=
+     GPR2."+" ("image_dirs");
    Output_Dir_Attribute                 : constant GPR2.Attribute_Id :=
      GPR2."+" ("output_dir");
    Resources_Dir_Attribute              : constant GPR2.Attribute_Id :=
@@ -79,6 +82,8 @@ package body GNATdoc.Projects is
      (Documentation_Package, Documentation_Pattern_Attribute);
    Documentation_Excluded_Project_Files : constant GPR2.Q_Attribute_Id :=
      (Documentation_Package, Excluded_Project_Files_Attribute);
+   Documentation_Image_Dirs             : constant GPR2.Q_Attribute_Id :=
+     (Documentation_Package, Image_Dirs_Attribute);
    Documentation_Output_Dir             : constant GPR2.Q_Attribute_Id :=
      (Documentation_Package, Output_Dir_Attribute);
    Documentation_Resources_Dir          : constant GPR2.Q_Attribute_Id :=
@@ -165,6 +170,48 @@ package body GNATdoc.Projects is
    begin
       return Ada.Strings.Hash (Item.Display_Full_Name);
    end Hash;
+
+   -----------------------
+   -- Image_Directories --
+   -----------------------
+
+   function Image_Directories
+     (Backend_Name : VSS.Strings.Virtual_String)
+      return GNATdoc.Virtual_File_Vectors.Vector
+   is
+      Index : constant GPR2.Project.Attribute_Index.Object :=
+        GPR2.Project.Attribute_Index.Create
+          (VSS.Strings.Conversions.To_UTF_8_String (Backend_Name));
+
+   begin
+      return Result : GNATdoc.Virtual_File_Vectors.Vector do
+         if Project_Tree.Root_Project.Has_Attribute
+           (Documentation_Image_Dirs, Index)
+         then
+            declare
+               Attribute : constant GPR2.Project.Attribute.Object :=
+                 Project_Tree.Root_Project.Attribute
+                   (Documentation_Image_Dirs, Index);
+               Values    : constant GPR2.Containers.Source_Value_List :=
+                 Attribute.Values;
+               Directory : GNATCOLL.VFS.Virtual_File;
+
+            begin
+               for Value of Values loop
+                  Directory :=
+                    GNATCOLL.VFS.Create_From_Base
+                      (GNATCOLL.VFS.Filesystem_String (Value.Text),
+                       Project_Tree.Root_Project.Dir_Name.Virtual_File
+                         .Full_Name.all);
+
+                  if Directory.Is_Directory then
+                     Result.Append (Directory);
+                  end if;
+               end loop;
+            end;
+         end if;
+      end return;
+   end Image_Directories;
 
    ----------------
    -- Initialize --
@@ -499,6 +546,17 @@ package body GNATdoc.Projects is
            "the 'Documentation' package." & ASCII.LF &
            "If this attribute is not specified, all comments are considered " &
            "to be documentation.");
+
+      GPR2.Project.Registry.Attribute.Add
+        (Name                 => Documentation_Image_Dirs,
+         Index_Type           => GPR2.Project.Registry.Attribute.String_Index,
+         Value                => GPR2.Project.Registry.Attribute.List,
+         Value_Case_Sensitive => True,
+         Is_Allowed_In        => GPR2.Project.Registry.Attribute.Everywhere,
+         Index_Optional       => True);
+      GPR2.Project.Registry.Attribute.Description.Set_Attribute_Description
+        (Documentation_Image_Dirs,
+         "List of directories to lookup for image files.");
 
       GPR2.Project.Registry.Attribute.Add
         (Name                 => Documentation_Output_Dir,

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2024, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,11 +15,11 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.Strings.Character_Iterators;
+with VSS.IRIs;
 with VSS.XML.Events;
 with VSS.XML.Namespaces;
 
-with Markdown.Annotations;
+with Markdown.Annotations.Visitors;
 with Markdown.Block_Containers;
 with Markdown.Blocks.Indented_Code;
 with Markdown.Blocks.Lists;
@@ -28,6 +28,46 @@ with Markdown.Documents;
 with Markdown.Parsers.GNATdoc_Enable;
 
 package body GNATdoc.Backend.HTML_Markup is
+
+   type Annotated_Text_Builder is
+     limited new Markdown.Annotations.Visitors.Annotated_Text_Visitor with
+   record
+      Image  : Boolean := False;
+      Text   : VSS.Strings.Virtual_String;
+      Stream : VSS.XML.Event_Vectors.Vector;
+   end record;
+
+   overriding procedure Visit_Text
+     (Self : in out Annotated_Text_Builder;
+      Text : VSS.Strings.Virtual_String);
+
+   overriding procedure Enter_Emphasis
+     (Self : in out Annotated_Text_Builder);
+
+   overriding procedure Leave_Emphasis
+     (Self : in out Annotated_Text_Builder);
+
+   overriding procedure Enter_Strong
+     (Self : in out Annotated_Text_Builder);
+
+   overriding procedure Leave_Strong
+     (Self : in out Annotated_Text_Builder);
+
+   overriding procedure Enter_Code_Span
+     (Self : in out Annotated_Text_Builder);
+
+   overriding procedure Leave_Code_Span
+     (Self : in out Annotated_Text_Builder);
+
+   overriding procedure Enter_Image
+     (Self        : in out Annotated_Text_Builder;
+      Destination : VSS.Strings.Virtual_String;
+      Title       : VSS.Strings.Virtual_String);
+
+   overriding procedure Leave_Image
+     (Self        : in out Annotated_Text_Builder;
+      Destination : VSS.Strings.Virtual_String;
+      Title       : VSS.Strings.Virtual_String);
 
    procedure Build_Annotated_Text
      (Result : in out VSS.XML.Event_Vectors.Vector;
@@ -57,6 +97,17 @@ package body GNATdoc.Backend.HTML_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Tag    : VSS.Strings.Virtual_String);
 
+   procedure Write_Attribute
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      Name   : VSS.Strings.Virtual_String;
+      Value  : VSS.Strings.Virtual_String);
+
+   procedure Write_Attribute
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      URI    : VSS.IRIs.IRI;
+      Name   : VSS.Strings.Virtual_String;
+      Value  : VSS.Strings.Virtual_String);
+
    procedure Write_End_Element
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Tag    : VSS.Strings.Virtual_String);
@@ -77,117 +128,13 @@ package body GNATdoc.Backend.HTML_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Item   : Markdown.Annotations.Annotated_Text'Class)
    is
-      use type VSS.Strings.Character_Count;
-
-      procedure Build_Annotation
-        (From  : in out Positive;
-         Next  : in out VSS.Strings.Character_Iterators.Character_Iterator;
-         Limit : VSS.Strings.Character_Count);
-      --  From is an index in Text.Annotation to start from
-      --  Next is a not printed yet character in Text.Plain_Text
-      --  Dont go after Limit position in Text.Plain_Text
-
-      ----------------------
-      -- Build_Annotation --
-      ----------------------
-
-      procedure Build_Annotation
-        (From  : in out Positive;
-         Next  : in out VSS.Strings.Character_Iterators.Character_Iterator;
-         Limit : VSS.Strings.Character_Count)
-      is
-         function Before
-           (From : VSS.Strings.Character_Index)
-              return VSS.Strings.Character_Iterators.Character_Iterator;
-
-         ------------
-         -- Before --
-         ------------
-
-         function Before
-           (From : VSS.Strings.Character_Index)
-            return VSS.Strings.Character_Iterators.Character_Iterator is
-         begin
-            return Iter : VSS.Strings.Character_Iterators.Character_Iterator do
-               Iter.Set_At (Next);
-
-               while Iter.Character_Index >= From and then Iter.Backward loop
-                  null;
-               end loop;
-
-               while Iter.Character_Index + 1 < From and then Iter.Forward loop
-                  null;
-               end loop;
-            end return;
-         end Before;
-
-         Ignore : Boolean;
-
-      begin
-         while From <= Item.Annotation.Last_Index and then
-           Item.Annotation (From).To <= Limit
-         loop
-            declare
-               Annotation : constant Markdown.Annotations.Annotation :=
-                 Item.Annotation (From);
-               Last       : constant
-                 VSS.Strings.Character_Iterators.Character_Iterator :=
-                   Before (Annotation.From);
-
-            begin
-               From := From + 1;
-
-               Write_Text (Result, Item.Plain_Text.Slice (Next, Last));
-
-               Next.Set_At (Last);
-               Ignore := Next.Forward;
-
-               case Annotation.Kind is
-                  when Markdown.Annotations.Emphasis =>
-                     Write_Start_Element (Result, "em");
-                     Build_Annotation (From, Next, Annotation.To);
-                     Write_End_Element (Result, "em");
-
-                  when Markdown.Annotations.Strong =>
-                     Write_Start_Element (Result, "strong");
-                     Build_Annotation (From, Next, Annotation.To);
-                     Write_End_Element (Result, "strong");
-
-                  when Markdown.Annotations.Code_Span =>
-                     Write_Start_Element (Result, "code");
-                     Build_Annotation (From, Next, Annotation.To);
-                     Write_End_Element (Result, "code");
-
-                  when others =>
-                     null;
-               end case;
-            end;
-         end loop;
-
-         if Next.Character_Index <= Limit then
-            declare
-               Last : constant
-                 VSS.Strings.Character_Iterators.Character_Iterator :=
-                   Before (Limit + 1);
-
-            begin
-               Write_Text (Result, Item.Plain_Text.Slice (Next, Last));
-
-               Next.Set_At (Last);
-               Ignore := Next.Forward;
-            end;
-         end if;
-      end Build_Annotation;
-
-      From  : Positive := Item.Annotation.First_Index;
-      Next  : VSS.Strings.Character_Iterators.Character_Iterator :=
-        Item.Plain_Text.At_First_Character;
+      Visitor  : Annotated_Text_Builder;
+      Iterator : Markdown.Annotations.Visitors.Annotated_Text_Iterator;
 
    begin
-      Build_Annotation
-        (From  => From,
-         Next  => Next,
-         Limit => Item.Plain_Text.Character_Length);
+      Iterator.Iterate (Item, Visitor);
+
+      Result.Append_Vector (Visitor.Stream);
    end Build_Annotated_Text;
 
    -----------------
@@ -235,6 +182,8 @@ package body GNATdoc.Backend.HTML_Markup is
    begin
       Write_Start_Element (Result, "pre");
       Write_Start_Element (Result, "code");
+      Write_Attribute
+        (Result, VSS.XML.Namespaces.XML_Namespace, "space", "preserve");
       Write_Text (Result, Item.Text);
       Write_End_Element (Result, "code");
       Write_End_Element (Result, "pre");
@@ -304,6 +253,194 @@ package body GNATdoc.Backend.HTML_Markup is
       Build_Annotated_Text (Result, Item.Text);
       Write_End_Element (Result, "p");
    end Build_Paragraph;
+
+   ---------------------
+   -- Enter_Code_Span --
+   ---------------------
+
+   overriding procedure Enter_Code_Span
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      if Self.Image then
+         --  Formatting is not supported for image's alternative text
+
+         return;
+      end if;
+
+      Write_Start_Element (Self.Stream, "code");
+   end Enter_Code_Span;
+
+   --------------------
+   -- Enter_Emphasis --
+   --------------------
+
+   overriding procedure Enter_Emphasis
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      if Self.Image then
+         --  Formatting is not supported for image's alternative text
+
+         return;
+      end if;
+
+      Write_Start_Element (Self.Stream, "em");
+   end Enter_Emphasis;
+
+   -----------------
+   -- Enter_Image --
+   -----------------
+
+   overriding procedure Enter_Image
+     (Self        : in out Annotated_Text_Builder;
+      Destination : VSS.Strings.Virtual_String;
+      Title       : VSS.Strings.Virtual_String) is
+   begin
+      Self.Image := True;
+   end Enter_Image;
+
+   ------------------
+   -- Enter_Strong --
+   ------------------
+
+   overriding procedure Enter_Strong
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      if Self.Image then
+         --  Formatting is not supported for image's alternative text
+
+         return;
+      end if;
+
+      Write_Start_Element (Self.Stream, "strong");
+   end Enter_Strong;
+
+   ---------------------
+   -- Leave_Code_Span --
+   ---------------------
+
+   overriding procedure Leave_Code_Span
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      if Self.Image then
+         --  Formatting is not supported for image's alternative text
+
+         return;
+      end if;
+
+      Write_End_Element (Self.Stream, "code");
+   end Leave_Code_Span;
+
+   -----------------
+   -- Leave_Image --
+   -----------------
+
+   overriding procedure Leave_Image
+     (Self        : in out Annotated_Text_Builder;
+      Destination : VSS.Strings.Virtual_String;
+      Title       : VSS.Strings.Virtual_String)
+   is
+      use type VSS.Strings.Virtual_String;
+
+   begin
+      Write_Start_Element (Self.Stream, "img");
+      Write_Attribute (Self.Stream, "src", "images/" & Destination);
+
+      if not Title.Is_Empty then
+         Write_Attribute (Self.Stream, "title", Title);
+      end if;
+
+      if not Self.Text.Is_Empty then
+         Write_Attribute (Self.Stream, "alt", Self.Text);
+      end if;
+
+      Write_End_Element (Self.Stream, "img");
+
+      Self.Image := False;
+      Self.Text.Clear;
+   end Leave_Image;
+
+   ------------------
+   -- Leave_Strong --
+   ------------------
+
+   overriding procedure Leave_Strong
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      if Self.Image then
+         --  Formatting is not supported for image's alternative text
+
+         return;
+      end if;
+
+      Write_End_Element (Self.Stream, "strong");
+   end Leave_Strong;
+
+   --------------------
+   -- Leave_Emphasis --
+   --------------------
+
+   overriding procedure Leave_Emphasis
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      if Self.Image then
+         --  Formatting is not supported for image's alternative text
+
+         return;
+      end if;
+
+      Write_End_Element (Self.Stream, "em");
+   end Leave_Emphasis;
+
+   ----------------
+   -- Visit_Text --
+   ----------------
+
+   overriding procedure Visit_Text
+     (Self : in out Annotated_Text_Builder;
+      Text : VSS.Strings.Virtual_String) is
+   begin
+      if Self.Image then
+         Self.Text.Append (Text);
+
+      else
+         Write_Text (Self.Stream, Text);
+      end if;
+   end Visit_Text;
+
+   ---------------------
+   -- Write_Attribute --
+   ---------------------
+
+   procedure Write_Attribute
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      Name   : VSS.Strings.Virtual_String;
+      Value  : VSS.Strings.Virtual_String) is
+   begin
+      Result.Append
+        (VSS.XML.Events.XML_Event'
+           (Kind  => VSS.XML.Events.Attribute,
+            URI   => <>,
+            Name  => Name,
+            Value => Value));
+   end Write_Attribute;
+
+   ---------------------
+   -- Write_Attribute --
+   ---------------------
+
+   procedure Write_Attribute
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      URI    : VSS.IRIs.IRI;
+      Name   : VSS.Strings.Virtual_String;
+      Value  : VSS.Strings.Virtual_String) is
+   begin
+      Result.Append
+        (VSS.XML.Events.XML_Event'
+           (Kind  => VSS.XML.Events.Attribute,
+            URI   => URI,
+            Name  => Name,
+            Value => Value));
+   end Write_Attribute;
 
    -----------------------
    -- Write_End_Element --

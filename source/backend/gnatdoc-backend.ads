@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2024, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -62,6 +62,9 @@ private
       --  subdirectory for given backend.
       Output_Root            : GNATCOLL.VFS.Virtual_File;
       --  Root directory for output
+      Image_Directories      :
+        GNATdoc.Virtual_File_Vectors.Vector;
+      --  Source directories for images
    end record;
 
    function Lookup_Resource_File
