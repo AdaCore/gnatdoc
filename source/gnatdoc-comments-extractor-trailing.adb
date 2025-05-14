@@ -874,8 +874,9 @@ package body GNATdoc.Comments.Extractor.Trailing is
                                 = Infos (Entities_Group_Line)
                                     .Entity_Group.Indent
                               then
-                                 State         := Entities_Group;
-                                 Sections      :=
+                                 State                 := Entities_Group;
+                                 Components_Group_Line := 0;
+                                 Sections              :=
                                    Infos (Entities_Group_Line)
                                      .Entity_Group.Sections;
                                  Text.Append (Line);
@@ -926,7 +927,11 @@ package body GNATdoc.Comments.Extractor.Trailing is
                            Text.Append (Line);
 
                         else
-                           raise Program_Error;
+                           Apply;
+
+                           Entities_Group_Line := 0;
+
+                           goto Redo;
                         end if;
                   end case;
 
