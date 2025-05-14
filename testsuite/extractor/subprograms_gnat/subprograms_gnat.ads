@@ -191,6 +191,11 @@ package Subprograms_GNAT is
    pragma Inline (Test_Procedure_With_Pragma);
    --  Documentation of the procedure with applied pragma.
 
+   procedure Test_With_Anonymous_Access_To_Subprogram_Parameter
+     (S : not null access procedure (X : Integer));  --  Callback subprogram.
+   --  Documentation of subprogram with parameter of anonymous access to
+   --  subprogram type.
+
    type Access_Procedure_1 is access procedure;
    --  Access to parameterless procedure.
 
