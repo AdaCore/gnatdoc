@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2023-2024, AdaCore                     --
+--                     Copyright (C) 2023-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -23,7 +23,8 @@ private
 
    type RST_Backend_Base (Pass_Through : Boolean) is
      abstract new Abstract_Backend with record
-      OOP_Mode : Boolean := False;
+      OOP_Mode           : Boolean := False;
+      Alphabetical_Order : Boolean := True;
    end record;
 
    overriding procedure Initialize (Self : in out RST_Backend_Base);
