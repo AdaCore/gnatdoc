@@ -17,7 +17,6 @@
 
 with VSS.IRIs;
 with VSS.XML.Events;
-with VSS.XML.Namespaces;
 
 with Markdown.Annotations.Visitors;
 with Markdown.Block_Containers;
@@ -116,20 +115,12 @@ package body GNATdoc.Backend.ODF_Markup is
 
    procedure Write_Start_Element
      (Result : in out VSS.XML.Event_Vectors.Vector;
-      Tag    : VSS.Strings.Virtual_String);
-
-   procedure Write_Start_Element
-     (Result : in out VSS.XML.Event_Vectors.Vector;
       URI    : VSS.IRIs.IRI;
       Tag    : VSS.Strings.Virtual_String);
 
    procedure Write_End_Element
      (Result : in out VSS.XML.Event_Vectors.Vector;
       URI    : VSS.IRIs.IRI;
-      Tag    : VSS.Strings.Virtual_String);
-
-   procedure Write_End_Element
-     (Result : in out VSS.XML.Event_Vectors.Vector;
       Tag    : VSS.Strings.Virtual_String);
 
    procedure Write_Attribute
@@ -478,21 +469,6 @@ package body GNATdoc.Backend.ODF_Markup is
 
    procedure Write_End_Element
      (Result : in out VSS.XML.Event_Vectors.Vector;
-      Tag    : VSS.Strings.Virtual_String) is
-   begin
-      Result.Append
-        (VSS.XML.Events.XML_Event'
-           (VSS.XML.Events.End_Element,
-            VSS.XML.Namespaces.HTML_Namespace,
-            Tag));
-   end Write_End_Element;
-
-   -----------------------
-   -- Write_End_Element --
-   -----------------------
-
-   procedure Write_End_Element
-     (Result : in out VSS.XML.Event_Vectors.Vector;
       URI    : VSS.IRIs.IRI;
       Tag    : VSS.Strings.Virtual_String) is
    begin
@@ -502,21 +478,6 @@ package body GNATdoc.Backend.ODF_Markup is
             URI,
             Tag));
    end Write_End_Element;
-
-   -------------------------
-   -- Write_Start_Element --
-   -------------------------
-
-   procedure Write_Start_Element
-     (Result : in out VSS.XML.Event_Vectors.Vector;
-      Tag    : VSS.Strings.Virtual_String) is
-   begin
-      Result.Append
-        (VSS.XML.Events.XML_Event'
-           (VSS.XML.Events.Start_Element,
-            VSS.XML.Namespaces.HTML_Namespace,
-            Tag));
-   end Write_Start_Element;
 
    -------------------------
    -- Write_Start_Element --
