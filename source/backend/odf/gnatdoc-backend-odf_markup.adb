@@ -34,6 +34,9 @@ package body GNATdoc.Backend.ODF_Markup is
    Text_Namespace : constant VSS.IRIs.IRI :=
      VSS.IRIs.To_IRI ("urn:oasis:names:tc:opendocument:xmlns:text:1.0");
 
+   Line_Break_Element : constant VSS.Strings.Virtual_String := "line-break";
+   P_Element          : constant VSS.Strings.Virtual_String := "p";
+
    Style_Name_Attribute : constant VSS.Strings.Virtual_String :=
      "style-name";
 
@@ -129,10 +132,6 @@ package body GNATdoc.Backend.ODF_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Text   : VSS.Strings.Virtual_String);
 
-   procedure Write_Text
-     (Result : in out VSS.XML.Event_Vectors.Vector;
-      Text   : VSS.String_Vectors.Virtual_String_Vector);
-
    --------------------------
    -- Build_Annotated_Text --
    --------------------------
@@ -193,11 +192,23 @@ package body GNATdoc.Backend.ODF_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Item   : Markdown.Blocks.Indented_Code.Indented_Code_Block) is
    begin
-      Write_Start_Element (Result, "pre");
-      Write_Start_Element (Result, "code");
-      Write_Text (Result, Item.Text);
-      Write_End_Element (Result, "code");
-      Write_End_Element (Result, "pre");
+      Write_Start_Element (Result, Text_Namespace, P_Element);
+      Write_Attribute
+        (Result,
+         Text_Namespace,
+         Style_Name_Attribute,
+         "GNATdoc_20_code_20_span");
+
+      for Index in Item.Text.First_Index .. Item.Text.Last_Index loop
+         if Index /= Item.Text.First_Index then
+            Write_Start_Element (Result, Text_Namespace, Line_Break_Element);
+            Write_End_Element (Result, Text_Namespace, Line_Break_Element);
+         end if;
+
+         Write_Text (Result, Item.Text.Element (Index));
+      end loop;
+
+      Write_End_Element (Result, Text_Namespace, P_Element);
    end Build_Indented_Code_Block;
 
    ----------------
@@ -510,19 +521,6 @@ package body GNATdoc.Backend.ODF_Markup is
       Text   : VSS.Strings.Virtual_String) is
    begin
       Result.Append (VSS.XML.Events.XML_Event'(VSS.XML.Events.Text, Text));
-   end Write_Text;
-
-   ----------------
-   -- Write_Text --
-   ----------------
-
-   procedure Write_Text
-     (Result : in out VSS.XML.Event_Vectors.Vector;
-      Text   : VSS.String_Vectors.Virtual_String_Vector) is
-   begin
-      Result.Append
-        (VSS.XML.Events.XML_Event'
-           (VSS.XML.Events.Text, Text.Join_Lines (VSS.Strings.LF)));
    end Write_Text;
 
 end GNATdoc.Backend.ODF_Markup;
