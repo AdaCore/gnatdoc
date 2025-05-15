@@ -2291,6 +2291,16 @@ package body GNATdoc.Frontend is
                                .P_Referenced_Defining_Name
                                  .P_Fully_Qualified_Name);
 
+                        if Type_Decl_Node.As_Subtype_Indication.F_Name.Kind
+                          = Ada_Attribute_Ref
+                        then
+                           Type_Name.Append (''');
+                           Type_Name.Append
+                             (VSS.Strings.To_Virtual_String
+                                (Type_Decl_Node.As_Subtype_Indication.F_Name
+                                 .As_Attribute_Ref.F_Attribute.Text));
+                        end if;
+
                      when others =>
                         raise Program_Error;
                         --  Should not happened.

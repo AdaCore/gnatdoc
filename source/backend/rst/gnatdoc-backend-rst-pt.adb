@@ -25,7 +25,8 @@ package body GNATdoc.Backend.RST.PT is
    begin
       RST_Backend_Base (Self).Initialize;
 
-      Self.OOP_Mode := True;
+      Self.OOP_Mode           := True;
+      Self.Alphabetical_Order := False;
    end Initialize;
 
    ----------
