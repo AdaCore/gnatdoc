@@ -388,27 +388,17 @@ package body GNATdoc.Backend.RST is
                   if Self.OOP_Mode
                     and then Item.Kind in Ada_Interface_Type | Ada_Tagged_Type
                   then
-                     declare
-                        Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
-
-                     begin
-                        Methods.Union (Item.Dispatching_Declared);
-                        Methods.Union (Item.Dispatching_Overrided);
-                        Methods.Union (Item.Prefix_Callable_Declared);
-
-                        for Method of Methods loop
-                           if not Is_Private_Entity
-                                    (GNATdoc.Entities.To_Entity
-                                       (Method.Signature))
-                           then
-                              Generate_Subprogram_Documentation
-                                ("    ",
-                                 GNATdoc.Entities.To_Entity
-                                   (Method.Signature).all,
-                                 Entity.Qualified_Name);
-                           end if;
-                        end loop;
-                     end;
+                     for Method of Item.Belongs_Subprograms loop
+                        if not Is_Private_Entity
+                          (GNATdoc.Entities.To_Entity (Method.Signature))
+                        then
+                           Generate_Subprogram_Documentation
+                             ("    ",
+                              GNATdoc.Entities.To_Entity
+                                (Method.Signature).all,
+                              Entity.Qualified_Name);
+                        end if;
+                     end loop;
                   end if;
 
                   File.New_Line (Success);
