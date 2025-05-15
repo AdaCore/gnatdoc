@@ -35,6 +35,8 @@ package body GNATdoc.Backend.ODF_Markup is
      VSS.IRIs.To_IRI ("urn:oasis:names:tc:opendocument:xmlns:text:1.0");
 
    Line_Break_Element : constant VSS.Strings.Virtual_String := "line-break";
+   List_Element       : constant VSS.Strings.Virtual_String := "list";
+   List_Item_Element  : constant VSS.Strings.Virtual_String := "list-item";
    P_Element          : constant VSS.Strings.Virtual_String := "p";
 
    Style_Name_Attribute : constant VSS.Strings.Virtual_String :=
@@ -219,23 +221,30 @@ package body GNATdoc.Backend.ODF_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       List   : Markdown.Blocks.Lists.List) is
    begin
+      Write_Start_Element (Result, Text_Namespace, List_Element);
+
       if List.Is_Ordered then
-         Write_Start_Element (Result, "ol");
+         Write_Attribute
+           (Result,
+            Text_Namespace,
+            Style_Name_Attribute,
+            "GNATdoc_20_ordered_20_list");
+
       else
-         Write_Start_Element (Result, "ul");
+         Write_Attribute
+           (Result,
+            Text_Namespace,
+            Style_Name_Attribute,
+            "GNATdoc_20_unordered_20_list");
       end if;
 
       for Item of List loop
-         Write_Start_Element (Result, "li");
+         Write_Start_Element (Result, Text_Namespace, List_Item_Element);
          Build_Block_Container (Result, Item);
-         Write_End_Element (Result, "li");
+         Write_End_Element (Result, Text_Namespace, List_Item_Element);
       end loop;
 
-      if List.Is_Ordered then
-         Write_End_Element (Result, "ol");
-      else
-         Write_End_Element (Result, "ul");
-      end if;
+      Write_End_Element (Result, Text_Namespace, List_Element);
    end Build_List;
 
    ------------------
