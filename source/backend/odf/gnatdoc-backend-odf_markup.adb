@@ -42,8 +42,13 @@ package body GNATdoc.Backend.ODF_Markup is
    Style_Name_Attribute : constant VSS.Strings.Virtual_String :=
      "style-name";
 
-   GNATdoc_Paragraph_Style : constant VSS.Strings.Virtual_String :=
+   GNATdoc_Paragraph_Style  : constant VSS.Strings.Virtual_String :=
      "GNATdoc_20_paragraph";
+   GNATdoc_Code_Block_Style : constant VSS.Strings.Virtual_String :=
+     "GNATdoc_20_code_20_block";
+   GNATdoc_Code_Span_Style  : constant VSS.Strings.Virtual_String :=
+     "GNATdoc_20_code_20_span";
+   --  Names of styles predefined by GNATdoc
 
    type Annotated_Text_Builder is
      limited new Markdown.Annotations.Visitors.Annotated_Text_Visitor with
@@ -202,7 +207,7 @@ package body GNATdoc.Backend.ODF_Markup is
         (Result,
          Text_Namespace,
          Style_Name_Attribute,
-         "GNATdoc_20_code_20_span");
+         GNATdoc_Code_Block_Style);
 
       for Index in Item.Text.First_Index .. Item.Text.Last_Index loop
          if Index /= Item.Text.First_Index then
@@ -311,7 +316,7 @@ package body GNATdoc.Backend.ODF_Markup is
         (Self.Stream,
          Text_Namespace,
          Style_Name_Attribute,
-         "GNATdoc_20_code_20_span");
+         GNATdoc_Code_Span_Style);
    end Enter_Code_Span;
 
    --------------------
