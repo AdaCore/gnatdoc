@@ -431,16 +431,16 @@
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
       <text:section tal:omit-tag='' tal:condition='item/documentation/parameters'>
         <text:list text:style-name="GNATdoc_20_component_20_list">
-          <text:list-header><text:h text:style-name="GNATdoc_20_component_20_list_20_header">Parameters</text:h></text:list-header>
+          <text:list-header><text:h text:style-name="GNATdoc_20_component_20_list_20_header" text:outline-level="5">Parameters</text:h></text:list-header>
           <text:list-item tal:repeat='parameter item/documentation/parameters'>
-            <text:h tal:content='parameter/name' text:style-name="GNATdoc_20_component_20_list_20_item_20_header">Name of the parameter</text:h>
+            <text:h tal:content='parameter/name' text:style-name="GNATdoc_20_component_20_list_20_item_20_header" text:outline-level="6">Name of the parameter</text:h>
             <text:p tal:omit-tag='' tal:content='parameter/description_odf'>Description of the parameter</text:p>
           </text:list-item>
         </text:list>
       </text:section>
       <text:section tal:omit-tag='' tal:condition='item/documentation/returns'>
         <text:list text:style-name="GNATdoc_20_component_20_list">
-          <text:list-header><text:h text:style-name="GNATdoc_20_component_20_list_20_header">Return value</text:h></text:list-header>
+          <text:list-header><text:h text:style-name="GNATdoc_20_component_20_list_20_header" text:outline-level="5">Return value</text:h></text:list-header>
           <text:list-item tal:repeat='return item/documentation/returns'>
             <text:p tal:omit-tag='' tal:content='return/description_odf'>Description of the return value</text:p>
           </text:list-item>
@@ -448,9 +448,9 @@
       </text:section>
       <text:section tal:omit-tag='' tal:condition='item/documentation/exceptions'>
         <text:list text:style-name="GNATdoc_20_component_20_list">
-          <text:list-header><text:h text:style-name="GNATdoc_20_component_20_list_20_header">Raised exceptions</text:h></text:list-header>
+          <text:list-header><text:h text:style-name="GNATdoc_20_component_20_list_20_header" text:outline-level="5">Raised exceptions</text:h></text:list-header>
           <text:list-item tal:repeat='exception item/documentation/exceptions'>
-            <text:h tal:content='exception/name' text:style-name="GNATdoc_20_component_20_list_20_item_20_header">Name of the exception</text:h>
+            <text:h tal:content='exception/name' text:style-name="GNATdoc_20_component_20_list_20_item_20_header" text:outline-level="6">Name of the exception</text:h>
             <text:p tal:omit-tag='' tal:content='exception/description_odf'>Description of the raised exception</text:p>
           </text:list-item>
         </text:list>
