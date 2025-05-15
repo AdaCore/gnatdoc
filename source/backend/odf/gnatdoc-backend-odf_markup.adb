@@ -42,6 +42,9 @@ package body GNATdoc.Backend.ODF_Markup is
    Style_Name_Attribute : constant VSS.Strings.Virtual_String :=
      "style-name";
 
+   GNATdoc_Paragraph_Style : constant VSS.Strings.Virtual_String :=
+     "GNATdoc_20_paragraph";
+
    type Annotated_Text_Builder is
      limited new Markdown.Annotations.Visitors.Annotated_Text_Visitor with
    record
@@ -280,9 +283,14 @@ package body GNATdoc.Backend.ODF_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Item   : Markdown.Blocks.Paragraphs.Paragraph) is
    begin
-      Write_Start_Element (Result, Text_Namespace, "p");
+      Write_Start_Element (Result, Text_Namespace, P_Element);
+      Write_Attribute
+        (Result,
+         Text_Namespace,
+         Style_Name_Attribute,
+         GNATdoc_Paragraph_Style);
       Build_Annotated_Text (Result, Item.Text);
-      Write_End_Element (Result, Text_Namespace, "p");
+      Write_End_Element (Result, Text_Namespace, P_Element);
    end Build_Paragraph;
 
    ---------------------
