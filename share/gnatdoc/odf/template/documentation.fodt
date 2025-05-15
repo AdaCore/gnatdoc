@@ -223,6 +223,20 @@
   <style:style style:name="GNATdoc_20_code_20_span" style:display-name="GNATdoc code span" style:family="text">
    <style:text-properties style:font-name="Liberation Mono" fo:font-family="&apos;Liberation Mono&apos;" style:font-family-generic="modern" style:font-pitch="fixed" style:font-name-asian="Noto Sans Mono CJK SC" style:font-family-asian="&apos;Noto Sans Mono CJK SC&apos;" style:font-family-generic-asian="modern" style:font-pitch-asian="fixed" style:font-name-complex="Liberation Mono" style:font-family-complex="&apos;Liberation Mono&apos;" style:font-family-generic-complex="modern" style:font-pitch-complex="fixed"/>
   </style:style>
+  <text:list-style style:name="GNATdoc_20_unordered_20_list" style:display-name="GNATdoc unordered list">
+   <text:list-level-style-bullet text:level="1" text:style-name="GNATdoc_20_Bullet_20_Symbols" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.5in" fo:text-indent="-0.25in" fo:margin-left="0.5in"/>
+    </style:list-level-properties>
+   </text:list-level-style-bullet>
+  </text:list-style>
+  <text:list-style style:name="GNATdoc_20_ordered_20_list" style:display-name="GNATdoc ordered list">
+   <text:list-level-style-number text:level="1" text:style-name="GNATdoc_20_Numbering_20_Symbols" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.5in" fo:text-indent="-0.25in" fo:margin-left="0.5in"/>
+    </style:list-level-properties>
+   </text:list-level-style-number>
+  </text:list-style>
 
   <text:outline-style style:name="Outline">
    <text:outline-level-style text:level="1" style:num-format="">
