@@ -210,10 +210,17 @@
    <style:paragraph-properties fo:margin-top="0.0835in" fo:margin-bottom="0.0835in" style:contextual-spacing="false"/>
    <style:text-properties fo:font-size="13pt" fo:font-style="italic" fo:font-weight="bold" style:font-size-asian="13pt" style:font-style-asian="italic" style:font-weight-asian="bold" style:font-size-complex="13pt" style:font-style-complex="italic" style:font-weight-complex="bold"/>
   </style:style>
-  <style:style style:name="Preformatted_20_Text" style:display-name="Preformatted Text" style:family="paragraph" style:parent-style-name="Standard" style:class="html">
-   <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0in" style:contextual-spacing="false"/>
-   <style:text-properties style:font-name="Liberation Mono" fo:font-family="&apos;Liberation Mono&apos;" style:font-family-generic="modern" style:font-pitch="fixed" fo:font-size="10pt" style:font-name-asian="Noto Sans Mono CJK SC" style:font-family-asian="&apos;Noto Sans Mono CJK SC&apos;" style:font-family-generic-asian="modern" style:font-pitch-asian="fixed" style:font-size-asian="10pt" style:font-name-complex="Liberation Mono" style:font-family-complex="&apos;Liberation Mono&apos;" style:font-family-generic-complex="modern" style:font-pitch-complex="fixed" style:font-size-complex="10pt"/>
+
+  <style:style style:name="GNATdoc_20_bold" style:display-name="GNATdoc bold" style:family="text">
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
+  <style:style style:name="GNATdoc_20_italic" style:display-name="GNATdoc italic" style:family="text">
+   <style:text-properties fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic"/>
+  </style:style>
+  <style:style style:name="GNATdoc_20_code_20_span" style:display-name="GNATdoc code span" style:family="text">
+   <style:text-properties style:font-name="Liberation Mono" fo:font-family="&apos;Liberation Mono&apos;" style:font-family-generic="modern" style:font-pitch="fixed" style:font-name-asian="Noto Sans Mono CJK SC" style:font-family-asian="&apos;Noto Sans Mono CJK SC&apos;" style:font-family-generic-asian="modern" style:font-pitch-asian="fixed" style:font-name-complex="Liberation Mono" style:font-family-complex="&apos;Liberation Mono&apos;" style:font-family-generic-complex="modern" style:font-pitch-complex="fixed"/>
+  </style:style>
+
   <text:outline-style style:name="Outline">
    <text:outline-level-style text:level="1" style:num-format="">
     <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
@@ -273,15 +280,6 @@
  <office:automatic-styles>
   <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
    <style:text-properties officeooo:rsid="001a1679" officeooo:paragraph-rsid="001a1679"/>
-  </style:style>
-  <style:style style:name="T1" style:family="text">
-   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="T2" style:family="text">
-   <style:text-properties fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic"/>
-  </style:style>
-  <style:style style:name="T3" style:family="text">
-   <style:text-properties fo:font-style="italic" fo:font-weight="bold" style:font-style-asian="italic" style:font-weight-asian="bold" style:font-style-complex="italic" style:font-weight-complex="bold"/>
   </style:style>
 
   <style:style style:name="Sect1" style:family="section">

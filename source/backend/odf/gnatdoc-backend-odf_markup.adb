@@ -34,6 +34,9 @@ package body GNATdoc.Backend.ODF_Markup is
    Text_Namespace : constant VSS.IRIs.IRI :=
      VSS.IRIs.To_IRI ("urn:oasis:names:tc:opendocument:xmlns:text:1.0");
 
+   Style_Name_Attribute : constant VSS.Strings.Virtual_String :=
+     "style-name";
+
    type Annotated_Text_Builder is
      limited new Markdown.Annotations.Visitors.Annotated_Text_Visitor with
    record
@@ -115,6 +118,12 @@ package body GNATdoc.Backend.ODF_Markup is
    procedure Write_End_Element
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Tag    : VSS.Strings.Virtual_String);
+
+   procedure Write_Attribute
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      URI    : VSS.IRIs.IRI;
+      Name   : VSS.Strings.Virtual_String;
+      Value  : VSS.Strings.Virtual_String);
 
    procedure Write_Text
      (Result : in out VSS.XML.Event_Vectors.Vector;
@@ -270,6 +279,11 @@ package body GNATdoc.Backend.ODF_Markup is
       end if;
 
       Write_Start_Element (Self.Stream, Text_Namespace, "span");
+      Write_Attribute
+        (Self.Stream,
+         Text_Namespace,
+         Style_Name_Attribute,
+         "GNATdoc_20_code_20_span");
    end Enter_Code_Span;
 
    --------------------
@@ -286,6 +300,11 @@ package body GNATdoc.Backend.ODF_Markup is
       end if;
 
       Write_Start_Element (Self.Stream, Text_Namespace, "span");
+      Write_Attribute
+        (Self.Stream,
+         Text_Namespace,
+         Style_Name_Attribute,
+         "GNATdoc_20_italic");
    end Enter_Emphasis;
 
    -----------------
@@ -317,6 +336,8 @@ package body GNATdoc.Backend.ODF_Markup is
       end if;
 
       Write_Start_Element (Self.Stream, Text_Namespace, "span");
+      Write_Attribute
+        (Self.Stream, Text_Namespace, Style_Name_Attribute, "GNATdoc_20_bold");
    end Enter_Strong;
 
    ---------------------
@@ -399,6 +420,24 @@ package body GNATdoc.Backend.ODF_Markup is
          Write_Text (Self.Stream, Text);
       end if;
    end Visit_Text;
+
+   ---------------------
+   -- Write_Attribute --
+   ---------------------
+
+   procedure Write_Attribute
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      URI    : VSS.IRIs.IRI;
+      Name   : VSS.Strings.Virtual_String;
+      Value  : VSS.Strings.Virtual_String) is
+   begin
+      Result.Append
+        (VSS.XML.Events.XML_Event'
+           (Kind  => VSS.XML.Events.Attribute,
+            URI   => URI,
+            Name  => Name,
+            Value => Value));
+   end Write_Attribute;
 
    -----------------------
    -- Write_End_Element --
