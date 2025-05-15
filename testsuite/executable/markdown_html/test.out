@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+<html class=main>
+<link rel=stylesheet href=gnatdoc.css><body class=content><h1>P</h1><h2>Entities</h2><h2>Description</h2><p>This is test of the Markdown features supported by GNATdoc.<p>Paragraph.<p><code>code</code>,<em>emphasis</em>,<strong>strong</strong><p><img src=images/image.png alt=Image><pre><code>with P;
+
+rocedure Hello_World;
+</code></pre><ol><li><p>Item 1<li><p>Item 2</ol><ul><li><p>Item 1<li><p>Item 2</ul>

@@ -73,6 +73,9 @@ private
       --  subdirectory for given backend.
       Output_Root            : GNATCOLL.VFS.Virtual_File;
       --  Root directory for output
+      Image_Directories      :
+        GNATdoc.Virtual_File_Vectors.Vector;
+      --  Source directories for images
    end record;
 
    function Lookup_Resource_File

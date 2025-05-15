@@ -408,6 +408,21 @@ package body GNATdoc.Backend.HTML is
 
       Copy_Static (Self.System_Resources_Root);
       Copy_Static (Self.Project_Resources_Root);
+
+      if not Self.Image_Directories.Is_Empty then
+         declare
+            Images_Dir : constant GNATCOLL.VFS.Virtual_File :=
+              Self.Output_Root / "images";
+            Success    : Boolean;
+
+         begin
+            Images_Dir.Make_Dir;
+
+            for Directory of reverse Self.Image_Directories loop
+               Directory.Copy (Images_Dir.Full_Name.all, Success);
+            end loop;
+         end;
+      end if;
    end Initialize;
 
    ----------

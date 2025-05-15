@@ -49,6 +49,9 @@ package body GNATdoc.Backend is
       Self.Output_Root :=
         GNATdoc.Configuration.Provider.Output_Directory (Name);
 
+      Self.Image_Directories :=
+        GNATdoc.Configuration.Provider.Image_Directories (Name);
+
       --  Create output directory if not exists
 
       if not Self.Output_Root.Is_Directory then
