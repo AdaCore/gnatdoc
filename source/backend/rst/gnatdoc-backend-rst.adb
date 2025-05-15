@@ -397,11 +397,16 @@ package body GNATdoc.Backend.RST is
                         Methods.Union (Item.Prefix_Callable_Declared);
 
                         for Method of Methods loop
-                           Generate_Subprogram_Documentation
-                             ("    ",
-                              GNATdoc.Entities.To_Entity
-                                (Method.Signature).all,
-                              Entity.Qualified_Name);
+                           if not Is_Private_Entity
+                                    (GNATdoc.Entities.To_Entity
+                                       (Method.Signature))
+                           then
+                              Generate_Subprogram_Documentation
+                                ("    ",
+                                 GNATdoc.Entities.To_Entity
+                                   (Method.Signature).all,
+                                 Entity.Qualified_Name);
+                           end if;
                         end loop;
                      end;
                   end if;
