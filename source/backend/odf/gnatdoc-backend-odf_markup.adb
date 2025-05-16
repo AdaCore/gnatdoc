@@ -186,6 +186,36 @@ package body GNATdoc.Backend.ODF_Markup is
    end Build_Block_Container;
 
    -------------------------------
+   -- Build_Code_Snipped_Markup --
+   -------------------------------
+
+   function Build_Code_Snipped_Markup
+     (Text : VSS.String_Vectors.Virtual_String_Vector)
+      return VSS.XML.Event_Vectors.Vector is
+   begin
+      return Result : VSS.XML.Event_Vectors.Vector do
+         Write_Start_Element (Result, Text_Namespace, P_Element);
+         Write_Attribute
+           (Result,
+            Text_Namespace,
+            Style_Name_Attribute,
+            GNATdoc_Code_Block_Style);
+
+         for Index in Text.First_Index .. Text.Last_Index loop
+            if Index /= Text.First_Index then
+               Write_Start_Element
+                 (Result, Text_Namespace, Line_Break_Element);
+               Write_End_Element (Result, Text_Namespace, Line_Break_Element);
+            end if;
+
+            Write_Text (Result, Text.Element (Index));
+         end loop;
+
+         Write_End_Element (Result, Text_Namespace, P_Element);
+      end return;
+   end Build_Code_Snipped_Markup;
+
+   -------------------------------
    -- Build_Indented_Code_Block --
    -------------------------------
 
