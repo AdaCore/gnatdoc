@@ -24,4 +24,8 @@ package GNATdoc.Backend.ODF_Markup is
      (Text : VSS.String_Vectors.Virtual_String_Vector)
       return VSS.XML.Event_Vectors.Vector;
 
+   function Build_Code_Snipped_Markup
+     (Text : VSS.String_Vectors.Virtual_String_Vector)
+      return VSS.XML.Event_Vectors.Vector;
+
 end GNATdoc.Backend.ODF_Markup;

@@ -21,9 +21,10 @@ with VSS.Strings.Conversions;
 with VSS.XML.Templates.Proxies.Booleans;
 with VSS.XML.Templates.Proxies.Strings;
 
-with GNATdoc.Backend;
+with GNATdoc.Backend.ODF_Markup;
 with GNATdoc.Comments.Helpers;
 with GNATdoc.Comments.Proxies;
+with GNATdoc.Proxies;
 
 package body GNATdoc.Entities.Proxies is
 
@@ -280,6 +281,14 @@ package body GNATdoc.Entities.Proxies is
              (Text =>
                 GNATdoc.Comments.Helpers.Get_Ada_Code_Snippet
                   (Self.Entity.Documentation).Join_Lines (VSS.Strings.LF));
+
+      elsif Name = "code_odf" then
+         return
+           GNATdoc.Proxies.Markup_Proxy'
+             (Markup =>
+                GNATdoc.Backend.ODF_Markup.Build_Code_Snipped_Markup
+                  (GNATdoc.Comments.Helpers.Get_Ada_Code_Snippet
+                     (Self.Entity.Documentation)));
 
       elsif Name = "documentation" then
          return
