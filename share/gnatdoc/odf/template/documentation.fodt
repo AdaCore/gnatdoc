@@ -210,10 +210,54 @@
    <style:paragraph-properties fo:margin-top="0.0835in" fo:margin-bottom="0.0835in" style:contextual-spacing="false"/>
    <style:text-properties fo:font-size="13pt" fo:font-style="italic" fo:font-weight="bold" style:font-size-asian="13pt" style:font-style-asian="italic" style:font-weight-asian="bold" style:font-size-complex="13pt" style:font-style-complex="italic" style:font-weight-complex="bold"/>
   </style:style>
-  <style:style style:name="Preformatted_20_Text" style:display-name="Preformatted Text" style:family="paragraph" style:parent-style-name="Standard" style:class="html">
-   <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0in" style:contextual-spacing="false"/>
+  <style:style style:name="Heading_20_5" style:display-name="Heading 5" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Text_20_body" style:default-outline-level="5" style:class="text">
+   <style:paragraph-properties fo:margin-top="0.0835in" fo:margin-bottom="0.0417in" style:contextual-spacing="false"/>
+   <style:text-properties fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="Heading_20_6" style:display-name="Heading 6" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Text_20_body" style:default-outline-level="6" style:class="text">
+   <style:paragraph-properties fo:margin-top="0.0417in" fo:margin-bottom="0.0417in" style:contextual-spacing="false"/>
+   <style:text-properties fo:font-size="12pt" fo:font-style="italic" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="italic" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-style-complex="italic" style:font-weight-complex="bold"/>
+  </style:style>
+
+  <style:style style:name="GNATdoc_20_code_20_block" style:display-name="GNATdoc code block" style:family="paragraph" style:parent-style-name="Standard">
    <style:text-properties style:font-name="Liberation Mono" fo:font-family="&apos;Liberation Mono&apos;" style:font-family-generic="modern" style:font-pitch="fixed" fo:font-size="10pt" style:font-name-asian="Noto Sans Mono CJK SC" style:font-family-asian="&apos;Noto Sans Mono CJK SC&apos;" style:font-family-generic-asian="modern" style:font-pitch-asian="fixed" style:font-size-asian="10pt" style:font-name-complex="Liberation Mono" style:font-family-complex="&apos;Liberation Mono&apos;" style:font-family-generic-complex="modern" style:font-pitch-complex="fixed" style:font-size-complex="10pt"/>
   </style:style>
+  <style:style style:name="GNATdoc_20_paragraph" style:display-name="GNATdoc paragraph" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+   <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0.0972in" style:contextual-spacing="false" fo:line-height="115%"/>
+  </style:style>
+  <style:style style:name="GNATdoc_20_bold" style:display-name="GNATdoc bold" style:family="text">
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="GNATdoc_20_italic" style:display-name="GNATdoc italic" style:family="text">
+   <style:text-properties fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic"/>
+  </style:style>
+  <style:style style:name="GNATdoc_20_code_20_span" style:display-name="GNATdoc code span" style:family="text">
+   <style:text-properties style:font-name="Liberation Mono" fo:font-family="&apos;Liberation Mono&apos;" style:font-family-generic="modern" style:font-pitch="fixed" style:font-name-asian="Noto Sans Mono CJK SC" style:font-family-asian="&apos;Noto Sans Mono CJK SC&apos;" style:font-family-generic-asian="modern" style:font-pitch-asian="fixed" style:font-name-complex="Liberation Mono" style:font-family-complex="&apos;Liberation Mono&apos;" style:font-family-generic-complex="modern" style:font-pitch-complex="fixed"/>
+  </style:style>
+  <text:list-style style:name="GNATdoc_20_unordered_20_list" style:display-name="GNATdoc unordered list">
+   <text:list-level-style-bullet text:level="1" text:style-name="GNATdoc_20_Bullet_20_Symbols" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.5in" fo:text-indent="-0.25in" fo:margin-left="0.5in"/>
+    </style:list-level-properties>
+   </text:list-level-style-bullet>
+  </text:list-style>
+  <text:list-style style:name="GNATdoc_20_ordered_20_list" style:display-name="GNATdoc ordered list">
+   <text:list-level-style-number text:level="1" text:style-name="GNATdoc_20_Numbering_20_Symbols" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.5in" fo:text-indent="-0.25in" fo:margin-left="0.5in"/>
+    </style:list-level-properties>
+   </text:list-level-style-number>
+  </text:list-style>
+  <text:list-style style:name="GNATdoc_20_component_20_list" style:display-name="GNATdoc component list">
+   <text:list-level-style-bullet text:level="1" text:style-name="GNATdoc_20_Bullet_20_Symbols" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.5in" fo:text-indent="-0.25in" fo:margin-left="0.5in"/>
+    </style:list-level-properties>
+   </text:list-level-style-bullet>
+  </text:list-style>
+  <style:style style:name="GNATdoc_20_component_20_list_20_header" style:display-name="GNATdoc component list header" style:family="paragraph" style:parent-style-name="Heading_20_5" style:list-style-name="GNATdoc_20_component_20_list"/>
+  <style:style style:name="GNATdoc_20_component_20_list_20_item_20_header" style:display-name="GNATdoc component list item header" style:family="paragraph" style:parent-style-name="Heading_20_6" style:list-style-name="GNATdoc_20_component_20_list"/>
+
   <text:outline-style style:name="Outline">
    <text:outline-level-style text:level="1" style:num-format="">
     <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
@@ -271,25 +315,6 @@
   <text:linenumbering-configuration text:number-lines="false" text:offset="0.1965in" style:num-format="1" text:number-position="left" text:increment="5"/>
  </office:styles>
  <office:automatic-styles>
-  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
-   <style:text-properties officeooo:rsid="001a1679" officeooo:paragraph-rsid="001a1679"/>
-  </style:style>
-  <style:style style:name="T1" style:family="text">
-   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="T2" style:family="text">
-   <style:text-properties fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic"/>
-  </style:style>
-  <style:style style:name="T3" style:family="text">
-   <style:text-properties fo:font-style="italic" fo:font-weight="bold" style:font-style-asian="italic" style:font-weight-asian="bold" style:font-style-complex="italic" style:font-weight-complex="bold"/>
-  </style:style>
-
-  <style:style style:name="Sect1" style:family="section">
-   <style:section-properties style:editable="false">
-    <style:columns fo:column-count="1" fo:column-gap="0in"/>
-   </style:section-properties>
-  </style:style>
-
   <style:page-layout style:name="pm1">
    <style:page-layout-properties fo:page-width="8.2681in" fo:page-height="11.6929in" style:num-format="1" style:print-orientation="portrait" fo:margin-top="0.7874in" fo:margin-bottom="0.7874in" fo:margin-left="0.7874in" fo:margin-right="0.7874in" style:writing-mode="lr-tb" style:footnote-max-height="0in" loext:margin-gutter="0in">
     <style:footnote-sep style:width="0.0071in" style:distance-before-sep="0.0398in" style:distance-after-sep="0.0398in" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
@@ -404,6 +429,32 @@
     <text:section tal:omit-tag='' tal:repeat='item entity/subprograms'>
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
+      <text:section tal:omit-tag='' tal:condition='item/documentation/parameters'>
+        <text:list text:style-name="GNATdoc_20_component_20_list">
+          <text:list-header><text:h text:style-name="GNATdoc_20_component_20_list_20_header" text:outline-level="5">Parameters</text:h></text:list-header>
+          <text:list-item tal:repeat='parameter item/documentation/parameters'>
+            <text:h tal:content='parameter/name' text:style-name="GNATdoc_20_component_20_list_20_item_20_header" text:outline-level="6">Name of the parameter</text:h>
+            <text:p tal:omit-tag='' tal:content='parameter/description_odf'>Description of the parameter</text:p>
+          </text:list-item>
+        </text:list>
+      </text:section>
+      <text:section tal:omit-tag='' tal:condition='item/documentation/returns'>
+        <text:list text:style-name="GNATdoc_20_component_20_list">
+          <text:list-header><text:h text:style-name="GNATdoc_20_component_20_list_20_header" text:outline-level="5">Return value</text:h></text:list-header>
+          <text:list-item tal:repeat='return item/documentation/returns'>
+            <text:p tal:omit-tag='' tal:content='return/description_odf'>Description of the return value</text:p>
+          </text:list-item>
+        </text:list>
+      </text:section>
+      <text:section tal:omit-tag='' tal:condition='item/documentation/exceptions'>
+        <text:list text:style-name="GNATdoc_20_component_20_list">
+          <text:list-header><text:h text:style-name="GNATdoc_20_component_20_list_20_header" text:outline-level="5">Raised exceptions</text:h></text:list-header>
+          <text:list-item tal:repeat='exception item/documentation/exceptions'>
+            <text:h tal:content='exception/name' text:style-name="GNATdoc_20_component_20_list_20_item_20_header" text:outline-level="6">Name of the exception</text:h>
+            <text:p tal:omit-tag='' tal:content='exception/description_odf'>Description of the raised exception</text:p>
+          </text:list-item>
+        </text:list>
+      </text:section>
     </text:section>
 
     <text:h tal:condition='entity/generic_instantiations' text:style-name="Heading_20_3" text:outline-level="3">Generic Instantiations</text:h>

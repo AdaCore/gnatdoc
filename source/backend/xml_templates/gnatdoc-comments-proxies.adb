@@ -192,6 +192,12 @@ package body GNATdoc.Comments.Proxies is
              (Markup =>
                 GNATdoc.Backend.HTML_Markup.Build_Markup (Self.Section.Text));
 
+      elsif Name = "description_odf" then
+         return
+           Markup_Proxy'
+             (Markup =>
+                GNATdoc.Backend.ODF_Markup.Build_Markup (Self.Section.Text));
+
       else
          return
            VSS.XML.Templates.Proxies.Error_Proxy'

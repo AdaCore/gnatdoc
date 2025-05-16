@@ -16,11 +16,9 @@
 ------------------------------------------------------------------------------
 
 with VSS.IRIs;
-with VSS.Strings.Character_Iterators;
 with VSS.XML.Events;
-with VSS.XML.Namespaces;
 
-with Markdown.Annotations;
+with Markdown.Annotations.Visitors;
 with Markdown.Block_Containers;
 with Markdown.Blocks.Indented_Code;
 with Markdown.Blocks.Lists;
@@ -30,8 +28,66 @@ with Markdown.Parsers.GNATdoc_Enable;
 
 package body GNATdoc.Backend.ODF_Markup is
 
+   Draw_Namespace : constant VSS.IRIs.IRI :=
+     VSS.IRIs.To_IRI ("urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
    Text_Namespace : constant VSS.IRIs.IRI :=
      VSS.IRIs.To_IRI ("urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+
+   Line_Break_Element : constant VSS.Strings.Virtual_String := "line-break";
+   List_Element       : constant VSS.Strings.Virtual_String := "list";
+   List_Item_Element  : constant VSS.Strings.Virtual_String := "list-item";
+   P_Element          : constant VSS.Strings.Virtual_String := "p";
+
+   Style_Name_Attribute : constant VSS.Strings.Virtual_String :=
+     "style-name";
+
+   GNATdoc_Paragraph_Style  : constant VSS.Strings.Virtual_String :=
+     "GNATdoc_20_paragraph";
+   GNATdoc_Code_Block_Style : constant VSS.Strings.Virtual_String :=
+     "GNATdoc_20_code_20_block";
+   GNATdoc_Code_Span_Style  : constant VSS.Strings.Virtual_String :=
+     "GNATdoc_20_code_20_span";
+   --  Names of styles predefined by GNATdoc
+
+   type Annotated_Text_Builder is
+     limited new Markdown.Annotations.Visitors.Annotated_Text_Visitor with
+   record
+      Image  : Boolean := False;
+      Text   : VSS.Strings.Virtual_String;
+      Stream : VSS.XML.Event_Vectors.Vector;
+   end record;
+
+   overriding procedure Visit_Text
+     (Self : in out Annotated_Text_Builder;
+      Text : VSS.Strings.Virtual_String);
+
+   overriding procedure Enter_Emphasis
+     (Self : in out Annotated_Text_Builder);
+
+   overriding procedure Leave_Emphasis
+     (Self : in out Annotated_Text_Builder);
+
+   overriding procedure Enter_Strong
+     (Self : in out Annotated_Text_Builder);
+
+   overriding procedure Leave_Strong
+     (Self : in out Annotated_Text_Builder);
+
+   overriding procedure Enter_Code_Span
+     (Self : in out Annotated_Text_Builder);
+
+   overriding procedure Leave_Code_Span
+     (Self : in out Annotated_Text_Builder);
+
+   overriding procedure Enter_Image
+     (Self        : in out Annotated_Text_Builder;
+      Destination : VSS.Strings.Virtual_String;
+      Title       : VSS.Strings.Virtual_String);
+
+   overriding procedure Leave_Image
+     (Self        : in out Annotated_Text_Builder;
+      Destination : VSS.Strings.Virtual_String;
+      Title       : VSS.Strings.Virtual_String);
 
    procedure Build_Annotated_Text
      (Result : in out VSS.XML.Event_Vectors.Vector;
@@ -59,10 +115,6 @@ package body GNATdoc.Backend.ODF_Markup is
 
    procedure Write_Start_Element
      (Result : in out VSS.XML.Event_Vectors.Vector;
-      Tag    : VSS.Strings.Virtual_String);
-
-   procedure Write_Start_Element
-     (Result : in out VSS.XML.Event_Vectors.Vector;
       URI    : VSS.IRIs.IRI;
       Tag    : VSS.Strings.Virtual_String);
 
@@ -71,17 +123,15 @@ package body GNATdoc.Backend.ODF_Markup is
       URI    : VSS.IRIs.IRI;
       Tag    : VSS.Strings.Virtual_String);
 
-   procedure Write_End_Element
+   procedure Write_Attribute
      (Result : in out VSS.XML.Event_Vectors.Vector;
-      Tag    : VSS.Strings.Virtual_String);
+      URI    : VSS.IRIs.IRI;
+      Name   : VSS.Strings.Virtual_String;
+      Value  : VSS.Strings.Virtual_String);
 
    procedure Write_Text
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Text   : VSS.Strings.Virtual_String);
-
-   procedure Write_Text
-     (Result : in out VSS.XML.Event_Vectors.Vector;
-      Text   : VSS.String_Vectors.Virtual_String_Vector);
 
    --------------------------
    -- Build_Annotated_Text --
@@ -91,123 +141,13 @@ package body GNATdoc.Backend.ODF_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Item   : Markdown.Annotations.Annotated_Text'Class)
    is
-      use type VSS.Strings.Character_Count;
-
-      procedure Build_Annotation
-        (From  : in out Positive;
-         Next  : in out VSS.Strings.Character_Iterators.Character_Iterator;
-         Limit : VSS.Strings.Character_Count);
-      --  From is an index in Text.Annotation to start from
-      --  Next is a not printed yet character in Text.Plain_Text
-      --  Dont go after Limit position in Text.Plain_Text
-
-      ----------------------
-      -- Build_Annotation --
-      ----------------------
-
-      procedure Build_Annotation
-        (From  : in out Positive;
-         Next  : in out VSS.Strings.Character_Iterators.Character_Iterator;
-         Limit : VSS.Strings.Character_Count)
-      is
-         function Before
-           (From : VSS.Strings.Character_Index)
-              return VSS.Strings.Character_Iterators.Character_Iterator;
-
-         ------------
-         -- Before --
-         ------------
-
-         function Before
-           (From : VSS.Strings.Character_Index)
-            return VSS.Strings.Character_Iterators.Character_Iterator is
-         begin
-            return Iter : VSS.Strings.Character_Iterators.Character_Iterator do
-               Iter.Set_At (Next);
-
-               while Iter.Character_Index >= From and then Iter.Backward loop
-                  null;
-               end loop;
-
-               while Iter.Character_Index + 1 < From and then Iter.Forward loop
-                  null;
-               end loop;
-            end return;
-         end Before;
-
-         Ignore : Boolean;
-
-      begin
-         while From <= Item.Annotation.Last_Index and then
-           Item.Annotation (From).To <= Limit
-         loop
-            declare
-               Annotation : constant Markdown.Annotations.Annotation :=
-                 Item.Annotation (From);
-               Last       : constant
-                 VSS.Strings.Character_Iterators.Character_Iterator :=
-                   Before (Annotation.From);
-
-            begin
-               From := From + 1;
-
-               Write_Text (Result, Item.Plain_Text.Slice (Next, Last));
-
-               Next.Set_At (Last);
-               Ignore := Next.Forward;
-
-               case Annotation.Kind is
-                  when Markdown.Annotations.Emphasis =>
-                     --  Write_Start_Element (Result, "em");
-                     Write_Start_Element (Result, Text_Namespace, "span");
-                     Build_Annotation (From, Next, Annotation.To);
-                     Write_End_Element (Result, Text_Namespace, "span");
-                     --  Write_End_Element (Result, "em");
-
-                  when Markdown.Annotations.Strong =>
-                     --  Write_Start_Element (Result, "strong");
-                     Write_Start_Element (Result, Text_Namespace, "span");
-                     Build_Annotation (From, Next, Annotation.To);
-                     Write_End_Element (Result, Text_Namespace, "span");
-                     --  Write_End_Element (Result, "strong");
-
-                  when Markdown.Annotations.Code_Span =>
-                     --  Write_Start_Element (Result, "code");
-                     Write_Start_Element (Result, Text_Namespace, "span");
-                     Build_Annotation (From, Next, Annotation.To);
-                     Write_End_Element (Result, Text_Namespace, "span");
-                     --  Write_End_Element (Result, "code");
-
-                  when others =>
-                     null;
-               end case;
-            end;
-         end loop;
-
-         if Next.Character_Index <= Limit then
-            declare
-               Last : constant
-                 VSS.Strings.Character_Iterators.Character_Iterator :=
-                   Before (Limit + 1);
-
-            begin
-               Write_Text (Result, Item.Plain_Text.Slice (Next, Last));
-
-               Next.Set_At (Last);
-               Ignore := Next.Forward;
-            end;
-         end if;
-      end Build_Annotation;
-
-      From  : Positive := Item.Annotation.First_Index;
-      Next  : VSS.Strings.Character_Iterators.Character_Iterator :=
-        Item.Plain_Text.At_First_Character;
+      Visitor  : Annotated_Text_Builder;
+      Iterator : Markdown.Annotations.Visitors.Annotated_Text_Iterator;
 
    begin
-      Build_Annotation
-        (From  => From,
-         Next  => Next,
-         Limit => Item.Plain_Text.Character_Length);
+      Iterator.Iterate (Item, Visitor);
+
+      Result.Append_Vector (Visitor.Stream);
    end Build_Annotated_Text;
 
    -----------------
@@ -253,11 +193,23 @@ package body GNATdoc.Backend.ODF_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Item   : Markdown.Blocks.Indented_Code.Indented_Code_Block) is
    begin
-      Write_Start_Element (Result, "pre");
-      Write_Start_Element (Result, "code");
-      Write_Text (Result, Item.Text);
-      Write_End_Element (Result, "code");
-      Write_End_Element (Result, "pre");
+      Write_Start_Element (Result, Text_Namespace, P_Element);
+      Write_Attribute
+        (Result,
+         Text_Namespace,
+         Style_Name_Attribute,
+         GNATdoc_Code_Block_Style);
+
+      for Index in Item.Text.First_Index .. Item.Text.Last_Index loop
+         if Index /= Item.Text.First_Index then
+            Write_Start_Element (Result, Text_Namespace, Line_Break_Element);
+            Write_End_Element (Result, Text_Namespace, Line_Break_Element);
+         end if;
+
+         Write_Text (Result, Item.Text.Element (Index));
+      end loop;
+
+      Write_End_Element (Result, Text_Namespace, P_Element);
    end Build_Indented_Code_Block;
 
    ----------------
@@ -268,23 +220,30 @@ package body GNATdoc.Backend.ODF_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       List   : Markdown.Blocks.Lists.List) is
    begin
+      Write_Start_Element (Result, Text_Namespace, List_Element);
+
       if List.Is_Ordered then
-         Write_Start_Element (Result, "ol");
+         Write_Attribute
+           (Result,
+            Text_Namespace,
+            Style_Name_Attribute,
+            "GNATdoc_20_ordered_20_list");
+
       else
-         Write_Start_Element (Result, "ul");
+         Write_Attribute
+           (Result,
+            Text_Namespace,
+            Style_Name_Attribute,
+            "GNATdoc_20_unordered_20_list");
       end if;
 
       for Item of List loop
-         Write_Start_Element (Result, "li");
+         Write_Start_Element (Result, Text_Namespace, List_Item_Element);
          Build_Block_Container (Result, Item);
-         Write_End_Element (Result, "li");
+         Write_End_Element (Result, Text_Namespace, List_Item_Element);
       end loop;
 
-      if List.Is_Ordered then
-         Write_End_Element (Result, "ol");
-      else
-         Write_End_Element (Result, "ul");
-      end if;
+      Write_End_Element (Result, Text_Namespace, List_Element);
    end Build_List;
 
    ------------------
@@ -320,25 +279,189 @@ package body GNATdoc.Backend.ODF_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Item   : Markdown.Blocks.Paragraphs.Paragraph) is
    begin
-      Write_Start_Element (Result, Text_Namespace, "p");
+      Write_Start_Element (Result, Text_Namespace, P_Element);
+      Write_Attribute
+        (Result,
+         Text_Namespace,
+         Style_Name_Attribute,
+         GNATdoc_Paragraph_Style);
       Build_Annotated_Text (Result, Item.Text);
-      Write_End_Element (Result, Text_Namespace, "p");
+      Write_End_Element (Result, Text_Namespace, P_Element);
    end Build_Paragraph;
 
-   -----------------------
-   -- Write_End_Element --
-   -----------------------
+   ---------------------
+   -- Enter_Code_Span --
+   ---------------------
 
-   procedure Write_End_Element
+   overriding procedure Enter_Code_Span
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      if Self.Image then
+         --  Formatting is not supported for image's alternative text
+
+         return;
+      end if;
+
+      Write_Start_Element (Self.Stream, Text_Namespace, "span");
+      Write_Attribute
+        (Self.Stream,
+         Text_Namespace,
+         Style_Name_Attribute,
+         GNATdoc_Code_Span_Style);
+   end Enter_Code_Span;
+
+   --------------------
+   -- Enter_Emphasis --
+   --------------------
+
+   overriding procedure Enter_Emphasis
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      if Self.Image then
+         --  Formatting is not supported for image's alternative text
+
+         return;
+      end if;
+
+      Write_Start_Element (Self.Stream, Text_Namespace, "span");
+      Write_Attribute
+        (Self.Stream,
+         Text_Namespace,
+         Style_Name_Attribute,
+         "GNATdoc_20_italic");
+   end Enter_Emphasis;
+
+   -----------------
+   -- Enter_Image --
+   -----------------
+
+   overriding procedure Enter_Image
+     (Self        : in out Annotated_Text_Builder;
+      Destination : VSS.Strings.Virtual_String;
+      Title       : VSS.Strings.Virtual_String) is
+   begin
+      Self.Image := True;
+
+      Write_Start_Element (Self.Stream, Draw_Namespace, "frame");
+      Write_Start_Element (Self.Stream, Draw_Namespace, "image");
+   end Enter_Image;
+
+   ------------------
+   -- Enter_Strong --
+   ------------------
+
+   overriding procedure Enter_Strong
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      if Self.Image then
+         --  Formatting is not supported for image's alternative text
+
+         return;
+      end if;
+
+      Write_Start_Element (Self.Stream, Text_Namespace, "span");
+      Write_Attribute
+        (Self.Stream, Text_Namespace, Style_Name_Attribute, "GNATdoc_20_bold");
+   end Enter_Strong;
+
+   ---------------------
+   -- Leave_Code_Span --
+   ---------------------
+
+   overriding procedure Leave_Code_Span
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      if Self.Image then
+         --  Formatting is not supported for image's alternative text
+
+         return;
+      end if;
+
+      Write_End_Element (Self.Stream, Text_Namespace, "span");
+   end Leave_Code_Span;
+
+   --------------------
+   -- Leave_Emphasis --
+   --------------------
+
+   overriding procedure Leave_Emphasis
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      if Self.Image then
+         --  Formatting is not supported for image's alternative text
+
+         return;
+      end if;
+
+      Write_End_Element (Self.Stream, Text_Namespace, "span");
+   end Leave_Emphasis;
+
+   -----------------
+   -- Leave_Image --
+   -----------------
+
+   overriding procedure Leave_Image
+     (Self        : in out Annotated_Text_Builder;
+      Destination : VSS.Strings.Virtual_String;
+      Title       : VSS.Strings.Virtual_String) is
+   begin
+      Write_End_Element (Self.Stream, Draw_Namespace, "image");
+      Write_End_Element (Self.Stream, Draw_Namespace, "frame");
+
+      Self.Image := False;
+      Self.Text.Clear;
+   end Leave_Image;
+
+   ------------------
+   -- Leave_Strong --
+   ------------------
+
+   overriding procedure Leave_Strong
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      if Self.Image then
+         --  Formatting is not supported for image's alternative text
+
+         return;
+      end if;
+
+      Write_End_Element (Self.Stream, Text_Namespace, "span");
+   end Leave_Strong;
+
+   ----------------
+   -- Visit_Text --
+   ----------------
+
+   overriding procedure Visit_Text
+     (Self : in out Annotated_Text_Builder;
+      Text : VSS.Strings.Virtual_String) is
+   begin
+      if Self.Image then
+         Self.Text.Append (Text);
+         --  ???
+
+      else
+         Write_Text (Self.Stream, Text);
+      end if;
+   end Visit_Text;
+
+   ---------------------
+   -- Write_Attribute --
+   ---------------------
+
+   procedure Write_Attribute
      (Result : in out VSS.XML.Event_Vectors.Vector;
-      Tag    : VSS.Strings.Virtual_String) is
+      URI    : VSS.IRIs.IRI;
+      Name   : VSS.Strings.Virtual_String;
+      Value  : VSS.Strings.Virtual_String) is
    begin
       Result.Append
         (VSS.XML.Events.XML_Event'
-           (VSS.XML.Events.End_Element,
-            VSS.XML.Namespaces.HTML_Namespace,
-            Tag));
-   end Write_End_Element;
+           (Kind  => VSS.XML.Events.Attribute,
+            URI   => URI,
+            Name  => Name,
+            Value => Value));
+   end Write_Attribute;
 
    -----------------------
    -- Write_End_Element --
@@ -355,21 +478,6 @@ package body GNATdoc.Backend.ODF_Markup is
             URI,
             Tag));
    end Write_End_Element;
-
-   -------------------------
-   -- Write_Start_Element --
-   -------------------------
-
-   procedure Write_Start_Element
-     (Result : in out VSS.XML.Event_Vectors.Vector;
-      Tag    : VSS.Strings.Virtual_String) is
-   begin
-      Result.Append
-        (VSS.XML.Events.XML_Event'
-           (VSS.XML.Events.Start_Element,
-            VSS.XML.Namespaces.HTML_Namespace,
-            Tag));
-   end Write_Start_Element;
 
    -------------------------
    -- Write_Start_Element --
@@ -396,19 +504,6 @@ package body GNATdoc.Backend.ODF_Markup is
       Text   : VSS.Strings.Virtual_String) is
    begin
       Result.Append (VSS.XML.Events.XML_Event'(VSS.XML.Events.Text, Text));
-   end Write_Text;
-
-   ----------------
-   -- Write_Text --
-   ----------------
-
-   procedure Write_Text
-     (Result : in out VSS.XML.Event_Vectors.Vector;
-      Text   : VSS.String_Vectors.Virtual_String_Vector) is
-   begin
-      Result.Append
-        (VSS.XML.Events.XML_Event'
-           (VSS.XML.Events.Text, Text.Join_Lines (VSS.Strings.LF)));
    end Write_Text;
 
 end GNATdoc.Backend.ODF_Markup;
