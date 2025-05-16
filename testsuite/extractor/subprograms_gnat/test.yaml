@@ -1,1 +1,4 @@
-extractor_source: subprograms_gnat.ads
+description: Check documentation extraction for subprogram declarations.
+extractor_sources:
+  - subprograms_gnat.ads
+  - monitor_loop.ads
