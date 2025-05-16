@@ -945,7 +945,7 @@ package body GNATdoc.Comments.Extractor.Trailing is
          end loop;
 
          if State /= None then
-            raise Program_Error;
+            Apply;
          end if;
       end;
    end Process;
