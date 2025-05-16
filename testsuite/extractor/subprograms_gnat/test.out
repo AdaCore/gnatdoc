@@ -562,3 +562,40 @@ Documentation of the subprogram.
 <EndName subprograms_gnat.ads:263:5-263:21>
 <Id "Subprograms_GNAT" subprograms_gnat.ads:263:5-263:21>
 <PragmaNodeList subprograms_gnat.ads:263:22-263:22>
+<CompilationUnit monitor_loop.ads:7:1-7:45>
+<AdaNodeList monitor_loop.ads:7:1-7:1>
+<LibraryItem monitor_loop.ads:7:1-7:45>
+<PrivateAbsent monitor_loop.ads:7:1-7:1>
+<SubpDecl ["Monitor_Loop"] monitor_loop.ads:7:1-7:45>
+**************************
+\/ RAW <<CALLABLE>> ()
+Drive process control engine, deliver events, watch child processes, etc.
+
+Timeout to run. Don't wait if zero. If there are some events then procedure
+will return before timeout expires.
+
+Note: This procedure is NOT thread-safe! In multi-tasking environment
+create a dedicated task to drive the engine.
+
+In single task application you should call this to drive process engine.
+
+In Glib enabled application the engine is integrated it the Glib event
+loop and this procedure shouldn't be used.
+\/ PARAMETER timeout (Timeout)
+\/ SNIPPET ada ()
+procedure Monitor_Loop (Timeout : Duration)
+\/ DESCRIPTION  ()
+Drive process control engine, deliver events, watch child processes, etc.
+
+Timeout to run. Don't wait if zero. If there are some events then procedure
+will return before timeout expires.
+
+Note: This procedure is NOT thread-safe! In multi-tasking environment
+create a dedicated task to drive the engine.
+
+In single task application you should call this to drive process engine.
+
+In Glib enabled application the engine is integrated it the Glib event
+loop and this procedure shouldn't be used.
+**************************
+<PragmaNodeList monitor_loop.ads:7:45-7:45>
