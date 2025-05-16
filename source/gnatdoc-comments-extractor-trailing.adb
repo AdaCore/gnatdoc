@@ -477,8 +477,9 @@ package body GNATdoc.Comments.Extractor.Trailing is
    is
       use type Libadalang.Slocs.Line_Number;
 
-      Infos : Line_Information_Array
+      Infos  : Line_Information_Array
         (Node.Sloc_Range.Start_Line .. Node.Sloc_Range.End_Line + 1);
+      Subp   : Boolean := False;
 
       package Visit_State is new Generic_State (Infos);
 
@@ -595,6 +596,12 @@ package body GNATdoc.Comments.Extractor.Trailing is
                   end;
                end if;
 
+               Subp := True;
+               Traverse_Children;
+               Subp := False;
+
+               return Libadalang.Common.Over;
+
             when Ada_Abstract_Subp_Decl
                | Ada_Entry_Decl
                | Ada_Expr_Function
@@ -610,6 +617,15 @@ package body GNATdoc.Comments.Extractor.Trailing is
                Visit_State.Leave_Subprogram;
 
                return Libadalang.Common.Over;
+
+            when Ada_Anonymous_Type =>
+               if Subp then
+                  --  Ignore anonymous types inside Subp_Spec node, they
+                  --  might be anonymous access to subprogram type that
+                  --  has "nested" subprogram declaration.
+
+                  return Libadalang.Common.Over;
+               end if;
 
             when others =>
                null;
@@ -858,8 +874,9 @@ package body GNATdoc.Comments.Extractor.Trailing is
                                 = Infos (Entities_Group_Line)
                                     .Entity_Group.Indent
                               then
-                                 State         := Entities_Group;
-                                 Sections      :=
+                                 State                 := Entities_Group;
+                                 Components_Group_Line := 0;
+                                 Sections              :=
                                    Infos (Entities_Group_Line)
                                      .Entity_Group.Sections;
                                  Text.Append (Line);
@@ -910,7 +927,11 @@ package body GNATdoc.Comments.Extractor.Trailing is
                            Text.Append (Line);
 
                         else
-                           raise Program_Error;
+                           Apply;
+
+                           Entities_Group_Line := 0;
+
+                           goto Redo;
                         end if;
                   end case;
 

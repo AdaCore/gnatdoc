@@ -191,6 +191,11 @@ package Subprograms_GNAT is
    pragma Inline (Test_Procedure_With_Pragma);
    --  Documentation of the procedure with applied pragma.
 
+   procedure Test_With_Anonymous_Access_To_Subprogram_Parameter
+     (S : not null access procedure (X : Integer));  --  Callback subprogram.
+   --  Documentation of subprogram with parameter of anonymous access to
+   --  subprogram type.
+
    type Access_Procedure_1 is access procedure;
    --  Access to parameterless procedure.
 
@@ -238,6 +243,17 @@ package Subprograms_GNAT is
       -- Y
      );  
    -- Baz
+
+   -------------------------
+   -- LAL broken comments --
+   -------------------------
+
+   procedure Test_Procedure_With_Broken_Comments
+     (X : Integer);
+   --  Documentation of the subprogram.
+      --  Wrong indentation for subprogram documentation continuation, line 1
+      --  Wrong indentation for subprogram documentation continuation, line 2
+   --  This line must not be included into the documentation.
 
 private
 

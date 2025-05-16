@@ -1,13 +1,13 @@
-<CompilationUnit subprograms_gnat.ads:5:1-247:22>
+<CompilationUnit subprograms_gnat.ads:5:1-263:22>
 <AdaNodeList subprograms_gnat.ads:5:1-5:17>
 <WithClause subprograms_gnat.ads:5:1-5:17>
 <LimitedAbsent subprograms_gnat.ads:5:1-5:1>
 <PrivateAbsent subprograms_gnat.ads:5:1-5:1>
 <NameList subprograms_gnat.ads:5:6-5:16>
 <Id "Interfaces" subprograms_gnat.ads:5:6-5:16>
-<LibraryItem subprograms_gnat.ads:7:1-247:22>
+<LibraryItem subprograms_gnat.ads:7:1-263:22>
 <PrivateAbsent subprograms_gnat.ads:5:17-5:17>
-<PackageDecl ["Subprograms_GNAT"] subprograms_gnat.ads:7:1-247:22>
+<PackageDecl ["Subprograms_GNAT"] subprograms_gnat.ads:7:1-263:22>
 **************************
 \/ RAW <<HEADER>> ()
 \/ RAW <<LEADING>> ()
@@ -21,8 +21,8 @@ This is description of the package at the top of the specification.
 **************************
 <DefiningName "Subprograms_GNAT" subprograms_gnat.ads:7:9-7:25>
 <Id "Subprograms_GNAT" subprograms_gnat.ads:7:9-7:25>
-<PublicPart subprograms_gnat.ads:7:28-242:1>
-<AdaNodeList subprograms_gnat.ads:9:4-239:8>
+<PublicPart subprograms_gnat.ads:7:28-258:1>
+<AdaNodeList subprograms_gnat.ads:9:4-252:20>
 <PragmaNode subprograms_gnat.ads:9:4-9:24>
 <Id "Preelaborate" subprograms_gnat.ads:9:11-9:23>
 <BaseAssocList subprograms_gnat.ads:9:23-9:23>
@@ -433,7 +433,21 @@ Documentation of the procedure with applied pragma.
 <BaseAssocList subprograms_gnat.ads:191:19-191:45>
 <PragmaArgumentAssoc subprograms_gnat.ads:191:19-191:45>
 <Id "Test_Procedure_With_Pragma" subprograms_gnat.ads:191:19-191:45>
-<ConcreteTypeDecl ["Access_Procedure_1"] subprograms_gnat.ads:194:4-194:48>
+<SubpDecl ["Test_With_Anonymous_Access_To_Subprogram_Parameter"] subprograms_gnat.ads:194:4-195:52>
+**************************
+\/ RAW <<CALLABLE>> ()
+Documentation of subprogram with parameter of anonymous access to
+subprogram type.
+\/ PARAMETER s (S)
+Callback subprogram.
+\/ SNIPPET ada ()
+procedure Test_With_Anonymous_Access_To_Subprogram_Parameter
+  (S : not null access procedure (X : Integer))
+\/ DESCRIPTION  ()
+Documentation of subprogram with parameter of anonymous access to
+subprogram type.
+**************************
+<ConcreteTypeDecl ["Access_Procedure_1"] subprograms_gnat.ads:199:4-199:48>
 **************************
 \/ RAW <<CALLABLE>> ()
 Access to parameterless procedure.
@@ -442,7 +456,7 @@ type Access_Procedure_1 is access procedure;
 \/ DESCRIPTION  ()
 Access to parameterless procedure.
 **************************
-<ConcreteTypeDecl ["Access_Procedure_2"] subprograms_gnat.ads:197:4-198:37>
+<ConcreteTypeDecl ["Access_Procedure_2"] subprograms_gnat.ads:202:4-203:37>
 **************************
 \/ RAW <<CALLABLE>> ()
 Access to procedure.
@@ -454,7 +468,7 @@ type Access_Procedure_2 is
 \/ DESCRIPTION  ()
 Access to procedure.
 **************************
-<ConcreteTypeDecl ["Access_Procedure_3"] subprograms_gnat.ads:201:4-201:65>
+<ConcreteTypeDecl ["Access_Procedure_3"] subprograms_gnat.ads:206:4-206:65>
 **************************
 \/ RAW <<CALLABLE>> ()
 Access to procedure with two parameters.
@@ -470,7 +484,7 @@ type Access_Procedure_3 is access procedure (X, Y : Integer);
 \/ DESCRIPTION  ()
 Access to procedure with two parameters.
 **************************
-<ConcreteTypeDecl ["Access_Function_1"] subprograms_gnat.ads:207:4-208:37>
+<ConcreteTypeDecl ["Access_Function_1"] subprograms_gnat.ads:212:4-213:37>
 **************************
 \/ RAW <<CALLABLE>> ()
 Access to parameterless function.
@@ -482,7 +496,7 @@ type Access_Function_1 is
 \/ DESCRIPTION  ()
 Access to parameterless function.
 **************************
-<ConcreteTypeDecl ["Access_Function_2"] subprograms_gnat.ads:211:4-212:49>
+<ConcreteTypeDecl ["Access_Function_2"] subprograms_gnat.ads:216:4-217:49>
 **************************
 \/ RAW <<CALLABLE>> ()
 Access to function
@@ -499,7 +513,7 @@ type Access_Function_2 is
 \/ DESCRIPTION  ()
 Access to function
 **************************
-<SubpDecl ["Test_VC20_013_Baz3"] subprograms_gnat.ads:222:4-226:22>
+<SubpDecl ["Test_VC20_013_Baz3"] subprograms_gnat.ads:227:4-231:22>
 **************************
 \/ RAW <<CALLABLE>> ()
 Text 1
@@ -516,7 +530,7 @@ function Test_VC20_013_Baz3
 \/ DESCRIPTION  ()
 Text 1
 **************************
-<SubpDecl ["Baz_CS0038741"] subprograms_gnat.ads:234:4-239:8>
+<SubpDecl ["Baz_CS0038741"] subprograms_gnat.ads:239:4-244:8>
 **************************
 \/ RAW <<CALLABLE>> ()
 Baz
@@ -532,8 +546,19 @@ procedure Baz_CS0038741
 \/ DESCRIPTION  ()
 Baz
 **************************
-<PrivatePart subprograms_gnat.ads:242:8-247:1>
-<AdaNodeList subprograms_gnat.ads:242:8-242:8>
-<EndName subprograms_gnat.ads:247:5-247:21>
-<Id "Subprograms_GNAT" subprograms_gnat.ads:247:5-247:21>
-<PragmaNodeList subprograms_gnat.ads:247:22-247:22>
+<SubpDecl ["Test_Procedure_With_Broken_Comments"] subprograms_gnat.ads:251:4-252:20>
+**************************
+\/ RAW <<CALLABLE>> ()
+Documentation of the subprogram.
+\/ PARAMETER x (X)
+\/ SNIPPET ada ()
+procedure Test_Procedure_With_Broken_Comments
+  (X : Integer)
+\/ DESCRIPTION  ()
+Documentation of the subprogram.
+**************************
+<PrivatePart subprograms_gnat.ads:258:8-263:1>
+<AdaNodeList subprograms_gnat.ads:258:8-258:8>
+<EndName subprograms_gnat.ads:263:5-263:21>
+<Id "Subprograms_GNAT" subprograms_gnat.ads:263:5-263:21>
+<PragmaNodeList subprograms_gnat.ads:263:22-263:22>

@@ -3486,6 +3486,7 @@ package body GNATdoc.Comments.Extractor is
                end if;
 
                Belongs_To := Match.Captured (1);
+               Line_Tail := Line_Tail.Tail_After (Match.Last_Marker);
 
                goto Skip;
 

@@ -15,6 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with Ada.Containers.Ordered_Sets;
+
 with VSS.Characters.Latin;
 with VSS.Strings.Character_Iterators;
 with VSS.Strings.Conversions;
@@ -218,70 +220,192 @@ package body GNATdoc.Backend.RST is
          Success);
       File.New_Line (Success);
 
-      declare
-         Types : Entity_Information_Sets.Set;
+      if Self.Alphabetical_Order then
+         declare
+            Types : Entity_Information_Sets.Set;
 
-      begin
-         Types.Union (Entity.Simple_Types);
-         Types.Union (Entity.Array_Types);
-         Types.Union (Entity.Record_Types);
-         Types.Union (Entity.Interface_Types);
-         Types.Union (Entity.Tagged_Types);
-         Types.Union (Entity.Task_Types);
-         Types.Union (Entity.Protected_Types);
-         Types.Union (Entity.Access_Types);
-         Types.Union (Entity.Subtypes);
+         begin
+            Types.Union (Entity.Simple_Types);
+            Types.Union (Entity.Array_Types);
+            Types.Union (Entity.Record_Types);
+            Types.Union (Entity.Interface_Types);
+            Types.Union (Entity.Tagged_Types);
+            Types.Union (Entity.Task_Types);
+            Types.Union (Entity.Protected_Types);
+            Types.Union (Entity.Access_Types);
+            Types.Union (Entity.Subtypes);
 
-         if not Types.Is_Empty then
-            File.Put ("-----", Success);
-            File.New_Line (Success);
-            File.Put ("Types", Success);
-            File.New_Line (Success);
-            File.Put ("-----", Success);
-            File.New_Line (Success);
-            File.New_Line (Success);
-
-            for Item of Types loop
-               File.Put (".. ada:type:: type ", Success);
-               File.Put (Item.Name, Success);
+            if not Types.Is_Empty then
+               File.Put ("-----", Success);
                File.New_Line (Success);
-               File.Put ("    :package: ", Success);
-               File.Put (Entity.Qualified_Name, Success);
+               File.Put ("Types", Success);
+               File.New_Line (Success);
+               File.Put ("-----", Success);
                File.New_Line (Success);
                File.New_Line (Success);
 
-               File.Put_Lines
-                 (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
-                    (Indent        => "    ",
-                     Documentation => Item.Documentation,
-                     Pass_Through  => Self.Pass_Through,
-                     Code_Snippet  => True),
-                  Success);
+               for Item of Types loop
+                  File.Put (".. ada:type:: type ", Success);
+                  File.Put (Item.Name, Success);
+                  File.New_Line (Success);
+                  File.Put ("    :package: ", Success);
+                  File.Put (Entity.Qualified_Name, Success);
+                  File.New_Line (Success);
+                  File.New_Line (Success);
 
-               if Self.OOP_Mode
-                 and then Item.Kind in Ada_Interface_Type | Ada_Tagged_Type
-               then
-                  declare
-                     Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
+                  File.Put_Lines
+                    (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
+                       (Indent        => "    ",
+                        Documentation => Item.Documentation,
+                        Pass_Through  => Self.Pass_Through,
+                        Code_Snippet  => True),
+                     Success);
 
-                  begin
-                     Methods.Union (Item.Dispatching_Declared);
-                     Methods.Union (Item.Dispatching_Overrided);
-                     Methods.Union (Item.Prefix_Callable_Declared);
+                  if Self.OOP_Mode
+                    and then Item.Kind in Ada_Interface_Type | Ada_Tagged_Type
+                  then
+                     declare
+                        Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
 
-                     for Method of Methods loop
-                        Generate_Subprogram_Documentation
-                          ("    ",
-                           GNATdoc.Entities.To_Entity (Method.Signature).all,
-                           Entity.Qualified_Name);
-                     end loop;
-                  end;
+                     begin
+                        Methods.Union (Item.Dispatching_Declared);
+                        Methods.Union (Item.Dispatching_Overrided);
+                        Methods.Union (Item.Prefix_Callable_Declared);
+
+                        for Method of Methods loop
+                           Generate_Subprogram_Documentation
+                             ("    ",
+                              GNATdoc.Entities.To_Entity
+                                (Method.Signature).all,
+                              Entity.Qualified_Name);
+                        end loop;
+                     end;
+                  end if;
+
+                  File.New_Line (Success);
+               end loop;
+            end if;
+         end;
+
+      else
+         declare
+
+            function Less
+              (Left  : not null GNATdoc.Entities.Entity_Information_Access;
+               Right : not null GNATdoc.Entities.Entity_Information_Access)
+               return Boolean;
+
+            package Entity_Information_Sets is
+              new Ada.Containers.Ordered_Sets
+                (Element_Type => GNATdoc.Entities.Entity_Information_Access,
+                 "<"          => Less,
+                 "="          => GNATdoc.Entities."=");
+
+            procedure Union
+              (Container : in out Entity_Information_Sets.Set;
+               Items     : GNATdoc.Entities.Entity_Information_Sets.Set);
+
+            ----------
+            -- Less --
+            ----------
+
+            function Less
+              (Left  : not null GNATdoc.Entities.Entity_Information_Access;
+               Right : not null GNATdoc.Entities.Entity_Information_Access)
+               return Boolean
+            is
+               use type VSS.Strings.Character_Count;
+               use type VSS.Strings.Line_Count;
+               use type VSS.Strings.Virtual_String;
+
+            begin
+               if Left.Location.File < Right.Location.File then
+                  return True;
+
+               elsif Left.Location.Line < Right.Location.Line then
+                  return True;
+
+               elsif Left.Location.Column < Right.Location.Column then
+                  return True;
+
+               else
+                  return False;
                end if;
+            end Less;
 
+            -----------
+            -- Union --
+            -----------
+
+            procedure Union
+              (Container : in out Entity_Information_Sets.Set;
+               Items     : GNATdoc.Entities.Entity_Information_Sets.Set) is
+            begin
+               for Item of Items loop
+                  Container.Insert (Item);
+               end loop;
+            end Union;
+
+            Types : Entity_Information_Sets.Set;
+
+         begin
+            Union (Types, Entity.Simple_Types);
+            Union (Types, Entity.Array_Types);
+            Union (Types, Entity.Record_Types);
+            Union (Types, Entity.Interface_Types);
+            Union (Types, Entity.Tagged_Types);
+            Union (Types, Entity.Task_Types);
+            Union (Types, Entity.Protected_Types);
+            Union (Types, Entity.Access_Types);
+            Union (Types, Entity.Subtypes);
+
+            if not Types.Is_Empty then
+               File.Put ("-----", Success);
                File.New_Line (Success);
-            end loop;
-         end if;
-      end;
+               File.Put ("Types", Success);
+               File.New_Line (Success);
+               File.Put ("-----", Success);
+               File.New_Line (Success);
+               File.New_Line (Success);
+
+               for Item of Types loop
+                  File.Put (".. ada:type:: type ", Success);
+                  File.Put (Item.Name, Success);
+                  File.New_Line (Success);
+                  File.Put ("    :package: ", Success);
+                  File.Put (Entity.Qualified_Name, Success);
+                  File.New_Line (Success);
+                  File.New_Line (Success);
+
+                  File.Put_Lines
+                    (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
+                       (Indent        => "    ",
+                        Documentation => Item.Documentation,
+                        Pass_Through  => Self.Pass_Through,
+                        Code_Snippet  => True),
+                     Success);
+
+                  if Self.OOP_Mode
+                    and then Item.Kind in Ada_Interface_Type | Ada_Tagged_Type
+                  then
+                     for Method of Item.Belongs_Subprograms loop
+                        if not Is_Private_Entity
+                          (GNATdoc.Entities.To_Entity (Method.Signature))
+                        then
+                           Generate_Subprogram_Documentation
+                             ("    ",
+                              GNATdoc.Entities.To_Entity
+                                (Method.Signature).all,
+                              Entity.Qualified_Name);
+                        end if;
+                     end loop;
+                  end if;
+
+                  File.New_Line (Success);
+               end loop;
+            end if;
+         end;
+      end if;
 
       begin
          declare
