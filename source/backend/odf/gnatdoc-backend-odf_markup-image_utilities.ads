@@ -15,17 +15,12 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.String_Vectors;
-with VSS.XML.Event_Vectors;
+package GNATdoc.Backend.ODF_Markup.Image_Utilities is
 
-package GNATdoc.Backend.ODF_Markup is
+   procedure Load_Encode
+     (Destination     : VSS.Strings.Virtual_String;
+      Encoded_Content : out VSS.Strings.Virtual_String);
+   --  Loads given file, converts its content into Base64 encoded form and
+   --  transforms to `Virtual_String`.
 
-   function Build_Markup
-     (Text : VSS.String_Vectors.Virtual_String_Vector)
-      return VSS.XML.Event_Vectors.Vector;
-
-   function Build_Code_Snipped_Markup
-     (Text : VSS.String_Vectors.Virtual_String_Vector)
-      return VSS.XML.Event_Vectors.Vector;
-
-end GNATdoc.Backend.ODF_Markup;
+end GNATdoc.Backend.ODF_Markup.Image_Utilities;

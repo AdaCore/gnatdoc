@@ -26,17 +26,24 @@ with Markdown.Blocks.Paragraphs;
 with Markdown.Documents;
 with Markdown.Parsers.GNATdoc_Enable;
 
+with GNATdoc.Backend.ODF_Markup.Image_Utilities;
+
 package body GNATdoc.Backend.ODF_Markup is
 
-   Draw_Namespace : constant VSS.IRIs.IRI :=
+   Draw_Namespace   : constant VSS.IRIs.IRI :=
      VSS.IRIs.To_IRI ("urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
-   Text_Namespace : constant VSS.IRIs.IRI :=
+   Office_Namespace : constant VSS.IRIs.IRI :=
+     VSS.IRIs.To_IRI ("urn:oasis:names:tc:opendocument:xmlns:office:1.0");
+   Text_Namespace   : constant VSS.IRIs.IRI :=
      VSS.IRIs.To_IRI ("urn:oasis:names:tc:opendocument:xmlns:text:1.0");
 
-   Line_Break_Element : constant VSS.Strings.Virtual_String := "line-break";
-   List_Element       : constant VSS.Strings.Virtual_String := "list";
-   List_Item_Element  : constant VSS.Strings.Virtual_String := "list-item";
-   P_Element          : constant VSS.Strings.Virtual_String := "p";
+   Binary_Data_Element : constant VSS.Strings.Virtual_String := "binary-data";
+   Frame_Element       : constant VSS.Strings.Virtual_String := "frame";
+   Image_Element       : constant VSS.Strings.Virtual_String := "image";
+   Line_Break_Element  : constant VSS.Strings.Virtual_String := "line-break";
+   List_Element        : constant VSS.Strings.Virtual_String := "list";
+   List_Item_Element   : constant VSS.Strings.Virtual_String := "list-item";
+   P_Element           : constant VSS.Strings.Virtual_String := "p";
 
    Style_Name_Attribute : constant VSS.Strings.Virtual_String :=
      "style-name";
@@ -184,6 +191,36 @@ package body GNATdoc.Backend.ODF_Markup is
          Build_Block (Result, Item);
       end loop;
    end Build_Block_Container;
+
+   -------------------------------
+   -- Build_Code_Snipped_Markup --
+   -------------------------------
+
+   function Build_Code_Snipped_Markup
+     (Text : VSS.String_Vectors.Virtual_String_Vector)
+      return VSS.XML.Event_Vectors.Vector is
+   begin
+      return Result : VSS.XML.Event_Vectors.Vector do
+         Write_Start_Element (Result, Text_Namespace, P_Element);
+         Write_Attribute
+           (Result,
+            Text_Namespace,
+            Style_Name_Attribute,
+            GNATdoc_Code_Block_Style);
+
+         for Index in Text.First_Index .. Text.Last_Index loop
+            if Index /= Text.First_Index then
+               Write_Start_Element
+                 (Result, Text_Namespace, Line_Break_Element);
+               Write_End_Element (Result, Text_Namespace, Line_Break_Element);
+            end if;
+
+            Write_Text (Result, Text.Element (Index));
+         end loop;
+
+         Write_End_Element (Result, Text_Namespace, P_Element);
+      end return;
+   end Build_Code_Snipped_Markup;
 
    -------------------------------
    -- Build_Indented_Code_Block --
@@ -338,12 +375,20 @@ package body GNATdoc.Backend.ODF_Markup is
    overriding procedure Enter_Image
      (Self        : in out Annotated_Text_Builder;
       Destination : VSS.Strings.Virtual_String;
-      Title       : VSS.Strings.Virtual_String) is
+      Title       : VSS.Strings.Virtual_String)
+   is
+      Encoded_Content : VSS.Strings.Virtual_String;
+
    begin
       Self.Image := True;
 
-      Write_Start_Element (Self.Stream, Draw_Namespace, "frame");
-      Write_Start_Element (Self.Stream, Draw_Namespace, "image");
+      GNATdoc.Backend.ODF_Markup.Image_Utilities.Load_Encode
+        (Destination, Encoded_Content);
+
+      Write_Start_Element (Self.Stream, Draw_Namespace, Frame_Element);
+      Write_Start_Element (Self.Stream, Draw_Namespace, Image_Element);
+      Write_Start_Element (Self.Stream, Office_Namespace, Binary_Data_Element);
+      Write_Text (Self.Stream, Encoded_Content);
    end Enter_Image;
 
    ------------------
@@ -405,8 +450,9 @@ package body GNATdoc.Backend.ODF_Markup is
       Destination : VSS.Strings.Virtual_String;
       Title       : VSS.Strings.Virtual_String) is
    begin
-      Write_End_Element (Self.Stream, Draw_Namespace, "image");
-      Write_End_Element (Self.Stream, Draw_Namespace, "frame");
+      Write_End_Element (Self.Stream, Office_Namespace, Binary_Data_Element);
+      Write_End_Element (Self.Stream, Draw_Namespace, Image_Element);
+      Write_End_Element (Self.Stream, Draw_Namespace, Frame_Element);
 
       Self.Image := False;
       Self.Text.Clear;

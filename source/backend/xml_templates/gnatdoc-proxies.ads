@@ -15,17 +15,19 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.String_Vectors;
 with VSS.XML.Event_Vectors;
+with VSS.XML.Templates.Proxies;
+with VSS.XML.Templates.Values;
 
-package GNATdoc.Backend.ODF_Markup is
+private package GNATdoc.Proxies is
 
-   function Build_Markup
-     (Text : VSS.String_Vectors.Virtual_String_Vector)
-      return VSS.XML.Event_Vectors.Vector;
+   type Markup_Proxy is
+     limited new VSS.XML.Templates.Proxies.Abstract_Value_Proxy with
+   record
+      Markup : VSS.XML.Event_Vectors.Vector;
+   end record;
 
-   function Build_Code_Snipped_Markup
-     (Text : VSS.String_Vectors.Virtual_String_Vector)
-      return VSS.XML.Event_Vectors.Vector;
+   overriding function Value
+     (Self : Markup_Proxy) return VSS.XML.Templates.Values.Value;
 
-end GNATdoc.Backend.ODF_Markup;
+end GNATdoc.Proxies;

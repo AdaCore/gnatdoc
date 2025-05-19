@@ -220,6 +220,7 @@
   </style:style>
 
   <style:style style:name="GNATdoc_20_code_20_block" style:display-name="GNATdoc code block" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0.0972in" style:contextual-spacing="false" fo:line-height="115%"/>
    <style:text-properties style:font-name="Liberation Mono" fo:font-family="&apos;Liberation Mono&apos;" style:font-family-generic="modern" style:font-pitch="fixed" fo:font-size="10pt" style:font-name-asian="Noto Sans Mono CJK SC" style:font-family-asian="&apos;Noto Sans Mono CJK SC&apos;" style:font-family-generic-asian="modern" style:font-pitch-asian="fixed" style:font-size-asian="10pt" style:font-name-complex="Liberation Mono" style:font-family-complex="&apos;Liberation Mono&apos;" style:font-family-generic-complex="modern" style:font-pitch-complex="fixed" style:font-size-complex="10pt"/>
   </style:style>
   <style:style style:name="GNATdoc_20_paragraph" style:display-name="GNATdoc paragraph" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
@@ -356,30 +357,35 @@
     <text:h tal:condition='entity/simple_types' text:style-name="Heading_20_3" text:outline-level="3">Simple Types</text:h>
     <text:section tal:omit-tag='' tal:repeat='item entity/simple_types'>
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
+      <text:p tal:omit-tag='' tal:content='item/code_odf'>Entity declaration</text:p>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
     </text:section>
 
     <text:h tal:condition='entity/array_types' text:style-name="Heading_20_3" text:outline-level="3">Array Types</text:h>
     <text:section tal:omit-tag='' tal:repeat='item entity/array_types'>
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
+      <text:p tal:omit-tag='' tal:content='item/code_odf'>Entity declaration</text:p>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
     </text:section>
 
     <text:h tal:condition='entity/record_types' text:style-name="Heading_20_3" text:outline-level="3">Record Types</text:h>
     <text:section tal:omit-tag='' tal:repeat='item entity/record_types'>
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
+      <text:p tal:omit-tag='' tal:content='item/code_odf'>Entity declaration</text:p>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
     </text:section>
 
     <text:h tal:condition='entity/interface_types' text:style-name="Heading_20_3" text:outline-level="3">Interface Types</text:h>
     <text:section tal:omit-tag='' tal:repeat='item entity/interface_types'>
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
+      <text:p tal:omit-tag='' tal:content='item/code_odf'>Entity declaration</text:p>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
     </text:section>
 
     <text:h tal:condition='entity/tagged_types' text:style-name="Heading_20_3" text:outline-level="3">Tagged Types</text:h>
     <text:section tal:omit-tag='' tal:repeat='item entity/tagged_types'>
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
+      <text:p tal:omit-tag='' tal:content='item/code_odf'>Entity declaration</text:p>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
     </text:section>
 
@@ -398,36 +404,42 @@
     <text:h tal:condition='entity/access_types' text:style-name="Heading_20_3" text:outline-level="3">Access Types</text:h>
     <text:section tal:omit-tag='' tal:repeat='item entity/access_types'>
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
+      <text:p tal:omit-tag='' tal:content='item/code_odf'>Entity declaration</text:p>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
     </text:section>
 
     <text:h tal:condition='entity/subtypes' text:style-name="Heading_20_3" text:outline-level="3">Subtypes</text:h>
     <text:section tal:omit-tag='' tal:repeat='item entity/subtypes'>
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
+      <text:p tal:omit-tag='' tal:content='item/code_odf'>Entity declaration</text:p>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
     </text:section>
 
     <text:h tal:condition='entity/constants' text:style-name="Heading_20_3" text:outline-level="3">Constants</text:h>
     <text:section tal:omit-tag='' tal:repeat='item entity/constants'>
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
+      <text:p tal:omit-tag='' tal:content='item/code_odf'>Entity declaration</text:p>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
     </text:section>
 
     <text:h tal:condition='entity/variables' text:style-name="Heading_20_3" text:outline-level="3">Variables</text:h>
     <text:section tal:omit-tag='' tal:repeat='item entity/variables'>
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
+      <text:p tal:omit-tag='' tal:content='item/code_odf'>Entity declaration</text:p>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
     </text:section>
 
     <text:h tal:condition='entity/entries' text:style-name="Heading_20_3" text:outline-level="3">Entries</text:h>
     <text:section tal:omit-tag='' tal:repeat='item entity/entries'>
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
+      <text:p tal:omit-tag='' tal:content='item/code_odf'>Entity declaration</text:p>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
     </text:section>
 
     <text:h tal:condition='entity/subprograms' text:style-name="Heading_20_3" text:outline-level="3">Subprograms</text:h>
     <text:section tal:omit-tag='' tal:repeat='item entity/subprograms'>
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
+      <text:p tal:omit-tag='' tal:content='item/code_odf'>Entity declaration</text:p>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
       <text:section tal:omit-tag='' tal:condition='item/documentation/parameters'>
         <text:list text:style-name="GNATdoc_20_component_20_list">

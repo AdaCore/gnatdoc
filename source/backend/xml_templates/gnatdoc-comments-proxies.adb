@@ -15,12 +15,11 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with VSS.XML.Event_Vectors;
 with VSS.XML.Templates.Proxies.Strings;
-with VSS.XML.Templates.Values;
 
 with GNATdoc.Backend.HTML_Markup;
 with GNATdoc.Backend.ODF_Markup;
+with GNATdoc.Proxies;
 
 package body GNATdoc.Comments.Proxies is
 
@@ -66,15 +65,6 @@ package body GNATdoc.Comments.Proxies is
      (Self : in out Section_Proxy;
       Name : VSS.Strings.Virtual_String)
       return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
-
-   type Markup_Proxy is
-     limited new VSS.XML.Templates.Proxies.Abstract_Value_Proxy with
-   record
-      Markup : VSS.XML.Event_Vectors.Vector;
-   end record;
-
-   overriding function Value
-     (Self : Markup_Proxy) return VSS.XML.Templates.Values.Value;
 
    ---------------
    -- Component --
@@ -123,7 +113,7 @@ package body GNATdoc.Comments.Proxies is
             end loop;
 
             return
-              Markup_Proxy'
+              GNATdoc.Proxies.Markup_Proxy'
                 (Markup => GNATdoc.Backend.HTML_Markup.Build_Markup (Text));
          end;
 
@@ -139,7 +129,7 @@ package body GNATdoc.Comments.Proxies is
             end loop;
 
             return
-              Markup_Proxy'
+              GNATdoc.Proxies.Markup_Proxy'
                 (Markup => GNATdoc.Backend.ODF_Markup.Build_Markup (Text));
          end;
 
@@ -188,13 +178,13 @@ package body GNATdoc.Comments.Proxies is
 
       elsif Name = "description" then
          return
-           Markup_Proxy'
+           GNATdoc.Proxies.Markup_Proxy'
              (Markup =>
                 GNATdoc.Backend.HTML_Markup.Build_Markup (Self.Section.Text));
 
       elsif Name = "description_odf" then
          return
-           Markup_Proxy'
+           GNATdoc.Proxies.Markup_Proxy'
              (Markup =>
                 GNATdoc.Backend.ODF_Markup.Build_Markup (Self.Section.Text));
 
@@ -268,15 +258,5 @@ package body GNATdoc.Comments.Proxies is
 
       return Section_Vectors.Has_Element (Self.Position);
    end Next;
-
-   -----------
-   -- Value --
-   -----------
-
-   overriding function Value
-     (Self : Markup_Proxy) return VSS.XML.Templates.Values.Value is
-   begin
-      return (VSS.XML.Templates.Values.Content, Self.Markup);
-   end Value;
 
 end GNATdoc.Comments.Proxies;
