@@ -346,7 +346,8 @@ package body GNATdoc.Backend.RST is
                end loop;
             end Union;
 
-            Types : Entity_Information_Sets.Set;
+            Types   : Entity_Information_Sets.Set;
+            Methods : Entity_Information_Sets.Set;
 
          begin
             Union (Types, Entity.Simple_Types);
@@ -388,16 +389,20 @@ package body GNATdoc.Backend.RST is
                   if Self.OOP_Mode
                     and then Item.Kind in Ada_Interface_Type | Ada_Tagged_Type
                   then
+                     Methods.Clear;
+
                      for Method of Item.Belongs_Subprograms loop
                         if not Is_Private_Entity
                           (GNATdoc.Entities.To_Entity (Method.Signature))
                         then
-                           Generate_Subprogram_Documentation
-                             ("    ",
-                              GNATdoc.Entities.To_Entity
-                                (Method.Signature).all,
-                              Entity.Qualified_Name);
+                           Methods.Insert
+                             (GNATdoc.Entities.To_Entity (Method.Signature));
                         end if;
+                     end loop;
+
+                     for Method of Methods loop
+                        Generate_Subprogram_Documentation
+                          ("    ", Method.all, Entity.Qualified_Name);
                      end loop;
                   end if;
 
