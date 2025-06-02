@@ -154,6 +154,16 @@ package body GNATdoc.Comments.Extractor is
                              = Ada_Private_Type_Def);
    --  Extract documentation for private type declaration.
 
+   procedure Extract_Object_Declaration_Documentation
+     (Node       : Libadalang.Analysis.Basic_Decl'Class;
+      Options    : GNATdoc.Comments.Options.Extractor_Options;
+      Sections   : in out Section_Vectors.Vector;
+      Messages   : in out GNATdoc.Messages.Message_Container;
+      Belongs_To : out VSS.Strings.Virtual_String;
+      Is_Private : out Boolean)
+     with Pre => Node.Kind in Ada_Object_Decl;
+   --  Extractdocumentation for object declaration
+
    procedure Extract_Simple_Declaration_Documentation
      (Node     : Libadalang.Analysis.Basic_Decl'Class;
       Options  : GNATdoc.Comments.Options.Extractor_Options;
@@ -644,11 +654,13 @@ package body GNATdoc.Comments.Extractor is
                Messages);
 
          when Ada_Object_Decl =>
-            Extract_Simple_Declaration_Documentation
+            Extract_Object_Declaration_Documentation
               (Node.As_Object_Decl,
                Options,
                Documentation.Sections,
-               Messages);
+               Messages,
+               Documentation.Belongs_To,
+               Documentation.Is_Private);
 
          when Ada_Number_Decl =>
             Extract_Simple_Declaration_Documentation
@@ -1854,6 +1866,75 @@ package body GNATdoc.Comments.Extractor is
          end;
       end if;
    end Extract_Leading_Section;
+
+   ----------------------------------------------
+   -- Extract_Object_Declaration_Documentation --
+   ----------------------------------------------
+
+   procedure Extract_Object_Declaration_Documentation
+     (Node       : Libadalang.Analysis.Basic_Decl'Class;
+      Options    : GNATdoc.Comments.Options.Extractor_Options;
+      Sections   : in out Section_Vectors.Vector;
+      Messages   : in out GNATdoc.Messages.Message_Container;
+      Belongs_To : out VSS.Strings.Virtual_String;
+      Is_Private : out Boolean)
+   is
+      Leading_Section   : Section_Access;
+      Trailing_Section  : Section_Access;
+
+   begin
+      Extract_General_Leading_Trailing_Documentation
+        (Decl_Node        => Node,
+         Options          => Options,
+         Last_Section     => null,
+         Minimum_Indent   => 0,
+         Sections         => Sections,
+         Leading_Section  => Leading_Section,
+         Trailing_Section => Trailing_Section);
+
+      Fill_Code_Snippet (Node, Node.Token_Start, Node.Token_End, Sections);
+      Remove_Comment_Start_And_Indentation (Sections, Options.Pattern);
+
+      declare
+         Raw_Section : Section_Access;
+
+      begin
+         --  Select most appropriate section depending from the style and
+         --  fallback.
+
+         case Options.Style is
+            when GNAT =>
+               if not Trailing_Section.Text.Is_Empty then
+                  Raw_Section := Trailing_Section;
+
+               elsif Options.Fallback
+                 and not Leading_Section.Text.Is_Empty
+               then
+                  Raw_Section := Leading_Section;
+               end if;
+
+            when Leading =>
+               if not Leading_Section.Text.Is_Empty then
+                  Raw_Section := Leading_Section;
+
+               elsif Options.Fallback
+                 and not Trailing_Section.Text.Is_Empty
+               then
+                  Raw_Section := Trailing_Section;
+               end if;
+         end case;
+
+         Parse_Raw_Section
+           (Location     => GNATdoc.Utilities.Location (Node),
+            Raw_Section  => Raw_Section,
+            Allowed_Tags =>
+              [Private_Tag | Belongs_To_Tag => True, others => False],
+            Sections     => Sections,
+            Belongs_To   => Belongs_To,
+            Is_Private   => Is_Private,
+            Messages     => Messages);
+      end;
+   end Extract_Object_Declaration_Documentation;
 
    ----------------------------------------
    -- Extract_Private_Type_Documentation --

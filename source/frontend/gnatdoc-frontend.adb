@@ -1768,7 +1768,7 @@ package body GNATdoc.Frontend is
    begin
       for Name of Node.F_Ids loop
          declare
-            Entity : constant not null
+            Entity  : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
                   (Location       => GNATdoc.Utilities.Location (Name),
@@ -1777,6 +1777,7 @@ package body GNATdoc.Frontend is
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
                    others         => <>);
+            Belongs : GNATdoc.Entities.Entity_Information_Access;
 
          begin
             Extract
@@ -1784,9 +1785,23 @@ package body GNATdoc.Frontend is
                Options       => GNATdoc.Options.Extractor_Options,
                Documentation => Entity.Documentation,
                Messages      => Entity.Messages);
+            GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
             if Node.F_Has_Constant then
                Enclosing.Constants.Insert (Entity);
+
+               Resolve_Belongs_To
+                 (Enclosing => Enclosing,
+                  Belongs   => Belongs,
+                  Entity    => Entity);
+
+               if Belongs = null then
+                  Enclosing.Belongs_Constants.Insert (Entity.Reference);
+
+               else
+                  Belongs.Belongs_Constants.Insert (Entity.Reference);
+                  Entity.Belongs := Belongs.Reference;
+               end if;
 
             else
                Enclosing.Variables.Insert (Entity);
