@@ -21,7 +21,7 @@ with VSS.Strings.Conversions;
 
 with GNATdoc.Comments.Options;
 with GNATdoc.Options;
-with GNATdoc.Version;
+with Gnatdoc_Config;
 
 with GPR2.Options;
 with GPR2.Project.Registry.Exchange;
@@ -209,7 +209,8 @@ package body GNATdoc.Command_Line is
             VSS.Command_Line.Report_Error
               (Template.Format
                  (VSS.Strings.Formatters.Strings.Image
-                      (GNATdoc.Version.Version_String)));
+                    (VSS.Strings.Conversions.To_Virtual_String
+                       (Gnatdoc_Config.Crate_Version))));
          end;
       end if;
 
