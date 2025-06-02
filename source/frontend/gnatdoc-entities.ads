@@ -86,10 +86,11 @@ package GNATdoc.Entities is
       Enclosing              : Entity_Signature;
       --  Structural enclosing entity (package/task/protected object).
       Belongs                : Entity_Reference;
-      --  Reference to the entity it belongs. It is set then subprogram is:
-      --    * explicitly `@belongs-to` type
+      --  Reference to the entity it belongs. It is set to refer to type when
+      --  entity `@belongs-to` explicitly (for constants/subprogram), or then
+      --  subprogram:
       --    * can be called with prefix notation
-      --    * primitive operations of the tagged type
+      --    * is a primitive operations of the tagged type
 
       Is_Private             : Boolean := False;
       --  Private entities are excluded from the documentartion.
@@ -129,6 +130,9 @@ package GNATdoc.Entities is
       Access_Types           : aliased Entity_Information_Sets.Set;
       Subtypes               : aliased Entity_Information_Sets.Set;
       Constants              : aliased Entity_Information_Sets.Set;
+      Belongs_Constants      : aliased Entity_Reference_Sets.Set;
+      --  Constants that belongs to the entity (to interface/tagged type,
+      --  otherwise to the package)
       Variables              : aliased Entity_Information_Sets.Set;
       Exceptions             : aliased Entity_Information_Sets.Set;
 
