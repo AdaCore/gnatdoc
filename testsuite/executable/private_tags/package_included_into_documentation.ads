@@ -11,4 +11,7 @@ package Package_Included_Into_Documentation is
    procedure Function_Excluded_From_Documentation;
    --  @private
 
+   C : constant Integer := 1;
+   --  @private
+
 end Package_Included_Into_Documentation;
