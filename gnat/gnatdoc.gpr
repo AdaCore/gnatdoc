@@ -25,7 +25,8 @@ project GNATdoc is
 
    for Object_Dir use "../.objs";
    for Source_Dirs use
-     ("../source/backend",
+     ("../config",
+      "../source/backend",
       "../source/backend/odf",
       "../source/backend/rst",
       "../source/backend/xml_templates",
