@@ -1,5 +1,15 @@
 + ? (UNDEFINED) ''
   Packages:
+    +  Constants (UNDEFINED) 'constants'
+      Tagged Types:
+        +  T (UNDEFINED) 'constants.t'
+          Belongs Constants:
+            +  B (UNDEFINED) 'constants.b'
+      Constants:
+        +  B (UNDEFINED) 'constants.b'
+        +  C (UNDEFINED) 'constants.c'
+      Belongs Constants:
+        +  C (UNDEFINED) 'constants.c'
     +  Subprograms (UNDEFINED) 'subprograms'
       Interface Types:
         +  I1 (ADA_INTERFACE_TYPE) 'subprograms.i1'
@@ -38,6 +48,9 @@
         +  PI2 (ADA_FUNCTION) 'subprograms.pi2((subprograms.i1'class) -> subprograms.i2)'
         +  PI2 (ADA_FUNCTION) 'subprograms.pi2((subprograms.i1) -> subprograms.i2'class)'
   Tagged Types:
+    +  T (UNDEFINED) 'constants.t'
+      Belongs Constants:
+        +  B (UNDEFINED) 'constants.b'
     +  T1 (UNDEFINED) 'subprograms.t1'
       Belongs Subprograms:
         +  DT1 (ADA_FUNCTION) 'subprograms.dt1((subprograms.t1) -> subprograms.t2'class)'
