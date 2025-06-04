@@ -1,5 +1,5 @@
 
-package Belongs_To is
+package Subprograms is
 
    type T1 is tagged null record;
 
@@ -29,4 +29,4 @@ package Belongs_To is
    function PI2 (Self : I1) return I2'Class is abstract;
    --  @belongs-to I2
 
-end Belongs_To;
+end Subprograms;

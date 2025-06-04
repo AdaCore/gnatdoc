@@ -144,11 +144,52 @@ package body GNATdoc.Backend.RST is
       File    : Streams.Output_Text_Stream;
       Success : Boolean := True;
 
+      procedure Generate_Constant_Documentation
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String);
+      --  Generate documentation for the given constant.
+
       procedure Generate_Subprogram_Documentation
         (Indent       : VSS.Strings.Virtual_String;
          Entity       : GNATdoc.Entities.Entity_Information;
          Package_Name : VSS.Strings.Virtual_String);
       --  Generate documentation for the given subprogram.
+
+      -------------------------------------
+      -- Generate_Constant_Documentation --
+      -------------------------------------
+
+      procedure Generate_Constant_Documentation
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String)
+      is
+         use type VSS.Strings.Virtual_String;
+
+      begin
+         File.New_Line (Success);
+
+         File.Put (Indent, Success);
+         File.Put (".. ada:object:: ", Success);
+
+         File.Put (Entity.RST_Profile, Success);
+         File.New_Line (Success);
+         File.Put (Indent, Success);
+         File.Put ("    :package: ", Success);
+         File.Put (Package_Name, Success);
+         File.New_Line (Success);
+         File.New_Line (Success);
+
+         File.Put_Lines
+           (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
+              (Indent        => Indent & "    ",
+               Documentation => Entity.Documentation,
+               Pass_Through  => Self.Pass_Through,
+               Code_Snippet  => False),
+            Success);
+         File.New_Line (Success);
+      end Generate_Constant_Documentation;
 
       ---------------------------------------
       -- Generate_Subprogram_Documentation --
@@ -346,8 +387,9 @@ package body GNATdoc.Backend.RST is
                end loop;
             end Union;
 
-            Types   : Entity_Information_Sets.Set;
-            Methods : Entity_Information_Sets.Set;
+            Types     : Entity_Information_Sets.Set;
+            Constants : Entity_Information_Sets.Set;
+            Methods   : Entity_Information_Sets.Set;
 
          begin
             Union (Types, Entity.Simple_Types);
@@ -389,7 +431,22 @@ package body GNATdoc.Backend.RST is
                   if Self.OOP_Mode
                     and then Item.Kind in Ada_Interface_Type | Ada_Tagged_Type
                   then
+                     Constants.Clear;
                      Methods.Clear;
+
+                     for Object of Item.Belongs_Constants loop
+                        if not Is_Private_Entity
+                          (GNATdoc.Entities.To_Entity (Object.Signature))
+                        then
+                           Constants.Insert
+                             (GNATdoc.Entities.To_Entity (Object.Signature));
+                        end if;
+                     end loop;
+
+                     for Object of Constants loop
+                        Generate_Constant_Documentation
+                          ("    ", Object.all, Entity.Qualified_Name);
+                     end loop;
 
                      for Method of Item.Belongs_Subprograms loop
                         if not Is_Private_Entity
