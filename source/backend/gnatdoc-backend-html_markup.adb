@@ -19,7 +19,7 @@ with VSS.IRIs;
 with VSS.XML.Events;
 with VSS.XML.Namespaces;
 
-with Markdown.Annotations.Visitors;
+with Markdown.Inlines.Visitors;
 with Markdown.Block_Containers;
 with Markdown.Blocks.Indented_Code;
 with Markdown.Blocks.Lists;
@@ -30,7 +30,7 @@ with Markdown.Parsers.GNATdoc_Enable;
 package body GNATdoc.Backend.HTML_Markup is
 
    type Annotated_Text_Builder is
-     limited new Markdown.Annotations.Visitors.Annotated_Text_Visitor with
+     limited new Markdown.Inlines.Visitors.Annotated_Text_Visitor with
    record
       Image  : Boolean := False;
       Text   : VSS.Strings.Virtual_String;
@@ -71,7 +71,7 @@ package body GNATdoc.Backend.HTML_Markup is
 
    procedure Build_Annotated_Text
      (Result : in out VSS.XML.Event_Vectors.Vector;
-      Item   : Markdown.Annotations.Annotated_Text'Class);
+      Item   : Markdown.Inlines.Inline_Vector'Class);
 
    procedure Build_Block
      (Result : in out VSS.XML.Event_Vectors.Vector;
@@ -126,10 +126,10 @@ package body GNATdoc.Backend.HTML_Markup is
 
    procedure Build_Annotated_Text
      (Result : in out VSS.XML.Event_Vectors.Vector;
-      Item   : Markdown.Annotations.Annotated_Text'Class)
+      Item   : Markdown.Inlines.Inline_Vector'Class)
    is
       Visitor  : Annotated_Text_Builder;
-      Iterator : Markdown.Annotations.Visitors.Annotated_Text_Iterator;
+      Iterator : Markdown.Inlines.Visitors.Annotated_Text_Iterator;
 
    begin
       Iterator.Iterate (Item, Visitor);
@@ -229,6 +229,7 @@ package body GNATdoc.Backend.HTML_Markup is
 
    begin
       Markdown.Parsers.GNATdoc_Enable (Parser);
+      Parser.Set_Extensions ((Link_Attributes => True));
 
       for Line of Text loop
          Parser.Parse_Line (Line);

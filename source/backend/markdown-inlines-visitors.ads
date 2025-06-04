@@ -4,7 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-package Markdown.Annotations.Visitors
+package Markdown.Inlines.Visitors
   with Preelaborate
 is
 
@@ -46,7 +46,7 @@ is
 
    procedure Iterate
      (Self    : in out Annotated_Text_Iterator'Class;
-      Text    : Markdown.Annotations.Annotated_Text'Class;
+      Text    : Markdown.Inlines.Inline_Vector'Class;
       Visitor : in out Annotated_Text_Visitor'Class);
 
 private
@@ -55,4 +55,4 @@ private
       null;
    end record;
 
-end Markdown.Annotations.Visitors;
+end Markdown.Inlines.Visitors;
