@@ -18,7 +18,7 @@
 with VSS.IRIs;
 with VSS.XML.Events;
 
-with Markdown.Annotations.Visitors;
+with Markdown.Inlines.Visitors;
 with Markdown.Block_Containers;
 with Markdown.Blocks.Indented_Code;
 with Markdown.Blocks.Lists;
@@ -57,7 +57,7 @@ package body GNATdoc.Backend.ODF_Markup is
    --  Names of styles predefined by GNATdoc
 
    type Annotated_Text_Builder is
-     limited new Markdown.Annotations.Visitors.Annotated_Text_Visitor with
+     limited new Markdown.Inlines.Visitors.Annotated_Text_Visitor with
    record
       Image  : Boolean := False;
       Text   : VSS.Strings.Virtual_String;
@@ -98,7 +98,7 @@ package body GNATdoc.Backend.ODF_Markup is
 
    procedure Build_Annotated_Text
      (Result : in out VSS.XML.Event_Vectors.Vector;
-      Item   : Markdown.Annotations.Annotated_Text'Class);
+      Item   : Markdown.Inlines.Inline_Vector'Class);
 
    procedure Build_Block
      (Result : in out VSS.XML.Event_Vectors.Vector;
@@ -146,10 +146,10 @@ package body GNATdoc.Backend.ODF_Markup is
 
    procedure Build_Annotated_Text
      (Result : in out VSS.XML.Event_Vectors.Vector;
-      Item   : Markdown.Annotations.Annotated_Text'Class)
+      Item   : Markdown.Inlines.Inline_Vector'Class)
    is
       Visitor  : Annotated_Text_Builder;
-      Iterator : Markdown.Annotations.Visitors.Annotated_Text_Iterator;
+      Iterator : Markdown.Inlines.Visitors.Annotated_Text_Iterator;
 
    begin
       Iterator.Iterate (Item, Visitor);
