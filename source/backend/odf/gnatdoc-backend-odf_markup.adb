@@ -18,6 +18,7 @@
 with VSS.IRIs;
 with VSS.XML.Events;
 
+with Markdown.Attribute_Lists;
 with Markdown.Inlines.Visitors;
 with Markdown.Block_Containers;
 with Markdown.Blocks.Indented_Code;
@@ -36,6 +37,9 @@ package body GNATdoc.Backend.ODF_Markup is
      VSS.IRIs.To_IRI ("urn:oasis:names:tc:opendocument:xmlns:office:1.0");
    Text_Namespace   : constant VSS.IRIs.IRI :=
      VSS.IRIs.To_IRI ("urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+   SVG_Namespace    : constant VSS.IRIs.IRI :=
+     VSS.IRIs.To_IRI
+       ("urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
 
    Binary_Data_Element : constant VSS.Strings.Virtual_String := "binary-data";
    Frame_Element       : constant VSS.Strings.Virtual_String := "frame";
@@ -45,8 +49,9 @@ package body GNATdoc.Backend.ODF_Markup is
    List_Item_Element   : constant VSS.Strings.Virtual_String := "list-item";
    P_Element           : constant VSS.Strings.Virtual_String := "p";
 
-   Style_Name_Attribute : constant VSS.Strings.Virtual_String :=
-     "style-name";
+   Height_Attribute     : constant VSS.Strings.Virtual_String := "height";
+   Style_Name_Attribute : constant VSS.Strings.Virtual_String := "style-name";
+   Width_Attribute      : constant VSS.Strings.Virtual_String := "width";
 
    GNATdoc_Paragraph_Style  : constant VSS.Strings.Virtual_String :=
      "GNATdoc_20_paragraph";
@@ -67,6 +72,9 @@ package body GNATdoc.Backend.ODF_Markup is
    overriding procedure Visit_Text
      (Self : in out Annotated_Text_Builder;
       Text : VSS.Strings.Virtual_String);
+
+   overriding procedure Visit_Soft_Line_Break
+     (Self : in out Annotated_Text_Builder) is null;
 
    overriding procedure Enter_Emphasis
      (Self : in out Annotated_Text_Builder);
@@ -89,12 +97,14 @@ package body GNATdoc.Backend.ODF_Markup is
    overriding procedure Enter_Image
      (Self        : in out Annotated_Text_Builder;
       Destination : VSS.Strings.Virtual_String;
-      Title       : VSS.Strings.Virtual_String);
+      Title       : VSS.Strings.Virtual_String;
+      Attributes  : Markdown.Attribute_Lists.Attribute_List);
 
    overriding procedure Leave_Image
      (Self        : in out Annotated_Text_Builder;
       Destination : VSS.Strings.Virtual_String;
-      Title       : VSS.Strings.Virtual_String);
+      Title       : VSS.Strings.Virtual_String;
+      Attributes  : Markdown.Attribute_Lists.Attribute_List);
 
    procedure Build_Annotated_Text
      (Result : in out VSS.XML.Event_Vectors.Vector;
@@ -375,8 +385,11 @@ package body GNATdoc.Backend.ODF_Markup is
    overriding procedure Enter_Image
      (Self        : in out Annotated_Text_Builder;
       Destination : VSS.Strings.Virtual_String;
-      Title       : VSS.Strings.Virtual_String)
+      Title       : VSS.Strings.Virtual_String;
+      Attributes  : Markdown.Attribute_Lists.Attribute_List)
    is
+      use type VSS.Strings.Virtual_String;
+
       Encoded_Content : VSS.Strings.Virtual_String;
 
    begin
@@ -386,6 +399,18 @@ package body GNATdoc.Backend.ODF_Markup is
         (Destination, Encoded_Content);
 
       Write_Start_Element (Self.Stream, Draw_Namespace, Frame_Element);
+
+      for Attribute of Attributes loop
+         if Attribute.Name = "width" then
+            Write_Attribute
+              (Self.Stream, SVG_Namespace, Width_Attribute, Attribute.Value);
+
+         elsif Attribute.Name = "height" then
+            Write_Attribute
+              (Self.Stream, SVG_Namespace, Height_Attribute, Attribute.Value);
+         end if;
+      end loop;
+
       Write_Start_Element (Self.Stream, Draw_Namespace, Image_Element);
       Write_Start_Element (Self.Stream, Office_Namespace, Binary_Data_Element);
       Write_Text (Self.Stream, Encoded_Content);
@@ -448,7 +473,8 @@ package body GNATdoc.Backend.ODF_Markup is
    overriding procedure Leave_Image
      (Self        : in out Annotated_Text_Builder;
       Destination : VSS.Strings.Virtual_String;
-      Title       : VSS.Strings.Virtual_String) is
+      Title       : VSS.Strings.Virtual_String;
+      Attributes  : Markdown.Attribute_Lists.Attribute_List) is
    begin
       Write_End_Element (Self.Stream, Office_Namespace, Binary_Data_Element);
       Write_End_Element (Self.Stream, Draw_Namespace, Image_Element);
