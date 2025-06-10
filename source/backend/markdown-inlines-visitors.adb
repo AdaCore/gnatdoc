@@ -72,12 +72,14 @@ package body Markdown.Inlines.Visitors is
 
                Visitor.Enter_Image
                  (Destination => State.Destination,
-                  Title       => State.Title);
+                  Title       => State.Title,
+                  Attributes  => State.Attributes);
 
             when Markdown.Inlines.End_Image =>
                Visitor.Leave_Image
                  (Destination => State.Destination,
-                  Title       => State.Title);
+                  Title       => State.Title,
+                  Attributes  => State.Attributes);
 
             when others =>
                null;

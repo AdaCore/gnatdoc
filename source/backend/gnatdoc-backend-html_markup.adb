@@ -19,6 +19,7 @@ with VSS.IRIs;
 with VSS.XML.Events;
 with VSS.XML.Namespaces;
 
+with Markdown.Attribute_Lists;
 with Markdown.Inlines.Visitors;
 with Markdown.Block_Containers;
 with Markdown.Blocks.Indented_Code;
@@ -62,12 +63,14 @@ package body GNATdoc.Backend.HTML_Markup is
    overriding procedure Enter_Image
      (Self        : in out Annotated_Text_Builder;
       Destination : VSS.Strings.Virtual_String;
-      Title       : VSS.Strings.Virtual_String);
+      Title       : VSS.Strings.Virtual_String;
+      Attributes  : Markdown.Attribute_Lists.Attribute_List);
 
    overriding procedure Leave_Image
      (Self        : in out Annotated_Text_Builder;
       Destination : VSS.Strings.Virtual_String;
-      Title       : VSS.Strings.Virtual_String);
+      Title       : VSS.Strings.Virtual_String;
+      Attributes  : Markdown.Attribute_Lists.Attribute_List);
 
    procedure Build_Annotated_Text
      (Result : in out VSS.XML.Event_Vectors.Vector;
@@ -294,7 +297,8 @@ package body GNATdoc.Backend.HTML_Markup is
    overriding procedure Enter_Image
      (Self        : in out Annotated_Text_Builder;
       Destination : VSS.Strings.Virtual_String;
-      Title       : VSS.Strings.Virtual_String) is
+      Title       : VSS.Strings.Virtual_String;
+      Attributes  : Markdown.Attribute_Lists.Attribute_List) is
    begin
       Self.Image := True;
    end Enter_Image;
@@ -338,7 +342,8 @@ package body GNATdoc.Backend.HTML_Markup is
    overriding procedure Leave_Image
      (Self        : in out Annotated_Text_Builder;
       Destination : VSS.Strings.Virtual_String;
-      Title       : VSS.Strings.Virtual_String)
+      Title       : VSS.Strings.Virtual_String;
+      Attributes  : Markdown.Attribute_Lists.Attribute_List)
    is
       use type VSS.Strings.Virtual_String;
 
@@ -353,6 +358,15 @@ package body GNATdoc.Backend.HTML_Markup is
       if not Self.Text.Is_Empty then
          Write_Attribute (Self.Stream, "alt", Self.Text);
       end if;
+
+      for J in 1 .. Attributes.Length loop
+         if Attributes.Name (J) = "width" then
+            Write_Attribute (Self.Stream, "width", Attributes.Value (J));
+
+         elsif Attributes.Name (J) = "height" then
+            Write_Attribute (Self.Stream, "height", Attributes.Value (J));
+         end if;
+      end loop;
 
       Write_End_Element (Self.Stream, "img");
 
