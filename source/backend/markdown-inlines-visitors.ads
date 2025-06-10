@@ -4,6 +4,8 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+with Markdown.Attribute_Lists;
+
 package Markdown.Inlines.Visitors
   with Preelaborate
 is
@@ -13,6 +15,9 @@ is
    not overriding procedure Visit_Text
      (Self : in out Annotated_Text_Visitor;
       Text : VSS.Strings.Virtual_String) is abstract;
+
+   not overriding procedure Visit_Soft_Line_Break
+     (Self : in out Annotated_Text_Visitor) is abstract;
 
    not overriding procedure Enter_Emphasis
      (Self : in out Annotated_Text_Visitor) is abstract;
@@ -35,12 +40,14 @@ is
    not overriding procedure Enter_Image
      (Self        : in out Annotated_Text_Visitor;
       Destination : VSS.Strings.Virtual_String;
-      Title       : VSS.Strings.Virtual_String) is abstract;
+      Title       : VSS.Strings.Virtual_String;
+      Attributes  : Markdown.Attribute_Lists.Attribute_List) is abstract;
 
    not overriding procedure Leave_Image
      (Self        : in out Annotated_Text_Visitor;
       Destination : VSS.Strings.Virtual_String;
-      Title       : VSS.Strings.Virtual_String) is abstract;
+      Title       : VSS.Strings.Virtual_String;
+      Attributes  : Markdown.Attribute_Lists.Attribute_List) is abstract;
 
    type Annotated_Text_Iterator is tagged limited private;
 

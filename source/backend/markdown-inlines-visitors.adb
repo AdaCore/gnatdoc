@@ -47,6 +47,9 @@ package body Markdown.Inlines.Visitors is
             when Markdown.Inlines.Text =>
                Visitor.Visit_Text (Item.Text);
 
+            when Markdown.Inlines.Soft_Line_Break =>
+               Visitor.Visit_Soft_Line_Break;
+
             when Markdown.Inlines.Start_Emphasis =>
                Visitor.Enter_Emphasis;
 
@@ -72,12 +75,14 @@ package body Markdown.Inlines.Visitors is
 
                Visitor.Enter_Image
                  (Destination => State.Destination,
-                  Title       => State.Title);
+                  Title       => State.Title,
+                  Attributes  => State.Attributes);
 
             when Markdown.Inlines.End_Image =>
                Visitor.Leave_Image
                  (Destination => State.Destination,
-                  Title       => State.Title);
+                  Title       => State.Title,
+                  Attributes  => State.Attributes);
 
             when others =>
                null;
