@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2023-2024, AdaCore                     --
+--                     Copyright (C) 2023-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -14,6 +14,8 @@
 -- COPYING3.  If not, go to http://www.gnu.org/licenses for a complete copy --
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
+
+with GNATdoc.Backend.RST_Markup;
 
 package body GNATdoc.Comments.RST_Helpers is
 
@@ -58,9 +60,15 @@ package body GNATdoc.Comments.RST_Helpers is
 
       for Section of Documentation.Sections loop
          if Section.Kind = Description then
-            for Line of Section.Text loop
-               Text.Append (Indent & Line);
-            end loop;
+            if Pass_Through then
+               for Line of Section.Text loop
+                  Text.Append (Indent & Line);
+               end loop;
+
+            else
+               Text.Append
+                 (GNATdoc.Backend.RST_Markup.Build_Markup (Section.Text));
+            end if;
 
             exit;
          end if;
@@ -77,9 +85,22 @@ package body GNATdoc.Comments.RST_Helpers is
                Text.Append (VSS.Strings.Empty_Virtual_String);
                Text.Append (Indent & ":parameter " & Section.Name & ":");
 
-               for Line of Section.Text loop
-                  Text.Append (Indent & "    " & Line);
-               end loop;
+               declare
+                  RST : VSS.String_Vectors.Virtual_String_Vector;
+
+               begin
+                  if Pass_Through then
+                     RST := Section.Text;
+
+                  else
+                     RST :=
+                       GNATdoc.Backend.RST_Markup.Build_Markup (Section.Text);
+                  end if;
+
+                  for Line of RST loop
+                     Text.Append (Indent & "    " & Line);
+                  end loop;
+               end;
 
                Text.Append (VSS.Strings.Empty_Virtual_String);
             end if;
@@ -90,9 +111,22 @@ package body GNATdoc.Comments.RST_Helpers is
                Text.Append (VSS.Strings.Empty_Virtual_String);
                Text.Append (Indent & ":returns:");
 
-               for Line of Section.Text loop
-                  Text.Append (Indent & "    " & Line);
-               end loop;
+               declare
+                  RST : VSS.String_Vectors.Virtual_String_Vector;
+
+               begin
+                  if Pass_Through then
+                     RST := Section.Text;
+
+                  else
+                     RST :=
+                       GNATdoc.Backend.RST_Markup.Build_Markup (Section.Text);
+                  end if;
+
+                  for Line of RST loop
+                     Text.Append (Indent & "    " & Line);
+                  end loop;
+               end;
 
                Text.Append (VSS.Strings.Empty_Virtual_String);
 
@@ -105,9 +139,22 @@ package body GNATdoc.Comments.RST_Helpers is
                Text.Append (VSS.Strings.Empty_Virtual_String);
                Text.Append (Indent & ":exception " & Section.Name & ":");
 
-               for Line of Section.Text loop
-                  Text.Append (Indent & "    " & Line);
-               end loop;
+               declare
+                  RST : VSS.String_Vectors.Virtual_String_Vector;
+
+               begin
+                  if Pass_Through then
+                     RST := Section.Text;
+
+                  else
+                     RST :=
+                       GNATdoc.Backend.RST_Markup.Build_Markup (Section.Text);
+                  end if;
+
+                  for Line of RST loop
+                     Text.Append (Indent & "    " & Line);
+                  end loop;
+               end;
 
                Text.Append (VSS.Strings.Empty_Virtual_String);
 
