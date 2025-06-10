@@ -235,7 +235,6 @@ package body GNATdoc.Backend.HTML_Markup is
 
    begin
       Markdown.Parsers.GNATdoc_Enable (Parser);
-      Parser.Set_Extensions ((Link_Attributes => True));
 
       for Line of Text loop
          Parser.Parse_Line (Line);
