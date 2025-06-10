@@ -42,6 +42,9 @@ package body GNATdoc.Backend.HTML_Markup is
      (Self : in out Annotated_Text_Builder;
       Text : VSS.Strings.Virtual_String);
 
+   overriding procedure Visit_Soft_Line_Break
+     (Self : in out Annotated_Text_Builder) is null;
+
    overriding procedure Enter_Emphasis
      (Self : in out Annotated_Text_Builder);
 

@@ -16,6 +16,9 @@ is
      (Self : in out Annotated_Text_Visitor;
       Text : VSS.Strings.Virtual_String) is abstract;
 
+   not overriding procedure Visit_Soft_Line_Break
+     (Self : in out Annotated_Text_Visitor) is abstract;
+
    not overriding procedure Enter_Emphasis
      (Self : in out Annotated_Text_Visitor) is abstract;
 

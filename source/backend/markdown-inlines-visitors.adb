@@ -47,6 +47,9 @@ package body Markdown.Inlines.Visitors is
             when Markdown.Inlines.Text =>
                Visitor.Visit_Text (Item.Text);
 
+            when Markdown.Inlines.Soft_Line_Break =>
+               Visitor.Visit_Soft_Line_Break;
+
             when Markdown.Inlines.Start_Emphasis =>
                Visitor.Enter_Emphasis;
 
