@@ -15,7 +15,12 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with VSS.Characters;
 with VSS.IRIs;
+with VSS.Strings.Character_Iterators;
+with VSS.Strings.Formatters.Integers;
+with VSS.Strings.Markers;
+with VSS.Strings.Templates;
 with VSS.XML.Events;
 
 with Markdown.Attribute_Lists;
@@ -48,7 +53,9 @@ package body GNATdoc.Backend.ODF_Markup is
    List_Element        : constant VSS.Strings.Virtual_String := "list";
    List_Item_Element   : constant VSS.Strings.Virtual_String := "list-item";
    P_Element           : constant VSS.Strings.Virtual_String := "p";
+   S_Element           : constant VSS.Strings.Virtual_String := "s";
 
+   C_Attribute          : constant VSS.Strings.Virtual_String := "c";
    Height_Attribute     : constant VSS.Strings.Virtual_String := "height";
    Style_Name_Attribute : constant VSS.Strings.Virtual_String := "style-name";
    Width_Attribute      : constant VSS.Strings.Virtual_String := "width";
@@ -202,6 +209,121 @@ package body GNATdoc.Backend.ODF_Markup is
       end loop;
    end Build_Block_Container;
 
+   procedure Write_Code_Block
+     (Output : in out VSS.XML.Event_Vectors.Vector;
+      Text   : VSS.String_Vectors.Virtual_String_Vector);
+
+   ----------------------
+   -- Write_Code_Block --
+   ----------------------
+
+   procedure Write_Code_Block
+     (Output : in out VSS.XML.Event_Vectors.Vector;
+      Text   : VSS.String_Vectors.Virtual_String_Vector)
+   is
+      Template : VSS.Strings.Templates.Virtual_String_Template := "{}";
+
+   begin
+      for Index in Text.First_Index .. Text.Last_Index loop
+         if Index /= Text.First_Index then
+            Write_Start_Element (Output, Text_Namespace, Line_Break_Element);
+            Write_End_Element (Output, Text_Namespace, Line_Break_Element);
+         end if;
+
+         declare
+            use type VSS.Characters.Virtual_Character;
+
+            procedure Write_Text_S;
+
+            procedure Set_From_To_Next;
+
+            Line      : constant VSS.Strings.Virtual_String :=
+              Text.Element (Index);
+            From      : VSS.Strings.Markers.Character_Marker :=
+              Line.At_First_Character.Marker;
+            Iterator  : VSS.Strings.Character_Iterators.Character_Iterator :=
+              Line.Before_First_Character;
+            Character : VSS.Characters.Virtual_Character'Base;
+            Count     : Natural := 0;
+
+            ----------------------
+            -- Set_From_To_Next --
+            ----------------------
+
+            procedure Set_From_To_Next is
+               Aux : VSS.Strings.Character_Iterators.Character_Iterator;
+
+            begin
+               Aux.Set_At (Iterator);
+
+               if Aux.Forward then
+                  From := Aux.Marker;
+
+               else
+                  From := Line.After_Last_Character.Marker;
+               end if;
+            end Set_From_To_Next;
+
+            ------------------
+            -- Write_Text_S --
+            ------------------
+
+            procedure Write_Text_S is
+            begin
+               Write_Start_Element (Output, Text_Namespace, S_Element);
+
+               if Count > 2 then
+                  Write_Attribute
+                    (Output,
+                     Text_Namespace,
+                     C_Attribute,
+                     Template.Format (VSS.Strings.Formatters.Integers.Image
+                       (Count - 1)));
+               end if;
+
+               Write_End_Element (Output, Text_Namespace, S_Element);
+            end Write_Text_S;
+
+         begin
+            while Iterator.Forward (Character) loop
+               if Character = ' ' then
+                  if Count = 0 then
+                     Write_Text (Output, Line.Slice (From, Iterator));
+                     Set_From_To_Next;
+                     Count := 1;
+
+                  else
+                     Set_From_To_Next;
+                     Count := @ + 1;
+                  end if;
+
+               else
+                  if Count = 0 then
+                     null;
+
+                  elsif Count = 1 then
+                     Count := 0;
+
+                  else
+                     Write_Text_S;
+                     Count := 0;
+                  end if;
+               end if;
+            end loop;
+
+            if Count = 0 then
+               Write_Text (Output, Line.Tail_From (From));
+
+            elsif Count = 1 then
+               null;
+
+            else
+               Write_Text_S;
+            end if;
+         end;
+      end loop;
+   end Write_Code_Block;
+
    -------------------------------
    -- Build_Code_Snipped_Markup --
    -------------------------------
@@ -218,15 +340,7 @@ package body GNATdoc.Backend.ODF_Markup is
             Style_Name_Attribute,
             GNATdoc_Code_Block_Style);
 
-         for Index in Text.First_Index .. Text.Last_Index loop
-            if Index /= Text.First_Index then
-               Write_Start_Element
-                 (Result, Text_Namespace, Line_Break_Element);
-               Write_End_Element (Result, Text_Namespace, Line_Break_Element);
-            end if;
-
-            Write_Text (Result, Text.Element (Index));
-         end loop;
+         Write_Code_Block (Result, Text);
 
          Write_End_Element (Result, Text_Namespace, P_Element);
       end return;
@@ -247,14 +361,7 @@ package body GNATdoc.Backend.ODF_Markup is
          Style_Name_Attribute,
          GNATdoc_Code_Block_Style);
 
-      for Index in Item.Text.First_Index .. Item.Text.Last_Index loop
-         if Index /= Item.Text.First_Index then
-            Write_Start_Element (Result, Text_Namespace, Line_Break_Element);
-            Write_End_Element (Result, Text_Namespace, Line_Break_Element);
-         end if;
-
-         Write_Text (Result, Item.Text.Element (Index));
-      end loop;
+      Write_Code_Block (Result, Item.Text);
 
       Write_End_Element (Result, Text_Namespace, P_Element);
    end Build_Indented_Code_Block;
