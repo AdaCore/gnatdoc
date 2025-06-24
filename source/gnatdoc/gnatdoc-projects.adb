@@ -209,6 +209,9 @@ package body GNATdoc.Projects is
                   end if;
                end loop;
             end;
+
+         else
+            Result.Append (Project_Tree.Root_Project.Dir_Name.Virtual_File);
          end if;
       end return;
    end Image_Directories;
