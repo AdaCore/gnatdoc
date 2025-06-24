@@ -20,7 +20,7 @@ private with GNATCOLL.VFS;
 with VSS.Command_Line.Parsers;
 private with VSS.String_Vectors;
 
-private with GNATdoc.Entities;
+with GNATdoc.Entities;
 
 package GNATdoc.Backend is
 
@@ -51,6 +51,17 @@ package GNATdoc.Backend is
 
    procedure Generate (Self : in out Abstract_Backend) is abstract;
 
+   -------------------------
+   -- Utility subprograms --
+   -------------------------
+
+   function Is_Private_Entity
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access)
+      return Boolean;
+   --  Return True when given entity is private package, or explicitly marked
+   --  as private entity, or enclosed by the private package, or enclosed by
+   --  the entity marked as private entity.
+
 private
 
    type Abstract_Backend is abstract tagged limited record
@@ -71,16 +82,5 @@ private
      (Self : Abstract_Backend;
       Path : VSS.String_Vectors.Virtual_String_Vector)
       return GNATCOLL.VFS.Virtual_File;
-
-   -------------------------
-   -- Utility subprograms --
-   -------------------------
-
-   function Is_Private_Entity
-     (Entity : not null GNATdoc.Entities.Entity_Information_Access)
-      return Boolean;
-   --  Return True when given entity is private package, or explicitly marked
-   --  as private entity, or enclosed by the private package, or enclosed by
-   --  the entity marked as private entity.
 
 end GNATdoc.Backend;

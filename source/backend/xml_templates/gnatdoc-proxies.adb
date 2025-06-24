@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2024-2025, AdaCore                     --
+--                       Copyright (C) 2025, AdaCore                        --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,40 +15,16 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATdoc.Backend.HTML;
-with GNATdoc.Backend.ODF;
-with GNATdoc.Backend.RST.PT;
-with GNATdoc.Backend.Test;
+package body GNATdoc.Proxies is
 
-package body GNATdoc.Backend.Registry is
+   -----------
+   -- Value --
+   -----------
 
-   --------------------
-   -- Create_Backend --
-   --------------------
-
-   function Create_Backend
-     (Name : VSS.Strings.Virtual_String) return Backend_Access
-   is
-      use type VSS.Strings.Virtual_String;
-
+   overriding function Value
+     (Self : Markup_Proxy) return VSS.XML.Templates.Values.Value is
    begin
-      if Name = "html" then
-         return new GNATdoc.Backend.HTML.HTML_Backend;
+      return (VSS.XML.Templates.Values.Content, Self.Markup);
+   end Value;
 
-      elsif Name = "odf" then
-         return new GNATdoc.Backend.ODF.ODF_Backend;
-
-      elsif Name = "rst" then
-         return new GNATdoc.Backend.RST.RST_Backend;
-
-      elsif Name = "rstpt" then
-         return new GNATdoc.Backend.RST.PT.PT_RST_Backend;
-
-      elsif Name = "test" then
-         return new GNATdoc.Backend.Test.Test_Backend;
-      end if;
-
-      return null;
-   end Create_Backend;
-
-end GNATdoc.Backend.Registry;
+end GNATdoc.Proxies;
