@@ -6,7 +6,7 @@
 --
 --  `code`, *emphasis*, **strong**
 --
---  ![Image](image.png)
+--  ![Image](image.png){width=64px height=64px}
 --
 --     with P;
 --
