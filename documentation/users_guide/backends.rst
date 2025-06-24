@@ -46,6 +46,17 @@ Layout of the resources directory
     style documentation is specified)
 
 
+ODF
+===
+
+The ODF backend can be used to generate documentation in OpenDocument Format
+(ODF) format. The generated file can be opened by many office suites
+(Microsoft Word, LibreOffice Writer, etc) to apply different styles and print
+the documentation.
+
+Output can be customized by providing a custom
+*<resources_dir>/template/documentation.fodt* file.
+
 
 RST
 ===
