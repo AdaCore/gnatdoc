@@ -22,6 +22,7 @@ with VSS.XML.Writers.Simple;
 
 with GNATdoc.Backend.ODF_Markup.Image_Utilities;
 with GNATdoc.Entities.Proxies;
+with GNATdoc.Projects;
 with Streams;
 
 package body GNATdoc.Backend.ODF is
@@ -127,8 +128,14 @@ package body GNATdoc.Backend.ODF is
    begin
       Abstract_Backend (Self).Initialize;
 
-      GNATdoc.Backend.ODF_Markup.Image_Utilities.Set_Image_Directories
-        (Self.Image_Directories);
+      if Self.Image_Directories.Is_Empty then
+         GNATdoc.Backend.ODF_Markup.Image_Utilities.Set_Image_Directories
+           ([GNATdoc.Projects.Project_File_Directory]);
+
+      else
+         GNATdoc.Backend.ODF_Markup.Image_Utilities.Set_Image_Directories
+           (Self.Image_Directories);
+      end if;
    end Initialize;
 
    ----------------------------------

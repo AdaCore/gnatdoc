@@ -209,9 +209,6 @@ package body GNATdoc.Projects is
                   end if;
                end loop;
             end;
-
-         else
-            Result.Append (Project_Tree.Root_Project.Dir_Name.Virtual_File);
          end if;
       end return;
    end Image_Directories;
@@ -522,6 +519,15 @@ package body GNATdoc.Projects is
          end if;
       end loop;
    end Process_Compilation_Units;
+
+   ----------------------------
+   -- Project_File_Directory --
+   ----------------------------
+
+   function Project_File_Directory return GNATCOLL.VFS.Virtual_File is
+   begin
+      return Project_Tree.Root_Project.Dir_Name.Virtual_File;
+   end Project_File_Directory;
 
    -------------------------
    -- Register_Attributes --
