@@ -151,4 +151,18 @@ package body GNATdoc.Messages is
         Success);
    end Report_Warning;
 
+   --------------------
+   -- Report_Warning --
+   --------------------
+
+   procedure Report_Warning (Text : VSS.Strings.Virtual_String) is
+      Template : constant Virtual_String_Template := "warning: {}";
+      Success  : Boolean := True;
+      Stream   : VSS.Text_Streams.Output_Text_Stream'Class :=
+        VSS.Text_Streams.Standards.Standard_Error;
+
+   begin
+      Stream.Put_Line (Template.Format (Image (Text)), Success);
+   end Report_Warning;
+
 end GNATdoc.Messages;

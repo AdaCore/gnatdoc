@@ -33,6 +33,9 @@ package GNATdoc.Projects is
      (Handler : not null access procedure
         (Node : Libadalang.Analysis.Compilation_Unit'Class));
 
+   function Project_File_Directory return GNATCOLL.VFS.Virtual_File;
+   --  Return directory of the root project.
+
    function Output_Directory
      (Backend_Name : VSS.Strings.Virtual_String)
       return GNATCOLL.VFS.Virtual_File;

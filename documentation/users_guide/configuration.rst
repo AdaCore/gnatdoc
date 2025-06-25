@@ -69,3 +69,17 @@ and templates can be specified via the string attribute *Resources_Dir* of the
 
 Each backend has own conventions on the layout of the resources directory: see
 the documentation of the particular backend.
+
+
+Images directories
+------------------
+
+
+List of directories to lookup for image files referenced in the documentation
+can be defined with *Image_Dirs* attribute of the root project file::
+
+   package Documentation is
+      for Image_Dirs ("odf") use ("images");
+   end Documentation;
+
+By default paths are resolved relatively to the project file's root directory.
