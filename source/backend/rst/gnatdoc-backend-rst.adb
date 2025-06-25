@@ -36,11 +36,6 @@ package body GNATdoc.Backend.RST is
       Entity : Entity_Information);
    --  Generate RTS file for given entity.
 
-   function "*"
-     (Count : VSS.Strings.Character_Count;
-      Item  : VSS.Characters.Virtual_Character)
-      return VSS.Strings.Virtual_String;
-
    OOP_Style_Option : constant VSS.Command_Line.Binary_Option :=
      (Short_Name  => <>,
       Long_Name   => "rst-oop-style",
@@ -48,22 +43,6 @@ package body GNATdoc.Backend.RST is
         VSS.Strings.To_Virtual_String
           ("Group subprograms by tagged types, generating a page for each"
            & " tagged type"));
-
-   ---------
-   -- "*" --
-   ---------
-
-   function "*"
-     (Count : VSS.Strings.Character_Count;
-      Item  : VSS.Characters.Virtual_Character)
-      return VSS.Strings.Virtual_String is
-   begin
-      return Result : VSS.Strings.Virtual_String do
-         for J in 1 .. Count loop
-            Result.Append (Item);
-         end loop;
-      end return;
-   end "*";
 
    ------------------------------
    -- Add_Command_Line_Options --
@@ -133,6 +112,8 @@ package body GNATdoc.Backend.RST is
      (Self   : in out RST_Backend_Base'Class;
       Entity : Entity_Information)
    is
+      use type VSS.Strings.Character_Count;
+
       Name    : constant GNATCOLL.VFS.Virtual_File :=
         GNATCOLL.VFS.Create_From_Base
           (GNATCOLL.VFS.Filesystem_String
@@ -240,11 +221,11 @@ package body GNATdoc.Backend.RST is
    begin
       File.Open (Name);
 
-      File.Put (Entity.Qualified_Name.Character_Length * '*', Success);
       File.New_Line (Success);
       File.Put (Entity.Qualified_Name, Success);
       File.New_Line (Success);
-      File.Put (Entity.Qualified_Name.Character_Length * '*', Success);
+      File.Put ((Entity.Qualified_Name.Character_Length + 2) * '*', Success);
+      File.New_Line (Success);
       File.New_Line (Success);
 
       File.Put (".. ada:set_package:: ", Success);
@@ -355,7 +336,6 @@ package body GNATdoc.Backend.RST is
                Right : not null GNATdoc.Entities.Entity_Information_Access)
                return Boolean
             is
-               use type VSS.Strings.Character_Count;
                use type VSS.Strings.Line_Count;
                use type VSS.Strings.Virtual_String;
 
