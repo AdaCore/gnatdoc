@@ -269,7 +269,8 @@ package body GNATdoc.Projects is
          Opt.Add_Switch
            (GPR2.Options.P,
             VSS.Strings.Conversions.To_UTF_8_String
-             (GNATdoc.Command_Line.Project_File));
+              (GNATdoc.Command_Line.Project_File));
+         Opt.Add_Context (Project_Context);
 
          if not Project_Tree.Load (Opt, With_Runtime => True) then
             Msgs := Messages;
