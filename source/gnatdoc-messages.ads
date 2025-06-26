@@ -40,6 +40,9 @@ package GNATdoc.Messages is
    procedure Report_Warning (Message : GNATdoc.Messages.Message);
    --  Output warning to standard error stream.
 
+   procedure Report_Warning (Text : VSS.Strings.Virtual_String);
+   --  Output warning to standard error stream.
+
    procedure Report_Error
      (Location : GNATdoc.Source_Location;
       Message  : VSS.Strings.Virtual_String);

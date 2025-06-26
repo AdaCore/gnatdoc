@@ -20,8 +20,12 @@ with GNAT.Strings;
 
 with VSS.Strings.Conversions;
 with VSS.Strings.Converters.Decoders;
+with VSS.Strings.Formatters.Strings;
+with VSS.Strings.Templates;
 
 with GNATCOLL.Coders.Base64;
+
+with GNATdoc.Messages;
 
 package body GNATdoc.Backend.ODF_Markup.Image_Utilities is
 
@@ -31,6 +35,12 @@ package body GNATdoc.Backend.ODF_Markup.Image_Utilities is
    procedure Free is
      new Ada.Unchecked_Deallocation
            (Ada.Streams.Stream_Element_Array, Stream_Element_Array_Access);
+
+   Image_Directories : GNATdoc.Virtual_File_Vectors.Vector;
+
+   Not_Found_Template : constant
+     VSS.Strings.Templates.Virtual_String_Template :=
+       "image file '{}' is not found";
 
    -----------------
    -- Load_Encode --
@@ -42,18 +52,30 @@ package body GNATdoc.Backend.ODF_Markup.Image_Utilities is
    is
       use type Ada.Streams.Stream_Element_Offset;
 
+      Name    : constant GNATCOLL.VFS.Filesystem_String :=
+        GNATCOLL.VFS.Filesystem_String
+          (VSS.Strings.Conversions.To_UTF_8_String (Destination));
       File    : GNATCOLL.VFS.Virtual_File;
       Binary  : GNAT.Strings.String_Access;
       Encoded : Stream_Element_Array_Access;
       Coder   : GNATCOLL.Coders.Base64.Encoder_Type;
 
    begin
-      File :=
-        GNATCOLL.VFS.Create_From_UTF8
-          (VSS.Strings.Conversions.To_UTF_8_String (Destination));
+      for Directory of Image_Directories loop
+         File :=
+           GNATCOLL.VFS.Create_From_Base
+             (Base_Name => Name,
+              Base_Dir  => Directory.Full_Name.all);
+
+         exit when File.Is_Regular_File;
+      end loop;
 
       if not File.Is_Regular_File then
-         raise Program_Error;
+         GNATdoc.Messages.Report_Warning
+           (Not_Found_Template.Format
+              (VSS.Strings.Formatters.Strings.Image (Destination)));
+
+         return;
       end if;
 
       Binary := File.Read_File;
@@ -85,5 +107,15 @@ package body GNATdoc.Backend.ODF_Markup.Image_Utilities is
       Free (Encoded);
       GNAT.Strings.Free (Binary);
    end Load_Encode;
+
+   ---------------------------
+   -- Set_Image_Directories --
+   ---------------------------
+
+   procedure Set_Image_Directories
+     (To : GNATdoc.Virtual_File_Vectors.Vector) is
+   begin
+      Image_Directories := To;
+   end Set_Image_Directories;
 
 end GNATdoc.Backend.ODF_Markup.Image_Utilities;

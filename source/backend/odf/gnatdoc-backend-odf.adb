@@ -20,7 +20,9 @@ with VSS.XML.XmlAda_Readers;
 with VSS.XML.Templates.Processors;
 with VSS.XML.Writers.Simple;
 
+with GNATdoc.Backend.ODF_Markup.Image_Utilities;
 with GNATdoc.Entities.Proxies;
+with GNATdoc.Projects;
 with Streams;
 
 package body GNATdoc.Backend.ODF is
@@ -117,6 +119,24 @@ package body GNATdoc.Backend.ODF is
       Input.Close;
       Output.Close;
    end Generate;
+
+   ----------------
+   -- Initialize --
+   ----------------
+
+   overriding procedure Initialize (Self : in out ODF_Backend) is
+   begin
+      Abstract_Backend (Self).Initialize;
+
+      if Self.Image_Directories.Is_Empty then
+         GNATdoc.Backend.ODF_Markup.Image_Utilities.Set_Image_Directories
+           ([GNATdoc.Projects.Project_File_Directory]);
+
+      else
+         GNATdoc.Backend.ODF_Markup.Image_Utilities.Set_Image_Directories
+           (Self.Image_Directories);
+      end if;
+   end Initialize;
 
    ----------------------------------
    -- Process_Command_Line_Options --
