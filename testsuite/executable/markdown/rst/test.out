@@ -1,0 +1,38 @@
+
+P
+***
+
+.. ada:set_package:: P
+
+.. code-block:: ada
+
+   package P
+
+
+This is test of the Markdown features supported by GNATdoc.
+
+Paragraph.
+
+``code``, *emphasis*, **strong**
+
+..  image:: image.png
+    :width: 600px
+    :height: 400px
+
+
+..  code-block:: ada
+
+    with P;
+    
+    procedure Hello_World;
+
+#. Item 1
+
+#. Item 2
+
+* Item 1
+
+* Item 2
+
+
+

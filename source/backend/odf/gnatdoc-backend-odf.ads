@@ -25,7 +25,7 @@ private
       null;
    end record;
 
-   --  overriding procedure Initialize (Self : in out RST_Backend_Base);
+   overriding procedure Initialize (Self : in out ODF_Backend);
 
    overriding procedure Generate (Self : in out ODF_Backend);
 

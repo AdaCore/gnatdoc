@@ -23,4 +23,7 @@ package GNATdoc.Backend.ODF_Markup.Image_Utilities is
    --  Loads given file, converts its content into Base64 encoded form and
    --  transforms to `Virtual_String`.
 
+   procedure Set_Image_Directories (To : GNATdoc.Virtual_File_Vectors.Vector);
+   --  Set list of directories to lookup for image files.
+
 end GNATdoc.Backend.ODF_Markup.Image_Utilities;
