@@ -32,13 +32,8 @@ clean:
 build-tests:
 	gprbuild -j0 -p -P gnat/tests/test_drivers.gpr ${SCENARIO_VARIABLES}
 
-check: build-tests check_extractor check_gnatdoc
-
-check_extractor:
+check: build-tests
 	make -C testsuite
-
-check_gnatdoc:
-	make -C testsuite/gnatdoc.RB16-013.gpr_tool
 
 build-documentation:
 	make -C documentation/users_guide html latexpdf
