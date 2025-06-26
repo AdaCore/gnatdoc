@@ -1,0 +1,2 @@
+description: Check setting of GPR_TOOL scenario variable
+driver: executable
