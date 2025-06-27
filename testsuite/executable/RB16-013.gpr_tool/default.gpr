@@ -1,5 +1,5 @@
 
-project Test is
+project Default is
 
    Tool := external ("GPR_TOOL", "");
 
@@ -11,4 +11,4 @@ project Test is
          for Object_Dir use ".objs";
    end case;
 
-end Test;
+end Default;
