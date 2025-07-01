@@ -1,0 +1,20 @@
+
+project Default is
+   for Object_Dir use ".objs";
+
+   package Documentation is
+      for Output_Dir ("html") use "html";
+      for Image_Dirs ("html") use ("images");
+
+      for Output_Dir ("odf") use "odf";
+      for Image_Dirs ("odf") use ("images");
+
+      for Output_Dir ("rst") use "rst";
+      for Image_Dirs ("rst") use ("images");
+
+      --  for Output_Dir (others) use "docs";
+      --  for Image_Dirs (others) use "images";
+      --  `others` can be used to set attributes for all backends, but it is
+      --  not supported by some tools yet.
+   end Documentation;
+end Default;
