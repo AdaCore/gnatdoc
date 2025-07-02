@@ -359,6 +359,15 @@
       <text:h tal:content='item/name' text:style-name="Heading_20_4" text:outline-level="4">Heading 4</text:h>
       <text:p tal:omit-tag='' tal:content='item/code_odf'>Entity declaration</text:p>
       <text:p tal:omit-tag='' tal:content='item/documentation/description_odf'>Entity description</text:p>
+      <text:section tal:omit-tag='' tal:condition='item/documentation/enumeration_literals'>
+        <text:list text:style-name="GNATdoc_20_component_20_list">
+          <text:list-header><text:h text:style-name="GNATdoc_20_component_20_list_20_header" text:outline-level="5">Enumeration Literals</text:h></text:list-header>
+          <text:list-item tal:repeat='literal item/documentation/enumeration_literals'>
+            <text:h tal:content='literal/name' text:style-name="GNATdoc_20_component_20_list_20_item_20_header" text:outline-level="6">Name of the enumeration literal</text:h>
+            <text:p tal:omit-tag='' tal:content='literal/description_odf'>Description of the enumeration literal</text:p>
+          </text:list-item>
+        </text:list>
+      </text:section>
     </text:section>
 
     <text:h tal:condition='entity/array_types' text:style-name="Heading_20_3" text:outline-level="3">Array Types</text:h>
