@@ -81,7 +81,7 @@ package body GNATdoc.Backend.ODF_Markup is
       Text : VSS.Strings.Virtual_String);
 
    overriding procedure Visit_Soft_Line_Break
-     (Self : in out Annotated_Text_Builder) is null;
+     (Self : in out Annotated_Text_Builder);
 
    overriding procedure Enter_Emphasis
      (Self : in out Annotated_Text_Builder);
@@ -606,6 +606,18 @@ package body GNATdoc.Backend.ODF_Markup is
 
       Write_End_Element (Self.Stream, Text_Namespace, "span");
    end Leave_Strong;
+
+   ---------------------------
+   -- Visit_Soft_Line_Break --
+   ---------------------------
+
+   overriding procedure Visit_Soft_Line_Break
+     (Self : in out Annotated_Text_Builder) is
+   begin
+      --  Convert soft line break into space character.
+
+      Self.Visit_Text (" ");
+   end Visit_Soft_Line_Break;
 
    ----------------
    -- Visit_Text --
