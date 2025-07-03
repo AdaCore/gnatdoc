@@ -130,11 +130,16 @@ package Subprograms_GNAT is
 
    function Test_2 (X : Integer; Y : Integer)
      return       --  Multiline inlined description
-       Integer;   --  of the return value
+       Integer;   --  of the return value.
    --  Function with two parameters
    --
    --  @param X Value of X
    --  @param Y Value of Y
+
+   function Test_3
+     return Integer;  --  Multiline inlined description
+                      --  of the return value.
+   --  Function without parameters
 
    function Test_Aspects_1 return Integer with Inline;
    --  Parameterless single line function declaration.

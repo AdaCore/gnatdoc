@@ -1,13 +1,13 @@
-<CompilationUnit subprograms_gnat.ads:5:1-263:22>
+<CompilationUnit subprograms_gnat.ads:5:1-268:22>
 <AdaNodeList subprograms_gnat.ads:5:1-5:17>
 <WithClause subprograms_gnat.ads:5:1-5:17>
 <LimitedAbsent subprograms_gnat.ads:5:1-5:1>
 <PrivateAbsent subprograms_gnat.ads:5:1-5:1>
 <NameList subprograms_gnat.ads:5:6-5:16>
 <Id "Interfaces" subprograms_gnat.ads:5:6-5:16>
-<LibraryItem subprograms_gnat.ads:7:1-263:22>
+<LibraryItem subprograms_gnat.ads:7:1-268:22>
 <PrivateAbsent subprograms_gnat.ads:5:17-5:17>
-<PackageDecl ["Subprograms_GNAT"] subprograms_gnat.ads:7:1-263:22>
+<PackageDecl ["Subprograms_GNAT"] subprograms_gnat.ads:7:1-268:22>
 **************************
 \/ RAW <<HEADER>> ()
 \/ RAW <<LEADING>> ()
@@ -21,8 +21,8 @@ This is description of the package at the top of the specification.
 **************************
 <DefiningName "Subprograms_GNAT" subprograms_gnat.ads:7:9-7:25>
 <Id "Subprograms_GNAT" subprograms_gnat.ads:7:9-7:25>
-<PublicPart subprograms_gnat.ads:7:28-258:1>
-<AdaNodeList subprograms_gnat.ads:9:4-252:20>
+<PublicPart subprograms_gnat.ads:7:28-263:1>
+<AdaNodeList subprograms_gnat.ads:9:4-257:20>
 <PragmaNode subprograms_gnat.ads:9:4-9:24>
 <Id "Preelaborate" subprograms_gnat.ads:9:11-9:23>
 <BaseAssocList subprograms_gnat.ads:9:23-9:23>
@@ -292,7 +292,7 @@ Value of X
 Value of Y
 \/ RETURNS  ()
 Multiline inlined description
-of the return value
+of the return value.
 \/ SNIPPET ada ()
 function Test_2 (X : Integer; Y : Integer)
   return
@@ -300,7 +300,20 @@ function Test_2 (X : Integer; Y : Integer)
 \/ DESCRIPTION  ()
 Function with two parameters
 **************************
-<SubpDecl ["Test_Aspects_1"] subprograms_gnat.ads:139:4-139:55>
+<SubpDecl ["Test_3"] subprograms_gnat.ads:139:4-140:21>
+**************************
+\/ RAW <<CALLABLE>> ()
+Function without parameters
+\/ RETURNS  ()
+Multiline inlined description
+of the return value.
+\/ SNIPPET ada ()
+function Test_3
+  return Integer
+\/ DESCRIPTION  ()
+Function without parameters
+**************************
+<SubpDecl ["Test_Aspects_1"] subprograms_gnat.ads:144:4-144:55>
 **************************
 \/ RAW <<CALLABLE>> ()
 Parameterless single line function declaration.
@@ -310,7 +323,7 @@ function Test_Aspects_1 return Integer
 \/ DESCRIPTION  ()
 Parameterless single line function declaration.
 **************************
-<SubpDecl ["Test_Aspects_2"] subprograms_gnat.ads:142:4-144:18>
+<SubpDecl ["Test_Aspects_2"] subprograms_gnat.ads:147:4-149:18>
 **************************
 \/ RAW <<CALLABLE>> ()
 Parameterless single line function declaration.
@@ -320,7 +333,7 @@ function Test_Aspects_2 return Integer
 \/ DESCRIPTION  ()
 Parameterless single line function declaration.
 **************************
-<SubpDecl ["Test_Aspects_3"] subprograms_gnat.ads:146:4-148:24>
+<SubpDecl ["Test_Aspects_3"] subprograms_gnat.ads:151:4-153:24>
 **************************
 \/ RAW <<CALLABLE>> ()
 Parameterless single line function declaration.
@@ -330,7 +343,7 @@ function Test_Aspects_3 return Integer
 \/ DESCRIPTION  ()
 Parameterless single line function declaration.
 **************************
-<SubpDecl ["Test_Aspects_4"] subprograms_gnat.ads:150:4-153:24>
+<SubpDecl ["Test_Aspects_4"] subprograms_gnat.ads:155:4-158:24>
 **************************
 \/ RAW <<CALLABLE>> ()
 Parameterless single line function declaration.
@@ -342,7 +355,7 @@ function Test_Aspects_4
 \/ DESCRIPTION  ()
 Parameterless single line function declaration.
 **************************
-<NullSubpDecl ["Test_Null"] subprograms_gnat.ads:159:4-159:32>
+<NullSubpDecl ["Test_Null"] subprograms_gnat.ads:164:4-164:32>
 **************************
 \/ RAW <<CALLABLE>> ()
 Parameterless null subprogram.
@@ -351,7 +364,7 @@ procedure Test_Null
 \/ DESCRIPTION  ()
 Parameterless null subprogram.
 **************************
-<AbstractSubpDecl ["Test_Abstract"] subprograms_gnat.ads:162:4-162:63>
+<AbstractSubpDecl ["Test_Abstract"] subprograms_gnat.ads:167:4-167:63>
 **************************
 \/ RAW <<CALLABLE>> ()
 Abstract procedure.
@@ -361,7 +374,7 @@ procedure Test_Abstract (Self : Abstract_Type)
 \/ DESCRIPTION  ()
 Abstract procedure.
 **************************
-<AbstractSubpDecl ["Test_Abstract"] subprograms_gnat.ads:165:4-165:77>
+<AbstractSubpDecl ["Test_Abstract"] subprograms_gnat.ads:170:4-170:77>
 **************************
 \/ RAW <<CALLABLE>> ()
 Abstract function.
@@ -372,7 +385,7 @@ function Test_Abstract (Self : Abstract_Type) return Boolean
 \/ DESCRIPTION  ()
 Abstract function.
 **************************
-<ExprFunction ["Test_Expression_1"] subprograms_gnat.ads:168:4-168:53>
+<ExprFunction ["Test_Expression_1"] subprograms_gnat.ads:173:4-173:53>
 **************************
 \/ RAW <<CALLABLE>> ()
 Expression function.
@@ -382,7 +395,7 @@ function Test_Expression_1 return Integer
 \/ DESCRIPTION  ()
 Expression function.
 **************************
-<ExprFunction ["Test_Expression_2"] subprograms_gnat.ads:171:4-174:15>
+<ExprFunction ["Test_Expression_2"] subprograms_gnat.ads:176:4-179:15>
 **************************
 \/ RAW <<CALLABLE>> ()
 Multiline expression function, documentation before expression.
@@ -393,7 +406,7 @@ function Test_Expression_2
 \/ DESCRIPTION  ()
 Multiline expression function, documentation before expression.
 **************************
-<ExprFunction ["Test_Expression_3"] subprograms_gnat.ads:176:4-181:20>
+<ExprFunction ["Test_Expression_3"] subprograms_gnat.ads:181:4-186:20>
 **************************
 \/ RAW <<CALLABLE>> ()
 Multiline expression function, documentation before expression, aspects
@@ -406,7 +419,7 @@ function Test_Expression_3
 Multiline expression function, documentation before expression, aspects
 present.
 **************************
-<ExprFunction ["Test_Expression_4"] subprograms_gnat.ads:183:4-188:18>
+<ExprFunction ["Test_Expression_4"] subprograms_gnat.ads:188:4-193:18>
 **************************
 \/ RAW <<CALLABLE>> ()
 Multiline expression function, documentation after expression, aspects
@@ -419,7 +432,7 @@ function Test_Expression_4
 Multiline expression function, documentation after expression, aspects
 present.
 **************************
-<SubpDecl ["Test_Procedure_With_Pragma"] subprograms_gnat.ads:190:4-190:41>
+<SubpDecl ["Test_Procedure_With_Pragma"] subprograms_gnat.ads:195:4-195:41>
 **************************
 \/ RAW <<CALLABLE>> ()
 Documentation of the procedure with applied pragma.
@@ -428,12 +441,12 @@ procedure Test_Procedure_With_Pragma
 \/ DESCRIPTION  ()
 Documentation of the procedure with applied pragma.
 **************************
-<PragmaNode subprograms_gnat.ads:191:4-191:47>
-<Id "Inline" subprograms_gnat.ads:191:11-191:17>
-<BaseAssocList subprograms_gnat.ads:191:19-191:45>
-<PragmaArgumentAssoc subprograms_gnat.ads:191:19-191:45>
-<Id "Test_Procedure_With_Pragma" subprograms_gnat.ads:191:19-191:45>
-<SubpDecl ["Test_With_Anonymous_Access_To_Subprogram_Parameter"] subprograms_gnat.ads:194:4-195:52>
+<PragmaNode subprograms_gnat.ads:196:4-196:47>
+<Id "Inline" subprograms_gnat.ads:196:11-196:17>
+<BaseAssocList subprograms_gnat.ads:196:19-196:45>
+<PragmaArgumentAssoc subprograms_gnat.ads:196:19-196:45>
+<Id "Test_Procedure_With_Pragma" subprograms_gnat.ads:196:19-196:45>
+<SubpDecl ["Test_With_Anonymous_Access_To_Subprogram_Parameter"] subprograms_gnat.ads:199:4-200:52>
 **************************
 \/ RAW <<CALLABLE>> ()
 Documentation of subprogram with parameter of anonymous access to
@@ -447,7 +460,7 @@ procedure Test_With_Anonymous_Access_To_Subprogram_Parameter
 Documentation of subprogram with parameter of anonymous access to
 subprogram type.
 **************************
-<ConcreteTypeDecl ["Access_Procedure_1"] subprograms_gnat.ads:199:4-199:48>
+<ConcreteTypeDecl ["Access_Procedure_1"] subprograms_gnat.ads:204:4-204:48>
 **************************
 \/ RAW <<CALLABLE>> ()
 Access to parameterless procedure.
@@ -456,7 +469,7 @@ type Access_Procedure_1 is access procedure;
 \/ DESCRIPTION  ()
 Access to parameterless procedure.
 **************************
-<ConcreteTypeDecl ["Access_Procedure_2"] subprograms_gnat.ads:202:4-203:37>
+<ConcreteTypeDecl ["Access_Procedure_2"] subprograms_gnat.ads:207:4-208:37>
 **************************
 \/ RAW <<CALLABLE>> ()
 Access to procedure.
@@ -468,7 +481,7 @@ type Access_Procedure_2 is
 \/ DESCRIPTION  ()
 Access to procedure.
 **************************
-<ConcreteTypeDecl ["Access_Procedure_3"] subprograms_gnat.ads:206:4-206:65>
+<ConcreteTypeDecl ["Access_Procedure_3"] subprograms_gnat.ads:211:4-211:65>
 **************************
 \/ RAW <<CALLABLE>> ()
 Access to procedure with two parameters.
@@ -484,7 +497,7 @@ type Access_Procedure_3 is access procedure (X, Y : Integer);
 \/ DESCRIPTION  ()
 Access to procedure with two parameters.
 **************************
-<ConcreteTypeDecl ["Access_Function_1"] subprograms_gnat.ads:212:4-213:37>
+<ConcreteTypeDecl ["Access_Function_1"] subprograms_gnat.ads:217:4-218:37>
 **************************
 \/ RAW <<CALLABLE>> ()
 Access to parameterless function.
@@ -496,7 +509,7 @@ type Access_Function_1 is
 \/ DESCRIPTION  ()
 Access to parameterless function.
 **************************
-<ConcreteTypeDecl ["Access_Function_2"] subprograms_gnat.ads:216:4-217:49>
+<ConcreteTypeDecl ["Access_Function_2"] subprograms_gnat.ads:221:4-222:49>
 **************************
 \/ RAW <<CALLABLE>> ()
 Access to function
@@ -513,7 +526,7 @@ type Access_Function_2 is
 \/ DESCRIPTION  ()
 Access to function
 **************************
-<SubpDecl ["Test_VC20_013_Baz3"] subprograms_gnat.ads:227:4-231:22>
+<SubpDecl ["Test_VC20_013_Baz3"] subprograms_gnat.ads:232:4-236:22>
 **************************
 \/ RAW <<CALLABLE>> ()
 Text 1
@@ -530,7 +543,7 @@ function Test_VC20_013_Baz3
 \/ DESCRIPTION  ()
 Text 1
 **************************
-<SubpDecl ["Baz_CS0038741"] subprograms_gnat.ads:239:4-244:8>
+<SubpDecl ["Baz_CS0038741"] subprograms_gnat.ads:244:4-249:8>
 **************************
 \/ RAW <<CALLABLE>> ()
 Baz
@@ -546,7 +559,7 @@ procedure Baz_CS0038741
 \/ DESCRIPTION  ()
 Baz
 **************************
-<SubpDecl ["Test_Procedure_With_Broken_Comments"] subprograms_gnat.ads:251:4-252:20>
+<SubpDecl ["Test_Procedure_With_Broken_Comments"] subprograms_gnat.ads:256:4-257:20>
 **************************
 \/ RAW <<CALLABLE>> ()
 Documentation of the subprogram.
@@ -557,11 +570,11 @@ procedure Test_Procedure_With_Broken_Comments
 \/ DESCRIPTION  ()
 Documentation of the subprogram.
 **************************
-<PrivatePart subprograms_gnat.ads:258:8-263:1>
-<AdaNodeList subprograms_gnat.ads:258:8-258:8>
-<EndName subprograms_gnat.ads:263:5-263:21>
-<Id "Subprograms_GNAT" subprograms_gnat.ads:263:5-263:21>
-<PragmaNodeList subprograms_gnat.ads:263:22-263:22>
+<PrivatePart subprograms_gnat.ads:263:8-268:1>
+<AdaNodeList subprograms_gnat.ads:263:8-263:8>
+<EndName subprograms_gnat.ads:268:5-268:21>
+<Id "Subprograms_GNAT" subprograms_gnat.ads:268:5-268:21>
+<PragmaNodeList subprograms_gnat.ads:268:22-268:22>
 <CompilationUnit monitor_loop.ads:7:1-7:45>
 <AdaNodeList monitor_loop.ads:7:1-7:1>
 <LibraryItem monitor_loop.ads:7:1-7:45>
