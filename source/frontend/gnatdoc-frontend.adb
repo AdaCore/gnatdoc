@@ -1874,11 +1874,13 @@ package body GNATdoc.Frontend is
       Entity    : constant not null
         GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.F_Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Enclosing      =>
+          (Location         => GNATdoc.Utilities.Location (Name),
+           Name             => To_Virtual_String (Name.F_Name.Text),
+           Qualified_Name   =>
+             To_Virtual_String (Name.P_Fully_Qualified_Name),
+           Signature        => Signature (Name),
+           Is_Specification => False,
+           Enclosing        =>
              Signature
                ((case Canonical.Kind is
                    when Ada_Package_Decl             =>
@@ -1886,8 +1888,8 @@ package body GNATdoc.Frontend is
                    when Ada_Generic_Package_Internal =>
                      Canonical.As_Generic_Package_Internal.F_Package_Name,
                    when others                       => raise Program_Error)),
-           Documentation  => <>,
-           others         => <>);
+           Documentation    => <>,
+           others           => <>);
 
    begin
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);

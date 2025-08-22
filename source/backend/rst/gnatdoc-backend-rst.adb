@@ -85,6 +85,10 @@ package body GNATdoc.Backend.RST is
                   end if;
                end;
             end loop;
+
+            Result.Append
+              (VSS.Strings.To_Virtual_String
+                 (if Entity.Is_Specification then "___spec" else "___body"));
          end;
 
          Result.Append (".rst");
