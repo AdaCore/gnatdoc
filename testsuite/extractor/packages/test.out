@@ -46,3 +46,83 @@ This is documentation of the MyPackage2 package.
 <EndName package_pragma_package.ads:7:5-7:15>
 <Id "MyPackage2" package_pragma_package.ads:7:5-7:15>
 <PragmaNodeList package_pragma_package.ads:7:16-7:16>
+<CompilationUnit package_body_after_context.adb:3:1-9:16>
+<AdaNodeList package_body_after_context.adb:3:1-3:18>
+<WithClause package_body_after_context.adb:3:1-3:18>
+<LimitedAbsent package_body_after_context.adb:3:1-3:1>
+<PrivateAbsent package_body_after_context.adb:3:1-3:1>
+<NameList package_body_after_context.adb:3:6-3:17>
+<DottedName package_body_after_context.adb:3:6-3:17>
+<Id "Ada" package_body_after_context.adb:3:6-3:9>
+<Id "Text_IO" package_body_after_context.adb:3:10-3:17>
+<LibraryItem package_body_after_context.adb:7:1-9:16>
+<PrivateAbsent package_body_after_context.adb:3:18-3:18>
+<PackageBody ["My_Package"] package_body_after_context.adb:7:1-9:16>
+**************************
+\/ RAW <<HEADER>> ()
+Copyright header
+\/ RAW <<LEADING>> ()
+Description of the package body after context clauses.
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
+package body My_Package
+\/ DESCRIPTION  ()
+Description of the package body after context clauses.
+**************************
+<DefiningName "My_Package" package_body_after_context.adb:7:14-7:24>
+<Id "My_Package" package_body_after_context.adb:7:14-7:24>
+<DeclarativePart package_body_after_context.adb:7:27-9:1>
+<AdaNodeList package_body_after_context.adb:7:27-7:27>
+<EndName package_body_after_context.adb:9:5-9:15>
+<Id "My_Package" package_body_after_context.adb:9:5-9:15>
+<PragmaNodeList package_body_after_context.adb:9:16-9:16>
+<CompilationUnit package_body_before_context.adb:5:1-9:25>
+<AdaNodeList package_body_before_context.adb:5:1-5:18>
+<WithClause package_body_before_context.adb:5:1-5:18>
+<LimitedAbsent package_body_before_context.adb:5:1-5:1>
+<PrivateAbsent package_body_before_context.adb:5:1-5:1>
+<NameList package_body_before_context.adb:5:6-5:17>
+<DottedName package_body_before_context.adb:5:6-5:17>
+<Id "Ada" package_body_before_context.adb:5:6-5:9>
+<Id "Text_IO" package_body_before_context.adb:5:10-5:17>
+<LibraryItem package_body_before_context.adb:7:1-9:25>
+<PrivateAbsent package_body_before_context.adb:5:18-5:18>
+<PackageBody ["Package_Body_Header"] package_body_before_context.adb:7:1-9:25>
+**************************
+\/ RAW <<HEADER>> ()
+Description of the package body before context clauses.
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
+package body Package_Body_Header
+\/ DESCRIPTION  ()
+Description of the package body before context clauses.
+**************************
+<DefiningName "Package_Body_Header" package_body_before_context.adb:7:14-7:33>
+<Id "Package_Body_Header" package_body_before_context.adb:7:14-7:33>
+<DeclarativePart package_body_before_context.adb:7:36-9:1>
+<AdaNodeList package_body_before_context.adb:7:36-7:36>
+<EndName package_body_before_context.adb:9:5-9:24>
+<Id "Package_Body_Header" package_body_before_context.adb:9:5-9:24>
+<PragmaNodeList package_body_before_context.adb:9:25-9:25>
+<CompilationUnit package_body_no_context.adb:5:1-7:16>
+<AdaNodeList package_body_no_context.adb:5:1-5:1>
+<LibraryItem package_body_no_context.adb:5:1-7:16>
+<PrivateAbsent package_body_no_context.adb:5:1-5:1>
+<PackageBody ["My_Package"] package_body_no_context.adb:5:1-7:16>
+**************************
+\/ RAW <<LEADING>> ()
+Description of the package body with out context clauses.
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
+package body My_Package
+\/ DESCRIPTION  ()
+Description of the package body with out context clauses.
+**************************
+<DefiningName "My_Package" package_body_no_context.adb:5:14-5:24>
+<Id "My_Package" package_body_no_context.adb:5:14-5:24>
+<DeclarativePart package_body_no_context.adb:5:27-7:1>
+<AdaNodeList package_body_no_context.adb:5:27-5:27>
+<EndName package_body_no_context.adb:7:5-7:15>
+<Id "My_Package" package_body_no_context.adb:7:5-7:15>
+<PragmaNodeList package_body_no_context.adb:7:16-7:16>

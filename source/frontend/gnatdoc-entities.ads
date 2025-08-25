@@ -77,6 +77,7 @@ package GNATdoc.Entities is
    type Entity_Information is tagged limited record
       Location               : Source_Location;
       Kind                   : Entity_Kind := Undefined;
+      Is_Specification       : Boolean     := True;
       Name                   : VSS.Strings.Virtual_String;
       Qualified_Name         : VSS.Strings.Virtual_String;
       Signature              : Entity_Signature;

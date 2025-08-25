@@ -132,7 +132,7 @@ procedure Test_Extractor is
       Ada.Text_IO.Put_Line (Node.Image);
 
       case Node.Kind is
-         when Ada_Package_Decl =>
+         when Ada_Package_Decl | Ada_Package_Body =>
             Extract_And_Dump;
 
             return Into;
