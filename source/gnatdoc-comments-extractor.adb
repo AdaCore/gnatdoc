@@ -65,12 +65,15 @@ package body GNATdoc.Comments.Extractor is
    Ada_Optional_Separator_Expression : constant Virtual_String :=
      "[\p{Zs}\p{Cf}]*";
 
-   procedure Extract_Base_Package_Decl_Documentation
-     (Basic_Decl_Node        : Libadalang.Analysis.Basic_Decl'Class;
-      Base_Package_Decl_Node : Libadalang.Analysis.Base_Package_Decl'Class;
-      Options                : GNATdoc.Comments.Options.Extractor_Options;
-      Documentation          : in out Structured_Comment'Class;
-      Messages               : in out GNATdoc.Messages.Message_Container);
+   procedure Extract_Base_Package_Documentation
+     (Basic_Decl_Node : Libadalang.Analysis.Basic_Decl'Class;
+      Package_Node    : Libadalang.Analysis.Basic_Decl'Class;
+      Options         : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation   : in out Structured_Comment'Class;
+      Messages        : in out GNATdoc.Messages.Message_Container)
+     with Pre => Package_Node.Kind
+       in Ada_Package_Decl | Ada_Package_Body
+         | Ada_Generic_Package_Internal;
    --  Common code to extract documentation for ordinary and generic package
    --  declarations.
 
@@ -310,6 +313,7 @@ package body GNATdoc.Comments.Extractor is
       Cleanup         : Boolean)
      with Pre => Node.Kind in Ada_Generic_Package_Decl
                                 | Ada_Generic_Subp_Decl
+                                | Ada_Package_Body
                                 | Ada_Package_Decl
                                 | Ada_Subp_Body
                                 | Ada_Subp_Decl
@@ -439,12 +443,20 @@ package body GNATdoc.Comments.Extractor is
 
       case Node.Kind is
          when Ada_Package_Decl =>
-            Extract_Base_Package_Decl_Documentation
-              (Basic_Decl_Node        => Node.As_Package_Decl,
-               Base_Package_Decl_Node => Node.As_Package_Decl,
-               Options                => Options,
-               Documentation          => Documentation,
-               Messages               => Messages);
+            Extract_Base_Package_Documentation
+              (Basic_Decl_Node => Node.As_Package_Decl,
+               Package_Node    => Node.As_Package_Decl,
+               Options         => Options,
+               Documentation   => Documentation,
+               Messages        => Messages);
+
+         when Ada_Package_Body =>
+            Extract_Base_Package_Documentation
+              (Basic_Decl_Node  => Node.As_Package_Body,
+               Package_Node     => Node.As_Package_Body,
+               Options          => Options,
+               Documentation    => Documentation,
+               Messages         => Messages);
 
          when Ada_Abstract_Subp_Decl | Ada_Subp_Decl =>
             Extract_Subprogram_Documentation
@@ -737,16 +749,16 @@ package body GNATdoc.Comments.Extractor is
       end case;
    end Extract;
 
-   ---------------------------------------------
-   -- Extract_Base_Package_Decl_Documentation --
-   ---------------------------------------------
+   ----------------------------------------
+   -- Extract_Base_Package_Documentation --
+   ----------------------------------------
 
-   procedure Extract_Base_Package_Decl_Documentation
-     (Basic_Decl_Node        : Libadalang.Analysis.Basic_Decl'Class;
-      Base_Package_Decl_Node : Libadalang.Analysis.Base_Package_Decl'Class;
-      Options                : GNATdoc.Comments.Options.Extractor_Options;
-      Documentation          : in out Structured_Comment'Class;
-      Messages               : in out GNATdoc.Messages.Message_Container)
+   procedure Extract_Base_Package_Documentation
+     (Basic_Decl_Node : Libadalang.Analysis.Basic_Decl'Class;
+      Package_Node    : Libadalang.Analysis.Basic_Decl'Class;
+      Options         : GNATdoc.Comments.Options.Extractor_Options;
+      Documentation   : in out Structured_Comment'Class;
+      Messages        : in out GNATdoc.Messages.Message_Container)
    is
       --  Structure of the documentation for the package specification:
       --
@@ -780,6 +792,7 @@ package body GNATdoc.Comments.Extractor is
       Intermediate_Upper_Section : Section_Access;
       Intermediate_Lower_Section : Section_Access;
       Last_Pragma_Or_Use         : Ada_Node;
+      Decls                      : Ada_Node_List;
 
    begin
       if Basic_Decl_Node.P_Is_Compilation_Unit_Root then
@@ -807,7 +820,7 @@ package body GNATdoc.Comments.Extractor is
       --  Upper intermediate section: after 'is' and before any declarations.
 
       declare
-         Token : Token_Reference := Base_Package_Decl_Node.Token_Start;
+         Token : Token_Reference := Package_Node.Token_Start;
 
       begin
          --  Lookup 'is' in the package declaration
@@ -821,7 +834,7 @@ package body GNATdoc.Comments.Extractor is
 
          Extract_Upper_Intermediate_Section
            (Token,
-            Base_Package_Decl_Node.Token_End,
+            Package_Node.Token_End,
             Options,
             Documentation,
             Intermediate_Upper_Section);
@@ -832,7 +845,17 @@ package body GNATdoc.Comments.Extractor is
       --  Looukp last use clause or pragma declarations at the beginning of the
       --  public part of the package.
 
-      for N of Base_Package_Decl_Node.F_Public_Part.F_Decls loop
+      Decls :=
+        (case Package_Node.Kind is
+            when Ada_Generic_Package_Internal =>
+              Package_Node.As_Generic_Package_Internal.F_Public_Part.F_Decls,
+            when Ada_Package_Body =>
+              Package_Node.As_Package_Body.F_Decls.F_Decls,
+            when Ada_Package_Decl =>
+              Package_Node.As_Package_Decl.F_Public_Part.F_Decls,
+            when others => raise Program_Error);
+
+      for N of Decls loop
          case N.Kind is
             when Ada_Pragma_Node | Ada_Use_Clause =>
                Last_Pragma_Or_Use := N.As_Ada_Node;
@@ -897,7 +920,15 @@ package body GNATdoc.Comments.Extractor is
       Fill_Code_Snippet
         (Basic_Decl_Node,
          Basic_Decl_Node.Token_Start,
-         Base_Package_Decl_Node.F_Package_Name.Token_End,
+         (case Package_Node.Kind is
+            when Ada_Generic_Package_Internal =>
+               Package_Node.As_Generic_Package_Internal.F_Package_Name
+                 .Token_End,
+            when Ada_Package_Body =>
+               Package_Node.As_Package_Body.F_Package_Name.Token_End,
+            when Ada_Package_Decl =>
+               Package_Node.As_Package_Decl.F_Package_Name.Token_End,
+            when others           => raise Program_Error),
          Documentation.Sections);
 
       Remove_Comment_Start_And_Indentation
@@ -929,7 +960,7 @@ package body GNATdoc.Comments.Extractor is
          end if;
 
          Parse_Raw_Section
-           (GNATdoc.Utilities.Location (Base_Package_Decl_Node),
+           (GNATdoc.Utilities.Location (Package_Node),
             Raw_Section,
             [Private_Tag => True,
              Formal_Tag  => Basic_Decl_Node.Kind in Ada_Generic_Decl,
@@ -938,7 +969,7 @@ package body GNATdoc.Comments.Extractor is
             Documentation.Is_Private,
             Messages);
       end;
-   end Extract_Base_Package_Decl_Documentation;
+   end Extract_Base_Package_Documentation;
 
    --------------------------------------------
    -- Extract_Compilation_Unit_Documentation --
@@ -1595,7 +1626,7 @@ package body GNATdoc.Comments.Extractor is
 
       case Node.Kind is
          when Ada_Generic_Package_Decl =>
-            Extract_Base_Package_Decl_Documentation
+            Extract_Base_Package_Documentation
               (Node,
                Node.As_Generic_Package_Decl.F_Package_Decl,
                Options,
