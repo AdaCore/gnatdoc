@@ -3,6 +3,26 @@
 <LibraryItem protecteds.adb:6:1-81:16>
 <PrivateAbsent protecteds.adb:6:1-6:1>
 <PackageBody ["Protecteds"] protecteds.adb:6:1-81:16>
+**************************
+\/ RAW <<LEADING>> ()
+This package contains test cases of documentation extraction for protected
+bodies. Coverage of tests of procedures/functions/entries are limited to
+few cases only (this code is tested by subprograms tests).
+\/ RAW <<INTERMEDIATE UPPER>> ()
+type IE is synchronized interface;
+
+type IP is synchronized interface;
+
+not overriding procedure Process (Self : IP) is abstract;
+\/ SNIPPET ada ()
+package body Protecteds
+\/ DESCRIPTION  ()
+type IE is synchronized interface;
+
+type IP is synchronized interface;
+
+not overriding procedure Process (Self : IP) is abstract;
+**************************
 <DefiningName "Protecteds" protecteds.adb:6:14-6:24>
 <Id "Protecteds" protecteds.adb:6:14-6:24>
 <DeclarativePart protecteds.adb:6:27-81:1>

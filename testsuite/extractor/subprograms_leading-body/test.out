@@ -3,6 +3,13 @@
 <LibraryItem subprograms_leading.adb:2:1-28:25>
 <PrivateAbsent subprograms_leading.adb:2:1-2:1>
 <PackageBody ["Subprograms_Leading"] subprograms_leading.adb:2:1-28:25>
+**************************
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
+package body Subprograms_Leading
+\/ DESCRIPTION  ()
+**************************
 <DefiningName "Subprograms_Leading" subprograms_leading.adb:2:14-2:33>
 <Id "Subprograms_Leading" subprograms_leading.adb:2:14-2:33>
 <DeclarativePart subprograms_leading.adb:2:36-28:1>
