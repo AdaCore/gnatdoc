@@ -1870,7 +1870,7 @@ package body GNATdoc.Frontend is
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
    is
       Name      : constant Defining_Name := Node.F_Package_Name;
-      Canonical : constant Basic_Decl := Node.P_Canonical_Part;
+      Canonical : constant Basic_Decl    := Node.P_Canonical_Part;
       Entity    : constant not null
         GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
@@ -1892,6 +1892,11 @@ package body GNATdoc.Frontend is
            others           => <>);
 
    begin
+      Extract
+        (Node          => Node,
+         Options       => GNATdoc.Options.Extractor_Options,
+         Documentation => Entity.Documentation,
+         Messages      => Entity.Messages);
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Packages.Insert (Entity);
 
