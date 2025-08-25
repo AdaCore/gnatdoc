@@ -1,3 +1,6 @@
 extractor_sources:
   - package_pragma_only.ads
   - package_pragma_package.ads
+  - package_body_after_context.adb
+  - package_body_before_context.adb
+  - package_body_no_context.adb
