@@ -627,6 +627,12 @@ package body GNATdoc.Comments.Extractor.Trailing is
                   return Libadalang.Common.Over;
                end if;
 
+            when Ada_Declarative_Part | Ada_Handled_Stmts =>
+               --  These nodes appears after subprogram profile of the
+               --  subprogram body, nothing to analyze inside these nodes.
+
+               return Libadalang.Common.Over;
+
             when others =>
                null;
          end case;

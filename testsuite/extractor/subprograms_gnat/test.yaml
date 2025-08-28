@@ -2,3 +2,4 @@ description: Check documentation extraction for subprogram declarations.
 extractor_sources:
   - subprograms_gnat.ads
   - monitor_loop.ads
+  - gnatdoc_134.adb
