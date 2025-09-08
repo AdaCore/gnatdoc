@@ -260,6 +260,24 @@ package Subprograms_GNAT is
       --  Wrong indentation for subprogram documentation continuation, line 2
    --  This line must not be included into the documentation.
 
+   -----------------
+   -- GNATdoc#135 --
+   -----------------
+
+   function Test_GNATdoc_135
+     (Self      : Object;
+      Externals : Containers.External_Name_Set) return Context.Binary_Signature
+     with Post =>
+       (if Externals.Length = 0
+           or else (for all E of Externals => not Self.Contains (E))
+        then Signature'Result = Default_Signature
+        else Signature'Result /= Default_Signature);
+   --  Computes and returns MD5 signature for the Externals given the context.
+   --  This is used to check if a project's environment has been changed and
+   --  if so the project is to be analyzed again. Note that if there is no
+   --  Externals the project has no need to be analyzed again, in this case
+   --  the Default_Signature is returned.
+
 private
 
    --  This is description of the package at the beginning of the private
