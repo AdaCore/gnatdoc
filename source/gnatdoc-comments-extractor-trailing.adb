@@ -586,6 +586,16 @@ package body GNATdoc.Comments.Extractor.Trailing is
 
                return Libadalang.Common.Over;
 
+            when Ada_Aspect_Assoc =>
+               --  Aspect association might be interested in some cases (for
+               --  example, for tracability/certification purposes).
+               --
+               --  Skip it for now, because some quantified expressions
+               --  contains Ada_Defining_Name nodes, and processed as
+               --  elements.
+
+               return Libadalang.Common.Over;
+
             when others =>
                null;
          end case;
