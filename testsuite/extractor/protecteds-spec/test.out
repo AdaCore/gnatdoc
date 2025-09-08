@@ -1,8 +1,8 @@
-<CompilationUnit protecteds.ads:6:1-88:16>
+<CompilationUnit protecteds.ads:6:1-95:16>
 <AdaNodeList protecteds.ads:6:1-6:1>
-<LibraryItem protecteds.ads:6:1-88:16>
+<LibraryItem protecteds.ads:6:1-95:16>
 <PrivateAbsent protecteds.ads:6:1-6:1>
-<PackageDecl ["Protecteds"] protecteds.ads:6:1-88:16>
+<PackageDecl ["Protecteds"] protecteds.ads:6:1-95:16>
 **************************
 \/ RAW <<LEADING>> ()
 This package contains test cases of documentation extraction for protected
@@ -329,6 +329,26 @@ Second entry family.
 **************************
 <EndName protecteds.ads:86:8-86:22>
 <Id "P_Entry_Family" protecteds.ads:86:8-86:22>
-<EndName protecteds.ads:88:5-88:15>
-<Id "Protecteds" protecteds.ads:88:5-88:15>
-<PragmaNodeList protecteds.ads:88:16-88:16>
+<PrivatePart protecteds.ads:88:8-95:1>
+<AdaNodeList protecteds.ads:90:4-93:20>
+<ProtectedTypeDecl ["GNATdoc_135"] protecteds.ads:90:4-93:20>
+**************************
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+Protected type is declared in the private part of the package
+specification.
+\/ DESCRIPTION  ()
+Protected type is declared in the private part of the package
+specification.
+**************************
+<DefiningName "GNATdoc_135" protecteds.ads:90:19-90:30>
+<Id "GNATdoc_135" protecteds.ads:90:19-90:30>
+<ParentList protecteds.ads:90:33-90:33>
+<ProtectedDef protecteds.ads:93:4-93:19>
+<PublicPart protecteds.ads:90:33-93:4>
+<DeclList protecteds.ads:90:33-90:33>
+<EndName protecteds.ads:93:8-93:19>
+<Id "GNATdoc_135" protecteds.ads:93:8-93:19>
+<EndName protecteds.ads:95:5-95:15>
+<Id "Protecteds" protecteds.ads:95:5-95:15>
+<PragmaNodeList protecteds.ads:95:16-95:16>
