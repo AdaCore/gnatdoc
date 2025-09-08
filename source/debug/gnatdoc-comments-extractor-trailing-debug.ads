@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                       Copyright (C) 2025, AdaCore                        --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,18 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with "libadalang";
-with "vss_regexp";
-with "vss_text";
+private package GNATdoc.Comments.Extractor.Trailing.Debug is
 
-project LibGNATdoc is
+   procedure Print (Information : Line_Information_Array);
 
-   for Object_Dir use "../.objs";
-   for Source_Dirs use ("../source", "../source/debug");
-
-   package Compiler is
-      for Switches ("Ada") use
-        ("-g", "-gnat2022", "-gnatW8", "-gnatygO", "-gnata", "-gnatwa");
-   end Compiler;
-
-end LibGNATdoc;
+end GNATdoc.Comments.Extractor.Trailing.Debug;
