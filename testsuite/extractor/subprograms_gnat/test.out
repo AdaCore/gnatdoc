@@ -1,13 +1,13 @@
-<CompilationUnit subprograms_gnat.ads:5:1-268:22>
+<CompilationUnit subprograms_gnat.ads:5:1-286:22>
 <AdaNodeList subprograms_gnat.ads:5:1-5:17>
 <WithClause subprograms_gnat.ads:5:1-5:17>
 <LimitedAbsent subprograms_gnat.ads:5:1-5:1>
 <PrivateAbsent subprograms_gnat.ads:5:1-5:1>
 <NameList subprograms_gnat.ads:5:6-5:16>
 <Id "Interfaces" subprograms_gnat.ads:5:6-5:16>
-<LibraryItem subprograms_gnat.ads:7:1-268:22>
+<LibraryItem subprograms_gnat.ads:7:1-286:22>
 <PrivateAbsent subprograms_gnat.ads:5:17-5:17>
-<PackageDecl ["Subprograms_GNAT"] subprograms_gnat.ads:7:1-268:22>
+<PackageDecl ["Subprograms_GNAT"] subprograms_gnat.ads:7:1-286:22>
 **************************
 \/ RAW <<HEADER>> ()
 \/ RAW <<LEADING>> ()
@@ -21,8 +21,8 @@ This is description of the package at the top of the specification.
 **************************
 <DefiningName "Subprograms_GNAT" subprograms_gnat.ads:7:9-7:25>
 <Id "Subprograms_GNAT" subprograms_gnat.ads:7:9-7:25>
-<PublicPart subprograms_gnat.ads:7:28-263:1>
-<AdaNodeList subprograms_gnat.ads:9:4-257:20>
+<PublicPart subprograms_gnat.ads:7:28-281:1>
+<AdaNodeList subprograms_gnat.ads:9:4-274:53>
 <PragmaNode subprograms_gnat.ads:9:4-9:24>
 <Id "Preelaborate" subprograms_gnat.ads:9:11-9:23>
 <BaseAssocList subprograms_gnat.ads:9:23-9:23>
@@ -570,11 +570,33 @@ procedure Test_Procedure_With_Broken_Comments
 \/ DESCRIPTION  ()
 Documentation of the subprogram.
 **************************
-<PrivatePart subprograms_gnat.ads:263:8-268:1>
-<AdaNodeList subprograms_gnat.ads:263:8-263:8>
-<EndName subprograms_gnat.ads:268:5-268:21>
-<Id "Subprograms_GNAT" subprograms_gnat.ads:268:5-268:21>
-<PragmaNodeList subprograms_gnat.ads:268:22-268:22>
+<SubpDecl ["Test_GNATdoc_135"] subprograms_gnat.ads:267:4-274:53>
+**************************
+\/ RAW <<CALLABLE>> ()
+Computes and returns MD5 signature for the Externals given the context.
+This is used to check if a project's environment has been changed and
+if so the project is to be analyzed again. Note that if there is no
+Externals the project has no need to be analyzed again, in this case
+the Default_Signature is returned.
+\/ PARAMETER self (Self)
+\/ PARAMETER externals (Externals)
+\/ RETURNS  ()
+\/ SNIPPET ada ()
+function Test_GNATdoc_135
+  (Self      : Object;
+   Externals : Containers.External_Name_Set) return Context.Binary_Signature
+\/ DESCRIPTION  ()
+Computes and returns MD5 signature for the Externals given the context.
+This is used to check if a project's environment has been changed and
+if so the project is to be analyzed again. Note that if there is no
+Externals the project has no need to be analyzed again, in this case
+the Default_Signature is returned.
+**************************
+<PrivatePart subprograms_gnat.ads:281:8-286:1>
+<AdaNodeList subprograms_gnat.ads:281:8-281:8>
+<EndName subprograms_gnat.ads:286:5-286:21>
+<Id "Subprograms_GNAT" subprograms_gnat.ads:286:5-286:21>
+<PragmaNodeList subprograms_gnat.ads:286:22-286:22>
 <CompilationUnit monitor_loop.ads:7:1-7:45>
 <AdaNodeList monitor_loop.ads:7:1-7:1>
 <LibraryItem monitor_loop.ads:7:1-7:45>

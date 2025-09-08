@@ -22,53 +22,6 @@ with Libadalang.Common;
 
 package body GNATdoc.Comments.Extractor.Trailing is
 
-   type Kinds is (None, Subprogram, Parameter, Returns);
-
-   type Entity_Kind is (None, Entity);
-
-   type Entity_Group_Kind is (None, Subprogram);
-
-   type Component_Group_Kind is (None, Parameter, Returns);
-
-   type Entity_Information (Kind : Entity_Kind := None) is record
-      Indent  : Libadalang.Slocs.Column_Number := 0;
-      Section : GNATdoc.Comments.Section_Access;
-   end record;
-
-   type Entity_Group_Information (Kind : Entity_Group_Kind := None) is record
-      case Kind is
-         when None =>
-            null;
-
-         when Subprogram =>
-            Indent   : Libadalang.Slocs.Column_Number := 0;
-            Sections : Section_Vectors.Vector;
-      end case;
-   end record;
-
-   type Component_Group_Information
-     (Kind : Component_Group_Kind := None) is
-   record
-      Sections : Section_Vectors.Vector;
-   end record;
-
-   type Info is record
-      Kind     : Kinds := None;
-      Indent   : Libadalang.Slocs.Column_Number := 0;
-      Sections : Section_Vectors.Vector;
-   end record;
-
-   type Line_Information is record
-      Item            : Info;
-
-      Entity          : Entity_Information;
-      Component_Group : Component_Group_Information;
-      Entity_Group    : Entity_Group_Information;
-   end record;
-
-   type Line_Information_Array is
-     array (Libadalang.Slocs.Line_Number range <>) of Line_Information;
-
    generic
       Info : in out Line_Information_Array;
 
@@ -630,6 +583,16 @@ package body GNATdoc.Comments.Extractor.Trailing is
             when Ada_Declarative_Part | Ada_Handled_Stmts =>
                --  These nodes appears after subprogram profile of the
                --  subprogram body, nothing to analyze inside these nodes.
+
+               return Libadalang.Common.Over;
+
+            when Ada_Aspect_Assoc =>
+               --  Aspect association might be interested in some cases (for
+               --  example, for tracability/certification purposes).
+               --
+               --  Skip it for now, because some quantified expressions
+               --  contains Ada_Defining_Name nodes, and processed as
+               --  elements.
 
                return Libadalang.Common.Over;
 

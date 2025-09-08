@@ -85,4 +85,11 @@ package Protecteds is
       --  Second entry family.
    end P_Entry_Family;
 
+private
+
+   protected type GNATdoc_135 is
+      --  Protected type is declared in the private part of the package
+      --  specification.
+   end GNATdoc_135;
+
 end Protecteds;

@@ -80,4 +80,11 @@ package Tasks is
       entry E;
    end TT_2;
 
+private
+
+   task type GNATdoc_135 is
+      --  Task type is declared in the private part of the package
+      --  specification.
+   end GNATdoc_135;
+
 end Tasks;

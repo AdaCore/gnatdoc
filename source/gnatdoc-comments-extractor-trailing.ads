@@ -23,4 +23,53 @@ private package GNATdoc.Comments.Extractor.Trailing is
      (Node     : Libadalang.Analysis.Basic_Decl'Class;
       Sections : in out GNATdoc.Comments.Section_Vectors.Vector);
 
+private
+
+   type Kinds is (None, Subprogram, Parameter, Returns);
+
+   type Entity_Kind is (None, Entity);
+
+   type Entity_Group_Kind is (None, Subprogram);
+
+   type Component_Group_Kind is (None, Parameter, Returns);
+
+   type Info is record
+      Kind     : Kinds := None;
+      Indent   : Libadalang.Slocs.Column_Number := 0;
+      Sections : Section_Vectors.Vector;
+   end record;
+
+   type Entity_Information (Kind : Entity_Kind := None) is record
+      Indent  : Libadalang.Slocs.Column_Number := 0;
+      Section : GNATdoc.Comments.Section_Access;
+   end record;
+
+   type Entity_Group_Information (Kind : Entity_Group_Kind := None) is record
+      case Kind is
+         when None =>
+            null;
+
+         when Subprogram =>
+            Indent   : Libadalang.Slocs.Column_Number := 0;
+            Sections : Section_Vectors.Vector;
+      end case;
+   end record;
+
+   type Component_Group_Information
+     (Kind : Component_Group_Kind := None) is
+   record
+      Sections : Section_Vectors.Vector;
+   end record;
+
+   type Line_Information is record
+      Item            : Info;
+
+      Entity          : Entity_Information;
+      Component_Group : Component_Group_Information;
+      Entity_Group    : Entity_Group_Information;
+   end record;
+
+   type Line_Information_Array is
+     array (Libadalang.Slocs.Line_Number range <>) of Line_Information;
+
 end GNATdoc.Comments.Extractor.Trailing;
