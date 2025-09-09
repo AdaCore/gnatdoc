@@ -883,8 +883,10 @@ package body GNATdoc.Frontend is
                   | Ada_Object_Decl
                   | Ada_Package_Renaming_Decl
                   | Ada_Pragma_Node
+                  | Ada_Protected_Type_Decl
                   | Ada_Record_Rep_Clause
                   | Ada_Subtype_Decl
+                  | Ada_Task_Type_Decl
                   | Ada_Use_Package_Clause
                   | Ada_Use_Type_Clause
                =>

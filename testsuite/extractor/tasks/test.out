@@ -1,8 +1,8 @@
-<CompilationUnit tasks.ads:7:1-83:11>
+<CompilationUnit tasks.ads:7:1-90:11>
 <AdaNodeList tasks.ads:7:1-7:1>
-<LibraryItem tasks.ads:7:1-83:11>
+<LibraryItem tasks.ads:7:1-90:11>
 <PrivateAbsent tasks.ads:7:1-7:1>
-<PackageDecl ["Tasks"] tasks.ads:7:1-83:11>
+<PackageDecl ["Tasks"] tasks.ads:7:1-90:11>
 **************************
 \/ RAW <<LEADING>> ()
 Test extraction of the documentation for tasks and task types.
@@ -317,6 +317,26 @@ entry E
 **************************
 <EndName tasks.ads:81:8-81:12>
 <Id "TT_2" tasks.ads:81:8-81:12>
-<EndName tasks.ads:83:5-83:10>
-<Id "Tasks" tasks.ads:83:5-83:10>
-<PragmaNodeList tasks.ads:83:11-83:11>
+<PrivatePart tasks.ads:83:8-90:1>
+<AdaNodeList tasks.ads:85:4-88:20>
+<TaskTypeDecl ["GNATdoc_135"] tasks.ads:85:4-88:20>
+**************************
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+Task type is declared in the private part of the package
+specification.
+\/ DESCRIPTION  ()
+Task type is declared in the private part of the package
+specification.
+**************************
+<DefiningName "GNATdoc_135" tasks.ads:85:14-85:25>
+<Id "GNATdoc_135" tasks.ads:85:14-85:25>
+<TaskDef tasks.ads:85:26-88:19>
+<ParentList tasks.ads:85:28-85:28>
+<PublicPart tasks.ads:85:28-88:4>
+<DeclList tasks.ads:85:28-85:28>
+<EndName tasks.ads:88:8-88:19>
+<Id "GNATdoc_135" tasks.ads:88:8-88:19>
+<EndName tasks.ads:90:5-90:10>
+<Id "Tasks" tasks.ads:90:5-90:10>
+<PragmaNodeList tasks.ads:90:11-90:11>

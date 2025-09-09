@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                       Copyright (C) 2025, AdaCore                        --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,19 +15,42 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with "libadalang";
-with "vss_regexp";
-with "vss_os";
-with "vss_text";
+with Ada.Strings.Wide_Wide_Fixed;
+with Ada.Wide_Wide_Text_IO;
 
-project LibGNATdoc is
+package body GNATdoc.Comments.Extractor.Trailing.Debug is
 
-   for Object_Dir use "../.objs";
-   for Source_Dirs use ("../source", "../source/debug");
+   package Line_Number_IO is
+     new Ada.Wide_Wide_Text_IO.Modular_IO (Libadalang.Slocs.Line_Number);
 
-   package Compiler is
-      for Switches ("Ada") use
-        ("-g", "-gnat2022", "-gnatW8", "-gnatygO", "-gnata", "-gnatwa");
-   end Compiler;
+   package Kind_IO is
+      new Ada.Wide_Wide_Text_IO.Enumeration_IO (Kinds);
 
-end LibGNATdoc;
+   -----------
+   -- Print --
+   -----------
+
+   procedure Print (Information : Line_Information_Array) is
+      use Ada.Strings.Wide_Wide_Fixed;
+      use Ada.Wide_Wide_Text_IO;
+
+   begin
+      for Line_Index in Information'Range loop
+         Line_Number_IO.Put (Line_Index, Width => 5);
+
+         --  Item information
+
+         case Information (Line_Index).Item.Kind is
+            when None =>
+               Put (12 * ' ');
+
+            when others =>
+               Put (' ');
+               Kind_IO.Put (Information (Line_Index).Item.Kind, Width => 11);
+         end case;
+
+         New_Line;
+      end loop;
+   end Print;
+
+end GNATdoc.Comments.Extractor.Trailing.Debug;
