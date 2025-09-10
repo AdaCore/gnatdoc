@@ -272,6 +272,99 @@ package body GNATdoc.Comments.Extractor.Code_Snippets is
          end;
       end if;
 
+      --  Object declaration of array type with default expression: limit
+      --  number of lines of the aggregate to 4.
+
+      if Node.Kind = Ada_Object_Decl
+        and then not Node.As_Object_Decl.F_Default_Expr.Is_Null
+      then
+         declare
+            Is_Array : Boolean := False;
+
+         begin
+
+            if Node.As_Object_Decl.F_Type_Expr.Kind = Ada_Anonymous_Type
+              and then Node.As_Object_Decl.F_Type_Expr.As_Anonymous_Type
+                .F_Type_Decl.Kind = Ada_Anonymous_Type_Decl
+                and then Node.As_Object_Decl.F_Type_Expr.As_Anonymous_Type
+                  .F_Type_Decl.As_Anonymous_Type_Decl.F_Type_Def.Kind
+                    = Ada_Array_Type_Def
+            then
+               --  A : array (<range>) of <type> := (<value>, ..., <value>)
+               --  A : array (<range>) of <type> := [<value>, ..., <value>]
+
+               Is_Array := True;
+
+            elsif Node.As_Object_Decl.F_Type_Expr.Kind
+              = Ada_Subtype_Indication
+              and then Node.As_Object_Decl.F_Type_Expr.P_Designated_Type_Decl
+                .Kind = Ada_Concrete_Type_Decl
+                and then Node.As_Object_Decl.F_Type_Expr.P_Designated_Type_Decl
+                  .As_Concrete_Type_Decl.F_Type_Def.Kind = Ada_Array_Type_Def
+            then
+               --  A : <array_type> := (<value>, ..., <value>)
+               --  A : <array_type> := [<value>, ..., <value>]
+
+               Is_Array := True;
+
+            else
+               raise Program_Error;
+            end if;
+
+            if Is_Array then
+               declare
+                  Offset       : constant Line_Number :=
+                    Sloc_Range (Data (First_Token)).Start_Line - 1;
+
+                  First_Token  : Token_Reference;
+                  Last_Token   : Token_Reference;
+                  First_Line   : Line_Number;
+                  First_Column : Column_Number;
+                  Last_Line    : Line_Number;
+
+               begin
+                  if Node.As_Object_Decl.F_Default_Expr.Kind
+                    = Ada_Bracket_Aggregate
+                  then
+                     First_Token :=
+                       Node.As_Object_Decl.F_Default_Expr.As_Bracket_Aggregate
+                         .Token_Start;
+                     Last_Token :=
+                       Node.As_Object_Decl.F_Default_Expr.As_Bracket_Aggregate
+                         .Token_End;
+
+                  elsif Node.As_Object_Decl.F_Default_Expr.Kind
+                    = Ada_Aggregate
+                  then
+                     First_Token :=
+                       Node.As_Object_Decl.F_Default_Expr.As_Aggregate
+                         .Token_Start;
+                     Last_Token :=
+                       Node.As_Object_Decl.F_Default_Expr.As_Aggregate
+                         .Token_End;
+
+                  else
+                     raise Program_Error;
+                  end if;
+
+                  First_Line   := Sloc_Range (Data (First_Token)).Start_Line;
+                  First_Column := Sloc_Range (Data (First_Token)).Start_Column;
+                  Last_Line    := Sloc_Range (Data (Last_Token)).End_Line;
+
+                  if Last_Line - First_Line >= 4 then
+                     for J in First_Line + 2 .. Last_Line - 2 loop
+                        Text.Delete (Positive (First_Line - Offset + 2));
+                     end loop;
+
+                     Text.Replace
+                       (Positive (First_Line - Offset + 2),
+                        Character_Count (First_Column) * ' ' & "…");
+                  end if;
+               end;
+            end if;
+         end;
+      end if;
+
       --  For record type add ';' at the end
 
       if Node.Kind = Ada_Concrete_Type_Decl
