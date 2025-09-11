@@ -279,10 +279,9 @@ package body GNATdoc.Comments.Extractor.Code_Snippets is
         and then not Node.As_Object_Decl.F_Default_Expr.Is_Null
       then
          declare
-            Is_Array : Boolean := False;
+            Is_Array : Boolean;
 
          begin
-
             if Node.As_Object_Decl.F_Type_Expr.Kind = Ada_Anonymous_Type
               and then Node.As_Object_Decl.F_Type_Expr.As_Anonymous_Type
                 .F_Type_Decl.Kind = Ada_Anonymous_Type_Decl
@@ -308,7 +307,7 @@ package body GNATdoc.Comments.Extractor.Code_Snippets is
                Is_Array := True;
 
             else
-               raise Program_Error;
+               Is_Array := False;
             end if;
 
             if Is_Array then
