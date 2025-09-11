@@ -1,0 +1,105 @@
+<CompilationUnit arrays.ads:1:1-38:8>
+<AdaNodeList arrays.ads:1:1-1:17>
+<PragmaNode arrays.ads:1:1-1:17>
+<Id "Ada_2022" arrays.ads:1:8-1:16>
+<BaseAssocList arrays.ads:1:16-1:16>
+<LibraryItem arrays.ads:3:1-38:8>
+<PrivateAbsent arrays.ads:1:17-1:17>
+<PackageDecl ["PA"] arrays.ads:3:1-38:8>
+**************************
+\/ RAW <<HEADER>> ()
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
+package PA
+\/ DESCRIPTION  ()
+**************************
+<DefiningName "PA" arrays.ads:3:9-3:11>
+<Id "PA" arrays.ads:3:9-3:11>
+<PublicPart arrays.ads:3:14-38:1>
+<AdaNodeList arrays.ads:5:4-35:10>
+<ObjectDecl ["A"] arrays.ads:5:4-5:53>
+**************************
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+Anonymous: Code snippet contains complete initialization expression.
+\/ SNIPPET ada ()
+A : array (1 .. 5) of Integer := [1, 2, 3, 4, 5];
+\/ DESCRIPTION  ()
+Anonymous: Code snippet contains complete initialization expression.
+**************************
+<ObjectDecl ["B"] arrays.ads:8:4-13:10>
+**************************
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+Anonymous Code snippet contains few items of initialization expression.
+\/ SNIPPET ada ()
+B : array (1 .. 5) of Integer :=
+  [1,
+   2,
+   ["2026"]
+   5];
+\/ DESCRIPTION  ()
+Anonymous Code snippet contains few items of initialization expression.
+**************************
+<ConcreteTypeDecl ["Integer_Array"] arrays.ads:16:4-16:63>
+**************************
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+\/ SNIPPET ada ()
+type Integer_Array is array (Positive range <>) of Integer;
+\/ DESCRIPTION  ()
+**************************
+<ObjectDecl ["IA"] arrays.ads:18:4-18:51>
+**************************
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+Variable: Code snippet contains complete initialization expression.
+\/ SNIPPET ada ()
+IA : Integer_Array (1 .. 5) := [1, 2, 3, 4, 5];
+\/ DESCRIPTION  ()
+Variable: Code snippet contains complete initialization expression.
+**************************
+<ObjectDecl ["IB"] arrays.ads:20:4-20:60>
+**************************
+\/ RAW <<LEADING>> ()
+Variable: Code snippet contains complete initialization expression.
+\/ RAW <<TRAILING>> ()
+Constant: Code snippet contains complete initialization expression.
+\/ SNIPPET ada ()
+IB : constant Integer_Array (1 .. 5) := [1, 2, 3, 4, 5];
+\/ DESCRIPTION  ()
+Constant: Code snippet contains complete initialization expression.
+**************************
+<ObjectDecl ["IC"] arrays.ads:23:4-28:10>
+**************************
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+Variable: Code snippet contains few items of initialization expression.
+\/ SNIPPET ada ()
+IC : Integer_Array (1 .. 5) :=
+  [1,
+   2,
+   ["2026"]
+   5];
+\/ DESCRIPTION  ()
+Variable: Code snippet contains few items of initialization expression.
+**************************
+<ObjectDecl ["ID"] arrays.ads:30:4-35:10>
+**************************
+\/ RAW <<LEADING>> ()
+Variable: Code snippet contains few items of initialization expression.
+\/ RAW <<TRAILING>> ()
+Constant: Code snippet contains few items of initialization expression.
+\/ SNIPPET ada ()
+ID : constant Integer_Array (1 .. 5) :=
+  [1,
+   2,
+   ["2026"]
+   5];
+\/ DESCRIPTION  ()
+Constant: Code snippet contains few items of initialization expression.
+**************************
+<EndName arrays.ads:38:5-38:7>
+<Id "PA" arrays.ads:38:5-38:7>
+<PragmaNodeList arrays.ads:38:8-38:8>
