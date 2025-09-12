@@ -21,7 +21,6 @@ with Langkit_Support.Slocs;           use Langkit_Support.Slocs;
 with Langkit_Support.Text;            use Langkit_Support.Text;
 
 with VSS.Characters;                  use VSS.Characters;
-with VSS.Characters.Latin;            use VSS.Characters.Latin;
 with VSS.Regular_Expressions;         use VSS.Regular_Expressions;
 with VSS.String_Vectors;              use VSS.String_Vectors;
 with VSS.Strings;                     use VSS.Strings;
@@ -35,6 +34,7 @@ with GNATdoc.Comments.Builders.Generics;
 with GNATdoc.Comments.Builders.Protecteds;
 with GNATdoc.Comments.Builders.Records;
 with GNATdoc.Comments.Builders.Subprograms;
+with GNATdoc.Comments.Extractor.Code_Snippets;
 with GNATdoc.Comments.Extractor.Trailing;
 with GNATdoc.Comments.Utilities;      use GNATdoc.Comments.Utilities;
 with GNATdoc.Utilities;
@@ -54,9 +54,6 @@ package body GNATdoc.Comments.Extractor is
       Belongs_To_Tag);
 
    type Section_Tag_Flags is array (Section_Tag) of Boolean with Pack;
-
-   Ada_New_Line_Function             : constant Line_Terminator_Set :=
-     [CR | LF | CRLF => True, others => False];
 
    Ada_Identifier_Expression         : constant Virtual_String :=
      "[\p{L}\p{Nl}][\p{L}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}]*";
@@ -340,19 +337,6 @@ package body GNATdoc.Comments.Extractor is
    --
    --  <library item>
    --  ======================================================================
-
-   procedure Fill_Code_Snippet
-     (Node        : Ada_Node'Class;
-      First_Token : Token_Reference;
-      Last_Token  : Token_Reference;
-      Sections    : in out Section_Vectors.Vector);
-   --  Extract code snippet between given tokens, remove all comments from it,
-   --  and create code snippet section of the structured comment.
-   --
-   --  @param Node         Declaration or specification node
-   --  @param First_Token  First token of the range to be processed
-   --  @param Last_Token   Last token of the range to be processed
-   --  @param Sections     List of sections to append new section.
 
    procedure Remove_Comment_Start_And_Indentation
      (Sections : in out Section_Vectors.Vector;
@@ -917,7 +901,7 @@ package body GNATdoc.Comments.Extractor is
          end;
       end if;
 
-      Fill_Code_Snippet
+      GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
         (Basic_Decl_Node,
          Basic_Decl_Node.Token_Start,
          (case Package_Node.Kind is
@@ -1280,7 +1264,7 @@ package body GNATdoc.Comments.Extractor is
             end case;
          end loop;
 
-         Fill_Code_Snippet
+         GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
            (Decl_Node,
             Decl_Node.Token_Start,
             Last_Token,
@@ -1385,7 +1369,7 @@ package body GNATdoc.Comments.Extractor is
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
-      Fill_Code_Snippet
+      GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
         (Node, Node.Token_Start, Node.Token_End, Documentation.Sections);
 
       Remove_Comment_Start_And_Indentation
@@ -1923,7 +1907,8 @@ package body GNATdoc.Comments.Extractor is
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
-      Fill_Code_Snippet (Node, Node.Token_Start, Node.Token_End, Sections);
+      GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
+        (Node, Node.Token_Start, Node.Token_End, Sections);
       Remove_Comment_Start_And_Indentation (Sections, Options.Pattern);
 
       declare
@@ -2003,7 +1988,8 @@ package body GNATdoc.Comments.Extractor is
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
-      Fill_Code_Snippet (Node, Node.Token_Start, Node.Token_End, Sections);
+      GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
+        (Node, Node.Token_Start, Node.Token_End, Sections);
 
       Remove_Comment_Start_And_Indentation (Sections, Options.Pattern);
 
@@ -2248,7 +2234,7 @@ package body GNATdoc.Comments.Extractor is
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
-      Fill_Code_Snippet
+      GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
         (Node,
          Node.Token_Start,
          Node.F_Type_Def.Token_End,
@@ -2318,7 +2304,8 @@ package body GNATdoc.Comments.Extractor is
          Leading_Section  => Leading_Section,
          Trailing_Section => Trailing_Section);
 
-      Fill_Code_Snippet (Node, Node.Token_Start, Node.Token_End, Sections);
+      GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
+        (Node, Node.Token_Start, Node.Token_End, Sections);
       Remove_Comment_Start_And_Indentation (Sections, Options.Pattern);
 
       declare
@@ -2636,7 +2623,7 @@ package body GNATdoc.Comments.Extractor is
          if Decl_Node.Kind in Ada_Type_Decl then
             --  Access to subprogram type
 
-            Fill_Code_Snippet
+            GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
               (Decl_Node,
                Decl_Node.Token_Start,
                Decl_Node.Token_End,
@@ -2646,14 +2633,14 @@ package body GNATdoc.Comments.Extractor is
             --  Generic subprogram declaration includes generic formals
             --  declarations.
 
-            Fill_Code_Snippet
+            GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
               (Spec_Node,
                Decl_Node.Parent.Token_Start,
                Spec_Node.Token_End,
                Sections);
 
          else
-            Fill_Code_Snippet
+            GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
               (Spec_Node,
                Spec_Node.Token_Start,
                Spec_Node.Token_End,
@@ -2889,21 +2876,21 @@ package body GNATdoc.Comments.Extractor is
       if Decl_Node.Kind in Ada_Type_Decl then
          --  Access to subprogram type
 
-         Fill_Code_Snippet
+         GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
            (Decl_Node, Decl_Node.Token_Start, Decl_Node.Token_End, Sections);
 
       elsif Decl_Node.Kind in Ada_Generic_Subp_Internal then
          --  Generic subprogram declaration includes generic formals
          --  declarations.
 
-         Fill_Code_Snippet
+         GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
            (Spec_Node,
             Decl_Node.Parent.Token_Start,
             Spec_Node.Token_End,
             Sections);
 
       else
-         Fill_Code_Snippet
+         GNATdoc.Comments.Extractor.Code_Snippets.Fill_Code_Snippet
            (Spec_Node, Spec_Node.Token_Start, Spec_Node.Token_End, Sections);
       end if;
 
@@ -3073,346 +3060,6 @@ package body GNATdoc.Comments.Extractor is
          end case;
       end loop;
    end Extract_Upper_Intermediate_Section;
-
-   -----------------------
-   -- Fill_Code_Snippet --
-   -----------------------
-
-   procedure Fill_Code_Snippet
-     (Node        : Ada_Node'Class;
-      First_Token : Token_Reference;
-      Last_Token  : Token_Reference;
-      Sections    : in out Section_Vectors.Vector)
-   is
-
-      procedure Remove_Leading_Spaces
-        (Text       : in out VSS.String_Vectors.Virtual_String_Vector;
-         Line_Index : Positive;
-         Amount     : VSS.Strings.Character_Count);
-      --  Remove given amount of space characters from the line of the given
-      --  index.
-
-      ---------------------------
-      -- Remove_Leading_Spaces --
-      ---------------------------
-
-      procedure Remove_Leading_Spaces
-        (Text       : in out VSS.String_Vectors.Virtual_String_Vector;
-         Line_Index : Positive;
-         Amount     : VSS.Strings.Character_Count)
-      is
-         Line      : constant Virtual_String := Text (Line_Index);
-         Iterator  : Character_Iterator      := Line.At_First_Character;
-         Count     : Character_Count         := Amount;
-
-      begin
-         while Iterator.Forward loop
-            exit when Iterator.Element /= Space;
-
-            Count := Count - 1;
-
-            if Count = 0 then
-               Text.Replace (Line_Index, Line.Tail_From (Iterator));
-
-               exit;
-            end if;
-         end loop;
-      end Remove_Leading_Spaces;
-
-      First_Token_Location : constant Source_Location_Range :=
-        Sloc_Range (Data (First_Token));
-      Snippet_Section      : Section_Access;
-      Text                 : Virtual_String_Vector;
-
-   begin
-      Text :=
-        To_Virtual_String
-          (Libadalang.Common.Text (First_Token, Last_Token)).Split_Lines
-            (Ada_New_Line_Function);
-
-      --  Indent first line correctly.
-
-      declare
-         Line : Virtual_String := Text (1);
-
-      begin
-         for J in 2 .. First_Token_Location.Start_Column loop
-            Line.Prepend (' ');
-         end loop;
-
-         Text.Replace (1, Line);
-      end;
-
-      --  Remove comments
-
-      if First_Token /= Last_Token then
-         declare
-            Line_Offset : constant Line_Number :=
-              First_Token_Location.Start_Line - 1;
-            Token       : Token_Reference      := Last_Token;
-
-         begin
-            loop
-               Token := Previous (Token);
-
-               exit when Token = First_Token or Token = No_Token;
-
-               if Kind (Data (Token)) = Ada_Comment then
-                  declare
-                     Location : constant Source_Location_Range :=
-                       Sloc_Range (Data (Token));
-                     Index    : constant Positive :=
-                       Positive (Location.Start_Line - Line_Offset);
-                     Line     : Virtual_String := Text (Index);
-                     Iterator : Character_Iterator :=
-                       Line.After_Last_Character;
-
-                  begin
-                     --  Move iterator till first character before the
-                     --  comment's start column.
-
-                     while Iterator.Backward loop
-                        exit when
-                          Iterator.Character_Index
-                            < Character_Index (Location.Start_Column);
-                     end loop;
-
-                     --  Rewind all whitespaces before the comment
-
-                     while Iterator.Backward loop
-                        exit when not Is_Ada_Separator (Iterator.Element);
-                     end loop;
-
-                     --  Remove comment and spaces before it from the line.
-
-                     Line := Line.Slice (Line.At_First_Character, Iterator);
-                     Text.Replace (Index, Line);
-                  end;
-               end if;
-            end loop;
-         end;
-      end if;
-
-      --  For enumeration types with large number of defined enumeration
-      --  literals, limit text for few first literals and last literal.
-
-      if Node.Kind = Ada_Concrete_Type_Decl
-        and then Node.As_Concrete_Type_Decl.F_Type_Def.Kind
-                   = Ada_Enum_Type_Def
-      then
-         declare
-            procedure Move_At
-              (Iterator : in out Character_Iterator;
-               Position : Character_Index);
-
-            -------------
-            -- Move_At --
-            -------------
-
-            procedure Move_At
-              (Iterator : in out Character_Iterator;
-               Position : Character_Index) is
-            begin
-               if Iterator.Character_Index = Position then
-                  return;
-
-               elsif Iterator.Character_Index < Position then
-                  while Iterator.Forward loop
-                     exit when Iterator.Character_Index = Position;
-                  end loop;
-
-               else
-                  while Iterator.Backward loop
-                     exit when Iterator.Character_Index = Position;
-                  end loop;
-               end if;
-            end Move_At;
-
-            Max_Enum_Literals : constant := 10;
-            --  Maximum number of the enumeration literals presented in the
-            --  code snippet.
-
-            Line_Offset : constant Line_Number :=
-              First_Token_Location.Start_Line - 1;
-            Literals    : constant Enum_Literal_Decl_List :=
-              Node.As_Concrete_Type_Decl.F_Type_Def.As_Enum_Type_Def
-                .F_Enum_Literals;
-
-         begin
-            if Literals.Children_Count > Max_Enum_Literals then
-               --  Replace enumeration literal before the last enumeration
-               --  literal of the type by the horizontal ellipsis.
-
-               declare
-                  Location   : constant Source_Location_Range :=
-                    Literals.Child (Literals.Last_Child_Index - 1).Sloc_Range;
-                  Index      : constant Positive :=
-                    Positive (Location.Start_Line - Line_Offset);
-                  Line       : Virtual_String := Text (Index);
-                  E_Iterator : Character_Iterator :=
-                    Line.After_Last_Character;
-                  S_Iterator : Character_Iterator :=
-                    Line.After_Last_Character;
-
-               begin
-                  Move_At
-                    (S_Iterator, Character_Index (Location.Start_Column));
-                  Move_At
-                    (E_Iterator, Character_Index (Location.End_Column) - 1);
-                  Line.Replace (S_Iterator, E_Iterator, "…");
-                  Text.Replace (Index, Line);
-               end;
-
-               --  Remove all other intermediate enumeration literals.
-
-               for J in reverse
-                 Literals.First_Child_Index + Max_Enum_Literals - 2
-                   .. Literals.Last_Child_Index - 2
-               loop
-                  declare
-                     Location   : constant Source_Location_Range :=
-                       Literals.Child (J).Sloc_Range;
-                     Index      : constant Positive :=
-                       Positive (Location.Start_Line - Line_Offset);
-                     Line       : Virtual_String := Text (Index);
-                     E_Iterator : Character_Iterator :=
-                       Line.After_Last_Character;
-                     S_Iterator : Character_Iterator :=
-                       Line.After_Last_Character;
-
-                  begin
-                     Move_At
-                       (S_Iterator, Character_Index (Location.Start_Column));
-                     Move_At
-                       (E_Iterator, Character_Index (Location.End_Column) - 1);
-
-                     while S_Iterator.Backward loop
-                        exit when not Is_Ada_Separator (S_Iterator.Element);
-                     end loop;
-
-                     if S_Iterator.Has_Element then
-                        Line.Delete (S_Iterator, E_Iterator);
-                        Text.Replace (Index, Line);
-
-                     else
-                        Line.Delete (Line.At_First_Character, E_Iterator);
-
-                        declare
-                           Previous : Virtual_String := Text (Index - 1);
-
-                        begin
-                           E_Iterator.Set_At_Last (Previous);
-                           Previous.Delete
-                             (E_Iterator, Previous.At_Last_Character);
-                           Previous.Append (Line);
-                           Text.Replace (Index - 1, Previous);
-                           Text.Delete (Index);
-                        end;
-                     end if;
-                  end;
-               end loop;
-            end if;
-         end;
-      end if;
-
-      --  For record type add ';' at the end
-
-      if Node.Kind = Ada_Concrete_Type_Decl
-        and then Node.As_Concrete_Type_Decl.F_Type_Def.Kind
-                  in Ada_Record_Type_Def | Ada_Derived_Type_Def
-        and then not
-          (Node.As_Concrete_Type_Decl.F_Type_Def.Kind = Ada_Derived_Type_Def
-             and then Node.As_Concrete_Type_Decl.F_Type_Def.As_Derived_Type_Def
-                        .F_Record_Extension.Is_Null)
-      then
-         Text.Replace (Text.Length, Text.Last_Element & ";");
-      end if;
-
-      --  Remove all empty lines
-
-      for Index in reverse 1 .. Text.Length loop
-         if Text (Index).Is_Empty then
-            Text.Delete (Index);
-         end if;
-      end loop;
-
-      --  For the subprogram specification check whether "overriding"/"not
-      --  overriding" indicator is used at the same line with subprogram
-      --  specification and reformat code snippet: first line of the
-      --  subprogram specification is moved left to position of the indicator;
-      --  if subprogram parameter is present on this line too, all lines
-      --  below is moved too, unless any non-space characters are found in
-      --  the removed slice of the line.
-
-      if Node.Kind = Ada_Subp_Spec
-        and then Node.Parent.Kind
-                   in Ada_Classic_Subp_Decl | Ada_Base_Subp_Body
-      then
-         declare
-            Indicator_Node     : constant Overriding_Node :=
-              (if Node.Parent.Kind in Ada_Classic_Subp_Decl
-               then Node.Parent.As_Classic_Subp_Decl.F_Overriding
-               else Node.Parent.As_Base_Subp_Body.F_Overriding);
-            Indicator_Location : constant Source_Location_Range :=
-              Indicator_Node.Sloc_Range;
-            Offset             : VSS.Strings.Character_Count := 0;
-
-         begin
-            if Indicator_Node.Kind /= Ada_Overriding_Unspecified
-              and then First_Token_Location.Start_Line
-                         = Indicator_Location.Start_Line
-            then
-               Offset :=
-                 VSS.Strings.Character_Count
-                   (First_Token_Location.Start_Column
-                      - Indicator_Location.Start_Column);
-            end if;
-
-            if Offset /= 0 then
-               Remove_Leading_Spaces (Text, 1, Offset);
-
-               declare
-                  Params_Node : constant Params :=
-                    Node.As_Subp_Spec.F_Subp_Params;
-                  P1_Node     : Ada_Node;
-                  Success     : Boolean;
-
-               begin
-                  if Params_Node /= No_Params then
-                     Params_Node.F_Params.Get_Child (1, Success, P1_Node);
-
-                     if Success
-                       and then P1_Node.Sloc_Range.Start_Line
-                                  = First_Token_Location.Start_Line
-                     then
-                        for J in 2 .. Text.Length loop
-                           Remove_Leading_Spaces (Text, J, Offset);
-                        end loop;
-                     end if;
-                  end if;
-               end;
-            end if;
-         end;
-      end if;
-
-      --  Remove indentation
-
-      declare
-         Indent : constant VSS.Strings.Character_Count :=
-           Count_Leading_Whitespaces (Text (1));
-
-      begin
-         for Index in Text.First_Index .. Text.Last_Index loop
-            Text.Replace
-              (Index, Remove_Leading_Whitespaces (Text (Index), Indent));
-         end loop;
-      end;
-
-      Snippet_Section :=
-        new Section'
-          (Kind => Snippet, Symbol => "ada", Text => Text, others => <>);
-      Sections.Append (Snippet_Section);
-   end Fill_Code_Snippet;
 
    ----------------------
    -- Is_Ada_Separator --
