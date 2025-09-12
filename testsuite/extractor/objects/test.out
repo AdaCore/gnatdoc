@@ -1,11 +1,11 @@
-<CompilationUnit arrays.ads:1:1-38:8>
+<CompilationUnit arrays.ads:1:1-42:8>
 <AdaNodeList arrays.ads:1:1-1:17>
 <PragmaNode arrays.ads:1:1-1:17>
 <Id "Ada_2022" arrays.ads:1:8-1:16>
 <BaseAssocList arrays.ads:1:16-1:16>
-<LibraryItem arrays.ads:3:1-38:8>
+<LibraryItem arrays.ads:3:1-42:8>
 <PrivateAbsent arrays.ads:1:17-1:17>
-<PackageDecl ["PA"] arrays.ads:3:1-38:8>
+<PackageDecl ["PA"] arrays.ads:3:1-42:8>
 **************************
 \/ RAW <<HEADER>> ()
 \/ RAW <<LEADING>> ()
@@ -16,8 +16,8 @@ package PA
 **************************
 <DefiningName "PA" arrays.ads:3:9-3:11>
 <Id "PA" arrays.ads:3:9-3:11>
-<PublicPart arrays.ads:3:14-38:1>
-<AdaNodeList arrays.ads:5:4-35:10>
+<PublicPart arrays.ads:3:14-42:1>
+<AdaNodeList arrays.ads:5:4-38:59>
 <ObjectDecl ["A"] arrays.ads:5:4-5:53>
 **************************
 \/ RAW <<LEADING>> ()
@@ -100,6 +100,18 @@ ID : constant Integer_Array (1 .. 5) :=
 \/ DESCRIPTION  ()
 Constant: Code snippet contains few items of initialization expression.
 **************************
-<EndName arrays.ads:38:5-38:7>
-<Id "PA" arrays.ads:38:5-38:7>
-<PragmaNodeList arrays.ads:38:8-38:8>
+<ObjectDecl ["S"] arrays.ads:38:4-38:59>
+**************************
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+`String` type is an array, and initialization expression can be a string
+literal.
+\/ SNIPPET ada ()
+S : constant String := "`String` type is an array too";
+\/ DESCRIPTION  ()
+`String` type is an array, and initialization expression can be a string
+literal.
+**************************
+<EndName arrays.ads:42:5-42:7>
+<Id "PA" arrays.ads:42:5-42:7>
+<PragmaNodeList arrays.ads:42:8-42:8>
