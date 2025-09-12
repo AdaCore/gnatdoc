@@ -278,6 +278,21 @@ package Subprograms_GNAT is
    --  Externals the project has no need to be analyzed again, in this case
    --  the Default_Signature is returned.
 
+   ----------------
+   -- GNATdoc#90 --
+   ----------------
+
+   procedure Report_Preference_File_Error
+     (Handle    : access Kernel_Handle_Record;
+      Filename  : Virtual_File;
+      Is_Saving : Boolean := True);
+     --  Print out an error message in messages window, or display a dialog
+     --  if GNAT Studio is exiting. Is_Saving controls whether we try to save
+     --  or load the file.
+   --
+   --  Subprogram's description use incorrect alignment for description of the
+   --  subprogram.
+
 private
 
    --  This is description of the package at the beginning of the private
