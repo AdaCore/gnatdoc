@@ -343,21 +343,27 @@ package body GNATdoc.Comments.Extractor.Code_Snippets is
                          .Token_End;
 
                   else
-                     raise Program_Error;
+                     --  Any other expressions, including string literals.
+
+                     Is_Array := False;
                   end if;
 
-                  First_Line   := Sloc_Range (Data (First_Token)).Start_Line;
-                  First_Column := Sloc_Range (Data (First_Token)).Start_Column;
-                  Last_Line    := Sloc_Range (Data (Last_Token)).End_Line;
+                  if Is_Array then
+                     First_Line   :=
+                       Sloc_Range (Data (First_Token)).Start_Line;
+                     First_Column :=
+                       Sloc_Range (Data (First_Token)).Start_Column;
+                     Last_Line    := Sloc_Range (Data (Last_Token)).End_Line;
 
-                  if Last_Line - First_Line >= 4 then
-                     for J in First_Line + 2 .. Last_Line - 2 loop
-                        Text.Delete (Positive (First_Line - Offset + 2));
-                     end loop;
+                     if Last_Line - First_Line >= 4 then
+                        for J in First_Line + 2 .. Last_Line - 2 loop
+                           Text.Delete (Positive (First_Line - Offset + 2));
+                        end loop;
 
-                     Text.Replace
-                       (Positive (First_Line - Offset + 2),
-                        Character_Count (First_Column) * ' ' & "…");
+                        Text.Replace
+                          (Positive (First_Line - Offset + 2),
+                           Character_Count (First_Column) * ' ' & "…");
+                     end if;
                   end if;
                end;
             end if;
