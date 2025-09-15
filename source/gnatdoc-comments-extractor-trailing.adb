@@ -759,7 +759,10 @@ package body GNATdoc.Comments.Extractor.Trailing is
                            null;
 
                         elsif Last_Line + 1 = Location.End_Line then
-                           if Infos (Location.End_Line).Item.Kind /= None then
+                           if Location.End_Line in Infos'Range
+                             and then Infos (Location.End_Line).Item.Kind
+                                        /= None
+                           then
                               Apply;
                            end if;
 

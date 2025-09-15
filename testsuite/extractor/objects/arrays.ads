@@ -35,4 +35,8 @@ package PA is
       5];
    --  Constant: Code snippet contains few items of initialization expression.
 
+   S : constant String := "`String` type is an array too";
+   --  `String` type is an array, and initialization expression can be a string
+   --  literal.
+
 end PA;
