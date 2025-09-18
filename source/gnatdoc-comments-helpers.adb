@@ -299,10 +299,13 @@ package body GNATdoc.Comments.Helpers is
 
    procedure Get_Plain_Text_Documentation
      (Name          : Libadalang.Analysis.Defining_Name'Class;
+      Origin        : Libadalang.Analysis.Ada_Node'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
       Code_Snippet  : out VSS.String_Vectors.Virtual_String_Vector;
       Documentation : out VSS.String_Vectors.Virtual_String_Vector)
    is
+      pragma Unreferenced (Origin);
+
       Decl               : constant Basic_Decl := Name.P_Basic_Decl;
       Parent_Basic_Decl  : constant Basic_Decl := Decl.P_Parent_Basic_Decl;
       Decl_To_Extract    : Basic_Decl;
