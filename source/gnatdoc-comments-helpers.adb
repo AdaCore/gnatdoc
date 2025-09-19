@@ -51,6 +51,12 @@ package body GNATdoc.Comments.Helpers is
    --  component depends from the kind of formal (name of parameter,
    --  discriminant, etc.)).
 
+   procedure Get_Plain_Text_Documentation
+     (Name          : Libadalang.Analysis.Defining_Name'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Code_Snippet  : out VSS.String_Vectors.Virtual_String_Vector;
+      Documentation : out VSS.String_Vectors.Virtual_String_Vector);
+
    --------------------------
    -- Get_Ada_Code_Snippet --
    --------------------------
@@ -299,13 +305,10 @@ package body GNATdoc.Comments.Helpers is
 
    procedure Get_Plain_Text_Documentation
      (Name          : Libadalang.Analysis.Defining_Name'Class;
-      Origin        : Libadalang.Analysis.Ada_Node'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
       Code_Snippet  : out VSS.String_Vectors.Virtual_String_Vector;
       Documentation : out VSS.String_Vectors.Virtual_String_Vector)
    is
-      pragma Unreferenced (Origin);
-
       Decl               : constant Basic_Decl := Name.P_Basic_Decl;
       Parent_Basic_Decl  : constant Basic_Decl := Decl.P_Parent_Basic_Decl;
       Decl_To_Extract    : Basic_Decl;
@@ -414,21 +417,6 @@ package body GNATdoc.Comments.Helpers is
            Decl.As_Enum_Literal_Decl.P_Enum_Type.As_Basic_Decl;
          Name_To_Extract := Name.As_Defining_Name;
 
-      elsif Decl.Kind = Ada_Incomplete_Type_Decl then
-         --  We are looking at an incomplete type declaration. Check the
-         --  complete part, and use it for doc if it's not private.
-         declare
-            Next_Part : constant Basic_Decl :=
-              P_Next_Part_For_Decl (Decl);
-         begin
-            if not (Next_Part.Is_Null
-                    or else As_Type_Decl (Next_Part).P_Is_Private)
-            then
-               Decl_To_Extract := As_Basic_Decl (Next_Part);
-               Name_To_Extract := Name.As_Defining_Name;
-            end if;
-         end;
-
       elsif Decl.Kind in Ada_Discriminant_Spec | Ada_Component_Decl
         and then Parent_Basic_Decl.Kind
       in Ada_Type_Decl | Ada_Concrete_Type_Decl_Range
@@ -458,6 +446,131 @@ package body GNATdoc.Comments.Helpers is
 
          Code_Snippet := Get_Ada_Code_Snippet (Extracted);
       end if;
+   end Get_Plain_Text_Documentation;
+
+   ----------------------------------
+   -- Get_Plain_Text_Documentation --
+   ----------------------------------
+
+   procedure Get_Plain_Text_Documentation
+     (Name          : Libadalang.Analysis.Defining_Name'Class;
+      Origin        : Libadalang.Analysis.Ada_Node'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Code_Snippet  : out VSS.String_Vectors.Virtual_String_Vector;
+      Documentation : out VSS.String_Vectors.Virtual_String_Vector)
+   is
+      function Is_Callable
+        (Name : Libadalang.Analysis.Defining_Name'Class) return Boolean;
+
+      -----------------
+      -- Is_Callable --
+      -----------------
+
+      function Is_Callable
+        (Name : Libadalang.Analysis.Defining_Name'Class) return Boolean is
+      begin
+         case Name.P_Basic_Decl.Kind is
+            when Ada_Entry_Decl
+               | Ada_Expr_Function
+               | Ada_Null_Subp_Decl
+               | Ada_Subp_Body
+               | Ada_Subp_Decl
+            =>
+               return True;
+
+            when Ada_Generic_Subp_Instantiation
+               | Ada_Subp_Renaming_Decl
+            =>
+               return False;
+               --  ???
+
+            when Ada_Component_Decl
+               | Ada_Concrete_Type_Decl
+               | Ada_For_Loop_Var_Decl
+               | Ada_Generic_Package_Decl
+               | Ada_Generic_Subp_Decl
+               | Ada_Incomplete_Type_Decl
+               | Ada_Object_Decl
+               | Ada_Package_Body
+               | Ada_Package_Decl
+               | Ada_Subtype_Decl
+            =>
+               return False;
+
+            when others =>
+               raise Program_Error with Name.P_Basic_Decl.Kind'Img;
+         end case;
+      end Is_Callable;
+
+      All_Decls          : constant Libadalang.Analysis.Defining_Name_Array :=
+        Name.P_All_Parts;
+      Most_Visible_Decl  : constant Libadalang.Analysis.Defining_Name :=
+        (if Origin.Is_Null
+           then Name.As_Defining_Name else Name.P_Most_Visible_Part (Origin));
+      Most_Visible_Index : Positive := All_Decls'First;
+      All_Code_Snippet   :
+        array (All_Decls'Range) of VSS.String_Vectors.Virtual_String_Vector;
+      All_Documentation  :
+        array (All_Decls'Range) of VSS.String_Vectors.Virtual_String_Vector;
+
+   begin
+      --  Lookup for index of most visible declaration
+
+      for J in All_Decls'Range loop
+         if All_Decls (J) = Most_Visible_Decl then
+            Most_Visible_Index := J;
+
+            exit;
+         end if;
+      end loop;
+
+      --  Extract documentation for each declaration till most visible
+
+      for J in All_Decls'First .. Most_Visible_Index loop
+         Get_Plain_Text_Documentation
+           (Name          => All_Decls (J),
+            Options       => Options,
+            Code_Snippet  => All_Code_Snippet (J),
+            Documentation => All_Documentation (J));
+      end loop;
+
+      --  Merge documentation
+
+      Code_Snippet.Clear;
+      Documentation.Clear;
+
+      if Is_Callable (Most_Visible_Decl) then
+         --  For subprograms/entries use first declaration - subprogram/entry
+         --  specification. When it is not available subprogram/entry body is
+         --  used.
+
+         Code_Snippet := All_Code_Snippet (All_Code_Snippet'First);
+
+      else
+         for J in All_Decls'First .. Most_Visible_Index loop
+            if not All_Code_Snippet (J).Is_Empty then
+               if not Code_Snippet.Is_Empty
+                 and then not Code_Snippet.Last_Element.Is_Empty
+               then
+                  Code_Snippet.Append (Empty_Virtual_String);
+               end if;
+
+               Code_Snippet.Append (All_Code_Snippet (J));
+            end if;
+         end loop;
+      end if;
+
+      for J in All_Decls'First .. Most_Visible_Index loop
+         if not All_Documentation (J).Is_Empty then
+            if not Documentation.Is_Empty
+              and then not Documentation.Last_Element.Is_Empty
+            then
+               Documentation.Append (Empty_Virtual_String);
+            end if;
+
+            Documentation.Append (All_Documentation (J));
+         end if;
+      end loop;
    end Get_Plain_Text_Documentation;
 
 end GNATdoc.Comments.Helpers;
