@@ -35,15 +35,15 @@ package body GNATdoc.Comments.Helpers is
 
    function Get_Plain_Text_Description
      (Documentation : Structured_Comment;
-      Name          : Defining_Name'Class)
+      Symbol        : VSS.Strings.Virtual_String)
       return VSS.String_Vectors.Virtual_String_Vector;
    --  Return description as plain text. Name is the defining name of the
    --  documented entity.
 
    function Get_Plain_Text_Description
      (Documentation : Structured_Comment;
-      Name          : Defining_Name'Class;
-      Subname       : Defining_Name'Class)
+      Symbol        : VSS.Strings.Virtual_String;
+      Subsymbol     : VSS.Strings.Virtual_String)
       return VSS.String_Vectors.Virtual_String_Vector;
    --  Return description as plain text. Name and Subname are defining names
    --  of the documented entity. This hierarhy is used for generic declarations
@@ -52,10 +52,17 @@ package body GNATdoc.Comments.Helpers is
    --  discriminant, etc.)).
 
    procedure Get_Plain_Text_Documentation
-     (Name          : Libadalang.Analysis.Defining_Name'Class;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Code_Snippet  : out VSS.String_Vectors.Virtual_String_Vector;
-      Documentation : out VSS.String_Vectors.Virtual_String_Vector);
+     (Name         : Libadalang.Analysis.Defining_Name'Class;
+      Options      : GNATdoc.Comments.Options.Extractor_Options;
+      Code_Snippet : out VSS.String_Vectors.Virtual_String_Vector;
+      Comment      : out GNATdoc.Comments.Structured_Comment;
+      Symbol       : out VSS.Strings.Virtual_String;
+      Subsymbol    : out VSS.Strings.Virtual_String);
+
+   procedure Merge
+     (Documentation : in out Structured_Comment;
+      Item          : Structured_Comment);
+   --  Appends all components of the `Item` into `Documentation`.
 
    --------------------------
    -- Get_Ada_Code_Snippet --
@@ -254,13 +261,11 @@ package body GNATdoc.Comments.Helpers is
 
    function Get_Plain_Text_Description
      (Documentation : Structured_Comment;
-      Name          : Defining_Name'Class)
+      Symbol        : VSS.Strings.Virtual_String)
       return VSS.String_Vectors.Virtual_String_Vector is
    begin
       for Section of Documentation.Sections loop
-         if Section.Kind in Component
-           and then Section.Symbol = Utilities.To_Symbol (Name)
-         then
+         if Section.Kind in Component and then Section.Symbol = Symbol then
             return Get_Plain_Text_Description (Section);
          end if;
       end loop;
@@ -274,15 +279,9 @@ package body GNATdoc.Comments.Helpers is
 
    function Get_Plain_Text_Description
      (Documentation : Structured_Comment;
-      Name          : Defining_Name'Class;
-      Subname       : Defining_Name'Class)
-      return VSS.String_Vectors.Virtual_String_Vector
-   is
-      Symbol    : constant VSS.Strings.Virtual_String :=
-        GNATdoc.Comments.Utilities.To_Symbol (Name);
-      Subsymbol : constant VSS.Strings.Virtual_String :=
-        GNATdoc.Comments.Utilities.To_Symbol (Subname);
-
+      Symbol        : VSS.Strings.Virtual_String;
+      Subsymbol     : VSS.Strings.Virtual_String)
+      return VSS.String_Vectors.Virtual_String_Vector is
    begin
       for Section of Documentation.Sections loop
          if Section.Kind = Formal and then Section.Symbol = Symbol then
@@ -304,17 +303,18 @@ package body GNATdoc.Comments.Helpers is
    ----------------------------------
 
    procedure Get_Plain_Text_Documentation
-     (Name          : Libadalang.Analysis.Defining_Name'Class;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Code_Snippet  : out VSS.String_Vectors.Virtual_String_Vector;
-      Documentation : out VSS.String_Vectors.Virtual_String_Vector)
+     (Name         : Libadalang.Analysis.Defining_Name'Class;
+      Options      : GNATdoc.Comments.Options.Extractor_Options;
+      Code_Snippet : out VSS.String_Vectors.Virtual_String_Vector;
+      Comment      : out GNATdoc.Comments.Structured_Comment;
+      Symbol       : out VSS.Strings.Virtual_String;
+      Subsymbol    : out VSS.Strings.Virtual_String)
    is
       Decl               : constant Basic_Decl := Name.P_Basic_Decl;
       Parent_Basic_Decl  : constant Basic_Decl := Decl.P_Parent_Basic_Decl;
       Decl_To_Extract    : Basic_Decl;
       Name_To_Extract    : Defining_Name;
       Subname_To_Extract : Defining_Name;
-      Extracted          : Structured_Comment;
       Messages           : GNATdoc.Messages.Message_Container;
 
    begin
@@ -431,22 +431,18 @@ package body GNATdoc.Comments.Helpers is
 
       if not Decl_To_Extract.Is_Null then
          GNATdoc.Comments.Extractor.Extract
-           (Decl_To_Extract, Options, Extracted, Messages);
+           (Decl_To_Extract, Options, Comment, Messages);
 
-         if Name_To_Extract.Is_Null then
-            Documentation := Get_Plain_Text_Description (Extracted);
+         if not Name_To_Extract.Is_Null then
+            Symbol := GNATdoc.Comments.Utilities.To_Symbol (Name_To_Extract);
 
-         elsif Subname_To_Extract.Is_Null then
-            Documentation :=
-              Get_Plain_Text_Description (Extracted, Name_To_Extract);
-
-         else
-            Documentation :=
-              Get_Plain_Text_Description
-                (Extracted, Name_To_Extract, Subname_To_Extract);
+            if not Subname_To_Extract.Is_Null then
+               Subsymbol :=
+                 GNATdoc.Comments.Utilities.To_Symbol (Subname_To_Extract);
+            end if;
          end if;
 
-         Code_Snippet := Get_Ada_Code_Snippet (Extracted);
+         Code_Snippet := Get_Ada_Code_Snippet (Comment);
       end if;
    end Get_Plain_Text_Documentation;
 
@@ -514,8 +510,13 @@ package body GNATdoc.Comments.Helpers is
       Most_Visible_Index : Positive := All_Decls'First;
       All_Code_Snippet   :
         array (All_Decls'Range) of VSS.String_Vectors.Virtual_String_Vector;
-      All_Documentation  :
-        array (All_Decls'Range) of VSS.String_Vectors.Virtual_String_Vector;
+      All_Comment        :
+        array (All_Decls'Range) of GNATdoc.Comments.Structured_Comment;
+      All_Symbol         :
+        array (All_Decls'Range) of VSS.Strings.Virtual_String;
+      All_Subsymbol      :
+        array (All_Decls'Range) of VSS.Strings.Virtual_String;
+      Comment            : Structured_Comment;
 
    begin
       --  Lookup for index of most visible declaration
@@ -535,7 +536,9 @@ package body GNATdoc.Comments.Helpers is
            (Name          => All_Decls (J),
             Options       => Options,
             Code_Snippet  => All_Code_Snippet (J),
-            Documentation => All_Documentation (J));
+            Comment       => All_Comment (J),
+            Symbol        => All_Symbol (J),
+            Subsymbol     => All_Subsymbol (J));
       end loop;
 
       --  Merge documentation
@@ -565,16 +568,98 @@ package body GNATdoc.Comments.Helpers is
       end if;
 
       for J in All_Decls'First .. Most_Visible_Index loop
-         if not All_Documentation (J).Is_Empty then
-            if not Documentation.Is_Empty
-              and then not Documentation.Last_Element.Is_Empty
-            then
-               Documentation.Append (Empty_Virtual_String);
-            end if;
-
-            Documentation.Append (All_Documentation (J));
+         if not All_Comment (J).Is_Empty then
+            Merge (Comment, All_Comment (J));
          end if;
       end loop;
+
+      if not All_Subsymbol (Most_Visible_Index).Is_Empty then
+         Documentation :=
+           Get_Plain_Text_Description
+             (Comment,
+              All_Symbol (Most_Visible_Index),
+              All_Subsymbol (Most_Visible_Index));
+
+      elsif not All_Symbol (Most_Visible_Index).Is_Empty then
+         Documentation :=
+           Get_Plain_Text_Description
+             (Comment, All_Symbol (Most_Visible_Index));
+
+      else
+         Documentation := Get_Plain_Text_Description (Comment);
+      end if;
    end Get_Plain_Text_Documentation;
+
+   -----------
+   -- Merge --
+   -----------
+
+   procedure Merge
+     (Documentation : in out Structured_Comment;
+      Item          : Structured_Comment)
+   is
+      procedure Merge
+        (Target_Sections : in out Section_Vectors.Vector;
+         Source_Sections    : Section_Vectors.Vector);
+
+      -----------
+      -- Merge --
+      -----------
+
+      procedure Merge
+        (Target_Sections : in out Section_Vectors.Vector;
+         Source_Sections : Section_Vectors.Vector)
+      is
+         Target : Section_Access;
+
+      begin
+         for Source of Source_Sections loop
+            Target := null;
+
+            if Source.Kind /= Raw then
+               --  Raw sections are not needed, skip them.
+
+               for Section of Target_Sections loop
+                  if Section.Kind = Source.Kind
+                    and Section.Symbol = Source.Symbol
+                  then
+                     Target := Section;
+
+                     exit;
+                  end if;
+               end loop;
+            end if;
+
+            if Target = null then
+               Target :=
+                 new Section'
+                   (Kind             => Source.Kind,
+                    Name             => Source.Name,
+                    Symbol           => Source.Symbol,
+                    Text             => Source.Text,
+                    Exact_Start_Line => 0,
+                    Exact_End_Line   => 0,
+                    Group_Start_Line => 0,
+                    Group_End_Line   => 0,
+                    Sections         => <>);
+               Target_Sections.Append (Target);
+
+            else
+               if not Target.Text.Is_Empty
+                 and not Source.Text.Is_Empty
+               then
+                  Target.Text.Append (VSS.Strings.Empty_Virtual_String);
+               end if;
+
+               Target.Text.Append (Source.Text);
+            end if;
+
+            Merge (Target.Sections, Source.Sections);
+         end loop;
+      end Merge;
+
+   begin
+      Merge (Documentation.Sections, Item.Sections);
+   end Merge;
 
 end GNATdoc.Comments.Helpers;

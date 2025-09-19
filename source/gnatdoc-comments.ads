@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -106,6 +106,9 @@ private
    end record;
 
    overriding procedure Finalize (Self : in out Structured_Comment);
+
+   function Is_Empty (Self : Structured_Comment) return Boolean is
+     (Self.Sections.Is_Empty);
 
    function Clone
      (Section : not null Section_Access) return not null Section_Access;
