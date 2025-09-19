@@ -396,7 +396,8 @@ package body GNATdoc.Comments.Helpers is
 
       elsif Decl.Kind in Ada_Param_Spec | Ada_Entry_Index_Spec
         and then Parent_Basic_Decl.Kind
-                   in Ada_Subp_Decl | Ada_Entry_Decl | Ada_Entry_Body
+                   in Ada_Subp_Decl | Ada_Subp_Body | Ada_Subp_Renaming_Decl
+                        | Ada_Entry_Decl | Ada_Entry_Body
       then
          --  Parameters of the subprograms and entries, family index of
          --  entries.
@@ -495,6 +496,7 @@ package body GNATdoc.Comments.Helpers is
                | Ada_Object_Decl
                | Ada_Package_Body
                | Ada_Package_Decl
+               | Ada_Param_Spec
                | Ada_Subtype_Decl
             =>
                return False;
