@@ -17,6 +17,7 @@
 
 with "libadalang";
 with "vss_regexp";
+with "vss_os";
 with "vss_text";
 
 project LibGNATdoc is
