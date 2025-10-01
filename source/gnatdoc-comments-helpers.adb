@@ -35,21 +35,34 @@ package body GNATdoc.Comments.Helpers is
 
    function Get_Plain_Text_Description
      (Documentation : Structured_Comment;
-      Name          : Defining_Name'Class)
+      Symbol        : VSS.Strings.Virtual_String)
       return VSS.String_Vectors.Virtual_String_Vector;
    --  Return description as plain text. Name is the defining name of the
    --  documented entity.
 
    function Get_Plain_Text_Description
      (Documentation : Structured_Comment;
-      Name          : Defining_Name'Class;
-      Subname       : Defining_Name'Class)
+      Symbol        : VSS.Strings.Virtual_String;
+      Subsymbol     : VSS.Strings.Virtual_String)
       return VSS.String_Vectors.Virtual_String_Vector;
    --  Return description as plain text. Name and Subname are defining names
    --  of the documented entity. This hierarhy is used for generic declarations
    --  only (name is a name of the formal and subname is a name of the
    --  component depends from the kind of formal (name of parameter,
    --  discriminant, etc.)).
+
+   procedure Get_Plain_Text_Documentation
+     (Name         : Libadalang.Analysis.Defining_Name'Class;
+      Options      : GNATdoc.Comments.Options.Extractor_Options;
+      Code_Snippet : out VSS.String_Vectors.Virtual_String_Vector;
+      Comment      : out GNATdoc.Comments.Structured_Comment;
+      Symbol       : out VSS.Strings.Virtual_String;
+      Subsymbol    : out VSS.Strings.Virtual_String);
+
+   procedure Merge
+     (Documentation : in out Structured_Comment;
+      Item          : Structured_Comment);
+   --  Appends all components of the `Item` into `Documentation`.
 
    --------------------------
    -- Get_Ada_Code_Snippet --
@@ -248,13 +261,11 @@ package body GNATdoc.Comments.Helpers is
 
    function Get_Plain_Text_Description
      (Documentation : Structured_Comment;
-      Name          : Defining_Name'Class)
+      Symbol        : VSS.Strings.Virtual_String)
       return VSS.String_Vectors.Virtual_String_Vector is
    begin
       for Section of Documentation.Sections loop
-         if Section.Kind in Component
-           and then Section.Symbol = Utilities.To_Symbol (Name)
-         then
+         if Section.Kind in Component and then Section.Symbol = Symbol then
             return Get_Plain_Text_Description (Section);
          end if;
       end loop;
@@ -268,15 +279,9 @@ package body GNATdoc.Comments.Helpers is
 
    function Get_Plain_Text_Description
      (Documentation : Structured_Comment;
-      Name          : Defining_Name'Class;
-      Subname       : Defining_Name'Class)
-      return VSS.String_Vectors.Virtual_String_Vector
-   is
-      Symbol    : constant VSS.Strings.Virtual_String :=
-        GNATdoc.Comments.Utilities.To_Symbol (Name);
-      Subsymbol : constant VSS.Strings.Virtual_String :=
-        GNATdoc.Comments.Utilities.To_Symbol (Subname);
-
+      Symbol        : VSS.Strings.Virtual_String;
+      Subsymbol     : VSS.Strings.Virtual_String)
+      return VSS.String_Vectors.Virtual_String_Vector is
    begin
       for Section of Documentation.Sections loop
          if Section.Kind = Formal and then Section.Symbol = Symbol then
@@ -298,17 +303,18 @@ package body GNATdoc.Comments.Helpers is
    ----------------------------------
 
    procedure Get_Plain_Text_Documentation
-     (Name          : Libadalang.Analysis.Defining_Name'Class;
-      Options       : GNATdoc.Comments.Options.Extractor_Options;
-      Code_Snippet  : out VSS.String_Vectors.Virtual_String_Vector;
-      Documentation : out VSS.String_Vectors.Virtual_String_Vector)
+     (Name         : Libadalang.Analysis.Defining_Name'Class;
+      Options      : GNATdoc.Comments.Options.Extractor_Options;
+      Code_Snippet : out VSS.String_Vectors.Virtual_String_Vector;
+      Comment      : out GNATdoc.Comments.Structured_Comment;
+      Symbol       : out VSS.Strings.Virtual_String;
+      Subsymbol    : out VSS.Strings.Virtual_String)
    is
       Decl               : constant Basic_Decl := Name.P_Basic_Decl;
       Parent_Basic_Decl  : constant Basic_Decl := Decl.P_Parent_Basic_Decl;
       Decl_To_Extract    : Basic_Decl;
       Name_To_Extract    : Defining_Name;
       Subname_To_Extract : Defining_Name;
-      Extracted          : Structured_Comment;
       Messages           : GNATdoc.Messages.Message_Container;
 
    begin
@@ -364,6 +370,7 @@ package body GNATdoc.Comments.Helpers is
                     | Ada_Single_Protected_Decl
                     | Ada_Subp_Body
                     | Ada_Subp_Decl
+                    | Ada_Subp_Renaming_Decl
                     | Ada_Subtype_Decl
                     | Ada_Task_Type_Decl
         or (Decl.Kind in Ada_Type_Decl
@@ -389,7 +396,8 @@ package body GNATdoc.Comments.Helpers is
 
       elsif Decl.Kind in Ada_Param_Spec | Ada_Entry_Index_Spec
         and then Parent_Basic_Decl.Kind
-                   in Ada_Subp_Decl | Ada_Entry_Decl | Ada_Entry_Body
+                   in Ada_Subp_Decl | Ada_Subp_Body | Ada_Subp_Renaming_Decl
+                        | Ada_Entry_Decl | Ada_Entry_Body
       then
          --  Parameters of the subprograms and entries, family index of
          --  entries.
@@ -411,21 +419,6 @@ package body GNATdoc.Comments.Helpers is
            Decl.As_Enum_Literal_Decl.P_Enum_Type.As_Basic_Decl;
          Name_To_Extract := Name.As_Defining_Name;
 
-      elsif Decl.Kind = Ada_Incomplete_Type_Decl then
-         --  We are looking at an incomplete type declaration. Check the
-         --  complete part, and use it for doc if it's not private.
-         declare
-            Next_Part : constant Basic_Decl :=
-              P_Next_Part_For_Decl (Decl);
-         begin
-            if not (Next_Part.Is_Null
-                    or else As_Type_Decl (Next_Part).P_Is_Private)
-            then
-               Decl_To_Extract := As_Basic_Decl (Next_Part);
-               Name_To_Extract := Name.As_Defining_Name;
-            end if;
-         end;
-
       elsif Decl.Kind in Ada_Discriminant_Spec | Ada_Component_Decl
         and then Parent_Basic_Decl.Kind
       in Ada_Type_Decl | Ada_Concrete_Type_Decl_Range
@@ -438,23 +431,235 @@ package body GNATdoc.Comments.Helpers is
 
       if not Decl_To_Extract.Is_Null then
          GNATdoc.Comments.Extractor.Extract
-           (Decl_To_Extract, Options, Extracted, Messages);
+           (Decl_To_Extract, Options, Comment, Messages);
 
-         if Name_To_Extract.Is_Null then
-            Documentation := Get_Plain_Text_Description (Extracted);
+         if not Name_To_Extract.Is_Null then
+            Symbol := GNATdoc.Comments.Utilities.To_Symbol (Name_To_Extract);
 
-         elsif Subname_To_Extract.Is_Null then
-            Documentation :=
-              Get_Plain_Text_Description (Extracted, Name_To_Extract);
-
-         else
-            Documentation :=
-              Get_Plain_Text_Description
-                (Extracted, Name_To_Extract, Subname_To_Extract);
+            if not Subname_To_Extract.Is_Null then
+               Subsymbol :=
+                 GNATdoc.Comments.Utilities.To_Symbol (Subname_To_Extract);
+            end if;
          end if;
 
-         Code_Snippet := Get_Ada_Code_Snippet (Extracted);
+         Code_Snippet := Get_Ada_Code_Snippet (Comment);
       end if;
    end Get_Plain_Text_Documentation;
+
+   ----------------------------------
+   -- Get_Plain_Text_Documentation --
+   ----------------------------------
+
+   procedure Get_Plain_Text_Documentation
+     (Name          : Libadalang.Analysis.Defining_Name'Class;
+      Origin        : Libadalang.Analysis.Ada_Node'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Code_Snippet  : out VSS.String_Vectors.Virtual_String_Vector;
+      Documentation : out VSS.String_Vectors.Virtual_String_Vector)
+   is
+      function Is_Callable
+        (Name : Libadalang.Analysis.Defining_Name'Class) return Boolean;
+
+      -----------------
+      -- Is_Callable --
+      -----------------
+
+      function Is_Callable
+        (Name : Libadalang.Analysis.Defining_Name'Class) return Boolean is
+      begin
+         case Name.P_Basic_Decl.Kind is
+            when Ada_Entry_Decl
+               | Ada_Expr_Function
+               | Ada_Null_Subp_Decl
+               | Ada_Subp_Body
+               | Ada_Subp_Decl
+               | Ada_Subp_Renaming_Decl
+            =>
+               return True;
+
+            when Ada_Generic_Subp_Instantiation
+            =>
+               return False;
+               --  ???
+
+            when Ada_Component_Decl
+               | Ada_Concrete_Type_Decl
+               | Ada_Enum_Literal_Decl
+               | Ada_For_Loop_Var_Decl
+               | Ada_Generic_Package_Decl
+               | Ada_Generic_Subp_Decl
+               | Ada_Incomplete_Type_Decl
+               | Ada_Object_Decl
+               | Ada_Package_Body
+               | Ada_Package_Decl
+               | Ada_Param_Spec
+               | Ada_Subtype_Decl
+            =>
+               return False;
+
+            when others =>
+               raise Program_Error with Name.P_Basic_Decl.Kind'Img;
+         end case;
+      end Is_Callable;
+
+      All_Decls          : constant Libadalang.Analysis.Defining_Name_Array :=
+        Name.P_All_Parts;
+      Most_Visible_Decl  : constant Libadalang.Analysis.Defining_Name :=
+        (if Origin.Is_Null
+           then Name.As_Defining_Name else Name.P_Most_Visible_Part (Origin));
+      Most_Visible_Index : Positive := All_Decls'First;
+      All_Code_Snippet   :
+        array (All_Decls'Range) of VSS.String_Vectors.Virtual_String_Vector;
+      All_Comment        :
+        array (All_Decls'Range) of GNATdoc.Comments.Structured_Comment;
+      All_Symbol         :
+        array (All_Decls'Range) of VSS.Strings.Virtual_String;
+      All_Subsymbol      :
+        array (All_Decls'Range) of VSS.Strings.Virtual_String;
+      Comment            : Structured_Comment;
+
+   begin
+      --  Lookup for index of most visible declaration
+
+      for J in All_Decls'Range loop
+         if All_Decls (J) = Most_Visible_Decl then
+            Most_Visible_Index := J;
+
+            exit;
+         end if;
+      end loop;
+
+      --  Extract documentation for each declaration till most visible
+
+      for J in All_Decls'First .. Most_Visible_Index loop
+         Get_Plain_Text_Documentation
+           (Name          => All_Decls (J),
+            Options       => Options,
+            Code_Snippet  => All_Code_Snippet (J),
+            Comment       => All_Comment (J),
+            Symbol        => All_Symbol (J),
+            Subsymbol     => All_Subsymbol (J));
+      end loop;
+
+      --  Merge documentation
+
+      Code_Snippet.Clear;
+      Documentation.Clear;
+
+      if Is_Callable (Most_Visible_Decl) then
+         --  For subprograms/entries use first declaration - subprogram/entry
+         --  specification. When it is not available subprogram/entry body is
+         --  used.
+
+         Code_Snippet := All_Code_Snippet (All_Code_Snippet'First);
+
+      else
+         for J in All_Decls'First .. Most_Visible_Index loop
+            if not All_Code_Snippet (J).Is_Empty then
+               if not Code_Snippet.Is_Empty
+                 and then not Code_Snippet.Last_Element.Is_Empty
+               then
+                  Code_Snippet.Append (Empty_Virtual_String);
+               end if;
+
+               Code_Snippet.Append (All_Code_Snippet (J));
+            end if;
+         end loop;
+      end if;
+
+      for J in All_Decls'First .. Most_Visible_Index loop
+         if not All_Comment (J).Is_Empty then
+            Merge (Comment, All_Comment (J));
+         end if;
+      end loop;
+
+      if not All_Subsymbol (Most_Visible_Index).Is_Empty then
+         Documentation :=
+           Get_Plain_Text_Description
+             (Comment,
+              All_Symbol (Most_Visible_Index),
+              All_Subsymbol (Most_Visible_Index));
+
+      elsif not All_Symbol (Most_Visible_Index).Is_Empty then
+         Documentation :=
+           Get_Plain_Text_Description
+             (Comment, All_Symbol (Most_Visible_Index));
+
+      else
+         Documentation := Get_Plain_Text_Description (Comment);
+      end if;
+   end Get_Plain_Text_Documentation;
+
+   -----------
+   -- Merge --
+   -----------
+
+   procedure Merge
+     (Documentation : in out Structured_Comment;
+      Item          : Structured_Comment)
+   is
+      procedure Merge
+        (Target_Sections : in out Section_Vectors.Vector;
+         Source_Sections    : Section_Vectors.Vector);
+
+      -----------
+      -- Merge --
+      -----------
+
+      procedure Merge
+        (Target_Sections : in out Section_Vectors.Vector;
+         Source_Sections : Section_Vectors.Vector)
+      is
+         Target : Section_Access;
+
+      begin
+         for Source of Source_Sections loop
+            Target := null;
+
+            if Source.Kind /= Raw then
+               --  Raw sections are not needed, skip them.
+
+               for Section of Target_Sections loop
+                  if Section.Kind = Source.Kind
+                    and Section.Symbol = Source.Symbol
+                  then
+                     Target := Section;
+
+                     exit;
+                  end if;
+               end loop;
+            end if;
+
+            if Target = null then
+               Target :=
+                 new Section'
+                   (Kind             => Source.Kind,
+                    Name             => Source.Name,
+                    Symbol           => Source.Symbol,
+                    Text             => Source.Text,
+                    Exact_Start_Line => 0,
+                    Exact_End_Line   => 0,
+                    Group_Start_Line => 0,
+                    Group_End_Line   => 0,
+                    Sections         => <>);
+               Target_Sections.Append (Target);
+
+            else
+               if not Target.Text.Is_Empty
+                 and not Source.Text.Is_Empty
+               then
+                  Target.Text.Append (VSS.Strings.Empty_Virtual_String);
+               end if;
+
+               Target.Text.Append (Source.Text);
+            end if;
+
+            Merge (Target.Sections, Source.Sections);
+         end loop;
+      end Merge;
+
+   begin
+      Merge (Documentation.Sections, Item.Sections);
+   end Merge;
 
 end GNATdoc.Comments.Helpers;
