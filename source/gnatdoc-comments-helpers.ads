@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2022, AdaCore                        --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -25,6 +25,7 @@ package GNATdoc.Comments.Helpers is
 
    procedure Get_Plain_Text_Documentation
      (Name          : Libadalang.Analysis.Defining_Name'Class;
+      Origin        : Libadalang.Analysis.Ada_Node'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
       Code_Snippet  : out VSS.String_Vectors.Virtual_String_Vector;
       Documentation : out VSS.String_Vectors.Virtual_String_Vector);
@@ -32,6 +33,13 @@ package GNATdoc.Comments.Helpers is
    --  format.
    --
    --  Convenience function for ALS.
+   --
+   --  @param Name           Defining name of the entity
+   --  @param Origin
+   --    Node to resolve visible declaration part of the defining name
+   --  @param Options        Documentation extractor's options
+   --  @param Code_Snippet   Code snippet of the most visible declaration
+   --  @param Documentation  Extracted documentation
 
    function Get_Ada_Code_Snippet
      (Self : Structured_Comment'Class)
