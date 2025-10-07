@@ -24,7 +24,7 @@ build-gnatdoc:
 	gprbuild -j0 -p -P gnat/gnatdoc.gpr ${SCENARIO_VARIABLES}
 
 install-gnatdoc:
-	gprinstall -p -P gnat/gnatdoc.gpr --prefix="${PREFIX}" --no-project ${SCENARIO_VARIABLES}
+	gprinstall -f -p -P gnat/gnatdoc.gpr --prefix="${PREFIX}" --no-project ${SCENARIO_VARIABLES}
 
 clean:
 	rm -rf .objs bin
