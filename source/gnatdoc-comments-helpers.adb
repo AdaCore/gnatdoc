@@ -468,7 +468,8 @@ package body GNATdoc.Comments.Helpers is
         (Name : Libadalang.Analysis.Defining_Name'Class) return Boolean is
       begin
          case Name.P_Basic_Decl.Kind is
-            when Ada_Entry_Decl
+            when Ada_Abstract_Subp_Decl
+               | Ada_Entry_Decl
                | Ada_Expr_Function
                | Ada_Null_Subp_Decl
                | Ada_Subp_Body
