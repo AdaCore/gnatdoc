@@ -259,6 +259,8 @@ GNATdoc supports the following MarkDown features:
 
   * code span inline
 
+  * images
+
 
 Excluding entities
 ------------------
