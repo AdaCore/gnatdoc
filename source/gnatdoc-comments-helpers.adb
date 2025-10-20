@@ -488,6 +488,7 @@ package body GNATdoc.Comments.Helpers is
                | Ada_Enum_Literal_Decl
                | Ada_Exception_Decl
                | Ada_For_Loop_Var_Decl
+               | Ada_Generic_Package_Instantiation
                | Ada_Generic_Package_Decl
                | Ada_Generic_Subp_Decl
                | Ada_Incomplete_Type_Decl
