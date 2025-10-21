@@ -3,9 +3,10 @@
 from os import environ
 from os.path import abspath, dirname, join
 import sys
+from typing import List
 
 from e3.testsuite import Testsuite
-from e3.testsuite.driver.diff import DiffTestDriver
+from e3.testsuite.driver.diff import DiffTestDriver, OutputRefiner, ReplacePath
 
 
 class LibGNATdocExtractorDriver(DiffTestDriver):
@@ -48,6 +49,12 @@ class GNATdocExecutableDriver(DiffTestDriver):
         script_path = join(self.test_env["test_dir"], "test.sh")
 
         self.shell(args=["bash", script_path], env=self.test_environ)
+
+    @property
+    def output_refiners(self) -> List[OutputRefiner]:
+        return super(GNATdocExecutableDriver, self).output_refiners + [
+            ReplacePath(self.working_dir(), "<<WORKING_DIR>>")
+        ]
 
 
 class LibGNATdocTestsuite(Testsuite):
