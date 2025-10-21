@@ -1,0 +1,2 @@
+warning: `<<WORKING_DIR>>/images` is not a directory
+warning: image directory `<<WORKING_DIR>>/./` can't be parent of output directory

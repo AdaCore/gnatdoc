@@ -23,13 +23,16 @@ with GNATCOLL.VFS;
 with Input_Sources.File;
 
 with VSS.HTML.Writers;
+with VSS.Strings.Formatters.Virtual_Files;
 with VSS.Strings.Conversions;
+with VSS.Strings.Templates;
 with VSS.String_Vectors;
 with VSS.XML.Templates.Processors;
 with VSS.XML.Templates.Proxies.Booleans;
 with VSS.XML.XmlAda_Readers;
 
 with GNATdoc.Entities.Proxies;
+with GNATdoc.Messages;
 with Streams;
 
 package body GNATdoc.Backend.HTML is
@@ -419,7 +422,19 @@ package body GNATdoc.Backend.HTML is
             Images_Dir.Make_Dir;
 
             for Directory of reverse Self.Image_Directories loop
-               Directory.Copy (Images_Dir.Full_Name.all, Success);
+               if GNATCOLL.VFS.Greatest_Common_Path
+                 ([Self.Output_Root, Directory]) = Directory
+               then
+                  GNATdoc.Messages.Report_Warning
+                    (VSS.Strings.Templates.To_Virtual_String_Template
+                     ("image directory `{:fullname}` can't be parent of"
+                        & " output directory").Format
+                       (VSS.Strings.Formatters.Virtual_Files.Image
+                            (Directory)));
+
+               else
+                  Directory.Copy (Images_Dir.Full_Name.all, Success);
+               end if;
             end loop;
          end;
       end if;
