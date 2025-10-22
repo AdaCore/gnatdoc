@@ -45,6 +45,7 @@ package GNATdoc.Comments.Extractor is
                       | Ada_Generic_Subp_Decl
                       | Ada_Generic_Subp_Instantiation
                       | Ada_Generic_Subp_Renaming_Decl
+                      | Ada_Incomplete_Type_Decl
                       | Ada_Null_Subp_Decl
                       | Ada_Number_Decl
                       | Ada_Object_Decl
