@@ -1,5 +1,5 @@
 
-package Record_Types is
+package Discriminant_Record_Types is
 
    type Discriminant_Null_Record (Discriminant : Integer) is null record;
    --  Description of the `Discriminant_Null_Record` type.
@@ -71,4 +71,4 @@ private
 
    procedure Dummy;
 
-end Record_Types;
+end Discriminant_Record_Types;

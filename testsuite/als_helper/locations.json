@@ -1,10 +1,27 @@
 [
-    {"file": "record_types.ads", "line": 4, "column": 9},  //  declaration: `Discriminant_Null_Record`
-    {"file": "record_types.adb", "line": 7, "column": 19},  //  reference: `Discriminant_Null_Record`
-    {"file": "pkg2.adb", "line": 8, "column": 32},  //  reference: `Discriminant_Null_Record`
-    {"file": "record_types.ads", "line": 4, "column": 35},  //  discriminant declaration: `Discriminant_Null_Record`
-    {"file": "record_types.adb", "line": 11, "column": 26},  //  discriminant reference: `Discriminant_Null_Record`
-    {"file": "pkg2.adb", "line": 12, "column": 26},  //  discriminant reference: `Discriminant_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 4, "column": 9},
+    //  declaration: `Discriminant_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 7, "column": 19},
+    //  reference: `Discriminant_Null_Record`
+    {"file": "discriminant_record_types_package.adb", "line": 8, "column": 32},
+    //  reference: `Discriminant_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 4, "column": 35},
+    //  discriminant declaration: `Discriminant_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 11, "column": 26},
+    //  discriminant reference: `Discriminant_Null_Record`
+    {"file": "discriminant_record_types_package.adb", "line": 12, "column": 26},
+    //  discriminant reference: `Discriminant_Null_Record`
+
+    {"file": "discriminant_record_types.ads", "line": 9, "column": 9},
+    //  public declaration: `Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 44, "column": 9},
+    //  private declaration: `Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 15, "column": 19},
+    //  reference: `Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 44, "column": 51},
+    //  discriminant private declaration: `Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 19, "column": 26},
+    //  reference: `Unknown_Discriminant_Private_Null_Record`
 
     // {"file": "pkg1.ads", "line": 5, "column": 9},  // package specification name
     // {"file": "pkg1.ads", "line": 9, "column": 5},  // package specification end name
