@@ -1,0 +1,18 @@
+Defining name: <DefiningName "Discriminant_Null_Record" record_types.ads:4:9-4:33>
+Origin: <Id "Discriminant_Null_Record" record_types.ads:4:9-4:33>
+----- CODE SNIPPET -----
+type Discriminant_Null_Record (Discriminant : Integer) is null record;
+----- DOCUMENTATION -----
+Description of the `Discriminant_Null_Record` type.
+
+@field Discriminant
+  Description of the discriminant
+----- DONE -----
+Defining name: <DefiningName "Discriminant" record_types.ads:4:35-4:47>
+Origin: <Id "Discriminant" record_types.ads:4:35-4:47>
+----- CODE SNIPPET -----
+type Discriminant_Null_Record (Discriminant : Integer) is null record;
+----- DOCUMENTATION -----
+@field Discriminant
+  Description of the discriminant
+----- DONE -----
