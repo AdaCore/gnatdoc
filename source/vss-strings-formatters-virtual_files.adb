@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2024, AdaCore                        --
+--                     Copyright (C) 2024-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -28,9 +28,19 @@ package body VSS.Strings.Formatters.Virtual_Files is
       Format : VSS.Strings.Formatters.Format_Information)
       return VSS.Strings.Virtual_String is
    begin
-      return
-        VSS.Strings.Conversions.To_Virtual_String
-          (Self.Value.Display_Base_Name);
+      if Format.Format.Is_Empty or Format.Format = "basename" then
+         return
+           VSS.Strings.Conversions.To_Virtual_String
+             (Self.Value.Display_Base_Name);
+
+      elsif Format.Format = "fullname" then
+         return
+           VSS.Strings.Conversions.To_Virtual_String
+             (Self.Value.Display_Full_Name);
+
+      else
+         raise Program_Error;
+      end if;
    end Format;
 
    -----------

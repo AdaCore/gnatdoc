@@ -206,6 +206,13 @@ package body GNATdoc.Projects is
 
                   if Directory.Is_Directory then
                      Result.Append (Directory);
+
+                  else
+                     GNATdoc.Messages.Report_Warning
+                       (VSS.Strings.Templates.Virtual_String_Template'
+                          ("`{:fullname}` is not a directory").Format
+                            (VSS.Strings.Formatters.Virtual_Files.Image
+                                 (Directory)));
                   end if;
                end loop;
             end;

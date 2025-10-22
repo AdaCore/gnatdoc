@@ -1,0 +1,8 @@
+
+project Default is
+
+  package Documentation is
+    for Image_Dirs ("html") use (".", "images");
+  end Documentation;
+
+end Default;
