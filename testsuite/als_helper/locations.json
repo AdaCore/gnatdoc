@@ -55,6 +55,19 @@
     {"file": "discriminant_record_types_package.adb", "line": 28, "column": 26},
     //  discriminant reference: `Incomplete_Discriminant_Null_Record`
 
+    {"file": "discriminant_record_types.ads", "line": 29, "column": 9},
+    //  incomplete declaration: `Incomplete_Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 33, "column": 9},
+    //  public declaration: `Incomplete_Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 64, "column": 9},
+    //  private declaration: `Incomplete_Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 39, "column": 19},
+    //  reference: `Incomplete_Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 65, "column": 12},
+    //  discriminant private declaration: `Incomplete_Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 43, "column": 26},
+    //  reference: `Incomplete_Unknown_Discriminant_Private_Null_Record`
+
     // {"file": "pkg1.ads", "line": 5, "column": 9},  // package specification name
     // {"file": "pkg1.ads", "line": 9, "column": 5},  // package specification end name
     // {"file": "pkg1.adb", "line": 5, "column": 14},  // package body name

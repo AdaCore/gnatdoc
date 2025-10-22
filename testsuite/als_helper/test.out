@@ -295,3 +295,80 @@ type Incomplete_Discriminant_Null_Record (Discriminant : Integer)
 @field Discriminant
   Description of the discriminant
 ----- DONE -----
+Defining name: <DefiningName "Incomplete_Unknown_Discriminant_Private_Null_Record" discriminant_record_types.ads:29:9-29:60>
+Origin: <Id "Incomplete_Unknown_Discriminant_Private_Null_Record" discriminant_record_types.ads:29:9-29:60>
+----- CODE SNIPPET -----
+type Incomplete_Unknown_Discriminant_Private_Null_Record;
+----- DOCUMENTATION -----
+Incomplete description of the
+`Incomplete_Unknown_Discriminant_Private_Null_Record` type.
+----- DONE -----
+Defining name: <DefiningName "Incomplete_Unknown_Discriminant_Private_Null_Record" discriminant_record_types.ads:33:9-33:60>
+Origin: <Id "Incomplete_Unknown_Discriminant_Private_Null_Record" discriminant_record_types.ads:33:9-33:60>
+----- CODE SNIPPET -----
+type Incomplete_Unknown_Discriminant_Private_Null_Record (<>) is private;
+----- DOCUMENTATION -----
+Incomplete description of the
+`Incomplete_Unknown_Discriminant_Private_Null_Record` type.
+
+Public description of the
+`Incomplete_Unknown_Discriminant_Private_Null_Record` type.
+----- DONE -----
+Defining name: <DefiningName "Incomplete_Unknown_Discriminant_Private_Null_Record" discriminant_record_types.ads:64:9-64:60>
+Origin: <Id "Incomplete_Unknown_Discriminant_Private_Null_Record" discriminant_record_types.ads:64:9-64:60>
+----- CODE SNIPPET -----
+type Incomplete_Unknown_Discriminant_Private_Null_Record (<>) is private;
+
+type Incomplete_Unknown_Discriminant_Private_Null_Record
+       (Discriminant : Integer) is null record;
+----- DOCUMENTATION -----
+Incomplete description of the
+`Incomplete_Unknown_Discriminant_Private_Null_Record` type.
+
+Public description of the
+`Incomplete_Unknown_Discriminant_Private_Null_Record` type.
+
+Private description of the
+`Incomplete_Unknown_Discriminant_Private_Null_Record` type.
+
+@field Discriminant
+  Description of the discriminant
+----- DONE -----
+Defining name: <DefiningName "Incomplete_Unknown_Discriminant_Private_Null_Record" discriminant_record_types.ads:64:9-64:60>
+Origin: <Id "Incomplete_Unknown_Discriminant_Private_Null_Record" discriminant_record_types.adb:39:19-39:70>
+----- CODE SNIPPET -----
+type Incomplete_Unknown_Discriminant_Private_Null_Record (<>) is private;
+
+type Incomplete_Unknown_Discriminant_Private_Null_Record
+       (Discriminant : Integer) is null record;
+----- DOCUMENTATION -----
+Incomplete description of the
+`Incomplete_Unknown_Discriminant_Private_Null_Record` type.
+
+Public description of the
+`Incomplete_Unknown_Discriminant_Private_Null_Record` type.
+
+Private description of the
+`Incomplete_Unknown_Discriminant_Private_Null_Record` type.
+
+@field Discriminant
+  Description of the discriminant
+----- DONE -----
+Defining name: <DefiningName "Discriminant" discriminant_record_types.ads:65:12-65:24>
+Origin: <Id "Discriminant" discriminant_record_types.ads:65:12-65:24>
+----- CODE SNIPPET -----
+type Incomplete_Unknown_Discriminant_Private_Null_Record
+       (Discriminant : Integer) is null record;
+----- DOCUMENTATION -----
+@field Discriminant
+  Description of the discriminant
+----- DONE -----
+Defining name: <DefiningName "Discriminant" discriminant_record_types.ads:65:12-65:24>
+Origin: <Id "Discriminant" discriminant_record_types.adb:43:26-43:38>
+----- CODE SNIPPET -----
+type Incomplete_Unknown_Discriminant_Private_Null_Record
+       (Discriminant : Integer) is null record;
+----- DOCUMENTATION -----
+@field Discriminant
+  Description of the discriminant
+----- DONE -----
