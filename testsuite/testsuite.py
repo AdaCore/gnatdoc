@@ -9,6 +9,12 @@ from e3.testsuite import Testsuite
 from e3.testsuite.driver.diff import DiffTestDriver, OutputRefiner, ReplacePath
 
 
+class ALSHelperDriver(DiffTestDriver):
+    def run(self):
+        exe_path = join(dirname(dirname(abspath(__file__))), ".objs", "test_als_helper")
+        self.shell([exe_path, "default.gpr", "locations.json"])
+
+
 class LibGNATdocExtractorDriver(DiffTestDriver):
     def run(self):
         exe_path = join(dirname(dirname(abspath(__file__))), ".objs", "test_extractor")
@@ -63,6 +69,7 @@ class LibGNATdocTestsuite(Testsuite):
     test_driver_map = {
         "extractor": LibGNATdocExtractorDriver,
         "executable": GNATdocExecutableDriver,
+        "als_helper": ALSHelperDriver,
     }
     default_driver = "extractor"
 
