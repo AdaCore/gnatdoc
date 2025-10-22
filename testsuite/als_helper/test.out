@@ -112,3 +112,109 @@ type Unknown_Discriminant_Private_Null_Record (Discriminant : Integer)
 @field Discriminant
   Description of the discriminant
 ----- DONE -----
+Defining name: <DefiningName "Known_Discriminant_Private_Null_Record" discriminant_record_types.ads:13:9-13:47>
+Origin: <Id "Known_Discriminant_Private_Null_Record" discriminant_record_types.ads:13:9-13:47>
+----- CODE SNIPPET -----
+type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
+  is private;
+----- DOCUMENTATION -----
+Public description of the `Known_Discriminant_Private_Null_Record` type.
+
+@field Discriminant
+  Public description of the discriminant
+----- DONE -----
+Defining name: <DefiningName "Known_Discriminant_Private_Null_Record" discriminant_record_types.ads:51:9-51:47>
+Origin: <Id "Known_Discriminant_Private_Null_Record" discriminant_record_types.ads:51:9-51:47>
+----- CODE SNIPPET -----
+type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
+  is private;
+
+type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
+  is null record;
+----- DOCUMENTATION -----
+Public description of the `Known_Discriminant_Private_Null_Record` type.
+
+Private description of the `Known_Discriminant_Private_Null_Record`
+type.
+
+@field Discriminant
+  Public description of the discriminant
+  
+  Private description of the discriminant
+----- DONE -----
+Defining name: <DefiningName "Known_Discriminant_Private_Null_Record" discriminant_record_types.ads:51:9-51:47>
+Origin: <Id "Known_Discriminant_Private_Null_Record" discriminant_record_types.adb:23:19-23:57>
+----- CODE SNIPPET -----
+type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
+  is private;
+
+type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
+  is null record;
+----- DOCUMENTATION -----
+Public description of the `Known_Discriminant_Private_Null_Record` type.
+
+Private description of the `Known_Discriminant_Private_Null_Record`
+type.
+
+@field Discriminant
+  Public description of the discriminant
+  
+  Private description of the discriminant
+----- DONE -----
+Defining name: <DefiningName "Known_Discriminant_Private_Null_Record" discriminant_record_types.ads:13:9-13:47>
+Origin: <Id "Known_Discriminant_Private_Null_Record" discriminant_record_types_package.adb:16:19-16:57>
+----- CODE SNIPPET -----
+type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
+  is private;
+----- DOCUMENTATION -----
+Public description of the `Known_Discriminant_Private_Null_Record` type.
+
+@field Discriminant
+  Public description of the discriminant
+----- DONE -----
+Defining name: <DefiningName "Discriminant" discriminant_record_types.ads:13:49-13:61>
+Origin: <Id "Discriminant" discriminant_record_types.ads:13:49-13:61>
+----- CODE SNIPPET -----
+type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
+  is private;
+----- DOCUMENTATION -----
+@field Discriminant
+  Public description of the discriminant
+----- DONE -----
+Defining name: <DefiningName "Discriminant" discriminant_record_types.ads:51:49-51:61>
+Origin: <Id "Discriminant" discriminant_record_types.ads:51:49-51:61>
+----- CODE SNIPPET -----
+type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
+  is private;
+
+type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
+  is null record;
+----- DOCUMENTATION -----
+@field Discriminant
+  Public description of the discriminant
+  
+  Private description of the discriminant
+----- DONE -----
+Defining name: <DefiningName "Discriminant" discriminant_record_types.ads:51:49-51:61>
+Origin: <Id "Discriminant" discriminant_record_types.adb:27:26-27:38>
+----- CODE SNIPPET -----
+type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
+  is private;
+
+type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
+  is null record;
+----- DOCUMENTATION -----
+@field Discriminant
+  Public description of the discriminant
+  
+  Private description of the discriminant
+----- DONE -----
+Defining name: <DefiningName "Discriminant" discriminant_record_types.ads:13:49-13:61>
+Origin: <Id "Discriminant" discriminant_record_types_package.adb:20:26-20:38>
+----- CODE SNIPPET -----
+type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
+  is private;
+----- DOCUMENTATION -----
+@field Discriminant
+  Public description of the discriminant
+----- DONE -----

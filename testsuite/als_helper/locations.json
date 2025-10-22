@@ -3,7 +3,7 @@
     //  declaration: `Discriminant_Null_Record`
     {"file": "discriminant_record_types.adb", "line": 7, "column": 19},
     //  reference: `Discriminant_Null_Record`
-    {"file": "discriminant_record_types_package.adb", "line": 8, "column": 32},
+    {"file": "discriminant_record_types_package.adb", "line": 8, "column": 19},
     //  reference: `Discriminant_Null_Record`
     {"file": "discriminant_record_types.ads", "line": 4, "column": 35},
     //  discriminant declaration: `Discriminant_Null_Record`
@@ -22,6 +22,23 @@
     //  discriminant private declaration: `Unknown_Discriminant_Private_Null_Record`
     {"file": "discriminant_record_types.adb", "line": 19, "column": 26},
     //  reference: `Unknown_Discriminant_Private_Null_Record`
+
+    {"file": "discriminant_record_types.ads", "line": 13, "column": 9},
+    //  public declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 51, "column": 9},
+    //  private declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 23, "column": 19},
+    //  reference: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types_package.adb", "line": 16, "column": 19},
+    //  reference: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 13, "column": 49},
+    //  public declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 51, "column": 49},
+    //  private declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 27, "column": 26},
+    //  reference: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types_package.adb", "line": 20, "column": 26},
+    //  reference: `Known_Discriminant_Private_Null_Record`
 
     // {"file": "pkg1.ads", "line": 5, "column": 9},  // package specification name
     // {"file": "pkg1.ads", "line": 9, "column": 5},  // package specification end name
