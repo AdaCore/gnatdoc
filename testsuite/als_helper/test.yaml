@@ -1,0 +1,2 @@
+description: Run tests of ALS helper
+driver: als_helper

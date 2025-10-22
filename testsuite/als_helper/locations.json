@@ -1,0 +1,102 @@
+[
+    {"file": "discriminant_record_types.ads", "line": 4, "column": 9},
+    //  declaration: `Discriminant_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 7, "column": 19},
+    //  reference: `Discriminant_Null_Record`
+    {"file": "discriminant_record_types_package.adb", "line": 8, "column": 19},
+    //  reference: `Discriminant_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 4, "column": 35},
+    //  discriminant declaration: `Discriminant_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 11, "column": 26},
+    //  discriminant reference: `Discriminant_Null_Record`
+    {"file": "discriminant_record_types_package.adb", "line": 12, "column": 26},
+    //  discriminant reference: `Discriminant_Null_Record`
+
+    {"file": "discriminant_record_types.ads", "line": 9, "column": 9},
+    //  public declaration: `Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 50, "column": 9},
+    //  private declaration: `Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 15, "column": 19},
+    //  reference: `Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 50, "column": 51},
+    //  discriminant private declaration: `Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 19, "column": 26},
+    //  reference: `Unknown_Discriminant_Private_Null_Record`
+
+    {"file": "discriminant_record_types.ads", "line": 13, "column": 9},
+    //  public declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 57, "column": 9},
+    //  private declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 23, "column": 19},
+    //  reference: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types_package.adb", "line": 16, "column": 19},
+    //  reference: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 13, "column": 49},
+    //  public declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 57, "column": 49},
+    //  private declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 27, "column": 26},
+    //  reference: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types_package.adb", "line": 20, "column": 26},
+    //  reference: `Known_Discriminant_Private_Null_Record`
+
+    {"file": "discriminant_record_types.ads", "line": 19, "column": 9},
+    //  incomplete declaration: `Incomplete_Discriminant_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 23, "column": 9},
+    //  declaration: `Incomplete_Discriminant_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 31, "column": 19},
+    //  reference: `Incomplete_Discriminant_Null_Record`
+    {"file": "discriminant_record_types_package.adb", "line": 24, "column": 19},
+    //  reference: `Incomplete_Discriminant_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 23, "column": 46},
+    //  discriminant declaration: `Incomplete_Discriminant_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 35, "column": 26},
+    //  discriminant reference: `Incomplete_Discriminant_Null_Record`
+    {"file": "discriminant_record_types_package.adb", "line": 28, "column": 26},
+    //  discriminant reference: `Incomplete_Discriminant_Null_Record`
+
+    {"file": "discriminant_record_types.ads", "line": 29, "column": 9},
+    //  incomplete declaration: `Incomplete_Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 33, "column": 9},
+    //  public declaration: `Incomplete_Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 64, "column": 9},
+    //  private declaration: `Incomplete_Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 39, "column": 19},
+    //  reference: `Incomplete_Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 65, "column": 12},
+    //  discriminant private declaration: `Incomplete_Unknown_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 43, "column": 26},
+    //  reference: `Incomplete_Unknown_Discriminant_Private_Null_Record`
+
+    {"file": "discriminant_record_types.ads", "line": 37, "column": 9},
+    //  incomplete declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 41, "column": 9},
+    //  public declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 71, "column": 9},
+    //  private declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 47, "column": 19},
+    //  reference: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types_package.adb", "line": 32, "column": 19},
+    //  reference: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 42, "column": 12},
+    //  public declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.ads", "line": 72, "column": 12},
+    //  private declaration: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types.adb", "line": 51, "column": 26},
+    //  reference: `Known_Discriminant_Private_Null_Record`
+    {"file": "discriminant_record_types_package.adb", "line": 36, "column": 26},
+    //  reference: `Known_Discriminant_Private_Null_Record`
+
+    // {"file": "pkg1.ads", "line": 5, "column": 9},  // package specification name
+    // {"file": "pkg1.ads", "line": 9, "column": 5},  // package specification end name
+    // {"file": "pkg1.adb", "line": 5, "column": 14},  // package body name
+    // {"file": "pkg1.adb", "line": 12, "column": 5},  // package body end name
+	// {"file": "pkg2.ads", "line": 1, "column": 6},  // reference from the `with` clause
+    // {"file": "pkg1.adb", "line": 9, "column": 12},  // reference from the body
+    // {"file": "record_types.ads", "line": 10, "column": 9},  //  public declaration of `Unknown_Discriminant_Private_Null_Record`
+    // {"file": "record_types.ads", "line": 19, "column": 9},  //  private declaration of `Unknown_Discriminant_Private_Null_Record`
+    // {"file": "record_types.ads", "line": 19, "column": 51},  //  private declaration of discriminant of `Unknown_Discriminant_Private_Null_Record`
+    // {"file": "record_types.adb", "line": 11, "column": 26},  //  private declaration of discriminant of `Unknown_Discriminant_Private_Null_Record` reference
+    // {"file": "record_types.ads", "line": 14, "column": 9},  //  public declaration: `Known_Discriminant_Private_Null_Record`
+    // {"file": "record_types.ads", "line": 32, "column": 9},  //  private declaration: `Known_Discriminant_Private_Null_Record`
+]
