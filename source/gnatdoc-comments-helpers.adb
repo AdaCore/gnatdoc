@@ -485,6 +485,7 @@ package body GNATdoc.Comments.Helpers is
 
             when Ada_Component_Decl
                | Ada_Concrete_Type_Decl
+               | Ada_Discriminant_Spec
                | Ada_Enum_Literal_Decl
                | Ada_Exception_Decl
                | Ada_For_Loop_Var_Decl
