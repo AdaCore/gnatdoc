@@ -502,3 +502,144 @@ type Incomplete_Known_Discriminant_Private_Null_Record
 @field Discriminant
   Public description of the discriminant
 ----- DONE -----
+Defining name: <DefiningName "Named_Number" objects.ads:4:4-4:16>
+Origin: <Id "Named_Number" objects.ads:4:4-4:16>
+----- CODE SNIPPET -----
+Named_Number : constant := 2;
+----- DOCUMENTATION -----
+Description of the named number
+----- DONE -----
+Defining name: <DefiningName "Named_Number" objects.ads:4:4-4:16>
+Origin: <Id "Named_Number" objects.adb:7:30-7:42>
+----- CODE SNIPPET -----
+Named_Number : constant := 2;
+----- DOCUMENTATION -----
+Description of the named number
+----- DONE -----
+Defining name: <DefiningName "Named_Number" objects.ads:4:4-4:16>
+Origin: <Id "Named_Number" objects_package.adb:8:30-8:42>
+----- CODE SNIPPET -----
+Named_Number : constant := 2;
+----- DOCUMENTATION -----
+Description of the named number
+----- DONE -----
+Defining name: <DefiningName "Public_Constant" objects.ads:7:4-7:19>
+Origin: <Id "Public_Constant" objects.ads:7:4-7:19>
+----- CODE SNIPPET -----
+Public_Constant : constant Integer := 3;
+----- DOCUMENTATION -----
+Description of the `Public_Constant`
+----- DONE -----
+Defining name: <DefiningName "Public_Constant" objects.ads:7:4-7:19>
+Origin: <Id "Public_Constant" objects.adb:14:30-14:45>
+----- CODE SNIPPET -----
+Public_Constant : constant Integer := 3;
+----- DOCUMENTATION -----
+Description of the `Public_Constant`
+----- DONE -----
+Defining name: <DefiningName "Public_Constant" objects.ads:7:4-7:19>
+Origin: <Id "Public_Constant" objects_package.adb:15:30-15:45>
+----- CODE SNIPPET -----
+Public_Constant : constant Integer := 3;
+----- DOCUMENTATION -----
+Description of the `Public_Constant`
+----- DONE -----
+Defining name: <DefiningName "Private_Constant" objects.ads:10:4-10:20>
+Origin: <Id "Private_Constant" objects.ads:10:4-10:20>
+----- CODE SNIPPET -----
+Private_Constant : constant Integer;
+----- DOCUMENTATION -----
+Public description of the `Private_Constant`
+----- DONE -----
+Defining name: <DefiningName "Private_Constant" objects.ads:21:4-21:20>
+Origin: <Id "Private_Constant" objects.ads:21:4-21:20>
+----- CODE SNIPPET -----
+Private_Constant : constant Integer;
+
+Private_Constant : constant Integer := 4;
+----- DOCUMENTATION -----
+Public description of the `Private_Constant`
+
+Private description of the `Private_Constant`
+----- DONE -----
+Defining name: <DefiningName "Private_Constant" objects.ads:21:4-21:20>
+Origin: <Id "Private_Constant" objects.adb:21:30-21:46>
+----- CODE SNIPPET -----
+Private_Constant : constant Integer;
+
+Private_Constant : constant Integer := 4;
+----- DOCUMENTATION -----
+Public description of the `Private_Constant`
+
+Private description of the `Private_Constant`
+----- DONE -----
+Defining name: <DefiningName "Private_Constant" objects.ads:10:4-10:20>
+Origin: <Id "Private_Constant" objects_package.adb:22:30-22:46>
+----- CODE SNIPPET -----
+Private_Constant : constant Integer;
+----- DOCUMENTATION -----
+Public description of the `Private_Constant`
+----- DONE -----
+Defining name: <DefiningName "Value" objects.ads:13:4-13:9>
+Origin: <Id "Value" objects.ads:13:4-13:9>
+----- CODE SNIPPET -----
+Value : Integer;
+----- DOCUMENTATION -----
+Description of the object
+----- DONE -----
+Defining name: <DefiningName "Value" objects.ads:13:4-13:9>
+Origin: <Id "Value" objects.adb:28:30-28:35>
+----- CODE SNIPPET -----
+Value : Integer;
+----- DOCUMENTATION -----
+Description of the object
+----- DONE -----
+Defining name: <DefiningName "Value" objects.ads:13:4-13:9>
+Origin: <Id "Value" objects_package.adb:29:30-29:35>
+----- CODE SNIPPET -----
+Value : Integer;
+----- DOCUMENTATION -----
+Description of the object
+----- DONE -----
+Defining name: <DefiningName "Value_Default" objects.ads:16:4-16:17>
+Origin: <Id "Value_Default" objects.ads:16:4-16:17>
+----- CODE SNIPPET -----
+Value_Default : Integer := 1;
+----- DOCUMENTATION -----
+Description of the object with default value
+----- DONE -----
+Defining name: <DefiningName "Value_Default" objects.ads:16:4-16:17>
+Origin: <Id "Value_Default" objects.adb:35:30-35:43>
+----- CODE SNIPPET -----
+Value_Default : Integer := 1;
+----- DOCUMENTATION -----
+Description of the object with default value
+----- DONE -----
+Defining name: <DefiningName "Value_Default" objects.ads:16:4-16:17>
+Origin: <Id "Value_Default" objects_package.adb:36:30-36:43>
+----- CODE SNIPPET -----
+Value_Default : Integer := 1;
+----- DOCUMENTATION -----
+Description of the object with default value
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions.ads:4:4-4:18>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions.adb:7:16-7:30>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions_package.adb:8:16-8:30>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
