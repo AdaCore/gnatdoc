@@ -622,3 +622,24 @@ Value_Default : Integer := 1;
 ----- DOCUMENTATION -----
 Description of the object with default value
 ----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions.ads:4:4-4:18>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions.adb:7:16-7:30>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions_package.adb:8:16-8:30>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----

@@ -124,6 +124,13 @@
     {"file": "objects_package.adb", "line": 36, "column": 30},
     //  reference of the object with default value
 
+    {"file": "exceptions.ads", "line": 4, "column": 4},
+    //  declaration of the exception
+    {"file": "exceptions.adb", "line": 7, "column": 16},
+    //  reference of the exception
+    {"file": "exceptions_package.adb", "line": 8, "column": 16},
+    //  reference of the exception
+
     // {"file": "pkg1.ads", "line": 5, "column": 9},  // package specification name
     // {"file": "pkg1.ads", "line": 9, "column": 5},  // package specification end name
     // {"file": "pkg1.adb", "line": 5, "column": 14},  // package body name
