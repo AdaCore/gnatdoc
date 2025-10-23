@@ -421,12 +421,15 @@ package body GNATdoc.Comments.Helpers is
 
       elsif Decl.Kind in Ada_Discriminant_Spec | Ada_Component_Decl
         and then Parent_Basic_Decl.Kind
-      in Ada_Type_Decl | Ada_Concrete_Type_Decl_Range
+          in Ada_Type_Decl | Ada_Concrete_Type_Decl_Range
         and then Parent_Basic_Decl.As_Type_Decl.F_Type_Def.Kind
-      in Ada_Record_Type_Def | Ada_Derived_Type_Def
+          in Ada_Record_Type_Def | Ada_Derived_Type_Def | Ada_Private_Type_Def
       then
          Decl_To_Extract := Parent_Basic_Decl;
          Name_To_Extract := Name.As_Defining_Name;
+
+      elsif Decl.Kind = Ada_Incomplete_Type_Decl then
+         Decl_To_Extract := Decl;
       end if;
 
       if not Decl_To_Extract.Is_Null then
@@ -485,6 +488,7 @@ package body GNATdoc.Comments.Helpers is
 
             when Ada_Component_Decl
                | Ada_Concrete_Type_Decl
+               | Ada_Discriminant_Spec
                | Ada_Enum_Literal_Decl
                | Ada_Exception_Decl
                | Ada_For_Loop_Var_Decl
@@ -511,6 +515,7 @@ package body GNATdoc.Comments.Helpers is
         (if Origin.Is_Null
            then Name.As_Defining_Name else Name.P_Most_Visible_Part (Origin));
       Most_Visible_Index : Positive := All_Decls'First;
+      First_Decl_Index   : Positive := All_Decls'First;
       All_Code_Snippet   :
         array (All_Decls'Range) of VSS.String_Vectors.Virtual_String_Vector;
       All_Comment        :
@@ -531,6 +536,16 @@ package body GNATdoc.Comments.Helpers is
             exit;
          end if;
       end loop;
+
+      --  Exclude incomplete type declaration code snippets when documentation
+      --  is requested for complete type declaration.
+
+      if All_Decls (All_Decls'First).P_Basic_Decl.Kind
+           = Ada_Incomplete_Type_Decl
+        and All_Decls (First_Decl_Index) /= Name
+      then
+         First_Decl_Index := @ + 1;
+      end if;
 
       --  Extract documentation for each declaration till most visible
 
@@ -557,7 +572,7 @@ package body GNATdoc.Comments.Helpers is
          Code_Snippet := All_Code_Snippet (All_Code_Snippet'First);
 
       else
-         for J in All_Decls'First .. Most_Visible_Index loop
+         for J in First_Decl_Index .. Most_Visible_Index loop
             if not All_Code_Snippet (J).Is_Empty then
                if not Code_Snippet.Is_Empty
                  and then not Code_Snippet.Last_Element.Is_Empty

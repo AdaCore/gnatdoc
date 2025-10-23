@@ -175,6 +175,7 @@ package body GNATdoc.Comments.Extractor is
                    | Ada_Generic_Package_Renaming_Decl
                    | Ada_Generic_Subp_Instantiation
                    | Ada_Generic_Subp_Renaming_Decl
+                   | Ada_Incomplete_Type_Decl
                    | Ada_Number_Decl
                    | Ada_Object_Decl
                    | Ada_Package_Renaming_Decl
@@ -641,6 +642,13 @@ package body GNATdoc.Comments.Extractor is
                when others =>
                   raise Program_Error;
             end case;
+
+         when Ada_Incomplete_Type_Decl =>
+            Extract_Simple_Declaration_Documentation
+              (Node.As_Incomplete_Type_Decl,
+               Options,
+               Documentation.Sections,
+               Messages);
 
          when Ada_Subtype_Decl =>
             Extract_Simple_Declaration_Documentation
