@@ -496,6 +496,7 @@ package body GNATdoc.Comments.Helpers is
                | Ada_Generic_Package_Decl
                | Ada_Generic_Subp_Decl
                | Ada_Incomplete_Type_Decl
+               | Ada_Number_Decl
                | Ada_Object_Decl
                | Ada_Package_Body
                | Ada_Package_Decl
