@@ -496,6 +496,7 @@ package body GNATdoc.Comments.Helpers is
                | Ada_Generic_Package_Decl
                | Ada_Generic_Subp_Decl
                | Ada_Incomplete_Type_Decl
+               | Ada_Number_Decl
                | Ada_Object_Decl
                | Ada_Package_Body
                | Ada_Package_Decl
@@ -511,7 +512,7 @@ package body GNATdoc.Comments.Helpers is
 
       All_Decls          : constant Libadalang.Analysis.Defining_Name_Array :=
         Name.P_All_Parts;
-      Most_Visible_Decl  : constant Libadalang.Analysis.Defining_Name :=
+      Most_Visible_Decl  : Libadalang.Analysis.Defining_Name :=
         (if Origin.Is_Null
            then Name.As_Defining_Name else Name.P_Most_Visible_Part (Origin));
       Most_Visible_Index : Positive := All_Decls'First;
@@ -527,6 +528,18 @@ package body GNATdoc.Comments.Helpers is
       Comment            : Structured_Comment;
 
    begin
+      --  LAL 20250922: `P_Most_Visible_Part` returns `null` for named
+      --  numbers.
+
+      if Most_Visible_Decl.Is_Null then
+         if Name.P_Basic_Decl.Kind = Ada_Number_Decl then
+            Most_Visible_Decl := Name.As_Defining_Name;
+
+         else
+            raise Program_Error;
+         end if;
+      end if;
+
       --  Lookup for index of most visible declaration
 
       for J in All_Decls'Range loop
