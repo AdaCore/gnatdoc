@@ -89,6 +89,31 @@ procedure Test_ALS_Helper is
                  then Origin.As_Identifier.P_Enclosing_Defining_Name
                  else Origin.As_Identifier.P_Referenced_Defining_Name);
 
+         when Libadalang.Common.Ada_Op_Abs
+            | Libadalang.Common.Ada_Op_And
+            | Libadalang.Common.Ada_Op_Concat
+            | Libadalang.Common.Ada_Op_Div
+            | Libadalang.Common.Ada_Op_Eq
+            | Libadalang.Common.Ada_Op_Gt
+            | Libadalang.Common.Ada_Op_Gte
+            | Libadalang.Common.Ada_Op_Lt
+            | Libadalang.Common.Ada_Op_Lte
+            | Libadalang.Common.Ada_Op_Minus
+            | Libadalang.Common.Ada_Op_Mod
+            | Libadalang.Common.Ada_Op_Mult
+            | Libadalang.Common.Ada_Op_Neq
+            | Libadalang.Common.Ada_Op_Not
+            | Libadalang.Common.Ada_Op_Or
+            | Libadalang.Common.Ada_Op_Plus
+            | Libadalang.Common.Ada_Op_Pow
+            | Libadalang.Common.Ada_Op_Rem
+            | Libadalang.Common.Ada_Op_Xor
+         =>
+            Name :=
+              (if Origin.As_Op.P_Is_Defining
+                 then Origin.As_Op.P_Enclosing_Defining_Name
+                 else Origin.As_Op.P_Referenced_Defining_Name);
+
          when others =>
             Origin.Print;
             Unit.Root.Print;
@@ -98,6 +123,12 @@ procedure Test_ALS_Helper is
 
       Print ("Defining name", Name);
       Print ("Origin", Origin);
+
+      if Name.Is_Null then
+         Output.Put_Line (">>>>> LAL: name resolve failure <<<<<", Success);
+
+         return;
+      end if;
 
       GNATdoc.Comments.Helpers.Get_Plain_Text_Documentation
         (Name          => Name,
