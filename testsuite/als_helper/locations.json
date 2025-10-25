@@ -131,6 +131,232 @@
     {"file": "exceptions_package.adb", "line": 8, "column": 16},
     //  reference of the exception
 
+    {"file": "synthetics.adb", "line": 11, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Implicit_Record`
+    {"file": "synthetics.adb", "line": 15, "column": 15},
+    //  reference of synthetic `"/="` subprogram of `Implicit_Record`
+    {"file": "synthetics_package.adb", "line": 12, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Implicit_Record`
+    {"file": "synthetics_package.adb", "line": 16, "column": 15},
+    //  reference of synthetic `"/="` subprogram of `Implicit_Record`
+
+    {"file": "synthetics.adb", "line": 25, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Implicit_Record`
+    {"file": "synthetics.adb", "line": 29, "column": 15},
+    //  reference of synthetic `"/="` subprogram of `Derived_Implicit_Record`
+    {"file": "synthetics_package.adb", "line": 26, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Implicit_Record`
+    {"file": "synthetics_package.adb", "line": 30, "column": 15},
+    //  reference of synthetic `"/="` subprogram of `Derived_Implicit_Record`
+
+    {"file": "synthetics.adb", "line": 39, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Explicit_Record`
+    {"file": "synthetics.adb", "line": 43, "column": 15},
+    //  reference of synthetic `"/="` subprogram of `Explicit_Record`
+    {"file": "synthetics_package.adb", "line": 40, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Explicit_Record`
+    {"file": "synthetics_package.adb", "line": 44, "column": 15},
+    //  reference of synthetic `"/="` subprogram of `Explicit_Record`
+
+    {"file": "synthetics.adb", "line": 53, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Explicit_Record`
+    {"file": "synthetics.adb", "line": 57, "column": 15},
+    //  reference of synthetic `"/="` subprogram of `Derived_Explicit_Record`
+    {"file": "synthetics_package.adb", "line": 54, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Explicit_Record`
+    {"file": "synthetics_package.adb", "line": 58, "column": 15},
+    //  reference of synthetic `"/="` subprogram of `Derived_Explicit_Record`
+
+    {"file": "synthetics.adb", "line": 70, "column": 15},
+    //  reference of synthetic `"abs"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 71, "column": 15},
+    //  reference of synthetic `"abs"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 71, "column": 17},
+    //  reference of synthetic `"/"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 72, "column": 17},
+    //  reference of synthetic `"/"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 66, "column": 15},
+    //  reference of synthetic `">"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 67, "column": 15},
+    //  reference of synthetic `">"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 66, "column": 24},
+    //  reference of synthetic `">="` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 67, "column": 24},
+    //  reference of synthetic `">="` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 66, "column": 34},
+    //  reference of synthetic `"<"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 67, "column": 34},
+    //  reference of synthetic `"<"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 66, "column": 43},
+    //  reference of synthetic `"<="` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 67, "column": 43},
+    //  reference of synthetic `"<="` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 72, "column": 17},
+    //  reference of synthetic `"-"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 73, "column": 17},
+    //  reference of synthetic `"-"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 73, "column": 15},
+    //  reference of synthetic `"-"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 74, "column": 15},
+    //  reference of synthetic `"-"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 74, "column": 17},
+    //  reference of synthetic `"mod"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 75, "column": 17},
+    //  reference of synthetic `"mod"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 75, "column": 17},
+    //  reference of synthetic `"*"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 76, "column": 17},
+    //  reference of synthetic `"*"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 76, "column": 17},
+    //  reference of synthetic `"+"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 77, "column": 17},
+    //  reference of synthetic `"+"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 77, "column": 15},
+    //  reference of synthetic `"+"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 78, "column": 15},
+    //  reference of synthetic `"+"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 78, "column": 17},
+    //  reference of synthetic `"**"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 79, "column": 17},
+    //  reference of synthetic `"**"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 79, "column": 17},
+    //  reference of synthetic `"rem"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 80, "column": 17},
+    //  reference of synthetic `"rem"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 90, "column": 15},
+    //  reference of synthetic `"abs"` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 91, "column": 15},
+    //  reference of synthetic `"abs"` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 91, "column": 17},
+    //  reference of synthetic `"/"` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 92, "column": 17},
+    //  reference of synthetic `"/"` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 86, "column": 15},
+    //  reference of synthetic `">"` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 87, "column": 15},
+    //  reference of synthetic `">"` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 86, "column": 24},
+    //  reference of synthetic `">="` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 87, "column": 24},
+    //  reference of synthetic `">="` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 86, "column": 34},
+    //  reference of synthetic `"<"` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 87, "column": 34},
+    //  reference of synthetic `"<"` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 86, "column": 43},
+    //  reference of synthetic `"<="` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 87, "column": 43},
+    //  reference of synthetic `"<="` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 92, "column": 17},
+    //  reference of synthetic `"-"` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 93, "column": 17},
+    //  reference of synthetic `"-"` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 93, "column": 15},
+    //  reference of synthetic `"-"` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 94, "column": 15},
+    //  reference of synthetic `"-"` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 94, "column": 17},
+    //  reference of synthetic `"mod"` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 95, "column": 17},
+    //  reference of synthetic `"mod"` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 95, "column": 17},
+    //  reference of synthetic `"*"` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 96, "column": 17},
+    //  reference of synthetic `"*"` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 96, "column": 17},
+    //  reference of synthetic `"+"` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 97, "column": 17},
+    //  reference of synthetic `"+"` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 97, "column": 15},
+    //  reference of synthetic `"+"` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 98, "column": 15},
+    //  reference of synthetic `"+"` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 98, "column": 17},
+    //  reference of synthetic `"**"` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 99, "column": 17},
+    //  reference of synthetic `"**"` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 99, "column": 17},
+    //  reference of synthetic `"rem"` subprogram of `Derived_Integer_32`
+    {"file": "synthetics_package.adb", "line": 100, "column": 17},
+    //  reference of synthetic `"rem"` subprogram of `Derived_Integer_32`
+
+    {"file": "synthetics.adb", "line": 106, "column": 17},
+    //  reference of synthetic `"and"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 107, "column": 17},
+    //  reference of synthetic `"and"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 107, "column": 15},
+    //  reference of synthetic `"not"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 108, "column": 15},
+    //  reference of synthetic `"not"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 108, "column": 17},
+    //  reference of synthetic `"or"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 109, "column": 17},
+    //  reference of synthetic `"or"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 109, "column": 17},
+    //  reference of synthetic `"xor"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 110, "column": 17},
+    //  reference of synthetic `"xor"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 116, "column": 17},
+    //  reference of synthetic `"and"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 117, "column": 17},
+    //  reference of synthetic `"and"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 117, "column": 15},
+    //  reference of synthetic `"not"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 118, "column": 15},
+    //  reference of synthetic `"not"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 118, "column": 17},
+    //  reference of synthetic `"or"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 119, "column": 17},
+    //  reference of synthetic `"or"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 119, "column": 17},
+    //  reference of synthetic `"xor"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 120, "column": 17},
+    //  reference of synthetic `"xor"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 125, "column": 36},
+    //  reference of synthetic `"&"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 126, "column": 36},
+    //  reference of synthetic `"&"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 134, "column": 44},
+    //  reference of synthetic `"&"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 135, "column": 44},
+    //  reference of synthetic `"&"` subprogram of `Integer_32`
+
     // {"file": "pkg1.ads", "line": 5, "column": 9},  // package specification name
     // {"file": "pkg1.ads", "line": 9, "column": 5},  // package specification end name
     // {"file": "pkg1.adb", "line": 5, "column": 14},  // package body name

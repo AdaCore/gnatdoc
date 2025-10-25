@@ -28,7 +28,8 @@ package GNATdoc.Comments.Helpers is
       Origin        : Libadalang.Analysis.Ada_Node'Class;
       Options       : GNATdoc.Comments.Options.Extractor_Options;
       Code_Snippet  : out VSS.String_Vectors.Virtual_String_Vector;
-      Documentation : out VSS.String_Vectors.Virtual_String_Vector);
+      Documentation : out VSS.String_Vectors.Virtual_String_Vector)
+     with Pre => not Name.Is_Null;
    --  Return code snippet and documentation for the given node in plain text
    --  format.
    --

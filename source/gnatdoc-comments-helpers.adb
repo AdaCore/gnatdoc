@@ -528,6 +528,13 @@ package body GNATdoc.Comments.Helpers is
       Comment            : Structured_Comment;
 
    begin
+      --  Synthetic declarations doesn't have nor code snippets nor
+      --  documentation.
+
+      if Name.P_Basic_Decl.Kind = Ada_Synthetic_Subp_Decl then
+         return;
+      end if;
+
       --  LAL 20250922: `P_Most_Visible_Part` returns `null` for named
       --  numbers.
 
