@@ -137,6 +137,126 @@ package body Synthetics_Package is
       begin
          null;
       end;
+
+      declare
+         A : Tagged_Default;
+         B : Tagged_Default;
+
+      begin
+         if A = B or B /= A then
+            null;
+         end if;
+      end;
+
+      declare
+         A : Derived_Tagged_Default;
+         B : Derived_Tagged_Default;
+
+      begin
+         if A = B or B /= A then
+            null;
+         end if;
+      end;
+
+      declare
+         A : Derived_Tagged_Default_Private;
+         B : Derived_Tagged_Default_Private;
+
+      begin
+         if A = B or B /= A then
+            null;
+         end if;
+      end;
+
+      declare
+         A : Derived_Tagged_Default_Public;
+         B : Derived_Tagged_Default_Public;
+
+      begin
+         if A = B or B /= A then
+            null;
+         end if;
+      end;
+
+      declare
+         A : Tagged_Public;
+         B : Tagged_Public;
+
+      begin
+         if A = B or B /= A then
+            null;
+         end if;
+      end;
+
+      declare
+         A : Derived_Tagged_Public;
+         B : Derived_Tagged_Public;
+
+      begin
+         if A = B or B /= A then
+            null;
+         end if;
+      end;
+
+      declare
+         A : Derived_Tagged_Public_Public;
+         B : Derived_Tagged_Public_Public;
+
+      begin
+         if A = B or B /= A then
+            null;
+         end if;
+      end;
+
+      declare
+         A : Derived_Tagged_Public_Private;
+         B : Derived_Tagged_Public_Private;
+
+      begin
+         if A = B or B /= A then
+            null;
+         end if;
+      end;
+
+      declare
+         A : Tagged_Private;
+         B : Tagged_Private;
+
+      begin
+         if A = B or B /= A then
+            null;
+         end if;
+      end;
+
+      declare
+         A : Derived_Tagged_Private;
+         B : Derived_Tagged_Private;
+
+      begin
+         if A = B or B /= A then
+            null;
+         end if;
+      end;
+
+      declare
+         A : Derived_Tagged_Private_Private;
+         B : Derived_Tagged_Private_Private;
+
+      begin
+         if A = B or B /= A then
+            null;
+         end if;
+      end;
+
+      declare
+         A : Derived_Tagged_Private_Public;
+         B : Derived_Tagged_Private_Public;
+
+      begin
+         if A = B or B /= A then
+            null;
+         end if;
+      end;
    end Dummy;
 
 end Synthetics_Package;
