@@ -357,6 +357,138 @@
     {"file": "synthetics_package.adb", "line": 135, "column": 44},
     //  reference of synthetic `"&"` subprogram of `Integer_32`
 
+
+    {"file": "synthetics.adb", "line": 145, "column": 15},
+    //  reference of synthetic `"&"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 146, "column": 15},
+    //  reference of synthetic `"&"` subprogram of `Integer_32`
+
+    // {"file": "synthetics.adb", "line": 134, "column": 44},
+    //  reference of synthetic `"&"` subprogram of `Integer_32`
+    {"file": "synthetics_package.adb", "line": 146, "column": 24},
+    //  reference of synthetic `"&"` subprogram of `Integer_32`
+
+    {"file": "synthetics.adb", "line": 145, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Tagged_Default`
+    {"file": "synthetics_package.adb", "line": 146, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Tagged_Default`
+
+    {"file": "synthetics.adb", "line": 145, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Tagged_Default`
+    {"file": "synthetics_package.adb", "line": 146, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Tagged_Default`
+
+    {"file": "synthetics.adb", "line": 155, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Default`
+    {"file": "synthetics_package.adb", "line": 156, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Default`
+
+    {"file": "synthetics.adb", "line": 155, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Default`
+    {"file": "synthetics_package.adb", "line": 156, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Default`
+
+    {"file": "synthetics.adb", "line": 165, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Default_Private`
+    {"file": "synthetics_package.adb", "line": 166, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Default_Private`
+
+    {"file": "synthetics.adb", "line": 165, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Default_Private`
+    {"file": "synthetics_package.adb", "line": 166, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Default_Private`
+
+    {"file": "synthetics.adb", "line": 175, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Default_Public`
+    {"file": "synthetics_package.adb", "line": 176, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Default_Public`
+
+    {"file": "synthetics.adb", "line": 175, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Default_Public`
+    {"file": "synthetics_package.adb", "line": 176, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Default_Public`
+
+    {"file": "synthetics.adb", "line": 185, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Tagged_Public`
+    {"file": "synthetics_package.adb", "line": 186, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Tagged_Public`
+
+    {"file": "synthetics.adb", "line": 185, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Tagged_Public`
+    {"file": "synthetics_package.adb", "line": 186, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Tagged_Public`
+
+    {"file": "synthetics.adb", "line": 195, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Public`
+    {"file": "synthetics_package.adb", "line": 196, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Public`
+
+    {"file": "synthetics.adb", "line": 195, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Public`
+    {"file": "synthetics_package.adb", "line": 196, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Public`
+
+    {"file": "synthetics.adb", "line": 205, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Public_Public`
+    {"file": "synthetics_package.adb", "line": 206, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Public_Public`
+
+    {"file": "synthetics.adb", "line": 205, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Public_Public`
+    {"file": "synthetics_package.adb", "line": 206, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Public_Public`
+
+    {"file": "synthetics.adb", "line": 215, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Public_Private`
+    {"file": "synthetics_package.adb", "line": 216, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Public_Private`
+
+    {"file": "synthetics.adb", "line": 215, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Public_Private`
+    {"file": "synthetics_package.adb", "line": 216, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Public_Private`
+
+
+    {"file": "synthetics.adb", "line": 225, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Tagged_Private`
+    {"file": "synthetics_package.adb", "line": 226, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Tagged_Private`
+
+    {"file": "synthetics.adb", "line": 225, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Tagged_Private`
+    {"file": "synthetics_package.adb", "line": 226, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Tagged_Private`
+
+    {"file": "synthetics.adb", "line": 235, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Private`
+    {"file": "synthetics_package.adb", "line": 236, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Private`
+
+    {"file": "synthetics.adb", "line": 235, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Private`
+    {"file": "synthetics_package.adb", "line": 236, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Private`
+
+    {"file": "synthetics.adb", "line": 245, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Private_Public`
+    {"file": "synthetics_package.adb", "line": 246, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Private_Public`
+
+    {"file": "synthetics.adb", "line": 245, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Private_Public`
+    {"file": "synthetics_package.adb", "line": 246, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Private_Public`
+
+    {"file": "synthetics.adb", "line": 255, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Private_Private`
+    {"file": "synthetics_package.adb", "line": 256, "column": 15},
+    //  reference of synthetic `"="` subprogram of `Derived_Tagged_Private_Private`
+
+    {"file": "synthetics.adb", "line": 255, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Private_Private`
+    {"file": "synthetics_package.adb", "line": 256, "column": 24},
+    //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Private_Private`
+
     // {"file": "pkg1.ads", "line": 5, "column": 9},  // package specification name
     // {"file": "pkg1.ads", "line": 9, "column": 5},  // package specification end name
     // {"file": "pkg1.adb", "line": 5, "column": 14},  // package body name
