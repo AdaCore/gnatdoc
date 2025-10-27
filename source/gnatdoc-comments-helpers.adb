@@ -535,12 +535,19 @@ package body GNATdoc.Comments.Helpers is
          return;
       end if;
 
-      --  LAL 20250922: `P_Most_Visible_Part` returns `null` for named
-      --  numbers.
-
       if Most_Visible_Decl.Is_Null then
          if Name.P_Basic_Decl.Kind = Ada_Number_Decl then
+            --  LAL 20250922: `P_Most_Visible_Part` returns `null` for named
+            --  numbers.
+
             Most_Visible_Decl := Name.As_Defining_Name;
+
+         elsif Origin.Kind = Ada_Op_Eq then
+            --  LAL 20250922: `P_Most_Visible_Part` returns `null` when
+            --  `"="` function is declared in the private part of the package
+            --  specification. Use first part to improve user experience.
+
+            Most_Visible_Decl := All_Decls (All_Decls'First);
 
          else
             raise Program_Error;
