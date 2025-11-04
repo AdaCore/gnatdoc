@@ -23,7 +23,7 @@ package GNATdoc.Backend.RST.PT is
 
 private
 
-   type PT_RST_Backend is new RST_Backend_Base (True) with null record;
+   type PT_RST_Backend is new RST_Backend_Base with null record;
 
    overriding function Name
      (Self : in out PT_RST_Backend) return VSS.Strings.Virtual_String;

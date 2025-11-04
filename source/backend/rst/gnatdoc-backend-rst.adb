@@ -167,7 +167,7 @@ package body GNATdoc.Backend.RST is
            (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
               (Indent        => Indent & "    ",
                Documentation => Entity.Documentation,
-               Pass_Through  => Self.Pass_Through,
+               Pass_Through  => False,
                Code_Snippet  => False),
             Success);
          File.New_Line (Success);
@@ -213,7 +213,7 @@ package body GNATdoc.Backend.RST is
            (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
               (Indent        => Indent & "    ",
                Documentation => Entity.Documentation,
-               Pass_Through  => Self.Pass_Through,
+               Pass_Through  => False,
                Code_Snippet  => False),
             Success);
          File.New_Line (Success);
@@ -238,7 +238,7 @@ package body GNATdoc.Backend.RST is
         (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
            (Indent        => "",
             Documentation => Entity.Documentation,
-            Pass_Through  => Self.Pass_Through,
+            Pass_Through  => False,
             Code_Snippet  => True),
          Success);
       File.New_Line (Success);
@@ -280,7 +280,7 @@ package body GNATdoc.Backend.RST is
                     (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
                        (Indent        => "    ",
                         Documentation => Item.Documentation,
-                        Pass_Through  => Self.Pass_Through,
+                        Pass_Through  => False,
                         Code_Snippet  => True),
                      Success);
 
@@ -405,7 +405,7 @@ package body GNATdoc.Backend.RST is
                     (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
                        (Indent        => "    ",
                         Documentation => Item.Documentation,
-                        Pass_Through  => Self.Pass_Through,
+                        Pass_Through  => False,
                         Code_Snippet  => True),
                      Success);
 
