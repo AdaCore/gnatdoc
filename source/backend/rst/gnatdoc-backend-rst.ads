@@ -45,4 +45,10 @@ private
    overriding function Name
      (Self : in out RST_Backend) return VSS.Strings.Virtual_String;
 
+   function Documentation_File_Name
+     (Entity : GNATdoc.Entities.Entity_Information)
+      return VSS.Strings.Virtual_String;
+   --  Return name of the RST file to generate documentation for the given
+   --  entity.
+
 end GNATdoc.Backend.RST;

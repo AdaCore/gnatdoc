@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2023-2024, AdaCore                     --
+--                     Copyright (C) 2023-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -29,6 +29,8 @@ private
      (Self : in out PT_RST_Backend) return VSS.Strings.Virtual_String;
 
    overriding procedure Initialize (Self : in out PT_RST_Backend);
+
+   overriding procedure Generate (Self : in out PT_RST_Backend);
 
    overriding procedure Add_Command_Line_Options
      (Self   : PT_RST_Backend;
