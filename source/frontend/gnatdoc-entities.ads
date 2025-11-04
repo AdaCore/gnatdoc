@@ -27,6 +27,9 @@ package GNATdoc.Entities is
      (Undefined,
       Ada_Tagged_Type,
       Ada_Interface_Type,
+      Ada_Other_Type,
+      Ada_Object,
+      Ada_Exception,
       Ada_Function,
       Ada_Procedure);
 
