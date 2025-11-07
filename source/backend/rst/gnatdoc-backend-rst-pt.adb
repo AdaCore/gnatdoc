@@ -450,6 +450,12 @@ package body GNATdoc.Backend.RST.PT is
                   Generate_Generic_Package_Instantiation_Documentation
                     ("", Item.all, Entity.Qualified_Name);
 
+               when GNATdoc.Entities.Ada_Generic_Subprogram_Instantiation =>
+                  --  `sphinx-adadomain` doesn't support generic subprogram
+                  --  instantiation
+
+                  null;
+
                when others =>
                   raise Program_Error
                     with GNATdoc.Entities.Entity_Kind'Image (Item.Kind)
