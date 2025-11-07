@@ -1771,6 +1771,11 @@ package body GNATdoc.Frontend is
      (Node      : Object_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
    is
+      Type_Name      : Defining_Name;
+      Type_Signature : GNATdoc.Entities.Entity_Signature;
+      Type_Parent    : Basic_Decl;
+      Object_Parent  : Basic_Decl;
+
       Template : constant VSS.Strings.Templates.Virtual_String_Template :=
         "{} : constant {}";
 
@@ -1804,6 +1809,33 @@ package body GNATdoc.Frontend is
                  (Enclosing => Enclosing,
                   Belongs   => Belongs,
                   Entity    => Entity);
+
+               --  If there is not explicitly defined @belongs-to tag, and
+               --  type is a "class", and both type and object are declared in
+               --  the same package, mark constant object as belongs to type.
+
+               if Belongs = null
+                 and Node.F_Type_Expr.Kind = Ada_Subtype_Indication
+               then
+                  Type_Name :=
+                    Node.F_Type_Expr.As_Subtype_Indication.P_Type_Name
+                      .P_Referenced_Defining_Name;
+                  Type_Signature := Signature (Type_Name);
+                  Type_Parent :=
+                    Type_Name.P_Parent_Basic_Decl.P_Parent_Basic_Decl;
+                  Object_Parent := Node.P_Parent_Basic_Decl;
+
+                  if Type_Parent = Object_Parent
+                    and then GNATdoc.Entities.To_Entity.Contains
+                               (Type_Signature)
+                    and then GNATdoc.Entities.To_Entity (Type_Signature).Kind
+                       in GNATdoc.Entities.Ada_Tagged_Type
+                        | GNATdoc.Entities.Ada_Interface_Type
+                  then
+                     Belongs :=
+                       GNATdoc.Entities.To_Entity (Signature (Type_Name));
+                  end if;
+               end if;
 
                if Belongs = null then
                   Enclosing.Belongs_Constants.Insert (Entity.Reference);
