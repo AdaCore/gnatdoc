@@ -1576,7 +1576,14 @@ package body GNATdoc.Frontend is
          else Node.As_Generic_Subp_Instantiation.F_Subp_Name);
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
+          (Kind           =>
+             (case Node.Kind is
+                 when Ada_Generic_Package_Instantiation =>
+                   GNATdoc.Entities.Ada_Generic_Package_Instantiation,
+                 when Ada_Generic_Subp_Instantiation =>
+                   GNATdoc.Entities.Ada_Generic_Subprogram_Instantiation,
+                 when others => raise Program_Error),
+           Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1593,6 +1600,10 @@ package body GNATdoc.Frontend is
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Generic_Instantiations.Insert (Entity);
       end if;
+
+      Entity.RSTPT_Instpkg :=
+        VSS.Strings.To_Virtual_String
+          (Node.P_Designated_Generic_Decl.P_Fully_Qualified_Name);
 
       Check_Undocumented (Entity);
    end Process_Generic_Instantiation;

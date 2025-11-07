@@ -112,6 +112,12 @@ package body GNATdoc.Backend.RST.PT is
          Package_Name : VSS.Strings.Virtual_String);
       --  Generate documentation for the given callable entity.
 
+      procedure Generate_Generic_Package_Instantiation_Documentation
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String);
+      --  Generate documentation for the generic package instantiation.
+
       -------------------------------------
       -- Generate_Callable_Documentation --
       -------------------------------------
@@ -193,6 +199,55 @@ package body GNATdoc.Backend.RST.PT is
             Success);
          File.New_Line (Success);
       end Generate_Exception_Documentation;
+
+      ----------------------------------------------------------
+      -- Generate_Generic_Package_Instantiation_Documentation --
+      ----------------------------------------------------------
+
+      procedure Generate_Generic_Package_Instantiation_Documentation
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String)
+      is
+         use type VSS.Strings.Virtual_String;
+
+         Entity_Template  : VSS.Strings.Templates.Virtual_String_Template :=
+           "{}.. ada:generic-package-instantiation:: {}";
+         Package_Template : VSS.Strings.Templates.Virtual_String_Template :=
+           "{}    :package: {}";
+         Instpkg_Template : VSS.Strings.Templates.Virtual_String_Template :=
+           "{}    :instpkg: {}";
+
+      begin
+         File.New_Line (Success);
+
+         File.Put_Line
+           (Entity_Template.Format
+              (VSS.Strings.Formatters.Strings.Image (Indent),
+               VSS.Strings.Formatters.Strings.Image (Entity.Name)),
+            Success);
+         File.Put_Line
+           (Package_Template.Format
+              (VSS.Strings.Formatters.Strings.Image (Indent),
+               VSS.Strings.Formatters.Strings.Image (Package_Name)),
+            Success);
+         File.New_Line (Success);
+
+         File.Put_Lines
+           (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
+              (Indent        => Indent & "    ",
+               Documentation => Entity.Documentation,
+               Pass_Through  => True,
+               Code_Snippet  => True),
+            Success);
+
+         File.Put_Line
+           (Instpkg_Template.Format
+              (VSS.Strings.Formatters.Strings.Image (Indent),
+               VSS.Strings.Formatters.Strings.Image (Entity.RSTPT_Instpkg)),
+            Success);
+         File.New_Line (Success);
+      end Generate_Generic_Package_Instantiation_Documentation;
 
       -----------------------------------
       -- Generate_Object_Documentation --
@@ -363,6 +418,7 @@ package body GNATdoc.Backend.RST.PT is
          Union (Entities, Entity.Variables);
          Union (Entities, Entity.Exceptions);
          Union (Entities, Entity.Belongs_Subprograms);
+         Union (Entities, Entity.Generic_Instantiations);
 
          for Item of Entities loop
             case Item.Kind is
@@ -385,6 +441,10 @@ package body GNATdoc.Backend.RST.PT is
                   | GNATdoc.Entities.Ada_Tagged_Type
                =>
                   Generate_Type_Documentation
+                    ("", Item.all, Entity.Qualified_Name);
+
+               when GNATdoc.Entities.Ada_Generic_Package_Instantiation =>
+                  Generate_Generic_Package_Instantiation_Documentation
                     ("", Item.all, Entity.Qualified_Name);
 
                when others =>
