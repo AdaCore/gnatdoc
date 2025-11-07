@@ -1,0 +1,101 @@
+
+LAL
+*****
+
+.. ada:set_package:: LAL
+
+.. code-block:: ada
+
+   package LAL
+
+
+
+
+.. ada:object:: Default_Charset
+    :package: LAL
+    :objtype: Standard.String
+    :defval: ``"iso-8859-1"``
+
+    Default charset
+
+
+.. ada:exception:: File_Read_Error
+    :package: LAL
+
+    Exception
+
+
+.. ada:type:: type Ada_Node
+    :package: LAL
+
+    .. code-block:: ada
+
+       type Ada_Node is tagged private;
+
+
+    Root of node hierarchy
+
+    .. ada:object:: No_Ada_Node
+        :package: LAL.Ada_Node
+
+        Null node.
+
+
+    .. ada:function::     function Parent (Self : LAL.Ada_Node'Class) return LAL.Ada_Node
+        :package: LAL.Ada_Node
+
+        Parent node
+
+
+    .. ada:function::     function Children (Self : LAL.Ada_Node'Class) return LAL.Ada_Node_Array
+        :package: LAL.Ada_Node
+
+        Children nodes
+
+
+.. ada:type:: type Basic_Decl
+    :package: LAL
+
+    .. code-block:: ada
+
+       type Basic_Decl is new Ada_Node with private;
+
+
+    Basic declaration
+
+
+.. ada:type:: type Ada_Node_Array
+    :package: LAL
+
+    .. code-block:: ada
+
+       type Ada_Node_Array is array (Positive range <>) of Ada_Node;
+
+
+    Array of nodes
+
+
+.. ada:generic-package-instantiation:: Elementary_Functions
+    :package: LAL
+
+    .. code-block:: ada
+
+       package Elementary_Functions is
+         new Ada.Numerics.Generic_Elementary_Functions (Float);
+
+
+    Instantiation of the generic package
+
+    :instpkg: LAL.Elementary_Functions
+
+
+.. ada:type:: type Ada_Node_Array_Access
+    :package: LAL
+
+    .. code-block:: ada
+
+       type Ada_Node_Array_Access is access all Ada_Node_Array;
+
+
+    Access to array type
+
