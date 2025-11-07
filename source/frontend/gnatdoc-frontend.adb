@@ -1771,15 +1771,35 @@ package body GNATdoc.Frontend is
      (Node      : Object_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
    is
+      Objects_Parent : constant Basic_Decl := Node.P_Parent_Basic_Decl;
       Type_Name      : Defining_Name;
       Type_Signature : GNATdoc.Entities.Entity_Signature;
       Type_Parent    : Basic_Decl;
-      Object_Parent  : Basic_Decl;
+
+      RSTPT_Objtype  : VSS.Strings.Virtual_String;
 
       Template : constant VSS.Strings.Templates.Virtual_String_Template :=
         "{} : constant {}";
 
    begin
+      case Node.F_Type_Expr.Kind is
+         when Ada_Subtype_Indication =>
+            Type_Name :=
+              Node.F_Type_Expr.As_Subtype_Indication.P_Type_Name
+                .P_Referenced_Defining_Name;
+            Type_Signature := Signature (Type_Name);
+            Type_Parent := Type_Name.P_Parent_Basic_Decl.P_Parent_Basic_Decl;
+
+            RSTPT_Objtype :=
+              VSS.Strings.To_Virtual_String (Type_Name.P_Fully_Qualified_Name);
+
+         when Ada_Anonymous_Type =>
+            null;
+
+         when others =>
+            raise Program_Error;
+      end case;
+
       for Name of Node.F_Ids loop
          declare
             Entity   : constant not null
@@ -1791,6 +1811,7 @@ package body GNATdoc.Frontend is
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
+                   RSTPT_Objtype  => RSTPT_Objtype,
                    others         => <>);
             Belongs  : GNATdoc.Entities.Entity_Information_Access;
 
@@ -1817,15 +1838,8 @@ package body GNATdoc.Frontend is
                if Belongs = null
                  and Node.F_Type_Expr.Kind = Ada_Subtype_Indication
                then
-                  Type_Name :=
-                    Node.F_Type_Expr.As_Subtype_Indication.P_Type_Name
-                      .P_Referenced_Defining_Name;
-                  Type_Signature := Signature (Type_Name);
-                  Type_Parent :=
-                    Type_Name.P_Parent_Basic_Decl.P_Parent_Basic_Decl;
-                  Object_Parent := Node.P_Parent_Basic_Decl;
 
-                  if Type_Parent = Object_Parent
+                  if Type_Parent = Objects_Parent
                     and then GNATdoc.Entities.To_Entity.Contains
                                (Type_Signature)
                     and then GNATdoc.Entities.To_Entity (Type_Signature).Kind
@@ -1835,6 +1849,10 @@ package body GNATdoc.Frontend is
                      Belongs :=
                        GNATdoc.Entities.To_Entity (Signature (Type_Name));
                   end if;
+
+                  Entity.RSTPT_Objtype :=
+                    VSS.Strings.To_Virtual_String
+                      (Type_Name.P_Fully_Qualified_Name);
                end if;
 
                if Belongs = null then

@@ -94,7 +94,8 @@ package body GNATdoc.Backend.RST.PT is
       procedure Generate_Object_Documentation
         (Indent       : VSS.Strings.Virtual_String;
          Entity       : GNATdoc.Entities.Entity_Information;
-         Package_Name : VSS.Strings.Virtual_String);
+         Package_Name : VSS.Strings.Virtual_String;
+         Inside_Type  : Boolean);
       --  Generate documentation for object entity.
 
       procedure Generate_Exception_Documentation
@@ -198,7 +199,8 @@ package body GNATdoc.Backend.RST.PT is
       procedure Generate_Object_Documentation
         (Indent       : VSS.Strings.Virtual_String;
          Entity       : GNATdoc.Entities.Entity_Information;
-         Package_Name : VSS.Strings.Virtual_String)
+         Package_Name : VSS.Strings.Virtual_String;
+         Inside_Type  : Boolean)
       is
          use type VSS.Strings.Virtual_String;
 
@@ -207,14 +209,22 @@ package body GNATdoc.Backend.RST.PT is
 
          File.Put (Indent, Success);
          File.Put (".. ada:object:: ", Success);
-
          File.Put (Entity.Name, Success);
          File.New_Line (Success);
+
          File.Put (Indent, Success);
          File.Put ("    :package: ", Success);
          File.Put (Package_Name, Success);
-         --  XXX `:objtype:` and `:defval:` are not supported
          File.New_Line (Success);
+
+         if not Inside_Type and not Entity.RSTPT_Objtype.Is_Empty then
+            File.Put (Indent, Success);
+            File.Put ("    :objtype: ", Success);
+            File.Put (Entity.RSTPT_Objtype, Success);
+            File.New_Line (Success);
+         end if;
+
+         --  XXX `:defval:` are not supported
          File.New_Line (Success);
 
          File.Put_Lines
@@ -272,7 +282,7 @@ package body GNATdoc.Backend.RST.PT is
 
          for Object of Constants loop
             Generate_Object_Documentation
-              ("    ", Object.all, Entity.Qualified_Name);
+              ("    ", Object.all, Entity.Qualified_Name, True);
          end loop;
 
          for Method of Entity.Belongs_Subprograms loop
@@ -348,7 +358,7 @@ package body GNATdoc.Backend.RST.PT is
 
                when GNATdoc.Entities.Ada_Object =>
                   Generate_Object_Documentation
-                    ("", Item.all, Entity.Qualified_Name);
+                    ("", Item.all, Entity.Qualified_Name, False);
 
                when GNATdoc.Entities.Ada_Interface_Type
                   | GNATdoc.Entities.Ada_Other_Type

@@ -106,6 +106,8 @@ package GNATdoc.Entities is
 
       RST_Profile            : VSS.Strings.Virtual_String;
       --  Subprogram's profile in fortmat to use by RST backend
+      RSTPT_Objtype          : VSS.Strings.Virtual_String;
+      --  Name of the type of the object
 
       Packages               : Entity_Information_Sets.Set;
       Subprograms            : aliased Entity_Information_Sets.Set;
