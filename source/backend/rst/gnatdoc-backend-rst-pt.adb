@@ -161,7 +161,6 @@ package body GNATdoc.Backend.RST.PT is
                Pass_Through  => True,
                Code_Snippet  => False),
             Success);
-
          File.New_Line (Success);
       end Generate_Callable_Documentation;
 
@@ -240,6 +239,7 @@ package body GNATdoc.Backend.RST.PT is
                Pass_Through  => True,
                Code_Snippet  => True),
             Success);
+         File.New_Line (Success);
 
          File.Put_Line
            (Instpkg_Template.Format
@@ -327,6 +327,7 @@ package body GNATdoc.Backend.RST.PT is
          Methods   : Entity_Information_Sets.Set;
 
       begin
+         File.New_Line (Success);
          File.Put (".. ada:type:: type ", Success);
          File.Put (Entity.Name, Success);
          File.New_Line (Success);
@@ -374,7 +375,9 @@ package body GNATdoc.Backend.RST.PT is
               ("    ", Method.all, Entity.Qualified_Name);
          end loop;
 
-         File.New_Line (Success);
+         if Constants.Is_Empty and Methods.Is_Empty then
+            File.New_Line (Success);
+         end if;
       end Generate_Type_Documentation;
 
    begin
