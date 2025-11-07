@@ -2,14 +2,18 @@
   Packages:
     +  Constants (UNDEFINED) 'constants'
       Tagged Types:
-        +  T (ADA_TAGGED_TYPE) 'constants.t'
+        +  TT (ADA_TAGGED_TYPE) 'constants.tt'
           Belongs Constants:
-            +  B (ADA_OBJECT) 'constants.b'
+            +  BT (ADA_OBJECT) 'constants.bt'
+            +  CT (ADA_OBJECT) 'constants.ct'
       Constants:
-        +  B (ADA_OBJECT) 'constants.b'
-        +  C (ADA_OBJECT) 'constants.c'
+        +  BI (ADA_OBJECT) 'constants.bi'
+        +  BT (ADA_OBJECT) 'constants.bt'
+        +  CI (ADA_OBJECT) 'constants.ci'
+        +  CT (ADA_OBJECT) 'constants.ct'
       Belongs Constants:
-        +  C (ADA_OBJECT) 'constants.c'
+        +  BI (ADA_OBJECT) 'constants.bi'
+        +  CI (ADA_OBJECT) 'constants.ci'
     +  Subprograms (UNDEFINED) 'subprograms'
       Interface Types:
         +  I1 (ADA_INTERFACE_TYPE) 'subprograms.i1'
@@ -48,9 +52,10 @@
         +  PI2 (ADA_FUNCTION) 'subprograms.pi2((subprograms.i1'class) -> subprograms.i2)'
         +  PI2 (ADA_FUNCTION) 'subprograms.pi2((subprograms.i1) -> subprograms.i2'class)'
   Tagged Types:
-    +  T (ADA_TAGGED_TYPE) 'constants.t'
+    +  TT (ADA_TAGGED_TYPE) 'constants.tt'
       Belongs Constants:
-        +  B (ADA_OBJECT) 'constants.b'
+        +  BT (ADA_OBJECT) 'constants.bt'
+        +  CT (ADA_OBJECT) 'constants.ct'
     +  T1 (ADA_TAGGED_TYPE) 'subprograms.t1'
       Belongs Subprograms:
         +  DT1 (ADA_FUNCTION) 'subprograms.dt1((subprograms.t1) -> subprograms.t2'class)'
