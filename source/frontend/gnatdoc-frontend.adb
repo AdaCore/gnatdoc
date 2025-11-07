@@ -1777,6 +1777,7 @@ package body GNATdoc.Frontend is
       Type_Parent    : Basic_Decl;
 
       RSTPT_Objtype  : VSS.Strings.Virtual_String;
+      RSTPT_Defval   : VSS.Strings.Virtual_String;
 
       Template : constant VSS.Strings.Templates.Virtual_String_Template :=
         "{} : constant {}";
@@ -1800,9 +1801,14 @@ package body GNATdoc.Frontend is
             raise Program_Error;
       end case;
 
+      if not Node.F_Default_Expr.Is_Null then
+         RSTPT_Defval :=
+           VSS.Strings.To_Virtual_String (Node.F_Default_Expr.Text);
+      end if;
+
       for Name of Node.F_Ids loop
          declare
-            Entity   : constant not null
+            Entity  : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
                   (Kind           => GNATdoc.Entities.Ada_Object,
@@ -1812,8 +1818,9 @@ package body GNATdoc.Frontend is
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
                    RSTPT_Objtype  => RSTPT_Objtype,
+                   RSTPT_Defval   => RSTPT_Defval,
                    others         => <>);
-            Belongs  : GNATdoc.Entities.Entity_Information_Access;
+            Belongs : GNATdoc.Entities.Entity_Information_Access;
 
          begin
             Extract

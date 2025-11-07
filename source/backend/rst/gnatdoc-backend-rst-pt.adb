@@ -18,6 +18,8 @@
 with Ada.Containers.Ordered_Sets;
 
 with VSS.Strings.Conversions;
+with VSS.Strings.Formatters.Strings;
+with VSS.Strings.Templates;
 
 with GNATdoc.Comments.RST_Helpers;
 with GNATdoc.Configuration;
@@ -204,6 +206,9 @@ package body GNATdoc.Backend.RST.PT is
       is
          use type VSS.Strings.Virtual_String;
 
+         Defval_Template : VSS.Strings.Templates.Virtual_String_Template :=
+           "{}    :defval: ``{}``";
+
       begin
          File.New_Line (Success);
 
@@ -224,7 +229,14 @@ package body GNATdoc.Backend.RST.PT is
             File.New_Line (Success);
          end if;
 
-         --  XXX `:defval:` are not supported
+         if not Entity.RSTPT_Defval.Is_Null then
+            File.Put_Line
+              (Defval_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Indent),
+                  VSS.Strings.Formatters.Strings.Image (Entity.RSTPT_Defval)),
+              Success);
+         end if;
+
          File.New_Line (Success);
 
          File.Put_Lines
