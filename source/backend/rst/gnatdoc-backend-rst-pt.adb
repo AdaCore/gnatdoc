@@ -206,27 +206,35 @@ package body GNATdoc.Backend.RST.PT is
       is
          use type VSS.Strings.Virtual_String;
 
-         Defval_Template : VSS.Strings.Templates.Virtual_String_Template :=
+         Object_Template  : VSS.Strings.Templates.Virtual_String_Template :=
+           "{}.. ada:object:: {}";
+         Package_Template : VSS.Strings.Templates.Virtual_String_Template :=
+           "{}    :package: {}";
+         Objtype_Template : VSS.Strings.Templates.Virtual_String_Template :=
+           "{}    :objtype: {}";
+         Defval_Template  : VSS.Strings.Templates.Virtual_String_Template :=
            "{}    :defval: ``{}``";
 
       begin
          File.New_Line (Success);
 
-         File.Put (Indent, Success);
-         File.Put (".. ada:object:: ", Success);
-         File.Put (Entity.Name, Success);
-         File.New_Line (Success);
-
-         File.Put (Indent, Success);
-         File.Put ("    :package: ", Success);
-         File.Put (Package_Name, Success);
-         File.New_Line (Success);
+         File.Put_Line
+           (Object_Template.Format
+              (VSS.Strings.Formatters.Strings.Image (Indent),
+               VSS.Strings.Formatters.Strings.Image (Entity.Name)),
+            Success);
+         File.Put_Line
+           (Package_Template.Format
+              (VSS.Strings.Formatters.Strings.Image (Indent),
+               VSS.Strings.Formatters.Strings.Image (Package_Name)),
+            Success);
 
          if not Inside_Type and not Entity.RSTPT_Objtype.Is_Empty then
-            File.Put (Indent, Success);
-            File.Put ("    :objtype: ", Success);
-            File.Put (Entity.RSTPT_Objtype, Success);
-            File.New_Line (Success);
+            File.Put_Line
+              (Objtype_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Indent),
+                  VSS.Strings.Formatters.Strings.Image (Entity.RSTPT_Objtype)),
+            Success);
          end if;
 
          if not Entity.RSTPT_Defval.Is_Null then
