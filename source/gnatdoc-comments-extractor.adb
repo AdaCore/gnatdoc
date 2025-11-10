@@ -165,10 +165,12 @@ package body GNATdoc.Comments.Extractor is
    --  Extractdocumentation for object declaration
 
    procedure Extract_Simple_Declaration_Documentation
-     (Node     : Libadalang.Analysis.Basic_Decl'Class;
-      Options  : GNATdoc.Comments.Options.Extractor_Options;
-      Sections : in out Section_Vectors.Vector;
-      Messages : in out GNATdoc.Messages.Message_Container)
+     (Node          : Libadalang.Analysis.Basic_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Allow_Private : Boolean;
+      Sections      : in out Section_Vectors.Vector;
+      Is_Private    : out Boolean;
+      Messages      : in out GNATdoc.Messages.Message_Container)
      with Pre => Node.Kind in Ada_Exception_Decl
                    | Ada_Generic_Formal_Package
                    | Ada_Generic_Package_Instantiation
@@ -507,35 +509,45 @@ package body GNATdoc.Comments.Extractor is
             Extract_Simple_Declaration_Documentation
               (Node.As_Generic_Package_Instantiation,
                Options,
+               False,
                Documentation.Sections,
+               Documentation.Is_Private,
                Messages);
 
          when Ada_Generic_Package_Renaming_Decl =>
             Extract_Simple_Declaration_Documentation
               (Node.As_Generic_Package_Renaming_Decl,
                Options,
+               False,
                Documentation.Sections,
+               Documentation.Is_Private,
                Messages);
 
          when Ada_Generic_Subp_Instantiation =>
             Extract_Simple_Declaration_Documentation
               (Node.As_Generic_Subp_Instantiation,
                Options,
+               False,
                Documentation.Sections,
+               Documentation.Is_Private,
                Messages);
 
          when Ada_Generic_Subp_Renaming_Decl =>
             Extract_Simple_Declaration_Documentation
               (Node.As_Generic_Subp_Renaming_Decl,
                Options,
+               False,
                Documentation.Sections,
+               Documentation.Is_Private,
                Messages);
 
          when Ada_Package_Renaming_Decl =>
             Extract_Simple_Declaration_Documentation
               (Node.As_Package_Renaming_Decl,
                Options,
+               False,
                Documentation.Sections,
+               Documentation.Is_Private,
                Messages);
 
          when Ada_Subp_Renaming_Decl =>
@@ -552,13 +564,14 @@ package body GNATdoc.Comments.Extractor is
                Is_Private    => Documentation.Is_Private);
 
          when Ada_Type_Decl =>
-            --  Print (Node);
             case Node.As_Type_Decl.F_Type_Def.Kind is
                when Ada_Array_Type_Def =>
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl,
                      Options,
+                     False,
                      Documentation.Sections,
+                     Documentation.Is_Private,
                      Messages);
 
                when Ada_Enum_Type_Def =>
@@ -572,7 +585,9 @@ package body GNATdoc.Comments.Extractor is
                      Extract_Simple_Declaration_Documentation
                        (Node.As_Type_Decl,
                         Options,
+                        False,
                         Documentation.Sections,
+                        Documentation.Is_Private,
                         Messages);
 
                   else
@@ -584,7 +599,9 @@ package body GNATdoc.Comments.Extractor is
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl,
                      Options,
+                     False,
                      Documentation.Sections,
+                     Documentation.Is_Private,
                      Messages);
 
                when Ada_Decimal_Fixed_Point_Def
@@ -596,7 +613,9 @@ package body GNATdoc.Comments.Extractor is
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl,
                      Options,
+                     False,
                      Documentation.Sections,
+                     Documentation.Is_Private,
                      Messages);
 
                when Ada_Record_Type_Def =>
@@ -615,7 +634,9 @@ package body GNATdoc.Comments.Extractor is
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl,
                      Options,
+                     False,
                      Documentation.Sections,
+                     Documentation.Is_Private,
                      Messages);
 
                when Ada_Access_To_Subp_Def =>
@@ -647,14 +668,18 @@ package body GNATdoc.Comments.Extractor is
             Extract_Simple_Declaration_Documentation
               (Node.As_Incomplete_Type_Decl,
                Options,
+               False,
                Documentation.Sections,
+               Documentation.Is_Private,
                Messages);
 
          when Ada_Subtype_Decl =>
             Extract_Simple_Declaration_Documentation
               (Node.As_Subtype_Decl,
                Options,
+               True,
                Documentation.Sections,
+               Documentation.Is_Private,
                Messages);
 
          when Ada_Object_Decl =>
@@ -670,14 +695,18 @@ package body GNATdoc.Comments.Extractor is
             Extract_Simple_Declaration_Documentation
               (Node.As_Number_Decl,
                Options,
+               False,
                Documentation.Sections,
+               Documentation.Is_Private,
                Messages);
 
          when Ada_Exception_Decl =>
             Extract_Simple_Declaration_Documentation
               (Node.As_Exception_Decl,
                Options,
+               False,
                Documentation.Sections,
+               Documentation.Is_Private,
                Messages);
 
          when Ada_Single_Task_Decl =>
@@ -1607,6 +1636,7 @@ package body GNATdoc.Comments.Extractor is
             when Ada_Generic_Subp_Decl    =>
               Node.As_Generic_Subp_Decl.F_Subp_Decl,
             when others                   => raise Program_Error);
+      Dummy             : Boolean;
 
    begin
       Component_Builder.Build
@@ -1656,7 +1686,9 @@ package body GNATdoc.Comments.Extractor is
                         Extract_Simple_Declaration_Documentation
                           (Item.As_Generic_Formal_Type_Decl,
                            Options,
+                           False,
                            Lookup_Formal_Section (Formal_Name).Sections,
+                           Dummy,
                            Messages);
                      end;
 
@@ -1694,7 +1726,9 @@ package body GNATdoc.Comments.Extractor is
                               Extract_Simple_Declaration_Documentation
                                 (Item.As_Generic_Formal_Type_Decl,
                                  Options,
+                                 False,
                                  Lookup_Formal_Section (Formal_Name).Sections,
+                                 Dummy,
                                  Messages);
 
                            when Ada_Access_To_Subp_Def =>
@@ -1768,7 +1802,9 @@ package body GNATdoc.Comments.Extractor is
                      Extract_Simple_Declaration_Documentation
                        (Item.As_Generic_Formal_Obj_Decl,
                         Options,
+                        False,
                         Lookup_Formal_Section (Id).Sections,
+                        Dummy,
                         Messages);
                   end loop;
                end;
@@ -1777,9 +1813,11 @@ package body GNATdoc.Comments.Extractor is
                Extract_Simple_Declaration_Documentation
                  (Item.As_Generic_Formal_Package,
                   Options,
+                  False,
                   Lookup_Formal_Section
                     (Item.As_Generic_Formal_Package.F_Decl
                        .As_Generic_Package_Instantiation.F_Name).Sections,
+                  Dummy,
                   Messages);
 
             when Ada_Pragma_Node =>
@@ -2294,10 +2332,12 @@ package body GNATdoc.Comments.Extractor is
    ----------------------------------------------
 
    procedure Extract_Simple_Declaration_Documentation
-     (Node     : Libadalang.Analysis.Basic_Decl'Class;
-      Options  : GNATdoc.Comments.Options.Extractor_Options;
-      Sections : in out Section_Vectors.Vector;
-      Messages : in out GNATdoc.Messages.Message_Container)
+     (Node          : Libadalang.Analysis.Basic_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Allow_Private : Boolean;
+      Sections      : in out Section_Vectors.Vector;
+      Is_Private    : out Boolean;
+      Messages      : in out GNATdoc.Messages.Message_Container)
    is
       Leading_Section   : Section_Access;
       Trailing_Section  : Section_Access;
@@ -2346,10 +2386,11 @@ package body GNATdoc.Comments.Extractor is
          end case;
 
          Parse_Raw_Section
-           (
-            GNATdoc.Utilities.Location (Node),
-            Raw_Section, [others => False],
+           (GNATdoc.Utilities.Location (Node),
+            Raw_Section,
+            [Private_Tag => Allow_Private, others => False],
             Sections,
+            Is_Private,
             Messages);
       end;
    end Extract_Simple_Declaration_Documentation;

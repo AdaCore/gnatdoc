@@ -28,9 +28,6 @@ with Streams;
 
 package body GNATdoc.Backend.RST is
 
-   function Documentation_File_Name
-     (Entity : Entity_Information) return VSS.Strings.Virtual_String;
-
    procedure Generate_Documentation
      (Self   : in out RST_Backend_Base'Class;
       Entity : Entity_Information);
@@ -158,7 +155,7 @@ package body GNATdoc.Backend.RST is
          File.Put (Indent, Success);
          File.Put (".. ada:object:: ", Success);
 
-         File.Put (Entity.RST_Profile, Success);
+         File.Put (Entity.Name, Success);
          File.New_Line (Success);
          File.Put (Indent, Success);
          File.Put ("    :package: ", Success);
@@ -170,7 +167,7 @@ package body GNATdoc.Backend.RST is
            (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
               (Indent        => Indent & "    ",
                Documentation => Entity.Documentation,
-               Pass_Through  => Self.Pass_Through,
+               Pass_Through  => False,
                Code_Snippet  => False),
             Success);
          File.New_Line (Success);
@@ -216,7 +213,7 @@ package body GNATdoc.Backend.RST is
            (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
               (Indent        => Indent & "    ",
                Documentation => Entity.Documentation,
-               Pass_Through  => Self.Pass_Through,
+               Pass_Through  => False,
                Code_Snippet  => False),
             Success);
          File.New_Line (Success);
@@ -241,7 +238,7 @@ package body GNATdoc.Backend.RST is
         (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
            (Indent        => "",
             Documentation => Entity.Documentation,
-            Pass_Through  => Self.Pass_Through,
+            Pass_Through  => False,
             Code_Snippet  => True),
          Success);
       File.New_Line (Success);
@@ -283,7 +280,7 @@ package body GNATdoc.Backend.RST is
                     (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
                        (Indent        => "    ",
                         Documentation => Item.Documentation,
-                        Pass_Through  => Self.Pass_Through,
+                        Pass_Through  => False,
                         Code_Snippet  => True),
                      Success);
 
@@ -408,7 +405,7 @@ package body GNATdoc.Backend.RST is
                     (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
                        (Indent        => "    ",
                         Documentation => Item.Documentation,
-                        Pass_Through  => Self.Pass_Through,
+                        Pass_Through  => False,
                         Code_Snippet  => True),
                      Success);
 

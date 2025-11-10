@@ -1,11 +1,18 @@
 
 package Constants is
 
-   type T is tagged limited null record;
+   type TT is tagged limited null record;
 
-   C : constant T := (others => <>);
+   CT : constant TT := (others => <>);
 
-   B : constant T := (others => <>);
-   --  @belongs-to T
+   BT : constant TT := (others => <>);
+   --  @belongs-to TT
+
+   type TI is range 0 ..  100;
+
+   CI : constant TI := 5;
+
+   BI : constant TI := 10;
+   --  @belongs-to TI
 
 end Constants;
