@@ -14,4 +14,9 @@ package Package_Included_Into_Documentation is
    C : constant Integer := 1;
    --  @private
 
+   subtype Public_Integer is Integer;
+
+   subtype Private_Integer is Integer;
+   --  @private
+
 end Package_Included_Into_Documentation;

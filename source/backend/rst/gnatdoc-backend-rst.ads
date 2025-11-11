@@ -21,7 +21,7 @@ package GNATdoc.Backend.RST is
 
 private
 
-   type RST_Backend_Base (Pass_Through : Boolean) is
+   type RST_Backend_Base is
      abstract new Abstract_Backend with record
       OOP_Mode           : Boolean := False;
       Alphabetical_Order : Boolean := True;
@@ -39,10 +39,15 @@ private
      (Self   : in out RST_Backend_Base;
       Parser : VSS.Command_Line.Parsers.Command_Line_Parser'Class);
 
-   type RST_Backend is
-     new RST_Backend_Base (False) with null record;
+   type RST_Backend is new RST_Backend_Base with null record;
 
    overriding function Name
      (Self : in out RST_Backend) return VSS.Strings.Virtual_String;
+
+   function Documentation_File_Name
+     (Entity : GNATdoc.Entities.Entity_Information)
+      return VSS.Strings.Virtual_String;
+   --  Return name of the RST file to generate documentation for the given
+   --  entity.
 
 end GNATdoc.Backend.RST;

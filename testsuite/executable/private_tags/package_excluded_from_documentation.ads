@@ -14,5 +14,12 @@ package Package_Excluded_From_Documentation is
    procedure Function_Excluded_From_Documentation;
    --  @private
 
-end Package_Excluded_From_Documentation;
+   C : constant Integer := 1;
+   --  @private
 
+   subtype Public_Integer is Integer;
+
+   subtype Private_Integer is Integer;
+   --  @private
+
+end Package_Excluded_From_Documentation;

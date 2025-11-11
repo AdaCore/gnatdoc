@@ -27,8 +27,13 @@ package GNATdoc.Entities is
      (Undefined,
       Ada_Tagged_Type,
       Ada_Interface_Type,
+      Ada_Other_Type,
+      Ada_Object,
+      Ada_Exception,
       Ada_Function,
-      Ada_Procedure);
+      Ada_Procedure,
+      Ada_Generic_Package_Instantiation,
+      Ada_Generic_Subprogram_Instantiation);
 
    type Entity_Signature is record
       Image : VSS.Strings.Virtual_String;
@@ -103,6 +108,12 @@ package GNATdoc.Entities is
 
       RST_Profile            : VSS.Strings.Virtual_String;
       --  Subprogram's profile in fortmat to use by RST backend
+      RSTPT_Objtype          : VSS.Strings.Virtual_String;
+      --  Name of the type of the object
+      RSTPT_Defval           : VSS.Strings.Virtual_String;
+      --  Default value of the object
+      RSTPT_Instpkg          : VSS.Strings.Virtual_String;
+      --  Name of instantiated package
 
       Packages               : Entity_Information_Sets.Set;
       Subprograms            : aliased Entity_Information_Sets.Set;

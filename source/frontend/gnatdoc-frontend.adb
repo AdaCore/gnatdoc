@@ -721,7 +721,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
+          (Kind           => GNATdoc.Entities.Ada_Other_Type,
+           Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -748,7 +749,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
+          (Kind           => GNATdoc.Entities.Ada_Other_Type,
+           Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1539,7 +1541,8 @@ package body GNATdoc.Frontend is
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
-                  (Location       => GNATdoc.Utilities.Location (Name),
+                  (Kind           => GNATdoc.Entities.Ada_Exception,
+                   Location       => GNATdoc.Utilities.Location (Name),
                    Name           => To_Virtual_String (Name.Text),
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
@@ -1573,7 +1576,14 @@ package body GNATdoc.Frontend is
          else Node.As_Generic_Subp_Instantiation.F_Subp_Name);
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
+          (Kind           =>
+             (case Node.Kind is
+                 when Ada_Generic_Package_Instantiation =>
+                   GNATdoc.Entities.Ada_Generic_Package_Instantiation,
+                 when Ada_Generic_Subp_Instantiation =>
+                   GNATdoc.Entities.Ada_Generic_Subprogram_Instantiation,
+                 when others => raise Program_Error),
+           Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -1590,6 +1600,10 @@ package body GNATdoc.Frontend is
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Generic_Instantiations.Insert (Entity);
       end if;
+
+      Entity.RSTPT_Instpkg :=
+        VSS.Strings.To_Virtual_String
+          (Node.P_Designated_Generic_Decl.P_Fully_Qualified_Name);
 
       Check_Undocumented (Entity);
    end Process_Generic_Instantiation;
@@ -1768,22 +1782,56 @@ package body GNATdoc.Frontend is
      (Node      : Object_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
    is
+      Objects_Parent : constant Basic_Decl := Node.P_Parent_Basic_Decl;
+      Type_Name      : Defining_Name;
+      Type_Signature : GNATdoc.Entities.Entity_Signature;
+      Type_Parent    : Basic_Decl;
+
+      RSTPT_Objtype  : VSS.Strings.Virtual_String;
+      RSTPT_Defval   : VSS.Strings.Virtual_String;
+
       Template : constant VSS.Strings.Templates.Virtual_String_Template :=
         "{} : constant {}";
 
    begin
+      case Node.F_Type_Expr.Kind is
+         when Ada_Subtype_Indication =>
+            Type_Name :=
+              Node.F_Type_Expr.As_Subtype_Indication.P_Type_Name
+                .P_Referenced_Defining_Name;
+            Type_Signature := Signature (Type_Name);
+            Type_Parent := Type_Name.P_Parent_Basic_Decl.P_Parent_Basic_Decl;
+
+            RSTPT_Objtype :=
+              VSS.Strings.To_Virtual_String (Type_Name.P_Fully_Qualified_Name);
+
+         when Ada_Anonymous_Type =>
+            null;
+
+         when others =>
+            raise Program_Error;
+      end case;
+
+      if not Node.F_Default_Expr.Is_Null then
+         RSTPT_Defval :=
+           VSS.Strings.To_Virtual_String (Node.F_Default_Expr.Text);
+      end if;
+
       for Name of Node.F_Ids loop
          declare
-            Entity   : constant not null
+            Entity  : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
                 new GNATdoc.Entities.Entity_Information'
-                  (Location       => GNATdoc.Utilities.Location (Name),
+                  (Kind           => GNATdoc.Entities.Ada_Object,
+                   Location       => GNATdoc.Utilities.Location (Name),
                    Name           => To_Virtual_String (Name.Text),
                    Qualified_Name =>
                      To_Virtual_String (Name.P_Fully_Qualified_Name),
                    Signature      => Signature (Name),
+                   RSTPT_Objtype  => RSTPT_Objtype,
+                   RSTPT_Defval   => RSTPT_Defval,
                    others         => <>);
-            Belongs  : GNATdoc.Entities.Entity_Information_Access;
+            Belongs : GNATdoc.Entities.Entity_Information_Access;
 
          begin
             Extract
@@ -1800,6 +1848,30 @@ package body GNATdoc.Frontend is
                  (Enclosing => Enclosing,
                   Belongs   => Belongs,
                   Entity    => Entity);
+
+               --  If there is not explicitly defined @belongs-to tag, and
+               --  type is a "class", and both type and object are declared in
+               --  the same package, mark constant object as belongs to type.
+
+               if Belongs = null
+                 and Node.F_Type_Expr.Kind = Ada_Subtype_Indication
+               then
+
+                  if Type_Parent = Objects_Parent
+                    and then GNATdoc.Entities.To_Entity.Contains
+                               (Type_Signature)
+                    and then GNATdoc.Entities.To_Entity (Type_Signature).Kind
+                       in GNATdoc.Entities.Ada_Tagged_Type
+                        | GNATdoc.Entities.Ada_Interface_Type
+                  then
+                     Belongs :=
+                       GNATdoc.Entities.To_Entity (Signature (Type_Name));
+                  end if;
+
+                  Entity.RSTPT_Objtype :=
+                    VSS.Strings.To_Virtual_String
+                      (Type_Name.P_Fully_Qualified_Name);
+               end if;
 
                if Belongs = null then
                   Enclosing.Belongs_Constants.Insert (Entity.Reference);
@@ -1956,7 +2028,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
+          (Kind           => GNATdoc.Entities.Ada_Other_Type,
+           Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -2081,7 +2154,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
+          (Kind           => GNATdoc.Entities.Ada_Other_Type,
+           Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -2096,6 +2170,7 @@ package body GNATdoc.Frontend is
       GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
       if Node.F_Type_Def.As_Record_Type_Def.F_Has_Tagged then
+         Entity.Kind := GNATdoc.Entities.Ada_Tagged_Type;
          Enclosing.Tagged_Types.Insert (Entity);
          GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
 
@@ -2117,7 +2192,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
+          (Kind           => GNATdoc.Entities.Ada_Other_Type,
+           Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),
@@ -2144,7 +2220,8 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
+          (Kind           => GNATdoc.Entities.Ada_Other_Type,
+           Location       => GNATdoc.Utilities.Location (Name),
            Name           => To_Virtual_String (Name.Text),
            Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
            Signature      => Signature (Name),

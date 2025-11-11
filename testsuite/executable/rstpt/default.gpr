@@ -1,0 +1,8 @@
+
+project Default is
+
+   package Documentation is
+      for Output_Dir ("rstpt") use ".";
+   end Documentation;
+
+end Default;
