@@ -643,6 +643,27 @@ Test_Exception : exception;
 ----- DOCUMENTATION -----
 Description of the exception
 ----- DONE -----
+Defining name: <DefiningName "Packages_Renaming" packages_renaming.ads:7:9-7:26>
+Origin: <Id "Packages_Renaming" packages_renaming.ads:7:9-7:26>
+----- CODE SNIPPET -----
+package Packages_Renaming renames Packages;
+----- DOCUMENTATION -----
+Description of the package renaming
+----- DONE -----
+Defining name: <DefiningName "Packages_Renaming" packages_renaming.ads:7:9-7:26>
+Origin: <Id "Packages_Renaming" packages_package.adb:2:6-2:23>
+----- CODE SNIPPET -----
+package Packages_Renaming renames Packages;
+----- DOCUMENTATION -----
+Description of the package renaming
+----- DONE -----
+Defining name: <DefiningName "Packages_Renaming" packages_renaming.ads:7:9-7:26>
+Origin: <Id "Packages_Renaming" packages_package.adb:2:6-2:23>
+----- CODE SNIPPET -----
+package Packages_Renaming renames Packages;
+----- DOCUMENTATION -----
+Description of the package renaming
+----- DONE -----
 Defining name: None
 Origin: <OpEq "=" synthetics.adb:11:15-11:16>
 >>>>> LAL: name resolve failure <<<<<

@@ -131,6 +131,27 @@
     {"file": "exceptions_package.adb", "line": 8, "column": 16},
     //  reference of the exception
 
+    //  LAL 20250922: issue with package name resolution in the body doesn't allow to write test
+    // {"file": "packages.ads", "line": 5, "column": 9},
+    // //  specification of the package
+    // //  reference of the package from "end <>"
+    // {"file": "packages.adb", "line": 5, "column": 14},
+    // //  body of the package
+    // {"file": "packages.adb", "line": 9, "column": 7},
+    // //  reference of the package
+    // //  reference of the package from "end <>"
+    // {"file": "packages_package.adb", "line": 1, "column": 6},
+    // //  reference of the package in with clause
+    // {"file": "packages_package.adb", "line": 8, "column": 7},
+    // //  reference of the package in code
+
+    {"file": "packages_renaming.ads", "line": 7, "column": 9},
+    //  specification of the package renaming
+    {"file": "packages_package.adb", "line": 2, "column": 6},
+    //  reference of the package renaming from `with` clause
+    {"file": "packages_package.adb", "line": 2, "column": 6},
+    //  reference of the package renaming from code
+
     {"file": "synthetics.adb", "line": 11, "column": 15},
     //  reference of synthetic `"="` subprogram of `Implicit_Record`
     {"file": "synthetics.adb", "line": 15, "column": 15},

@@ -2,8 +2,8 @@
 
 --  Description of the package specification
 
-package Pkg1 is
+package Packages is
 
    procedure Dummy;
 
-end Pkg1;
+end Packages;
