@@ -500,6 +500,7 @@ package body GNATdoc.Comments.Helpers is
                | Ada_Object_Decl
                | Ada_Package_Body
                | Ada_Package_Decl
+               | Ada_Package_Renaming_Decl
                | Ada_Param_Spec
                | Ada_Subtype_Decl
             =>
