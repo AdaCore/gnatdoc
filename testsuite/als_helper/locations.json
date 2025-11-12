@@ -145,6 +145,13 @@
     // {"file": "packages_package.adb", "line": 8, "column": 7},
     // //  reference of the package in code
 
+    {"file": "packages_renaming.ads", "line": 7, "column": 9},
+    //  specification of the package renaming
+    {"file": "packages_package.adb", "line": 2, "column": 6},
+    //  reference of the package renaming from `with` clause
+    {"file": "packages_package.adb", "line": 2, "column": 6},
+    //  reference of the package renaming from code
+
     {"file": "synthetics.adb", "line": 11, "column": 15},
     //  reference of synthetic `"="` subprogram of `Implicit_Record`
     {"file": "synthetics.adb", "line": 15, "column": 15},
