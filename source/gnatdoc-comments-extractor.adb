@@ -315,6 +315,7 @@ package body GNATdoc.Comments.Extractor is
                                 | Ada_Generic_Subp_Decl
                                 | Ada_Package_Body
                                 | Ada_Package_Decl
+                                | Ada_Package_Renaming_Decl
                                 | Ada_Subp_Body
                                 | Ada_Subp_Decl
                                 | Ada_Null_Subp_Decl
@@ -2339,6 +2340,7 @@ package body GNATdoc.Comments.Extractor is
       Is_Private    : out Boolean;
       Messages      : in out GNATdoc.Messages.Message_Container)
    is
+      Header_Section    : Section_Access;
       Leading_Section   : Section_Access;
       Trailing_Section  : Section_Access;
 
@@ -2384,6 +2386,24 @@ package body GNATdoc.Comments.Extractor is
                   Raw_Section := Trailing_Section;
                end if;
          end case;
+
+         if Raw_Section = null and Node.P_Is_Compilation_Unit_Root then
+            --  It is case of the package renaming as compilation unit
+            --
+            --  Side effect: two `<<LEADING>>` sections are created, one for
+            --  leading comments of the declation and another one for leading
+            --  section of the compilation unit's header.
+
+            Extract_Compilation_Unit_Documentation
+              (Node, Options, Sections, Header_Section, Leading_Section, True);
+
+            if not Leading_Section.Text.Is_Empty then
+               Raw_Section := Leading_Section;
+
+            else
+               Raw_Section := Header_Section;
+            end if;
+         end if;
 
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Node),
