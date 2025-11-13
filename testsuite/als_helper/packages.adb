@@ -2,11 +2,11 @@
 
 --  Description of the package body
 
-package body Pkg1 is
+package body Packages is
 
    procedure Dummy is
    begin
-      Pkg1.Dummy;
+      Packages.Dummy;
    end Dummy;
 
-end Pkg1;
+end Packages;
