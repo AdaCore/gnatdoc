@@ -502,6 +502,76 @@ type Incomplete_Known_Discriminant_Private_Null_Record
 @field Discriminant
   Public description of the discriminant
 ----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions.ads:4:4-4:18>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions.adb:7:16-7:30>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions.adb:10:15-10:29>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions_package.adb:9:27-9:41>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions_package.adb:12:26-12:40>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Renamed_Test_Exception" exceptions_renamings.ads:6:4-6:26>
+Origin: <Id "Renamed_Test_Exception" exceptions_renamings.ads:6:4-6:26>
+----- CODE SNIPPET -----
+Renamed_Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the renamed exception
+----- DONE -----
+Defining name: <DefiningName "Renamed_Test_Exception" exceptions_renamings.ads:6:4-6:26>
+Origin: <Id "Renamed_Test_Exception" exceptions_renamings.adb:7:16-7:38>
+----- CODE SNIPPET -----
+Renamed_Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the renamed exception
+----- DONE -----
+Defining name: <DefiningName "Renamed_Test_Exception" exceptions_renamings.ads:6:4-6:26>
+Origin: <Id "Renamed_Test_Exception" exceptions_renamings.adb:10:15-10:37>
+----- CODE SNIPPET -----
+Renamed_Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the renamed exception
+----- DONE -----
+Defining name: <DefiningName "Renamed_Test_Exception" exceptions_renamings.ads:6:4-6:26>
+Origin: <Id "Renamed_Test_Exception" exceptions_package.adb:17:37-17:59>
+----- CODE SNIPPET -----
+Renamed_Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the renamed exception
+----- DONE -----
+Defining name: <DefiningName "Renamed_Test_Exception" exceptions_renamings.ads:6:4-6:26>
+Origin: <Id "Renamed_Test_Exception" exceptions_package.adb:20:36-20:58>
+----- CODE SNIPPET -----
+Renamed_Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the renamed exception
+----- DONE -----
 Defining name: <DefiningName "Named_Number" objects.ads:4:4-4:16>
 Origin: <Id "Named_Number" objects.ads:4:4-4:16>
 ----- CODE SNIPPET -----
@@ -705,27 +775,6 @@ Origin: <Id "Renamed_Value" objects_package.adb:68:43-68:56>
 Renamed_Value : Integer renames Objects.Value;
 ----- DOCUMENTATION -----
 Description of the renamed object
------ DONE -----
-Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
-Origin: <Id "Test_Exception" exceptions.ads:4:4-4:18>
------ CODE SNIPPET -----
-Test_Exception : exception;
------ DOCUMENTATION -----
-Description of the exception
------ DONE -----
-Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
-Origin: <Id "Test_Exception" exceptions.adb:7:16-7:30>
------ CODE SNIPPET -----
-Test_Exception : exception;
------ DOCUMENTATION -----
-Description of the exception
------ DONE -----
-Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
-Origin: <Id "Test_Exception" exceptions_package.adb:8:16-8:30>
------ CODE SNIPPET -----
-Test_Exception : exception;
------ DOCUMENTATION -----
-Description of the exception
 ----- DONE -----
 Defining name: <DefiningName "Packages_Renaming" packages_renaming.ads:7:9-7:26>
 Origin: <Id "Packages_Renaming" packages_renaming.ads:7:9-7:26>

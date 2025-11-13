@@ -87,6 +87,32 @@
     {"file": "discriminant_record_types_package.adb", "line": 36, "column": 26},
     //  reference: `Known_Discriminant_Private_Null_Record`
 
+    //  Exceptions (declarations and renamings)
+
+    {"file": "exceptions.ads", "line": 4, "column": 4},
+    //  declaration of the exception
+    {"file": "exceptions.adb", "line": 7, "column": 16},
+    //  reference of the exception
+    {"file": "exceptions.adb", "line": 10, "column": 15},
+    //  reference of the exception
+    {"file": "exceptions_package.adb", "line": 9, "column": 27},
+    //  reference of the exception
+    {"file": "exceptions_package.adb", "line": 12, "column": 26},
+    //  reference of the exception
+
+    {"file": "exceptions_renamings.ads", "line": 6, "column": 4},
+    //  renaming of the exception
+    {"file": "exceptions_renamings.adb", "line": 7, "column": 16},
+    //  reference of the renamed exception
+    {"file": "exceptions_renamings.adb", "line": 10, "column": 15},
+    //  reference of the renamed exception
+    {"file": "exceptions_package.adb", "line": 17, "column": 37},
+    //  reference of the renamed exception
+    {"file": "exceptions_package.adb", "line": 20, "column": 36},
+    //  reference of the renamed exception
+
+    //  Objects
+
     {"file": "objects.ads", "line": 4, "column": 4},
     //  declaration: `Named_Number`
     {"file": "objects.adb", "line": 7, "column": 30},
@@ -151,13 +177,6 @@
     // reference of `Renamed_Value`
     {"file": "objects_package.adb", "line": 68, "column": 43},
     // reference of `Renamed_Value`
-
-    {"file": "exceptions.ads", "line": 4, "column": 4},
-    //  declaration of the exception
-    {"file": "exceptions.adb", "line": 7, "column": 16},
-    //  reference of the exception
-    {"file": "exceptions_package.adb", "line": 8, "column": 16},
-    //  reference of the exception
 
     //  LAL 20250922: issue with package name resolution in the body doesn't allow to write test
     // {"file": "packages.ads", "line": 5, "column": 9},
