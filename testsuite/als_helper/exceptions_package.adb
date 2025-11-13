@@ -1,14 +1,23 @@
-with Exceptions; use Exceptions;
+with Exceptions;
+with Exceptions_Renamings;
 
 package body Exceptions_Package is
 
    procedure Dummy is
    begin
       begin
-         raise Test_Exception;
+         raise Exceptions.Test_Exception;
 
       exception
-         when Test_Exception =>
+         when Exceptions.Test_Exception =>
+            null;
+      end;
+
+      begin
+         raise Exceptions_Renamings.Renamed_Test_Exception;
+
+      exception
+         when Exceptions_Renamings.Renamed_Test_Exception =>
             null;
       end;
    end Dummy;
