@@ -502,6 +502,76 @@ type Incomplete_Known_Discriminant_Private_Null_Record
 @field Discriminant
   Public description of the discriminant
 ----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions.ads:4:4-4:18>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions.adb:7:16-7:30>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions.adb:10:15-10:29>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions_package.adb:9:27-9:41>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
+Origin: <Id "Test_Exception" exceptions_package.adb:12:26-12:40>
+----- CODE SNIPPET -----
+Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the exception
+----- DONE -----
+Defining name: <DefiningName "Renamed_Test_Exception" exceptions_renamings.ads:6:4-6:26>
+Origin: <Id "Renamed_Test_Exception" exceptions_renamings.ads:6:4-6:26>
+----- CODE SNIPPET -----
+Renamed_Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the renamed exception
+----- DONE -----
+Defining name: <DefiningName "Renamed_Test_Exception" exceptions_renamings.ads:6:4-6:26>
+Origin: <Id "Renamed_Test_Exception" exceptions_renamings.adb:7:16-7:38>
+----- CODE SNIPPET -----
+Renamed_Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the renamed exception
+----- DONE -----
+Defining name: <DefiningName "Renamed_Test_Exception" exceptions_renamings.ads:6:4-6:26>
+Origin: <Id "Renamed_Test_Exception" exceptions_renamings.adb:10:15-10:37>
+----- CODE SNIPPET -----
+Renamed_Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the renamed exception
+----- DONE -----
+Defining name: <DefiningName "Renamed_Test_Exception" exceptions_renamings.ads:6:4-6:26>
+Origin: <Id "Renamed_Test_Exception" exceptions_package.adb:17:37-17:59>
+----- CODE SNIPPET -----
+Renamed_Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the renamed exception
+----- DONE -----
+Defining name: <DefiningName "Renamed_Test_Exception" exceptions_renamings.ads:6:4-6:26>
+Origin: <Id "Renamed_Test_Exception" exceptions_package.adb:20:36-20:58>
+----- CODE SNIPPET -----
+Renamed_Test_Exception : exception;
+----- DOCUMENTATION -----
+Description of the renamed exception
+----- DONE -----
 Defining name: <DefiningName "Named_Number" objects.ads:4:4-4:16>
 Origin: <Id "Named_Number" objects.ads:4:4-4:16>
 ----- CODE SNIPPET -----
@@ -517,7 +587,7 @@ Named_Number : constant := 2;
 Description of the named number
 ----- DONE -----
 Defining name: <DefiningName "Named_Number" objects.ads:4:4-4:16>
-Origin: <Id "Named_Number" objects_package.adb:8:30-8:42>
+Origin: <Id "Named_Number" objects_package.adb:10:38-10:50>
 ----- CODE SNIPPET -----
 Named_Number : constant := 2;
 ----- DOCUMENTATION -----
@@ -538,7 +608,7 @@ Public_Constant : constant Integer := 3;
 Description of the `Public_Constant`
 ----- DONE -----
 Defining name: <DefiningName "Public_Constant" objects.ads:7:4-7:19>
-Origin: <Id "Public_Constant" objects_package.adb:15:30-15:45>
+Origin: <Id "Public_Constant" objects_package.adb:17:38-17:53>
 ----- CODE SNIPPET -----
 Public_Constant : constant Integer := 3;
 ----- DOCUMENTATION -----
@@ -574,7 +644,7 @@ Public description of the `Private_Constant`
 Private description of the `Private_Constant`
 ----- DONE -----
 Defining name: <DefiningName "Private_Constant" objects.ads:10:4-10:20>
-Origin: <Id "Private_Constant" objects_package.adb:22:30-22:46>
+Origin: <Id "Private_Constant" objects_package.adb:24:38-24:54>
 ----- CODE SNIPPET -----
 Private_Constant : constant Integer;
 ----- DOCUMENTATION -----
@@ -595,7 +665,7 @@ Value : Integer;
 Description of the object
 ----- DONE -----
 Defining name: <DefiningName "Value" objects.ads:13:4-13:9>
-Origin: <Id "Value" objects_package.adb:29:30-29:35>
+Origin: <Id "Value" objects_package.adb:31:38-31:43>
 ----- CODE SNIPPET -----
 Value : Integer;
 ----- DOCUMENTATION -----
@@ -616,32 +686,95 @@ Value_Default : Integer := 1;
 Description of the object with default value
 ----- DONE -----
 Defining name: <DefiningName "Value_Default" objects.ads:16:4-16:17>
-Origin: <Id "Value_Default" objects_package.adb:36:30-36:43>
+Origin: <Id "Value_Default" objects_package.adb:38:38-38:51>
 ----- CODE SNIPPET -----
 Value_Default : Integer := 1;
 ----- DOCUMENTATION -----
 Description of the object with default value
 ----- DONE -----
-Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
-Origin: <Id "Test_Exception" exceptions.ads:4:4-4:18>
+Defining name: <DefiningName "Renamed_Named_Number" objects_renamings.ads:6:4-6:24>
+Origin: <Id "Renamed_Named_Number" objects_renamings.ads:6:4-6:24>
 ----- CODE SNIPPET -----
-Test_Exception : exception;
+Renamed_Named_Number : constant := Objects.Named_Number;
 ----- DOCUMENTATION -----
-Description of the exception
+Description of the renamed named number
 ----- DONE -----
-Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
-Origin: <Id "Test_Exception" exceptions.adb:7:16-7:30>
+Defining name: <DefiningName "Renamed_Named_Number" objects_renamings.ads:6:4-6:24>
+Origin: <Id "Renamed_Named_Number" objects_renamings.adb:7:25-7:45>
 ----- CODE SNIPPET -----
-Test_Exception : exception;
+Renamed_Named_Number : constant := Objects.Named_Number;
 ----- DOCUMENTATION -----
-Description of the exception
+Description of the renamed named number
 ----- DONE -----
-Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
-Origin: <Id "Test_Exception" exceptions_package.adb:8:16-8:30>
+Defining name: <DefiningName "Renamed_Named_Number" objects_renamings.ads:6:4-6:24>
+Origin: <Id "Renamed_Named_Number" objects_package.adb:47:43-47:63>
 ----- CODE SNIPPET -----
-Test_Exception : exception;
+Renamed_Named_Number : constant := Objects.Named_Number;
 ----- DOCUMENTATION -----
-Description of the exception
+Description of the renamed named number
+----- DONE -----
+Defining name: <DefiningName "Renamed_Public_Constant" objects_renamings.ads:9:4-9:27>
+Origin: <Id "Renamed_Public_Constant" objects_renamings.ads:9:4-9:27>
+----- CODE SNIPPET -----
+Renamed_Public_Constant : Integer renames Objects.Public_Constant;
+----- DOCUMENTATION -----
+Description of the renamed `Public_Constant`
+----- DONE -----
+Defining name: <DefiningName "Renamed_Public_Constant" objects_renamings.ads:9:4-9:27>
+Origin: <Id "Renamed_Public_Constant" objects_renamings.adb:14:25-14:48>
+----- CODE SNIPPET -----
+Renamed_Public_Constant : Integer renames Objects.Public_Constant;
+----- DOCUMENTATION -----
+Description of the renamed `Public_Constant`
+----- DONE -----
+Defining name: <DefiningName "Renamed_Public_Constant" objects_renamings.ads:9:4-9:27>
+Origin: <Id "Renamed_Public_Constant" objects_package.adb:54:43-54:66>
+----- CODE SNIPPET -----
+Renamed_Public_Constant : Integer renames Objects.Public_Constant;
+----- DOCUMENTATION -----
+Description of the renamed `Public_Constant`
+----- DONE -----
+Defining name: <DefiningName "Renamed_Private_Constant" objects_renamings.ads:12:4-12:28>
+Origin: <Id "Renamed_Private_Constant" objects_renamings.ads:12:4-12:28>
+----- CODE SNIPPET -----
+Renamed_Private_Constant : Integer renames Objects.Private_Constant;
+----- DOCUMENTATION -----
+Description of the renamed `Private_Constant`
+----- DONE -----
+Defining name: <DefiningName "Renamed_Private_Constant" objects_renamings.ads:12:4-12:28>
+Origin: <Id "Renamed_Private_Constant" objects_renamings.adb:21:25-21:49>
+----- CODE SNIPPET -----
+Renamed_Private_Constant : Integer renames Objects.Private_Constant;
+----- DOCUMENTATION -----
+Description of the renamed `Private_Constant`
+----- DONE -----
+Defining name: <DefiningName "Renamed_Private_Constant" objects_renamings.ads:12:4-12:28>
+Origin: <Id "Renamed_Private_Constant" objects_package.adb:61:43-61:67>
+----- CODE SNIPPET -----
+Renamed_Private_Constant : Integer renames Objects.Private_Constant;
+----- DOCUMENTATION -----
+Description of the renamed `Private_Constant`
+----- DONE -----
+Defining name: <DefiningName "Renamed_Value" objects_renamings.ads:15:4-15:17>
+Origin: <Id "Renamed_Value" objects_renamings.ads:15:4-15:17>
+----- CODE SNIPPET -----
+Renamed_Value : Integer renames Objects.Value;
+----- DOCUMENTATION -----
+Description of the renamed object
+----- DONE -----
+Defining name: <DefiningName "Renamed_Value" objects_renamings.ads:15:4-15:17>
+Origin: <Id "Renamed_Value" objects_renamings.adb:28:25-28:38>
+----- CODE SNIPPET -----
+Renamed_Value : Integer renames Objects.Value;
+----- DOCUMENTATION -----
+Description of the renamed object
+----- DONE -----
+Defining name: <DefiningName "Renamed_Value" objects_renamings.ads:15:4-15:17>
+Origin: <Id "Renamed_Value" objects_package.adb:68:43-68:56>
+----- CODE SNIPPET -----
+Renamed_Value : Integer renames Objects.Value;
+----- DOCUMENTATION -----
+Description of the renamed object
 ----- DONE -----
 Defining name: <DefiningName "Packages_Renaming" packages_renaming.ads:7:9-7:26>
 Origin: <Id "Packages_Renaming" packages_renaming.ads:7:9-7:26>

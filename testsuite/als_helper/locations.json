@@ -87,18 +87,44 @@
     {"file": "discriminant_record_types_package.adb", "line": 36, "column": 26},
     //  reference: `Known_Discriminant_Private_Null_Record`
 
+    //  Exceptions (declarations and renamings)
+
+    {"file": "exceptions.ads", "line": 4, "column": 4},
+    //  declaration of the exception
+    {"file": "exceptions.adb", "line": 7, "column": 16},
+    //  reference of the exception
+    {"file": "exceptions.adb", "line": 10, "column": 15},
+    //  reference of the exception
+    {"file": "exceptions_package.adb", "line": 9, "column": 27},
+    //  reference of the exception
+    {"file": "exceptions_package.adb", "line": 12, "column": 26},
+    //  reference of the exception
+
+    {"file": "exceptions_renamings.ads", "line": 6, "column": 4},
+    //  renaming of the exception
+    {"file": "exceptions_renamings.adb", "line": 7, "column": 16},
+    //  reference of the renamed exception
+    {"file": "exceptions_renamings.adb", "line": 10, "column": 15},
+    //  reference of the renamed exception
+    {"file": "exceptions_package.adb", "line": 17, "column": 37},
+    //  reference of the renamed exception
+    {"file": "exceptions_package.adb", "line": 20, "column": 36},
+    //  reference of the renamed exception
+
+    //  Objects
+
     {"file": "objects.ads", "line": 4, "column": 4},
     //  declaration: `Named_Number`
     {"file": "objects.adb", "line": 7, "column": 30},
     //  reference: `Named_Number`
-    {"file": "objects_package.adb", "line": 8, "column": 30},
+    {"file": "objects_package.adb", "line": 10, "column": 38},
     //  reference: `Named_Number`
 
     {"file": "objects.ads", "line": 7, "column": 4},
     //  declaration `Public_Constant`
     {"file": "objects.adb", "line": 14, "column": 30},
     //  reference `Public_Constant`
-    {"file": "objects_package.adb", "line": 15, "column": 30},
+    {"file": "objects_package.adb", "line": 17, "column": 38},
     //  reference `Public_Constant`
 
     {"file": "objects.ads", "line": 10, "column": 4},
@@ -107,29 +133,50 @@
     //  declaration `Private_Constant`
     {"file": "objects.adb", "line": 21, "column": 30},
     //  reference `Private_Constant`
-    {"file": "objects_package.adb", "line": 22, "column": 30},
+    {"file": "objects_package.adb", "line": 24, "column": 38},
     //  reference `Private_Constant`
 
     {"file": "objects.ads", "line": 13, "column": 4},
-    //  declaration of the object
+    //  declaration of the object `Private_Constant`
     {"file": "objects.adb", "line": 28, "column": 30},
-    //  reference of the object
-    {"file": "objects_package.adb", "line": 29, "column": 30},
-    //  reference of the object
+    //  reference of the object `Private_Constant`
+    {"file": "objects_package.adb", "line": 31, "column": 38},
+    //  reference of the object `Private_Constant`
 
     {"file": "objects.ads", "line": 16, "column": 4},
     //  declaration of the object with default value
     {"file": "objects.adb", "line": 35, "column": 30},
     //  reference of the object with default value
-    {"file": "objects_package.adb", "line": 36, "column": 30},
+    {"file": "objects_package.adb", "line": 38, "column": 38},
     //  reference of the object with default value
 
-    {"file": "exceptions.ads", "line": 4, "column": 4},
-    //  declaration of the exception
-    {"file": "exceptions.adb", "line": 7, "column": 16},
-    //  reference of the exception
-    {"file": "exceptions_package.adb", "line": 8, "column": 16},
-    //  reference of the exception
+    {"file": "objects_renamings.ads", "line": 6, "column": 4},
+    //  declaration of `Renamed_Named_Number`
+    {"file": "objects_renamings.adb", "line": 7, "column": 25},
+    // reference of `Renamed_Named_Number`
+    {"file": "objects_package.adb", "line": 47, "column": 43},
+    // reference of `Renamed_Named_Number`
+
+    {"file": "objects_renamings.ads", "line": 9, "column": 4},
+    //  declaration of `Renamed_Public_Constant`
+    {"file": "objects_renamings.adb", "line": 14, "column": 25},
+    // reference of `Renamed_Public_Constant`
+    {"file": "objects_package.adb", "line": 54, "column": 43},
+    // reference of `Renamed_Public_Constant`
+
+    {"file": "objects_renamings.ads", "line": 12, "column": 4},
+    //  declaration of `Renamed_Private_Constant`
+    {"file": "objects_renamings.adb", "line": 21, "column": 25},
+    // reference of `Renamed_Private_Constant`
+    {"file": "objects_package.adb", "line": 61, "column": 43},
+    // reference of `Renamed_Private_Constant`
+
+    {"file": "objects_renamings.ads", "line": 15, "column": 4},
+    //  declaration of `Renamed_Value`
+    {"file": "objects_renamings.adb", "line": 28, "column": 25},
+    // reference of `Renamed_Value`
+    {"file": "objects_package.adb", "line": 68, "column": 43},
+    // reference of `Renamed_Value`
 
     //  LAL 20250922: issue with package name resolution in the body doesn't allow to write test
     // {"file": "packages.ads", "line": 5, "column": 9},
