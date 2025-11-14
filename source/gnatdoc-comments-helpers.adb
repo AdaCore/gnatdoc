@@ -364,7 +364,9 @@ package body GNATdoc.Comments.Helpers is
                     | Ada_Null_Subp_Decl
                     | Ada_Number_Decl
                     | Ada_Object_Decl
-                    | Ada_Package_Body
+--                    | Ada_Package_Body
+--  LAL 20250923 due to bug in `P_Most_Visible_Part` package body's
+--  documentation is added even for package specification
                     | Ada_Package_Decl
                     | Ada_Package_Renaming_Decl
                     | Ada_Protected_Type_Decl
