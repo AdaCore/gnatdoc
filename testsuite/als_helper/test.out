@@ -655,6 +655,39 @@ function Generic_Function_Instantiation is new Generic_Function;
 ----- DOCUMENTATION -----
 Description of the generic function instantiation
 ----- DONE -----
+Defining name: <DefiningName "Generic_Procedure" generic_procedure.adb:5:11-5:28>
+Origin: <Id "Generic_Procedure" generic_procedure.adb:5:11-5:28>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the generic procedure body
+----- DONE -----
+Defining name: <DefiningName "Generic_Procedure" generic_procedure.adb:5:11-5:28>
+Origin: <Id "Generic_Procedure" generic_procedure.adb:8:5-8:22>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the generic procedure body
+----- DONE -----
+Defining name: <DefiningName "Generic_Procedure_Instantiation" generic_procedure_instantiation.ads:7:11-7:42>
+Origin: <Id "Generic_Procedure_Instantiation" generic_procedure_instantiation.ads:7:11-7:42>
+----- CODE SNIPPET -----
+procedure Generic_Procedure_Instantiation is new Generic_Procedure;
+----- DOCUMENTATION -----
+Description of the generic procedure instantiation
+----- DONE -----
+Defining name: <DefiningName "Generic_Package_Instantiation" generic_package_instantiation.ads:7:9-7:38>
+Origin: <Id "Generic_Package_Instantiation" generics_package.adb:6:6-6:35>
+----- CODE SNIPPET -----
+package Generic_Package_Instantiation is new Generic_Package;
+----- DOCUMENTATION -----
+Description of the generic package instantiation
+----- DONE -----
+Defining name: <DefiningName "Generic_Procedure_Instantiation" generic_procedure_instantiation.ads:7:11-7:42>
+Origin: <Id "Generic_Procedure_Instantiation" generics_package.adb:22:7-22:38>
+----- CODE SNIPPET -----
+procedure Generic_Procedure_Instantiation is new Generic_Procedure;
+----- DOCUMENTATION -----
+Description of the generic procedure instantiation
+----- DONE -----
 Defining name: <DefiningName "Named_Number" objects.ads:4:4-4:16>
 Origin: <Id "Named_Number" objects.ads:4:4-4:16>
 ----- CODE SNIPPET -----

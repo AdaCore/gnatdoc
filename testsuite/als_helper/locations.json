@@ -152,8 +152,24 @@
     {"file": "generics_package.adb", "line": 16, "column": 25},
     //  reference: `Generic_Function_Instantiation`
 
+    //  LAL 20251007: `Most_Visible_Part` returns body always
     // {"file": "generic_procedure.ads", "line": 6, "column": 11},
     // //  declaration: `Generic_Procedure`
+    {"file": "generic_procedure.adb", "line": 5, "column": 11},
+    //  declaration: `Generic_Procedure`
+    {"file": "generic_procedure.adb", "line": 8, "column": 5},
+    //  reference: `Generic_Procedure`
+    // {"file": "generic_procedure_instantiation.ads", "line": 5, "column": 6},
+    // //  reference: `Generic_Procedure` (context clause)
+    // {"file": "generic_procedure_instantiation.ads", "line": 7, "column": 50},
+    // //  reference: `Generic_Procedure`
+
+    {"file": "generic_procedure_instantiation.ads", "line": 7, "column": 11},
+    //  declaration: `Generic_Procedure_Instantiation`
+    {"file": "generics_package.adb", "line": 6, "column": 6},
+    //  reference: `Generic_Procedure_Instantiation` (context clause)
+    {"file": "generics_package.adb", "line": 22, "column": 7},
+    //  reference: `Generic_Procedure_Instantiation`
 
     //  Objects
 
