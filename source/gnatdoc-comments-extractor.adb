@@ -312,6 +312,7 @@ package body GNATdoc.Comments.Extractor is
       Leading_Section : out Section_Access;
       Cleanup         : Boolean)
      with Pre => Node.Kind in Ada_Generic_Package_Decl
+                                | Ada_Generic_Package_Instantiation
                                 | Ada_Generic_Subp_Decl
                                 | Ada_Package_Body
                                 | Ada_Package_Decl
