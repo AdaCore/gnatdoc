@@ -111,6 +111,27 @@
     {"file": "exceptions_package.adb", "line": 20, "column": 36},
     //  reference of the renamed exception
 
+    //  Generics
+
+    {"file": "generic_package.ads", "line": 6, "column": 9},
+    //  declaration: `Generic_Package`
+    {"file": "generic_package.ads", "line": 10, "column": 5},
+    //  reference: `Generic_Package`
+    //  LAL 20251007: `Most_Visible_Part` returns spec always
+    // {"file": "generic_package.adb", "line": 6, "column": 14},
+    // //  body: `Generic_Package`
+    // {"file": "generic_package.adb", "line": 13, "column": 5},
+    // //  reference: `Generic_Package`
+    {"file": "generic_package_instantiation.ads", "line": 5, "column": 6},
+    //  reference: `Generic_Package` (context clause)
+    {"file": "generic_package_instantiation.ads", "line": 7, "column": 46},
+    //  reference: `Generic_Package`
+
+    {"file": "generic_package_instantiation.ads", "line": 7, "column": 9},
+    //  reference: `Generic_Package_Instantiation` (context clause)
+    {"file": "generics_package.adb", "line": 11, "column": 7},
+    //  reference: `Generic_Package_Instantiation`
+
     //  Objects
 
     {"file": "objects.ads", "line": 4, "column": 4},

@@ -572,6 +572,52 @@ Renamed_Test_Exception : exception;
 ----- DOCUMENTATION -----
 Description of the renamed exception
 ----- DONE -----
+Defining name: <DefiningName "Generic_Package" generic_package.ads:6:9-6:24>
+Origin: <Id "Generic_Package" generic_package.ads:6:9-6:24>
+----- CODE SNIPPET -----
+generic
+package Generic_Package
+----- DOCUMENTATION -----
+Description of the generic package specification
+----- DONE -----
+Defining name: <DefiningName "Generic_Package" generic_package.ads:6:9-6:24>
+Origin: <Id "Generic_Package" generic_package.ads:10:5-10:20>
+----- CODE SNIPPET -----
+generic
+package Generic_Package
+----- DOCUMENTATION -----
+Description of the generic package specification
+----- DONE -----
+Defining name: <DefiningName "Generic_Package" generic_package.ads:6:9-6:24>
+Origin: <Id "Generic_Package" generic_package_instantiation.ads:5:6-5:21>
+----- CODE SNIPPET -----
+generic
+package Generic_Package
+----- DOCUMENTATION -----
+Description of the generic package specification
+----- DONE -----
+Defining name: <DefiningName "Generic_Package" generic_package.ads:6:9-6:24>
+Origin: <Id "Generic_Package" generic_package_instantiation.ads:7:46-7:61>
+----- CODE SNIPPET -----
+generic
+package Generic_Package
+----- DOCUMENTATION -----
+Description of the generic package specification
+----- DONE -----
+Defining name: <DefiningName "Generic_Package_Instantiation" generic_package_instantiation.ads:7:9-7:38>
+Origin: <Id "Generic_Package_Instantiation" generic_package_instantiation.ads:7:9-7:38>
+----- CODE SNIPPET -----
+package Generic_Package_Instantiation is new Generic_Package;
+----- DOCUMENTATION -----
+Description of the generic package instantiation
+----- DONE -----
+Defining name: <DefiningName "Generic_Package_Instantiation" generic_package_instantiation.ads:7:9-7:38>
+Origin: <Id "Generic_Package_Instantiation" generics_package.adb:11:7-11:36>
+----- CODE SNIPPET -----
+package Generic_Package_Instantiation is new Generic_Package;
+----- DOCUMENTATION -----
+Description of the generic package instantiation
+----- DONE -----
 Defining name: <DefiningName "Named_Number" objects.ads:4:4-4:16>
 Origin: <Id "Named_Number" objects.ads:4:4-4:16>
 ----- CODE SNIPPET -----
