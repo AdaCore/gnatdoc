@@ -612,11 +612,48 @@ package Generic_Package_Instantiation is new Generic_Package;
 Description of the generic package instantiation
 ----- DONE -----
 Defining name: <DefiningName "Generic_Package_Instantiation" generic_package_instantiation.ads:7:9-7:38>
-Origin: <Id "Generic_Package_Instantiation" generics_package.adb:11:7-11:36>
+Origin: <Id "Generic_Package_Instantiation" generics_package.adb:13:7-13:36>
 ----- CODE SNIPPET -----
 package Generic_Package_Instantiation is new Generic_Package;
 ----- DOCUMENTATION -----
 Description of the generic package instantiation
+----- DONE -----
+Defining name: <DefiningName "Generic_Function" generic_function.adb:5:10-5:26>
+Origin: <Id "Generic_Function" generic_function.adb:5:10-5:26>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the generic function body
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Generic_Function" generic_function.adb:5:10-5:26>
+Origin: <Id "Generic_Function" generic_function.adb:8:5-8:21>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the generic function body
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Generic_Function_Instantiation" generic_function_instantiation.ads:7:10-7:40>
+Origin: <Id "Generic_Function_Instantiation" generic_function_instantiation.ads:7:10-7:40>
+----- CODE SNIPPET -----
+function Generic_Function_Instantiation is new Generic_Function;
+----- DOCUMENTATION -----
+Description of the generic function instantiation
+----- DONE -----
+Defining name: <DefiningName "Generic_Function_Instantiation" generic_function_instantiation.ads:7:10-7:40>
+Origin: <Id "Generic_Function_Instantiation" generics_package.adb:5:6-5:36>
+----- CODE SNIPPET -----
+function Generic_Function_Instantiation is new Generic_Function;
+----- DOCUMENTATION -----
+Description of the generic function instantiation
+----- DONE -----
+Defining name: <DefiningName "Generic_Function_Instantiation" generic_function_instantiation.ads:7:10-7:40>
+Origin: <Id "Generic_Function_Instantiation" generics_package.adb:16:25-16:55>
+----- CODE SNIPPET -----
+function Generic_Function_Instantiation is new Generic_Function;
+----- DOCUMENTATION -----
+Description of the generic function instantiation
 ----- DONE -----
 Defining name: <DefiningName "Named_Number" objects.ads:4:4-4:16>
 Origin: <Id "Named_Number" objects.ads:4:4-4:16>

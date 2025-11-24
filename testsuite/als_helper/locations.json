@@ -129,8 +129,31 @@
 
     {"file": "generic_package_instantiation.ads", "line": 7, "column": 9},
     //  reference: `Generic_Package_Instantiation` (context clause)
-    {"file": "generics_package.adb", "line": 11, "column": 7},
+    {"file": "generics_package.adb", "line": 13, "column": 7},
     //  reference: `Generic_Package_Instantiation`
+
+    //  LAL 20251007: `Most_Visible_Part` returns body always
+    // {"file": "generic_function.ads", "line": 6, "column": 10},
+    // //  declaration: `Generic_Function`
+    {"file": "generic_function.adb", "line": 5, "column": 10},
+    //  declaration: `Generic_Function` (body)
+    {"file": "generic_function.adb", "line": 8, "column": 5},
+    //  reference: `Generic_Function` (end)
+    //  LAL 20251007: `Most_Visible_Part` returns body always
+    // {"file": "generic_function_instantiation.ads", "line": 5, "column": 6},
+    // //  reference: `Generic_Function`
+    // {"file": "generic_function_instantiation.ads", "line": 7, "column": 48},
+    // //  reference: `Generic_Function`
+
+    {"file": "generic_function_instantiation.ads", "line": 7, "column": 10},
+    //  declaration: `Generic_Function_Instantiation`
+    {"file": "generics_package.adb", "line": 5, "column": 6},
+    //  reference: `Generic_Function_Instantiation` (context clause)
+    {"file": "generics_package.adb", "line": 16, "column": 25},
+    //  reference: `Generic_Function_Instantiation`
+
+    // {"file": "generic_procedure.ads", "line": 6, "column": 11},
+    // //  declaration: `Generic_Procedure`
 
     //  Objects
 
