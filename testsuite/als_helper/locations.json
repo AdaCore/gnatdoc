@@ -171,6 +171,83 @@
     {"file": "generics_package.adb", "line": 22, "column": 7},
     //  reference: `Generic_Procedure_Instantiation`
 
+    {"file": "generics.ads", "line": 11, "column": 12},
+    //  declaration: `Private_Type`
+    {"file": "generics.adb", "line": 22, "column": 37},
+    //  reference: `Private_Type`
+    {"file": "generics-instantiations.ads", "line": 13, "column": 13},
+    //  reference: `Private_Type`
+
+    {"file": "generics.ads", "line": 14, "column": 12},
+    //  declaration: `Derived_Type`
+    {"file": "generics.adb", "line": 23, "column": 37},
+    //  reference: `Derived_Type`
+    {"file": "generics-instantiations.ads", "line": 15, "column": 13},
+    //  reference: `Derived_Type`
+
+    {"file": "generics.ads", "line": 17, "column": 12},
+    //  declaration: `Discrete_Type`
+    {"file": "generics.adb", "line": 24, "column": 37},
+    //  reference: `Discrete_Type`
+    {"file": "generics-instantiations.ads", "line": 16, "column": 13},
+    //  reference: `Discrete_Type`
+
+    {"file": "generics.ads", "line": 20, "column": 12},
+    //  declaration: `Signed_Integer_Type`
+    {"file": "generics.adb", "line": 25, "column": 37},
+    //  reference: `Signed_Integer_Type`
+    {"file": "generics-instantiations.ads", "line": 17, "column": 13},
+    //  reference: `Signed_Integer_Type`
+
+    {"file": "generics.ads", "line": 23, "column": 12},
+    //  declaration: `Modular_Type`
+    {"file": "generics.adb", "line": 26, "column": 37},
+    //  reference: `Modular_Type`
+    {"file": "generics-instantiations.ads", "line": 18, "column": 13},
+    //  reference: `Modular_Type`
+
+    {"file": "generics.ads", "line": 26, "column": 12},
+    //  declaration: `Floating_Point_Type`
+    {"file": "generics.adb", "line": 27, "column": 37},
+    //  reference: `Floating_Point_Type`
+    {"file": "generics-instantiations.ads", "line": 19, "column": 13},
+    //  reference: `Floating_Point_Type`
+
+    {"file": "generics.ads", "line": 29, "column": 12},
+    //  declaration: `Ordinary_Fixed_Point_Type`
+    {"file": "generics.adb", "line": 28, "column": 37},
+    //  reference: `Ordinary_Fixed_Point_Type`
+    {"file": "generics-instantiations.ads", "line": 20, "column": 13},
+    //  reference: `Ordinary_Fixed_Point_Type`
+
+    {"file": "generics.ads", "line": 32, "column": 12},
+    //  declaration: `Decimal_Fixed_Point_Type`
+    {"file": "generics.adb", "line": 29, "column": 37},
+    //  reference: `Decimal_Fixed_Point_Type`
+    {"file": "generics-instantiations.ads", "line": 21, "column": 13},
+    //  reference: `Decimal_Fixed_Point_Type`
+
+    {"file": "generics.ads", "line": 35, "column": 12},
+    //  declaration: `Array_Type`
+    {"file": "generics.adb", "line": 30, "column": 37},
+    //  reference: `Array_Type`
+    {"file": "generics-instantiations.ads", "line": 22, "column": 13},
+    //  reference: `Array_Type`
+
+    {"file": "generics.ads", "line": 38, "column": 12},
+    //  declaration: `Access_Type`
+    {"file": "generics.adb", "line": 31, "column": 37},
+    //  reference: `Access_Type`
+    {"file": "generics-instantiations.ads", "line": 23, "column": 13},
+    //  reference: `Access_Type`
+
+    {"file": "generics.ads", "line": 41, "column": 12},
+    //  declaration: `Interface_Type`
+    {"file": "generics.adb", "line": 33, "column": 41},
+    //  reference: `Interface_Type`
+    {"file": "generics-instantiations.ads", "line": 24, "column": 13},
+    //  reference: `Interface_Type`
+
     //  Objects
 
     {"file": "objects.ads", "line": 4, "column": 4},
