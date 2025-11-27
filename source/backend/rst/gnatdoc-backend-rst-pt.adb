@@ -38,16 +38,6 @@ package body GNATdoc.Backend.RST.PT is
         "<"          => Less,
         "="          => GNATdoc.Entities."=");
 
-   procedure Union
-     (Container : in out Entity_Information_Sets.Set;
-      Items     : GNATdoc.Entities.Entity_Information_Sets.Set);
-   --  Include `Items` when they are not private
-
-   procedure Union
-     (Container : in out Entity_Information_Sets.Set;
-      Items     : GNATdoc.Entities.Entity_Reference_Sets.Set);
-   --  Include `Items` when they are not private
-
    procedure Generate_Documentation
      (Self   : in out PT_RST_Backend'Class;
       Entity : GNATdoc.Entities.Entity_Information);
@@ -404,67 +394,56 @@ package body GNATdoc.Backend.RST.PT is
          Success);
       File.New_Line (Success);
 
-      declare
-         Entities : Entity_Information_Sets.Set;
+      for Item_Reference of Entity.Belong_Entities loop
+         declare
+            Item : constant not null
+              GNATdoc.Entities.Entity_Information_Access :=
+                GNATdoc.Entities.To_Entity (Item_Reference.Signature);
 
-      begin
-         Union (Entities, Entity.Simple_Types);
-         Union (Entities, Entity.Array_Types);
-         Union (Entities, Entity.Record_Types);
-         Union (Entities, Entity.Interface_Types);
-         Union (Entities, Entity.Tagged_Types);
-         Union (Entities, Entity.Task_Types);
-         Union (Entities, Entity.Protected_Types);
-         Union (Entities, Entity.Access_Types);
-         Union (Entities, Entity.Subtypes);
-         Union (Entities, Entity.Belongs_Constants);
-         Union (Entities, Entity.Variables);
-         Union (Entities, Entity.Exceptions);
-         Union (Entities, Entity.Belongs_Subprograms);
-         Union (Entities, Entity.Generic_Instantiations);
+         begin
+            if not Is_Private_Entity (Item) then
+               case Item.Kind is
+                  when GNATdoc.Entities.Ada_Function
+                     | GNATdoc.Entities.Ada_Procedure
+                  =>
+                     Generate_Callable_Documentation
+                       ("", Item.all, Entity.Qualified_Name);
 
-         for Item of Entities loop
-            case Item.Kind is
-               when GNATdoc.Entities.Ada_Function
-                  | GNATdoc.Entities.Ada_Procedure
-               =>
-                  Generate_Callable_Documentation
-                    ("", Item.all, Entity.Qualified_Name);
+                  when GNATdoc.Entities.Ada_Exception =>
+                     Generate_Exception_Documentation
+                       ("", Item.all, Entity.Qualified_Name);
 
-               when GNATdoc.Entities.Ada_Exception =>
-                  Generate_Exception_Documentation
-                    ("", Item.all, Entity.Qualified_Name);
+                  when GNATdoc.Entities.Ada_Object =>
+                     Generate_Object_Documentation
+                       ("", Item.all, Entity.Qualified_Name, False);
 
-               when GNATdoc.Entities.Ada_Object =>
-                  Generate_Object_Documentation
-                    ("", Item.all, Entity.Qualified_Name, False);
+                  when GNATdoc.Entities.Ada_Interface_Type
+                     | GNATdoc.Entities.Ada_Other_Type
+                     | GNATdoc.Entities.Ada_Tagged_Type
+                  =>
+                     Generate_Type_Documentation
+                       ("", Item.all, Entity.Qualified_Name);
 
-               when GNATdoc.Entities.Ada_Interface_Type
-                  | GNATdoc.Entities.Ada_Other_Type
-                  | GNATdoc.Entities.Ada_Tagged_Type
-               =>
-                  Generate_Type_Documentation
-                    ("", Item.all, Entity.Qualified_Name);
+                  when GNATdoc.Entities.Ada_Generic_Package_Instantiation =>
+                     Generate_Generic_Package_Instantiation_Documentation
+                       ("", Item.all, Entity.Qualified_Name);
 
-               when GNATdoc.Entities.Ada_Generic_Package_Instantiation =>
-                  Generate_Generic_Package_Instantiation_Documentation
-                    ("", Item.all, Entity.Qualified_Name);
+                  when GNATdoc.Entities.Ada_Generic_Subprogram_Instantiation =>
+                     --  `sphinx-adadomain` doesn't support generic subprogram
+                     --  instantiation
 
-               when GNATdoc.Entities.Ada_Generic_Subprogram_Instantiation =>
-                  --  `sphinx-adadomain` doesn't support generic subprogram
-                  --  instantiation
+                     null;
 
-                  null;
-
-               when others =>
-                  raise Program_Error
-                    with GNATdoc.Entities.Entity_Kind'Image (Item.Kind)
-                    & " "
-                    & VSS.Strings.Conversions.To_UTF_8_String
-                    (Item.Qualified_Name);
-            end case;
-         end loop;
-      end;
+                  when others =>
+                     raise Program_Error
+                       with GNATdoc.Entities.Entity_Kind'Image (Item.Kind)
+                       & " "
+                       & VSS.Strings.Conversions.To_UTF_8_String
+                       (Item.Qualified_Name);
+               end case;
+            end if;
+         end;
+      end loop;
 
       File.Close;
    end Generate_Documentation;
@@ -523,37 +502,5 @@ package body GNATdoc.Backend.RST.PT is
    begin
       return "rstpt";
    end Name;
-
-   -----------
-   -- Union --
-   -----------
-
-   procedure Union
-     (Container : in out Entity_Information_Sets.Set;
-      Items     : GNATdoc.Entities.Entity_Information_Sets.Set) is
-   begin
-      for Item of Items loop
-         if not Is_Private_Entity (Item) then
-            Container.Insert (Item);
-         end if;
-      end loop;
-   end Union;
-
-   -----------
-   -- Union --
-   -----------
-
-   procedure Union
-     (Container : in out Entity_Information_Sets.Set;
-      Items     : GNATdoc.Entities.Entity_Reference_Sets.Set) is
-   begin
-      for Item of Items loop
-         if not Is_Private_Entity
-           (GNATdoc.Entities.To_Entity (Item.Signature))
-         then
-            Container.Insert (GNATdoc.Entities.To_Entity (Item.Signature));
-         end if;
-      end loop;
-   end Union;
 
 end GNATdoc.Backend.RST.PT;
