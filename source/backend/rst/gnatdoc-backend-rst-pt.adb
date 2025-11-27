@@ -488,7 +488,7 @@ package body GNATdoc.Backend.RST.PT is
    function Less
      (Left  : not null GNATdoc.Entities.Entity_Information_Access;
       Right : not null GNATdoc.Entities.Entity_Information_Access)
-            return Boolean
+      return Boolean
    is
       use type VSS.Strings.Character_Count;
       use type VSS.Strings.Line_Count;
