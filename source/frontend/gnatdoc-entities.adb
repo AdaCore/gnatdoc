@@ -112,6 +112,19 @@ package body GNATdoc.Entities is
       end if;
    end Is_In_Declaration_Order;
 
+   -----------------------------
+   -- Is_In_Declaration_Order --
+   -----------------------------
+
+   function Is_In_Declaration_Order
+     (Left  : Entity_Reference;
+      Right : Entity_Reference) return Boolean is
+   begin
+      return
+        Is_In_Declaration_Order
+          (To_Entity (Left.Signature), To_Entity (Right.Signature));
+   end Is_In_Declaration_Order;
+
    ------------------
    -- Is_Undefined --
    ------------------

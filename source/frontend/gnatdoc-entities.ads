@@ -86,8 +86,18 @@ package GNATdoc.Entities is
      (Left  : Entity_Reference;
       Right : Entity_Reference) return Boolean;
 
+   function Is_In_Declaration_Order
+     (Left  : Entity_Reference;
+      Right : Entity_Reference) return Boolean;
+
    package Entity_Reference_Sets is
      new Ada.Containers.Ordered_Sets (Entity_Reference);
+
+   package Entity_Reference_Declaration_Order_Sets is
+     new Ada.Containers.Ordered_Sets
+       (Element_Type => Entity_Reference,
+        "<"          => Is_In_Declaration_Order,
+        "="          => "=");
 
    type Entity_Information is tagged limited record
       Location               : Source_Location;
@@ -110,6 +120,8 @@ package GNATdoc.Entities is
 
       Entities               : Entity_Information_Declaration_Order_Sets.Set;
       --  All nested entities (structural view, in declaration order)
+      Belong_Entities        : Entity_Reference_Declaration_Order_Sets.Set;
+      --  All belong entities (belongs view, in declaration order)
 
       Is_Private             : Boolean := False;
       --  Private entities are excluded from the documentartion.

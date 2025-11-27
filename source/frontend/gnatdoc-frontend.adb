@@ -311,8 +311,10 @@ package body GNATdoc.Frontend is
 
                if Belongs = null then
                   Entity.Belongs := Belongs_Reference;
+                  Belongs_Entity.Belong_Entities.Insert (Entity.Reference);
                   Belongs_Entity.Belongs_Subprograms.Insert (Entity.Reference);
 
+                  Enclosing.Belong_Entities.Exclude (Entity.Reference);
                   Enclosing.Belongs_Subprograms.Exclude (Entity.Reference);
                   --  Subprograms declared in private part can be excluded
                   --  from the set of subprograms, so use `Exclude` to prevent
@@ -508,8 +510,10 @@ package body GNATdoc.Frontend is
              Documentation  => <>,
              others         => <>)
       do
-         Enclosing.Entities.Insert (Result);
          GNATdoc.Entities.To_Entity.Insert (Result.Signature, Result);
+
+         Enclosing.Entities.Insert (Result);
+         Enclosing.Belong_Entities.Insert (Result.Reference);
       end return;
    end Create_Entity;
 
@@ -723,10 +727,13 @@ package body GNATdoc.Frontend is
                --  from generation for some reason
 
             begin
-               if Enclosing.Belongs_Subprograms.Contains (Entity.Reference)
+               if Enclosing.Belong_Entities.Contains (Entity.Reference)
                  and Belongs /= null
                then
+                  Enclosing.Belong_Entities.Delete (Entity.Reference);
                   Enclosing.Belongs_Subprograms.Delete (Entity.Reference);
+
+                  Belongs.Belong_Entities.Insert (Entity.Reference);
                   Belongs.Belongs_Subprograms.Insert (Entity.Reference);
                end if;
 
@@ -832,7 +839,11 @@ package body GNATdoc.Frontend is
             Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
 
          else
+            Enclosing.Belong_Entities.Delete (Entity.Reference);
+
+            Belongs.Belong_Entities.Insert (Entity.Reference);
             Belongs.Belongs_Subprograms.Insert (Entity.Reference);
+
             Entity.Belongs := Belongs.Reference;
          end if;
 
@@ -1242,7 +1253,11 @@ package body GNATdoc.Frontend is
             Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
 
          else
+            Enclosing.Belong_Entities.Delete (Entity.Reference);
+
+            Belongs.Belong_Entities.Insert (Entity.Reference);
             Belongs.Belongs_Subprograms.Insert (Entity.Reference);
+
             Entity.Belongs := Belongs.Reference;
          end if;
 
@@ -1853,6 +1868,9 @@ package body GNATdoc.Frontend is
                     Template.Format
                       (VSS.Strings.Formatters.Strings.Image (Entity.Name),
                        VSS.Strings.Formatters.Strings.Image (Belongs.Name));
+
+                  Enclosing.Belong_Entities.Delete (Entity.Reference);
+                  Belongs.Belong_Entities.Insert (Entity.Reference);
                   Belongs.Belongs_Constants.Insert (Entity.Reference);
                   Entity.Belongs := Belongs.Reference;
                end if;
