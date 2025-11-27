@@ -1457,23 +1457,21 @@ package body GNATdoc.Comments.Extractor is
    -- Extract_Formal_Section --
    ----------------------------
 
-   function Extract_Formal_Section
+   procedure Extract_Formal_Section
      (Documentation : Structured_Comment;
-      Name          : Libadalang.Analysis.Defining_Name'Class)
-      return Structured_Comment
+      Name          : Libadalang.Analysis.Defining_Name'Class;
+      Into          : in out Structured_Comment)
    is
       Symbol : constant VSS.Strings.Virtual_String := To_Symbol (Name);
 
    begin
-      return Result : Structured_Comment do
-         for Section of Documentation.Sections loop
-            if Section.Kind = Formal and Section.Symbol = Symbol then
-               Result.Sections := Clone (Section.Sections);
+      for Section of Documentation.Sections loop
+         if Section.Kind = Formal and Section.Symbol = Symbol then
+            Into.Sections := Clone (Section.Sections);
 
-               exit;
-            end if;
-         end loop;
-      end return;
+            exit;
+         end if;
+      end loop;
    end Extract_Formal_Section;
 
    ----------------------------------------------------

@@ -49,8 +49,18 @@ package GNATdoc.Entities is
      (Left  : Entity_Information_Access;
       Right : Entity_Information_Access) return Boolean;
 
+   function Is_In_Declaration_Order
+     (Left  : Entity_Information_Access;
+      Right : Entity_Information_Access) return Boolean;
+
    package Entity_Information_Sets is
      new Ada.Containers.Ordered_Sets (Entity_Information_Access);
+
+   package Entity_Information_Declaration_Order_Sets is
+     new Ada.Containers.Ordered_Sets
+       (Element_Type => Entity_Information_Access,
+        "<"          => Is_In_Declaration_Order,
+        "="          => "=");
 
    package Entity_Information_Maps is
      new Ada.Containers.Hashed_Maps
@@ -97,6 +107,9 @@ package GNATdoc.Entities is
       --  subprogram:
       --    * can be called with prefix notation
       --    * is a primitive operations of the tagged type
+
+      Entities               : Entity_Information_Declaration_Order_Sets.Set;
+      --  All nested entities (structural view, in declaration order)
 
       Is_Private             : Boolean := False;
       --  Private entities are excluded from the documentartion.

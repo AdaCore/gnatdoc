@@ -80,6 +80,38 @@ package body GNATdoc.Entities is
       return VSS.Strings.Hash (Self.Image);
    end Hash;
 
+   -----------------------------
+   -- Is_In_Declaration_Order --
+   -----------------------------
+
+   function Is_In_Declaration_Order
+     (Left  : Entity_Information_Access;
+      Right : Entity_Information_Access) return Boolean
+   is
+      use type VSS.Strings.Character_Count;
+      use type VSS.Strings.Line_Count;
+      use type VSS.Strings.Virtual_String;
+
+   begin
+      if Left.Location.File < Right.Location.File then
+         return True;
+
+      elsif Left.Location.File = Right.Location.File
+        and Left.Location.Line < Right.Location.Line
+      then
+         return True;
+
+      elsif Left.Location.File = Right.Location.File
+        and Left.Location.Line < Right.Location.Line
+        and Left.Location.Column < Right.Location.Column
+      then
+         return True;
+
+      else
+         return False;
+      end if;
+   end Is_In_Declaration_Order;
+
    ------------------
    -- Is_Undefined --
    ------------------

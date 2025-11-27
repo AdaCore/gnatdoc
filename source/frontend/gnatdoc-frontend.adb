@@ -180,7 +180,6 @@ package body GNATdoc.Frontend is
 
    procedure Construct_Generic_Formals
      (Entity  : not null GNATdoc.Entities.Entity_Information_Access;
-      Name    : Libadalang.Analysis.Defining_Name'Class;
       Formals : Generic_Formal_Part);
    --  Constructs entities for formal parameters of the generic from the
    --  structured comment of the generic.
@@ -208,6 +207,13 @@ package body GNATdoc.Frontend is
       Belongs   : out GNATdoc.Entities.Entity_Information_Access;
       Entity    : not null GNATdoc.Entities.Entity_Information_Access);
    --  Process `@belongs-to` tag.
+
+   function Create_Entity
+     (Enclosing     : GNATdoc.Entities.Entity_Information_Access;
+      Kind          : GNATdoc.Entities.Entity_Kind;
+      Defining_Name : Libadalang.Analysis.Defining_Name'Class)
+      return not null GNATdoc.Entities.Entity_Information_Access;
+   --  Creates entity and link it with enclosing
 
    Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
    --  All methods was found during processing of compilation units.
@@ -403,13 +409,11 @@ package body GNATdoc.Frontend is
 
    procedure Construct_Generic_Formals
      (Entity  : not null GNATdoc.Entities.Entity_Information_Access;
-      Name    : Libadalang.Analysis.Defining_Name'Class;
       Formals : Generic_Formal_Part)
    is
       procedure Create_Formal
-        (Enclosing      : not null GNATdoc.Entities.Entity_Information_Access;
-         Enclosing_Name : Libadalang.Analysis.Defining_Name'Class;
-         Name           : Libadalang.Analysis.Defining_Name'Class);
+        (Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+         Name      : Libadalang.Analysis.Defining_Name'Class);
       --  Extract documentation for formal with given name.
 
       -------------------
@@ -417,26 +421,22 @@ package body GNATdoc.Frontend is
       -------------------
 
       procedure Create_Formal
-        (Enclosing      : not null GNATdoc.Entities.Entity_Information_Access;
-         Enclosing_Name : Libadalang.Analysis.Defining_Name'Class;
-         Name           : Libadalang.Analysis.Defining_Name'Class)
+        (Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
+         Name      : Libadalang.Analysis.Defining_Name'Class)
       is
          Entity :
            constant not null GNATdoc.Entities.Entity_Information_Access :=
-             new GNATdoc.Entities.Entity_Information'
-               (Location       => GNATdoc.Utilities.Location (Name),
-                Name           => To_Virtual_String (Name.F_Name.Text),
-                Qualified_Name =>
-                  To_Virtual_String (Name.P_Fully_Qualified_Name),
-                Signature      => Signature (Name),
-                Enclosing      => Signature (Enclosing_Name),
-                Is_Private     => False,
-                Documentation  =>
-                  GNATdoc.Comments.Extractor.Extract_Formal_Section
-                    (Enclosing.Documentation, Name),
-                others         => <>);
+             Create_Entity
+               (Enclosing     => Enclosing,
+                Kind          => GNATdoc.Entities.Undefined,
+                Defining_Name => Name);
 
       begin
+         GNATdoc.Comments.Extractor.Extract_Formal_Section
+           (Documentation => Enclosing.Documentation,
+            Name          => Name,
+            Into          => Entity.Documentation);
+
          Enclosing.Formals.Insert (Entity);
       end Create_Formal;
 
@@ -456,13 +456,12 @@ package body GNATdoc.Frontend is
                         when others => raise Program_Error);
 
                begin
-                  Create_Formal (Entity, Name, Formal_Name);
+                  Create_Formal (Entity, Formal_Name);
                end;
 
             when Ada_Generic_Formal_Subp_Decl =>
                Create_Formal
                  (Entity,
-                  Name,
                   Item.As_Generic_Formal_Subp_Decl.F_Decl
                     .As_Concrete_Formal_Subp_Decl.F_Subp_Spec.F_Subp_Name);
 
@@ -470,13 +469,12 @@ package body GNATdoc.Frontend is
                for Id of
                  Item.As_Generic_Formal_Obj_Decl.F_Decl.As_Object_Decl.F_Ids
                loop
-                  Create_Formal (Entity, Name, Id);
+                  Create_Formal (Entity, Id);
                end loop;
 
             when Ada_Generic_Formal_Package =>
                Create_Formal
                  (Entity,
-                  Name,
                   Item.As_Generic_Formal_Package.F_Decl
                     .As_Generic_Package_Instantiation.F_Name);
 
@@ -486,6 +484,33 @@ package body GNATdoc.Frontend is
          end case;
       end loop;
    end Construct_Generic_Formals;
+
+   -------------------
+   -- Create_Entity --
+   -------------------
+
+   function Create_Entity
+     (Enclosing     : GNATdoc.Entities.Entity_Information_Access;
+      Kind          : GNATdoc.Entities.Entity_Kind;
+      Defining_Name : Libadalang.Analysis.Defining_Name'Class)
+      return not null GNATdoc.Entities.Entity_Information_Access is
+   begin
+      return Result : constant not null
+        GNATdoc.Entities.Entity_Information_Access :=
+          new GNATdoc.Entities.Entity_Information'
+            (Kind           => Kind,
+             Location       => GNATdoc.Utilities.Location (Defining_Name),
+             Name           => To_Virtual_String (Defining_Name.F_Name.Text),
+             Qualified_Name =>
+               To_Virtual_String (Defining_Name.P_Fully_Qualified_Name),
+             Signature      => Signature (Defining_Name),
+             Enclosing      => Enclosing.Signature,
+             Documentation  => <>,
+             others         => <>)
+      do
+         Enclosing.Entities.Insert (Result);
+      end return;
+   end Create_Entity;
 
    -----------------
    -- Postprocess --
@@ -720,13 +745,10 @@ package body GNATdoc.Frontend is
    is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Kind           => GNATdoc.Entities.Ada_Other_Type,
-           Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Ada_Other_Type,
+           Defining_Name => Name);
 
    begin
       Extract
@@ -748,13 +770,10 @@ package body GNATdoc.Frontend is
    is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Kind           => GNATdoc.Entities.Ada_Other_Type,
-           Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Ada_Other_Type,
+           Defining_Name => Name);
 
    begin
       Extract
@@ -778,24 +797,20 @@ package body GNATdoc.Frontend is
    is
       Name    : constant Defining_Name := Node.F_Subp_Spec.F_Subp_Name;
       Entity  : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
-           Kind           =>
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          =>
              (case Node.F_Subp_Spec.F_Subp_Kind is
                  when Ada_Subp_Kind_Function  =>
                    GNATdoc.Entities.Ada_Function,
                  when Ada_Subp_Kind_Procedure =>
                    GNATdoc.Entities.Ada_Procedure),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Enclosing      =>
-             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           RST_Profile    => RST_Profile (Node.F_Subp_Spec),
-           others         => <>);
+           Defining_Name => Name);
       Belongs : GNATdoc.Entities.Entity_Information_Access;
 
    begin
+      Entity.RST_Profile := RST_Profile (Node.F_Subp_Spec);
+
       Extract
         (Node          => Node,
          Options       => GNATdoc.Options.Extractor_Options,
@@ -1196,24 +1211,20 @@ package body GNATdoc.Frontend is
       Spec    : constant Subp_Spec     := Node.F_Subp_Spec;
       Name    : constant Defining_Name := Spec.F_Subp_Name;
       Entity  : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
-           Kind           =>
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          =>
              (case Spec.F_Subp_Kind is
                  when Ada_Subp_Kind_Function  =>
                    GNATdoc.Entities.Ada_Function,
                  when Ada_Subp_Kind_Procedure =>
                    GNATdoc.Entities.Ada_Procedure),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Enclosing      =>
-             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           RST_Profile    => RST_Profile (Spec),
-           others         => <>);
+           Defining_Name => Name);
       Belongs : GNATdoc.Entities.Entity_Information_Access;
 
    begin
+      Entity.RST_Profile := RST_Profile (Spec);
+
       Extract
         (Node          => Node,
          Options       => GNATdoc.Options.Extractor_Options,
@@ -1385,15 +1396,10 @@ package body GNATdoc.Frontend is
       Def    : constant Derived_Type_Def :=
         Node.F_Type_Def.As_Derived_Type_Def;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Kind           => GNATdoc.Entities.Ada_Tagged_Type,
-           Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Enclosing      =>
-             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Ada_Tagged_Type,
+           Defining_Name => Name);
 
    begin
       Extract
@@ -1484,12 +1490,10 @@ package body GNATdoc.Frontend is
    is
       Name   : constant Defining_Name := Node.F_Entry_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Undefined,
+           Defining_Name => Name);
 
    begin
       Extract
@@ -1511,12 +1515,10 @@ package body GNATdoc.Frontend is
    is
       Name   : constant Defining_Name := Node.F_Spec.F_Entry_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Undefined,
+           Defining_Name => Name);
 
    begin
       Extract
@@ -1540,14 +1542,10 @@ package body GNATdoc.Frontend is
          declare
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
-                new GNATdoc.Entities.Entity_Information'
-                  (Kind           => GNATdoc.Entities.Ada_Exception,
-                   Location       => GNATdoc.Utilities.Location (Name),
-                   Name           => To_Virtual_String (Name.Text),
-                   Qualified_Name =>
-                     To_Virtual_String (Name.P_Fully_Qualified_Name),
-                   Signature      => Signature (Name),
-                   others         => <>);
+                Create_Entity
+                  (Enclosing     => Enclosing,
+                   Kind          => GNATdoc.Entities.Ada_Exception,
+                   Defining_Name => Name);
 
          begin
             Extract
@@ -1575,19 +1573,16 @@ package body GNATdoc.Frontend is
          then Node.As_Generic_Package_Instantiation.F_Name
          else Node.As_Generic_Subp_Instantiation.F_Subp_Name);
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Kind           =>
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind =>
              (case Node.Kind is
                  when Ada_Generic_Package_Instantiation =>
                    GNATdoc.Entities.Ada_Generic_Package_Instantiation,
                  when Ada_Generic_Subp_Instantiation =>
                    GNATdoc.Entities.Ada_Generic_Subprogram_Instantiation,
                  when others => raise Program_Error),
-           Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           others         => <>);
+           Defining_Name => Name);
 
    begin
       Extract
@@ -1621,23 +1616,19 @@ package body GNATdoc.Frontend is
       Spec   : constant Subp_Spec := Decl.F_Subp_Spec;
       Name   : constant Defining_Name := Spec.F_Subp_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
-           Kind           =>
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          =>
              (case Spec.F_Subp_Kind is
                  when Ada_Subp_Kind_Function  =>
                    GNATdoc.Entities.Ada_Function,
                  when Ada_Subp_Kind_Procedure =>
                    GNATdoc.Entities.Ada_Procedure),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Enclosing      =>
-             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           RST_Profile    => RST_Profile (Spec),
-           others         => <>);
+           Defining_Name => Name);
 
    begin
+      Entity.RST_Profile := RST_Profile (Spec);
+
       Extract
         (Node          => Node,
          Options       => GNATdoc.Options.Extractor_Options,
@@ -1652,7 +1643,7 @@ package body GNATdoc.Frontend is
 
       Check_Undocumented (Entity);
 
-      Construct_Generic_Formals (Entity, Name, Node.F_Formal_Part);
+      Construct_Generic_Formals (Entity, Node.F_Formal_Part);
    end Process_Generic_Subp_Decl;
 
    ----------------------------------
@@ -1665,19 +1656,16 @@ package body GNATdoc.Frontend is
    is
       Name   : constant Defining_Name := Node.F_Package_Decl.F_Package_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.F_Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Enclosing      =>
-             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           Is_Private     =>
-             (Node.Parent.Kind = Ada_Library_Item
-                and then Node.Parent.As_Library_Item.F_Has_Private),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Undefined,
+           Defining_Name => Name);
 
    begin
+      Entity.Is_Private :=
+        (Node.Parent.Kind = Ada_Library_Item
+           and then Node.Parent.As_Library_Item.F_Has_Private);
+
       Extract
         (Node          => Node,
          Options       => GNATdoc.Options.Extractor_Options,
@@ -1695,7 +1683,7 @@ package body GNATdoc.Frontend is
       Process_Children (Node.F_Package_Decl.F_Public_Part, Entity, False);
       Process_Children (Node.F_Package_Decl.F_Private_Part, Entity, True);
 
-      Construct_Generic_Formals (Entity, Name, Node.F_Formal_Part);
+      Construct_Generic_Formals (Entity, Node.F_Formal_Part);
    end Process_Generic_Package_Decl;
 
    --------------------------------
@@ -1710,15 +1698,10 @@ package body GNATdoc.Frontend is
       Def    : constant Interface_Type_Def :=
         Node.F_Type_Def.As_Interface_Type_Def;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Kind           => GNATdoc.Entities.Ada_Interface_Type,
-           Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Enclosing      =>
-             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Ada_Interface_Type,
+           Defining_Name => Name);
 
    begin
       Extract
@@ -1754,13 +1737,10 @@ package body GNATdoc.Frontend is
          declare
             Entity : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
-                new GNATdoc.Entities.Entity_Information'
-                  (Location       => GNATdoc.Utilities.Location (Name),
-                   Name           => To_Virtual_String (Name.Text),
-                   Qualified_Name =>
-                     To_Virtual_String (Name.P_Fully_Qualified_Name),
-                   Signature      => Signature (Name),
-                   others         => <>);
+                Create_Entity
+                  (Enclosing     => Enclosing,
+                   Kind          => GNATdoc.Entities.Undefined,
+                   Defining_Name => Name);
 
          begin
             Extract
@@ -1821,19 +1801,16 @@ package body GNATdoc.Frontend is
          declare
             Entity  : constant not null
               GNATdoc.Entities.Entity_Information_Access :=
-                new GNATdoc.Entities.Entity_Information'
-                  (Kind           => GNATdoc.Entities.Ada_Object,
-                   Location       => GNATdoc.Utilities.Location (Name),
-                   Name           => To_Virtual_String (Name.Text),
-                   Qualified_Name =>
-                     To_Virtual_String (Name.P_Fully_Qualified_Name),
-                   Signature      => Signature (Name),
-                   RSTPT_Objtype  => RSTPT_Objtype,
-                   RSTPT_Defval   => RSTPT_Defval,
-                   others         => <>);
+                Create_Entity
+                  (Enclosing     => Enclosing,
+                   Kind          => GNATdoc.Entities.Ada_Object,
+                   Defining_Name => Name);
             Belongs : GNATdoc.Entities.Entity_Information_Access;
 
          begin
+            Entity.RSTPT_Objtype := RSTPT_Objtype;
+            Entity.RSTPT_Defval  := RSTPT_Defval;
+
             Extract
               (Node          => Node,
                Options       => GNATdoc.Options.Extractor_Options,
@@ -1904,19 +1881,16 @@ package body GNATdoc.Frontend is
    is
       Name   : constant Defining_Name := Node.F_Package_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.F_Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Enclosing      =>
-             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           Is_Private     =>
-             (Node.Parent.Kind = Ada_Library_Item
-                and then Node.Parent.As_Library_Item.F_Has_Private),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Undefined,
+           Defining_Name => Name);
 
    begin
+      Entity.Is_Private :=
+        (Node.Parent.Kind = Ada_Library_Item
+           and then Node.Parent.As_Library_Item.F_Has_Private);
+
       Extract
         (Node          => Node,
          Options       => GNATdoc.Options.Extractor_Options,
@@ -1943,29 +1917,16 @@ package body GNATdoc.Frontend is
      (Node      : Package_Body'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
    is
-      Name      : constant Defining_Name := Node.F_Package_Name;
-      Canonical : constant Basic_Decl    := Node.P_Canonical_Part;
-      Entity    : constant not null
-        GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Location         => GNATdoc.Utilities.Location (Name),
-           Name             => To_Virtual_String (Name.F_Name.Text),
-           Qualified_Name   =>
-             To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature        => Signature (Name),
-           Is_Specification => False,
-           Enclosing        =>
-             Signature
-               ((case Canonical.Kind is
-                   when Ada_Package_Decl             =>
-                     Canonical.As_Package_Decl.F_Package_Name,
-                   when Ada_Generic_Package_Internal =>
-                     Canonical.As_Generic_Package_Internal.F_Package_Name,
-                   when others                       => raise Program_Error)),
-           Documentation    => <>,
-           others           => <>);
+      Name   : constant Defining_Name := Node.F_Package_Name;
+      Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Undefined,
+           Defining_Name => Name);
 
    begin
+      Entity.Is_Specification := False;
+
       Extract
         (Node          => Node,
          Options       => GNATdoc.Options.Extractor_Options,
@@ -1994,13 +1955,10 @@ package body GNATdoc.Frontend is
    is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      =>
-             (Image => To_Virtual_String (Name.P_Unique_Identifying_Name)),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Undefined,
+           Defining_Name => Name);
 
    begin
       Extract
@@ -2027,15 +1985,10 @@ package body GNATdoc.Frontend is
    is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Kind           => GNATdoc.Entities.Ada_Other_Type,
-           Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Enclosing      =>
-             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Ada_Other_Type,
+           Defining_Name => Name);
 
    begin
       Extract
@@ -2071,14 +2024,10 @@ package body GNATdoc.Frontend is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null
         GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.F_Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Enclosing      =>
-             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Undefined,
+           Defining_Name => Name);
 
    begin
       Extract
@@ -2109,19 +2058,16 @@ package body GNATdoc.Frontend is
       Enclosing  : not null GNATdoc.Entities.Entity_Information_Access)
    is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.F_Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Enclosing      =>
-             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           Is_Private     =>
-             (Node.Parent.Kind = Ada_Library_Item
-                and then Node.Parent.As_Library_Item.F_Has_Private),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Undefined,
+           Defining_Name => Name);
 
    begin
+      Entity.Is_Private :=
+        (Node.Parent.Kind = Ada_Library_Item
+           and then Node.Parent.As_Library_Item.F_Has_Private);
+
       Extract
         (Node          => Node,
          Options       => GNATdoc.Options.Extractor_Options,
@@ -2153,13 +2099,10 @@ package body GNATdoc.Frontend is
    is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Kind           => GNATdoc.Entities.Ada_Other_Type,
-           Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Ada_Other_Type,
+           Defining_Name => Name);
 
    begin
       Extract
@@ -2191,13 +2134,10 @@ package body GNATdoc.Frontend is
    is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Kind           => GNATdoc.Entities.Ada_Other_Type,
-           Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Ada_Other_Type,
+           Defining_Name => Name);
 
    begin
       Extract
@@ -2219,13 +2159,10 @@ package body GNATdoc.Frontend is
    is
       Name   : constant Defining_Name := Node.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Kind           => GNATdoc.Entities.Ada_Other_Type,
-           Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Ada_Other_Type,
+           Defining_Name => Name);
 
    begin
       Extract
@@ -2252,19 +2189,16 @@ package body GNATdoc.Frontend is
    is
       Name   : constant Defining_Name := Decl.F_Name;
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
-        new GNATdoc.Entities.Entity_Information'
-          (Location       => GNATdoc.Utilities.Location (Name),
-           Name           => To_Virtual_String (Name.F_Name.Text),
-           Qualified_Name => To_Virtual_String (Name.P_Fully_Qualified_Name),
-           Signature      => Signature (Name),
-           Enclosing      =>
-             Signature (Node.P_Parent_Basic_Decl.P_Defining_Name),
-           Is_Private     =>
-             (Node.Parent.Kind = Ada_Library_Item
-                and then Node.Parent.As_Library_Item.F_Has_Private),
-           others         => <>);
+        Create_Entity
+          (Enclosing     => Enclosing,
+           Kind          => GNATdoc.Entities.Undefined,
+           Defining_Name => Name);
 
    begin
+      Entity.Is_Private :=
+        (Node.Parent.Kind = Ada_Library_Item
+           and then Node.Parent.As_Library_Item.F_Has_Private);
+
       Extract
         (Node          => Node,
          Options       => GNATdoc.Options.Extractor_Options,
@@ -2475,8 +2409,12 @@ package body GNATdoc.Frontend is
         (Image => To_Virtual_String (Name.P_Unique_Identifying_Name))
       do
          case Name.P_Basic_Decl.Kind is
-            when Ada_Package_Body | Ada_Subp_Body | Ada_Expr_Function
-               | Ada_Subp_Renaming_Decl | Ada_Protected_Body | Ada_Entry_Body
+            when Ada_Entry_Body
+               | Ada_Expr_Function
+               | Ada_Package_Body
+               | Ada_Protected_Body
+               | Ada_Subp_Body
+               | Ada_Subp_Renaming_Decl
             =>
                Result.Image.Append ('$');
 
@@ -2485,19 +2423,25 @@ package body GNATdoc.Frontend is
                --  ??? LAL: bug in P_Unique_Identifying_Name for generic
                --  subprogram instantiations
 
-            when Ada_Package_Decl | Ada_Type_Decl | Ada_Abstract_Subp_Decl
-               | Ada_Subp_Decl | Ada_Null_Subp_Decl
-               | Ada_Generic_Package_Instantiation
-               | Ada_Generic_Package_Decl
-               | Ada_Generic_Subp_Decl
-               | Ada_Object_Decl
-               | Ada_Number_Decl
-               | Ada_Subtype_Decl
-               | Ada_Exception_Decl
-               | Ada_Single_Task_Type_Decl | Ada_Task_Type_Decl
-               | Ada_Single_Protected_Decl | Ada_Protected_Type_Decl
-               | Ada_Entry_Decl
+            when Ada_Abstract_Subp_Decl
                | Ada_Concrete_Formal_Subp_Decl
+               | Ada_Entry_Decl
+               | Ada_Exception_Decl
+               | Ada_Generic_Package_Decl
+               | Ada_Generic_Package_Instantiation
+               | Ada_Generic_Subp_Decl
+               | Ada_Null_Subp_Decl
+               | Ada_Number_Decl
+               | Ada_Object_Decl
+               | Ada_Package_Renaming_Decl
+               | Ada_Package_Decl
+               | Ada_Protected_Type_Decl
+               | Ada_Single_Protected_Decl
+               | Ada_Single_Task_Type_Decl
+               | Ada_Subp_Decl
+               | Ada_Subtype_Decl
+               | Ada_Task_Type_Decl
+               | Ada_Type_Decl
             =>
                null;
 
