@@ -509,6 +509,7 @@ package body GNATdoc.Frontend is
              others         => <>)
       do
          Enclosing.Entities.Insert (Result);
+         GNATdoc.Entities.To_Entity.Insert (Result.Signature, Result);
       end return;
    end Create_Entity;
 
@@ -816,7 +817,6 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
       Resolve_Belongs_To
         (Enclosing => Enclosing,
@@ -1230,7 +1230,6 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
       Resolve_Belongs_To (Enclosing, Belongs, Entity);
 
@@ -1409,7 +1408,6 @@ package body GNATdoc.Frontend is
          Messages      => Entity.Messages);
 
       if Def.F_Has_With_Private or not Def.F_Record_Extension.Is_Null then
-         GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
          Enclosing.Tagged_Types.Insert (Entity);
          GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
 
@@ -1671,7 +1669,6 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Packages.Insert (Entity);
 
       if GNATdoc.Entities.Globals'Access /= Enclosing then
@@ -1709,7 +1706,6 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Interface_Types.Insert (Entity);
       GNATdoc.Entities.Globals.Interface_Types.Insert (Entity);
 
@@ -1816,7 +1812,6 @@ package body GNATdoc.Frontend is
                Options       => GNATdoc.Options.Extractor_Options,
                Documentation => Entity.Documentation,
                Messages      => Entity.Messages);
-            GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
             if Node.F_Has_Constant then
                Enclosing.Constants.Insert (Entity);
@@ -1896,7 +1891,6 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Packages.Insert (Entity);
 
       if GNATdoc.Entities.Globals'Access /= Enclosing then
@@ -1932,7 +1926,6 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Packages.Insert (Entity);
 
       if GNATdoc.Entities.Globals'Access /= Enclosing then
@@ -2000,7 +1993,6 @@ package body GNATdoc.Frontend is
       if Node.F_Type_Def.As_Private_Type_Def.F_Has_Tagged then
          Entity.Kind := GNATdoc.Entities.Ada_Tagged_Type;
 
-         GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
          Enclosing.Tagged_Types.Insert (Entity);
          GNATdoc.Entities.Globals.Tagged_Types.Insert (Entity);
 
@@ -2035,7 +2027,6 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Protected_Types.Insert (Entity);
 
       if GNATdoc.Entities.Globals'Access /= Enclosing then
@@ -2073,7 +2064,6 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Protected_Types.Insert (Entity);
 
       if GNATdoc.Entities.Globals'Access /= Enclosing then
@@ -2110,7 +2100,6 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
       if Node.F_Type_Def.As_Record_Type_Def.F_Has_Tagged then
          Entity.Kind := GNATdoc.Entities.Ada_Tagged_Type;
@@ -2170,7 +2159,6 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
 
       Enclosing.Subtypes.Insert (Entity);
       GNATdoc.Entities.Globals.Subtypes.Insert (Entity);
@@ -2204,7 +2192,6 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      GNATdoc.Entities.To_Entity.Insert (Entity.Signature, Entity);
       Enclosing.Task_Types.Insert (Entity);
 
       if GNATdoc.Entities.Globals'Access /= Enclosing then
