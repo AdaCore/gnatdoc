@@ -569,6 +569,14 @@ package body GNATdoc.Comments.Helpers is
          end if;
       end loop;
 
+      --  eng/libadalang/libadalang#1643: ignore accept statement, LAL returns
+      --  it as most visible part.
+
+      if Most_Visible_Decl.Parent.Kind = Ada_Accept_Stmt_Body then
+         Most_Visible_Index := @ - 1;
+         Most_Visible_Decl  := All_Decls (Most_Visible_Index);
+      end if;
+
       --  Exclude incomplete type declaration code snippets when documentation
       --  is requested for complete type declaration.
 
