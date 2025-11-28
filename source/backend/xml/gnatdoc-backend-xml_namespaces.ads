@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2024-2025, AdaCore                     --
+--                       Copyright (C) 2025, AdaCore                        --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,44 +15,11 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-with GNATdoc.Backend.HTML;
-with GNATdoc.Backend.ODF;
-with GNATdoc.Backend.RST.PT;
-with GNATdoc.Backend.Test;
-with GNATdoc.Backend.XML;
+with VSS.IRIs;
 
-package body GNATdoc.Backend.Registry is
+package GNATdoc.Backend.XML_Namespaces is
 
-   --------------------
-   -- Create_Backend --
-   --------------------
+   GNATdoc_Namespace : constant VSS.IRIs.IRI :=
+     "http://adacore.com/schema/gnatdoc";
 
-   function Create_Backend
-     (Name : VSS.Strings.Virtual_String) return Backend_Access
-   is
-      use type VSS.Strings.Virtual_String;
-
-   begin
-      if Name = "html" then
-         return new GNATdoc.Backend.HTML.HTML_Backend;
-
-      elsif Name = "odf" then
-         return new GNATdoc.Backend.ODF.ODF_Backend;
-
-      elsif Name = "rst" then
-         return new GNATdoc.Backend.RST.RST_Backend;
-
-      elsif Name = "rstpt" then
-         return new GNATdoc.Backend.RST.PT.PT_RST_Backend;
-
-      elsif Name = "test" then
-         return new GNATdoc.Backend.Test.Test_Backend;
-
-      elsif Name = "xml" then
-         return new GNATdoc.Backend.XML.XML_Backend;
-      end if;
-
-      return null;
-   end Create_Backend;
-
-end GNATdoc.Backend.Registry;
+end GNATdoc.Backend.XML_Namespaces;
