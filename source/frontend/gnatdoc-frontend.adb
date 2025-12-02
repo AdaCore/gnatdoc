@@ -430,7 +430,7 @@ package body GNATdoc.Frontend is
            constant not null GNATdoc.Entities.Entity_Information_Access :=
              Create_Entity
                (Enclosing     => Enclosing,
-                Kind          => GNATdoc.Entities.Undefined,
+                Kind          => GNATdoc.Entities.Ada_Formal,
                 Defining_Name => Name);
 
       begin

@@ -403,6 +403,12 @@ package body GNATdoc.Backend.RST.PT is
          begin
             if not Is_Private_Entity (Item) then
                case Item.Kind is
+                  when GNATdoc.Entities.Ada_Formal =>
+                     --  Ignore formals of the generic entity, they are
+                     --  processed as part of entity itself
+
+                     null;
+
                   when GNATdoc.Entities.Ada_Function
                      | GNATdoc.Entities.Ada_Procedure
                   =>
