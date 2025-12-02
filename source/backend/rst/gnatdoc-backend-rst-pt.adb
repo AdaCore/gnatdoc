@@ -419,7 +419,9 @@ package body GNATdoc.Backend.RST.PT is
                      Generate_Exception_Documentation
                        ("", Item.all, Entity.Qualified_Name);
 
-                  when GNATdoc.Entities.Ada_Object =>
+                  when GNATdoc.Entities.Ada_Named_Number
+                     | GNATdoc.Entities.Ada_Object
+                  =>
                      Generate_Object_Documentation
                        ("", Item.all, Entity.Qualified_Name, False);
 

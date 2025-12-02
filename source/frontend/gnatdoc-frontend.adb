@@ -1750,10 +1750,15 @@ package body GNATdoc.Frontend is
               GNATdoc.Entities.Entity_Information_Access :=
                 Create_Entity
                   (Enclosing     => Enclosing,
-                   Kind          => GNATdoc.Entities.Undefined,
+                   Kind          => GNATdoc.Entities.Ada_Named_Number,
                    Defining_Name => Name);
 
          begin
+            if not Node.F_Expr.Is_Null then
+               Entity.RSTPT_Defval :=
+                 VSS.Strings.To_Virtual_String (Node.F_Expr.Text);
+            end if;
+
             Extract
               (Node          => Node,
                Options       => GNATdoc.Options.Extractor_Options,

@@ -28,6 +28,7 @@ package GNATdoc.Entities is
       Ada_Tagged_Type,
       Ada_Interface_Type,
       Ada_Other_Type,
+      Ada_Named_Number,
       Ada_Object,
       Ada_Exception,
       Ada_Function,
