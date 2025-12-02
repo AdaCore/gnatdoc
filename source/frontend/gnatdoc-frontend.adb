@@ -1095,12 +1095,16 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Package_Decl =>
-               Process_Package_Decl (Node.As_Package_Decl, Enclosing);
+               Process_Package_Decl
+                 (Node.As_Package_Decl,
+                  GNATdoc.Entities.Globals'Access);
 
                return Over;
 
             when Ada_Package_Body =>
-               Process_Package_Body (Node.As_Package_Body, Enclosing);
+               Process_Package_Body
+                 (Node.As_Package_Body,
+                  GNATdoc.Entities.Globals'Access);
 
                return Over;
 
