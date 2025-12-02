@@ -1041,7 +1041,8 @@ package body GNATdoc.Frontend is
 
             when Ada_Generic_Package_Decl =>
                Process_Generic_Package_Decl
-                 (Node.As_Generic_Package_Decl, Enclosing);
+                 (Node.As_Generic_Package_Decl,
+                  GNATdoc.Entities.Globals'Access);
 
                return Over;
 
