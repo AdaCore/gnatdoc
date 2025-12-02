@@ -58,11 +58,16 @@ package body GNATdoc.Backend.Test is
    ------------------------
 
    procedure Dump_Entities_Tree is
-      Output : VSS.Text_Streams.Output_Text_Stream'Class :=
+      Output  : VSS.Text_Streams.Output_Text_Stream'Class :=
         VSS.Text_Streams.Standards.Standard_Output;
-      Offset : VSS.Strings.Character_Count := 0;
+      Success : Boolean := True;
+      Offset  : VSS.Strings.Character_Count := 0;
 
       procedure Dump (Entity : GNATdoc.Entities.Entity_Information);
+
+      procedure Dump
+        (Entity  : GNATdoc.Entities.Entity_Reference;
+         Success : in out Boolean);
 
       procedure Dump_Entity_Summary
         (Entity  : GNATdoc.Entities.Entity_Information;
@@ -89,8 +94,6 @@ package body GNATdoc.Backend.Test is
            VSS.Strings.Templates.Virtual_String_Template :=
              "{}Parent type: '{}'";
 
-         Success  : Boolean := True;
-
       begin
          Dump_Entity_Summary (Entity, Success);
 
@@ -106,7 +109,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ + 2;
 
             for E of Entity.Packages loop
-               Dump (E.all);
+               Dump (E.Reference, Success);
             end loop;
 
             Offset := @ - 2;
@@ -125,7 +128,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ + 2;
 
             for E of Entity.Record_Types loop
-               Dump (E.all);
+               Dump (E.Reference, Success);
             end loop;
 
             Offset := @ - 2;
@@ -144,7 +147,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ + 2;
 
             for E of Entity.Interface_Types loop
-               Dump (GNATdoc.Entities.To_Entity (E.Signature).all);
+               Dump (E.Reference, Success);
             end loop;
 
             Offset := @ - 2;
@@ -163,7 +166,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ + 2;
 
             for E of Entity.Tagged_Types loop
-               Dump (GNATdoc.Entities.To_Entity (E.Signature).all);
+               Dump (E.Reference, Success);
             end loop;
 
             Offset := @ - 2;
@@ -194,13 +197,8 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for E of Entity.Progenitor_Types loop
-               if GNATdoc.Entities.To_Entity.Contains (E.Signature) then
-                  Dump (GNATdoc.Entities.To_Entity (E.Signature).all);
-
-               else
-                  Dump_Entity_Unknown (E, Success);
-               end if;
+            for R of Entity.Progenitor_Types loop
+               Dump (R, Success);
             end loop;
 
             Offset := @ - 2;
@@ -219,7 +217,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ + 2;
 
             for E of Entity.Subtypes loop
-               Dump (E.all);
+               Dump (E.Reference, Success);
             end loop;
 
             Offset := @ - 2;
@@ -238,7 +236,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ + 2;
 
             for E of Entity.Constants loop
-               Dump (E.all);
+               Dump (E.Reference, Success);
             end loop;
 
             Offset := @ - 2;
@@ -257,7 +255,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ + 2;
 
             for E of Entity.Subprograms loop
-               Dump (E.all);
+               Dump (E.Reference, Success);
             end loop;
 
             Offset := @ - 2;
@@ -275,13 +273,8 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for E of Entity.Belongs_Constants loop
-               if GNATdoc.Entities.To_Entity.Contains (E.Signature) then
-                  Dump (GNATdoc.Entities.To_Entity (E.Signature).all);
-
-               else
-                  Dump_Entity_Unknown (E, Success);
-               end if;
+            for R of Entity.Belongs_Constants loop
+               Dump (R, Success);
             end loop;
 
             Offset := @ - 2;
@@ -300,17 +293,67 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for E of Entity.Belongs_Subprograms loop
-               if GNATdoc.Entities.To_Entity.Contains (E.Signature) then
-                  Dump (GNATdoc.Entities.To_Entity (E.Signature).all);
-
-               else
-                  Dump_Entity_Unknown (E, Success);
-               end if;
+            for R of Entity.Belongs_Subprograms loop
+               Dump (R, Success);
             end loop;
 
             Offset := @ - 2;
             Offset := @ - 2;
+         end if;
+
+         if not Entity.Entities.Is_Empty then
+            Offset := @ + 2;
+
+            Output.Put_Line
+              (Section_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+                  VSS.Strings.Formatters.Strings.Image ("Contains Entities")),
+               Success);
+
+            Offset := @ + 2;
+
+            for E of Entity.Entities loop
+               Dump (E.all);
+            end loop;
+
+            Offset := @ - 2;
+            Offset := @ - 2;
+         end if;
+
+         if not Entity.Belong_Entities.Is_Empty then
+            Offset := @ + 2;
+
+            Output.Put_Line
+              (Section_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+                  VSS.Strings.Formatters.Strings.Image ("Belongs Entities")),
+               Success);
+
+            Offset := @ + 2;
+
+            for R of Entity.Belong_Entities loop
+               Dump (R, Success);
+            end loop;
+
+            Offset := @ - 2;
+            Offset := @ - 2;
+         end if;
+      end Dump;
+
+      ----------
+      -- Dump --
+      ----------
+
+      procedure Dump
+        (Entity  : GNATdoc.Entities.Entity_Reference;
+         Success : in out Boolean) is
+      begin
+         if GNATdoc.Entities.To_Entity.Contains (Entity.Signature) then
+            Dump_Entity_Summary
+              (GNATdoc.Entities.To_Entity (Entity.Signature).all, Success);
+
+         else
+            Dump_Entity_Unknown (Entity, Success);
          end if;
       end Dump;
 
