@@ -1,6 +1,14 @@
 + ? (UNDEFINED) ''
   Packages:
     +/ Package_Excluded_From_Documentation (UNDEFINED) 'package_excluded_from_documentation'
+    +  Package_Included_Into_Documentation (UNDEFINED) 'package_included_into_documentation'
+  Subtypes:
+    +/ Private_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.private_integer'
+    +  Public_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.public_integer'
+    +/ Private_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.private_integer'
+    +  Public_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.public_integer'
+  Contains Entities:
+    +/ Package_Excluded_From_Documentation (UNDEFINED) 'package_excluded_from_documentation'
       Subtypes:
         +/ Private_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.private_integer'
         +  Public_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.public_integer'
@@ -18,6 +26,22 @@
         +  Function_Included_Into_Documentation (ADA_PROCEDURE) 'package_excluded_from_documentation.function_included_into_documentation()'
         +/ Procedure_Excluded_From_Documentation (ADA_PROCEDURE) 'package_excluded_from_documentation.procedure_excluded_from_documentation()'
         +  Procedure_Included_Into_Documentation (ADA_PROCEDURE) 'package_excluded_from_documentation.procedure_included_into_documentation()'
+      Contains Entities:
+        +  Procedure_Included_Into_Documentation (ADA_PROCEDURE) 'package_excluded_from_documentation.procedure_included_into_documentation()'
+        +  Function_Included_Into_Documentation (ADA_PROCEDURE) 'package_excluded_from_documentation.function_included_into_documentation()'
+        +/ Procedure_Excluded_From_Documentation (ADA_PROCEDURE) 'package_excluded_from_documentation.procedure_excluded_from_documentation()'
+        +/ Function_Excluded_From_Documentation (ADA_PROCEDURE) 'package_excluded_from_documentation.function_excluded_from_documentation()'
+        +/ C (ADA_OBJECT) 'package_excluded_from_documentation.c'
+        +  Public_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.public_integer'
+        +/ Private_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.private_integer'
+      Belongs Entities:
+        +  Procedure_Included_Into_Documentation (ADA_PROCEDURE) 'package_excluded_from_documentation.procedure_included_into_documentation()'
+        +  Function_Included_Into_Documentation (ADA_PROCEDURE) 'package_excluded_from_documentation.function_included_into_documentation()'
+        +/ Procedure_Excluded_From_Documentation (ADA_PROCEDURE) 'package_excluded_from_documentation.procedure_excluded_from_documentation()'
+        +/ Function_Excluded_From_Documentation (ADA_PROCEDURE) 'package_excluded_from_documentation.function_excluded_from_documentation()'
+        +/ C (ADA_OBJECT) 'package_excluded_from_documentation.c'
+        +  Public_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.public_integer'
+        +/ Private_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.private_integer'
     +  Package_Included_Into_Documentation (UNDEFINED) 'package_included_into_documentation'
       Subtypes:
         +/ Private_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.private_integer'
@@ -36,8 +60,22 @@
         +  Function_Included_Into_Documentation (ADA_PROCEDURE) 'package_included_into_documentation.function_included_into_documentation()'
         +/ Procedure_Excluded_From_Documentation (ADA_PROCEDURE) 'package_included_into_documentation.procedure_excluded_from_documentation()'
         +  Procedure_Included_Into_Documentation (ADA_PROCEDURE) 'package_included_into_documentation.procedure_included_into_documentation()'
-  Subtypes:
-    +/ Private_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.private_integer'
-    +  Public_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.public_integer'
-    +/ Private_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.private_integer'
-    +  Public_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.public_integer'
+      Contains Entities:
+        +  Procedure_Included_Into_Documentation (ADA_PROCEDURE) 'package_included_into_documentation.procedure_included_into_documentation()'
+        +  Function_Included_Into_Documentation (ADA_PROCEDURE) 'package_included_into_documentation.function_included_into_documentation()'
+        +/ Procedure_Excluded_From_Documentation (ADA_PROCEDURE) 'package_included_into_documentation.procedure_excluded_from_documentation()'
+        +/ Function_Excluded_From_Documentation (ADA_PROCEDURE) 'package_included_into_documentation.function_excluded_from_documentation()'
+        +/ C (ADA_OBJECT) 'package_included_into_documentation.c'
+        +  Public_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.public_integer'
+        +/ Private_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.private_integer'
+      Belongs Entities:
+        +  Procedure_Included_Into_Documentation (ADA_PROCEDURE) 'package_included_into_documentation.procedure_included_into_documentation()'
+        +  Function_Included_Into_Documentation (ADA_PROCEDURE) 'package_included_into_documentation.function_included_into_documentation()'
+        +/ Procedure_Excluded_From_Documentation (ADA_PROCEDURE) 'package_included_into_documentation.procedure_excluded_from_documentation()'
+        +/ Function_Excluded_From_Documentation (ADA_PROCEDURE) 'package_included_into_documentation.function_excluded_from_documentation()'
+        +/ C (ADA_OBJECT) 'package_included_into_documentation.c'
+        +  Public_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.public_integer'
+        +/ Private_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.private_integer'
+  Belongs Entities:
+    +/ Package_Excluded_From_Documentation (UNDEFINED) 'package_excluded_from_documentation'
+    +  Package_Included_Into_Documentation (UNDEFINED) 'package_included_into_documentation'
