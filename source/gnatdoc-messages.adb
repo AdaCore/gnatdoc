@@ -36,10 +36,13 @@ package body GNATdoc.Messages is
    package Character_Count_Formatters is
      new VSS.Strings.Formatters.Generic_Integers (VSS.Strings.Character_Count);
    use Character_Count_Formatters;
+   --  XXX VSS 20251204+ provides it as
+   --  `VSS.Strings.Formatters.Character_Offsets`.
 
    package Line_Count_Formatters is
      new VSS.Strings.Formatters.Generic_Integers (VSS.Strings.Line_Count);
    use Line_Count_Formatters;
+   --  XXX VSS 20251204+ provides it as `VSS.Strings.Formatters.Line_Offsets`.
 
    --------------------
    -- Append_Message --
