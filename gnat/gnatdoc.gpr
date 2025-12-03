@@ -29,6 +29,7 @@ project GNATdoc is
       "../source/backend",
       "../source/backend/odf",
       "../source/backend/rst",
+      "../source/backend/test",
       "../source/backend/xml_templates",
       "../source/frontend",
       "../source/gnatdoc");
