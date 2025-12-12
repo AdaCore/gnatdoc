@@ -91,8 +91,12 @@ package body GNATdoc.Comments.XML_Helpers is
             end case;
 
             Attributes.Clear;
-            Attributes.Insert
-              (VSS.IRIs.Empty_IRI, "name", Section.Name);
+
+            if Section.Kind /= Returns then
+               Attributes.Insert
+                 (VSS.IRIs.Empty_IRI, "name", Section.Name);
+            end if;
+
             Writer.Start_Element
               (GNATdoc_Namespace, Element, Attributes, Success);
 
