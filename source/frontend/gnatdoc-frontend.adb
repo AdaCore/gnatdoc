@@ -1907,7 +1907,7 @@ package body GNATdoc.Frontend is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         Create_Entity
           (Enclosing     => Enclosing,
-           Kind          => GNATdoc.Entities.Undefined,
+           Kind          => GNATdoc.Entities.Ada_Package_Declaration,
            Defining_Name => Name);
 
    begin
@@ -1944,7 +1944,7 @@ package body GNATdoc.Frontend is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         Create_Entity
           (Enclosing     => Enclosing,
-           Kind          => GNATdoc.Entities.Undefined,
+           Kind          => GNATdoc.Entities.Ada_Package_Body,
            Defining_Name => Name);
 
    begin

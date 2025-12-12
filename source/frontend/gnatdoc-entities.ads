@@ -33,6 +33,8 @@ package GNATdoc.Entities is
       Ada_Exception,
       Ada_Function,
       Ada_Procedure,
+      Ada_Package_Declaration,
+      Ada_Package_Body,
       Ada_Formal,
       Ada_Generic_Package_Declaration,
       Ada_Generic_Package_Instantiation,
