@@ -1,14 +1,14 @@
 + ? (UNDEFINED) ''
   Packages:
-    +/ Package_Excluded_From_Documentation (UNDEFINED) 'package_excluded_from_documentation'
-    +  Package_Included_Into_Documentation (UNDEFINED) 'package_included_into_documentation'
+    +/ Package_Excluded_From_Documentation (ADA_PACKAGE_DECLARATION) 'package_excluded_from_documentation'
+    +  Package_Included_Into_Documentation (ADA_PACKAGE_DECLARATION) 'package_included_into_documentation'
   Subtypes:
     +/ Private_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.private_integer'
     +  Public_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.public_integer'
     +/ Private_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.private_integer'
     +  Public_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.public_integer'
   Contains Entities:
-    +/ Package_Excluded_From_Documentation (UNDEFINED) 'package_excluded_from_documentation'
+    +/ Package_Excluded_From_Documentation (ADA_PACKAGE_DECLARATION) 'package_excluded_from_documentation'
       Subtypes:
         +/ Private_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.private_integer'
         +  Public_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.public_integer'
@@ -42,7 +42,7 @@
         +/ C (ADA_OBJECT) 'package_excluded_from_documentation.c'
         +  Public_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.public_integer'
         +/ Private_Integer (ADA_OTHER_TYPE) 'package_excluded_from_documentation.private_integer'
-    +  Package_Included_Into_Documentation (UNDEFINED) 'package_included_into_documentation'
+    +  Package_Included_Into_Documentation (ADA_PACKAGE_DECLARATION) 'package_included_into_documentation'
       Subtypes:
         +/ Private_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.private_integer'
         +  Public_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.public_integer'
@@ -77,5 +77,5 @@
         +  Public_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.public_integer'
         +/ Private_Integer (ADA_OTHER_TYPE) 'package_included_into_documentation.private_integer'
   Belongs Entities:
-    +/ Package_Excluded_From_Documentation (UNDEFINED) 'package_excluded_from_documentation'
-    +  Package_Included_Into_Documentation (UNDEFINED) 'package_included_into_documentation'
+    +/ Package_Excluded_From_Documentation (ADA_PACKAGE_DECLARATION) 'package_excluded_from_documentation'
+    +  Package_Included_Into_Documentation (ADA_PACKAGE_DECLARATION) 'package_included_into_documentation'
