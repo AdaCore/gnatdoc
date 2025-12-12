@@ -243,7 +243,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
          end if;
 
-         if not Entity.Subprograms.Is_Empty then
+         if not Entity.Contain_Subprograms.Is_Empty then
             Offset := @ + 2;
 
             Output.Put_Line
@@ -254,7 +254,7 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for E of Entity.Subprograms loop
+            for E of Entity.Contain_Subprograms loop
                Dump (E.Reference, Success);
             end loop;
 
@@ -281,7 +281,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
          end if;
 
-         if not Entity.Belongs_Subprograms.Is_Empty then
+         if not Entity.Belong_Subprograms.Is_Empty then
             Offset := @ + 2;
 
             Output.Put_Line
@@ -293,7 +293,7 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for R of Entity.Belongs_Subprograms loop
+            for R of Entity.Belong_Subprograms loop
                Dump (R, Success);
             end loop;
 

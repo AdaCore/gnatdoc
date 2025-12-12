@@ -59,7 +59,7 @@ package body GNATdoc.Backend.ODF is
          end if;
       end loop;
 
-      for Item of GNATdoc.Entities.Globals.Subprograms loop
+      for Item of GNATdoc.Entities.Globals.Contain_Subprograms loop
          if not Is_Private_Entity (Item) then
             Index_Entities.Insert (Item);
          end if;

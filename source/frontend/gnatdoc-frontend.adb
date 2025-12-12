@@ -312,10 +312,10 @@ package body GNATdoc.Frontend is
                if Belongs = null then
                   Entity.Belongs := Belongs_Reference;
                   Belongs_Entity.Belong_Entities.Insert (Entity.Reference);
-                  Belongs_Entity.Belongs_Subprograms.Insert (Entity.Reference);
+                  Belongs_Entity.Belong_Subprograms.Insert (Entity.Reference);
 
                   Enclosing.Belong_Entities.Exclude (Entity.Reference);
-                  Enclosing.Belongs_Subprograms.Exclude (Entity.Reference);
+                  Enclosing.Belong_Subprograms.Exclude (Entity.Reference);
                   --  Subprograms declared in private part can be excluded
                   --  from the set of subprograms, so use `Exclude` to prevent
                   --  raise of exception.
@@ -731,10 +731,10 @@ package body GNATdoc.Frontend is
                  and Belongs /= null
                then
                   Enclosing.Belong_Entities.Delete (Entity.Reference);
-                  Enclosing.Belongs_Subprograms.Delete (Entity.Reference);
+                  Enclosing.Belong_Subprograms.Delete (Entity.Reference);
 
                   Belongs.Belong_Entities.Insert (Entity.Reference);
-                  Belongs.Belongs_Subprograms.Insert (Entity.Reference);
+                  Belongs.Belong_Subprograms.Insert (Entity.Reference);
                end if;
 
                Entity.Is_Method := True;
@@ -833,16 +833,16 @@ package body GNATdoc.Frontend is
       if not In_Private
         or GNATdoc.Options.Frontend_Options.Generate_Private
       then
-         Enclosing.Subprograms.Insert (Entity);
+         Enclosing.Contain_Subprograms.Insert (Entity);
 
          if Belongs = null then
-            Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
+            Enclosing.Belong_Subprograms.Insert (Entity.Reference);
 
          else
             Enclosing.Belong_Entities.Delete (Entity.Reference);
 
             Belongs.Belong_Entities.Insert (Entity.Reference);
-            Belongs.Belongs_Subprograms.Insert (Entity.Reference);
+            Belongs.Belong_Subprograms.Insert (Entity.Reference);
 
             Entity.Belongs := Belongs.Reference;
          end if;
@@ -850,7 +850,7 @@ package body GNATdoc.Frontend is
          if Global /= null
            and GNATdoc.Entities.Globals'Access /= Enclosing
          then
-            Global.Subprograms.Insert (Entity);
+            Global.Contain_Subprograms.Insert (Entity);
          end if;
       end if;
 
@@ -1252,16 +1252,16 @@ package body GNATdoc.Frontend is
       if not In_Private
         or else GNATdoc.Options.Frontend_Options.Generate_Private
       then
-         Enclosing.Subprograms.Insert (Entity);
+         Enclosing.Contain_Subprograms.Insert (Entity);
 
          if Belongs = null then
-            Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
+            Enclosing.Belong_Subprograms.Insert (Entity.Reference);
 
          else
             Enclosing.Belong_Entities.Delete (Entity.Reference);
 
             Belongs.Belong_Entities.Insert (Entity.Reference);
-            Belongs.Belongs_Subprograms.Insert (Entity.Reference);
+            Belongs.Belong_Subprograms.Insert (Entity.Reference);
 
             Entity.Belongs := Belongs.Reference;
          end if;
@@ -1269,7 +1269,7 @@ package body GNATdoc.Frontend is
          if Global /= null
            and GNATdoc.Entities.Globals'Access /= Enclosing
          then
-            Global.Subprograms.Insert (Entity);
+            Global.Contain_Subprograms.Insert (Entity);
          end if;
       end if;
 
@@ -1652,11 +1652,11 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      Enclosing.Subprograms.Insert (Entity);
-      Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
+      Enclosing.Contain_Subprograms.Insert (Entity);
+      Enclosing.Belong_Subprograms.Insert (Entity.Reference);
 
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
-         Global.Subprograms.Insert (Entity);
+         Global.Contain_Subprograms.Insert (Entity);
       end if;
 
       Check_Undocumented (Entity);

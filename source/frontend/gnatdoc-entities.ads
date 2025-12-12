@@ -143,9 +143,9 @@ package GNATdoc.Entities is
       --  Name of instantiated package
 
       Packages               : Entity_Information_Sets.Set;
-      Subprograms            : aliased Entity_Information_Sets.Set;
+      Contain_Subprograms    : aliased Entity_Information_Sets.Set;
       --  All subprograms declared in the entity (package)
-      Belongs_Subprograms    : aliased Entity_Reference_Sets.Set;
+      Belong_Subprograms     : aliased Entity_Reference_Sets.Set;
       --  Subprograms that belongs to the entity (to interface/tagged type,
       --  otherwise to the package)
       Entries                : aliased Entity_Information_Sets.Set;
