@@ -514,6 +514,17 @@ package body GNATdoc.Frontend is
 
          Enclosing.Contain_Entities.Insert (Result);
          Enclosing.Belong_Entities.Insert (Result.Reference);
+
+         case Kind is
+            when GNATdoc.Entities.Ada_Function
+               | GNATdoc.Entities.Ada_Procedure
+            =>
+               Enclosing.Contain_Subprograms.Insert (Result);
+               Enclosing.Belong_Subprograms.Insert (Result.Reference);
+
+            when others =>
+               null;
+         end case;
       end return;
    end Create_Entity;
 
@@ -833,13 +844,9 @@ package body GNATdoc.Frontend is
       if not In_Private
         or GNATdoc.Options.Frontend_Options.Generate_Private
       then
-         Enclosing.Contain_Subprograms.Insert (Entity);
-
-         if Belongs = null then
-            Enclosing.Belong_Subprograms.Insert (Entity.Reference);
-
-         else
+         if Belongs /= null then
             Enclosing.Belong_Entities.Delete (Entity.Reference);
+            Enclosing.Belong_Subprograms.Delete (Entity.Reference);
 
             Belongs.Belong_Entities.Insert (Entity.Reference);
             Belongs.Belong_Subprograms.Insert (Entity.Reference);
@@ -1252,13 +1259,9 @@ package body GNATdoc.Frontend is
       if not In_Private
         or else GNATdoc.Options.Frontend_Options.Generate_Private
       then
-         Enclosing.Contain_Subprograms.Insert (Entity);
-
-         if Belongs = null then
-            Enclosing.Belong_Subprograms.Insert (Entity.Reference);
-
-         else
+         if Belongs /= null then
             Enclosing.Belong_Entities.Delete (Entity.Reference);
+            Enclosing.Belong_Subprograms.Delete (Entity.Reference);
 
             Belongs.Belong_Entities.Insert (Entity.Reference);
             Belongs.Belong_Subprograms.Insert (Entity.Reference);
@@ -1652,8 +1655,6 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      Enclosing.Contain_Subprograms.Insert (Entity);
-      Enclosing.Belong_Subprograms.Insert (Entity.Reference);
 
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Contain_Subprograms.Insert (Entity);
