@@ -182,8 +182,10 @@ package body GNATdoc.Entities.Proxies is
 
          else
             return
-              Entity_Information_Set_Proxy'
-                (Entities => Self.Entity.Contain_Subprograms'Unchecked_Access,
+              Entity_Reference_Set_Proxy'
+                (Entities =>
+                   Self.Entity.Contain_Subprograms'Unchecked_Access,
+                 Nested   => <>,
                  OOP_Mode => Self.OOP_Mode);
          end if;
 

@@ -462,7 +462,8 @@ package body GNATdoc.Backend.RST is
 
             else
                for Subprogram of Entity.Contain_Subprograms loop
-                  Subprograms.Insert (Subprogram);
+                  Subprograms.Insert
+                    (GNATdoc.Entities.To_Entity (Subprogram.Signature));
                end loop;
             end if;
 

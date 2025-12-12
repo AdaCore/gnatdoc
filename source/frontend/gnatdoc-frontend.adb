@@ -519,7 +519,7 @@ package body GNATdoc.Frontend is
             when GNATdoc.Entities.Ada_Function
                | GNATdoc.Entities.Ada_Procedure
             =>
-               Enclosing.Contain_Subprograms.Insert (Result);
+               Enclosing.Contain_Subprograms.Insert (Result.Reference);
                Enclosing.Belong_Subprograms.Insert (Result.Reference);
 
             when others =>
@@ -857,7 +857,7 @@ package body GNATdoc.Frontend is
          if Global /= null
            and GNATdoc.Entities.Globals'Access /= Enclosing
          then
-            Global.Contain_Subprograms.Insert (Entity);
+            Global.Contain_Subprograms.Insert (Entity.Reference);
          end if;
       end if;
 
@@ -1272,7 +1272,7 @@ package body GNATdoc.Frontend is
          if Global /= null
            and GNATdoc.Entities.Globals'Access /= Enclosing
          then
-            Global.Contain_Subprograms.Insert (Entity);
+            Global.Contain_Subprograms.Insert (Entity.Reference);
          end if;
       end if;
 
@@ -1657,7 +1657,7 @@ package body GNATdoc.Frontend is
          Messages      => Entity.Messages);
 
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
-         Global.Contain_Subprograms.Insert (Entity);
+         Global.Contain_Subprograms.Insert (Entity.Reference);
       end if;
 
       Check_Undocumented (Entity);
