@@ -89,7 +89,7 @@ package body GNATdoc.Comments.XML_Helpers is
                when others =>
                   --  Should never happened
 
-                  raise Program_Error;
+                  raise Program_Error with "unexpected kind of section";
             end case;
 
             Attributes.Clear;
