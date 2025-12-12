@@ -213,9 +213,6 @@ package GNATdoc.Entities is
    To_Entity : Entity_Information_Maps.Map;
    --  Map to lookup entity's information by entity's signature.
 
-   function All_Entities
-     (Self : Entity_Information'Class) return Entity_Information_Sets.Set;
-
    function Reference
      (Self : Entity_Information'Class) return Entity_Reference;
    --  Reference of entity
