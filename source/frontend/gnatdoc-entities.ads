@@ -120,7 +120,7 @@ package GNATdoc.Entities is
       --    * can be called with prefix notation
       --    * is a primitive operations of the tagged type
 
-      Entities               : Entity_Information_Declaration_Order_Sets.Set;
+      Contain_Entities       : Entity_Information_Declaration_Order_Sets.Set;
       --  All nested entities (structural view, in declaration order)
       Belong_Entities        : Entity_Reference_Declaration_Order_Sets.Set;
       --  All belong entities (belongs view, in declaration order)

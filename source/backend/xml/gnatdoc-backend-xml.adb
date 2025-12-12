@@ -110,7 +110,7 @@ package body GNATdoc.Backend.XML is
          GNATdoc.Comments.XML_Helpers.Generate
            (Entity.Documentation, Writer, Success);
 
-         for E of Entity.Entities loop
+         for E of Entity.Contain_Entities loop
             Generate (Writer, E, Success);
          end loop;
 
@@ -143,7 +143,7 @@ package body GNATdoc.Backend.XML is
       Writer.Start_Element
         (GNATdoc_Namespace, GNATdoc_Element, Attributes, Success);
 
-      for E of GNATdoc.Entities.Globals.Entities loop
+      for E of GNATdoc.Entities.Globals.Contain_Entities loop
          Generate (Writer, E, Success);
       end loop;
 

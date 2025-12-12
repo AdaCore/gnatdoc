@@ -512,7 +512,7 @@ package body GNATdoc.Frontend is
       do
          GNATdoc.Entities.To_Entity.Insert (Result.Signature, Result);
 
-         Enclosing.Entities.Insert (Result);
+         Enclosing.Contain_Entities.Insert (Result);
          Enclosing.Belong_Entities.Insert (Result.Reference);
       end return;
    end Create_Entity;

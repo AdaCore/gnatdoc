@@ -301,7 +301,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
          end if;
 
-         if not Entity.Entities.Is_Empty then
+         if not Entity.Contain_Entities.Is_Empty then
             Offset := @ + 2;
 
             Output.Put_Line
@@ -312,7 +312,7 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for E of Entity.Entities loop
+            for E of Entity.Contain_Entities loop
                Dump (E.all);
             end loop;
 
