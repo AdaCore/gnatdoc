@@ -1677,7 +1677,7 @@ package body GNATdoc.Frontend is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         Create_Entity
           (Enclosing     => Enclosing,
-           Kind          => GNATdoc.Entities.Undefined,
+           Kind          => GNATdoc.Entities.Ada_Generic_Package_Declaration,
            Defining_Name => Name);
 
    begin

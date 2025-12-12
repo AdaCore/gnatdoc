@@ -34,6 +34,7 @@ package GNATdoc.Entities is
       Ada_Function,
       Ada_Procedure,
       Ada_Formal,
+      Ada_Generic_Package_Declaration,
       Ada_Generic_Package_Instantiation,
       Ada_Generic_Subprogram_Instantiation);
 
