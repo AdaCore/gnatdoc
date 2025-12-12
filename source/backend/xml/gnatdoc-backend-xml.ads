@@ -15,6 +15,8 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+--  XML backend
+
 package GNATdoc.Backend.XML is
 
    type XML_Backend is new Abstract_Backend with private;
@@ -24,8 +26,6 @@ private
    type XML_Backend is new Abstract_Backend with record
       null;
    end record;
-
-   --  overriding procedure Initialize (Self : in out ODF_Backend);
 
    overriding procedure Generate (Self : in out XML_Backend);
 

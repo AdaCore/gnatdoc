@@ -87,6 +87,8 @@ package body GNATdoc.Comments.XML_Helpers is
                   Element := Raised_Exception_Element;
 
                when others =>
+                  --  Should never happened
+
                   raise Program_Error;
             end case;
 

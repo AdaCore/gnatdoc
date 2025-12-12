@@ -21,5 +21,6 @@ package GNATdoc.Backend.XML_Namespaces is
 
    GNATdoc_Namespace : constant VSS.IRIs.IRI :=
      "http://adacore.com/schema/gnatdoc";
+   --  XML namespace used by GNATdoc
 
 end GNATdoc.Backend.XML_Namespaces;
