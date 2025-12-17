@@ -337,7 +337,7 @@ package body GNATdoc.Backend.RST.PT is
          Constants.Clear;
          Methods.Clear;
 
-         for Object of Entity.Belongs_Constants loop
+         for Object of Entity.Belong_Constants loop
             if not Is_Private_Entity
               (GNATdoc.Entities.To_Entity (Object.Signature))
             then

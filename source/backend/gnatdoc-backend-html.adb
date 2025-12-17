@@ -238,7 +238,7 @@ package body GNATdoc.Backend.HTML is
          Nested.Union (Entity.Tagged_Types);
          Nested.Union (Entity.Access_Types);
          Nested.Union (Entity.Subtypes);
-         Nested.Union (Entity.Constants);
+         Nested.Union (Entity.Contain_Constants);
          Nested.Union (Entity.Variables);
          Union (Nested, Entity.Belong_Subprograms);
          Nested.Union (Entity.Entries);
@@ -324,7 +324,7 @@ package body GNATdoc.Backend.HTML is
          Nested.Union (Entity.Tagged_Types);
          Nested.Union (Entity.Access_Types);
          Nested.Union (Entity.Subtypes);
-         Nested.Union (Entity.Constants);
+         Nested.Union (Entity.Contain_Constants);
          Nested.Union (Entity.Variables);
 
          if Self.OOP_Mode then

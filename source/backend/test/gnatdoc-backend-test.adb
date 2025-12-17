@@ -224,7 +224,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
          end if;
 
-         if not Entity.Constants.Is_Empty then
+         if not Entity.Contain_Constants.Is_Empty then
             Offset := @ + 2;
 
             Output.Put_Line
@@ -235,7 +235,7 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for E of Entity.Constants loop
+            for E of Entity.Contain_Constants loop
                Dump (E.Reference, Success);
             end loop;
 
@@ -262,7 +262,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
          end if;
 
-         if not Entity.Belongs_Constants.Is_Empty then
+         if not Entity.Belong_Constants.Is_Empty then
             Offset := @ + 2;
 
             Output.Put_Line
@@ -273,7 +273,7 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for R of Entity.Belongs_Constants loop
+            for R of Entity.Belong_Constants loop
                Dump (R, Success);
             end loop;
 

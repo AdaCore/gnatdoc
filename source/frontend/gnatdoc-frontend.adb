@@ -1770,7 +1770,7 @@ package body GNATdoc.Frontend is
                Options       => GNATdoc.Options.Extractor_Options,
                Documentation => Entity.Documentation,
                Messages      => Entity.Messages);
-            Enclosing.Constants.Insert (Entity);
+            Enclosing.Contain_Constants.Insert (Entity);
             Check_Undocumented (Entity);
          end;
       end loop;
@@ -1840,7 +1840,7 @@ package body GNATdoc.Frontend is
                Messages      => Entity.Messages);
 
             if Node.F_Has_Constant then
-               Enclosing.Constants.Insert (Entity);
+               Enclosing.Contain_Constants.Insert (Entity);
 
                Resolve_Belongs_To
                  (Enclosing => Enclosing,
@@ -1872,7 +1872,7 @@ package body GNATdoc.Frontend is
                end if;
 
                if Belongs = null then
-                  Enclosing.Belongs_Constants.Insert (Entity.Reference);
+                  Enclosing.Belong_Constants.Insert (Entity.Reference);
 
                else
                   Entity.RST_Profile :=
@@ -1882,7 +1882,7 @@ package body GNATdoc.Frontend is
 
                   Enclosing.Belong_Entities.Delete (Entity.Reference);
                   Belongs.Belong_Entities.Insert (Entity.Reference);
-                  Belongs.Belongs_Constants.Insert (Entity.Reference);
+                  Belongs.Belong_Constants.Insert (Entity.Reference);
                   Entity.Belongs := Belongs.Reference;
                end if;
 

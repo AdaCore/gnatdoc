@@ -162,7 +162,7 @@ package body GNATdoc.Entities.Proxies is
       elsif Name = "constants" then
          return
            Entity_Information_Set_Proxy'
-             (Entities => Self.Entity.Constants'Unchecked_Access,
+             (Entities => Self.Entity.Contain_Constants'Unchecked_Access,
               OOP_Mode => Self.OOP_Mode);
 
       elsif Name = "variables" then

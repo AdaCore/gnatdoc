@@ -171,8 +171,8 @@ package GNATdoc.Entities is
       Protected_Types        : aliased Entity_Information_Sets.Set;
       Access_Types           : aliased Entity_Information_Sets.Set;
       Subtypes               : aliased Entity_Information_Sets.Set;
-      Constants              : aliased Entity_Information_Sets.Set;
-      Belongs_Constants      : aliased Entity_Reference_Sets.Set;
+      Contain_Constants      : aliased Entity_Information_Sets.Set;
+      Belong_Constants       : aliased Entity_Reference_Sets.Set;
       --  Constants that belongs to the entity (to interface/tagged type,
       --  otherwise to the package)
       Variables              : aliased Entity_Information_Sets.Set;
