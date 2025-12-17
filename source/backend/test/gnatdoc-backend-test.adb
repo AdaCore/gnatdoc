@@ -224,7 +224,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
          end if;
 
-         if not Entity.Constants.Is_Empty then
+         if not Entity.Contain_Constants.Is_Empty then
             Offset := @ + 2;
 
             Output.Put_Line
@@ -235,7 +235,7 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for E of Entity.Constants loop
+            for E of Entity.Contain_Constants loop
                Dump (E.Reference, Success);
             end loop;
 
@@ -243,7 +243,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
          end if;
 
-         if not Entity.Subprograms.Is_Empty then
+         if not Entity.Contain_Subprograms.Is_Empty then
             Offset := @ + 2;
 
             Output.Put_Line
@@ -254,15 +254,15 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for E of Entity.Subprograms loop
-               Dump (E.Reference, Success);
+            for E of Entity.Contain_Subprograms loop
+               Dump (E, Success);
             end loop;
 
             Offset := @ - 2;
             Offset := @ - 2;
          end if;
 
-         if not Entity.Belongs_Constants.Is_Empty then
+         if not Entity.Belong_Constants.Is_Empty then
             Offset := @ + 2;
 
             Output.Put_Line
@@ -273,7 +273,7 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for R of Entity.Belongs_Constants loop
+            for R of Entity.Belong_Constants loop
                Dump (R, Success);
             end loop;
 
@@ -281,7 +281,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
          end if;
 
-         if not Entity.Belongs_Subprograms.Is_Empty then
+         if not Entity.Belong_Subprograms.Is_Empty then
             Offset := @ + 2;
 
             Output.Put_Line
@@ -293,7 +293,7 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for R of Entity.Belongs_Subprograms loop
+            for R of Entity.Belong_Subprograms loop
                Dump (R, Success);
             end loop;
 
@@ -301,7 +301,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
          end if;
 
-         if not Entity.Entities.Is_Empty then
+         if not Entity.Contain_Entities.Is_Empty then
             Offset := @ + 2;
 
             Output.Put_Line
@@ -312,7 +312,7 @@ package body GNATdoc.Backend.Test is
 
             Offset := @ + 2;
 
-            for E of Entity.Entities loop
+            for E of Entity.Contain_Entities loop
                Dump (E.all);
             end loop;
 
@@ -370,9 +370,11 @@ package body GNATdoc.Backend.Test is
          Summary_Template  : constant
            VSS.Strings.Templates.Virtual_String_Template :=
              "{}{}{}{}{} ({}) '{}'";
-
+         Object_Template   : constant
+           VSS.Strings.Templates.Virtual_String_Template :=
+             " [of '{}']";
       begin
-         Output.Put_Line
+         Output.Put
            (Summary_Template.Format
               (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
                VSS.Strings.Formatters.Strings.Image
@@ -390,6 +392,16 @@ package body GNATdoc.Backend.Test is
                Entity_Kind_Formatters.Image (Entity.Kind),
                VSS.Strings.Formatters.Strings.Image (Entity.Signature.Image)),
             Success);
+
+         if not Entity.Type_Signature.Image.Is_Empty then
+            Output.Put
+              (Object_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image
+                    (Entity.Type_Signature.Image)),
+               Success);
+         end if;
+
+         Output.New_Line (Success);
       end Dump_Entity_Summary;
 
       -------------------------

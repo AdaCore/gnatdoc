@@ -91,9 +91,12 @@ package body GNATdoc.Backend.HTML is
          end if;
       end loop;
 
-      for Item of Globals.Subprograms loop
-         if not Is_Private_Entity (Item) then
-            Index_Entities.Insert (Item);
+      for Item of Globals.Contain_Subprograms loop
+         if not Is_Private_Entity
+           (GNATdoc.Entities.To_Entity (Item.Signature))
+         then
+            Index_Entities.Insert
+              (GNATdoc.Entities.To_Entity (Item.Signature));
          end if;
       end loop;
 
@@ -235,9 +238,9 @@ package body GNATdoc.Backend.HTML is
          Nested.Union (Entity.Tagged_Types);
          Nested.Union (Entity.Access_Types);
          Nested.Union (Entity.Subtypes);
-         Nested.Union (Entity.Constants);
+         Nested.Union (Entity.Contain_Constants);
          Nested.Union (Entity.Variables);
-         Union (Nested, Entity.Belongs_Subprograms);
+         Union (Nested, Entity.Belong_Subprograms);
          Nested.Union (Entity.Entries);
          Nested.Union (Entity.Generic_Instantiations);
 
@@ -321,14 +324,14 @@ package body GNATdoc.Backend.HTML is
          Nested.Union (Entity.Tagged_Types);
          Nested.Union (Entity.Access_Types);
          Nested.Union (Entity.Subtypes);
-         Nested.Union (Entity.Constants);
+         Nested.Union (Entity.Contain_Constants);
          Nested.Union (Entity.Variables);
 
          if Self.OOP_Mode then
-            Union (Nested, Entity.Belongs_Subprograms);
+            Union (Nested, Entity.Belong_Subprograms);
 
          else
-            Nested.Union (Entity.Subprograms);
+            Union (Nested, Entity.Contain_Subprograms);
          end if;
 
          Nested.Union (Entity.Entries);

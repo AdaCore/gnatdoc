@@ -33,7 +33,10 @@ package GNATdoc.Entities is
       Ada_Exception,
       Ada_Function,
       Ada_Procedure,
+      Ada_Package_Declaration,
+      Ada_Package_Body,
       Ada_Formal,
+      Ada_Generic_Package_Declaration,
       Ada_Generic_Package_Instantiation,
       Ada_Generic_Subprogram_Instantiation);
 
@@ -120,7 +123,7 @@ package GNATdoc.Entities is
       --    * can be called with prefix notation
       --    * is a primitive operations of the tagged type
 
-      Entities               : Entity_Information_Declaration_Order_Sets.Set;
+      Contain_Entities       : Entity_Information_Declaration_Order_Sets.Set;
       --  All nested entities (structural view, in declaration order)
       Belong_Entities        : Entity_Reference_Declaration_Order_Sets.Set;
       --  All belong entities (belongs view, in declaration order)
@@ -133,6 +136,9 @@ package GNATdoc.Entities is
       --  thus, it should be documented in "class" documentation; otherwise,
       --  it is documented in "unit" documentation.
 
+      Type_Signature         : Entity_Signature;
+      --  Reference to type of the objects (constants/variables)
+
       RST_Profile            : VSS.Strings.Virtual_String;
       --  Subprogram's profile in fortmat to use by RST backend
       RSTPT_Objtype          : VSS.Strings.Virtual_String;
@@ -143,9 +149,9 @@ package GNATdoc.Entities is
       --  Name of instantiated package
 
       Packages               : Entity_Information_Sets.Set;
-      Subprograms            : aliased Entity_Information_Sets.Set;
+      Contain_Subprograms    : aliased Entity_Reference_Sets.Set;
       --  All subprograms declared in the entity (package)
-      Belongs_Subprograms    : aliased Entity_Reference_Sets.Set;
+      Belong_Subprograms     : aliased Entity_Reference_Sets.Set;
       --  Subprograms that belongs to the entity (to interface/tagged type,
       --  otherwise to the package)
       Entries                : aliased Entity_Information_Sets.Set;
@@ -168,8 +174,8 @@ package GNATdoc.Entities is
       Protected_Types        : aliased Entity_Information_Sets.Set;
       Access_Types           : aliased Entity_Information_Sets.Set;
       Subtypes               : aliased Entity_Information_Sets.Set;
-      Constants              : aliased Entity_Information_Sets.Set;
-      Belongs_Constants      : aliased Entity_Reference_Sets.Set;
+      Contain_Constants      : aliased Entity_Information_Sets.Set;
+      Belong_Constants       : aliased Entity_Reference_Sets.Set;
       --  Constants that belongs to the entity (to interface/tagged type,
       --  otherwise to the package)
       Variables              : aliased Entity_Information_Sets.Set;
@@ -212,9 +218,6 @@ package GNATdoc.Entities is
 
    To_Entity : Entity_Information_Maps.Map;
    --  Map to lookup entity's information by entity's signature.
-
-   function All_Entities
-     (Self : Entity_Information'Class) return Entity_Information_Sets.Set;
 
    function Reference
      (Self : Entity_Information'Class) return Entity_Reference;

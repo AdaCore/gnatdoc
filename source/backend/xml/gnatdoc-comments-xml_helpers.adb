@@ -24,15 +24,15 @@ package body GNATdoc.Comments.XML_Helpers is
 
    use GNATdoc.Backend.XML_Namespaces;
 
-   Description_Element : constant VSS.Strings.Virtual_String := "description";
-   Formal_Element      : constant VSS.Strings.Virtual_String := "formal";
-   Enumeration_Literal_Element : constant VSS.Strings.Virtual_String :=
-     "enumeration_literal";
-   Component_Element   : constant VSS.Strings.Virtual_String := "component";
-   Parameter_Element   : constant VSS.Strings.Virtual_String := "parameter";
-   Return_Element      : constant VSS.Strings.Virtual_String := "return";
-   Raised_Exception_Element : constant VSS.Strings.Virtual_String :=
-     "raised_exception";
+   Description_Tag      : constant VSS.Strings.Virtual_String := "description";
+   Formal_Tag           : constant VSS.Strings.Virtual_String := "formal";
+   Enumeration_Literal_Tag : constant VSS.Strings.Virtual_String :=
+     "enumeration-literal";
+   Component_Tag        : constant VSS.Strings.Virtual_String := "component";
+   Parameter_Tag        : constant VSS.Strings.Virtual_String := "parameter";
+   Return_Tag           : constant VSS.Strings.Virtual_String := "return";
+   Raised_Exception_Tag : constant VSS.Strings.Virtual_String :=
+     "raised-exception";
 
    --------------
    -- Generate --
@@ -57,11 +57,11 @@ package body GNATdoc.Comments.XML_Helpers is
          then
             Attributes.Clear;
             Writer.Start_Element
-              (GNATdoc_Namespace, Description_Element, Attributes, Success);
+              (GNATdoc_Namespace, Description_Tag, Attributes, Success);
             Writer.Characters
               (Section.Text.Join_Lines (VSS.Strings.LF, False), Success);
             Writer.End_Element
-              (GNATdoc_Namespace, Description_Element, Success);
+              (GNATdoc_Namespace, Description_Tag, Success);
          end if;
       end loop;
 
@@ -69,22 +69,22 @@ package body GNATdoc.Comments.XML_Helpers is
          if Section.Kind in Component then
             case Section.Kind is
                when Formal =>
-                  Element := Formal_Element;
+                  Element := Formal_Tag;
 
                when Enumeration_Literal =>
-                  Element := Enumeration_Literal_Element;
+                  Element := Enumeration_Literal_Tag;
 
                when Field =>
-                  Element := Component_Element;
+                  Element := Component_Tag;
 
                when Parameter =>
-                  Element := Parameter_Element;
+                  Element := Parameter_Tag;
 
                when Returns =>
-                  Element := Return_Element;
+                  Element := Return_Tag;
 
                when Raised_Exception =>
-                  Element := Raised_Exception_Element;
+                  Element := Raised_Exception_Tag;
 
                when others =>
                   --  Should never happened
@@ -105,11 +105,11 @@ package body GNATdoc.Comments.XML_Helpers is
             if not Section.Text.Is_Empty then
                Attributes.Clear;
                Writer.Start_Element
-                 (GNATdoc_Namespace, Description_Element, Attributes, Success);
+                 (GNATdoc_Namespace, Description_Tag, Attributes, Success);
                Writer.Characters
                  (Section.Text.Join_Lines (VSS.Strings.LF, False), Success);
                Writer.End_Element
-                 (GNATdoc_Namespace, Description_Element, Success);
+                 (GNATdoc_Namespace, Description_Tag, Success);
             end if;
 
             Writer.End_Element

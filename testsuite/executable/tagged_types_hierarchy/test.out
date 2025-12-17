@@ -1,6 +1,6 @@
 + ? (UNDEFINED) ''
   Packages:
-    +  Issue_93_Subtype_As_Parent (UNDEFINED) 'issue_93_subtype_as_parent'
+    +  Issue_93_Subtype_As_Parent (ADA_PACKAGE_DECLARATION) 'issue_93_subtype_as_parent'
   Interface Types:
     +  Progenitor (ADA_INTERFACE_TYPE) 'issue_93_subtype_as_parent.progenitor'
   Tagged Types:
@@ -10,7 +10,7 @@
     +  Constrained_Parent (ADA_OTHER_TYPE) 'issue_93_subtype_as_parent.constrained_parent'
     +  Progenitor_Subtype (ADA_OTHER_TYPE) 'issue_93_subtype_as_parent.progenitor_subtype'
   Contains Entities:
-    +  Issue_93_Subtype_As_Parent (UNDEFINED) 'issue_93_subtype_as_parent'
+    +  Issue_93_Subtype_As_Parent (ADA_PACKAGE_DECLARATION) 'issue_93_subtype_as_parent'
       Interface Types:
         +  Progenitor (ADA_INTERFACE_TYPE) 'issue_93_subtype_as_parent.progenitor'
       Tagged Types:
@@ -35,4 +35,4 @@
         +  Progenitor_Subtype (ADA_OTHER_TYPE) 'issue_93_subtype_as_parent.progenitor_subtype'
         +  Child (ADA_TAGGED_TYPE) 'issue_93_subtype_as_parent.child'
   Belongs Entities:
-    +  Issue_93_Subtype_As_Parent (UNDEFINED) 'issue_93_subtype_as_parent'
+    +  Issue_93_Subtype_As_Parent (ADA_PACKAGE_DECLARATION) 'issue_93_subtype_as_parent'
