@@ -179,6 +179,11 @@ package body GNATdoc.Backend.XML is
               (VSS.IRIs.Empty_IRI, "progenitor_types", Signatures.Join (' '));
          end if;
 
+         if not Entity.Type_Signature.Image.Is_Empty then
+            Attributes.Insert
+              (VSS.IRIs.Empty_IRI, "type", Entity.Type_Signature.Image);
+         end if;
+
          Writer.Start_Element
            (GNATdoc_Namespace, Entity_Tag (Entity), Attributes, Success);
 
