@@ -14,31 +14,31 @@
       Tagged Types:
         +  TT (ADA_TAGGED_TYPE) 'constants.tt'
       Constants:
-        +  BI (ADA_OBJECT) 'constants.bi'
-        +  BT (ADA_OBJECT) 'constants.bt'
-        +  CI (ADA_OBJECT) 'constants.ci'
-        +  CT (ADA_OBJECT) 'constants.ct'
+        +  BI (ADA_OBJECT) 'constants.bi' [of 'constants.ti']
+        +  BT (ADA_OBJECT) 'constants.bt' [of 'constants.tt']
+        +  CI (ADA_OBJECT) 'constants.ci' [of 'constants.ti']
+        +  CT (ADA_OBJECT) 'constants.ct' [of 'constants.tt']
       Belongs Constants:
-        +  BI (ADA_OBJECT) 'constants.bi'
-        +  CI (ADA_OBJECT) 'constants.ci'
+        +  BI (ADA_OBJECT) 'constants.bi' [of 'constants.ti']
+        +  CI (ADA_OBJECT) 'constants.ci' [of 'constants.ti']
       Contains Entities:
         +  TT (ADA_TAGGED_TYPE) 'constants.tt'
           Belongs Constants:
-            +  BT (ADA_OBJECT) 'constants.bt'
-            +  CT (ADA_OBJECT) 'constants.ct'
+            +  BT (ADA_OBJECT) 'constants.bt' [of 'constants.tt']
+            +  CT (ADA_OBJECT) 'constants.ct' [of 'constants.tt']
           Belongs Entities:
-            +  CT (ADA_OBJECT) 'constants.ct'
-            +  BT (ADA_OBJECT) 'constants.bt'
-        +  CT (ADA_OBJECT) 'constants.ct'
-        +  BT (ADA_OBJECT) 'constants.bt'
+            +  CT (ADA_OBJECT) 'constants.ct' [of 'constants.tt']
+            +  BT (ADA_OBJECT) 'constants.bt' [of 'constants.tt']
+        +  CT (ADA_OBJECT) 'constants.ct' [of 'constants.tt']
+        +  BT (ADA_OBJECT) 'constants.bt' [of 'constants.tt']
         +  TI (ADA_OTHER_TYPE) 'constants.ti'
-        +  CI (ADA_OBJECT) 'constants.ci'
-        +  BI (ADA_OBJECT) 'constants.bi'
+        +  CI (ADA_OBJECT) 'constants.ci' [of 'constants.ti']
+        +  BI (ADA_OBJECT) 'constants.bi' [of 'constants.ti']
       Belongs Entities:
         +  TT (ADA_TAGGED_TYPE) 'constants.tt'
         +  TI (ADA_OTHER_TYPE) 'constants.ti'
-        +  CI (ADA_OBJECT) 'constants.ci'
-        +  BI (ADA_OBJECT) 'constants.bi'
+        +  CI (ADA_OBJECT) 'constants.ci' [of 'constants.ti']
+        +  BI (ADA_OBJECT) 'constants.bi' [of 'constants.ti']
     +  Subprograms (ADA_PACKAGE_DECLARATION) 'subprograms'
       Interface Types:
         +  I1 (ADA_INTERFACE_TYPE) 'subprograms.i1'
