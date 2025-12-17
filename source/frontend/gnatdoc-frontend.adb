@@ -1830,6 +1830,10 @@ package body GNATdoc.Frontend is
             Belongs : GNATdoc.Entities.Entity_Information_Access;
 
          begin
+            Entity.Type_Signature :=
+              (if not Type_Name.Is_Null
+               then Signature (Type_Name)
+               else (others => <>));
             Entity.RSTPT_Objtype := RSTPT_Objtype;
             Entity.RSTPT_Defval  := RSTPT_Defval;
 

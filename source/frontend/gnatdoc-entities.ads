@@ -136,6 +136,9 @@ package GNATdoc.Entities is
       --  thus, it should be documented in "class" documentation; otherwise,
       --  it is documented in "unit" documentation.
 
+      Type_Signature         : Entity_Signature;
+      --  Reference to type of the objects (constants/variables)
+
       RST_Profile            : VSS.Strings.Virtual_String;
       --  Subprogram's profile in fortmat to use by RST backend
       RSTPT_Objtype          : VSS.Strings.Virtual_String;
