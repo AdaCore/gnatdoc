@@ -370,9 +370,11 @@ package body GNATdoc.Backend.Test is
          Summary_Template  : constant
            VSS.Strings.Templates.Virtual_String_Template :=
              "{}{}{}{}{} ({}) '{}'";
-
+         Object_Template   : constant
+           VSS.Strings.Templates.Virtual_String_Template :=
+             " [of '{}']";
       begin
-         Output.Put_Line
+         Output.Put
            (Summary_Template.Format
               (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
                VSS.Strings.Formatters.Strings.Image
@@ -390,6 +392,16 @@ package body GNATdoc.Backend.Test is
                Entity_Kind_Formatters.Image (Entity.Kind),
                VSS.Strings.Formatters.Strings.Image (Entity.Signature.Image)),
             Success);
+
+         if not Entity.Type_Signature.Image.Is_Empty then
+            Output.Put
+              (Object_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image
+                    (Entity.Type_Signature.Image)),
+               Success);
+         end if;
+
+         Output.New_Line (Success);
       end Dump_Entity_Summary;
 
       -------------------------
