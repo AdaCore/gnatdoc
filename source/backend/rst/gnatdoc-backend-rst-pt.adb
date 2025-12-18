@@ -252,7 +252,7 @@ package body GNATdoc.Backend.RST.PT is
          use type VSS.Strings.Virtual_String;
 
          Object_Template  : VSS.Strings.Templates.Virtual_String_Template :=
-           "{}.. ada:object:: {}";
+           "{}.. ada:object:: {} : constant {}";
          Package_Template : VSS.Strings.Templates.Virtual_String_Template :=
            "{}    :package: {}";
          Objtype_Template : VSS.Strings.Templates.Virtual_String_Template :=
@@ -266,13 +266,15 @@ package body GNATdoc.Backend.RST.PT is
          File.Put_Line
            (Object_Template.Format
               (VSS.Strings.Formatters.Strings.Image (Indent),
-               VSS.Strings.Formatters.Strings.Image (Entity.Name)),
+               VSS.Strings.Formatters.Strings.Image (Entity.Name),
+               VSS.Strings.Formatters.Strings.Image (Entity.RSTPT_Objtype)),
             Success);
          File.Put_Line
            (Package_Template.Format
               (VSS.Strings.Formatters.Strings.Image (Indent),
                VSS.Strings.Formatters.Strings.Image (Package_Name)),
             Success);
+         File.New_Line (Success);
 
          if not Inside_Type and not Entity.RSTPT_Objtype.Is_Empty then
             File.Put_Line
