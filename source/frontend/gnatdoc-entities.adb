@@ -58,19 +58,6 @@ package body GNATdoc.Entities is
       return Left.Signature = Right.Signature;
    end "=";
 
-   ------------------
-   -- All_Entities --
-   ------------------
-
-   function All_Entities
-     (Self : Entity_Information'Class) return Entity_Information_Sets.Set is
-   begin
-      return Result : Entity_Information_Sets.Set do
-         Result.Union (Self.Packages);
-         Result.Union (Self.Subprograms);
-      end return;
-   end All_Entities;
-
    ----------
    -- Hash --
    ----------

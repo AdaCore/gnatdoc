@@ -312,10 +312,10 @@ package body GNATdoc.Frontend is
                if Belongs = null then
                   Entity.Belongs := Belongs_Reference;
                   Belongs_Entity.Belong_Entities.Insert (Entity.Reference);
-                  Belongs_Entity.Belongs_Subprograms.Insert (Entity.Reference);
+                  Belongs_Entity.Belong_Subprograms.Insert (Entity.Reference);
 
                   Enclosing.Belong_Entities.Exclude (Entity.Reference);
-                  Enclosing.Belongs_Subprograms.Exclude (Entity.Reference);
+                  Enclosing.Belong_Subprograms.Exclude (Entity.Reference);
                   --  Subprograms declared in private part can be excluded
                   --  from the set of subprograms, so use `Exclude` to prevent
                   --  raise of exception.
@@ -512,8 +512,19 @@ package body GNATdoc.Frontend is
       do
          GNATdoc.Entities.To_Entity.Insert (Result.Signature, Result);
 
-         Enclosing.Entities.Insert (Result);
+         Enclosing.Contain_Entities.Insert (Result);
          Enclosing.Belong_Entities.Insert (Result.Reference);
+
+         case Kind is
+            when GNATdoc.Entities.Ada_Function
+               | GNATdoc.Entities.Ada_Procedure
+            =>
+               Enclosing.Contain_Subprograms.Insert (Result.Reference);
+               Enclosing.Belong_Subprograms.Insert (Result.Reference);
+
+            when others =>
+               null;
+         end case;
       end return;
    end Create_Entity;
 
@@ -731,10 +742,10 @@ package body GNATdoc.Frontend is
                  and Belongs /= null
                then
                   Enclosing.Belong_Entities.Delete (Entity.Reference);
-                  Enclosing.Belongs_Subprograms.Delete (Entity.Reference);
+                  Enclosing.Belong_Subprograms.Delete (Entity.Reference);
 
                   Belongs.Belong_Entities.Insert (Entity.Reference);
-                  Belongs.Belongs_Subprograms.Insert (Entity.Reference);
+                  Belongs.Belong_Subprograms.Insert (Entity.Reference);
                end if;
 
                Entity.Is_Method := True;
@@ -833,16 +844,12 @@ package body GNATdoc.Frontend is
       if not In_Private
         or GNATdoc.Options.Frontend_Options.Generate_Private
       then
-         Enclosing.Subprograms.Insert (Entity);
-
-         if Belongs = null then
-            Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
-
-         else
+         if Belongs /= null then
             Enclosing.Belong_Entities.Delete (Entity.Reference);
+            Enclosing.Belong_Subprograms.Delete (Entity.Reference);
 
             Belongs.Belong_Entities.Insert (Entity.Reference);
-            Belongs.Belongs_Subprograms.Insert (Entity.Reference);
+            Belongs.Belong_Subprograms.Insert (Entity.Reference);
 
             Entity.Belongs := Belongs.Reference;
          end if;
@@ -850,7 +857,7 @@ package body GNATdoc.Frontend is
          if Global /= null
            and GNATdoc.Entities.Globals'Access /= Enclosing
          then
-            Global.Subprograms.Insert (Entity);
+            Global.Contain_Subprograms.Insert (Entity.Reference);
          end if;
       end if;
 
@@ -1252,16 +1259,12 @@ package body GNATdoc.Frontend is
       if not In_Private
         or else GNATdoc.Options.Frontend_Options.Generate_Private
       then
-         Enclosing.Subprograms.Insert (Entity);
-
-         if Belongs = null then
-            Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
-
-         else
+         if Belongs /= null then
             Enclosing.Belong_Entities.Delete (Entity.Reference);
+            Enclosing.Belong_Subprograms.Delete (Entity.Reference);
 
             Belongs.Belong_Entities.Insert (Entity.Reference);
-            Belongs.Belongs_Subprograms.Insert (Entity.Reference);
+            Belongs.Belong_Subprograms.Insert (Entity.Reference);
 
             Entity.Belongs := Belongs.Reference;
          end if;
@@ -1269,7 +1272,7 @@ package body GNATdoc.Frontend is
          if Global /= null
            and GNATdoc.Entities.Globals'Access /= Enclosing
          then
-            Global.Subprograms.Insert (Entity);
+            Global.Contain_Subprograms.Insert (Entity.Reference);
          end if;
       end if;
 
@@ -1652,11 +1655,9 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      Enclosing.Subprograms.Insert (Entity);
-      Enclosing.Belongs_Subprograms.Insert (Entity.Reference);
 
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
-         Global.Subprograms.Insert (Entity);
+         Global.Contain_Subprograms.Insert (Entity.Reference);
       end if;
 
       Check_Undocumented (Entity);
@@ -1676,7 +1677,7 @@ package body GNATdoc.Frontend is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         Create_Entity
           (Enclosing     => Enclosing,
-           Kind          => GNATdoc.Entities.Undefined,
+           Kind          => GNATdoc.Entities.Ada_Generic_Package_Declaration,
            Defining_Name => Name);
 
    begin
@@ -1769,7 +1770,7 @@ package body GNATdoc.Frontend is
                Options       => GNATdoc.Options.Extractor_Options,
                Documentation => Entity.Documentation,
                Messages      => Entity.Messages);
-            Enclosing.Constants.Insert (Entity);
+            Enclosing.Contain_Constants.Insert (Entity);
             Check_Undocumented (Entity);
          end;
       end loop;
@@ -1829,6 +1830,10 @@ package body GNATdoc.Frontend is
             Belongs : GNATdoc.Entities.Entity_Information_Access;
 
          begin
+            Entity.Type_Signature :=
+              (if not Type_Name.Is_Null
+               then Signature (Type_Name)
+               else (others => <>));
             Entity.RSTPT_Objtype := RSTPT_Objtype;
             Entity.RSTPT_Defval  := RSTPT_Defval;
 
@@ -1839,7 +1844,7 @@ package body GNATdoc.Frontend is
                Messages      => Entity.Messages);
 
             if Node.F_Has_Constant then
-               Enclosing.Constants.Insert (Entity);
+               Enclosing.Contain_Constants.Insert (Entity);
 
                Resolve_Belongs_To
                  (Enclosing => Enclosing,
@@ -1871,7 +1876,7 @@ package body GNATdoc.Frontend is
                end if;
 
                if Belongs = null then
-                  Enclosing.Belongs_Constants.Insert (Entity.Reference);
+                  Enclosing.Belong_Constants.Insert (Entity.Reference);
 
                else
                   Entity.RST_Profile :=
@@ -1881,7 +1886,7 @@ package body GNATdoc.Frontend is
 
                   Enclosing.Belong_Entities.Delete (Entity.Reference);
                   Belongs.Belong_Entities.Insert (Entity.Reference);
-                  Belongs.Belongs_Constants.Insert (Entity.Reference);
+                  Belongs.Belong_Constants.Insert (Entity.Reference);
                   Entity.Belongs := Belongs.Reference;
                end if;
 
@@ -1906,7 +1911,7 @@ package body GNATdoc.Frontend is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         Create_Entity
           (Enclosing     => Enclosing,
-           Kind          => GNATdoc.Entities.Undefined,
+           Kind          => GNATdoc.Entities.Ada_Package_Declaration,
            Defining_Name => Name);
 
    begin
@@ -1943,7 +1948,7 @@ package body GNATdoc.Frontend is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         Create_Entity
           (Enclosing     => Enclosing,
-           Kind          => GNATdoc.Entities.Undefined,
+           Kind          => GNATdoc.Entities.Ada_Package_Body,
            Defining_Name => Name);
 
    begin

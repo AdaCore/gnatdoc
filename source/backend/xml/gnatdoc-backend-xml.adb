@@ -41,7 +41,87 @@ package body GNATdoc.Backend.XML is
    use Line_Count_Formatters;
    --  XXX VSS 20251204+ provides it as `VSS.Strings.Formatters.Line_Offsets`.
 
-   GNATdoc_Element : constant VSS.Strings.Virtual_String := "gnatdoc";
+   Formal_Tag         : constant VSS.Strings.Virtual_String := "formal";
+   Function_Tag       : constant VSS.Strings.Virtual_String := "function";
+   Exception_Tag      : constant VSS.Strings.Virtual_String := "exception";
+   Generic_Package_Declaration_Tag : constant VSS.Strings.Virtual_String :=
+     "generic-package-declaration";
+   Generic_Package_Instantiation_Tag : constant VSS.Strings.Virtual_String :=
+     "generic-package-instantiation";
+   Generic_Subprogram_Instantiation_Tag : constant
+     VSS.Strings.Virtual_String := "generic-subprogram-instantiation";
+   GNATdoc_Tag        : constant VSS.Strings.Virtual_String := "gnatdoc";
+   Interface_Type_Tag : constant VSS.Strings.Virtual_String :=
+     "interface-type";
+   Named_Number_Tag   : constant VSS.Strings.Virtual_String :=
+     "named-number";
+   Object_Tag         : constant VSS.Strings.Virtual_String := "object";
+   Package_Body_Tag   : constant VSS.Strings.Virtual_String := "package-body";
+   Package_Declaration_Tag : constant VSS.Strings.Virtual_String :=
+     "package-declaration";
+   Procedure_Tag      : constant VSS.Strings.Virtual_String := "procedure";
+   Tagged_Type_Tag    : constant VSS.Strings.Virtual_String := "tagged-type";
+   Type_Tag           : constant VSS.Strings.Virtual_String := "type";
+
+   function Entity_Tag
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access)
+      return VSS.Strings.Virtual_String;
+
+   ----------------
+   -- Entity_Tag --
+   ----------------
+
+   function Entity_Tag
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access)
+      return VSS.Strings.Virtual_String is
+   begin
+      case Entity.Kind is
+         when GNATdoc.Entities.Undefined =>
+            raise Program_Error with "not classified entity";
+
+         when GNATdoc.Entities.Ada_Tagged_Type =>
+            return Tagged_Type_Tag;
+
+         when GNATdoc.Entities.Ada_Interface_Type =>
+            return Interface_Type_Tag;
+
+         when GNATdoc.Entities.Ada_Other_Type =>
+            return Type_Tag;
+
+         when GNATdoc.Entities.Ada_Named_Number =>
+            return Named_Number_Tag;
+
+         when GNATdoc.Entities.Ada_Object =>
+            return Object_Tag;
+
+         when GNATdoc.Entities.Ada_Exception =>
+            return Exception_Tag;
+
+         when GNATdoc.Entities.Ada_Function =>
+            return Function_Tag;
+
+         when GNATdoc.Entities.Ada_Procedure =>
+            return Procedure_Tag;
+
+         when GNATdoc.Entities.Ada_Package_Declaration =>
+            return Package_Declaration_Tag;
+
+         when GNATdoc.Entities.Ada_Package_Body =>
+            return Package_Body_Tag;
+
+         when GNATdoc.Entities.Ada_Formal =>
+            return Formal_Tag;
+
+         when GNATdoc.Entities.Ada_Generic_Package_Declaration =>
+            return Generic_Package_Declaration_Tag;
+
+         when GNATdoc.Entities.Ada_Generic_Package_Instantiation =>
+            return Generic_Package_Instantiation_Tag;
+
+         when GNATdoc.Entities.Ada_Generic_Subprogram_Instantiation =>
+            return Generic_Subprogram_Instantiation_Tag;
+      end case;
+   end Entity_Tag;
 
    --------------
    -- Generate --
@@ -72,11 +152,6 @@ package body GNATdoc.Backend.XML is
          Attributes.Clear;
          Attributes.Insert
            (VSS.IRIs.Empty_IRI,
-            "kind",
-            VSS.Strings.To_Virtual_String
-              (GNATdoc.Entities.Entity_Kind'Wide_Wide_Image (Entity.Kind)));
-         Attributes.Insert
-           (VSS.IRIs.Empty_IRI,
             "location",
             Location_Template.Format
               (VSS.Strings.Formatters.Strings.Image (Entity.Location.File),
@@ -104,17 +179,22 @@ package body GNATdoc.Backend.XML is
               (VSS.IRIs.Empty_IRI, "progenitor_types", Signatures.Join (' '));
          end if;
 
+         if not Entity.Type_Signature.Image.Is_Empty then
+            Attributes.Insert
+              (VSS.IRIs.Empty_IRI, "type", Entity.Type_Signature.Image);
+         end if;
+
          Writer.Start_Element
-           (GNATdoc_Namespace, "entity", Attributes, Success);
+           (GNATdoc_Namespace, Entity_Tag (Entity), Attributes, Success);
 
          GNATdoc.Comments.XML_Helpers.Generate
            (Entity.Documentation, Writer, Success);
 
-         for E of Entity.Entities loop
+         for E of Entity.Contain_Entities loop
             Generate (Writer, E, Success);
          end loop;
 
-         Writer.End_Element (GNATdoc_Namespace, "entity", Success);
+         Writer.End_Element (GNATdoc_Namespace, Entity_Tag (Entity), Success);
       end Generate;
 
       Writer     : aliased VSS.XML.Writers.Pretty.Pretty_XML_Writer;
@@ -141,13 +221,13 @@ package body GNATdoc.Backend.XML is
 
       Attributes.Clear;
       Writer.Start_Element
-        (GNATdoc_Namespace, GNATdoc_Element, Attributes, Success);
+        (GNATdoc_Namespace, GNATdoc_Tag, Attributes, Success);
 
-      for E of GNATdoc.Entities.Globals.Entities loop
+      for E of GNATdoc.Entities.Globals.Contain_Entities loop
          Generate (Writer, E, Success);
       end loop;
 
-      Writer.End_Element (GNATdoc_Namespace, GNATdoc_Element, Success);
+      Writer.End_Element (GNATdoc_Namespace, GNATdoc_Tag, Success);
 
       --  Close output file.
 
