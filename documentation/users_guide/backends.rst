@@ -68,5 +68,5 @@ documentation with *sphinx* configured with *ada-domain*.
 XML
 ===
 
-The XML backend can be used to export documentation in XML format to process it
-by other tools.
+The XML backend can be used to generate documentation in XML format for 
+processing with other tools.
