@@ -77,7 +77,7 @@ LAL
     Array of nodes
 
 
-.. ada:generic-package-instantiation:: Elementary_Functions
+.. ada:generic-package-instantiation:: package Elementary_Functions is new Ada.Numerics.Generic_Elementary_Functions
     :package: LAL
 
     .. code-block:: ada
