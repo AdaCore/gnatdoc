@@ -11,8 +11,9 @@ LAL
 
 
 
-.. ada:object:: Default_Charset
+.. ada:object:: Default_Charset : constant Standard.String
     :package: LAL
+
     :objtype: Standard.String
     :defval: ``"iso-8859-1"``
 
@@ -35,8 +36,9 @@ LAL
 
     Root of node hierarchy
 
-    .. ada:object:: No_Ada_Node
+    .. ada:object:: No_Ada_Node : constant LAL.Ada_Node
         :package: LAL.Ada_Node
+
 
         Null node.
 
