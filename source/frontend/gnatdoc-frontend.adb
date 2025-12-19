@@ -1613,6 +1613,15 @@ package body GNATdoc.Frontend is
          Messages      => Entity.Messages);
       Enclosing.Generic_Instantiations.Insert (Entity);
 
+      Entity.RSTPT_Instance_Of :=
+        VSS.Strings.To_Virtual_String
+          (case Node.Kind is
+              when Ada_Generic_Package_Instantiation =>
+                Node.As_Generic_Package_Instantiation.F_Generic_Pkg_Name.Text,
+              when Ada_Generic_Subp_Instantiation =>
+                Node.As_Generic_Subp_Instantiation.F_Generic_Subp_Name.Text,
+              when others => raise Program_Error);
+
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
          Global.Generic_Instantiations.Insert (Entity);
       end if;

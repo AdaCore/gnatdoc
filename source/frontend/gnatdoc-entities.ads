@@ -147,6 +147,8 @@ package GNATdoc.Entities is
       --  Default value of the object
       RSTPT_Instpkg          : VSS.Strings.Virtual_String;
       --  Name of instantiated package
+      RSTPT_Instance_Of      : VSS.Strings.Virtual_String;
+      --  Name of the generic package
 
       Packages               : Entity_Information_Sets.Set;
       Contain_Subprograms    : aliased Entity_Reference_Sets.Set;
