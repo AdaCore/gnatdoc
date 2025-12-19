@@ -63,3 +63,10 @@ RST
 
 The RST backend can be used to generate a set of *.rst* files to be used to generate
 documentation with *sphinx* configured with *ada-domain*.
+
+
+XML
+===
+
+The XML backend can be used to generate documentation in XML format for 
+processing with other tools.

@@ -44,7 +44,7 @@ package body GNATdoc.Command_Line is
    Backend_Option            : constant VSS.Command_Line.Value_Option :=
      (Short_Name  => <>,
       Long_Name   => "backend",
-      Value_Name  => "html|odf|rst",
+      Value_Name  => "html|odf|rst|xml",
       Description => "Backend to use to generate output");
 
    Generate_Option           : constant VSS.Command_Line.Value_Option :=
