@@ -50,16 +50,20 @@ A brief description of the supported switches is available through the
   Usage: gnatdoc [options] project_file
 
   Options:
-    --backend <name>           Backend to use to generate output
-    --generate <part>          Part of code to generate documentation
+    --backend <html|odf|rst|xml>
+                               Backend to use to generate output
+    --generate <public|private|body>
+                               Part of code to generate documentation
+    --style <leading|trailing|gnat>
+                               Use given style of documentation
     -O, --output-dir <output_dir>
                                Output directory for generated documentation
     -P, --project <project_file>
                                Project file to process
-    --style <style>            Use given style of documentation
     --warnings                 Report warnings for undocumented entities
     -v, --verbose              Enable verbose output
-    -X                         Set scenario variable
+    -X <name=value>            Specify an external reference for scenario
+                                 variables
     -h, --help                 Display help information
 
   Arguments:
@@ -78,8 +82,9 @@ Here is the list of supported switches:
 
 * `--backend=<name>`: select the output format
 
-  GNATdoc generates HTML files (*--backend=html*), or ReST
-  files (*--backend=rst*). The default is HTML.
+  GNATdoc generates HTML files (*--backend=html*), OpenDocument Text document
+  (*--backend-odf*), ReST files (*--backend=rst*), or XML file
+  (*--backend=xml*). The default is HTML.
 
 * `--generate=<part>`: Select the of entities to be included into the documentation
 
