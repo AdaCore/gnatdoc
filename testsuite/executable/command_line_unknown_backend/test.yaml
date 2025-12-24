@@ -1,0 +1,2 @@
+description: Check error is reported when unknown backend name is specified in the command line
+driver: executable

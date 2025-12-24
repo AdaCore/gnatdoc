@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2024, AdaCore                     --
+--                     Copyright (C) 2022-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,6 +15,10 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with VSS.Command_Line;
+with VSS.Strings.Formatters.Strings;
+with VSS.Strings.Templates;
+
 with GNATdoc.Command_Line;
 with GNATdoc.Configuration.Command_Line;
 with GNATdoc.Configuration.Project;
@@ -23,6 +27,9 @@ with GNATdoc.Frontend;
 with GNATdoc.Projects;
 
 procedure GNATdoc.Driver is
+
+   use type GNATdoc.Backend.Backend_Access;
+
    PF_Provider : aliased
      GNATdoc.Configuration.Project.Project_Configuration_Provider;
    CL_Provider : aliased
@@ -50,6 +57,14 @@ begin
    Backend :=
      GNATdoc.Backend.Registry.Create_Backend
        (GNATdoc.Configuration.Provider.Backend_Name);
+
+   if Backend = null then
+      VSS.Command_Line.Report_Error
+        (VSS.Strings.Templates.Virtual_String_Template'
+           ("unknown backend `{}`").Format
+             (VSS.Strings.Formatters.Strings.Image
+                  (GNATdoc.Configuration.Provider.Backend_Name)));
+   end if;
 
    --  Register backend's options.
 
