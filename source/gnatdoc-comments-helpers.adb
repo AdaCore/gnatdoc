@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -495,6 +495,7 @@ package body GNATdoc.Comments.Helpers is
                | Ada_Discriminant_Spec
                | Ada_Enum_Literal_Decl
                | Ada_Exception_Decl
+               | Ada_Exception_Handler
                | Ada_For_Loop_Var_Decl
                | Ada_Formal_Type_Decl
                | Ada_Generic_Package_Instantiation
