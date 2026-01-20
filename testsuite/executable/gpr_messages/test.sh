@@ -1,1 +1,1 @@
-$GNATDOC4 default.gpr 2>&1 | sed 's/\("\).*\(default.gpr\)/\1\2/'
+$GNATDOC4 default.gpr 2>&1 | sed 's/\("\).*\(default.gpr\)/\1\2/' | sed '/^   -/d'
