@@ -1,3 +1,13 @@
-default.gpr: error: project file "default.gpr" not found
-default.gpr: error: project file "default.gpr" not found
+error: project file "default.gpr" not found
+The following directories have been searched:
+* Current directory: <<WORKING_DIR>>
+* GPR_PROJECT_PATH environment variable:
+* Configuration file:
+
+error: project file "default.gpr" not found
+The following directories have been searched:
+* Current directory: <<WORKING_DIR>>
+* GPR_PROJECT_PATH environment variable:
+* Configuration file:
+
 Unable to load the project

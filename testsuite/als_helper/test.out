@@ -510,14 +510,14 @@ Test_Exception : exception;
 Description of the exception
 ----- DONE -----
 Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
-Origin: <Id "Test_Exception" exceptions.adb:7:16-7:30>
+Origin: <Id "Test_Exception" exceptions.adb:8:16-8:30>
 ----- CODE SNIPPET -----
 Test_Exception : exception;
 ----- DOCUMENTATION -----
 Description of the exception
 ----- DONE -----
 Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
-Origin: <Id "Test_Exception" exceptions.adb:10:15-10:29>
+Origin: <Id "Test_Exception" exceptions.adb:11:15-11:29>
 ----- CODE SNIPPET -----
 Test_Exception : exception;
 ----- DOCUMENTATION -----
@@ -571,6 +571,16 @@ Origin: <Id "Renamed_Test_Exception" exceptions_package.adb:20:36-20:58>
 Renamed_Test_Exception : exception;
 ----- DOCUMENTATION -----
 Description of the renamed exception
+----- DONE -----
+Defining name: <DefiningName "E" exceptions.adb:22:15-22:16>
+Origin: <Id "E" exceptions.adb:22:15-22:16>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+----- DONE -----
+Defining name: <DefiningName "E" exceptions.adb:22:15-22:16>
+Origin: <Id "E" exceptions.adb:23:51-23:52>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <DefiningName "Generic_Package" generic_package.ads:6:9-6:24>
 Origin: <Id "Generic_Package" generic_package.ads:6:9-6:24>
