@@ -10,8 +10,22 @@ include:
 
   - component: $CI_SERVER_FQDN/eng/gitlab-templates/test@~latest
     inputs:
+      linux: true
       needs: []
       anod-args: run build_and_test_gnatdoc4 --latest
+
+  - component: $CI_SERVER_FQDN/eng/gitlab-templates/test@~latest
+    inputs:
+      job-name: test:windows
+      linux: false
+      windows: true
+      windows-needs: []
+      windows-mem: 16
+      anod-args: run build_and_test_gnatdoc4 --latest
+      rules:
+        - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+          when: manual
+          allow_failure: true
 
   - component: $CI_SERVER_FQDN/eng/gitlab-templates/test@~latest
     inputs:
