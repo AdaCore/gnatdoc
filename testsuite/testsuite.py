@@ -6,7 +6,12 @@ import sys
 from typing import List
 
 from e3.testsuite import Testsuite
-from e3.testsuite.driver.diff import DiffTestDriver, OutputRefiner, ReplacePath
+from e3.testsuite.driver.diff import (
+    DiffTestDriver,
+    OutputRefiner,
+    ReplacePath,
+    Substitute,
+)
 
 
 class ALSHelperDriver(DiffTestDriver):
@@ -59,7 +64,9 @@ class GNATdocExecutableDriver(DiffTestDriver):
     @property
     def output_refiners(self) -> List[OutputRefiner]:
         return super(GNATdocExecutableDriver, self).output_refiners + [
-            ReplacePath(self.working_dir(), "<<WORKING_DIR>>")
+            ReplacePath(self.working_dir(), "<<WORKING_DIR>>"),
+            Substitute("<<WORKING_DIR>>\\.\\", "<<WORKING_DIR>>/./"),
+            Substitute("<<WORKING_DIR>>\\", "<<WORKING_DIR>>/"),
         ]
 
 
