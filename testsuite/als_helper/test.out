@@ -1550,6 +1550,16 @@ package Packages_Renaming renames Packages;
 ----- DOCUMENTATION -----
 Description of the package renaming
 ----- DONE -----
+Defining name: <DefiningName "Result" returns.adb:8:17-8:23>
+Origin: <Id "Result" returns.adb:8:17-8:23>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+----- DONE -----
+Defining name: <DefiningName "Result" returns.adb:8:17-8:23>
+Origin: <Id "Result" returns.adb:9:13-9:19>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+----- DONE -----
 Defining name: None
 Origin: <OpEq "=" synthetics.adb:11:15-11:16>
 >>>>> LAL: name resolve failure <<<<<
