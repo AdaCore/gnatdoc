@@ -582,6 +582,16 @@ Origin: <Id "E" exceptions.adb:23:51-23:52>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
+Defining name: <DefiningName "J" fors.adb:6:11-6:12>
+Origin: <Id "J" fors.adb:6:11-6:12>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+----- DONE -----
+Defining name: <DefiningName "J" fors.adb:6:11-6:12>
+Origin: <Id "J" fors.adb:7:20-7:21>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+----- DONE -----
 Defining name: <DefiningName "Generic_Package" generic_package.ads:6:9-6:24>
 Origin: <Id "Generic_Package" generic_package.ads:6:9-6:24>
 ----- CODE SNIPPET -----

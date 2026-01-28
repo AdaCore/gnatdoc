@@ -118,6 +118,13 @@
     {"file": "exceptions.adb", "line": 23, "column": 51},
     //  reference of the choice parameter
 
+    //  Object of `for` loop
+
+    {"file": "fors.adb", "line": 6, "column": 11},
+    //  declaration of `for` loop object
+    {"file": "fors.adb", "line": 7, "column": 20},
+    //  reference of `for` loop object
+
     //  Generics
 
     {"file": "generic_package.ads", "line": 6, "column": 9},
