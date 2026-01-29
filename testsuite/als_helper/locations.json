@@ -118,6 +118,13 @@
     {"file": "exceptions.adb", "line": 23, "column": 51},
     //  reference of the choice parameter
 
+    //  Object of `for` loop
+
+    {"file": "fors.adb", "line": 6, "column": 11},
+    //  declaration of `for` loop object
+    {"file": "fors.adb", "line": 7, "column": 20},
+    //  reference of `for` loop object
+
     //  Generics
 
     {"file": "generic_package.ads", "line": 6, "column": 9},
@@ -342,6 +349,11 @@
     //  reference of the package renaming from `with` clause
     {"file": "packages_package.adb", "line": 2, "column": 6},
     //  reference of the package renaming from code
+
+    {"file": "returns.adb", "line": 8, "column": 17},
+    //  declaration of return object
+    {"file": "returns.adb", "line": 9, "column": 13},
+    //  reference of the return object
 
     {"file": "synthetics.adb", "line": 11, "column": 15},
     //  reference of synthetic `"="` subprogram of `Implicit_Record`
