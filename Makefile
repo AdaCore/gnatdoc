@@ -44,3 +44,52 @@ install-documentation: build-documentation
 	mkdir -p $(docdir)/pdf
 	cp -r documentation/users_guide/_build/html/* $(docdir)/html/users_guide
 	cp documentation/users_guide/_build/latex/gnatdoc_ug.pdf $(docdir)/pdf
+
+####################
+# Coverage support #
+####################
+
+coverage-setup: clean
+# Create a local gnatcov RTS - do not do this in the gnatcov install prefix
+	gnatcov setup --prefix=$$(pwd)/.objs/gnatcov-rts
+
+coverage-instrument: coverage-setup
+# Create the instrumented sources for gnatdoc and libgnatdoc.
+# Do not process subprojects, to avoid measuring coverage on
+# the markdown subproject.
+	gnatcov instrument -P gnat/gnatdoc.gpr \
+		--level=stmt \
+		--projects=gnatdoc.gpr --projects=libgnatdoc.gpr \
+	    --runtime-project $$(pwd)/.objs/gnatcov-rts/share/gpr/gnatcov_rts.gpr \
+		--no-subprojects \
+		${SCENARIO_VARIABLES}
+
+coverage-build: coverage-instrument
+# Build the project and the test drivers
+	gprbuild -j0 -p -P gnat/gnatdoc.gpr \
+	    --src-subdirs=gnatcov-instr \
+	    --implicit-with=$$(pwd)/.objs/gnatcov-rts/share/gpr/gnatcov_rts.gpr \
+		${SCENARIO_VARIABLES}
+	gprbuild -j0 -p -P gnat/tests/test_drivers.gpr \
+	    --implicit-with=$$(pwd)/.objs/gnatcov-rts/share/gpr/gnatcov_rts.gpr \
+		${SCENARIO_VARIABLES}
+
+coverage-test: coverage-build
+# Run the testsuite with the instrumented binaries; aggregate the
+# traces in a local directory.
+	rm -rf gnatcov_traces
+	mkdir -p gnatcov_traces
+	export PATH=$$(pwd)/bin:$$PATH && \
+	export GNATCOV_TRACE_FILE=$$(pwd)/gnatcov_traces/ && \
+	make -C testsuite
+
+coverage-report: coverage-test
+# Create a report from the traces; use the HTML and Cobertura formats for
+# the report, and place it in a local directory.
+	export GNATCOV_TRACE_FILE=$$(pwd)/gnatcov_traces/ && \
+	gnatcov coverage -P gnat/gnatdoc.gpr \
+	    --level=stmt \
+		--annotate=html,cobertura \
+		--projects=gnatdoc.gpr --projects=libgnatdoc.gpr \
+		--output-dir gnatcov_report/ \
+		gnatcov_traces/

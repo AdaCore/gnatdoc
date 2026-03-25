@@ -1,5 +1,5 @@
-
 stages:
+  - build
   - test
   - downstream
   - check
@@ -8,11 +8,11 @@ include:
   # Issue check
   - component: $CI_SERVER_FQDN/eng/gitlab-templates/check-issue@~latest
 
-  - component: $CI_SERVER_FQDN/eng/gitlab-templates/test@~latest
+  - component: $CI_SERVER_FQDN/eng/gitlab-templates/build@~latest
     inputs:
       linux: true
       needs: []
-      anod-args: run build_and_test_gnatdoc4 --latest
+      anod-args: run build_and_test_gnatdoc4_coverage --latest
 
   - component: $CI_SERVER_FQDN/eng/gitlab-templates/test@~latest
     inputs:
@@ -37,3 +37,38 @@ include:
         - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
           when: manual
           allow_failure: true
+
+build:linux:
+  after_script:
+    # Source the env prepared by generic_anod_ci
+    - cat /tmp/ci_env.sh
+    - . /tmp/ci_env.sh
+    - bs=$(anod info build gnatdoc4 -Qcoverage-report --show working_dir)
+    - echo $bs
+    # Copy coverage reports
+    - cp -r $bs/src/gnatcov_report $CI_PROJECT_DIR/
+    # Export to GitLab pages
+    - |
+      if [[ $CI_PIPELINE_SOURCE = "merge_request_event" ]]; then
+        target_subdir=MRs/$CI_MERGE_REQUEST_IID
+      else
+        target_subdir=$CI_COMMIT_BRANCH
+      fi
+    - publish-pages $CI_PROJECT_DIR/gnatcov_report/ --target-subdir $target_subdir --expires 30
+    # Compute coverage precentage
+    - cobertura=$CI_PROJECT_DIR/gnatcov_report/cobertura/cobertura.xml
+    - line_rate=$(cat $cobertura | grep -o 'line-rate="\([^"]\+\)"' | head -1 | grep -o '[0-9.]\+')
+    - line_perc=$(python -c "print($line_rate * 100)")
+    - >
+      echo "Line Coverage: $line_perc"
+    # Process the cobertura report
+    - sed -e "s|$bs/src|$CI_PROJECT_DIR|" -i $cobertura
+  coverage: '/^Line Coverage:\s+(\d+\.\d+)$/'
+  artifacts:
+    when: always #  Upload on errors too
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: gnatcov_report/cobertura/cobertura.xml
+    paths:
+      - gnatcov_report/cobertura/cobertura.xml
