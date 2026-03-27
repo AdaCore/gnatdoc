@@ -61,8 +61,8 @@ build:linux:
     - line_perc=$(python -c "print($line_rate * 100)")
     - >
       echo "Line Coverage: $line_perc"
-    # Process the cobertura report
-    - sed -e "s|$bs/src|$CI_PROJECT_DIR|" -i $cobertura
+    # Process the cobertura report - make paths relative to the CI dir
+    - sed -e "s|$bs/src/||" -i $cobertura
   coverage: '/^Line Coverage:\s+(\d+\.\d+)$/'
   artifacts:
     when: always #  Upload on errors too
