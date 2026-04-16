@@ -1048,8 +1048,7 @@ package body GNATdoc.Frontend is
 
             when Ada_Generic_Package_Decl =>
                Process_Generic_Package_Decl
-                 (Node.As_Generic_Package_Decl,
-                  GNATdoc.Entities.Globals'Access);
+                 (Node.As_Generic_Package_Decl, Enclosing);
 
                return Over;
 
@@ -1103,16 +1102,12 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Package_Decl =>
-               Process_Package_Decl
-                 (Node.As_Package_Decl,
-                  GNATdoc.Entities.Globals'Access);
+               Process_Package_Decl (Node.As_Package_Decl, Enclosing);
 
                return Over;
 
             when Ada_Package_Body =>
-               Process_Package_Body
-                 (Node.As_Package_Body,
-                  GNATdoc.Entities.Globals'Access);
+               Process_Package_Body (Node.As_Package_Body, Enclosing);
 
                return Over;
 
