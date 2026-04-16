@@ -20,21 +20,37 @@ with GNATdoc.Entities.Proxies;
 
 package body GNATdoc.TOCs.Builder is
 
+   procedure Insert_Entity
+     (Parent   : GNATdoc.TOCs.Content_Trees.Cursor;
+      Entity   : not null GNATdoc.Entities.Entity_Information_Access;
+      OOP      : Boolean;
+      Position : out GNATdoc.TOCs.Content_Trees.Cursor);
+   procedure Insert_Entity
+     (Parent : GNATdoc.TOCs.Content_Trees.Cursor;
+      Entity : not null GNATdoc.Entities.Entity_Information_Access;
+      OOP    : Boolean);
+   --  Inserts `Entity` in the alphabetical order of their qualified names, but
+   --  before any section children.
+
    ---------------
    -- Build_TOC --
    ---------------
 
    procedure Build_TOC (OOP : Boolean) is
 
-      procedure Process
+      procedure Process_Compilation_Units
         (Parent : GNATdoc.TOCs.Content_Trees.Cursor;
          Entity : not null GNATdoc.Entities.Entity_Information_Access);
 
-      -------------
-      -- Process --
-      -------------
+      procedure Process_Tagged_Types
+        (Parent : GNATdoc.TOCs.Content_Trees.Cursor;
+         Entity : not null GNATdoc.Entities.Entity_Information_Access);
 
-      procedure Process
+      -------------------------------
+      -- Process_Compilation_Units --
+      -------------------------------
+
+      procedure Process_Compilation_Units
         (Parent : GNATdoc.TOCs.Content_Trees.Cursor;
          Entity : not null GNATdoc.Entities.Entity_Information_Access)
       is
@@ -45,26 +61,47 @@ package body GNATdoc.TOCs.Builder is
             return;
          end if;
 
-         TOC.Insert_Child
-           (Parent   => Parent,
-            Before   => GNATdoc.TOCs.Content_Trees.No_Element,
-            New_Item =>
-              (Kind       => GNATdoc.TOCs.Entity,
-               Entity     => Entity.Reference,
-               Local_Href =>
-                 GNATdoc.Entities.Proxies.Local_Href (Entity.all, OOP),
-               Full_Href  =>
-                 GNATdoc.Entities.Proxies.Full_Href (Entity.all, OOP)),
-            Position => Position);
+         Insert_Entity (Parent, Entity, OOP, Position);
 
          for Item of Entity.Packages loop
-            Process (Position, Item);
+            Process_Compilation_Units (Position, Item);
          end loop;
-      end Process;
+      end Process_Compilation_Units;
+
+      --------------------------
+      -- Process_Tagged_Types --
+      --------------------------
+
+      procedure Process_Tagged_Types
+        (Parent : GNATdoc.TOCs.Content_Trees.Cursor;
+         Entity : not null GNATdoc.Entities.Entity_Information_Access)
+      is
+         --  Position : GNATdoc.TOCs.Content_Trees.Cursor;
+
+      begin
+         if GNATdoc.Backend.Is_Private_Entity (Entity) then
+            return;
+         end if;
+
+         for Item of Entity.Tagged_Types loop
+            Insert_Entity (Parent, Item, OOP);
+         end loop;
+
+         for Item of Entity.Interface_Types loop
+            Insert_Entity (Parent, Item, OOP);
+         end loop;
+
+         for Item of Entity.Packages loop
+            Process_Tagged_Types (Parent, Item);
+         end loop;
+      end Process_Tagged_Types;
 
       Compilation_Units : GNATdoc.TOCs.Content_Trees.Cursor;
+      Tagged_Types      : GNATdoc.TOCs.Content_Trees.Cursor;
 
    begin
+      --  Build "Compilation Units" section
+
       TOC.Insert_Child
         (Parent   => TOC.Root,
          Before   => GNATdoc.TOCs.Content_Trees.No_Element,
@@ -75,8 +112,86 @@ package body GNATdoc.TOCs.Builder is
          Position => Compilation_Units);
 
       for Item of GNATdoc.Entities.Compilation_Units.Packages loop
-         Process (Compilation_Units, Item);
+         Process_Compilation_Units (Compilation_Units, Item);
+      end loop;
+
+      --  Build "Tagged Types" section
+
+      TOC.Insert_Child
+        (Parent   => TOC.Root,
+         Before   => GNATdoc.TOCs.Content_Trees.No_Element,
+         New_Item =>
+           (Kind  => GNATdoc.TOCs.Section,
+            Title => "Tagged Types",
+            Id    => "tagged-types"),
+         Position => Tagged_Types);
+
+      for Item of GNATdoc.Entities.Compilation_Units.Packages loop
+         Process_Tagged_Types (Tagged_Types, Item);
       end loop;
    end Build_TOC;
+
+   -------------------
+   -- Insert_Entity --
+   -------------------
+
+   procedure Insert_Entity
+     (Parent : GNATdoc.TOCs.Content_Trees.Cursor;
+      Entity : not null GNATdoc.Entities.Entity_Information_Access;
+      OOP    : Boolean)
+   is
+      Dummy : GNATdoc.TOCs.Content_Trees.Cursor;
+
+   begin
+      Insert_Entity (Parent, Entity, OOP, Dummy);
+   end Insert_Entity;
+
+   -------------------
+   -- Insert_Entity --
+   -------------------
+
+   procedure Insert_Entity
+     (Parent   : GNATdoc.TOCs.Content_Trees.Cursor;
+      Entity   : not null GNATdoc.Entities.Entity_Information_Access;
+      OOP      : Boolean;
+      Position : out GNATdoc.TOCs.Content_Trees.Cursor)
+   is
+      use type VSS.Strings.Virtual_String;
+
+      Current : GNATdoc.TOCs.Content_Trees.Cursor :=
+        GNATdoc.TOCs.Content_Trees.First_Child (Parent);
+      Next    : GNATdoc.TOCs.Content_Trees.Cursor;
+
+   begin
+      while GNATdoc.TOCs.Content_Trees.Has_Element (Current) loop
+         Next  := GNATdoc.TOCs.Content_Trees.Next_Sibling (Current);
+
+         if TOC (Current).Kind = Section then
+            exit;
+
+         elsif TOC (Current).Entity.Qualified_Name < Entity.Qualified_Name
+           and (GNATdoc.TOCs.Content_Trees.Has_Element (Next)
+                and then TOC (Next).Kind = GNATdoc.TOCs.Entity
+                and then Entity.Qualified_Name
+                           < TOC (Next).Entity.Qualified_Name)
+         then
+            exit;
+         end if;
+
+         Current := Next;
+      end loop;
+
+      TOC.Insert_Child
+        (Parent   => Parent,
+         Before   => Current,
+         New_Item =>
+           (Kind       => GNATdoc.TOCs.Entity,
+            Entity     => Entity.Reference,
+            Local_Href =>
+              GNATdoc.Entities.Proxies.Local_Href (Entity.all, OOP),
+            Full_Href  =>
+              GNATdoc.Entities.Proxies.Full_Href (Entity.all, OOP)),
+         Position => Position);
+   end Insert_Entity;
 
 end GNATdoc.TOCs.Builder;

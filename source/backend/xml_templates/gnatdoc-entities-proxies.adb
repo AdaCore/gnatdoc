@@ -525,18 +525,15 @@ package body GNATdoc.Entities.Proxies is
       if Entity.Kind in Ada_Tagged_Type | Ada_Interface_Type then
          if OOP then
             return
-              Digest (Entity.Enclosing)
-              & ".html#"
-              & Digest (Entity.Signature);
-
-         elsif not Entity.Belongs.Signature.Image.Is_Empty then
-            return
-              Digest (Entity.Belongs.Signature)
+              Digest (Entity.Signature)
               & ".html#"
               & Digest (Entity.Signature);
 
          else
-            return VSS.Strings.Empty_Virtual_String;
+            return
+              Digest (Entity.Enclosing)
+              & ".html#"
+              & Digest (Entity.Signature);
          end if;
 
       else
