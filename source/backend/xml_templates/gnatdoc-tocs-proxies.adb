@@ -17,8 +17,6 @@
 
 with VSS.XML.Templates.Proxies.Strings;
 
-with GNATdoc.Entities.Proxies;
-
 package body GNATdoc.TOCs.Proxies is
 
    type Tree_Iterator is
@@ -83,9 +81,7 @@ package body GNATdoc.TOCs.Proxies is
             when Entity =>
                return
                  VSS.XML.Templates.Proxies.Strings.Virtual_String_Proxy'
-                   (Text =>
-                      GNATdoc.Entities.Proxies.Digest (Item.Entity.Signature)
-                        & ".html");
+                   (Text => Item.Full_Href);
          end case;
 
       elsif Name = "id" then

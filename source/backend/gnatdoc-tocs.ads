@@ -30,7 +30,9 @@ package GNATdoc.TOCs is
             Id    : VSS.Strings.Virtual_String;
 
          when Entity =>
-            Entity : GNATdoc.Entities.Entity_Reference;
+            Entity     : GNATdoc.Entities.Entity_Reference;
+            Local_Href : VSS.Strings.Virtual_String;
+            Full_Href  : VSS.Strings.Virtual_String;
       end case;
    end record;
 

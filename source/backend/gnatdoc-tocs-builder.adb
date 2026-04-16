@@ -16,6 +16,7 @@
 ------------------------------------------------------------------------------
 
 with GNATdoc.Backend;
+with GNATdoc.Entities.Proxies;
 
 package body GNATdoc.TOCs.Builder is
 
@@ -23,7 +24,7 @@ package body GNATdoc.TOCs.Builder is
    -- Build_TOC --
    ---------------
 
-   procedure Build_TOC is
+   procedure Build_TOC (OOP : Boolean) is
 
       procedure Process
         (Parent : GNATdoc.TOCs.Content_Trees.Cursor;
@@ -48,7 +49,12 @@ package body GNATdoc.TOCs.Builder is
            (Parent   => Parent,
             Before   => GNATdoc.TOCs.Content_Trees.No_Element,
             New_Item =>
-              (Kind => GNATdoc.TOCs.Entity, Entity => Entity.Reference),
+              (Kind       => GNATdoc.TOCs.Entity,
+               Entity     => Entity.Reference,
+               Local_Href =>
+                 GNATdoc.Entities.Proxies.Local_Href (Entity.all, OOP),
+               Full_Href  =>
+                 GNATdoc.Entities.Proxies.Full_Href (Entity.all, OOP)),
             Position => Position);
 
          for Item of Entity.Packages loop

@@ -45,10 +45,12 @@ package GNATdoc.Entities.Proxies is
       Name : VSS.Strings.Virtual_String)
       return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
 
-   function Digest
-     (Item : GNATdoc.Entities.Entity_Signature)
-      return VSS.Strings.Virtual_String;
-   --  Returns SHA-256 digets of the entity's signature. It is expected to be
-   --  used to generate files names and cross-reference identifiers.
+   function Local_Href
+     (Entity : GNATdoc.Entities.Entity_Information'Class;
+      OOP    : Boolean) return VSS.Strings.Virtual_String;
+
+   function Full_Href
+     (Entity : GNATdoc.Entities.Entity_Information'Class;
+      OOP    : Boolean) return VSS.Strings.Virtual_String;
 
 end GNATdoc.Entities.Proxies;

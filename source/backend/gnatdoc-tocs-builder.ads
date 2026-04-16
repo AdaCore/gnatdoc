@@ -17,6 +17,6 @@
 
 package GNATdoc.TOCs.Builder is
 
-   procedure Build_TOC;
+   procedure Build_TOC (OOP : Boolean);
 
 end GNATdoc.TOCs.Builder;

@@ -87,7 +87,7 @@ package body GNATdoc.Backend.HTML is
       Class_Index_Entities : aliased Entity_Information_Sets.Set;
 
    begin
-      GNATdoc.TOCs.Builder.Build_TOC;
+      GNATdoc.TOCs.Builder.Build_TOC (Self.OOP_Mode);
 
       for Item of Globals.Packages loop
          if not Is_Private_Entity (Item) then
