@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -85,10 +85,6 @@ package body GNATdoc.Entities.Proxies is
    overriding function Element
      (Self : in out Entity_Reference_Set_Iterator)
       return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
-
-   function Digest
-     (Item : GNATdoc.Entities.Entity_Signature)
-      return VSS.Strings.Virtual_String;
 
    ---------------
    -- Component --

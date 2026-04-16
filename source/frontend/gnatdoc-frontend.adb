@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -1696,8 +1696,12 @@ package body GNATdoc.Frontend is
          Messages      => Entity.Messages);
       Enclosing.Packages.Insert (Entity);
 
-      if GNATdoc.Entities.Globals'Access /= Enclosing then
+      if Enclosing /= GNATdoc.Entities.Globals'Access then
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
+      end if;
+
+      if Node.P_Is_Compilation_Unit_Root then
+         GNATdoc.Entities.Compilation_Units.Packages.Insert (Entity);
       end if;
 
       Check_Undocumented (Entity);
@@ -1930,8 +1934,12 @@ package body GNATdoc.Frontend is
          Messages      => Entity.Messages);
       Enclosing.Packages.Insert (Entity);
 
-      if GNATdoc.Entities.Globals'Access /= Enclosing then
+      if Enclosing /= GNATdoc.Entities.Globals'Access then
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
+      end if;
+
+      if Node.P_Is_Compilation_Unit_Root then
+         GNATdoc.Entities.Compilation_Units.Packages.Insert (Entity);
       end if;
 
       Check_Undocumented (Entity);
@@ -1965,8 +1973,12 @@ package body GNATdoc.Frontend is
          Messages      => Entity.Messages);
       Enclosing.Packages.Insert (Entity);
 
-      if GNATdoc.Entities.Globals'Access /= Enclosing then
+      if Enclosing /= GNATdoc.Entities.Globals'Access then
          GNATdoc.Entities.Globals.Packages.Insert (Entity);
+      end if;
+
+      if Node.P_Is_Compilation_Unit_Root then
+         GNATdoc.Entities.Compilation_Units.Packages.Insert (Entity);
       end if;
 
       Check_Undocumented (Entity);
