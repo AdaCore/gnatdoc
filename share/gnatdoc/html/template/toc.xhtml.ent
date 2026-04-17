@@ -5,19 +5,19 @@
       <div tal:omit-tag='' tal:condition='section/sections'>
         <ol class="toc-level-2">
           <li class="toc-level-2-item" tal:repeat='section section/sections'>
-            <a class="toc-level-2-item-label" href='error.html' target='document-content' tal:content='section/title' tal:attributes='href section/full_href'/>
+            <a class="toc-level-2-item-label" href='error.html' tal:content='section/title' tal:attributes='href section/full_href'/>
             <div tal:omit-tag='' tal:condition='section/sections'>
               <ol class="toc-level-3">
                 <li class="toc-level-3-item" tal:repeat='section section/sections'>
-                  <a class="toc-level-3-item-label" href='error.html' target='document-content' tal:content='section/title' tal:attributes='href section/full_href'/>
+                  <a class="toc-level-3-item-label" href='error.html' tal:content='section/title' tal:attributes='href section/full_href'/>
                   <div tal:omit-tag='' tal:condition='section/sections'>
                     <ol class="toc-level-4">
                       <li class="toc-level-4-item" tal:repeat='section section/sections'>
-                        <a class="toc-level-4-item-label" href='error.html' target='document-content' tal:content='section/title' tal:attributes='href section/full_href'/>
+                        <a class="toc-level-4-item-label" href='error.html' tal:content='section/title' tal:attributes='href section/full_href'/>
                         <div tal:omit-tag='' tal:condition='section/sections'>
                           <ol class="toc-level-5">
                             <li class="toc-level-5-item" tal:repeat='section section/sections'>
-                              <a class="toc-level-5-item-label" href='error.html' target='document-content' tal:content='section/title' tal:attributes='href section/full_href'/>
+                              <a class="toc-level-5-item-label" href='error.html' tal:content='section/title' tal:attributes='href section/full_href'/>
                             </li>
                           </ol>
                         </div>
