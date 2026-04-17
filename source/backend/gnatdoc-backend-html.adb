@@ -260,6 +260,14 @@ package body GNATdoc.Backend.HTML is
 
          Path.Clear;
          Path.Append ("gnatdoc");
+         Path.Append ("toc");
+         Filter.Bind
+           (Path,
+            new VSS.XML.Templates.Proxies.Abstract_Proxy'Class'
+              (GNATdoc.TOCs.Proxies.TOC_Proxy));
+
+         Path.Clear;
+         Path.Append ("gnatdoc");
          Path.Append ("entity");
          Filter.Bind
            (Path,
@@ -350,6 +358,14 @@ package body GNATdoc.Backend.HTML is
          Reader.Set_Content_Handler (Filter'Unchecked_Access);
 
          --  Bind information
+
+         Path.Clear;
+         Path.Append ("gnatdoc");
+         Path.Append ("toc");
+         Filter.Bind
+           (Path,
+            new VSS.XML.Templates.Proxies.Abstract_Proxy'Class'
+              (GNATdoc.TOCs.Proxies.TOC_Proxy));
 
          Path.Clear;
          Path.Append ("gnatdoc");
