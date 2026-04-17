@@ -9,19 +9,40 @@
         <li class='tab'><a href='#compilation-units'>Compilation Units</a></li>
         <li class='tab'><a href='#tagged-types'>Tagged Types</a></li>
       </ul>
-      <div class='content-column'>
-        <h2 id='compilation-units'>Compilation Units</h2>
-        <ul>
-          <li tal:repeat='item gnatdoc/toc'>
-            <a href='error.html' target='document-content' tal:content='item/qualified_name' tal:attributes='href item/full_href'/>
+      <div class='content-column toc'>
+        <ol class="toc-level-1">
+          <li class="toc-level-1-item" id="error" tal:repeat="section gnatdoc/toc" tal:attributes="id section/id">
+            <a class="toc-level-1-item-label" tal:content='section/title'/>
+            <div tal:omit-tag='' tal:condition='section/sections'>
+              <ol class="toc-level-2">
+                <li class="toc-level-2-item" tal:repeat='section section/sections'>
+                  <a class="toc-level-2-item-label" href='error.html' target='document-content' tal:content='section/title' tal:attributes='href section/full_href'/>
+                  <div tal:omit-tag='' tal:condition='section/sections'>
+                    <ol class="toc-level-3">
+                      <li class="toc-level-3-item" tal:repeat='section section/sections'>
+                        <a class="toc-level-3-item-label" href='error.html' target='document-content' tal:content='section/title' tal:attributes='href section/full_href'/>
+                        <div tal:omit-tag='' tal:condition='section/sections'>
+                          <ol class="toc-level-4">
+                            <li class="toc-level-4-item" tal:repeat='section section/sections'>
+                              <a class="toc-level-4-item-label" href='error.html' target='document-content' tal:content='section/title' tal:attributes='href section/full_href'/>
+                              <div tal:omit-tag='' tal:condition='section/sections'>
+                                <ol class="toc-level-5">
+                                  <li class="toc-level-5-item" tal:repeat='section section/sections'>
+                                    <a class="toc-level-5-item-label" href='error.html' target='document-content' tal:content='section/title' tal:attributes='href section/full_href'/>
+                                  </li>
+                                </ol>
+                              </div>
+                            </li>
+                          </ol>
+                        </div>
+                      </li>
+                    </ol>
+                  </div>
+                </li>
+              </ol>
+            </div>
           </li>
-        </ul>
-        <h2 id='tagged-types'>Tagged types</h2>
-        <ul>
-          <li tal:repeat='item gnatdoc/classes_toc'>
-            <a href='error.html' target='document-content' tal:content='item/qualified_name' tal:attributes='href item/full_href'/>
-          </li>
-        </ul>
+        </ol>
       </div>
     </div>
     <div class='document-content'>

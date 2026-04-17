@@ -50,6 +50,29 @@ body.main
   overflow: scroll;
 }
 
+.toc a {
+    display: block;
+    text-decoration-line: none;
+}
+
+.toc ol
+{
+  padding: 0;
+  list-style-type: none;
+}
+
+.toc li
+{
+  padding: 0 0 0 1em;
+}
+
+.toc-level-1-item-label
+{
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: .75em 0 .5em 0;
+}
+
 .side-navigation > ul
 {
   padding: 0;
