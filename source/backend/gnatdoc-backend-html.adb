@@ -176,15 +176,6 @@ package body GNATdoc.Backend.HTML is
             new VSS.XML.Templates.Proxies.Abstract_Proxy'Class'
               (GNATdoc.TOCs.Proxies.TOC_Proxy));
 
-         Path.Clear;
-         Path.Append ("gnatdoc");
-         Path.Append ("classes_toc");
-         Filter.Bind
-           (Path,
-            new Proxies.Entity_Information_Set_Proxy'
-              (Entities => Class_Index_Entities'Unchecked_Access,
-               OOP_Mode => Self.OOP_Mode));
-
          --  Process template
 
          Reader.Parse (Input);
