@@ -2,6 +2,7 @@
 {
     --gnatdoc-left-column-width: 20cqi;
     --gnatdoc-right-column-width: 20cqi;
+    --gnatdoc-a-color: #0645AD;
 }
 
 * {
@@ -63,9 +64,20 @@ body
   overflow: scroll;
 }
 
-.toc a {
+.side-navigation > .tab-bar a,
+.side-navigation > .tab-bar a:visited
+{
     display: block;
     text-decoration-line: none;
+    color: var(--gnatdoc-a-color);
+}
+
+.toc a,
+.toc a:visited
+{
+    display: block;
+    text-decoration-line: none;
+    color: var(--gnatdoc-a-color);
 }
 
 .toc ol
@@ -138,5 +150,27 @@ h4:target
 
 .overview
 {
+  border-left: 1px solid #bfbfbf;
+  padding: .5rem 1rem;
+  background-color: #f5f5f5;
   overflow: auto;
+}
+
+.overview a,
+.overview a:visited
+{
+  display: block;
+  text-decoration-line: none;
+  color: var(--gnatdoc-a-color);
+}
+
+.overview ul
+{
+  padding: 0;
+  list-style-type: none;
+}
+
+.overview li
+{
+  padding: 0 0 0 1em;
 }

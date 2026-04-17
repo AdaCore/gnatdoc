@@ -1,7 +1,7 @@
 <div class='content-column toc'>
   <ol class="toc-level-1">
     <li class="toc-level-1-item" id="error" tal:repeat="section gnatdoc/toc" tal:attributes="id section/id">
-      <a class="toc-level-1-item-label" tal:content='section/title'/>
+      <p class="toc-level-1-item-label" tal:content='section/title'/>
       <div tal:omit-tag='' tal:condition='section/sections'>
         <ol class="toc-level-2">
           <li class="toc-level-2-item" tal:repeat='section section/sections'>
