@@ -1,0 +1,244 @@
+
+<p tal:condition='exists:gnatdoc/entity/parent_type' xml:space='preserve'>Parent type:
+  <a tal:condition='gnatdoc/entity/parent_type/is_documented' tal:attributes='href gnatdoc/entity/parent_type/full_href' tal:content='gnatdoc/entity/parent_type/name'>PARENT TYPE NAME</a>
+  <span tal:condition='not:gnatdoc/entity/parent_type/is_documented' tal:content='gnatdoc/entity/parent_type/name'>PARENT TYPE NAME</span>
+</p>
+
+<p tal:condition='exists:gnatdoc/entity/progenitor_types' xml:space='preserve'>Progenitor types:
+  <div tal:omit-tag='' tal:repeat='progenitor gnatdoc/entity/progenitor_types'>
+    <a tal:condition='progenitor/is_documented' tal:attributes='href progenitor/full_href' tal:content='progenitor/name'>PROGENIOTOR TYPE NAME</a>
+    <span tal:condition='not:progenitor/is_documented' tal:content='progenitor/name'>PROGENITOR TYPE NAME</span>
+  </div>
+</p>
+
+<p tal:condition='exists:gnatdoc/entity/derived_types' xml:space='preserve'>Derived types:
+  <div tal:omit-tag='' tal:repeat='derived gnatdoc/entity/derived_types'>
+    <a tal:condition='derived/is_documented' tal:attributes='href derived/full_href' tal:content='derived/name'>DERIVED TYPE NAME</a>
+    <span tal:condition='not:derived/is_documented' tal:content='derived/name'>DERIVED TYPE NAME</span>
+  </div>
+</p>
+
+<p tal:condition='exists:gnatdoc/entity/all_parent_types' xml:space='preserve'>All parent types:
+  <div tal:omit-tag='' tal:repeat='type gnatdoc/entity/all_parent_types'>
+    <a tal:condition='type/is_documented' tal:attributes='href type/full_href' tal:content='type/name'>PARENT TYPE NAME</a>
+    <span tal:condition='not:type/is_documented' tal:content='type/name'>PARENT TYPE NAME</span>
+  </div>
+</p>
+
+<p tal:condition='exists:gnatdoc/entity/all_progenitor_types' xml:space='preserve'>All progenitor types:
+  <div tal:omit-tag='' tal:repeat='type gnatdoc/entity/all_progenitor_types'>
+    <a tal:condition='type/is_documented' tal:attributes='href type/full_href' tal:content='type/name'>PARENT TYPE NAME</a>
+    <span tal:condition='not:type/is_documented' tal:content='type/name'>PARENT TYPE NAME</span>
+  </div>
+</p>
+
+<p tal:condition='exists:gnatdoc/entity/all_derived_types' xml:space='preserve'>All derived types:
+  <div tal:omit-tag='' tal:repeat='derived gnatdoc/entity/all_derived_types'>
+    <a tal:condition='derived/is_documented' tal:attributes='href derived/full_href' tal:content='derived/name'>DERIVED TYPE NAME</a>
+    <span tal:condition='not:derived/is_documented' tal:content='derived/name'>DERIVED TYPE NAME</span>
+  </div>
+</p>
+
+<div tal:omit-tag='' tal:condition='gnatdoc/entity/declared_dispatching_subprograms'>
+  <h3>Declared dispatching subprograms</h3>
+
+  <ul>
+    <li tal:repeat='subprogram gnatdoc/entity/declared_dispatching_subprograms'>
+      <a tal:condition='subprogram/is_documented' tal:attributes='href subprogram/local_href' tal:content='subprogram/name'>SUBPROGRAM NAME</a>
+      <span tal:condition='not:subprogram/is_documented' tal:content='subprogram/name'>SUBPROGRAM NAME</span>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag='' tal:condition='gnatdoc/entity/overrided_dispatching_subprograms'>
+  <h3>Overridden dispatching subprograms</h3>
+
+  <ul>
+    <li tal:repeat='subprogram gnatdoc/entity/overrided_dispatching_subprograms'>
+      <a tal:condition='subprogram/is_documented' tal:attributes='href subprogram/local_href' tal:content='subprogram/name'>SUBPROGRAM NAME</a>
+      <span tal:condition='not:subprogram/is_documented' tal:content='subprogram/name'>SUBPROGRAM NAME</span>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag='' tal:condition='gnatdoc/entity/inherited_dispatching_subprograms'>
+  <h3>Inherited dispatching subprograms</h3>
+
+  <ul>
+    <li tal:repeat='subprogram gnatdoc/entity/inherited_dispatching_subprograms'>
+      <!--
+      <a tal:condition='subprogram/is_documented' tal:attributes='href subprogram/full_href' tal:content='subprogram/name'>SUBPROGRAM NAME</a>
+      <span tal:condition='not:subprogram/is_documented' tal:content='subprogram/name'>SUBPROGRAM NAME</span>
+      -->
+      <span tal:content='subprogram/name'>SUBPROGRAM NAME</span>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag='' tal:condition='gnatdoc/entity/declared_prefix_callable_subprograms'>
+  <h3>Declared prefix-callable subprograms</h3>
+
+  <ul>
+    <li tal:repeat='subprogram gnatdoc/entity/declared_prefix_callable_subprograms'>
+      <a tal:condition='subprogram/is_documented' tal:attributes='href subprogram/local_href' tal:content='subprogram/name'>SUBPROGRAM NAME</a>
+      <span tal:condition='not:subprogram/is_documented' tal:content='subprogram/name'>SUBPROGRAM NAME</span>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag='' tal:condition='gnatdoc/entity/inherited_prefix_callable_subprograms'>
+  <h3>Inherited prefix-callable subprograms</h3>
+
+  <ul>
+    <li tal:repeat='subprogram gnatdoc/entity/inherited_prefix_callable_subprograms'>
+      <a tal:condition='subprogram/is_documented' tal:attributes='href subprogram/full_href' tal:content='subprogram/name'>SUBPROGRAM NAME</a>
+      <span tal:condition='not:subprogram/is_documented' tal:content='subprogram/name'>SUBPROGRAM NAME</span>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag='' tal:condition='gnatdoc/entity/formals'>
+  <h3>Generic formal parameters</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/formals'>
+      <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/exceptions">
+  <h3>Exceptions</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/exceptions'>
+      <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/simple_types">
+  <h3>Simple Types</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/simple_types'>
+      <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/array_types">
+  <h3>Array Types</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/array_types'>
+      <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/record_types">
+  <h3>Record Types</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/record_types'>
+      <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/interface_types">
+  <h3>Interface Types</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/interface_types'>
+      <a href='#' tal:condition='not:gnatdoc/oop_mode' tal:attributes='href item/local_href' tal:content='item/name'/>
+      <a href='#' tal:condition='gnatdoc/oop_mode' tal:attributes='href item/full_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/tagged_types">
+  <h3>Tagged Types</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/tagged_types'>
+      <a href='#' tal:condition='not:gnatdoc/oop_mode' tal:attributes='href item/local_href' tal:content='item/name'/>
+      <a href='#' tal:condition='gnatdoc/oop_mode' tal:attributes='href item/full_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/task_types">
+  <h3>Task Types and Tasks</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/task_types'>
+      <a href='#' tal:attributes='href item/full_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/protected_types">
+  <h3>Protected Types and Protected Objects</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/protected_types'>
+      <a href='#' tal:attributes='href item/full_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/access_types">
+  <h3>Access Types</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/access_types'>
+      <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/subtypes">
+  <h3>Subtypes</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/subtypes'>
+      <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/constants">
+  <h3>Constants</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/constants'>
+      <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/variables">
+  <h3>Variables</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/variables'>
+      <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/entries">
+  <h3>Entries</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/entries'>
+      <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/subprograms">
+  <h3>Subprograms</h3>
+  <ul>
+    <li tal:repeat='subprogram gnatdoc/entity/subprograms'>
+      <a href='#' tal:attributes='href subprogram/local_href' tal:content='subprogram/name'/>
+    </li>
+  </ul>
+</div>
+
+<div tal:omit-tag="" tal:condition="gnatdoc/entity/generic_instantiations">
+  <h3>Generic Instantiations</h3>
+  <ul>
+    <li tal:repeat='item gnatdoc/entity/generic_instantiations'>
+      <a href='#' tal:attributes='href item/local_href' tal:content='item/name'/>
+    </li>
+  </ul>
+</div>
