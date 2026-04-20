@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -20,6 +20,7 @@ pragma Ada_2022;
 with GNAT.SHA256;
 with GNATCOLL.VFS;
 
+with GNATdoc.TOCs.Proxies;
 with Input_Sources.File;
 
 with VSS.HTML.Writers;
@@ -33,6 +34,7 @@ with VSS.XML.XmlAda_Readers;
 
 with GNATdoc.Entities.Proxies;
 with GNATdoc.Messages;
+with GNATdoc.TOCs.Builder;
 with Streams;
 
 package body GNATdoc.Backend.HTML is
@@ -85,6 +87,8 @@ package body GNATdoc.Backend.HTML is
       Class_Index_Entities : aliased Entity_Information_Sets.Set;
 
    begin
+      GNATdoc.TOCs.Builder.Build_TOC (Self.OOP_Mode);
+
       for Item of Globals.Packages loop
          if not Is_Private_Entity (Item) then
             Index_Entities.Insert (Item);
@@ -169,18 +173,8 @@ package body GNATdoc.Backend.HTML is
          Path.Append ("toc");
          Filter.Bind
            (Path,
-            new Proxies.Entity_Information_Set_Proxy'
-              (Entities => Index_Entities'Unchecked_Access,
-               OOP_Mode => Self.OOP_Mode));
-
-         Path.Clear;
-         Path.Append ("gnatdoc");
-         Path.Append ("classes_toc");
-         Filter.Bind
-           (Path,
-            new Proxies.Entity_Information_Set_Proxy'
-              (Entities => Class_Index_Entities'Unchecked_Access,
-               OOP_Mode => Self.OOP_Mode));
+            new VSS.XML.Templates.Proxies.Abstract_Proxy'Class'
+              (GNATdoc.TOCs.Proxies.TOC_Proxy));
 
          --  Process template
 
@@ -263,6 +257,14 @@ package body GNATdoc.Backend.HTML is
          Reader.Set_Content_Handler (Filter'Unchecked_Access);
 
          --  Bind information
+
+         Path.Clear;
+         Path.Append ("gnatdoc");
+         Path.Append ("toc");
+         Filter.Bind
+           (Path,
+            new VSS.XML.Templates.Proxies.Abstract_Proxy'Class'
+              (GNATdoc.TOCs.Proxies.TOC_Proxy));
 
          Path.Clear;
          Path.Append ("gnatdoc");
@@ -356,6 +358,14 @@ package body GNATdoc.Backend.HTML is
          Reader.Set_Content_Handler (Filter'Unchecked_Access);
 
          --  Bind information
+
+         Path.Clear;
+         Path.Append ("gnatdoc");
+         Path.Append ("toc");
+         Filter.Bind
+           (Path,
+            new VSS.XML.Templates.Proxies.Abstract_Proxy'Class'
+              (GNATdoc.TOCs.Proxies.TOC_Proxy));
 
          Path.Clear;
          Path.Append ("gnatdoc");

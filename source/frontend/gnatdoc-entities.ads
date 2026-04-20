@@ -213,12 +213,15 @@ package GNATdoc.Entities is
       --  Non dispatching operations inherited by the type.
    end record;
 
-   Globals   : aliased Entity_Information;
+   Globals           : aliased Entity_Information;
    --  Set of all compilation units (including packages, subprograms,
    --  renamings, generics and instantiations) and all nested packages
    --  and generic packages.
 
-   To_Entity : Entity_Information_Maps.Map;
+   Compilation_Units : aliased Entity_Information;
+   --  Set of all compilation units.
+
+   To_Entity         : Entity_Information_Maps.Map;
    --  Map to lookup entity's information by entity's signature.
 
    function Reference

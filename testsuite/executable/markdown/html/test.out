@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html class=main>
-<link rel=stylesheet href=gnatdoc.css><body class=content><h1>P</h1><h2>Entities</h2><h2>Description</h2><p>This is test of the Markdown features supported by GNATdoc.<p>Paragraph.<p><code>code</code>, <em>emphasis</em>, <strong>strong</strong><p><img src=images/image.png alt=Image width=64px height=64px><pre><code>with P;
+<link rel=stylesheet href=gnatdoc.css><div class='panel side-navigation'><ul class=tab-bar><li class=tab><a href=#compilation-units>Compilation Units</a><li class=tab><a href=#tagged-types>Tagged Types</a></ul><div class='content-column toc'><ol class=toc-level-1><li class=toc-level-1-item id=compilation-units><p class=toc-level-1-item-label>Compilation Units<ol class=toc-level-2><li class=toc-level-2-item><a class=toc-level-2-item-label href=148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940.html#148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940>P</a></ol><li class=toc-level-1-item id=tagged-types><p class=toc-level-1-item-label>Tagged Types</ol></div></div><div class='panel document-content'><h1>P</h1><h2>Description</h2><p>This is test of the Markdown features supported by GNATdoc.<p>Paragraph.<p><code>code</code>, <em>emphasis</em>, <strong>strong</strong><p><img src=images/image.png alt=Image width=64px height=64px><pre><code>with P;
 
 procedure Hello_World;
-</code></pre><ol><li><p>Item 1<li><p>Item 2</ol><ul><li><p>Item 1<li><p>Item 2</ul>
+</code></pre><ol><li><p>Item 1<li><p>Item 2</ol><ul><li><p>Item 1<li><p>Item 2</ul></div><div class='panel overview'></div>

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -89,6 +89,8 @@ package body GNATdoc.Entities.Proxies is
    function Digest
      (Item : GNATdoc.Entities.Entity_Signature)
       return VSS.Strings.Virtual_String;
+   --  Returns SHA-256 digets of the entity's signature. It is expected to be
+   --  used to generate files names and cross-reference identifiers.
 
    ---------------
    -- Component --
@@ -452,6 +454,20 @@ package body GNATdoc.Entities.Proxies is
           (Message => "unknown component '" & Name & "'");
    end Component;
 
+   ------------
+   -- Digest --
+   ------------
+
+   function Digest
+     (Item : GNATdoc.Entities.Entity_Signature)
+      return VSS.Strings.Virtual_String is
+   begin
+      return
+        VSS.Strings.Conversions.To_Virtual_String
+          (GNAT.SHA256.Digest
+             (VSS.Strings.Conversions.To_UTF_8_String (Item.Image)));
+   end Digest;
+
    -------------
    -- Element --
    -------------
@@ -498,19 +514,35 @@ package body GNATdoc.Entities.Proxies is
       end if;
    end Element;
 
-   ------------
-   -- Digest --
-   ------------
+   ---------------
+   -- Full_Href --
+   ---------------
 
-   function Digest
-     (Item : GNATdoc.Entities.Entity_Signature)
-      return VSS.Strings.Virtual_String is
+   function Full_Href
+     (Entity : GNATdoc.Entities.Entity_Information'Class;
+      OOP  : Boolean) return VSS.Strings.Virtual_String is
    begin
-      return
-        VSS.Strings.Conversions.To_Virtual_String
-          (GNAT.SHA256.Digest
-             (VSS.Strings.Conversions.To_UTF_8_String (Item.Image)));
-   end Digest;
+      if Entity.Kind in Ada_Tagged_Type | Ada_Interface_Type then
+         if OOP then
+            return
+              Digest (Entity.Signature)
+              & ".html#"
+              & Digest (Entity.Signature);
+
+         else
+            return
+              Digest (Entity.Enclosing)
+              & ".html#"
+              & Digest (Entity.Signature);
+         end if;
+
+      else
+         return
+           Digest (Entity.Signature)
+           & ".html#"
+           & Digest (Entity.Signature);
+      end if;
+   end Full_Href;
 
    --------------
    -- Is_Empty --
@@ -612,6 +644,17 @@ package body GNATdoc.Entities.Proxies is
 
       return Entity_Information_Sets.Has_Element (Self.Position);
    end Next;
+
+   ----------------
+   -- Local_Href --
+   ----------------
+
+   function Local_Href
+     (Entity : GNATdoc.Entities.Entity_Information'Class;
+      OOP    : Boolean with Unreferenced) return VSS.Strings.Virtual_String is
+   begin
+      return '#' & Digest (Entity.Signature);
+   end Local_Href;
 
    ----------
    -- Next --

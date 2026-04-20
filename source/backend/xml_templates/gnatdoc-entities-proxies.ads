@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -44,5 +44,13 @@ package GNATdoc.Entities.Proxies is
      (Self : in out Entity_Information_Proxy;
       Name : VSS.Strings.Virtual_String)
       return VSS.XML.Templates.Proxies.Abstract_Proxy'Class;
+
+   function Local_Href
+     (Entity : GNATdoc.Entities.Entity_Information'Class;
+      OOP    : Boolean) return VSS.Strings.Virtual_String;
+
+   function Full_Href
+     (Entity : GNATdoc.Entities.Entity_Information'Class;
+      OOP    : Boolean) return VSS.Strings.Virtual_String;
 
 end GNATdoc.Entities.Proxies;
