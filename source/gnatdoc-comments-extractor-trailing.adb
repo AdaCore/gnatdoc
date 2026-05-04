@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2025, AdaCore                        --
+--                     Copyright (C) 2025-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -50,6 +50,10 @@ package body GNATdoc.Comments.Extractor.Trailing is
         (Line   : Libadalang.Slocs.Line_Number;
          Name   : VSS.Strings.Virtual_String;
          Symbol : VSS.Strings.Virtual_String);
+
+      procedure Visit_Declarative_Part
+        (Node : Libadalang.Analysis.Declarative_Part);
+      --  Process DeclarativePart node of the subprogram body.
 
    end Generic_State;
 
@@ -232,7 +236,7 @@ package body GNATdoc.Comments.Extractor.Trailing is
 
                case Info (Current.Return_Start_Line + 1).Component_Group.Kind
                is
-                  when None | Parameter =>
+                  when None | Parameter | Cancel =>
                      Info (Current.Return_Start_Line + 1).Component_Group :=
                        (Kind     => Returns,
                         Sections => <>);
@@ -344,6 +348,61 @@ package body GNATdoc.Comments.Extractor.Trailing is
          end if;
       end Register;
 
+      ----------------------------
+      -- Visit_Declarative_Part --
+      ----------------------------
+
+      procedure Visit_Declarative_Part
+        (Node : Libadalang.Analysis.Declarative_Part)
+      is
+         use type Libadalang.Slocs.Line_Number;
+
+         Location : constant Libadalang.Slocs.Source_Location_Range :=
+           Node.Sloc_Range;
+         Decls    : constant Libadalang.Analysis.Ada_Node_List :=
+           Node.F_Decls;
+         Child    : Libadalang.Analysis.Ada_Node;
+
+      begin
+         if Last_Line < Location.Start_Line then
+            --  Cancel components group at first line of the declarative part
+
+            Info (Location.Start_Line).Component_Group := (Kind => Cancel);
+
+         elsif Last_Line = Location.Start_Line then
+            --  Declarative part overlays components part
+
+            if Decls.Ada_Node_List_Has_Element (Decls.Ada_Node_List_First) then
+               --  Node list is not empty, cancel components group at the line
+               --  of the first declaration item.
+               --
+               --  Note, it will be not needed when declaration items be
+               --  processed.
+
+               Child :=
+                 Decls.Ada_Node_List_Element
+                   (Decls.Ada_Node_List_First).As_Ada_Node;
+
+               Info (Child.Sloc_Range.Start_Line).Component_Group :=
+                 (Kind => Cancel);
+
+            else
+               --  Node list if empty, cancel components group at last line of
+               --  the declarative part.
+               --
+               --  Note, it might be done by processing of F_Stmts of the
+               --  subprogram body too.
+
+               Info (Location.End_Line).Component_Group := (Kind => Cancel);
+            end if;
+
+         else  --  Location.Start_Line < Last_Line
+            --  Should never happened
+
+            raise Program_Error;
+         end if;
+      end Visit_Declarative_Part;
+
       -------------------------
       -- Visit_Defining_Name --
       -------------------------
@@ -384,6 +443,9 @@ package body GNATdoc.Comments.Extractor.Trailing is
                            Sections => <>);
                         Info (Line + 1).Component_Group.Sections.Append
                           (Section);
+
+                     when Cancel =>
+                        raise Program_Error;
 
                      when Parameter =>
                         Info (Line + 1).Component_Group.Sections.Append
@@ -580,7 +642,14 @@ package body GNATdoc.Comments.Extractor.Trailing is
                   return Libadalang.Common.Over;
                end if;
 
-            when Ada_Declarative_Part | Ada_Handled_Stmts =>
+            when Ada_Declarative_Part =>
+               --  Declarative part cancels components (parameters) group.
+
+               Visit_State.Visit_Declarative_Part (Node.As_Declarative_Part);
+
+               return Libadalang.Common.Over;
+
+            when Ada_Handled_Stmts =>
                --  These nodes appears after subprogram profile of the
                --  subprogram body, nothing to analyze inside these nodes.
 
@@ -676,8 +745,7 @@ package body GNATdoc.Comments.Extractor.Trailing is
          procedure Update
            (Location : Libadalang.Slocs.Source_Location_Range) is
          begin
-            for Line in Location.Start_Line + 1 .. Location.End_Line
-            loop
+            for Line in Location.Start_Line + 1 .. Location.End_Line loop
                if Line in Infos'Range then
                   if Infos (Line).Entity.Kind /= None then
                      Entities_Group_Line := 0;
@@ -770,6 +838,7 @@ package body GNATdoc.Comments.Extractor.Trailing is
 
                         else
                            Apply;
+                           Update (Location);
                         end if;
 
                      when Entities_Group =>
@@ -828,11 +897,18 @@ package body GNATdoc.Comments.Extractor.Trailing is
                                     > Infos (Entities_Group_Line)
                                         .Entity_Group.Indent)
                               then
-                                 State    := Components_Group;
-                                 Sections :=
-                                   Infos (Components_Group_Line)
-                                     .Component_Group.Sections;
-                                 Text.Append (Line);
+                                 if Infos (Components_Group_Line)
+                                      .Component_Group.Kind = Cancel
+                                 then
+                                    Components_Group_Line := 0;
+
+                                 else
+                                    State    := Components_Group;
+                                    Sections :=
+                                      Infos (Components_Group_Line)
+                                        .Component_Group.Sections;
+                                    Text.Append (Line);
+                                 end if;
                               end if;
                            end if;
 

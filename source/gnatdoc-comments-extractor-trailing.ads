@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2025, AdaCore                        --
+--                     Copyright (C) 2025-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -31,7 +31,7 @@ private
 
    type Entity_Group_Kind is (None, Subprogram);
 
-   type Component_Group_Kind is (None, Parameter, Returns);
+   type Component_Group_Kind is (None, Cancel, Parameter, Returns);
 
    type Info is record
       Kind     : Kinds := None;
@@ -58,7 +58,13 @@ private
    type Component_Group_Information
      (Kind : Component_Group_Kind := None) is
    record
-      Sections : Section_Vectors.Vector;
+      case Kind is
+         when None | Cancel =>
+            null;
+
+         when Parameter | Returns =>
+            Sections : Section_Vectors.Vector;
+      end case;
    end record;
 
    type Line_Information is record
