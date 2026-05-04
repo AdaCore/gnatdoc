@@ -3,3 +3,4 @@ extractor_sources:
   - subprograms_gnat.ads
   - monitor_loop.ads
   - gnatdoc_134.adb
+  - als_1749.adb
