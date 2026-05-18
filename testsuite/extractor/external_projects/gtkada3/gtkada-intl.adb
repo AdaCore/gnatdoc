@@ -1,0 +1,154 @@
+-----------------------------------------------------------------------
+--               GtkAda - Ada95 binding for Gtk+/Gnome               --
+--                                                                   --
+--     Copyright (C) 2000 E. Briot, J. Brobecker and A. Charlet      --
+--                Copyright (C) 2000-2003 ACT-Europe                 --
+--                                                                   --
+-- This library is free software; you can redistribute it and/or     --
+-- modify it under the terms of the GNU General Public               --
+-- License as published by the Free Software Foundation; either      --
+-- version 3 of the License, or (at your option) any later version.  --
+--                                                                   --
+-- This library is distributed in the hope that it will be useful,   --
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of    --
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU --
+-- General Public License for more details.                          --
+--                                                                   --
+-- You should have received a copy of the GNU General Public         --
+-- License along with this library; if not, write to the             --
+-- Free Software Foundation, Inc., 59 Temple Place - Suite 330,      --
+-- Boston, MA 02111-1307, USA.                                       --
+--                                                                   --
+-- As a special exception, if other files instantiate generics from  --
+-- this unit, or you link this unit with other files to produce an   --
+-- executable, this  unit  does not  by itself cause  the resulting  --
+-- executable to be covered by the GNU General Public License. This  --
+-- exception does not however invalidate any other reasons why the   --
+-- executable file  might be covered by the  GNU Public License.     --
+-----------------------------------------------------------------------
+
+with System;
+with Interfaces.C;         use Interfaces.C;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Glib; use Glib;
+
+package body Gtkada.Intl is
+
+   pragma Warnings (Off);
+
+   -------------
+   -- Gettext --
+   -------------
+
+   function Gettext (Msg : UTF8_String) return UTF8_String is
+      function Internal (Msg : UTF8_String) return chars_ptr;
+      pragma Import (C, Internal, "gettext");
+   begin
+      return Value (Internal (Msg & ASCII.NUL));
+   end Gettext;
+
+   --------------
+   -- Dgettext --
+   --------------
+
+   function Dgettext (Domain : String; Msg : UTF8_String) return UTF8_String is
+      function Internal
+        (Domain : String;
+         Msg    : UTF8_String) return chars_ptr;
+      pragma Import (C, Internal, "dgettext");
+   begin
+      return Value (Internal (Domain & ASCII.NUL, Msg & ASCII.NUL));
+   end Dgettext;
+
+   ---------
+   -- "-" --
+   ---------
+
+   function "-" (Msg : UTF8_String) return UTF8_String is
+   begin
+      return Gettext (Msg);
+   end "-";
+
+   ---------------
+   -- Dcgettext --
+   ---------------
+
+   function Dcgettext
+     (Domain : String; Msg : UTF8_String; Category : Integer) return String
+   is
+      function Internal
+        (Domain : String;
+         Msg    : UTF8_String;
+         Category : Integer) return chars_ptr;
+      pragma Import (C, Internal, "dcgettext");
+   begin
+      return Value (Internal (Domain & ASCII.NUL, Msg & ASCII.NUL, Category));
+   end Dcgettext;
+
+   -------------------------
+   -- Default_Text_Domain --
+   -------------------------
+
+   function Default_Text_Domain return String is
+      function Internal (Domain : System.Address) return chars_ptr;
+      pragma Import (C, Internal, "textdomain");
+   begin
+      return Value (Internal (System.Null_Address));
+   end Default_Text_Domain;
+
+   -----------------
+   -- Text_Domain --
+   -----------------
+
+   procedure Text_Domain (Domain : String := "") is
+      procedure Internal (Domain : String);
+      pragma Import (C, Internal, "textdomain");
+   begin
+      Internal (Domain & ASCII.NUL);
+   end Text_Domain;
+
+   ----------------------
+   -- Bind_Text_Domain --
+   ----------------------
+
+   procedure Bind_Text_Domain (Domain : String; Dirname : String) is
+      procedure Internal (Domain, Dirname : String);
+      pragma Import (C, Internal, "bindtextdomain");
+   begin
+      Internal (Domain & ASCII.NUL, Dirname & ASCII.NUL);
+   end Bind_Text_Domain;
+
+   ------------------------------
+   -- Bind_Text_Domain_Codeset --
+   ------------------------------
+
+   procedure Bind_Text_Domain_Codeset (Domain : String; Codeset : String) is
+      procedure Internal (Domain, Codeset : String);
+      pragma Import (C, Internal, "bind_textdomain_codeset");
+   begin
+      Internal (Domain & ASCII.NUL, Codeset & ASCII.NUL);
+   end Bind_Text_Domain_Codeset;
+
+   ---------------
+   -- Setlocale --
+   ---------------
+
+   procedure Setlocale (Category : Integer := LC_ALL; Locale : String := "") is
+      procedure Internal (Category : int; Locale : String);
+      pragma Import (C, Internal, "setlocale");
+   begin
+      Internal (int (Category), Locale & ASCII.NUL);
+   end Setlocale;
+
+   ---------------
+   -- Getlocale --
+   ---------------
+
+   function Getlocale return String is
+      function Internal (Category : int; Locale : chars_ptr) return chars_ptr;
+      pragma Import (C, Internal, "setlocale");
+   begin
+      return Value (Internal (0, Null_Ptr));
+   end Getlocale;
+
+end Gtkada.Intl;

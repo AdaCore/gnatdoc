@@ -1,0 +1,6 @@
+
+project GtkAda_Test is
+
+   for Object_Dir use ".objs";
+
+end GtkAda_Test;
