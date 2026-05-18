@@ -57,6 +57,12 @@ coverage-instrument: coverage-setup
 # Create the instrumented sources for gnatdoc and libgnatdoc.
 # Do not process subprojects, to avoid measuring coverage on
 # the markdown subproject.
+	gnatcov instrument -P gnat/tests/test_drivers.gpr \
+		--level=stmt \
+		--projects=libgnatdoc.gpr \
+	    --runtime-project $$(pwd)/.objs/gnatcov-rts/share/gpr/gnatcov_rts.gpr \
+		--no-subprojects \
+		${SCENARIO_VARIABLES}
 	gnatcov instrument -P gnat/gnatdoc.gpr \
 		--level=stmt \
 		--projects=gnatdoc.gpr --projects=libgnatdoc.gpr \
@@ -71,6 +77,7 @@ coverage-build: coverage-instrument
 	    --implicit-with=$$(pwd)/.objs/gnatcov-rts/share/gpr/gnatcov_rts.gpr \
 		${SCENARIO_VARIABLES}
 	gprbuild -j0 -p -P gnat/tests/test_drivers.gpr \
+	    --src-subdirs=gnatcov-instr \
 	    --implicit-with=$$(pwd)/.objs/gnatcov-rts/share/gpr/gnatcov_rts.gpr \
 		${SCENARIO_VARIABLES}
 
