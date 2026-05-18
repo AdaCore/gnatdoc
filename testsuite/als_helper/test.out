@@ -1539,6 +1539,77 @@ Renamed_Value : Integer renames Objects.Value;
 ----- DOCUMENTATION -----
 Description of the renamed object
 ----- DONE -----
+Defining name: <DefiningName "Packages" packages.ads:5:9-5:17>
+Origin: <Id "Packages" packages.ads:5:9-5:17>
+----- CODE SNIPPET -----
+package Packages
+----- DOCUMENTATION -----
+Description of the package specification
+----- DONE -----
+Defining name: <DefiningName "Packages" packages.ads:5:9-5:17>
+Origin: <Id "Packages" packages.ads:27:5-27:13>
+----- CODE SNIPPET -----
+package Packages
+----- DOCUMENTATION -----
+Description of the package specification
+----- DONE -----
+Defining name: <DefiningName "Packages" packages.adb:5:14-5:22>
+Origin: <Id "Packages" packages.adb:5:14-5:22>
+----- CODE SNIPPET -----
+package Packages
+
+package body Packages
+----- DOCUMENTATION -----
+Description of the package specification
+
+Description of the package body
+----- DONE -----
+Defining name: <DefiningName "Packages" packages.adb:5:14-5:22>
+Origin: <Id "Packages" packages.adb:69:5-69:13>
+----- CODE SNIPPET -----
+package Packages
+
+package body Packages
+----- DOCUMENTATION -----
+Description of the package specification
+
+Description of the package body
+----- DONE -----
+Defining name: <DefiningName "Packages" packages.ads:5:9-5:17>
+Origin: <Id "Packages" packages.adb:64:10-64:18>
+----- CODE SNIPPET -----
+package Packages
+----- DOCUMENTATION -----
+Description of the package specification
+----- DONE -----
+Defining name: <DefiningName "Packages" packages.ads:5:9-5:17>
+Origin: <Id "Packages" packages_renaming.ads:5:6-5:14>
+----- CODE SNIPPET -----
+package Packages
+----- DOCUMENTATION -----
+Description of the package specification
+----- DONE -----
+Defining name: <DefiningName "Packages" packages.ads:5:9-5:17>
+Origin: <Id "Packages" packages_renaming.ads:7:35-7:43>
+----- CODE SNIPPET -----
+package Packages
+----- DOCUMENTATION -----
+Description of the package specification
+----- DONE -----
+Defining name: <DefiningName "Packages" packages.ads:5:9-5:17>
+Origin: <Id "Packages" packages_package.adb:1:6-1:14>
+----- CODE SNIPPET -----
+package Packages
+----- DOCUMENTATION -----
+Description of the package specification
+----- DONE -----
+Defining name: <DefiningName "Packages" packages.ads:5:9-5:17>
+Origin: <Id "Packages" packages_package.adb:8:7-8:15>
+----- CODE SNIPPET -----
+package Packages
+----- DOCUMENTATION -----
+Description of the package specification
+----- DONE -----
 Defining name: <DefiningName "Packages_Renaming" packages_renaming.ads:7:9-7:26>
 Origin: <Id "Packages_Renaming" packages_renaming.ads:7:9-7:26>
 ----- CODE SNIPPET -----
