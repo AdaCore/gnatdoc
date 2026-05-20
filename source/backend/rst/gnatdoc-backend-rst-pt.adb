@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2023-2025, AdaCore                     --
+--                     Copyright (C) 2023-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -77,6 +77,18 @@ package body GNATdoc.Backend.RST.PT is
       File    : Streams.Output_Text_Stream;
       Success : Boolean := True;
 
+      procedure Generate_Belongs_Entities
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String);
+      --  Loop over set of belongs entities and call corresponding
+      --  documentation generation subprogram.
+
+      procedure Generate_Package_Documentation
+        (Indent : VSS.Strings.Virtual_String;
+         Entity : GNATdoc.Entities.Entity_Information);
+      --  Generate documentation for package
+
       procedure Generate_Type_Documentation
         (Indent       : VSS.Strings.Virtual_String;
          Entity       : GNATdoc.Entities.Entity_Information;
@@ -102,11 +114,94 @@ package body GNATdoc.Backend.RST.PT is
          Package_Name : VSS.Strings.Virtual_String);
       --  Generate documentation for the given callable entity.
 
+      procedure Generate_Generic_Package_Documentation
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String);
+      --  Generate documentation for the generic package instantiation.
+
       procedure Generate_Generic_Package_Instantiation_Documentation
         (Indent       : VSS.Strings.Virtual_String;
          Entity       : GNATdoc.Entities.Entity_Information;
          Package_Name : VSS.Strings.Virtual_String);
       --  Generate documentation for the generic package instantiation.
+
+      -------------------------------
+      -- Generate_Belongs_Entities --
+      -------------------------------
+
+      procedure Generate_Belongs_Entities
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String) is
+      begin
+         for Item_Reference of Entity.Belong_Entities loop
+            declare
+               Item : constant not null
+                 GNATdoc.Entities.Entity_Information_Access :=
+                   GNATdoc.Entities.To_Entity (Item_Reference.Signature);
+
+            begin
+               if not Is_Private_Entity (Item) then
+                  case Item.Kind is
+                     when GNATdoc.Entities.Ada_Formal =>
+                        --  Ignore formals of the generic entity, they are
+                        --  processed as part of entity itself
+
+                        null;
+
+                     when GNATdoc.Entities.Ada_Function
+                        | GNATdoc.Entities.Ada_Procedure
+                     =>
+                        Generate_Callable_Documentation
+                          (Indent, Item.all, Package_Name);
+
+                     when GNATdoc.Entities.Ada_Exception =>
+                        Generate_Exception_Documentation
+                          (Indent, Item.all, Package_Name);
+
+                     when GNATdoc.Entities.Ada_Named_Number
+                        | GNATdoc.Entities.Ada_Object
+                     =>
+                        Generate_Object_Documentation
+                          (Indent, Item.all, Package_Name, False);
+
+                     when GNATdoc.Entities.Ada_Interface_Type
+                        | GNATdoc.Entities.Ada_Other_Type
+                        | GNATdoc.Entities.Ada_Tagged_Type
+                     =>
+                        Generate_Type_Documentation
+                          (Indent, Item.all, Package_Name);
+
+                     when GNATdoc.Entities.Ada_Package_Declaration =>
+                        Generate_Package_Documentation (Indent, Item.all);
+
+                     when GNATdoc.Entities.Ada_Generic_Package_Declaration =>
+                        Generate_Generic_Package_Documentation
+                          (Indent, Item.all, Package_Name);
+
+                     when GNATdoc.Entities.Ada_Generic_Package_Instantiation =>
+                        Generate_Generic_Package_Instantiation_Documentation
+                          (Indent, Item.all, Package_Name);
+
+                     when GNATdoc.Entities.Ada_Generic_Subprogram_Instantiation
+                     =>
+                        --  `sphinx-adadomain` doesn't support generic
+                        --  subprogram instantiation
+
+                        null;
+
+                     when others =>
+                        raise Program_Error
+                          with GNATdoc.Entities.Entity_Kind'Image (Item.Kind)
+                          & " "
+                          & VSS.Strings.Conversions.To_UTF_8_String
+                          (Item.Qualified_Name);
+                  end case;
+               end if;
+            end;
+         end loop;
+      end Generate_Belongs_Entities;
 
       -------------------------------------
       -- Generate_Callable_Documentation --
@@ -189,6 +284,19 @@ package body GNATdoc.Backend.RST.PT is
          File.New_Line (Success);
       end Generate_Exception_Documentation;
 
+      --------------------------------------------
+      -- Generate_Generic_Package_Documentation --
+      --------------------------------------------
+
+      procedure Generate_Generic_Package_Documentation
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String)
+      is
+      begin
+         null;
+      end Generate_Generic_Package_Documentation;
+
       ----------------------------------------------------------
       -- Generate_Generic_Package_Instantiation_Documentation --
       ----------------------------------------------------------
@@ -229,7 +337,7 @@ package body GNATdoc.Backend.RST.PT is
               (Indent        => Indent & "    ",
                Documentation => Entity.Documentation,
                Pass_Through  => True,
-               Code_Snippet  => True),
+               Code_Snippet  => False),
             Success);
          File.New_Line (Success);
 
@@ -306,6 +414,36 @@ package body GNATdoc.Backend.RST.PT is
          File.New_Line (Success);
       end Generate_Object_Documentation;
 
+      ------------------------------------
+      -- Generate_Package_Documentation --
+      ------------------------------------
+
+      procedure Generate_Package_Documentation
+        (Indent : VSS.Strings.Virtual_String;
+         Entity : GNATdoc.Entities.Entity_Information)
+      is
+         use type VSS.Strings.Virtual_String;
+
+      begin
+         File.Put (Indent, Success);
+         File.Put (".. ada:package:: ", Success);
+         File.Put (Entity.Qualified_Name, Success);
+         File.New_Line (Success);
+         File.New_Line (Success);
+
+         File.Put_Lines
+           (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
+              (Indent        => Indent,
+               Documentation => Entity.Documentation,
+               Pass_Through  => True,
+               Code_Snippet  => False),
+            Success);
+         File.New_Line (Success);
+
+         Generate_Belongs_Entities
+           (Indent & "    ", Entity, Entity.Qualified_Name);
+      end Generate_Package_Documentation;
+
       ---------------------------------
       -- Generate_Type_Documentation --
       ---------------------------------
@@ -335,7 +473,7 @@ package body GNATdoc.Backend.RST.PT is
               (Indent        => Indent & "    ",
                Documentation => Entity.Documentation,
                Pass_Through  => True,
-               Code_Snippet  => True),
+               Code_Snippet  => False),
             Success);
 
          Constants.Clear;
@@ -394,68 +532,11 @@ package body GNATdoc.Backend.RST.PT is
            (Indent        => "",
             Documentation => Entity.Documentation,
             Pass_Through  => True,
-            Code_Snippet  => True),
+            Code_Snippet  => False),
          Success);
       File.New_Line (Success);
 
-      for Item_Reference of Entity.Belong_Entities loop
-         declare
-            Item : constant not null
-              GNATdoc.Entities.Entity_Information_Access :=
-                GNATdoc.Entities.To_Entity (Item_Reference.Signature);
-
-         begin
-            if not Is_Private_Entity (Item) then
-               case Item.Kind is
-                  when GNATdoc.Entities.Ada_Formal =>
-                     --  Ignore formals of the generic entity, they are
-                     --  processed as part of entity itself
-
-                     null;
-
-                  when GNATdoc.Entities.Ada_Function
-                     | GNATdoc.Entities.Ada_Procedure
-                  =>
-                     Generate_Callable_Documentation
-                       ("", Item.all, Entity.Qualified_Name);
-
-                  when GNATdoc.Entities.Ada_Exception =>
-                     Generate_Exception_Documentation
-                       ("", Item.all, Entity.Qualified_Name);
-
-                  when GNATdoc.Entities.Ada_Named_Number
-                     | GNATdoc.Entities.Ada_Object
-                  =>
-                     Generate_Object_Documentation
-                       ("", Item.all, Entity.Qualified_Name, False);
-
-                  when GNATdoc.Entities.Ada_Interface_Type
-                     | GNATdoc.Entities.Ada_Other_Type
-                     | GNATdoc.Entities.Ada_Tagged_Type
-                  =>
-                     Generate_Type_Documentation
-                       ("", Item.all, Entity.Qualified_Name);
-
-                  when GNATdoc.Entities.Ada_Generic_Package_Instantiation =>
-                     Generate_Generic_Package_Instantiation_Documentation
-                       ("", Item.all, Entity.Qualified_Name);
-
-                  when GNATdoc.Entities.Ada_Generic_Subprogram_Instantiation =>
-                     --  `sphinx-adadomain` doesn't support generic subprogram
-                     --  instantiation
-
-                     null;
-
-                  when others =>
-                     raise Program_Error
-                       with GNATdoc.Entities.Entity_Kind'Image (Item.Kind)
-                       & " "
-                       & VSS.Strings.Conversions.To_UTF_8_String
-                       (Item.Qualified_Name);
-               end case;
-            end if;
-         end;
-      end loop;
+      Generate_Belongs_Entities ("", Entity, Entity.Qualified_Name);
 
       File.Close;
    end Generate_Documentation;
