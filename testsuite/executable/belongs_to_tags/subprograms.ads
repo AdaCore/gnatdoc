@@ -29,4 +29,20 @@ package Subprograms is
    function PI2 (Self : I1) return I2'Class is abstract;
    --  @belongs-to I2
 
+   --  Enumeration types and private types
+
+   type ET is (X, Y, Z);
+
+   function "=" (Left : ET; Right : ET) return Boolean;
+   --  @belongs-to ET
+
+   type PT is private;
+
+   function "=" (Left : PT; Right : PT) return Boolean;
+   --  @belongs-to PT
+
+private
+
+   type PT is null record;
+
 end Subprograms;
