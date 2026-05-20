@@ -12,7 +12,7 @@ include:
     inputs:
       linux: true
       needs: []
-      anod-args: run build_and_test_gnatdoc4_coverage --latest
+      anod-args: run build_and_test_gnatdoc4 --latest
 
   - component: $CI_SERVER_FQDN/eng/gitlab-templates/test@~latest
     inputs:
