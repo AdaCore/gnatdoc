@@ -337,7 +337,7 @@ package body GNATdoc.Backend.RST.PT is
               (Indent        => Indent & "    ",
                Documentation => Entity.Documentation,
                Pass_Through  => True,
-               Code_Snippet  => True),
+               Code_Snippet  => False),
             Success);
          File.New_Line (Success);
 
@@ -436,7 +436,7 @@ package body GNATdoc.Backend.RST.PT is
               (Indent        => Indent,
                Documentation => Entity.Documentation,
                Pass_Through  => True,
-               Code_Snippet  => True),
+               Code_Snippet  => False),
             Success);
          File.New_Line (Success);
 
@@ -473,7 +473,7 @@ package body GNATdoc.Backend.RST.PT is
               (Indent        => Indent & "    ",
                Documentation => Entity.Documentation,
                Pass_Through  => True,
-               Code_Snippet  => True),
+               Code_Snippet  => False),
             Success);
 
          Constants.Clear;
@@ -532,7 +532,7 @@ package body GNATdoc.Backend.RST.PT is
            (Indent        => "",
             Documentation => Entity.Documentation,
             Pass_Through  => True,
-            Code_Snippet  => True),
+            Code_Snippet  => False),
          Success);
       File.New_Line (Success);
 
