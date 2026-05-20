@@ -114,6 +114,12 @@ package body GNATdoc.Backend.RST.PT is
          Package_Name : VSS.Strings.Virtual_String);
       --  Generate documentation for the given callable entity.
 
+      procedure Generate_Generic_Package_Documentation
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String);
+      --  Generate documentation for the generic package instantiation.
+
       procedure Generate_Generic_Package_Instantiation_Documentation
         (Indent       : VSS.Strings.Virtual_String;
          Entity       : GNATdoc.Entities.Entity_Information;
@@ -169,6 +175,10 @@ package body GNATdoc.Backend.RST.PT is
 
                      when GNATdoc.Entities.Ada_Package_Declaration =>
                         Generate_Package_Documentation (Indent, Item.all);
+
+                     when GNATdoc.Entities.Ada_Generic_Package_Declaration =>
+                        Generate_Generic_Package_Documentation
+                          (Indent, Item.all, Package_Name);
 
                      when GNATdoc.Entities.Ada_Generic_Package_Instantiation =>
                         Generate_Generic_Package_Instantiation_Documentation
@@ -273,6 +283,19 @@ package body GNATdoc.Backend.RST.PT is
             Success);
          File.New_Line (Success);
       end Generate_Exception_Documentation;
+
+      --------------------------------------------
+      -- Generate_Generic_Package_Documentation --
+      --------------------------------------------
+
+      procedure Generate_Generic_Package_Documentation
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String)
+      is
+      begin
+         null;
+      end Generate_Generic_Package_Documentation;
 
       ----------------------------------------------------------
       -- Generate_Generic_Package_Instantiation_Documentation --
