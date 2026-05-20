@@ -2279,6 +2279,14 @@ package body GNATdoc.Frontend is
          return;
       end if;
 
+      for E of Enclosing.Simple_Types loop
+         if E.Name = Belongs_To then
+            Belongs := E;
+
+            return;
+         end if;
+      end loop;
+
       for E of Enclosing.Tagged_Types loop
          if E.Name = Belongs_To then
             Belongs := E;
