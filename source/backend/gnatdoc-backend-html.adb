@@ -90,52 +90,50 @@ package body GNATdoc.Backend.HTML is
       GNATdoc.TOCs.Builder.Build_TOC (Self.OOP_Mode);
 
       for Item of Globals.Packages loop
-         if not Is_Private_Entity (Item) then
+         if Is_Included (Item) then
             Index_Entities.Insert (Item);
          end if;
       end loop;
 
       for Item of Globals.Contain_Subprograms loop
-         if not Is_Private_Entity
-           (GNATdoc.Entities.To_Entity (Item.Signature))
-         then
+         if Is_Included (GNATdoc.Entities.To_Entity (Item.Signature)) then
             Index_Entities.Insert
               (GNATdoc.Entities.To_Entity (Item.Signature));
          end if;
       end loop;
 
       for Item of Globals.Package_Renamings loop
-         if not Is_Private_Entity (Item) then
+         if Is_Included (Item) then
             Index_Entities.Insert (Item);
          end if;
       end loop;
 
       for Item of Globals.Generic_Instantiations loop
-         if not Is_Private_Entity (Item) then
+         if Is_Included (Item) then
             Index_Entities.Insert (Item);
          end if;
       end loop;
 
       for Item of Globals.Task_Types loop
-         if not Is_Private_Entity (Item) then
+         if Is_Included (Item) then
             Non_Index_Entities.Insert (Item);
          end if;
       end loop;
 
       for Item of Globals.Protected_Types loop
-         if not Is_Private_Entity (Item) then
+         if Is_Included (Item) then
             Non_Index_Entities.Insert (Item);
          end if;
       end loop;
 
       for Item of Globals.Interface_Types loop
-         if not Is_Private_Entity (Item) then
+         if Is_Included (Item) then
             Class_Index_Entities.Insert (Item);
          end if;
       end loop;
 
       for Item of Globals.Tagged_Types loop
-         if not Is_Private_Entity (Item) then
+         if Is_Included (Item) then
             Class_Index_Entities.Insert (Item);
          end if;
       end loop;

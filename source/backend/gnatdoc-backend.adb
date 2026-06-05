@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -59,11 +59,22 @@ package body GNATdoc.Backend is
       end if;
    end Initialize;
 
-   -----------------------
-   -- Is_Private_Entity --
-   -----------------------
+   -----------------
+   -- Is_Included --
+   -----------------
 
-   function Is_Private_Entity
+   function Is_Included
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access)
+      return Boolean is
+   begin
+      return not Is_Excluded (Entity);
+   end Is_Included;
+
+   -----------------
+   -- Is_Excluded --
+   -----------------
+
+   function Is_Excluded
      (Entity : not null GNATdoc.Entities.Entity_Information_Access)
       return Boolean is
    begin
@@ -73,9 +84,9 @@ package body GNATdoc.Backend is
         or Entity.Documentation.Is_Private
         or (not Entity.Enclosing.Image.Is_Empty
               and then GNATdoc.Entities.To_Entity.Contains (Entity.Enclosing)
-              and then Is_Private_Entity
+              and then Is_Excluded
                          (GNATdoc.Entities.To_Entity (Entity.Enclosing)));
-   end Is_Private_Entity;
+   end Is_Excluded;
 
    --------------------------
    -- Lookup_Resource_File --
