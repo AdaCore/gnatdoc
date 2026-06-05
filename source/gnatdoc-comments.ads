@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -50,8 +50,8 @@ package GNATdoc.Comments is
      (Self : Structured_Comment'Class) return Boolean;
    --  Return True when structured comment contains documentation
 
-   function Is_Private (Self : Structured_Comment'Class) return Boolean;
-   --  Return True when entity is marked by @private tag
+   function Has_Exclude (Self : Structured_Comment'Class) return Boolean;
+   --  Return True when entity is marked by `@exclude` tag
 
    function Has_Belongs_To (Self : Structured_Comment'Class) return Boolean;
    --  Return `True` when `@belongs-to` tag is specified.

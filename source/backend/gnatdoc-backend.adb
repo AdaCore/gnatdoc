@@ -81,7 +81,7 @@ package body GNATdoc.Backend is
       return
         (Entity.Is_Private
            and not GNATdoc.Options.Frontend_Options.Generate_Private)
-        or Entity.Documentation.Is_Private
+        or Entity.Documentation.Has_Exclude
         or (not Entity.Enclosing.Image.Is_Empty
               and then GNATdoc.Entities.To_Entity.Contains (Entity.Enclosing)
               and then Is_Excluded
