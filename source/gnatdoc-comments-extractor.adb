@@ -50,7 +50,7 @@ package body GNATdoc.Comments.Extractor is
       Enum_Tag,
       Member_Tag,
       Formal_Tag,
-      Private_Tag,
+      Exclude_Tag,
       Belongs_To_Tag);
 
    type Section_Tag_Flags is array (Section_Tag) of Boolean with Pack;
@@ -375,7 +375,7 @@ package body GNATdoc.Comments.Extractor is
       Allowed_Tags : Section_Tag_Flags;
       Sections     : in out Section_Vectors.Vector;
       Messages     : in out GNATdoc.Messages.Message_Container)
-     with Pre => not Allowed_Tags (Private_Tag);
+     with Pre => not Allowed_Tags (Exclude_Tag);
    --  Wrapper around `Parse_Raw_Section` when `@private` and `@belongs-to`
    --  tags are not allowed.
 
@@ -986,7 +986,7 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Package_Node),
             Raw_Section,
-            [Private_Tag => True,
+            [Exclude_Tag => True,
              Formal_Tag  => Basic_Decl_Node.Kind in Ada_Generic_Decl,
              others      => False],
             Documentation.Sections,
@@ -1991,7 +1991,7 @@ package body GNATdoc.Comments.Extractor is
            (Location     => GNATdoc.Utilities.Location (Node),
             Raw_Section  => Raw_Section,
             Allowed_Tags =>
-              [Private_Tag | Belongs_To_Tag => True, others => False],
+              [Exclude_Tag | Belongs_To_Tag => True, others => False],
             Sections     => Sections,
             Belongs_To   => Belongs_To,
             Is_Private   => Is_Private,
@@ -2150,7 +2150,7 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Node),
             Raw_Section,
-            [Private_Tag => True,
+            [Exclude_Tag => True,
              Member_Tag  => True,
              others      => False],
             Documentation.Sections,
@@ -2238,7 +2238,7 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Node),
             Raw_Section,
-            [Private_Tag => True,
+            [Exclude_Tag => True,
              Member_Tag  => True,
              others      => False],
             Documentation.Sections,
@@ -2408,7 +2408,7 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Node),
             Raw_Section,
-            [Private_Tag => Allow_Private, others => False],
+            [Exclude_Tag => Allow_Private, others => False],
             Sections,
             Is_Private,
             Messages);
@@ -2524,7 +2524,7 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Node),
             Raw_Section,
-            [Private_Tag => True,
+            [Exclude_Tag => True,
              Member_Tag  => True,
              others      => False],
             Documentation.Sections,
@@ -2751,7 +2751,7 @@ package body GNATdoc.Comments.Extractor is
             Raw_Section  => Raw_Section,
             Allowed_Tags =>
               [Param_Tag | Return_Tag | Exception_Tag => True,
-               Private_Tag                            => Allow_Private,
+               Exclude_Tag                            => Allow_Private,
                Belongs_To_Tag                         => True,
                others                                 => False],
             Sections    => Sections,
@@ -3052,7 +3052,7 @@ package body GNATdoc.Comments.Extractor is
             Raw_Section  => Raw_Section,
             Allowed_Tags =>
               [Param_Tag | Return_Tag | Exception_Tag => True,
-               Private_Tag                            => Allow_Private,
+               Exclude_Tag                            => Allow_Private,
                Belongs_To_Tag                         => True,
                others                                 => False],
             Sections    => Sections,
@@ -3206,7 +3206,8 @@ package body GNATdoc.Comments.Extractor is
       Tag_Matcher       : constant Regular_Expression :=
         To_Regular_Expression
           (Ada_Optional_Separator_Expression
-           & "@(belongs-to|param|return|exception|enum|field|formal|private)"
+           & "@(belongs-to|param|return|exception|enum|field|formal"
+           & "|private|exclude)"
            & Ada_Optional_Separator_Expression);
       Parameter_Matcher : constant Regular_Expression :=
         To_Regular_Expression
@@ -3273,8 +3274,10 @@ package body GNATdoc.Comments.Extractor is
                Tag  := Formal_Tag;
                Kind := Formal;
 
-            elsif Match.Captured (1) = "private" then
-               Tag  := Private_Tag;
+            elsif Match.Captured (1) = "private"
+              or Match.Captured (1) = "exclude"
+            then
+               Tag  := Exclude_Tag;
 
             elsif Match.Captured (1) = "belongs-to" then
                Tag  := Belongs_To_Tag;
@@ -3301,7 +3304,7 @@ package body GNATdoc.Comments.Extractor is
 
             Line_Tail := Line.Tail_After (Match.Last_Marker);
 
-            if Tag = Private_Tag then
+            if Tag = Exclude_Tag then
                Is_Private := True;
 
                goto Skip;
