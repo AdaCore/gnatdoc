@@ -123,7 +123,7 @@ package body GNATdoc.Comments is
 
    function Has_Exclude (Self : Structured_Comment'Class) return Boolean is
    begin
-      return Self.Is_Private;
+      return Self.Has_Exclude;
    end Has_Exclude;
 
 end GNATdoc.Comments;

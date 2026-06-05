@@ -100,9 +100,10 @@ private
 
    type Structured_Comment is
      new Ada.Finalization.Limited_Controlled with record
-      Sections   : aliased Section_Vectors.Vector;
-      Is_Private : Boolean := False;
-      Belongs_To : VSS.Strings.Virtual_String;
+      Sections    : aliased Section_Vectors.Vector;
+      Has_Exclude : Boolean := False;
+      --  Documentation contains `@exclude` tag
+      Belongs_To  : VSS.Strings.Virtual_String;
    end record;
 
    overriding procedure Finalize (Self : in out Structured_Comment);

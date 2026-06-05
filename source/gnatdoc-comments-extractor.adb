@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -459,7 +459,7 @@ package body GNATdoc.Comments.Extractor is
                Messages      => Messages,
                Allow_Private => True,
                Belongs_To    => Documentation.Belongs_To,
-               Is_Private    => Documentation.Is_Private);
+               Is_Private    => Documentation.Has_Exclude);
 
          when Ada_Expr_Function =>
             Extract_Subprogram_Documentation
@@ -472,7 +472,7 @@ package body GNATdoc.Comments.Extractor is
                Messages      => Messages,
                Allow_Private => True,
                Belongs_To    => Documentation.Belongs_To,
-               Is_Private    => Documentation.Is_Private);
+               Is_Private    => Documentation.Has_Exclude);
 
          when Ada_Null_Subp_Decl =>
             Extract_Subprogram_Documentation
@@ -485,7 +485,7 @@ package body GNATdoc.Comments.Extractor is
                Messages      => Messages,
                Allow_Private => True,
                Belongs_To    => Documentation.Belongs_To,
-               Is_Private    => Documentation.Is_Private);
+               Is_Private    => Documentation.Has_Exclude);
 
          when Ada_Subp_Body =>
             Extract_Subprogram_Documentation
@@ -498,7 +498,7 @@ package body GNATdoc.Comments.Extractor is
                Messages      => Messages,
                Allow_Private => True,
                Belongs_To    => Documentation.Belongs_To,
-               Is_Private    => Documentation.Is_Private);
+               Is_Private    => Documentation.Has_Exclude);
 
          when Ada_Generic_Package_Decl | Ada_Generic_Subp_Decl =>
             Extract_Generic_Decl_Documentation
@@ -514,7 +514,7 @@ package body GNATdoc.Comments.Extractor is
                Options,
                False,
                Documentation.Sections,
-               Documentation.Is_Private,
+               Documentation.Has_Exclude,
                Messages);
 
          when Ada_Generic_Package_Renaming_Decl =>
@@ -523,7 +523,7 @@ package body GNATdoc.Comments.Extractor is
                Options,
                False,
                Documentation.Sections,
-               Documentation.Is_Private,
+               Documentation.Has_Exclude,
                Messages);
 
          when Ada_Generic_Subp_Instantiation =>
@@ -532,7 +532,7 @@ package body GNATdoc.Comments.Extractor is
                Options,
                False,
                Documentation.Sections,
-               Documentation.Is_Private,
+               Documentation.Has_Exclude,
                Messages);
 
          when Ada_Generic_Subp_Renaming_Decl =>
@@ -541,7 +541,7 @@ package body GNATdoc.Comments.Extractor is
                Options,
                False,
                Documentation.Sections,
-               Documentation.Is_Private,
+               Documentation.Has_Exclude,
                Messages);
 
          when Ada_Package_Renaming_Decl =>
@@ -550,7 +550,7 @@ package body GNATdoc.Comments.Extractor is
                Options,
                False,
                Documentation.Sections,
-               Documentation.Is_Private,
+               Documentation.Has_Exclude,
                Messages);
 
          when Ada_Subp_Renaming_Decl =>
@@ -564,7 +564,7 @@ package body GNATdoc.Comments.Extractor is
                Messages      => Messages,
                Allow_Private => True,
                Belongs_To    => Documentation.Belongs_To,
-               Is_Private    => Documentation.Is_Private);
+               Is_Private    => Documentation.Has_Exclude);
 
          when Ada_Type_Decl =>
             case Node.As_Type_Decl.F_Type_Def.Kind is
@@ -574,7 +574,7 @@ package body GNATdoc.Comments.Extractor is
                      Options,
                      False,
                      Documentation.Sections,
-                     Documentation.Is_Private,
+                     Documentation.Has_Exclude,
                      Messages);
 
                when Ada_Enum_Type_Def =>
@@ -590,7 +590,7 @@ package body GNATdoc.Comments.Extractor is
                         Options,
                         False,
                         Documentation.Sections,
-                        Documentation.Is_Private,
+                        Documentation.Has_Exclude,
                         Messages);
 
                   else
@@ -604,7 +604,7 @@ package body GNATdoc.Comments.Extractor is
                      Options,
                      False,
                      Documentation.Sections,
-                     Documentation.Is_Private,
+                     Documentation.Has_Exclude,
                      Messages);
 
                when Ada_Decimal_Fixed_Point_Def
@@ -618,7 +618,7 @@ package body GNATdoc.Comments.Extractor is
                      Options,
                      False,
                      Documentation.Sections,
-                     Documentation.Is_Private,
+                     Documentation.Has_Exclude,
                      Messages);
 
                when Ada_Record_Type_Def =>
@@ -639,7 +639,7 @@ package body GNATdoc.Comments.Extractor is
                      Options,
                      False,
                      Documentation.Sections,
-                     Documentation.Is_Private,
+                     Documentation.Has_Exclude,
                      Messages);
 
                when Ada_Access_To_Subp_Def =>
@@ -673,7 +673,7 @@ package body GNATdoc.Comments.Extractor is
                Options,
                False,
                Documentation.Sections,
-               Documentation.Is_Private,
+               Documentation.Has_Exclude,
                Messages);
 
          when Ada_Subtype_Decl =>
@@ -682,7 +682,7 @@ package body GNATdoc.Comments.Extractor is
                Options,
                True,
                Documentation.Sections,
-               Documentation.Is_Private,
+               Documentation.Has_Exclude,
                Messages);
 
          when Ada_Object_Decl =>
@@ -692,7 +692,7 @@ package body GNATdoc.Comments.Extractor is
                Documentation.Sections,
                Messages,
                Documentation.Belongs_To,
-               Documentation.Is_Private);
+               Documentation.Has_Exclude);
 
          when Ada_Number_Decl =>
             Extract_Simple_Declaration_Documentation
@@ -700,7 +700,7 @@ package body GNATdoc.Comments.Extractor is
                Options,
                False,
                Documentation.Sections,
-               Documentation.Is_Private,
+               Documentation.Has_Exclude,
                Messages);
 
          when Ada_Exception_Decl =>
@@ -709,7 +709,7 @@ package body GNATdoc.Comments.Extractor is
                Options,
                False,
                Documentation.Sections,
-               Documentation.Is_Private,
+               Documentation.Has_Exclude,
                Messages);
 
          when Ada_Single_Task_Decl =>
@@ -759,7 +759,7 @@ package body GNATdoc.Comments.Extractor is
                Messages      => Messages,
                Allow_Private => True,
                Belongs_To    => Documentation.Belongs_To,
-               Is_Private    => Documentation.Is_Private);
+               Is_Private    => Documentation.Has_Exclude);
 
          when Ada_Entry_Body =>
             Extract_Entry_Body_Documentation
@@ -990,7 +990,7 @@ package body GNATdoc.Comments.Extractor is
              Formal_Tag  => Basic_Decl_Node.Kind in Ada_Generic_Decl,
              others      => False],
             Documentation.Sections,
-            Documentation.Is_Private,
+            Documentation.Has_Exclude,
             Messages);
       end;
    end Extract_Base_Package_Documentation;
@@ -1667,7 +1667,7 @@ package body GNATdoc.Comments.Extractor is
                Messages      => Messages,
                Allow_Private => True,
                Belongs_To    => Documentation.Belongs_To,
-               Is_Private    => Documentation.Is_Private);
+               Is_Private    => Documentation.Has_Exclude);
 
          when others =>
             raise Program_Error;
@@ -2154,7 +2154,7 @@ package body GNATdoc.Comments.Extractor is
              Member_Tag  => True,
              others      => False],
             Documentation.Sections,
-            Documentation.Is_Private,
+            Documentation.Has_Exclude,
             Messages);
       end;
    end Extract_Protected_Body_Documentation;
@@ -2242,7 +2242,7 @@ package body GNATdoc.Comments.Extractor is
              Member_Tag  => True,
              others      => False],
             Documentation.Sections,
-            Documentation.Is_Private,
+            Documentation.Has_Exclude,
             Messages);
       end;
    end Extract_Protected_Decl_Documentation;
@@ -2528,7 +2528,7 @@ package body GNATdoc.Comments.Extractor is
              Member_Tag  => True,
              others      => False],
             Documentation.Sections,
-            Documentation.Is_Private,
+            Documentation.Has_Exclude,
             Messages);
       end;
    end Extract_Single_Task_Decl_Documentation;
