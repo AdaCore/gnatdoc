@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -129,7 +129,8 @@ package GNATdoc.Entities is
       --  All belong entities (belongs view, in declaration order)
 
       Is_Private             : Boolean := False;
-      --  Private entities are excluded from the documentartion.
+      --  Private entities are delcared in private part of the package, or
+      --  private packages.
 
       Is_Method              : Boolean := False;
       --  True means that this subprogram is a "method" of some tagged type,
@@ -198,7 +199,7 @@ package GNATdoc.Entities is
       --  References to all known direct or indirect parent and derived types.
 
       Dispatching_Declared   : aliased Entity_Reference_Sets.Set;
-      --  Displatching operations declared by the type.
+      --  Dispatching operations declared by the type.
 
       Dispatching_Overrided  : aliased Entity_Reference_Sets.Set;
       --  Dispatching operations overrided by the type.
