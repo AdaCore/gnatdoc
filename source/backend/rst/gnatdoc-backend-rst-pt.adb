@@ -394,7 +394,9 @@ package body GNATdoc.Backend.RST.PT is
             Success);
          end if;
 
-         if not Entity.RSTPT_Defval.Is_Null then
+         if not Entity.Documentation.Has_Exclude_Value
+           and not Entity.RSTPT_Defval.Is_Null
+         then
             File.Put_Line
               (Defval_Template.Format
                  (VSS.Strings.Formatters.Strings.Image (Indent),

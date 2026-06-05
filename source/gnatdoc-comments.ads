@@ -53,6 +53,9 @@ package GNATdoc.Comments is
    function Has_Exclude (Self : Structured_Comment'Class) return Boolean;
    --  Return True when entity is marked by `@exclude` tag
 
+   function Has_Exclude_Value (Self : Structured_Comment'Class) return Boolean;
+   --  Return True when entity is marked by `@exclude-value` tag
+
    function Has_Belongs_To (Self : Structured_Comment'Class) return Boolean;
    --  Return `True` when `@belongs-to` tag is specified.
 
@@ -100,10 +103,12 @@ private
 
    type Structured_Comment is
      new Ada.Finalization.Limited_Controlled with record
-      Sections    : aliased Section_Vectors.Vector;
-      Has_Exclude : Boolean := False;
+      Sections          : aliased Section_Vectors.Vector;
+      Has_Exclude       : Boolean := False;
       --  Documentation contains `@exclude` tag
-      Belongs_To  : VSS.Strings.Virtual_String;
+      Has_Exclude_Value : Boolean := False;
+      --  Documentation contains `@exclude-value` tag
+      Belongs_To        : VSS.Strings.Virtual_String;
    end record;
 
    overriding procedure Finalize (Self : in out Structured_Comment);

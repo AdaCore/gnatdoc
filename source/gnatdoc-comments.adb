@@ -126,4 +126,13 @@ package body GNATdoc.Comments is
       return Self.Has_Exclude;
    end Has_Exclude;
 
+   ----------------------
+   -- Has_Exclude_Value --
+   ----------------------
+
+   function Has_Exclude_Value (Self : Structured_Comment'Class) return Boolean is
+   begin
+      return Self.Has_Exclude_Value;
+   end Has_Exclude_Value;
+
 end GNATdoc.Comments;
