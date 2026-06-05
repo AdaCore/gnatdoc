@@ -369,7 +369,7 @@ package body GNATdoc.Backend.Test is
 
          Summary_Template  : constant
            VSS.Strings.Templates.Virtual_String_Template :=
-             "{}{}{}{}{} ({}) '{}'";
+             "{}{}{}{}{}{} ({}) '{}'";
          Object_Template   : constant
            VSS.Strings.Templates.Virtual_String_Template :=
              " [of '{}']";
@@ -383,6 +383,10 @@ package body GNATdoc.Backend.Test is
                VSS.Strings.Formatters.Strings.Image
                  (VSS.Strings.Virtual_String'
                       (if Entity.Documentation.Has_Exclude then "/" else " ")),
+               VSS.Strings.Formatters.Strings.Image
+                 (VSS.Strings.Virtual_String'
+                    (if Entity.Documentation.Has_Exclude_Value
+                       then "v" else " ")),
                VSS.Strings.Formatters.Strings.Image
                  (VSS.Strings.Virtual_String'
                       (if GNATdoc.Entities.To_Entity.Contains
