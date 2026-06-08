@@ -265,7 +265,7 @@ GNATdoc supports the following MarkDown features:
 Excluding entities
 ------------------
 
-The *@private* tag indicates that no documentation should be generated
+The *@exclude* tag indicates that no documentation should be generated
 on a given entity. For example::
 
    type Calculator is tagged ...
@@ -274,8 +274,18 @@ on a given entity. For example::
    --  @param Obj The actual calculator
    --  @param Value The added value
    procedure Dump_State (Obj : Calculator);
-   --  @private No information is generated in the output about this
+   --  @exclude No information is generated in the output about this
    --  primitive because it is internally used for debugging.
 
-Note: specifing the *@private* tag for the packages removes the package and all its
+Note: specifing the *@exclude* tag for the packages removes the package and all its
 child packages from the generated documentation.
+
+Note: tag *@private* is an alias of *@exclude* tag and not recommended for use.
+
+The *@exclude-value* tag suppress generation of the default value expression of
+object declaration by RST-PT backend. For example::
+
+   C : constant Integer := 5;
+   --  Constant and its description is included into documentation, while
+   --  default value is not.
+   --  @exclude-value
