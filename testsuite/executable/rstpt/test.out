@@ -4,11 +4,6 @@ LAL
 
 .. ada:set_package:: LAL
 
-.. code-block:: ada
-
-   package LAL
-
-
 
 
 .. ada:object:: Default_Charset : constant Standard.String
@@ -28,11 +23,6 @@ LAL
 
 .. ada:type:: type Ada_Node
     :package: LAL
-
-    .. code-block:: ada
-
-       type Ada_Node is tagged private;
-
 
     Root of node hierarchy
 
@@ -58,33 +48,17 @@ LAL
 .. ada:type:: type Basic_Decl
     :package: LAL
 
-    .. code-block:: ada
-
-       type Basic_Decl is new Ada_Node with private;
-
-
     Basic declaration
 
 
 .. ada:type:: type Ada_Node_Array
     :package: LAL
 
-    .. code-block:: ada
-
-       type Ada_Node_Array is array (Positive range <>) of Ada_Node;
-
-
     Array of nodes
 
 
 .. ada:generic-package-instantiation:: package Elementary_Functions is new Ada.Numerics.Generic_Elementary_Functions
     :package: LAL
-
-    .. code-block:: ada
-
-       package Elementary_Functions is
-         new Ada.Numerics.Generic_Elementary_Functions (Float);
-
 
     Instantiation of the generic package
 
@@ -93,11 +67,6 @@ LAL
 
 .. ada:type:: type Ada_Node_Array_Access
     :package: LAL
-
-    .. code-block:: ada
-
-       type Ada_Node_Array_Access is access all Ada_Node_Array;
-
 
     Access to array type
 
