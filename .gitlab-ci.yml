@@ -1,8 +1,8 @@
 stages:
-  - build
   - test
   - downstream
   - check
+  - coverage
 
 include:
   # Issue check
@@ -16,6 +16,7 @@ include:
 
   - component: $CI_SERVER_FQDN/eng/gitlab-templates/build@~latest
     inputs:
+      stage: coverage
       linux: true
       needs: []
       anod-args: run build_and_test_gnatdoc4_coverage --latest
