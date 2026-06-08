@@ -1,0 +1,23 @@
++  ? (UNDEFINED) ''
+  Packages:
+    +   Exclude_Value_Objects (ADA_PACKAGE_DECLARATION) 'exclude_value_objects'
+  Contains Entities:
+    +   Exclude_Value_Objects (ADA_PACKAGE_DECLARATION) 'exclude_value_objects'
+      Constants:
+        + v Test_Constant_1 (ADA_OBJECT) 'exclude_value_objects.test_constant_1'
+        +   Test_Constant_2 (ADA_OBJECT) 'exclude_value_objects.test_constant_2'
+      Belongs Constants:
+        + v Test_Constant_1 (ADA_OBJECT) 'exclude_value_objects.test_constant_1'
+        +   Test_Constant_2 (ADA_OBJECT) 'exclude_value_objects.test_constant_2'
+      Contains Entities:
+        + v Test_Constant_1 (ADA_OBJECT) 'exclude_value_objects.test_constant_1'
+        +   Test_Constant_2 (ADA_OBJECT) 'exclude_value_objects.test_constant_2'
+        + v Test_Variable_1 (ADA_OBJECT) 'exclude_value_objects.test_variable_1'
+        +   Test_Variable_2 (ADA_OBJECT) 'exclude_value_objects.test_variable_2'
+      Belongs Entities:
+        + v Test_Constant_1 (ADA_OBJECT) 'exclude_value_objects.test_constant_1'
+        +   Test_Constant_2 (ADA_OBJECT) 'exclude_value_objects.test_constant_2'
+        + v Test_Variable_1 (ADA_OBJECT) 'exclude_value_objects.test_variable_1'
+        +   Test_Variable_2 (ADA_OBJECT) 'exclude_value_objects.test_variable_2'
+  Belongs Entities:
+    +   Exclude_Value_Objects (ADA_PACKAGE_DECLARATION) 'exclude_value_objects'
