@@ -50,7 +50,7 @@ package body GNATdoc.Backend.RST.PT is
    overriding procedure Generate (Self : in out PT_RST_Backend) is
    begin
       for Item of GNATdoc.Entities.Globals.Packages loop
-         if not Is_Private_Entity (Item) then
+         if Is_Included (Item) then
             Self.Generate_Documentation (Item.all);
          end if;
       end loop;
@@ -142,7 +142,7 @@ package body GNATdoc.Backend.RST.PT is
                    GNATdoc.Entities.To_Entity (Item_Reference.Signature);
 
             begin
-               if not Is_Private_Entity (Item) then
+               if Is_Included (Item) then
                   case Item.Kind is
                      when GNATdoc.Entities.Ada_Formal =>
                         --  Ignore formals of the generic entity, they are
@@ -394,7 +394,9 @@ package body GNATdoc.Backend.RST.PT is
             Success);
          end if;
 
-         if not Entity.RSTPT_Defval.Is_Null then
+         if not Entity.Documentation.Has_Exclude_Value
+           and not Entity.RSTPT_Defval.Is_Null
+         then
             File.Put_Line
               (Defval_Template.Format
                  (VSS.Strings.Formatters.Strings.Image (Indent),
@@ -480,7 +482,7 @@ package body GNATdoc.Backend.RST.PT is
          Methods.Clear;
 
          for Object of Entity.Belong_Constants loop
-            if not Is_Private_Entity
+            if Is_Included
               (GNATdoc.Entities.To_Entity (Object.Signature))
             then
                Constants.Insert
@@ -494,7 +496,7 @@ package body GNATdoc.Backend.RST.PT is
          end loop;
 
          for Method of Entity.Belong_Subprograms loop
-            if not Is_Private_Entity
+            if Is_Included
               (GNATdoc.Entities.To_Entity (Method.Signature))
             then
                Methods.Insert

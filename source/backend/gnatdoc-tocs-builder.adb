@@ -57,7 +57,7 @@ package body GNATdoc.TOCs.Builder is
          Position : GNATdoc.TOCs.Content_Trees.Cursor;
 
       begin
-         if GNATdoc.Backend.Is_Private_Entity (Entity) then
+         if GNATdoc.Backend.Is_Excluded (Entity) then
             return;
          end if;
 
@@ -79,7 +79,7 @@ package body GNATdoc.TOCs.Builder is
          --  Position : GNATdoc.TOCs.Content_Trees.Cursor;
 
       begin
-         if GNATdoc.Backend.Is_Private_Entity (Entity) then
+         if GNATdoc.Backend.Is_Excluded (Entity) then
             return;
          end if;
 

@@ -6,6 +6,10 @@ package LAL is
    Default_Charset : constant String := "iso-8859-1";
    --  Default charset
 
+   Exclude_Value : constant String := "iso-8859-1";
+   --  Default charset
+   --  @exclude-value
+
    File_Read_Error : exception;
    --  Exception
 

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -50,8 +50,11 @@ package GNATdoc.Comments is
      (Self : Structured_Comment'Class) return Boolean;
    --  Return True when structured comment contains documentation
 
-   function Is_Private (Self : Structured_Comment'Class) return Boolean;
-   --  Return True when entity is marked by @private tag
+   function Has_Exclude (Self : Structured_Comment'Class) return Boolean;
+   --  Return True when entity is marked by `@exclude` tag
+
+   function Has_Exclude_Value (Self : Structured_Comment'Class) return Boolean;
+   --  Return True when entity is marked by `@exclude-value` tag
 
    function Has_Belongs_To (Self : Structured_Comment'Class) return Boolean;
    --  Return `True` when `@belongs-to` tag is specified.
@@ -100,9 +103,12 @@ private
 
    type Structured_Comment is
      new Ada.Finalization.Limited_Controlled with record
-      Sections   : aliased Section_Vectors.Vector;
-      Is_Private : Boolean := False;
-      Belongs_To : VSS.Strings.Virtual_String;
+      Sections          : aliased Section_Vectors.Vector;
+      Has_Exclude       : Boolean := False;
+      --  Documentation contains `@exclude` tag
+      Has_Exclude_Value : Boolean := False;
+      --  Documentation contains `@exclude-value` tag
+      Belongs_To        : VSS.Strings.Virtual_String;
    end record;
 
    overriding procedure Finalize (Self : in out Structured_Comment);

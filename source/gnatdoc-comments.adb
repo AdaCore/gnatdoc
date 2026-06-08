@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -117,13 +117,22 @@ package body GNATdoc.Comments is
       return False;
    end Has_Documentation;
 
-   ----------------
-   -- Is_Private --
-   ----------------
+   -----------------
+   -- Has_Exclude --
+   -----------------
 
-   function Is_Private (Self : Structured_Comment'Class) return Boolean is
+   function Has_Exclude (Self : Structured_Comment'Class) return Boolean is
    begin
-      return Self.Is_Private;
-   end Is_Private;
+      return Self.Has_Exclude;
+   end Has_Exclude;
+
+   ----------------------
+   -- Has_Exclude_Value --
+   ----------------------
+
+   function Has_Exclude_Value (Self : Structured_Comment'Class) return Boolean is
+   begin
+      return Self.Has_Exclude_Value;
+   end Has_Exclude_Value;
 
 end GNATdoc.Comments;

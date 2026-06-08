@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2023-2025, AdaCore                     --
+--                     Copyright (C) 2023-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -99,7 +99,7 @@ package body GNATdoc.Backend.RST is
    overriding procedure Generate (Self : in out RST_Backend_Base) is
    begin
       for Item of Globals.Packages loop
-         if not Is_Private_Entity (Item) then
+         if Is_Included (Item) then
             Self.Generate_Documentation (Item.all);
          end if;
       end loop;
@@ -416,7 +416,7 @@ package body GNATdoc.Backend.RST is
                      Methods.Clear;
 
                      for Object of Item.Belong_Constants loop
-                        if not Is_Private_Entity
+                        if Is_Included
                           (GNATdoc.Entities.To_Entity (Object.Signature))
                         then
                            Constants.Insert
@@ -430,7 +430,7 @@ package body GNATdoc.Backend.RST is
                      end loop;
 
                      for Method of Item.Belong_Subprograms loop
-                        if not Is_Private_Entity
+                        if Is_Included
                           (GNATdoc.Entities.To_Entity (Method.Signature))
                         then
                            Methods.Insert

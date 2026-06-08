@@ -555,7 +555,7 @@ package body GNATdoc.Entities.Proxies is
       --  (marked by `@private` tag), so ignore them.
 
       for Entity of Self.Entities.all loop
-         if not GNATdoc.Backend.Is_Private_Entity (Entity) then
+         if GNATdoc.Backend.Is_Included (Entity) then
             return False;
          end if;
       end loop;
@@ -578,8 +578,7 @@ package body GNATdoc.Entities.Proxies is
 
       for Entity of Self.Entities.all loop
          if To_Entity.Contains (Entity.Signature)
-           and then not GNATdoc.Backend.Is_Private_Entity
-                          (To_Entity (Entity.Signature))
+           and then GNATdoc.Backend.Is_Included (To_Entity (Entity.Signature))
          then
             return False;
          end if;
@@ -636,7 +635,7 @@ package body GNATdoc.Entities.Proxies is
          exit when not Entity_Information_Sets.Has_Element (Self.Position);
 
          exit when
-           not GNATdoc.Backend.Is_Private_Entity
+           GNATdoc.Backend.Is_Included
              (Entity_Information_Sets.Element (Self.Position));
 
          Entity_Information_Sets.Next (Self.Position);
@@ -677,7 +676,7 @@ package body GNATdoc.Entities.Proxies is
          exit when
            To_Entity.Contains
              (Entity_Reference_Sets.Element (Self.Position).Signature)
-             and then not GNATdoc.Backend.Is_Private_Entity
+             and then GNATdoc.Backend.Is_Included
                (To_Entity
                   (Entity_Reference_Sets.Element
                      (Self.Position).Signature));

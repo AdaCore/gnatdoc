@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -55,12 +55,19 @@ package GNATdoc.Backend is
    -- Utility subprograms --
    -------------------------
 
-   function Is_Private_Entity
+   function Is_Excluded
      (Entity : not null GNATdoc.Entities.Entity_Information_Access)
       return Boolean;
    --  Return True when given entity is private package, or explicitly marked
    --  as private entity, or enclosed by the private package, or enclosed by
    --  the entity marked as private entity.
+
+   function Is_Included
+     (Entity : not null GNATdoc.Entities.Entity_Information_Access)
+      return Boolean;
+   --  Opposite of Is_Excluded. Return True when given entity is public
+   --  package, or explicitly marked as public entity, or enclosed by the
+   --  public package, or enclosed by the entity marked as public entity.
 
 private
 

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2025, AdaCore                        --
+--                     Copyright (C) 2025-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -54,28 +54,26 @@ package body GNATdoc.Backend.ODF is
 
    begin
       for Item of GNATdoc.Entities.Globals.Packages loop
-         if not Is_Private_Entity (Item) then
+         if Is_Included (Item) then
             Index_Entities.Insert (Item);
          end if;
       end loop;
 
       for Item of GNATdoc.Entities.Globals.Contain_Subprograms loop
-         if not Is_Private_Entity
-           (GNATdoc.Entities.To_Entity (Item.Signature))
-         then
+         if Is_Included (GNATdoc.Entities.To_Entity (Item.Signature)) then
             Index_Entities.Insert
               (GNATdoc.Entities.To_Entity (Item.Signature));
          end if;
       end loop;
 
       for Item of GNATdoc.Entities.Globals.Package_Renamings loop
-         if not Is_Private_Entity (Item) then
+         if Is_Included (Item) then
             Index_Entities.Insert (Item);
          end if;
       end loop;
 
       for Item of GNATdoc.Entities.Globals.Generic_Instantiations loop
-         if not Is_Private_Entity (Item) then
+         if Is_Included (Item) then
             Index_Entities.Insert (Item);
          end if;
       end loop;

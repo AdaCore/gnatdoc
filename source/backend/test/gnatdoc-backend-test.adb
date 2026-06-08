@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2024-2025, AdaCore                     --
+--                     Copyright (C) 2024-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -369,7 +369,7 @@ package body GNATdoc.Backend.Test is
 
          Summary_Template  : constant
            VSS.Strings.Templates.Virtual_String_Template :=
-             "{}{}{}{}{} ({}) '{}'";
+             "{}{}{}{}{}{} ({}) '{}'";
          Object_Template   : constant
            VSS.Strings.Templates.Virtual_String_Template :=
              " [of '{}']";
@@ -382,7 +382,11 @@ package body GNATdoc.Backend.Test is
                       (if Entity.Is_Private then "-" else "+")),
                VSS.Strings.Formatters.Strings.Image
                  (VSS.Strings.Virtual_String'
-                      (if Entity.Documentation.Is_Private then "/" else " ")),
+                      (if Entity.Documentation.Has_Exclude then "/" else " ")),
+               VSS.Strings.Formatters.Strings.Image
+                 (VSS.Strings.Virtual_String'
+                    (if Entity.Documentation.Has_Exclude_Value
+                       then "v" else " ")),
                VSS.Strings.Formatters.Strings.Image
                  (VSS.Strings.Virtual_String'
                       (if GNATdoc.Entities.To_Entity.Contains
