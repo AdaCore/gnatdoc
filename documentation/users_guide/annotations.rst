@@ -280,12 +280,11 @@ on a given entity. For example::
 Note: specifing the *@exclude* tag for the packages removes the package and all its
 child packages from the generated documentation.
 
-Note: tag *@private* is an alias of *@exclude* tag and not recommended for use.
+Note: the *@private* tag is now an alias of the *@exclude* tag and is no longer recommended.
 
-The *@exclude-value* tag suppress generation of the default value expression of
-object declaration by RST-PT backend. For example::
+The *@exclude-value* tag suppresses the generation of the documentation for a given expression value. For example::
 
    C : constant Integer := 5;
-   --  Constant and its description is included into documentation, while
-   --  default value is not.
+   --  The constant and its description will be included into the documentation, while
+   --  the actual value will not.
    --  @exclude-value
