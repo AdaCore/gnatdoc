@@ -15,6 +15,14 @@ LAL
     Default charset
 
 
+.. ada:object:: Exclude_Value : constant Standard.String
+    :package: LAL
+
+    :objtype: Standard.String
+
+    Default charset
+
+
 .. ada:exception:: File_Read_Error
     :package: LAL
 
