@@ -1863,20 +1863,14 @@ package body GNATdoc.Frontend is
                   Entity    => Entity);
 
                --  If there is not explicitly defined @belongs-to tag, and
-               --  type is a "class", and both type and object are declared in
-               --  the same package, mark constant object as belongs to type.
+               --  both type and object are declared in the same package,
+               --  mark constant object as belongs to type.
 
                if Belongs = null
                  and Node.F_Type_Expr.Kind = Ada_Subtype_Indication
                then
 
-                  if Type_Parent = Objects_Parent
-                    and then GNATdoc.Entities.To_Entity.Contains
-                               (Type_Signature)
-                    and then GNATdoc.Entities.To_Entity (Type_Signature).Kind
-                       in GNATdoc.Entities.Ada_Tagged_Type
-                        | GNATdoc.Entities.Ada_Interface_Type
-                  then
+                  if Type_Parent = Objects_Parent then
                      Belongs :=
                        GNATdoc.Entities.To_Entity (Signature (Type_Name));
                   end if;
