@@ -23,6 +23,15 @@ LAL
     Default charset
 
 
+.. ada:object:: Multiline_Value : constant Standard.String
+    :package: LAL
+
+    :objtype: Standard.String
+    :defval: ``"this is first line of the multiline initialization expression" & " and this is second line of it"``
+
+    Multiline initialization expression
+
+
 .. ada:exception:: File_Read_Error
     :package: LAL
 
