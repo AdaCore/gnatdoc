@@ -30,10 +30,10 @@ package GNATdoc.Comments.Extractor is
 
    function Is_Ada_Separator
      (Item : VSS.Characters.Virtual_Character) return Boolean;
-   --  Return True when given character is Ada's separator.
+   --  Return True if the character is a valid Ada separator.
    --
    --  @param Item Character to be classified
-   --  @return Whether given character is Ada's separator or not
+   --  @return Whether the character is an Ada separator or not
 
    procedure Extract
      (Node          : Libadalang.Analysis.Basic_Decl'Class;
