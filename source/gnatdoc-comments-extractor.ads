@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,7 +15,7 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
-private with VSS.Characters;
+with VSS.Characters;
 
 with Libadalang.Analysis;
 with Libadalang.Common;
@@ -27,6 +27,13 @@ package GNATdoc.Comments.Extractor is
 
    use all type Libadalang.Common.Ada_Node_Kind_Type;
    use Libadalang.Common;
+
+   function Is_Ada_Separator
+     (Item : VSS.Characters.Virtual_Character) return Boolean;
+   --  Return True if the character is a valid Ada separator.
+   --
+   --  @param Item Character to be classified
+   --  @return Whether the character is an Ada separator or not
 
    procedure Extract
      (Node          : Libadalang.Analysis.Basic_Decl'Class;
@@ -86,13 +93,6 @@ package GNATdoc.Comments.Extractor is
    --  of the generic with the given name.
 
 private
-
-   function Is_Ada_Separator
-     (Item : VSS.Characters.Virtual_Character) return Boolean;
-   --  Return True when given character is Ada's separator.
-   --
-   --  @param Item Character to be classified
-   --  @return Whether given character is Ada's separator or not
 
    function Count_Leading_Whitespaces
      (Line : VSS.Strings.Virtual_String) return VSS.Strings.Character_Count;

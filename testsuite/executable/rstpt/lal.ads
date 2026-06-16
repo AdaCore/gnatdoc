@@ -10,6 +10,11 @@ package LAL is
    --  Default charset
    --  @exclude-value
 
+   Multiline_Value : constant String :=
+     "this is first line of the multiline initialization expression"
+     & " and this is second line of it";
+   --  Multiline initialization expression
+
    File_Read_Error : exception;
    --  Exception
 
