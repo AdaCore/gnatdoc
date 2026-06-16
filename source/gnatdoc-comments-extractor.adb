@@ -21,6 +21,7 @@ with Langkit_Support.Slocs;           use Langkit_Support.Slocs;
 with Langkit_Support.Text;            use Langkit_Support.Text;
 
 with VSS.Characters;                  use VSS.Characters;
+with VSS.Characters.Latin;
 with VSS.Regular_Expressions;         use VSS.Regular_Expressions;
 with VSS.String_Vectors;              use VSS.String_Vectors;
 with VSS.Strings;                     use VSS.Strings;
@@ -3181,7 +3182,15 @@ package body GNATdoc.Comments.Extractor is
    function Is_Ada_Separator
      (Item : VSS.Characters.Virtual_Character) return Boolean is
    begin
-      return Get_General_Category (Item) in Space_Separator | Format;
+      return
+        (Get_General_Category (Item)
+           in Space_Separator | Line_Separator | Paragraph_Separator | Format)
+        or else Item in VSS.Characters.Latin.Character_Tabulation
+          | VSS.Characters.Latin.Line_Feed
+          | VSS.Characters.Latin.Line_Tabulation
+          | VSS.Characters.Latin.Form_Feed
+          | VSS.Characters.Latin.Carriage_Return
+          | VSS.Characters.Latin.Next_Line;
    end Is_Ada_Separator;
 
    -----------------------

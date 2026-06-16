@@ -20,6 +20,7 @@ with Ada.Text_IO;
 with GNATdoc.Utilities;
 with Libadalang.Common;
 
+with VSS.Characters;
 with VSS.Strings.Conversions;
 with VSS.Strings.Formatters.Strings;
 with VSS.Strings.Templates;
@@ -214,6 +215,10 @@ package body GNATdoc.Frontend is
       Defining_Name : Libadalang.Analysis.Defining_Name'Class)
       return not null GNATdoc.Entities.Entity_Information_Access;
    --  Creates entity and link it with enclosing
+
+   function Trim_Defval
+     (Text : Libadalang.Text.Text_Type) return VSS.Strings.Virtual_String;
+   --  Trim multiple whitespaces.
 
    Methods : GNATdoc.Entities.Entity_Reference_Sets.Set;
    --  All methods was found during processing of compilation units.
@@ -1769,8 +1774,7 @@ package body GNATdoc.Frontend is
 
          begin
             if not Node.F_Expr.Is_Null then
-               Entity.RSTPT_Defval :=
-                 VSS.Strings.To_Virtual_String (Node.F_Expr.Text);
+               Entity.RSTPT_Defval := Trim_Defval (Node.F_Expr.Text);
             end if;
 
             Extract
@@ -1823,8 +1827,7 @@ package body GNATdoc.Frontend is
       end case;
 
       if not Node.F_Default_Expr.Is_Null then
-         RSTPT_Defval :=
-           VSS.Strings.To_Virtual_String (Node.F_Default_Expr.Text);
+         RSTPT_Defval := Trim_Defval (Node.F_Default_Expr.Text);
       end if;
 
       for Name of Node.F_Ids loop
@@ -2528,5 +2531,33 @@ package body GNATdoc.Frontend is
 
       return (if Aux.Is_Null then Node.As_Basic_Decl else Aux);
    end Subprogram_Primary_View;
+
+   -----------------
+   -- Trim_Defval --
+   -----------------
+
+   function Trim_Defval
+     (Text : Libadalang.Text.Text_Type) return VSS.Strings.Virtual_String
+   is
+      Previous_Is_Separator : Boolean := False;
+
+   begin
+      return Result : VSS.Strings.Virtual_String do
+         for C of Text loop
+            if Is_Ada_Separator (VSS.Characters.Virtual_Character (C)) then
+               Previous_Is_Separator := True;
+
+            else
+               if Previous_Is_Separator and not Result.Is_Empty then
+                  Result.Append (' ');
+               end if;
+
+               Previous_Is_Separator := False;
+
+               Result.Append (VSS.Characters.Virtual_Character (C));
+            end if;
+         end loop;
+      end return;
+   end Trim_Defval;
 
 end GNATdoc.Frontend;
