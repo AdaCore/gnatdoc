@@ -87,3 +87,16 @@ LAL
 
     Access to array type
 
+
+.. ada:type:: type Record_Type
+    :package: LAL
+
+    :discriminant Standard.Integer X:
+
+    :component Standard.Integer Y:
+        Component Y
+    :component Standard.Integer Z:
+        Component Z
+
+    Description of the Record_Type
+
