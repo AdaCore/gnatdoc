@@ -107,7 +107,7 @@ package body GNATdoc.Comments is
      (Self : Structured_Comment'Class) return Boolean is
    begin
       for Section of Self.Sections loop
-         if Section.Kind in Description | Component
+         if Section.Kind in Description | Entity_Component
            and then not Section.Text.Is_Empty
          then
             return True;

@@ -68,7 +68,7 @@ package GNATdoc.Comments is
 
 private
 
-   subtype Component is Section_Kind range Formal .. Raised_Exception;
+   subtype Entity_Component is Section_Kind range Formal .. Raised_Exception;
 
    package Section_Vectors is
      new Ada.Containers.Vectors (Positive, Section_Access);

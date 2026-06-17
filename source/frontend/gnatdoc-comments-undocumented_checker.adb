@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2023-2025, AdaCore                     --
+--                     Copyright (C) 2023-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -57,7 +57,7 @@ package body GNATdoc.Comments.Undocumented_Checker is
       end loop;
 
       for Section of Documentation.Sections loop
-         if Section.Kind in Component
+         if Section.Kind in Entity_Component
            and then Section.Text.Is_Empty
          then
             declare

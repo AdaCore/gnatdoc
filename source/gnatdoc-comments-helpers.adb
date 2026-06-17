@@ -265,7 +265,9 @@ package body GNATdoc.Comments.Helpers is
       return VSS.String_Vectors.Virtual_String_Vector is
    begin
       for Section of Documentation.Sections loop
-         if Section.Kind in Component and then Section.Symbol = Symbol then
+         if Section.Kind in Entity_Component
+           and then Section.Symbol = Symbol
+         then
             return Get_Plain_Text_Description (Section);
          end if;
       end loop;
@@ -286,7 +288,7 @@ package body GNATdoc.Comments.Helpers is
       for Section of Documentation.Sections loop
          if Section.Kind = Formal and then Section.Symbol = Symbol then
             for Subsection of Section.Sections loop
-               if Subsection.Kind in Component
+               if Subsection.Kind in Entity_Component
                  and then Subsection.Symbol = Subsymbol
                then
                   return Get_Plain_Text_Description (Section);
