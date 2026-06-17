@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2023-2025, AdaCore                     --
+--                     Copyright (C) 2023-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -19,6 +19,27 @@ with GNATdoc.Backend.RST_Markup;
 
 package body GNATdoc.Comments.RST_Helpers is
 
+   use type VSS.Strings.Virtual_String;
+
+   procedure Append_Indented_Lines
+     (To     : in out VSS.String_Vectors.Virtual_String_Vector;
+      Indent : VSS.Strings.Virtual_String;
+      Text   : VSS.String_Vectors.Virtual_String_Vector);
+
+   ---------------------------
+   -- Append_Indented_Lines --
+   ---------------------------
+
+   procedure Append_Indented_Lines
+     (To     : in out VSS.String_Vectors.Virtual_String_Vector;
+      Indent : VSS.Strings.Virtual_String;
+      Text   : VSS.String_Vectors.Virtual_String_Vector) is
+   begin
+      for Line of Text loop
+         To.Append (Indent & Line);
+      end loop;
+   end Append_Indented_Lines;
+
    ---------------------------
    -- Get_RST_Documentation --
    ---------------------------
@@ -30,8 +51,6 @@ package body GNATdoc.Comments.RST_Helpers is
       Code_Snippet  : Boolean)
       return VSS.String_Vectors.Virtual_String_Vector
    is
-      use type VSS.Strings.Virtual_String;
-
       Text : VSS.String_Vectors.Virtual_String_Vector;
 
    begin
@@ -85,22 +104,13 @@ package body GNATdoc.Comments.RST_Helpers is
                Text.Append (VSS.Strings.Empty_Virtual_String);
                Text.Append (Indent & ":parameter " & Section.Name & ":");
 
-               declare
-                  RST : VSS.String_Vectors.Virtual_String_Vector;
-
-               begin
-                  if Pass_Through then
-                     RST := Section.Text;
-
-                  else
-                     RST :=
-                       GNATdoc.Backend.RST_Markup.Build_Markup (Section.Text);
-                  end if;
-
-                  for Line of RST loop
-                     Text.Append (Indent & "    " & Line);
-                  end loop;
-               end;
+               Append_Indented_Lines
+                 (Text,
+                  Indent & "    ",
+                  (if Pass_Through
+                   then Section.Text
+                   else GNATdoc.Backend.RST_Markup.Build_Markup
+                     (Section.Text)));
 
                Text.Append (VSS.Strings.Empty_Virtual_String);
             end if;
@@ -111,22 +121,13 @@ package body GNATdoc.Comments.RST_Helpers is
                Text.Append (VSS.Strings.Empty_Virtual_String);
                Text.Append (Indent & ":returns:");
 
-               declare
-                  RST : VSS.String_Vectors.Virtual_String_Vector;
-
-               begin
-                  if Pass_Through then
-                     RST := Section.Text;
-
-                  else
-                     RST :=
-                       GNATdoc.Backend.RST_Markup.Build_Markup (Section.Text);
-                  end if;
-
-                  for Line of RST loop
-                     Text.Append (Indent & "    " & Line);
-                  end loop;
-               end;
+               Append_Indented_Lines
+                 (Text,
+                  Indent & "    ",
+                  (if Pass_Through
+                   then Section.Text
+                   else GNATdoc.Backend.RST_Markup.Build_Markup
+                     (Section.Text)));
 
                Text.Append (VSS.Strings.Empty_Virtual_String);
 
@@ -139,22 +140,13 @@ package body GNATdoc.Comments.RST_Helpers is
                Text.Append (VSS.Strings.Empty_Virtual_String);
                Text.Append (Indent & ":exception " & Section.Name & ":");
 
-               declare
-                  RST : VSS.String_Vectors.Virtual_String_Vector;
-
-               begin
-                  if Pass_Through then
-                     RST := Section.Text;
-
-                  else
-                     RST :=
-                       GNATdoc.Backend.RST_Markup.Build_Markup (Section.Text);
-                  end if;
-
-                  for Line of RST loop
-                     Text.Append (Indent & "    " & Line);
-                  end loop;
-               end;
+               Append_Indented_Lines
+                 (Text,
+                  Indent & "    ",
+                  (if Pass_Through
+                   then Section.Text
+                   else GNATdoc.Backend.RST_Markup.Build_Markup
+                     (Section.Text)));
 
                Text.Append (VSS.Strings.Empty_Virtual_String);
 
