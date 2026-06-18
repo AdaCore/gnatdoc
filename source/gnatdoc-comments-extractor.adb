@@ -3373,7 +3373,8 @@ package body GNATdoc.Comments.Extractor is
            --  recognized
            & "|exclude|private"
            & "|field|member|comp|disc"
-           & "|param|return|exception|enum|formal|private)"
+           & "|exception|raise"
+           & "|param|return|enum|formal|private)"
            & Ada_Optional_Separator_Expression);
       Parameter_Matcher : constant Regular_Expression :=
         To_Regular_Expression
@@ -3422,7 +3423,9 @@ package body GNATdoc.Comments.Extractor is
             elsif Match.Captured (1) = "return" then
                Tag := Return_Tag;
 
-            elsif Match.Captured (1) = "exception" then
+            elsif Match.Captured (1) = "exception"
+              or Match.Captured (1) = "raise"
+            then
                Tag := Exception_Tag;
 
             elsif Match.Captured (1) = "enum" then
