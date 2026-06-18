@@ -409,7 +409,7 @@ Description of the generic function
 type Private_Unknown_Discriminants_Type (<>) is private;
   \/ DESCRIPTION  ()
 \/ FORMAL private_known_discriminants_type (Private_Known_Discriminants_Type)
-  \/ FIELD x (X)  129 129 130 128
+  \/ DISCRIMINANT x (X)  129 129 130 128
   \/ RAW <<LEADING>> ()
   \/ RAW <<TRAILING>> ()
   \/ SNIPPET ada ()

@@ -29,9 +29,9 @@ package Records
 <AdaNodeList records.ads:8:4-128:28>
 <ConcreteTypeDecl ["Record_Type_1"] records.ads:8:4-10:15>
 **************************
-\/ FIELD a (A)  8 8 9 8
+\/ DISCRIMINANT a (A)  8 8 9 8
 Discriminant
-\/ FIELD x (X)  9 9 10 9
+\/ COMPONENT x (X)  9 9 10 9
 Value of X
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
@@ -48,13 +48,13 @@ Record type with discriminant
 **************************
 <ConcreteTypeDecl ["Record_Type_2"] records.ads:16:4-39:15>
 **************************
-\/ FIELD k (K)  17 17 18 18
+\/ DISCRIMINANT k (K)  17 17 18 18
 Description of the discriminant
-\/ FIELD x (X)  22 22 23 23
+\/ COMPONENT x (X)  22 22 23 23
 This is decsription of X component.
-\/ FIELD y (Y)  30 30 31 31
+\/ COMPONENT y (Y)  30 30 31 31
 This is description of Y component.
-\/ FIELD z (Z)  37 37 38 38
+\/ COMPONENT z (Z)  37 37 38 38
 Description of the Z member
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
@@ -120,14 +120,14 @@ type String_Handler_Access is access all Abstract_String_Handler'Class;
 **************************
 <ConcreteTypeDecl ["String_Data"] records.ads:57:4-72:15>
 **************************
-\/ FIELD in_place (In_Place)  57 57 58 57
-\/ FIELD capacity (Capacity)  58 58 59 59
-\/ FIELD padding (Padding)  60 60 61 63
+\/ DISCRIMINANT in_place (In_Place)  57 57 58 57
+\/ COMPONENT capacity (Capacity)  58 58 59 59
+\/ COMPONENT padding (Padding)  60 60 61 63
 This padding bit is not used in the code, but here for the benefit
 of dynamic memory analysis tools such as valgrind.
-\/ FIELD storage (Storage)  66 66 67 67
-\/ FIELD handler (Handler)  69 69 71 71
-\/ FIELD pointer (Pointer)  70 70 71 71
+\/ COMPONENT storage (Storage)  66 66 67 67
+\/ COMPONENT handler (Handler)  69 69 71 71
+\/ COMPONENT pointer (Pointer)  70 70 71 71
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
 String_Data is a pair of Handler and pointer to the associated data.
@@ -165,9 +165,9 @@ Note: Storage has 4 bytes alignment.
 <RecordRepClause records.ads:73:4-80:15>
 <ConcreteTypeDecl ["My_Type"] records.ads:95:4-100:15>
 **************************
-\/ FIELD a (A)  96 96 97 97
+\/ COMPONENT a (A)  96 96 97 97
 This is a comment for A
-\/ FIELD b (B)  98 98 99 99
+\/ COMPONENT b (B)  98 98 99 99
 This is a comment for B
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
@@ -182,12 +182,12 @@ Comments for both fields must be extracted from the comments around.
 **************************
 <ConcreteTypeDecl ["Foo_1"] records.ads:107:4-120:15>
 **************************
-\/ FIELD x (X)  107 107 108 107
-\/ FIELD a (A)  110 110 111 110
-\/ FIELD b (B)  112 112 113 112
-\/ FIELD c (C)  114 114 115 114
-\/ FIELD d (D)  116 116 117 116
-\/ FIELD e (E)  118 118 119 119
+\/ DISCRIMINANT x (X)  107 107 108 107
+\/ COMPONENT a (A)  110 110 111 110
+\/ COMPONENT b (B)  112 112 113 112
+\/ COMPONENT c (C)  114 114 115 114
+\/ COMPONENT d (D)  116 116 117 116
+\/ COMPONENT e (E)  118 118 119 119
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
 This is example of the record type with discriminant of integer type and
@@ -213,7 +213,7 @@ variant part that depends from few kind of values.
 **************************
 <ConcreteTypeDecl ["My_Record"] records.ads:125:4-128:28>
 **************************
-\/ FIELD i (I)  126 126 127 127
+\/ COMPONENT i (I)  126 126 127 127
 \/ RAW <<LEADING>> ()
 Remove of aspects from the code snippet.
 \/ RAW <<TRAILING>> ()

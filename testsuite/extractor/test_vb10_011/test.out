@@ -28,7 +28,7 @@ package Test_VB10_011
 <AdaNodeList test_vb10_011.ads:7:4-33:19>
 <ConcreteTypeDecl ["Foo_1_T"] test_vb10_011.ads:7:4-10:19>
 **************************
-\/ FIELD baz_1 (Baz_1)  8 8 9 9
+\/ DISCRIMINANT baz_1 (Baz_1)  8 8 9 9
 A baz.
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
@@ -42,7 +42,7 @@ Foo type.
 **************************
 <ConcreteTypeDecl ["Foo_2_T"] test_vb10_011.ads:13:4-16:19>
 **************************
-\/ FIELD baz_2 (Baz_2)  14 14 15 15
+\/ DISCRIMINANT baz_2 (Baz_2)  14 14 15 15
 A baz.
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
@@ -56,7 +56,7 @@ Foo type.
 **************************
 <ConcreteTypeDecl ["Foo_3_T"] test_vb10_011.ads:19:4-21:19>
 **************************
-\/ FIELD baz_3 (Baz_3)  20 20 21 20
+\/ DISCRIMINANT baz_3 (Baz_3)  20 20 21 20
 A baz.
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
@@ -71,7 +71,7 @@ Foo type.
 **************************
 <ConcreteTypeDecl ["Foo_4_T"] test_vb10_011.ads:25:4-28:19>
 **************************
-\/ FIELD baz_4 (Baz_4)  26 26 27 27
+\/ DISCRIMINANT baz_4 (Baz_4)  26 26 27 27
 A baz.
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
@@ -85,7 +85,7 @@ Foo type.
 **************************
 <ConcreteTypeDecl ["Foo_5_T"] test_vb10_011.ads:31:4-33:19>
 **************************
-\/ FIELD baz_5 (Baz_5)  32 32 33 32
+\/ DISCRIMINANT baz_5 (Baz_5)  32 32 33 32
 A baz.
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
@@ -102,7 +102,7 @@ Foo type.
 <AdaNodeList test_vb10_011.ads:39:4-61:23>
 <ConcreteTypeDecl ["Foo_1_T"] test_vb10_011.ads:39:4-41:23>
 **************************
-\/ FIELD baz_1 (Baz_1)  40 40 41 40
+\/ DISCRIMINANT baz_1 (Baz_1)  40 40 41 40
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
 \/ SNIPPET ada ()
@@ -113,7 +113,7 @@ type Foo_1_T
 **************************
 <ConcreteTypeDecl ["Foo_2_T"] test_vb10_011.ads:43:4-46:23>
 **************************
-\/ FIELD baz_2 (Baz_2)  44 44 45 45
+\/ DISCRIMINANT baz_2 (Baz_2)  44 44 45 45
 A baz.
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
@@ -125,7 +125,7 @@ type Foo_2_T
 **************************
 <ConcreteTypeDecl ["Foo_3_T"] test_vb10_011.ads:48:4-50:23>
 **************************
-\/ FIELD baz_3 (Baz_3)  49 49 50 49
+\/ DISCRIMINANT baz_3 (Baz_3)  49 49 50 49
 A baz.
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
@@ -138,7 +138,7 @@ type Foo_3_T
 **************************
 <ConcreteTypeDecl ["Foo_4_T"] test_vb10_011.ads:53:4-55:23>
 **************************
-\/ FIELD baz_4 (Baz_4)  54 54 55 54
+\/ DISCRIMINANT baz_4 (Baz_4)  54 54 55 54
 A baz.
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
@@ -151,7 +151,7 @@ type Foo_4_T
 **************************
 <ConcreteTypeDecl ["Foo_5_T"] test_vb10_011.ads:58:4-61:23>
 **************************
-\/ FIELD baz_5 (Baz_5)  59 59 60 60
+\/ DISCRIMINANT baz_5 (Baz_5)  59 59 60 60
 A baz.
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
