@@ -101,24 +101,64 @@ indentation as the record type declaration (to distinguish it from the
 multiline in line documentation of the subprograms' parameter or subprogram's
 return value).
 
-The following tags are supported when annotating subprograms:
+The following tags are supported when annotating record types:
 
-*@field*
+*@comp*
 
    document a record component, with the following syntax:
 
-      *@field <component_name> <description>*
+      *@comp <component_name> <description>*
 
    where:
 
       *<component_name>*
 
-        is the name of the component as it appears in the subprogram.
+        is the name of the component as it appears in the record type.
 
       *<description>*
 
         the documentation for the component; all following text
         is considered for inclusion, until an another tag is encountered.
+
+*@disc*
+
+   document a discriminant of record/task/protected type, with the following
+   syntax:
+
+      *@disc <discriminant_name> <description>*
+
+   where:
+
+      *<discriminant_name>*
+
+        is the name of the discriminant as it appears in the type.
+
+      *<description>*
+
+        the documentation for the discriminant; all following text
+        is considered for inclusion, until an another tag is encountered.
+
+*@field*
+
+   document a record component or discriminant, with the following syntax:
+
+      *@field <name> <description>*
+
+   where:
+
+      *<name>*
+
+        is the name of the component or discriminant as it appears in the
+        record.
+
+      *<description>*
+
+        the documentation for the component or discriminant; all following text
+        is considered for inclusion, until an another tag is encountered.
+
+*@member*
+
+   alias of *@field* tag
 
 For example::
 
