@@ -24,10 +24,19 @@
       <h2>Description</h2>
       <div tal:omit-tag='' tal:content='gnatdoc/entity/documentation/description'>Description of the entity</div>
 
-      <div tal:omit-tag='' tal:condition='gnatdoc/entity/documentation/fields'>
+      <div tal:omit-tag='' tal:condition='gnatdoc/entity/documentation/discriminants'>
         <h3>Components and Discriminants</h3>
         <dl>
-          <div tal:omit-tag='' tal:repeat='component gnatdoc/entity/documentation/fields'>
+          <div tal:omit-tag='' tal:repeat='component gnatdoc/entity/documentation/discriminants'>
+            <dt tal:content='component/name'>Name of the field</dt>
+            <dd tal:content='component/description'>Description of the field</dd>
+          </div>
+        </dl>
+      </div>
+      <div tal:omit-tag='' tal:condition='gnatdoc/entity/documentation/components'>
+        <h3>Components and Discriminants</h3>
+        <dl>
+          <div tal:omit-tag='' tal:repeat='component gnatdoc/entity/documentation/components'>
             <dt tal:content='component/name'>Name of the field</dt>
             <dd tal:content='component/description'>Description of the field</dd>
           </div>

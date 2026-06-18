@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2025, AdaCore                        --
+--                     Copyright (C) 2025-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -28,6 +28,8 @@ package body GNATdoc.Comments.XML_Helpers is
    Formal_Tag           : constant VSS.Strings.Virtual_String := "formal";
    Enumeration_Literal_Tag : constant VSS.Strings.Virtual_String :=
      "enumeration-literal";
+   Discriminant_Tag     : constant VSS.Strings.Virtual_String :=
+     "discriminant";
    Component_Tag        : constant VSS.Strings.Virtual_String := "component";
    Parameter_Tag        : constant VSS.Strings.Virtual_String := "parameter";
    Return_Tag           : constant VSS.Strings.Virtual_String := "return";
@@ -66,7 +68,7 @@ package body GNATdoc.Comments.XML_Helpers is
       end loop;
 
       for Section of Comment.Sections loop
-         if Section.Kind in Component then
+         if Section.Kind in Entity_Component then
             case Section.Kind is
                when Formal =>
                   Element := Formal_Tag;
@@ -74,7 +76,10 @@ package body GNATdoc.Comments.XML_Helpers is
                when Enumeration_Literal =>
                   Element := Enumeration_Literal_Tag;
 
-               when Field =>
+               when Discriminant =>
+                  Element := Discriminant_Tag;
+
+               when Component =>
                   Element := Component_Tag;
 
                when Parameter =>

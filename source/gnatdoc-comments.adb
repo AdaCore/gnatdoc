@@ -107,7 +107,7 @@ package body GNATdoc.Comments is
      (Self : Structured_Comment'Class) return Boolean is
    begin
       for Section of Self.Sections loop
-         if Section.Kind in Description | Component
+         if Section.Kind in Description | Entity_Component
            and then not Section.Text.Is_Empty
          then
             return True;
@@ -130,7 +130,8 @@ package body GNATdoc.Comments is
    -- Has_Exclude_Value --
    ----------------------
 
-   function Has_Exclude_Value (Self : Structured_Comment'Class) return Boolean is
+   function Has_Exclude_Value
+     (Self : Structured_Comment'Class) return Boolean is
    begin
       return Self.Has_Exclude_Value;
    end Has_Exclude_Value;

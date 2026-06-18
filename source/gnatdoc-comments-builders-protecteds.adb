@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -63,7 +63,7 @@ package body GNATdoc.Comments.Builders.Protecteds is
                Self.Process_Component_Declaration (Node.As_Component_Decl);
 
                for Name of Node.As_Component_Decl.F_Ids loop
-                  Self.Process_Defining_Name (Field, Name);
+                  Self.Process_Defining_Name (Component, Name);
                end loop;
 
                return Over;

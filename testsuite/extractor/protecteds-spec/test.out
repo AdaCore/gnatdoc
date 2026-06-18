@@ -110,9 +110,9 @@ Intermediate description of the protected type PT_Intermediate.
 <Id "PT_Intermediate" protecteds.ads:28:8-28:23>
 <ProtectedTypeDecl ["PT_Discriminant_Component_Short"] protecteds.ads:30:4-35:40>
 **************************
-\/ FIELD discriminant (Discriminant)  31 31 32 32
+\/ DISCRIMINANT discriminant (Discriminant)  31 31 32 32
 Short description of the discriminant
-\/ FIELD component (Component)  34 34 35 34
+\/ COMPONENT component (Component)  34 34 35 34
 Short description of the component
 \/ RAW <<LEADING>> ()
 \/ RAW <<INTERMEDIATE UPPER>> ()
@@ -149,9 +149,9 @@ Short description of the component
 <Id "PT_Discriminant_Component_Short" protecteds.ads:35:8-35:39>
 <ProtectedTypeDecl ["PT_Discriminant_Component_Longer"] protecteds.ads:37:4-44:41>
 **************************
-\/ FIELD discriminant (Discriminant)  38 38 39 40
+\/ DISCRIMINANT discriminant (Discriminant)  38 38 39 40
 Longer description of the discriminant
-\/ FIELD component (Component)  42 42 43 43
+\/ COMPONENT component (Component)  42 42 43 43
 Longer description of the component
 \/ RAW <<LEADING>> ()
 \/ RAW <<INTERMEDIATE UPPER>> ()
@@ -188,7 +188,7 @@ Longer description of the component
 <Id "PT_Discriminant_Component_Longer" protecteds.ads:44:8-44:40>
 <ProtectedTypeDecl ["PT_Discriminant_Longer"] protecteds.ads:46:4-50:31>
 **************************
-\/ FIELD discriminant (Discriminant)  47 47 48 49
+\/ DISCRIMINANT discriminant (Discriminant)  47 47 48 49
 Longer description of the discriminant
 \/ RAW <<LEADING>> ()
 \/ RAW <<INTERMEDIATE UPPER>> ()
@@ -213,11 +213,11 @@ Longer description of the discriminant
 <Id "PT_Discriminant_Longer" protecteds.ads:50:8-50:30>
 <SingleProtectedDecl ["P_Private_Components_Subprograms"] protecteds.ads:52:4-75:41>
 **************************
-\/ FIELD x (X)  57 57 58 59
+\/ COMPONENT x (X)  57 57 58 59
 Description of the component X
-\/ FIELD y (Y)  63 63 64 65
+\/ COMPONENT y (Y)  63 63 64 65
 Description of the component Y
-\/ FIELD z (Z)  69 69 70 71
+\/ COMPONENT z (Z)  69 69 70 71
 Description of the component Z
 \/ RAW <<LEADING>> ()
 \/ RAW <<INTERMEDIATE UPPER>> ()

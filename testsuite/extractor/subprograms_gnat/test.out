@@ -92,7 +92,7 @@ Raised on some error condition.
 \/ RAW <<CALLABLE>> ()
 This is description of the procedure with "inline" parameter's
 description and aspects.
-@exception Constraint_Error Raised on some error condition.
+@raise Constraint_Error Raised on some error condition.
 \/ PARAMETER x (X)
 Value of X
 \/ PARAMETER y (Y)
@@ -115,7 +115,7 @@ Raised on some error condition.
 \/ RAW <<CALLABLE>> ()
 This is description of the procedure with "inline" parameter's
 description and aspects.
-@exception Constraint_Error Raised on some error condition.
+@raise Constraint_Error Raised on some error condition.
 \/ PARAMETER x (X)
 Value of X
 More about X

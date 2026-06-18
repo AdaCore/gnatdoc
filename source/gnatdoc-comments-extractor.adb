@@ -50,6 +50,8 @@ package body GNATdoc.Comments.Extractor is
       Exception_Tag,
       Enum_Tag,
       Member_Tag,
+      Discriminant_Tag,
+      Component_Tag,
       Formal_Tag,
       Exclude_Tag,
       Exclude_Value_Tag,
@@ -2112,7 +2114,8 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Decl),
             Raw_Section,
-            [Member_Tag => True, others => False],
+            [Member_Tag | Component_Tag | Discriminant_Tag => True,
+             others                                        => False],
             Sections,
             Messages);
       end;
@@ -2191,9 +2194,9 @@ package body GNATdoc.Comments.Extractor is
            (Location          => GNATdoc.Utilities.Location (Node),
             Raw_Section       =>  Raw_Section,
             Allowed_Tags      =>
-              [Exclude_Tag => True,
-               Member_Tag  => True,
-               others      => False],
+              [Exclude_Tag                                   => True,
+               Member_Tag | Component_Tag | Discriminant_Tag => True,
+               others                                        => False],
             Sections          =>  Documentation.Sections,
             Has_Exclude       => Documentation.Has_Exclude,
             Has_Exclude_Value => Documentation.Has_Exclude_Value,
@@ -2281,9 +2284,9 @@ package body GNATdoc.Comments.Extractor is
            (Location          => GNATdoc.Utilities.Location (Node),
             Raw_Section       => Raw_Section,
             Allowed_Tags      =>
-              [Exclude_Tag => True,
-               Member_Tag  => True,
-               others      => False],
+              [Exclude_Tag                                    => True,
+               Member_Tag | Component_Tag | Discriminant_Tag  => True,
+               others                                         => False],
             Sections          => Documentation.Sections,
             Has_Exclude       => Documentation.Has_Exclude,
             Has_Exclude_Value => Documentation.Has_Exclude_Value,
@@ -2366,7 +2369,8 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Node),
             Raw_Section,
-            [Member_Tag => True, others => False],
+            [Member_Tag | Component_Tag | Discriminant_Tag => True,
+             others                                        => False],
             Documentation.Sections,
             Messages);
       end;
@@ -2568,9 +2572,9 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Node),
             Raw_Section,
-            [Exclude_Tag => True,
-             Member_Tag  => True,
-             others      => False],
+            [Exclude_Tag                   => True,
+             Member_Tag | Discriminant_Tag => True,
+             others                        => False],
             Documentation.Sections,
             Documentation.Has_Exclude,
             Documentation.Has_Exclude_Value,
@@ -3315,6 +3319,51 @@ package body GNATdoc.Comments.Extractor is
       Has_Exclude_Value : out Boolean;
       Messages          : in out GNATdoc.Messages.Message_Container)
    is
+      function Lookup
+        (Tag     : Section_Tag;
+         Symbol  : Virtual_String;
+         Current : in out not null Section_Access) return Boolean
+        with Pre => Tag in Param_Tag | Return_Tag | Exception_Tag
+                         | Member_Tag | Component_Tag | Discriminant_Tag
+                         | Enum_Tag | Formal_Tag;
+      --  Lookup section by tag and symbol.
+      --
+      --  @return `True` when section has been found and `Current` has been
+      --  updated.
+
+      ------------
+      -- Lookup --
+      ------------
+
+      function Lookup
+        (Tag     : Section_Tag;
+         Symbol  : Virtual_String;
+         Current : in out not null Section_Access) return Boolean is
+      begin
+         for Section of Sections loop
+            if Section.Symbol = Symbol
+              and then
+                (case Section.Kind is
+                    when Parameter           => Tag = Param_Tag,
+                    when Returns             => Tag = Return_Tag,
+                    when Raised_Exception    => Tag = Exception_Tag,
+                    when Enumeration_Literal => Tag = Enum_Tag,
+                    when Discriminant        =>
+                      Tag in Member_Tag | Discriminant_Tag,
+                    when Component           =>
+                      Tag in Member_Tag | Component_Tag,
+                    when Formal              => Tag = Formal_Tag,
+                    when others              => False)
+            then
+               Current := Section;
+
+               return True;
+            end if;
+         end loop;
+
+         return False;
+      end Lookup;
+
       Tag_Matcher       : constant Regular_Expression :=
         To_Regular_Expression
           (Ada_Optional_Separator_Expression
@@ -3323,7 +3372,9 @@ package body GNATdoc.Comments.Extractor is
            --  `exclude-value` should be before `exclude` to be correctly
            --  recognized
            & "|exclude|private"
-           & "|param|return|exception|enum|field|formal|private)"
+           & "|field|member|comp|disc"
+           & "|exception|raise"
+           & "|param|return|enum|formal|private)"
            & Ada_Optional_Separator_Expression);
       Parameter_Matcher : constant Regular_Expression :=
         To_Regular_Expression
@@ -3333,7 +3384,6 @@ package body GNATdoc.Comments.Extractor is
 
       Match             : Regular_Expression_Match;
       Current_Section   : Section_Access;
-      Kind              : Section_Kind;
       Tag               : Section_Tag;
       Name              : Virtual_String;
       Symbol            : Virtual_String;
@@ -3368,28 +3418,32 @@ package body GNATdoc.Comments.Extractor is
 
          if Match.Has_Match then
             if Match.Captured (1) = "param" then
-               Tag  := Param_Tag;
-               Kind := Parameter;
+               Tag := Param_Tag;
 
             elsif Match.Captured (1) = "return" then
-               Tag  := Return_Tag;
-               Kind := Returns;
+               Tag := Return_Tag;
 
-            elsif Match.Captured (1) = "exception" then
-               Tag  := Exception_Tag;
-               Kind := Raised_Exception;
+            elsif Match.Captured (1) = "exception"
+              or Match.Captured (1) = "raise"
+            then
+               Tag := Exception_Tag;
 
             elsif Match.Captured (1) = "enum" then
-               Tag  := Enum_Tag;
-               Kind := Enumeration_Literal;
+               Tag := Enum_Tag;
 
-            elsif Match.Captured (1) = "field" then
-               Tag  := Member_Tag;
-               Kind := Field;
+            elsif Match.Captured (1) = "field"
+              or Match.Captured (1) = "member"
+            then
+               Tag := Member_Tag;
+
+            elsif Match.Captured (1) = "disc" then
+               Tag := Discriminant_Tag;
+
+            elsif Match.Captured (1) = "comp" then
+               Tag := Component_Tag;
 
             elsif Match.Captured (1) = "formal" then
                Tag  := Formal_Tag;
-               Kind := Formal;
 
             elsif Match.Captured (1) = "exclude-value" then
                Tag  := Exclude_Value_Tag;
@@ -3446,12 +3500,12 @@ package body GNATdoc.Comments.Extractor is
 
                goto Skip;
 
-            elsif Kind
-              in Parameter | Raised_Exception | Enumeration_Literal | Field
-                   | Formal
+            elsif Tag in Param_Tag | Exception_Tag
+                           | Member_Tag | Component_Tag | Discriminant_Tag
+                           | Enum_Tag | Formal_Tag
             then
-               --  Lookup for name of the parameter/exception. Convert
-               --  found name to canonical form.
+               --  Lookup for name of the parameter/exception/enumeration
+               --  literal/member/format. Convert found name to canonical form.
 
                --  Match := Parameter_Matcher.Match (Line, Tail_First);
                --  ??? Not implemented
@@ -3471,39 +3525,29 @@ package body GNATdoc.Comments.Extractor is
                Symbol.Clear;
             end if;
 
-            declare
-               Found : Boolean := False;
+            if not Lookup (Tag, Symbol, Current_Section) then
+               if Tag = Exception_Tag then
+                  --  Sections for raised exceptions are not created by the
+                  --  builder, due to missing necessary information in the
+                  --  callable declaration.
 
-            begin
-               for Section of Sections loop
-                  if Section.Kind = Kind and Section.Symbol = Symbol then
-                     Current_Section := Section;
-                     Found := True;
-
-                     exit;
-                  end if;
-               end loop;
-
-               if not Found then
-                  if Kind = Raised_Exception then
-                     Current_Section :=
-                       new Section'
-                         (Kind   => Raised_Exception,
-                          Name   => Name,
-                          Symbol => Symbol,
-                          others => <>);
-                     Sections.Append (Current_Section);
-
-                  else
-                     goto Default;
-                  end if;
+                  Current_Section :=
+                    new Section'
+                      (Kind   => Raised_Exception,
+                       Name   => Name,
+                       Symbol => Symbol,
+                       others => <>);
+                  Sections.Append (Current_Section);
 
                else
-                  if not Current_Section.Text.Is_Empty then
-                     Current_Section.Text.Append (Empty_Virtual_String);
-                  end if;
+                  goto Default;
                end if;
-            end;
+
+            else
+               if not Current_Section.Text.Is_Empty then
+                  Current_Section.Text.Append (Empty_Virtual_String);
+               end if;
+            end if;
 
             <<Skip>>
 

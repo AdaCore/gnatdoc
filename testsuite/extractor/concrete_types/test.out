@@ -32,7 +32,7 @@ type Child_Type is abstract new Parent_Type with null record;
 **************************
 <ConcreteTypeDecl ["Great_Child_Type"] concrete_types.ads:7:5-10:16>
 **************************
-\/ FIELD field_one (Field_One)  8 8 9 9
+\/ COMPONENT field_one (Field_One)  8 8 9 9
 A simple integer field.
 \/ RAW <<LEADING>> ()
 \/ RAW <<TRAILING>> ()
