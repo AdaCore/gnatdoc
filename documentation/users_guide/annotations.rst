@@ -122,7 +122,7 @@ The following tags are supported when annotating record types:
 
 *@disc*
 
-   document a discriminant of record/task/protected type, with the following
+   document a discriminant of a record/task/protected type, with the following
    syntax:
 
       *@disc <discriminant_name> <description>*
