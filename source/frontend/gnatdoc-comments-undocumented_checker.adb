@@ -77,7 +77,8 @@ package body GNATdoc.Comments.Undocumented_Checker is
                             (case Section.Kind is
                              when Formal              => "generic formal",
                              when Enumeration_Literal => "enumeration literal",
-                             when Field               => "component",
+                             when Discriminant        => "discriminant",
+                             when Component           => "component",
                              when Parameter           => "parameter",
                              when Raised_Exception    => "raised exception",
                              when others              => raise Program_Error)),

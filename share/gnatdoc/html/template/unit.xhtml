@@ -36,10 +36,19 @@
           </dl>
         </div>
 
-        <div tal:omit-tag='' tal:condition='item/documentation/fields'>
-          <h5>Record fields</h5>
+        <div tal:omit-tag='' tal:condition='item/documentation/discriminants'>
+          <h5>Record discriminants</h5>
           <dl>
-            <div tal:omit-tag='' tal:repeat='formal item/documentation/fields'>
+            <div tal:omit-tag='' tal:repeat='formal item/documentation/discriminants'>
+              <dt tal:content='formal/name'>Name of the field</dt>
+              <dd tal:content='formal/description'>Description of the field</dd>
+            </div>
+          </dl>
+        </div>
+        <div tal:omit-tag='' tal:condition='item/documentation/components'>
+          <h5>Record components</h5>
+          <dl>
+            <div tal:omit-tag='' tal:repeat='formal item/documentation/components'>
               <dt tal:content='formal/name'>Name of the field</dt>
               <dd tal:content='formal/description'>Description of the field</dd>
             </div>

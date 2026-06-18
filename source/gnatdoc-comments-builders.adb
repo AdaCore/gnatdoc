@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -52,7 +52,7 @@ package body GNATdoc.Comments.Builders is
             if Kind (Data (Token)) = Ada_Comment then
                for Section of Self.Sections.all loop
                   if Section.Kind
-                       in Raw | Enumeration_Literal | Field
+                       in Raw | Enumeration_Literal | Discriminant | Component
                             | Parameter | Returns | Formal
                     and then
                       (Location.Start_Line
@@ -274,7 +274,7 @@ package body GNATdoc.Comments.Builders is
             Self.Process_Component_Declaration (Node.As_Discriminant_Spec);
 
             for Name of Node.As_Discriminant_Spec.F_Ids loop
-               Self.Process_Defining_Name (Field, Name);
+               Self.Process_Defining_Name (Discriminant, Name);
             end loop;
 
             Done    := True;

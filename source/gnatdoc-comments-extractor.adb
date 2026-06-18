@@ -3343,7 +3343,8 @@ package body GNATdoc.Comments.Extractor is
                     when Returns             => Tag = Return_Tag,
                     when Raised_Exception    => Tag = Exception_Tag,
                     when Enumeration_Literal => Tag = Enum_Tag,
-                    when Field               => Tag = Member_Tag,
+                    when Discriminant        => Tag = Member_Tag,
+                    when Component           => Tag = Member_Tag,
                     when Formal              => Tag = Formal_Tag,
                     when others              => False)
             then

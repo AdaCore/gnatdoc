@@ -28,6 +28,8 @@ package body GNATdoc.Comments.XML_Helpers is
    Formal_Tag           : constant VSS.Strings.Virtual_String := "formal";
    Enumeration_Literal_Tag : constant VSS.Strings.Virtual_String :=
      "enumeration-literal";
+   Discriminant_Tag     : constant VSS.Strings.Virtual_String :=
+     "discriminant";
    Component_Tag        : constant VSS.Strings.Virtual_String := "component";
    Parameter_Tag        : constant VSS.Strings.Virtual_String := "parameter";
    Return_Tag           : constant VSS.Strings.Virtual_String := "return";
@@ -74,7 +76,10 @@ package body GNATdoc.Comments.XML_Helpers is
                when Enumeration_Literal =>
                   Element := Enumeration_Literal_Tag;
 
-               when Field =>
+               when Discriminant =>
+                  Element := Discriminant_Tag;
+
+               when Component =>
                   Element := Component_Tag;
 
                when Parameter =>

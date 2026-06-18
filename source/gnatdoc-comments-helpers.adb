@@ -99,7 +99,7 @@ package body GNATdoc.Comments.Helpers is
          when Enumeration_Literal =>
             Text.Append ("@enum " & Section.Name);
 
-         when Field =>
+         when Discriminant | Component =>
             Text.Append ("@field " & Section.Name);
 
          when Parameter =>
@@ -186,7 +186,7 @@ package body GNATdoc.Comments.Helpers is
 
          begin
             for Section of Documentation.Sections loop
-               if Section.Kind = Field then
+               if Section.Kind in Discriminant | Component then
                   if First_Entry then
                      Text.Append (Empty_Virtual_String);
                      First_Entry := False;

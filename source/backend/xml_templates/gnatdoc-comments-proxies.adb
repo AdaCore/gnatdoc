@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -101,7 +101,10 @@ package body GNATdoc.Comments.Proxies is
       end Filter;
 
    begin
-      if Name = "description" then
+      if Name = "components" then
+         return Filter (Component);
+
+      elsif Name = "description" then
          declare
             Text : VSS.String_Vectors.Virtual_String_Vector;
 
@@ -133,14 +136,14 @@ package body GNATdoc.Comments.Proxies is
                 (Markup => GNATdoc.Backend.ODF_Markup.Build_Markup (Text));
          end;
 
+      elsif Name = "discriminants" then
+         return Filter (Discriminant);
+
       elsif Name = "enumeration_literals" then
          return Filter (Enumeration_Literal);
 
       elsif Name = "exceptions" then
          return Filter (Raised_Exception);
-
-      elsif Name = "fields" then
-         return Filter (Field);
 
       elsif Name = "formals" then
          return Filter (Formal);

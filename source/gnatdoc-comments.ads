@@ -37,7 +37,8 @@ package GNATdoc.Comments is
       Description,          --  Full description of the entity
       Formal,               --  Formal parameter of the generic entity
       Enumeration_Literal,  --  Literal of the enumeration type
-      Field,                --  Record component of discriminant
+      Discriminant,         --  Type's discriminant
+      Component,            --  Record's component (not discriminant)
       Parameter,            --  Description of the parameter
       Returns,              --  Description of the return value
       Raised_Exception);    --  Description of the raised exception
