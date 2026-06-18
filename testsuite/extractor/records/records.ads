@@ -127,4 +127,24 @@ package Records is
    end record
      with Alignment => (8);
 
+   ------------------------------
+   -- @comp/@disc/@member tags --
+   ------------------------------
+
+   type Comp_Disc_Record (D : Integer := 0) is record
+      C : Integer;
+   end record;
+   --  Description of the record type
+   --
+   --  @disc D Description of the discriminant
+   --  @comp C Description of the component
+
+   type Comp_Disc_Member_Record (D : Integer := 0) is record
+      C : Integer;
+   end record;
+   --  Description of the record type
+   --
+   --  @member D Description of the discriminant
+   --  @member C Description of the component
+
 end Records;

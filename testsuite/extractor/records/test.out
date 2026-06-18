@@ -1,4 +1,4 @@
-<CompilationUnit records.ads:2:1-130:13>
+<CompilationUnit records.ads:2:1-150:13>
 <AdaNodeList records.ads:2:1-4:23>
 <WithClause records.ads:2:1-2:30>
 <LimitedAbsent records.ads:2:1-2:1>
@@ -12,9 +12,9 @@
 <PrivateAbsent records.ads:2:30-2:30>
 <NameList records.ads:4:6-4:22>
 <Id "All_Enumerations" records.ads:4:6-4:22>
-<LibraryItem records.ads:6:1-130:13>
+<LibraryItem records.ads:6:1-150:13>
 <PrivateAbsent records.ads:4:23-4:23>
-<PackageDecl ["Records"] records.ads:6:1-130:13>
+<PackageDecl ["Records"] records.ads:6:1-150:13>
 **************************
 \/ RAW <<HEADER>> ()
 \/ RAW <<LEADING>> ()
@@ -25,8 +25,8 @@ package Records
 **************************
 <DefiningName "Records" records.ads:6:9-6:16>
 <Id "Records" records.ads:6:9-6:16>
-<PublicPart records.ads:6:19-130:1>
-<AdaNodeList records.ads:8:4-128:28>
+<PublicPart records.ads:6:19-150:1>
+<AdaNodeList records.ads:8:4-144:15>
 <ConcreteTypeDecl ["Record_Type_1"] records.ads:8:4-10:15>
 **************************
 \/ DISCRIMINANT a (A)  8 8 9 8
@@ -223,6 +223,44 @@ type My_Record is tagged record
 end record;
 \/ DESCRIPTION  ()
 **************************
-<EndName records.ads:130:5-130:12>
-<Id "Records" records.ads:130:5-130:12>
-<PragmaNodeList records.ads:130:13-130:13>
+<ConcreteTypeDecl ["Comp_Disc_Record"] records.ads:134:4-136:15>
+**************************
+\/ DISCRIMINANT d (D)  134 134 135 134
+Description of the discriminant
+\/ COMPONENT c (C)  135 135 136 135
+Description of the component
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+Description of the record type
+
+@disc D Description of the discriminant
+@comp C Description of the component
+\/ SNIPPET ada ()
+type Comp_Disc_Record (D : Integer := 0) is record
+   C : Integer;
+end record;
+\/ DESCRIPTION  ()
+Description of the record type
+**************************
+<ConcreteTypeDecl ["Comp_Disc_Member_Record"] records.ads:142:4-144:15>
+**************************
+\/ DISCRIMINANT d (D)  142 142 143 142
+Description of the discriminant
+\/ COMPONENT c (C)  143 143 144 143
+Description of the component
+\/ RAW <<LEADING>> ()
+\/ RAW <<TRAILING>> ()
+Description of the record type
+
+@member D Description of the discriminant
+@member C Description of the component
+\/ SNIPPET ada ()
+type Comp_Disc_Member_Record (D : Integer := 0) is record
+   C : Integer;
+end record;
+\/ DESCRIPTION  ()
+Description of the record type
+**************************
+<EndName records.ads:150:5-150:12>
+<Id "Records" records.ads:150:5-150:12>
+<PragmaNodeList records.ads:150:13-150:13>
