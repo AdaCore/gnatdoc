@@ -50,6 +50,8 @@ package body GNATdoc.Comments.Extractor is
       Exception_Tag,
       Enum_Tag,
       Member_Tag,
+      Discriminant_Tag,
+      Component_Tag,
       Formal_Tag,
       Exclude_Tag,
       Exclude_Value_Tag,
@@ -2112,7 +2114,8 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Decl),
             Raw_Section,
-            [Member_Tag => True, others => False],
+            [Member_Tag | Component_Tag | Discriminant_Tag => True,
+             others                                        => False],
             Sections,
             Messages);
       end;
@@ -2191,9 +2194,9 @@ package body GNATdoc.Comments.Extractor is
            (Location          => GNATdoc.Utilities.Location (Node),
             Raw_Section       =>  Raw_Section,
             Allowed_Tags      =>
-              [Exclude_Tag => True,
-               Member_Tag  => True,
-               others      => False],
+              [Exclude_Tag                                   => True,
+               Member_Tag | Component_Tag | Discriminant_Tag => True,
+               others                                        => False],
             Sections          =>  Documentation.Sections,
             Has_Exclude       => Documentation.Has_Exclude,
             Has_Exclude_Value => Documentation.Has_Exclude_Value,
@@ -2281,9 +2284,9 @@ package body GNATdoc.Comments.Extractor is
            (Location          => GNATdoc.Utilities.Location (Node),
             Raw_Section       => Raw_Section,
             Allowed_Tags      =>
-              [Exclude_Tag => True,
-               Member_Tag  => True,
-               others      => False],
+              [Exclude_Tag                                    => True,
+               Member_Tag | Component_Tag | Discriminant_Tag  => True,
+               others                                         => False],
             Sections          => Documentation.Sections,
             Has_Exclude       => Documentation.Has_Exclude,
             Has_Exclude_Value => Documentation.Has_Exclude_Value,
@@ -2366,7 +2369,8 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Node),
             Raw_Section,
-            [Member_Tag => True, others => False],
+            [Member_Tag | Component_Tag | Discriminant_Tag => True,
+             others                                        => False],
             Documentation.Sections,
             Messages);
       end;
@@ -2568,9 +2572,9 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Node),
             Raw_Section,
-            [Exclude_Tag => True,
-             Member_Tag  => True,
-             others      => False],
+            [Exclude_Tag                   => True,
+             Member_Tag | Discriminant_Tag => True,
+             others                        => False],
             Documentation.Sections,
             Documentation.Has_Exclude,
             Documentation.Has_Exclude_Value,
@@ -3320,7 +3324,8 @@ package body GNATdoc.Comments.Extractor is
          Symbol  : Virtual_String;
          Current : in out not null Section_Access) return Boolean
         with Pre => Tag in Param_Tag | Return_Tag | Exception_Tag
-                         | Enum_Tag | Member_Tag | Formal_Tag;
+                         | Member_Tag | Component_Tag | Discriminant_Tag
+                         | Enum_Tag | Formal_Tag;
       --  Lookup section by tag and symbol.
       --
       --  @return `True` when section has been found and `Current` has been
@@ -3343,8 +3348,10 @@ package body GNATdoc.Comments.Extractor is
                     when Returns             => Tag = Return_Tag,
                     when Raised_Exception    => Tag = Exception_Tag,
                     when Enumeration_Literal => Tag = Enum_Tag,
-                    when Discriminant        => Tag = Member_Tag,
-                    when Component           => Tag = Member_Tag,
+                    when Discriminant        =>
+                      Tag in Member_Tag | Discriminant_Tag,
+                    when Component           =>
+                      Tag in Member_Tag | Component_Tag,
                     when Formal              => Tag = Formal_Tag,
                     when others              => False)
             then
@@ -3365,7 +3372,8 @@ package body GNATdoc.Comments.Extractor is
            --  `exclude-value` should be before `exclude` to be correctly
            --  recognized
            & "|exclude|private"
-           & "|param|return|exception|enum|field|formal|private)"
+           & "|field|member|comp|disc"
+           & "|param|return|exception|enum|formal|private)"
            & Ada_Optional_Separator_Expression);
       Parameter_Matcher : constant Regular_Expression :=
         To_Regular_Expression
@@ -3409,19 +3417,27 @@ package body GNATdoc.Comments.Extractor is
 
          if Match.Has_Match then
             if Match.Captured (1) = "param" then
-               Tag  := Param_Tag;
+               Tag := Param_Tag;
 
             elsif Match.Captured (1) = "return" then
-               Tag  := Return_Tag;
+               Tag := Return_Tag;
 
             elsif Match.Captured (1) = "exception" then
-               Tag  := Exception_Tag;
+               Tag := Exception_Tag;
 
             elsif Match.Captured (1) = "enum" then
-               Tag  := Enum_Tag;
+               Tag := Enum_Tag;
 
-            elsif Match.Captured (1) = "field" then
-               Tag  := Member_Tag;
+            elsif Match.Captured (1) = "field"
+              or Match.Captured (1) = "member"
+            then
+               Tag := Member_Tag;
+
+            elsif Match.Captured (1) = "disc" then
+               Tag := Discriminant_Tag;
+
+            elsif Match.Captured (1) = "comp" then
+               Tag := Component_Tag;
 
             elsif Match.Captured (1) = "formal" then
                Tag  := Formal_Tag;
@@ -3482,7 +3498,8 @@ package body GNATdoc.Comments.Extractor is
                goto Skip;
 
             elsif Tag in Param_Tag | Exception_Tag
-                           | Enum_Tag | Member_Tag | Formal_Tag
+                           | Member_Tag | Component_Tag | Discriminant_Tag
+                           | Enum_Tag | Formal_Tag
             then
                --  Lookup for name of the parameter/exception/enumeration
                --  literal/member/format. Convert found name to canonical form.
