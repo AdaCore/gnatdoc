@@ -54,7 +54,7 @@ package Subprograms_GNAT is
       --  Value of Z
    --  This is description of the procedure with "inline" parameter's
    --  description and aspects.
-   --  @exception Constraint_Error Raised on some error condition.
+   --  @raise Constraint_Error Raised on some error condition.
         with Convention => Ada;
 
    procedure Test_Procedure_Inline_Before_Aspects
@@ -65,7 +65,7 @@ package Subprograms_GNAT is
       Z : Integer) with             --  Value of Z
    --  This is description of the procedure with "inline" parameter's
    --  description and aspects.
-   --  @exception Constraint_Error Raised on some error condition.
+   --  @raise Constraint_Error Raised on some error condition.
         Convention => Ada;
 
    procedure Test_Procedure
