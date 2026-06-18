@@ -1798,7 +1798,6 @@ package body GNATdoc.Frontend is
    is
       Objects_Parent : constant Basic_Decl := Node.P_Parent_Basic_Decl;
       Type_Name      : Defining_Name;
-      Type_Signature : GNATdoc.Entities.Entity_Signature;
       Type_Parent    : Basic_Decl;
 
       RSTPT_Objtype  : VSS.Strings.Virtual_String;
@@ -1813,7 +1812,6 @@ package body GNATdoc.Frontend is
             Type_Name :=
               Node.F_Type_Expr.As_Subtype_Indication.P_Type_Name
                 .P_Referenced_Defining_Name;
-            Type_Signature := Signature (Type_Name);
             Type_Parent := Type_Name.P_Parent_Basic_Decl.P_Parent_Basic_Decl;
 
             RSTPT_Objtype :=
