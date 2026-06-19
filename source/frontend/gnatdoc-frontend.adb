@@ -17,7 +17,6 @@
 
 with Ada.Text_IO;
 
-with GNATdoc.Utilities;
 with Libadalang.Common;
 
 with VSS.Characters;
@@ -31,6 +30,7 @@ with GNATdoc.Configuration;
 with GNATdoc.Entities;
 with GNATdoc.Messages;
 with GNATdoc.Options;
+with GNATdoc.Utilities;
 
 package body GNATdoc.Frontend is
 
