@@ -2466,6 +2466,7 @@ package body GNATdoc.Frontend is
                | Ada_Concrete_Formal_Subp_Decl
                | Ada_Entry_Decl
                | Ada_Exception_Decl
+               | Ada_Incomplete_Formal_Type_Decl
                | Ada_Generic_Package_Decl
                | Ada_Generic_Package_Instantiation
                | Ada_Generic_Subp_Decl
