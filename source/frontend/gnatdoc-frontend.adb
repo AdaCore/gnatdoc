@@ -1669,9 +1669,9 @@ package body GNATdoc.Frontend is
          Global.Contain_Subprograms.Insert (Entity.Reference);
       end if;
 
-      Check_Undocumented (Entity);
-
       Construct_Generic_Formals (Entity, Node.F_Formal_Part);
+
+      Check_Undocumented (Entity);
    end Process_Generic_Subp_Decl;
 
    ----------------------------------
@@ -1709,12 +1709,12 @@ package body GNATdoc.Frontend is
          GNATdoc.Entities.Compilation_Units.Packages.Insert (Entity);
       end if;
 
+      Construct_Generic_Formals (Entity, Node.F_Formal_Part);
+
       Check_Undocumented (Entity);
 
       Process_Children (Node.F_Package_Decl.F_Public_Part, Entity, False);
       Process_Children (Node.F_Package_Decl.F_Private_Part, Entity, True);
-
-      Construct_Generic_Formals (Entity, Node.F_Formal_Part);
    end Process_Generic_Package_Decl;
 
    --------------------------------
