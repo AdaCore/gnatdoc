@@ -1,0 +1,24 @@
+<CompilationUnit p.ads:4:1-10:7>
+<AdaNodeList p.ads:4:1-4:1>
+<LibraryItem p.ads:4:1-10:7>
+<PrivateAbsent p.ads:4:1-4:1>
+<PackageDecl ["P"] p.ads:4:1-10:7>
+**************************
+\/ RAW <<LEADING>> ()
+Description of the package
+\/ RAW <<INTERMEDIATE UPPER>> ()
+------------------------------------------
+ This text should be ignored by GNATdoc --
+------------------------------------------
+\/ SNIPPET ada ()
+package P
+\/ DESCRIPTION  ()
+Description of the package
+**************************
+<DefiningName "P" p.ads:4:9-4:10>
+<Id "P" p.ads:4:9-4:10>
+<PublicPart p.ads:4:13-10:1>
+<AdaNodeList p.ads:4:13-4:13>
+<EndName p.ads:10:5-10:6>
+<Id "P" p.ads:10:5-10:6>
+<PragmaNodeList p.ads:10:7-10:7>
