@@ -17,7 +17,6 @@
 
 with Ada.Text_IO;
 
-with GNATdoc.Utilities;
 with Libadalang.Common;
 
 with VSS.Characters;
@@ -31,6 +30,7 @@ with GNATdoc.Configuration;
 with GNATdoc.Entities;
 with GNATdoc.Messages;
 with GNATdoc.Options;
+with GNATdoc.Utilities;
 
 package body GNATdoc.Frontend is
 
@@ -485,9 +485,15 @@ package body GNATdoc.Frontend is
                   Item.As_Generic_Formal_Package.F_Decl
                     .As_Generic_Package_Instantiation.F_Name);
 
+            when Ada_Pragma_Node =>
+               --  Ignore pragma nodes inside generic formal part
+
+               null;
+
             when others =>
                Ada.Text_IO.Put_Line
-                 (Ada.Text_IO.Standard_Error, Image (Item));
+                 (Ada.Text_IO.Standard_Error,
+                  Image (Item) & " in Construct_Generic_Formals");
          end case;
       end loop;
    end Construct_Generic_Formals;
@@ -1669,9 +1675,9 @@ package body GNATdoc.Frontend is
          Global.Contain_Subprograms.Insert (Entity.Reference);
       end if;
 
-      Check_Undocumented (Entity);
-
       Construct_Generic_Formals (Entity, Node.F_Formal_Part);
+
+      Check_Undocumented (Entity);
    end Process_Generic_Subp_Decl;
 
    ----------------------------------
@@ -1709,12 +1715,12 @@ package body GNATdoc.Frontend is
          GNATdoc.Entities.Compilation_Units.Packages.Insert (Entity);
       end if;
 
+      Construct_Generic_Formals (Entity, Node.F_Formal_Part);
+
       Check_Undocumented (Entity);
 
       Process_Children (Node.F_Package_Decl.F_Public_Part, Entity, False);
       Process_Children (Node.F_Package_Decl.F_Private_Part, Entity, True);
-
-      Construct_Generic_Formals (Entity, Node.F_Formal_Part);
    end Process_Generic_Package_Decl;
 
    --------------------------------
@@ -1796,9 +1802,13 @@ package body GNATdoc.Frontend is
      (Node      : Object_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
    is
+      use type GNATdoc.Entities.Entity_Kind;
+
       Objects_Parent : constant Basic_Decl := Node.P_Parent_Basic_Decl;
       Type_Name      : Defining_Name;
       Type_Parent    : Basic_Decl;
+      Type_Signature : GNATdoc.Entities.Entity_Signature;
+      Type_Entity    : GNATdoc.Entities.Entity_Information_Access;
 
       RSTPT_Objtype  : VSS.Strings.Virtual_String;
       RSTPT_Defval   : VSS.Strings.Virtual_String;
@@ -1809,10 +1819,15 @@ package body GNATdoc.Frontend is
    begin
       case Node.F_Type_Expr.Kind is
          when Ada_Subtype_Indication =>
-            Type_Name :=
+            Type_Name      :=
               Node.F_Type_Expr.As_Subtype_Indication.P_Type_Name
                 .P_Referenced_Defining_Name;
-            Type_Parent := Type_Name.P_Parent_Basic_Decl.P_Parent_Basic_Decl;
+            Type_Parent    :=
+              Type_Name.P_Parent_Basic_Decl.P_Parent_Basic_Decl;
+            Type_Signature := Signature (Type_Name);
+            Type_Entity    :=
+              (if GNATdoc.Entities.To_Entity.Contains (Type_Signature)
+               then GNATdoc.Entities.To_Entity (Type_Signature) else null);
 
             RSTPT_Objtype :=
               VSS.Strings.To_Virtual_String (Type_Name.P_Fully_Qualified_Name);
@@ -1867,10 +1882,14 @@ package body GNATdoc.Frontend is
                if Belongs = null
                  and Node.F_Type_Expr.Kind = Ada_Subtype_Indication
                then
-
                   if Type_Parent = Objects_Parent then
-                     Belongs :=
-                       GNATdoc.Entities.To_Entity (Signature (Type_Name));
+                     --  When type of the object is formal type of the generic,
+                     --  don't include non-formal object declaration into the
+                     --  set of entities belongs to formal type.
+
+                     if Type_Entity.Kind /= GNATdoc.Entities.Ada_Formal then
+                        Belongs := Type_Entity;
+                     end if;
                   end if;
 
                   Entity.RSTPT_Objtype :=
@@ -2466,6 +2485,7 @@ package body GNATdoc.Frontend is
                | Ada_Concrete_Formal_Subp_Decl
                | Ada_Entry_Decl
                | Ada_Exception_Decl
+               | Ada_Incomplete_Formal_Type_Decl
                | Ada_Generic_Package_Decl
                | Ada_Generic_Package_Instantiation
                | Ada_Generic_Subp_Decl
