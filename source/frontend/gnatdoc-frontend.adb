@@ -1796,9 +1796,13 @@ package body GNATdoc.Frontend is
      (Node      : Object_Decl'Class;
       Enclosing : not null GNATdoc.Entities.Entity_Information_Access)
    is
+      use type GNATdoc.Entities.Entity_Kind;
+
       Objects_Parent : constant Basic_Decl := Node.P_Parent_Basic_Decl;
       Type_Name      : Defining_Name;
       Type_Parent    : Basic_Decl;
+      Type_Signature : GNATdoc.Entities.Entity_Signature;
+      Type_Entity    : GNATdoc.Entities.Entity_Information_Access;
 
       RSTPT_Objtype  : VSS.Strings.Virtual_String;
       RSTPT_Defval   : VSS.Strings.Virtual_String;
@@ -1809,10 +1813,15 @@ package body GNATdoc.Frontend is
    begin
       case Node.F_Type_Expr.Kind is
          when Ada_Subtype_Indication =>
-            Type_Name :=
+            Type_Name      :=
               Node.F_Type_Expr.As_Subtype_Indication.P_Type_Name
                 .P_Referenced_Defining_Name;
-            Type_Parent := Type_Name.P_Parent_Basic_Decl.P_Parent_Basic_Decl;
+            Type_Parent    :=
+              Type_Name.P_Parent_Basic_Decl.P_Parent_Basic_Decl;
+            Type_Signature := Signature (Type_Name);
+            Type_Entity    :=
+              (if GNATdoc.Entities.To_Entity.Contains (Type_Signature)
+               then GNATdoc.Entities.To_Entity (Type_Signature) else null);
 
             RSTPT_Objtype :=
               VSS.Strings.To_Virtual_String (Type_Name.P_Fully_Qualified_Name);
@@ -1867,10 +1876,14 @@ package body GNATdoc.Frontend is
                if Belongs = null
                  and Node.F_Type_Expr.Kind = Ada_Subtype_Indication
                then
-
                   if Type_Parent = Objects_Parent then
-                     Belongs :=
-                       GNATdoc.Entities.To_Entity (Signature (Type_Name));
+                     --  When type of the object is formal type of the generic,
+                     --  don't include non-formal object declaration into the
+                     --  set of entities belongs to formal type.
+
+                     if Type_Entity.Kind /= GNATdoc.Entities.Ada_Formal then
+                        Belongs := Type_Entity;
+                     end if;
                   end if;
 
                   Entity.RSTPT_Objtype :=
