@@ -485,9 +485,15 @@ package body GNATdoc.Frontend is
                   Item.As_Generic_Formal_Package.F_Decl
                     .As_Generic_Package_Instantiation.F_Name);
 
+            when Ada_Pragma_Node =>
+               --  Ignore pragma nodes inside generic formal part
+
+               null;
+
             when others =>
                Ada.Text_IO.Put_Line
-                 (Ada.Text_IO.Standard_Error, Image (Item));
+                 (Ada.Text_IO.Standard_Error,
+                  Image (Item) & " in Construct_Generic_Formals");
          end case;
       end loop;
    end Construct_Generic_Formals;
