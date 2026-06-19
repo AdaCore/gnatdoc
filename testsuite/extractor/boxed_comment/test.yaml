@@ -1,0 +1,2 @@
+description: Check that boxed comment at the top of package specification is not used as documentation
+extractor_source: p.ads
