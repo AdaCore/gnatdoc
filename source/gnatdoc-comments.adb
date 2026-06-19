@@ -35,6 +35,7 @@ package body GNATdoc.Comments is
               Name             => Section.Name,
               Symbol           => Section.Symbol,
               Text             => Section.Text,
+              RST_Info         => Section.RST_Info,
               Exact_Start_Line => 0,
               Exact_End_Line   => 0,
               Group_Start_Line => 0,

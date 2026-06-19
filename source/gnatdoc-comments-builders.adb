@@ -213,6 +213,44 @@ package body GNATdoc.Comments.Builders is
       Kind : GNATdoc.Comments.Section_Kind;
       Node : Libadalang.Analysis.Defining_Name'Class)
    is
+      function Type_Name
+        (Node : Type_Expr'Class) return VSS.Strings.Virtual_String;
+      --  Returns fully qualified name of the type.
+
+      ---------------
+      -- Type_Name --
+      ---------------
+
+      function Type_Name
+        (Node : Type_Expr'Class) return VSS.Strings.Virtual_String
+      is
+         Name : Defining_Name;
+
+      begin
+         case Node.Kind is
+            when Ada_Subtype_Indication =>
+               Name := Node.P_Type_Name.P_Referenced_Defining_Name;
+
+            when Ada_Anonymous_Type =>
+               Name :=
+                 Node.As_Anonymous_Type.F_Type_Decl.F_Type_Def
+                   .As_Type_Access_Def.F_Subtype_Indication.P_Type_Name
+                   .P_Referenced_Defining_Name;
+
+            when others =>
+               raise Program_Error;
+               --  Should never happen
+         end case;
+
+         --  `Name` might be `null` when name resolution fails. Return an empty
+         --  string in this case to prevent raise of exception.
+
+         return
+           (if Name.Is_Null
+            then ""
+            else VSS.Strings.To_Virtual_String (Name.P_Fully_Qualified_Name));
+      end Type_Name;
+
       Start_Line : constant Libadalang.Slocs.Line_Number :=
         (if Kind = Formal then 0 else Self.Location.Start_Line);
       End_Line   : constant Libadalang.Slocs.Line_Number :=
@@ -220,6 +258,8 @@ package body GNATdoc.Comments.Builders is
       --  For the formal parameters only sections are created, text around
       --  declaration of each formal parameter is extracted in the same way
       --  as for ordinary entity of corresponding kind.
+
+      Decl_Node   : constant Basic_Decl := Node.P_Basic_Decl;
 
       New_Section : constant not null Section_Access :=
         new Section'
@@ -248,6 +288,20 @@ package body GNATdoc.Comments.Builders is
 
       Self.Last_Section   := New_Section;
       Self.Minimum_Indent := Self.Location.Start_Column;
+
+      case Decl_Node.Kind is
+         when Ada_Discriminant_Spec =>
+            New_Section.RST_Info :=
+              Type_Name (Decl_Node.As_Discriminant_Spec.F_Type_Expr);
+
+         when Ada_Component_Decl =>
+            New_Section.RST_Info :=
+              Type_Name
+                (Decl_Node.As_Component_Decl.F_Component_Def.F_Type_Expr);
+
+         when others =>
+            null;
+      end case;
    end Process_Defining_Name;
 
    --------------------------------
