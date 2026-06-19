@@ -849,6 +849,34 @@ package body GNATdoc.Comments.Extractor is
       --     ...
       --  ===================================================================
 
+      function Is_Boxed_Comment
+        (Text : VSS.String_Vectors.Virtual_String_Vector) return Boolean;
+      --  Guess that `Text` is GNAT style boxed comment.
+
+      ----------------------
+      -- Is_Boxed_Comment --
+      ----------------------
+
+      function Is_Boxed_Comment
+        (Text : VSS.String_Vectors.Virtual_String_Vector) return Boolean
+      is
+         Line_Length : constant VSS.Strings.Character_Count :=
+           Text.First_Element.Character_Length;
+         Minuses     : constant VSS.Strings.Virtual_String :=
+           Line_Length * '-';
+         Suffix      : constant VSS.Strings.Virtual_String := "--";
+
+      begin
+         return
+           Text.Length >= 3
+           and then Text.First_Element = Minuses
+           and then
+             (for all J in Text.First_Index + 1 .. Text.Last_Index - 1 =>
+                Text (J).Character_Length = Line_Length
+                   and Text (J).Ends_With (Suffix))
+           and then Text.Last_Element = Minuses;
+      end Is_Boxed_Comment;
+
       Header_Section             : Section_Access;
       Leading_Section            : Section_Access;
       Intermediate_Upper_Section : Section_Access;
@@ -1002,21 +1030,44 @@ package body GNATdoc.Comments.Extractor is
       begin
          --  Select most appropriate section.
 
-         if not Intermediate_Upper_Section.Text.Is_Empty then
+         if (not Intermediate_Upper_Section.Text.Is_Empty
+             and then Is_Boxed_Comment (Intermediate_Upper_Section.Text))
+           or else (Intermediate_Lower_Section /= null
+                    and then not Intermediate_Lower_Section.Text.Is_Empty
+                    and then Is_Boxed_Comment
+                      (Intermediate_Lower_Section.Text))
+           or else (Leading_Section /= null
+                    and then not Leading_Section.Text.Is_Empty
+                    and then Is_Boxed_Comment (Leading_Section.Text))
+           or else (Header_Section /= null
+                    and then not Header_Section.Text.Is_Empty
+                    and then Is_Boxed_Comment (Header_Section.Text))
+         then
+            Messages.Append_Message
+              (GNATdoc.Utilities.Location (Basic_Decl_Node),
+               "GNAT style boxed comment is ignored");
+         end if;
+
+         if not Intermediate_Upper_Section.Text.Is_Empty
+           and not Is_Boxed_Comment (Intermediate_Upper_Section.Text)
+         then
             Raw_Section := Intermediate_Upper_Section;
 
          elsif Intermediate_Lower_Section /= null
            and then not Intermediate_Lower_Section.Text.Is_Empty
+           and then not Is_Boxed_Comment (Intermediate_Lower_Section.Text)
          then
             Raw_Section := Intermediate_Lower_Section;
 
          elsif Leading_Section /= null
            and then not Leading_Section.Text.Is_Empty
+           and then not Is_Boxed_Comment (Leading_Section.Text)
          then
             Raw_Section := Leading_Section;
 
          elsif Header_Section /= null
            and then not Header_Section.Text.Is_Empty
+           and then not Is_Boxed_Comment (Header_Section.Text)
          then
             Raw_Section := Header_Section;
          end if;
