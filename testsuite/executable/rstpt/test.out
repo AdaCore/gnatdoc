@@ -46,6 +46,7 @@ LAL
     .. ada:object:: No_Ada_Node : constant LAL.Ada_Node
         :package: LAL.Ada_Node
 
+        :objtype: LAL.Ada_Node
 
         Null node.
 
