@@ -84,6 +84,11 @@ private
       --  Name in canonical form.
       Text             : VSS.String_Vectors.Virtual_String_Vector;
 
+      RST_Info         : VSS.Strings.Virtual_String;
+      --  Additional information for RST backend. For components of the
+      --  record type and discriminants it is fully qualified name of the
+      --  component's/discriminant's type.
+
       --  Members below are used by comment extractor only.
 
       Exact_Start_Line : Langkit_Support.Slocs.Line_Number := 0;

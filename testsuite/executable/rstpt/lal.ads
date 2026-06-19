@@ -50,6 +50,15 @@ package LAL is
      new Ada.Unchecked_Deallocation (Ada_Node_Array, Ada_Node_Array_Access);
    --  Not included into documentation
 
+   type Record_Type (X : Integer) is record
+      Y : Integer;
+      --  Component Y
+
+      Z : access Integer;
+      --  Component Z
+   end record;
+   --  Description of the Record_Type
+
 private
 
    type Ada_Node is tagged null record;

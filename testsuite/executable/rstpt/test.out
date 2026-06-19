@@ -46,6 +46,7 @@ LAL
     .. ada:object:: No_Ada_Node : constant LAL.Ada_Node
         :package: LAL.Ada_Node
 
+        :objtype: LAL.Ada_Node
 
         Null node.
 
@@ -86,4 +87,17 @@ LAL
     :package: LAL
 
     Access to array type
+
+
+.. ada:type:: type Record_Type
+    :package: LAL
+
+    :discriminant Standard.Integer X:
+
+    :component Standard.Integer Y:
+        Component Y
+    :component Standard.Integer Z:
+        Component Z
+
+    Description of the Record_Type
 

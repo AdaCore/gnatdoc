@@ -700,6 +700,7 @@ package body GNATdoc.Comments.Helpers is
                     Name             => Source.Name,
                     Symbol           => Source.Symbol,
                     Text             => Source.Text,
+                    RST_Info         => Source.RST_Info,
                     Exact_Start_Line => 0,
                     Exact_End_Line   => 0,
                     Group_Start_Line => 0,

@@ -15,6 +15,9 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with VSS.Strings.Formatters.Strings; use VSS.Strings.Formatters.Strings;
+with VSS.Strings.Templates;          use VSS.Strings.Templates;
+
 with GNATdoc.Backend.RST_Markup;
 
 package body GNATdoc.Comments.RST_Helpers is
@@ -51,7 +54,8 @@ package body GNATdoc.Comments.RST_Helpers is
       Code_Snippet  : Boolean)
       return VSS.String_Vectors.Virtual_String_Vector
    is
-      Text : VSS.String_Vectors.Virtual_String_Vector;
+      Text         : VSS.String_Vectors.Virtual_String_Vector;
+      Add_New_Line : Boolean := False;
 
    begin
       --  Insert code block first
@@ -74,6 +78,53 @@ package body GNATdoc.Comments.RST_Helpers is
             exit;
          end if;
       end loop;
+
+      --  Append components of type
+
+      for Section of Documentation.Sections loop
+         if Section.Kind in Component | Discriminant then
+            declare
+               Tag                : constant VSS.Strings.Virtual_String :=
+                 (case Section.Kind is
+                     when Component => "component",
+                     when Discriminant => "discriminant",
+                     when others => raise Program_Error);
+               Component_Template : constant Virtual_String_Template :=
+                 "{}:{} {} {}:";
+
+            begin
+               Text.Append
+                 (Component_Template.Format
+                    (Image (Indent),
+                     Image (Tag),
+                     Image (Section.RST_Info),
+                     Image (Section.Name)));
+
+               if Section.Text.Is_Empty then
+                  --  Empty line is necessary to prevent error reported by
+                  --  Sphynx
+
+                  Text.Append (VSS.Strings.Empty_Virtual_String);
+
+               else
+                  Append_Indented_Lines
+                    (Text,
+                     Indent & "    ",
+                     (if Pass_Through
+                      then Section.Text
+                      else GNATdoc.Backend.RST_Markup.Build_Markup
+                        (Section.Text)));
+               end if;
+
+               Add_New_Line := True;
+            end;
+         end if;
+      end loop;
+
+      if Add_New_Line then
+         Add_New_Line := False;
+         Text.Append (VSS.Strings.Empty_Virtual_String);
+      end if;
 
       --  Append description
 

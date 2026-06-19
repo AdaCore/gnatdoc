@@ -98,8 +98,7 @@ package body GNATdoc.Backend.RST.PT is
       procedure Generate_Object_Documentation
         (Indent       : VSS.Strings.Virtual_String;
          Entity       : GNATdoc.Entities.Entity_Information;
-         Package_Name : VSS.Strings.Virtual_String;
-         Inside_Type  : Boolean);
+         Package_Name : VSS.Strings.Virtual_String);
       --  Generate documentation for object entity.
 
       procedure Generate_Exception_Documentation
@@ -164,7 +163,7 @@ package body GNATdoc.Backend.RST.PT is
                         | GNATdoc.Entities.Ada_Object
                      =>
                         Generate_Object_Documentation
-                          (Indent, Item.all, Package_Name, False);
+                          (Indent, Item.all, Package_Name);
 
                      when GNATdoc.Entities.Ada_Interface_Type
                         | GNATdoc.Entities.Ada_Other_Type
@@ -356,8 +355,7 @@ package body GNATdoc.Backend.RST.PT is
       procedure Generate_Object_Documentation
         (Indent       : VSS.Strings.Virtual_String;
          Entity       : GNATdoc.Entities.Entity_Information;
-         Package_Name : VSS.Strings.Virtual_String;
-         Inside_Type  : Boolean)
+         Package_Name : VSS.Strings.Virtual_String)
       is
          use type VSS.Strings.Virtual_String;
 
@@ -386,7 +384,7 @@ package body GNATdoc.Backend.RST.PT is
             Success);
          File.New_Line (Success);
 
-         if not Inside_Type and not Entity.RSTPT_Objtype.Is_Empty then
+         if not Entity.RSTPT_Objtype.Is_Empty then
             File.Put_Line
               (Objtype_Template.Format
                  (VSS.Strings.Formatters.Strings.Image (Indent),
@@ -492,7 +490,7 @@ package body GNATdoc.Backend.RST.PT is
 
          for Object of Constants loop
             Generate_Object_Documentation
-              ("    ", Object.all, Entity.Qualified_Name, True);
+              ("    ", Object.all, Entity.Qualified_Name);
          end loop;
 
          for Method of Entity.Belong_Subprograms loop
