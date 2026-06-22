@@ -57,18 +57,26 @@ coverage-instrument: coverage-setup
 # Create the instrumented sources for gnatdoc and libgnatdoc.
 # Do not process subprojects, to avoid measuring coverage on
 # the markdown subproject.
+#
+# Note: due to a GPR2 bug, the two instrumentation passes may assign
+# different source files to libgnatdoc depending on the root project,
+# causing the second pass to overwrite files the first pass needs.
+# Work around this by saving and merging the libgnatdoc output.
 	gnatcov instrument -P gnat/tests/test_drivers.gpr \
 		--level=stmt \
 		--projects=libgnatdoc.gpr \
 	    --runtime-project $$(pwd)/.objs/gnatcov-rts/share/gpr/gnatcov_rts.gpr \
 		--no-subprojects \
 		${SCENARIO_VARIABLES}
+	cp -a .objs/libgnatdoc-gnatcov-instr .objs/libgnatdoc-gnatcov-instr.save
 	gnatcov instrument -P gnat/gnatdoc.gpr \
 		--level=stmt \
 		--projects=gnatdoc.gpr --projects=libgnatdoc.gpr \
 	    --runtime-project $$(pwd)/.objs/gnatcov-rts/share/gpr/gnatcov_rts.gpr \
 		--no-subprojects \
 		${SCENARIO_VARIABLES}
+	cp -n .objs/libgnatdoc-gnatcov-instr.save/* .objs/libgnatdoc-gnatcov-instr/
+	rm -rf .objs/libgnatdoc-gnatcov-instr.save
 
 coverage-build: coverage-instrument
 # Build the project and the test drivers
