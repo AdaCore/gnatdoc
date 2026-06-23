@@ -1,0 +1,20 @@
+warning: root project should not be externally built
+runtime.gpr [externally build]
+pa.gpr [externally build]
+pb.gpr [externally build]
+warning: root project should not be externally built
++  ? (UNDEFINED) ''
+  Packages:
+    +   PB (ADA_PACKAGE_DECLARATION) 'pb'
+  Contains Entities:
+    +   PB (ADA_PACKAGE_DECLARATION) 'pb'
+      Subprograms:
+        +   PBP (ADA_PROCEDURE) 'pb.pbp()'
+      Belongs Subprograms:
+        +   PBP (ADA_PROCEDURE) 'pb.pbp()'
+      Contains Entities:
+        +   PBP (ADA_PROCEDURE) 'pb.pbp()'
+      Belongs Entities:
+        +   PBP (ADA_PROCEDURE) 'pb.pbp()'
+  Belongs Entities:
+    +   PB (ADA_PACKAGE_DECLARATION) 'pb'
