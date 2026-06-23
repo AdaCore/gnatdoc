@@ -688,3 +688,176 @@ procedure GNATdoc_134
 \/ DESCRIPTION  ()
 **************************
 <PragmaNodeList gnatdoc_134.adb:25:17-25:17>
+<CompilationUnit als_1749.adb:2:1-147:14>
+<AdaNodeList als_1749.adb:2:1-2:1>
+<LibraryItem als_1749.adb:2:1-147:14>
+<PrivateAbsent als_1749.adb:2:1-2:1>
+<PackageBody ["ALS_1749"] als_1749.adb:2:1-147:14>
+**************************
+\/ RAW <<LEADING>> ()
+\/ RAW <<INTERMEDIATE UPPER>> ()
+\/ SNIPPET ada ()
+package body ALS_1749
+\/ DESCRIPTION  ()
+**************************
+<DefiningName "ALS_1749" als_1749.adb:2:14-2:22>
+<Id "ALS_1749" als_1749.adb:2:14-2:22>
+<DeclarativePart als_1749.adb:2:25-147:1>
+<AdaNodeList als_1749.adb:4:4-145:20>
+<SubpBody ["ALS_1749_0"] als_1749.adb:4:4-17:19>
+**************************
+\/ RAW <<CALLABLE>> ()
+\/ PARAMETER x (X)
+\/ PARAMETER y (Y)
+\/ SNIPPET ada ()
+procedure ALS_1749_0
+  (X : Integer;
+   Y : Integer)
+\/ DESCRIPTION  ()
+**************************
+<SubpBody ["ALS_1749_1"] als_1749.adb:19:4-32:19>
+**************************
+\/ RAW <<CALLABLE>> ()
+\/ PARAMETER x (X)
+Description of the `X` parameter
+\/ PARAMETER y (Y)
+Description of the `Y` parameter
+\/ SNIPPET ada ()
+procedure ALS_1749_1
+  (X : Integer;
+   Y : Integer)
+\/ DESCRIPTION  ()
+**************************
+<SubpBody ["ALS_1749_2"] als_1749.adb:34:4-47:19>
+**************************
+\/ RAW <<CALLABLE>> ()
+\/ PARAMETER x (X)
+Description of the `X` parameter
+\/ PARAMETER y (Y)
+Description of the `Y` parameter
+\/ SNIPPET ada ()
+procedure ALS_1749_2
+  (X : Integer;
+   Y : Integer)
+\/ DESCRIPTION  ()
+**************************
+<SubpBody ["ALS_1749_3"] als_1749.adb:49:4-58:19>
+**************************
+\/ RAW <<CALLABLE>> ()
+\/ PARAMETER x (X)
+Description of the `X` parameter
+\/ PARAMETER y (Y)
+Description of the `Y` parameter
+\/ SNIPPET ada ()
+procedure ALS_1749_3
+  (X : Integer;
+   Y : Integer)
+\/ DESCRIPTION  ()
+**************************
+<SubpBody ["ALS_1749_4"] als_1749.adb:60:4-70:19>
+**************************
+\/ RAW <<CALLABLE>> ()
+\/ PARAMETER x (X)
+Description of the `X` parameter
+\/ PARAMETER y (Y)
+Description of the `Y` parameter
+\/ SNIPPET ada ()
+procedure ALS_1749_4
+  (X : Integer;
+   Y : Integer)
+\/ DESCRIPTION  ()
+**************************
+<SubpBody ["ALS_1749_11"] als_1749.adb:72:4-83:20>
+**************************
+\/ RAW <<CALLABLE>> ()
+\/ PARAMETER x (X)
+Description of the `X` parameter
+
+Description of both parameters
+\/ PARAMETER y (Y)
+Description of the `Y` parameter
+continuation of 'Y'
+
+Description of both parameters
+\/ SNIPPET ada ()
+procedure ALS_1749_11
+  (X : Integer;
+   Y :
+       Integer)
+\/ DESCRIPTION  ()
+**************************
+<SubpBody ["ALS_1749_12"] als_1749.adb:85:4-97:20>
+**************************
+\/ RAW <<CALLABLE>> ()
+\/ PARAMETER x (X)
+Description of the `X` parameter
+
+Description of both parameters
+\/ PARAMETER y (Y)
+Description of the `Y` parameter
+continuation of 'Y'
+
+Description of both parameters
+\/ SNIPPET ada ()
+procedure ALS_1749_12
+  (X : Integer;
+   Y :
+       Integer)
+\/ DESCRIPTION  ()
+**************************
+<SubpBody ["ALS_1749_13"] als_1749.adb:99:4-110:20>
+**************************
+\/ RAW <<CALLABLE>> ()
+\/ PARAMETER x (X)
+Description of the `X` parameter
+\/ PARAMETER y (Y)
+Description of the `Y` parameter
+continuation of 'Y'
+\/ SNIPPET ada ()
+procedure ALS_1749_13
+  (X : Integer;
+   Y :
+       Integer)
+\/ DESCRIPTION  ()
+**************************
+<SubpBody ["ALS_1749_14"] als_1749.adb:112:4-127:20>
+**************************
+\/ RAW <<CALLABLE>> ()
+\/ PARAMETER x (X)
+Description of the `X` parameter
+
+Description of the both parameters
+\/ PARAMETER y (Y)
+Description of the `Y` parameter
+continuation of 'Y'
+
+Description of the both parameters
+\/ SNIPPET ada ()
+procedure ALS_1749_14
+  (X : Integer;
+   Y :
+       Integer)
+\/ DESCRIPTION  ()
+**************************
+<SubpBody ["ALS_1749_15"] als_1749.adb:129:4-145:20>
+**************************
+\/ RAW <<CALLABLE>> ()
+\/ PARAMETER x (X)
+Description of the `X` parameter
+
+Description of the both parameters
+\/ PARAMETER y (Y)
+Description of the `Y` parameter
+continuation of 'Y'
+
+Description of the both parameters
+\/ SNIPPET ada ()
+procedure ALS_1749_15
+  (X : Integer;
+   Y :
+       Integer)
+\/ DESCRIPTION  ()
+**************************
+<EndName als_1749.adb:147:5-147:13>
+<Id "ALS_1749" als_1749.adb:147:5-147:13>
+<PragmaNodeList als_1749.adb:147:14-147:14>

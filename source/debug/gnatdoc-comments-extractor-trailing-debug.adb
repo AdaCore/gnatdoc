@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2025, AdaCore                        --
+--                     Copyright (C) 2025-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -20,11 +20,20 @@ with Ada.Wide_Wide_Text_IO;
 
 package body GNATdoc.Comments.Extractor.Trailing.Debug is
 
+   package Count_IO is
+     new Ada.Wide_Wide_Text_IO.Integer_IO (Ada.Containers.Count_Type);
+
    package Line_Number_IO is
      new Ada.Wide_Wide_Text_IO.Modular_IO (Libadalang.Slocs.Line_Number);
 
+   package Column_Number_IO is
+     new Ada.Wide_Wide_Text_IO.Modular_IO (Libadalang.Slocs.Column_Number);
+
    package Kind_IO is
       new Ada.Wide_Wide_Text_IO.Enumeration_IO (Kinds);
+
+   package Entity_Kind_IO is
+      new Ada.Wide_Wide_Text_IO.Enumeration_IO (Entity_Kind);
 
    -----------
    -- Print --
@@ -36,21 +45,77 @@ package body GNATdoc.Comments.Extractor.Trailing.Debug is
 
    begin
       for Line_Index in Information'Range loop
-         Line_Number_IO.Put (Line_Index, Width => 5);
+         declare
+            Line : constant Line_Information := Information (Line_Index);
 
-         --  Item information
+         begin
+            Line_Number_IO.Put (Line_Index);
 
-         case Information (Line_Index).Item.Kind is
-            when None =>
-               Put (12 * ' ');
+            --  Item information
 
-            when others =>
-               Put (' ');
-               Kind_IO.Put (Information (Line_Index).Item.Kind, Width => 11);
-         end case;
+            case Line.Item.Kind is
+               when None =>
+                  Put (16 * ' ');
 
-         New_Line;
+               when others =>
+                  Put (' ');
+                  Kind_IO.Put (Line.Item.Kind);
+                  Put (" :");
+                  Count_IO.Put (Line.Item.Sections.Length);
+            end case;
+
+            --  Entity information
+
+            case Line.Entity.Kind is
+               when None =>
+                  Put (12 * ' ');
+
+               when others =>
+                  Put (" |");
+                  Entity_Kind_IO.Put (Line.Entity.Kind);
+                  Put ('>');
+                  Column_Number_IO.Put (Line.Entity.Indent);
+            end case;
+
+            --  Component group
+
+            case Line.Component_Group.Kind is
+               when None =>
+                  Put (5 * ' ');
+
+               when Cancel =>
+                  Put (" | CN");
+
+               when others =>
+                  Put (" |:");
+                  Count_IO.Put (Line.Component_Group.Sections.Length);
+            end case;
+
+            --  Entity group
+
+            case Line.Entity_Group.Kind is
+               when None =>
+                  Put (' ');
+
+               when others =>
+                  Put (" |>");
+                  Column_Number_IO.Put (Line.Entity_Group.Indent);
+                  Put (" :");
+                  Count_IO.Put (Line.Entity_Group.Sections.Length);
+            end case;
+
+            New_Line;
+         end;
       end loop;
    end Print;
 
+begin
+   --  Set `Default_Width` to have formatted output
+
+   Line_Number_IO.Default_Width := 5;
+   Column_Number_IO.Default_Width := 2;
+   Kind_IO.Default_Width := 11;
+   Entity_Kind_IO.Default_Width := 7;
+
+   Count_IO.Default_Width := 2;
 end GNATdoc.Comments.Extractor.Trailing.Debug;
