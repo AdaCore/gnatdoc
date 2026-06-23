@@ -110,6 +110,8 @@ package body GNATdoc.Comments.Extractor.Trailing.Debug is
    end Print;
 
 begin
+   --  Set `Default_Width` to have formatted output
+
    Line_Number_IO.Default_Width := 5;
    Column_Number_IO.Default_Width := 2;
    Kind_IO.Default_Width := 11;
