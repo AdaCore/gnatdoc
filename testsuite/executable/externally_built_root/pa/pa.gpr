@@ -1,0 +1,6 @@
+
+project PA is
+
+   for Externally_Built use "True";
+
+end PA;

@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2025, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -35,6 +35,7 @@ with GPR2.Project.Registry.Attribute;
 with GPR2.Project.Registry.Attribute.Description;
 with GPR2.Project.Registry.Pack;
 with GPR2.Project.Registry.Pack.Description;
+with GPR2.Project.View;
 
 --  Compiler glitch: we do need this "with" to avoid an issue
 --  in Process_Compilation_Unit where the compiler says
@@ -285,7 +286,14 @@ package body GNATdoc.Projects is
             VSS.Command_Line.Report_Error (Msgs);
 
          else
-            for Message of Messages loop
+            Msgs := Messages;
+
+            if Project_Tree.Root_Project.Is_Externally_Built then
+               Msgs.Append
+                 ("warning: root project should not be externally built");
+            end if;
+
+            for Message of Msgs loop
                Stream.Put_Line (Message, Success);
             end loop;
          end if;
@@ -470,9 +478,12 @@ package body GNATdoc.Projects is
         (Node : Libadalang.Analysis.Compilation_Unit'Class))
    is
       use type GPR2.Language_Id;
+      use type GPR2.Project.View.Object;
+
    begin
       for View of Project_Tree loop
-         if not View.Is_Externally_Built
+         if (not View.Is_Externally_Built
+               or else Project_Tree.Root_Project = View)
            and then not Exclude_Project_Files.Contains
                           (View.Path_Name.Virtual_File)
          then
