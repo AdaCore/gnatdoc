@@ -30,6 +30,36 @@ package body GNATdoc.RST_Utilities is
      (Type_Decl_Node  : Libadalang.Analysis.Type_Expr'Class;
       Profile_Renderer : Subprogram_Profile_Access := null)
       return VSS.Strings.Virtual_String is
+      function Normalized_Subtype_Name
+        (Subtype_Node : Libadalang.Analysis.Subtype_Indication'Class)
+         return VSS.Strings.Virtual_String;
+
+      -----------------------------
+      -- Normalized_Subtype_Name --
+      -----------------------------
+
+      function Normalized_Subtype_Name
+        (Subtype_Node : Libadalang.Analysis.Subtype_Indication'Class)
+         return VSS.Strings.Virtual_String
+      is
+         Name : constant Defining_Name :=
+           Subtype_Node.F_Name.P_Referenced_Defining_Name;
+
+      begin
+         return Result : VSS.Strings.Virtual_String :=
+           (if Name.Is_Null
+            then ""
+            else VSS.Strings.To_Virtual_String (Name.P_Fully_Qualified_Name))
+         do
+            if Subtype_Node.F_Name.Kind = Ada_Attribute_Ref then
+               Result.Append (''');
+               Result.Append
+                 (VSS.Strings.To_Virtual_String
+                    (Subtype_Node.F_Name.As_Attribute_Ref.F_Attribute.Text));
+            end if;
+         end return;
+      end Normalized_Subtype_Name;
+
    begin
       case Type_Decl_Node.Kind is
          when Ada_Anonymous_Type =>
@@ -40,19 +70,14 @@ package body GNATdoc.RST_Utilities is
             begin
                case Type_Def_Node.Kind is
                   when Ada_Type_Access_Def =>
-                     declare
-                        Name : constant Defining_Name :=
-                          Type_Def_Node.As_Type_Access_Def
-                            .F_Subtype_Indication.F_Name
-                              .P_Referenced_Defining_Name;
-
-                     begin
-                        return
-                          (if Name.Is_Null
-                           then ""
-                           else VSS.Strings.To_Virtual_String
-                             (Name.P_Fully_Qualified_Name));
-                     end;
+                     return Result : VSS.Strings.Virtual_String :=
+                       "access "
+                     do
+                        Result.Append
+                          (Normalized_Subtype_Name
+                             (Type_Def_Node.As_Type_Access_Def
+                                .F_Subtype_Indication));
+                     end return;
 
                   when Ada_Access_To_Subp_Def =>
                      return Result : VSS.Strings.Virtual_String :=
@@ -84,29 +109,8 @@ package body GNATdoc.RST_Utilities is
             end;
 
          when Ada_Subtype_Indication =>
-            declare
-               Name : constant Defining_Name :=
-                 Type_Decl_Node.As_Subtype_Indication.F_Name
-                   .P_Referenced_Defining_Name;
-
-            begin
-               return Result : VSS.Strings.Virtual_String :=
-                 (if Name.Is_Null
-                  then ""
-                  else VSS.Strings.To_Virtual_String
-                    (Name.P_Fully_Qualified_Name))
-               do
-                  if Type_Decl_Node.As_Subtype_Indication.F_Name.Kind
-                    = Ada_Attribute_Ref
-                  then
-                     Result.Append (''');
-                     Result.Append
-                       (VSS.Strings.To_Virtual_String
-                          (Type_Decl_Node.As_Subtype_Indication.F_Name
-                             .As_Attribute_Ref.F_Attribute.Text));
-                  end if;
-               end return;
-            end;
+            return
+              Normalized_Subtype_Name (Type_Decl_Node.As_Subtype_Indication);
 
          when others =>
             raise Program_Error;
