@@ -203,6 +203,13 @@ package body GNATdoc.Frontend is
      (Node : Libadalang.Analysis.Subp_Spec'Class)
       return VSS.Strings.Virtual_String;
 
+   function RST_Type_Name
+     (Type_Decl_Node : Libadalang.Analysis.Type_Expr'Class)
+      return VSS.Strings.Virtual_String;
+   --  Return normalized type name for a type expression, preserving subtype
+   --  attributes (for example, 'Class) and expanding access to subprogram
+   --  definitions recursively using RST_Profile itself.
+
    procedure Resolve_Belongs_To
      (Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
       Belongs   : out GNATdoc.Entities.Entity_Information_Access;
@@ -1831,15 +1838,14 @@ package body GNATdoc.Frontend is
               (if GNATdoc.Entities.To_Entity.Contains (Type_Signature)
                then GNATdoc.Entities.To_Entity (Type_Signature) else null);
 
-            RSTPT_Objtype :=
-              VSS.Strings.To_Virtual_String (Type_Name.P_Fully_Qualified_Name);
-
          when Ada_Anonymous_Type =>
             null;
 
          when others =>
             raise Program_Error;
       end case;
+
+      RSTPT_Objtype := RST_Type_Name (Node.F_Type_Expr);
 
       if not Node.F_Default_Expr.Is_Null then
          RSTPT_Defval := Trim_Defval (Node.F_Default_Expr.Text);
@@ -1893,10 +1899,6 @@ package body GNATdoc.Frontend is
                         Belongs := Type_Entity;
                      end if;
                   end if;
-
-                  Entity.RSTPT_Objtype :=
-                    VSS.Strings.To_Virtual_String
-                      (Type_Name.P_Fully_Qualified_Name);
                end if;
 
                if Belongs = null then
@@ -2333,80 +2335,6 @@ package body GNATdoc.Frontend is
      (Node : Libadalang.Analysis.Subp_Spec'Class)
       return VSS.Strings.Virtual_String
    is
-      function RST_Type_Name
-        (Type_Decl_Node : Libadalang.Analysis.Type_Expr'Class)
-         return VSS.Strings.Virtual_String;
-      --  Return normalized type name for parameters/return, preserving
-      --  subtype attributes (for example, 'Class) and expanding access to
-      --  subprogram definitions recursively using RST_Profile itself.
-
-      -------------------
-      -- RST_Type_Name --
-      -------------------
-
-      function RST_Type_Name
-        (Type_Decl_Node : Libadalang.Analysis.Type_Expr'Class)
-         return VSS.Strings.Virtual_String is
-      begin
-         case Type_Decl_Node.Kind is
-            when Ada_Anonymous_Type =>
-               declare
-                  Type_Def_Node : constant Type_Def :=
-                    Type_Decl_Node.As_Anonymous_Type.F_Type_Decl.F_Type_Def;
-
-               begin
-                  case Type_Def_Node.Kind is
-                     when Ada_Type_Access_Def =>
-                        return
-                          VSS.Strings.To_Virtual_String
-                            (Type_Def_Node.As_Type_Access_Def
-                               .F_Subtype_Indication.F_Name
-                                 .P_Referenced_Defining_Name
-                                   .P_Fully_Qualified_Name);
-
-                     when Ada_Access_To_Subp_Def =>
-                        return Result : VSS.Strings.Virtual_String :=
-                          (if Type_Def_Node.As_Access_To_Subp_Def
-                                  .F_Has_Not_Null
-                             then "not null access "
-                             else "access ")
-                        do
-                           Result.Append
-                             (RST_Profile
-                                (Type_Def_Node.As_Access_To_Subp_Def
-                                   .F_Subp_Spec));
-                        end return;
-
-                     when others =>
-                        raise Program_Error;
-                        --  Should not happened.
-                  end case;
-               end;
-
-            when Ada_Subtype_Indication =>
-               return Result : VSS.Strings.Virtual_String :=
-                 VSS.Strings.To_Virtual_String
-                   (Type_Decl_Node.As_Subtype_Indication.F_Name
-                      .P_Referenced_Defining_Name
-                        .P_Fully_Qualified_Name)
-               do
-                  if Type_Decl_Node.As_Subtype_Indication.F_Name.Kind
-                    = Ada_Attribute_Ref
-                  then
-                     Result.Append (''');
-                     Result.Append
-                       (VSS.Strings.To_Virtual_String
-                          (Type_Decl_Node.As_Subtype_Indication.F_Name
-                             .As_Attribute_Ref.F_Attribute.Text));
-                  end if;
-               end return;
-
-            when others =>
-               raise Program_Error;
-               --  Should not happened.
-         end case;
-      end RST_Type_Name;
-
       Params : constant Libadalang.Analysis.Params'Class :=
         Node.F_Subp_Params;
       First  : Boolean := True;
@@ -2463,6 +2391,76 @@ package body GNATdoc.Frontend is
          end if;
       end return;
    end RST_Profile;
+
+   -------------------
+   -- RST_Type_Name --
+   -------------------
+
+   function RST_Type_Name
+     (Type_Decl_Node : Libadalang.Analysis.Type_Expr'Class)
+      return VSS.Strings.Virtual_String is
+   begin
+      case Type_Decl_Node.Kind is
+         when Ada_Anonymous_Type =>
+            declare
+               Type_Def_Node : constant Type_Def :=
+                 Type_Decl_Node.As_Anonymous_Type.F_Type_Decl.F_Type_Def;
+
+            begin
+               case Type_Def_Node.Kind is
+                  when Ada_Type_Access_Def =>
+                     return
+                       VSS.Strings.To_Virtual_String
+                         (Type_Def_Node.As_Type_Access_Def
+                            .F_Subtype_Indication.F_Name
+                              .P_Referenced_Defining_Name
+                                .P_Fully_Qualified_Name);
+
+                  when Ada_Access_To_Subp_Def =>
+                     return Result : VSS.Strings.Virtual_String :=
+                       (if Type_Def_Node.As_Access_To_Subp_Def.F_Has_Not_Null
+                          then "not null access "
+                          else "access ")
+                     do
+                        Result.Append
+                          (RST_Profile
+                             (Type_Def_Node.As_Access_To_Subp_Def
+                                .F_Subp_Spec));
+                     end return;
+
+                  when Ada_Array_Type_Def =>
+                     return
+                       VSS.Strings.To_Virtual_String (Type_Def_Node.Text);
+
+                  when others =>
+                     raise Program_Error;
+                     --  Should not happened.
+               end case;
+            end;
+
+         when Ada_Subtype_Indication =>
+            return Result : VSS.Strings.Virtual_String :=
+              VSS.Strings.To_Virtual_String
+                (Type_Decl_Node.As_Subtype_Indication.F_Name
+                   .P_Referenced_Defining_Name
+                     .P_Fully_Qualified_Name)
+            do
+               if Type_Decl_Node.As_Subtype_Indication.F_Name.Kind
+                 = Ada_Attribute_Ref
+               then
+                  Result.Append (''');
+                  Result.Append
+                    (VSS.Strings.To_Virtual_String
+                       (Type_Decl_Node.As_Subtype_Indication.F_Name
+                          .As_Attribute_Ref.F_Attribute.Text));
+               end if;
+            end return;
+
+         when others =>
+            raise Program_Error;
+            --  Should not happened.
+      end case;
+   end RST_Type_Name;
 
    ---------------
    -- Signature --
