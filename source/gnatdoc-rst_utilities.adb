@@ -72,6 +72,11 @@ package body GNATdoc.RST_Utilities is
                      return Result : VSS.Strings.Virtual_String :=
                        "access "
                      do
+                        if Type_Def_Node.As_Type_Access_Def.F_Has_Constant
+                        then
+                           Result.Append ("constant ");
+                        end if;
+
                         Result.Append
                           (Normalized_Subtype_Name
                              (Type_Def_Node.As_Type_Access_Def
