@@ -54,7 +54,7 @@ package LAL is
       Y : Integer;
       --  Component Y
 
-      Z : access Integer;
+      Z : access constant Integer;
       --  Component Z
    end record;
    --  Description of the Record_Type

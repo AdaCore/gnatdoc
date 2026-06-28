@@ -103,7 +103,7 @@ LAL
 
     :component Standard.Integer Y:
         Component Y
-    :component ``access Standard.Integer`` Z:
+    :component ``access constant Standard.Integer`` Z:
         Component Z
 
     Description of the Record_Type
