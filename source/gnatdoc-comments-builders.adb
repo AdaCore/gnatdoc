@@ -22,6 +22,7 @@ with Libadalang.Analysis;        use Libadalang.Analysis;
 with Libadalang.Common;          use Libadalang.Common;
 
 with GNATdoc.Comments.Utilities; use GNATdoc.Comments.Utilities;
+with GNATdoc.RST_Utilities;
 
 package body GNATdoc.Comments.Builders is
 
@@ -213,44 +214,6 @@ package body GNATdoc.Comments.Builders is
       Kind : GNATdoc.Comments.Section_Kind;
       Node : Libadalang.Analysis.Defining_Name'Class)
    is
-      function Type_Name
-        (Node : Type_Expr'Class) return VSS.Strings.Virtual_String;
-      --  Returns fully qualified name of the type.
-
-      ---------------
-      -- Type_Name --
-      ---------------
-
-      function Type_Name
-        (Node : Type_Expr'Class) return VSS.Strings.Virtual_String
-      is
-         Name : Defining_Name;
-
-      begin
-         case Node.Kind is
-            when Ada_Subtype_Indication =>
-               Name := Node.P_Type_Name.P_Referenced_Defining_Name;
-
-            when Ada_Anonymous_Type =>
-               Name :=
-                 Node.As_Anonymous_Type.F_Type_Decl.F_Type_Def
-                   .As_Type_Access_Def.F_Subtype_Indication.P_Type_Name
-                   .P_Referenced_Defining_Name;
-
-            when others =>
-               raise Program_Error;
-               --  Should never happen
-         end case;
-
-         --  `Name` might be `null` when name resolution fails. Return an empty
-         --  string in this case to prevent raise of exception.
-
-         return
-           (if Name.Is_Null
-            then ""
-            else VSS.Strings.To_Virtual_String (Name.P_Fully_Qualified_Name));
-      end Type_Name;
-
       Start_Line : constant Libadalang.Slocs.Line_Number :=
         (if Kind = Formal then 0 else Self.Location.Start_Line);
       End_Line   : constant Libadalang.Slocs.Line_Number :=
@@ -292,11 +255,12 @@ package body GNATdoc.Comments.Builders is
       case Decl_Node.Kind is
          when Ada_Discriminant_Spec =>
             New_Section.RST_Info :=
-              Type_Name (Decl_Node.As_Discriminant_Spec.F_Type_Expr);
+              GNATdoc.RST_Utilities.RST_Type_Name
+                (Decl_Node.As_Discriminant_Spec.F_Type_Expr);
 
          when Ada_Component_Decl =>
             New_Section.RST_Info :=
-              Type_Name
+              GNATdoc.RST_Utilities.RST_Type_Name
                 (Decl_Node.As_Component_Decl.F_Component_Def.F_Type_Expr);
 
          when others =>
