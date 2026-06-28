@@ -27,8 +27,7 @@ package body GNATdoc.RST_Utilities is
    -------------------
 
    function RST_Type_Name
-     (Type_Decl_Node  : Libadalang.Analysis.Type_Expr'Class;
-      Profile_Renderer : Subprogram_Profile_Access := null)
+     (Type_Decl_Node : Libadalang.Analysis.Type_Expr'Class)
       return VSS.Strings.Virtual_String is
       function Normalized_Subtype_Name
         (Subtype_Node : Libadalang.Analysis.Subtype_Indication'Class)
@@ -85,17 +84,10 @@ package body GNATdoc.RST_Utilities is
                           then "not null access "
                           else "access ")
                      do
-                        if Profile_Renderer = null then
-                           Result.Append
-                             (VSS.Strings.To_Virtual_String
-                                (Type_Def_Node.As_Access_To_Subp_Def
-                                   .F_Subp_Spec.Text));
-                        else
-                           Result.Append
-                             (Profile_Renderer.all
-                                (Type_Def_Node.As_Access_To_Subp_Def
-                                   .F_Subp_Spec));
-                        end if;
+                        Result.Append
+                          (RST_Profile
+                             (Type_Def_Node.As_Access_To_Subp_Def
+                                .F_Subp_Spec));
                      end return;
 
                   when Ada_Array_Type_Def =>
@@ -117,5 +109,70 @@ package body GNATdoc.RST_Utilities is
             --  Should not happened.
       end case;
    end RST_Type_Name;
+
+   -----------------
+   -- RST_Profile --
+   -----------------
+
+   function RST_Profile
+     (Node : Libadalang.Analysis.Subp_Spec'Class)
+      return VSS.Strings.Virtual_String
+   is
+      Params : constant Libadalang.Analysis.Params'Class :=
+        Node.F_Subp_Params;
+      First  : Boolean := True;
+
+   begin
+      return Result : VSS.Strings.Virtual_String do
+         case Node.F_Subp_Kind is
+            when Ada_Subp_Kind_Function =>
+               Result.Append ("function");
+            when Ada_Subp_Kind_Procedure =>
+               Result.Append ("procedure");
+         end case;
+
+         if not Node.F_Subp_Name.Is_Null then
+            Result.Append (' ');
+            Result.Append
+              (VSS.Strings.To_Virtual_String (Node.F_Subp_Name.Text));
+         end if;
+
+         if not Params.Is_Null then
+            Result.Append (" (");
+
+            for Param of Params.F_Params loop
+               declare
+                  Ids       : constant Defining_Name_List := Param.F_Ids;
+                  Type_Name : constant VSS.Strings.Virtual_String :=
+                    RST_Type_Name (Param.F_Type_Expr);
+
+               begin
+                  for Id of Ids loop
+                     if First then
+                         First := False;
+
+                     else
+                        Result.Append ("; ");
+                     end if;
+
+                     Result.Append
+                       (VSS.Strings.To_Virtual_String (Id.F_Name.Text));
+                     Result.Append (" : ");
+                     Result.Append (Type_Name);
+                  end loop;
+               end;
+            end loop;
+
+            Result.Append (")");
+         end if;
+
+         if Node.F_Subp_Kind = Ada_Subp_Kind_Function
+           and then not Node.F_Subp_Returns.Is_Null
+         then
+            Result.Append (" return ");
+            Result.Append (RST_Type_Name (Node.F_Subp_Returns));
+         end if;
+      end return;
+   end RST_Profile;
 
 end GNATdoc.RST_Utilities;

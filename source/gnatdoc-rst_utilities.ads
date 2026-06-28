@@ -21,16 +21,16 @@ with VSS.Strings;
 
 package GNATdoc.RST_Utilities is
 
-   type Subprogram_Profile_Access is access function
+   function RST_Profile
      (Node : Libadalang.Analysis.Subp_Spec'Class)
       return VSS.Strings.Virtual_String;
+   --  Return RST rendering of a subprogram profile.
 
    function RST_Type_Name
-     (Type_Decl_Node  : Libadalang.Analysis.Type_Expr'Class;
-      Profile_Renderer : Subprogram_Profile_Access := null)
+     (Type_Decl_Node : Libadalang.Analysis.Type_Expr'Class)
       return VSS.Strings.Virtual_String;
    --  Return normalized type name for a type expression, preserving subtype
-   --  attributes (for example, 'Class). For access-to-subprogram type, use
-   --  Profile_Renderer when provided.
+   --  attributes (for example, 'Class). For access-to-subprogram types,
+   --  RST_Profile is used to render the subprogram specification.
 
 end GNATdoc.RST_Utilities;

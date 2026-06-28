@@ -200,10 +200,6 @@ package body GNATdoc.Frontend is
    --  Check whether entiry and all components of the entity are documented.
    --  Generate warnings when they are enabled.
 
-   function RST_Profile
-     (Node : Libadalang.Analysis.Subp_Spec'Class)
-      return VSS.Strings.Virtual_String;
-
    procedure Resolve_Belongs_To
      (Enclosing : not null GNATdoc.Entities.Entity_Information_Access;
       Belongs   : out GNATdoc.Entities.Entity_Information_Access;
@@ -841,7 +837,7 @@ package body GNATdoc.Frontend is
 
    begin
       Entity.Is_Private := In_Private;
-      Entity.RST_Profile := RST_Profile (Node.F_Subp_Spec);
+      Entity.RST_Profile := GNATdoc.RST_Utilities.RST_Profile (Node.F_Subp_Spec);
 
       Extract
         (Node          => Node,
@@ -1255,7 +1251,7 @@ package body GNATdoc.Frontend is
 
    begin
       Entity.Is_Private := In_Private;
-      Entity.RST_Profile := RST_Profile (Spec);
+      Entity.RST_Profile := GNATdoc.RST_Utilities.RST_Profile (Spec);
 
       Extract
         (Node          => Node,
@@ -1666,7 +1662,7 @@ package body GNATdoc.Frontend is
            Defining_Name => Name);
 
    begin
-      Entity.RST_Profile := RST_Profile (Spec);
+      Entity.RST_Profile := GNATdoc.RST_Utilities.RST_Profile (Spec);
 
       Extract
         (Node          => Node,
@@ -2333,74 +2329,6 @@ package body GNATdoc.Frontend is
          Template.Format
            (VSS.Strings.Formatters.Strings.Image (Belongs_To)));
    end Resolve_Belongs_To;
-
-   -----------------
-   -- RST_Profile --
-   -----------------
-
-   function RST_Profile
-     (Node : Libadalang.Analysis.Subp_Spec'Class)
-      return VSS.Strings.Virtual_String
-   is
-      Params : constant Libadalang.Analysis.Params'Class :=
-        Node.F_Subp_Params;
-      First  : Boolean := True;
-
-   begin
-      return Result : VSS.Strings.Virtual_String do
-         case Node.F_Subp_Kind is
-            when Ada_Subp_Kind_Function =>
-               Result.Append ("function");
-            when Ada_Subp_Kind_Procedure =>
-               Result.Append ("procedure");
-         end case;
-
-         if not Node.F_Subp_Name.Is_Null then
-            Result.Append (' ');
-            Result.Append
-              (VSS.Strings.To_Virtual_String (Node.F_Subp_Name.Text));
-         end if;
-
-         if not Params.Is_Null then
-            Result.Append (" (");
-
-            for Param of Params.F_Params loop
-               declare
-                  Ids       : constant Defining_Name_List := Param.F_Ids;
-                  Type_Name : constant VSS.Strings.Virtual_String :=
-                    GNATdoc.RST_Utilities.RST_Type_Name
-                      (Param.F_Type_Expr, RST_Profile'Access);
-
-               begin
-                  for Id of Ids loop
-                     if First then
-                        First := False;
-
-                     else
-                        Result.Append ("; ");
-                     end if;
-
-                     Result.Append
-                       (VSS.Strings.To_Virtual_String (Id.F_Name.Text));
-                     Result.Append (" : ");
-                     Result.Append (Type_Name);
-                  end loop;
-               end;
-            end loop;
-
-            Result.Append (")");
-         end if;
-
-         if Node.F_Subp_Kind = Ada_Subp_Kind_Function
-           and then not Node.F_Subp_Returns.Is_Null
-         then
-            Result.Append (" return ");
-            Result.Append
-              (GNATdoc.RST_Utilities.RST_Type_Name
-                 (Node.F_Subp_Returns, RST_Profile'Access));
-         end if;
-      end return;
-   end RST_Profile;
 
    ---------------
    -- Signature --
