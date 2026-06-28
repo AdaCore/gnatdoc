@@ -63,6 +63,13 @@ LAL
         Children nodes
 
 
+    .. ada:function::     function GNATdoc_179 (Source : LAL.Ada_Node'Class) return LAL.Ada_Node'Class
+        :package: LAL.Ada_Node
+
+        eng/ide/gnatdoc#179
+        Types of parameters and return contains `'Class`
+
+
 .. ada:type:: type Basic_Decl
     :package: LAL
 

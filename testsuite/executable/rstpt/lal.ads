@@ -59,6 +59,10 @@ package LAL is
    end record;
    --  Description of the Record_Type
 
+   function GNATdoc_179 (Source : Ada_Node'Class) return Ada_Node'Class;
+   --  eng/ide/gnatdoc#179
+   --  Types of parameters and return contains `'Class`
+
 private
 
    type Ada_Node is tagged null record;
