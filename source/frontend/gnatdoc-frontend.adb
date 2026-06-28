@@ -2336,8 +2336,9 @@ package body GNATdoc.Frontend is
       function RST_Type_Name
         (Type_Decl_Node : Libadalang.Analysis.Type_Expr'Class)
          return VSS.Strings.Virtual_String;
-      --  Return "normalized" type name for parameters/return, preserving
-      --  subtype attributes (for example, 'Class).
+      --  Return normalized type name for parameters/return, preserving
+      --  subtype attributes (for example, 'Class) and expanding access to
+      --  subprogram definitions recursively using RST_Profile itself.
 
       -------------------
       -- RST_Type_Name --
@@ -2364,7 +2365,17 @@ package body GNATdoc.Frontend is
                                    .P_Fully_Qualified_Name);
 
                      when Ada_Access_To_Subp_Def =>
-                        return "access subprogram";
+                        return Result : VSS.Strings.Virtual_String :=
+                          (if Type_Def_Node.As_Access_To_Subp_Def
+                                  .F_Has_Not_Null
+                             then "not null access "
+                             else "access ")
+                        do
+                           Result.Append
+                             (RST_Profile
+                                (Type_Def_Node.As_Access_To_Subp_Def
+                                   .F_Subp_Spec));
+                        end return;
 
                      when others =>
                         raise Program_Error;
@@ -2396,33 +2407,33 @@ package body GNATdoc.Frontend is
          end case;
       end RST_Type_Name;
 
-      Params  : constant Libadalang.Analysis.Params'Class :=
+      Params : constant Libadalang.Analysis.Params'Class :=
         Node.F_Subp_Params;
-      Returns : constant Libadalang.Analysis.Type_Expr'Class :=
-        Node.F_Subp_Returns;
-      First   : Boolean := True;
+      First  : Boolean := True;
 
    begin
       return Result : VSS.Strings.Virtual_String do
          case Node.F_Subp_Kind is
             when Ada_Subp_Kind_Function =>
-               Result.Append ("function ");
+               Result.Append ("function");
             when Ada_Subp_Kind_Procedure =>
-               Result.Append ("procedure ");
+               Result.Append ("procedure");
          end case;
 
-         Result.Append
-           (VSS.Strings.To_Virtual_String (Node.F_Subp_Name.Text));
+         if not Node.F_Subp_Name.Is_Null then
+            Result.Append (' ');
+            Result.Append
+              (VSS.Strings.To_Virtual_String (Node.F_Subp_Name.Text));
+         end if;
 
          if not Params.Is_Null then
             Result.Append (" (");
 
             for Param of Params.F_Params loop
                declare
-                  Ids            : constant Defining_Name_List := Param.F_Ids;
-                  Type_Decl_Node : constant Type_Expr := Param.F_Type_Expr;
-                  Type_Name      : constant VSS.Strings.Virtual_String :=
-                    RST_Type_Name (Type_Decl_Node);
+                  Ids       : constant Defining_Name_List := Param.F_Ids;
+                  Type_Name : constant VSS.Strings.Virtual_String :=
+                    RST_Type_Name (Param.F_Type_Expr);
 
                begin
                   for Id of Ids loop
@@ -2444,9 +2455,11 @@ package body GNATdoc.Frontend is
             Result.Append (")");
          end if;
 
-         if not Returns.Is_Null then
+         if Node.F_Subp_Kind = Ada_Subp_Kind_Function
+           and then not Node.F_Subp_Returns.Is_Null
+         then
             Result.Append (" return ");
-            Result.Append (RST_Type_Name (Returns));
+            Result.Append (RST_Type_Name (Node.F_Subp_Returns));
          end if;
       end return;
    end RST_Profile;
