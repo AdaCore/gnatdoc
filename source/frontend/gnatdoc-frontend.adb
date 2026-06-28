@@ -1839,7 +1839,20 @@ package body GNATdoc.Frontend is
                then GNATdoc.Entities.To_Entity (Type_Signature) else null);
 
          when Ada_Anonymous_Type =>
-            null;
+            declare
+               Type_Def_Node : constant Type_Def :=
+                 Node.F_Type_Expr.As_Anonymous_Type.F_Type_Decl.F_Type_Def;
+
+            begin
+               case Type_Def_Node.Kind is
+                  when Ada_Array_Type_Def =>
+                     RSTPT_Objtype :=
+                       VSS.Strings.To_Virtual_String (Type_Def_Node.Text);
+
+                  when others =>
+                     null;
+               end case;
+            end;
 
          when others =>
             raise Program_Error;
