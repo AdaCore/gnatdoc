@@ -108,3 +108,10 @@ LAL
 
     Description of the Record_Type
 
+
+.. ada:function:: function GNATdoc_180 (F : not null access function (N : LAL.Ada_Node'Class) return Standard.Boolean) return access procedure (N : LAL.Ada_Node)
+    :package: LAL
+
+    eng/ide/gnatdoc#180
+    Access to subprogram as type of subprogram's parameter and return value.
+

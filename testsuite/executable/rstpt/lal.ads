@@ -63,6 +63,12 @@ package LAL is
    --  eng/ide/gnatdoc#179
    --  Types of parameters and return contains `'Class`
 
+   function GNATdoc_180
+     (F : not null access function (N : Ada_Node'Class) return Boolean)
+      return access procedure (N : Ada_Node);
+   --  eng/ide/gnatdoc#180
+   --  Access to subprogram as type of subprogram's parameter and return value.
+
 private
 
    type Ada_Node is tagged null record;
