@@ -839,6 +839,7 @@ package body GNATdoc.Frontend is
       Belongs : GNATdoc.Entities.Entity_Information_Access;
 
    begin
+      Entity.Is_Private := In_Private;
       Entity.RST_Profile := RST_Profile (Node.F_Subp_Spec);
 
       Extract
@@ -1252,6 +1253,7 @@ package body GNATdoc.Frontend is
       Belongs : GNATdoc.Entities.Entity_Information_Access;
 
    begin
+      Entity.Is_Private := In_Private;
       Entity.RST_Profile := RST_Profile (Spec);
 
       Extract
