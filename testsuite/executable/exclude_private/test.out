@@ -1,0 +1,19 @@
++  ? (UNDEFINED) ''
+  Packages:
+    +   P (ADA_PACKAGE_DECLARATION) 'p'
+  Contains Entities:
+    +   P (ADA_PACKAGE_DECLARATION) 'p'
+      Subprograms:
+        +   Next (ADA_FUNCTION) 'p.next(() -> standard.integer)'
+        -   Next (ADA_FUNCTION) 'p.next(() -> standard.integer)$'
+      Belongs Subprograms:
+        +   Next (ADA_FUNCTION) 'p.next(() -> standard.integer)'
+        -   Next (ADA_FUNCTION) 'p.next(() -> standard.integer)$'
+      Contains Entities:
+        +   Next (ADA_FUNCTION) 'p.next(() -> standard.integer)'
+        -   Next (ADA_FUNCTION) 'p.next(() -> standard.integer)$'
+      Belongs Entities:
+        +   Next (ADA_FUNCTION) 'p.next(() -> standard.integer)'
+        -   Next (ADA_FUNCTION) 'p.next(() -> standard.integer)$'
+  Belongs Entities:
+    +   P (ADA_PACKAGE_DECLARATION) 'p'
