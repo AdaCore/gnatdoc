@@ -69,6 +69,10 @@ package LAL is
    --  eng/ide/gnatdoc#180
    --  Access to subprogram as type of subprogram's parameter and return value.
 
+   Map_GNATdoc_180 : array (Boolean) of Boolean;
+   --  eng/ide/gnatdoc#180
+   --  Anonymous array type
+
 private
 
    type Ada_Node is tagged null record;

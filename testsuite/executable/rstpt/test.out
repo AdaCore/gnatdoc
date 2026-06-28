@@ -115,3 +115,12 @@ LAL
     eng/ide/gnatdoc#180
     Access to subprogram as type of subprogram's parameter and return value.
 
+
+.. ada:object:: Map_GNATdoc_180 : constant array (Boolean) of Boolean
+    :package: LAL
+
+    :objtype: array (Boolean) of Boolean
+
+    eng/ide/gnatdoc#180
+    Anonymous array type
+
