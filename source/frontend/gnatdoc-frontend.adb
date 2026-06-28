@@ -2333,6 +2333,69 @@ package body GNATdoc.Frontend is
      (Node : Libadalang.Analysis.Subp_Spec'Class)
       return VSS.Strings.Virtual_String
    is
+      function RST_Type_Name
+        (Type_Decl_Node : Libadalang.Analysis.Type_Expr'Class)
+         return VSS.Strings.Virtual_String;
+      --  Return "normalized" type name for parameters/return, preserving
+      --  subtype attributes (for example, 'Class).
+
+      -------------------
+      -- RST_Type_Name --
+      -------------------
+
+      function RST_Type_Name
+        (Type_Decl_Node : Libadalang.Analysis.Type_Expr'Class)
+         return VSS.Strings.Virtual_String is
+      begin
+         case Type_Decl_Node.Kind is
+            when Ada_Anonymous_Type =>
+               declare
+                  Type_Def_Node : constant Type_Def :=
+                    Type_Decl_Node.As_Anonymous_Type.F_Type_Decl.F_Type_Def;
+
+               begin
+                  case Type_Def_Node.Kind is
+                     when Ada_Type_Access_Def =>
+                        return
+                          VSS.Strings.To_Virtual_String
+                            (Type_Def_Node.As_Type_Access_Def
+                               .F_Subtype_Indication.F_Name
+                                 .P_Referenced_Defining_Name
+                                   .P_Fully_Qualified_Name);
+
+                     when Ada_Access_To_Subp_Def =>
+                        return "access subprogram";
+
+                     when others =>
+                        raise Program_Error;
+                        --  Should not happened.
+                  end case;
+               end;
+
+            when Ada_Subtype_Indication =>
+               return Result : VSS.Strings.Virtual_String :=
+                 VSS.Strings.To_Virtual_String
+                   (Type_Decl_Node.As_Subtype_Indication.F_Name
+                      .P_Referenced_Defining_Name
+                        .P_Fully_Qualified_Name)
+               do
+                  if Type_Decl_Node.As_Subtype_Indication.F_Name.Kind
+                    = Ada_Attribute_Ref
+                  then
+                     Result.Append (''');
+                     Result.Append
+                       (VSS.Strings.To_Virtual_String
+                          (Type_Decl_Node.As_Subtype_Indication.F_Name
+                             .As_Attribute_Ref.F_Attribute.Text));
+                  end if;
+               end return;
+
+            when others =>
+               raise Program_Error;
+               --  Should not happened.
+         end case;
+      end RST_Type_Name;
+
       Params  : constant Libadalang.Analysis.Params'Class :=
         Node.F_Subp_Params;
       Returns : constant Libadalang.Analysis.Type_Expr'Class :=
@@ -2358,57 +2421,10 @@ package body GNATdoc.Frontend is
                declare
                   Ids            : constant Defining_Name_List := Param.F_Ids;
                   Type_Decl_Node : constant Type_Expr := Param.F_Type_Expr;
-                  Type_Name      : VSS.Strings.Virtual_String;
+                  Type_Name      : constant VSS.Strings.Virtual_String :=
+                    RST_Type_Name (Type_Decl_Node);
 
                begin
-                  case Type_Decl_Node.Kind is
-                     when Ada_Anonymous_Type =>
-                        declare
-                           Type_Def_Node : constant Type_Def :=
-                             Type_Decl_Node.As_Anonymous_Type.F_Type_Decl
-                               .F_Type_Def;
-
-                        begin
-                           case Type_Def_Node.Kind is
-                              when Ada_Type_Access_Def =>
-                                 Type_Name :=
-                                   VSS.Strings.To_Virtual_String
-                                     (Type_Def_Node.As_Type_Access_Def
-                                        .F_Subtype_Indication.F_Name
-                                          .P_Referenced_Defining_Name
-                                            .P_Fully_Qualified_Name);
-
-                              when Ada_Access_To_Subp_Def =>
-                                 Type_Name := "access subprogram";
-
-                              when others =>
-                                 raise Program_Error;
-                                 --  Should not happened.
-                           end case;
-                        end;
-
-                     when Ada_Subtype_Indication =>
-                        Type_Name :=
-                          VSS.Strings.To_Virtual_String
-                            (Type_Decl_Node.As_Subtype_Indication.F_Name
-                               .P_Referenced_Defining_Name
-                                 .P_Fully_Qualified_Name);
-
-                        if Type_Decl_Node.As_Subtype_Indication.F_Name.Kind
-                          = Ada_Attribute_Ref
-                        then
-                           Type_Name.Append (''');
-                           Type_Name.Append
-                             (VSS.Strings.To_Virtual_String
-                                (Type_Decl_Node.As_Subtype_Indication.F_Name
-                                 .As_Attribute_Ref.F_Attribute.Text));
-                        end if;
-
-                     when others =>
-                        raise Program_Error;
-                        --  Should not happened.
-                  end case;
-
                   for Id of Ids loop
                      if First then
                         First := False;
@@ -2430,26 +2446,7 @@ package body GNATdoc.Frontend is
 
          if not Returns.Is_Null then
             Result.Append (" return ");
-
-            case Returns.Kind is
-               when Ada_Subtype_Indication =>
-                  Result.Append
-                    (VSS.Strings.To_Virtual_String
-                       (Returns.P_Type_Name.P_Referenced_Defining_Name
-                        .P_Fully_Qualified_Name));
-
-               when Ada_Anonymous_Type =>
-                  Result.Append
-                    (VSS.Strings.To_Virtual_String
-                       (Returns.As_Anonymous_Type.F_Type_Decl
-                        .F_Type_Def.As_Type_Access_Def.F_Subtype_Indication
-                        .P_Type_Name
-                        .P_Referenced_Defining_Name
-                        .P_Fully_Qualified_Name));
-
-               when others =>
-                  raise Program_Error;
-            end case;
+            Result.Append (RST_Type_Name (Returns));
          end if;
       end return;
    end RST_Profile;
