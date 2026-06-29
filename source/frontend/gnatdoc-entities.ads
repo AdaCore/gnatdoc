@@ -164,7 +164,7 @@ package GNATdoc.Entities is
       --  Generic_Subprograms
       --  Package_Instantiations
       --  Subprogram_Instantiations
-      Package_Renamings      : Entity_Information_Sets.Set;
+      Package_Renamings         : Entity_Reference_Sets.Set;
       --  Renamings of the packages. Renamings of the subprograms is in
       --  the Subprograms field.
 

@@ -67,8 +67,9 @@ package body GNATdoc.Backend.ODF is
       end loop;
 
       for Item of GNATdoc.Entities.Globals.Package_Renamings loop
-         if Is_Included (Item) then
-            Index_Entities.Insert (Item);
+         if Is_Included (GNATdoc.Entities.To_Entity (Item.Signature)) then
+            Index_Entities.Insert
+              (GNATdoc.Entities.To_Entity (Item.Signature));
          end if;
       end loop;
 

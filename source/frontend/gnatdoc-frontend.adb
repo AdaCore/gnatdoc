@@ -2038,14 +2038,15 @@ package body GNATdoc.Frontend is
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      Enclosing.Package_Renamings.Insert (Entity);
+      Enclosing.Package_Renamings.Insert (Entity.Reference);
 
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
-         Global.Package_Renamings.Insert (Entity);
+         Global.Package_Renamings.Insert (Entity.Reference);
       end if;
 
       if Node.P_Is_Compilation_Unit_Root then
-         GNATdoc.Entities.Compilation_Units.Package_Renamings.Insert (Entity);
+         GNATdoc.Entities.Compilation_Units.Package_Renamings.Insert
+           (Entity.Reference);
       end if;
 
       Check_Undocumented (Entity);

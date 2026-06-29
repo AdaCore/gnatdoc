@@ -129,7 +129,7 @@ package body GNATdoc.Backend.Test is
             Offset := @ + 2;
 
             for E of Entity.Package_Renamings loop
-               Dump (E.Reference, Success);
+               Dump (E, Success);
             end loop;
 
             Offset := @ - 2;
