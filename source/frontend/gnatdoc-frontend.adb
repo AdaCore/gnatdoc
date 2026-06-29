@@ -1634,7 +1634,14 @@ package body GNATdoc.Frontend is
 
       Entity.RSTPT_Instpkg :=
         VSS.Strings.To_Virtual_String
-          (Node.P_Designated_Generic_Decl.P_Fully_Qualified_Name);
+          (case Node.Kind is
+              when Ada_Generic_Package_Instantiation =>
+                Node.As_Generic_Package_Instantiation.F_Generic_Pkg_Name
+                  .P_Referenced_Defining_Name.P_Fully_Qualified_Name,
+              when Ada_Generic_Subp_Instantiation =>
+                Node.As_Generic_Subp_Instantiation.F_Generic_Subp_Name
+                  .P_Referenced_Defining_Name.P_Fully_Qualified_Name,
+              when others => raise Program_Error);
 
       Check_Undocumented (Entity);
    end Process_Generic_Instantiation;
