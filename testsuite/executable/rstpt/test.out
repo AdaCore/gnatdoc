@@ -44,23 +44,30 @@ LAL
     Root of node hierarchy
 
     .. ada:object:: No_Ada_Node : constant LAL.Ada_Node
-        :package: LAL.Ada_Node
+        :package: LAL
 
         :objtype: LAL.Ada_Node
 
         Null node.
 
 
-    .. ada:function::     function Parent (Self : LAL.Ada_Node'Class) return LAL.Ada_Node
+    .. ada:function:: function Parent (Self : LAL.Ada_Node'Class) return LAL.Ada_Node
         :package: LAL.Ada_Node
 
         Parent node
 
 
-    .. ada:function::     function Children (Self : LAL.Ada_Node'Class) return LAL.Ada_Node_Array
+    .. ada:function:: function Children (Self : LAL.Ada_Node'Class) return LAL.Ada_Node_Array
         :package: LAL.Ada_Node
 
         Children nodes
+
+
+    .. ada:function:: function GNATdoc_179 (Source : LAL.Ada_Node'Class) return LAL.Ada_Node'Class
+        :package: LAL.Ada_Node
+
+        eng/ide/gnatdoc#179
+        Types of parameters and return contains `'Class`
 
 
 .. ada:type:: type Basic_Decl
@@ -80,7 +87,7 @@ LAL
 
     Instantiation of the generic package
 
-    :instpkg: LAL.Elementary_Functions
+    :instpkg: Ada.Numerics.Generic_Elementary_Functions
 
 
 .. ada:type:: type Ada_Node_Array_Access
@@ -96,8 +103,24 @@ LAL
 
     :component Standard.Integer Y:
         Component Y
-    :component Standard.Integer Z:
+    :component ``access constant Standard.Integer`` Z:
         Component Z
 
     Description of the Record_Type
+
+
+.. ada:function:: function GNATdoc_180 (F : not null access function (N : LAL.Ada_Node'Class) return Standard.Boolean) return access procedure (N : LAL.Ada_Node)
+    :package: LAL
+
+    eng/ide/gnatdoc#180
+    Access to subprogram as type of subprogram's parameter and return value.
+
+
+.. ada:object:: Map_GNATdoc_180 : constant array (Boolean) of Boolean
+    :package: LAL
+
+    :objtype: array (Boolean) of Boolean
+
+    eng/ide/gnatdoc#180
+    Anonymous array type
 
