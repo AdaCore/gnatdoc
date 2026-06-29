@@ -87,7 +87,7 @@ LAL
 
     Instantiation of the generic package
 
-    :instpkg: LAL.Elementary_Functions
+    :instpkg: Ada.Numerics.Generic_Elementary_Functions
 
 
 .. ada:type:: type Ada_Node_Array_Access
