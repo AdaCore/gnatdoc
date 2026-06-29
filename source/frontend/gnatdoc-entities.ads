@@ -151,6 +151,8 @@ package GNATdoc.Entities is
       --  Name of instantiated package
       RSTPT_Instance_Of      : VSS.Strings.Virtual_String;
       --  Name of the generic package
+      RSTPT_Renames          : VSS.Strings.Virtual_String;
+      --  Name of renamed package
 
       Packages               : Entity_Information_Sets.Set;
       Contain_Subprograms    : aliased Entity_Reference_Sets.Set;
