@@ -229,7 +229,6 @@ package body GNATdoc.Backend.RST.PT is
                raise Program_Error;
          end case;
 
-         File.Put (Indent, Success);
          File.Put (Entity.RST_Profile, Success);
          File.New_Line (Success);
          File.Put (Indent, Success);
