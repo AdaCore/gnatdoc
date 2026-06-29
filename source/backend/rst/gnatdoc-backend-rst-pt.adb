@@ -125,6 +125,12 @@ package body GNATdoc.Backend.RST.PT is
          Package_Name : VSS.Strings.Virtual_String);
       --  Generate documentation for the generic package instantiation.
 
+      procedure Generate_Package_Renaming_Documentation
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String);
+      --  Generate documentation for the package renaming.
+
       -------------------------------
       -- Generate_Belongs_Entities --
       -------------------------------
@@ -174,6 +180,10 @@ package body GNATdoc.Backend.RST.PT is
 
                      when GNATdoc.Entities.Ada_Package_Declaration =>
                         Generate_Package_Documentation (Indent, Item.all);
+
+                     when GNATdoc.Entities.Ada_Package_Renaming =>
+                        Generate_Package_Renaming_Documentation
+                          (Indent, Item.all, Package_Name);
 
                      when GNATdoc.Entities.Ada_Generic_Package_Declaration =>
                         Generate_Generic_Package_Documentation
@@ -442,6 +452,46 @@ package body GNATdoc.Backend.RST.PT is
          Generate_Belongs_Entities
            (Indent & "    ", Entity, Entity.Qualified_Name);
       end Generate_Package_Documentation;
+
+      ---------------------------------------------
+      -- Generate_Package_Renaming_Documentation --
+      ---------------------------------------------
+
+      procedure Generate_Package_Renaming_Documentation
+        (Indent       : VSS.Strings.Virtual_String;
+         Entity       : GNATdoc.Entities.Entity_Information;
+         Package_Name : VSS.Strings.Virtual_String)
+      is
+         use type VSS.Strings.Virtual_String;
+
+      begin
+         File.New_Line (Success);
+
+         File.Put (Indent, Success);
+         File.Put (".. ada:package:: ", Success);
+         File.Put (Entity.Name, Success);
+         File.New_Line (Success);
+         File.Put (Indent, Success);
+         File.Put ("    :package: ", Success);
+         File.Put (Package_Name, Success);
+         File.New_Line (Success);
+
+         File.Put (Indent, Success);
+         File.Put ("    :renames: ", Success);
+         File.Put (Entity.RSTPT_Renames, Success);
+         File.New_Line (Success);
+
+         File.New_Line (Success);
+
+         File.Put_Lines
+           (GNATdoc.Comments.RST_Helpers.Get_RST_Documentation
+              (Indent        => Indent & "    ",
+               Documentation => Entity.Documentation,
+               Pass_Through  => True,
+               Code_Snippet  => False),
+            Success);
+         File.New_Line (Success);
+      end Generate_Package_Renaming_Documentation;
 
       ---------------------------------
       -- Generate_Type_Documentation --

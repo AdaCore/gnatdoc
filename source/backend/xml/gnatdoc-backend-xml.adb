@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2025, AdaCore                        --
+--                     Copyright (C) 2025-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -59,6 +59,8 @@ package body GNATdoc.Backend.XML is
    Package_Body_Tag   : constant VSS.Strings.Virtual_String := "package-body";
    Package_Declaration_Tag : constant VSS.Strings.Virtual_String :=
      "package-declaration";
+   Package_Renaming_Tag : constant VSS.Strings.Virtual_String :=
+     "package-renaming";
    Procedure_Tag      : constant VSS.Strings.Virtual_String := "procedure";
    Tagged_Type_Tag    : constant VSS.Strings.Virtual_String := "tagged-type";
    Type_Tag           : constant VSS.Strings.Virtual_String := "type";
@@ -120,6 +122,9 @@ package body GNATdoc.Backend.XML is
 
          when GNATdoc.Entities.Ada_Generic_Subprogram_Instantiation =>
             return Generic_Subprogram_Instantiation_Tag;
+
+         when GNATdoc.Entities.Ada_Package_Renaming =>
+            return Package_Renaming_Tag;
       end case;
    end Entity_Tag;
 

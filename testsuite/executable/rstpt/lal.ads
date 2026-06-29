@@ -73,6 +73,10 @@ package LAL is
    --  eng/ide/gnatdoc#180
    --  Anonymous array type
 
+   package Num renames Ada.Numerics;
+   --  eng/ide/gnatdoc#183
+   --  Rename of the package
+
 private
 
    type Ada_Node is tagged null record;

@@ -38,7 +38,8 @@ package GNATdoc.Entities is
       Ada_Formal,
       Ada_Generic_Package_Declaration,
       Ada_Generic_Package_Instantiation,
-      Ada_Generic_Subprogram_Instantiation);
+      Ada_Generic_Subprogram_Instantiation,
+      Ada_Package_Renaming);
 
    type Entity_Signature is record
       Image : VSS.Strings.Virtual_String;
@@ -150,6 +151,8 @@ package GNATdoc.Entities is
       --  Name of instantiated package
       RSTPT_Instance_Of      : VSS.Strings.Virtual_String;
       --  Name of the generic package
+      RSTPT_Renames          : VSS.Strings.Virtual_String;
+      --  Name of renamed package
 
       Packages               : Entity_Information_Sets.Set;
       Contain_Subprograms    : aliased Entity_Reference_Sets.Set;
@@ -163,7 +166,7 @@ package GNATdoc.Entities is
       --  Generic_Subprograms
       --  Package_Instantiations
       --  Subprogram_Instantiations
-      Package_Renamings      : Entity_Information_Sets.Set;
+      Package_Renamings         : Entity_Reference_Sets.Set;
       --  Renamings of the packages. Renamings of the subprograms is in
       --  the Subprograms field.
 

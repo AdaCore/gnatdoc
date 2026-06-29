@@ -1081,7 +1081,8 @@ package body GNATdoc.Frontend is
                return Over;
 
             when Ada_Package_Renaming_Decl =>
-               Ada.Text_IO.Put_Line (Image (Node));
+               Process_Package_Renaming_Decl
+                 (Node.As_Package_Renaming_Decl, Enclosing, null);
 
                return Over;
 
@@ -2028,19 +2029,29 @@ package body GNATdoc.Frontend is
       Entity : constant not null GNATdoc.Entities.Entity_Information_Access :=
         Create_Entity
           (Enclosing     => Enclosing,
-           Kind          => GNATdoc.Entities.Undefined,
+           Kind          => GNATdoc.Entities.Ada_Package_Renaming,
            Defining_Name => Name);
 
    begin
+      Entity.RSTPT_Renames :=
+        VSS.Strings.To_Virtual_String
+          (Node.F_Renames.F_Renamed_Object.P_Referenced_Defining_Name
+             .P_Fully_Qualified_Name);
+
       Extract
         (Node          => Node,
          Options       => GNATdoc.Options.Extractor_Options,
          Documentation => Entity.Documentation,
          Messages      => Entity.Messages);
-      Enclosing.Package_Renamings.Insert (Entity);
+      Enclosing.Package_Renamings.Insert (Entity.Reference);
 
       if Global /= null and GNATdoc.Entities.Globals'Access /= Enclosing then
-         Global.Package_Renamings.Insert (Entity);
+         Global.Package_Renamings.Insert (Entity.Reference);
+      end if;
+
+      if Node.P_Is_Compilation_Unit_Root then
+         GNATdoc.Entities.Compilation_Units.Package_Renamings.Insert
+           (Entity.Reference);
       end if;
 
       Check_Undocumented (Entity);
