@@ -116,6 +116,26 @@ package body GNATdoc.Backend.Test is
             Offset := @ - 2;
          end if;
 
+         if not Entity.Package_Renamings.Is_Empty then
+            Offset := @ + 2;
+
+            Output.Put_Line
+              (Section_Template.Format
+                 (VSS.Strings.Formatters.Strings.Image (Offset * ' '),
+                  VSS.Strings.Formatters.Strings.Image
+                    ("Package Renamings")),
+               Success);
+
+            Offset := @ + 2;
+
+            for E of Entity.Package_Renamings loop
+               Dump (E.Reference, Success);
+            end loop;
+
+            Offset := @ - 2;
+            Offset := @ - 2;
+         end if;
+
          if not Entity.Record_Types.Is_Empty then
             Offset := @ + 2;
 

@@ -38,7 +38,8 @@ package GNATdoc.Entities is
       Ada_Formal,
       Ada_Generic_Package_Declaration,
       Ada_Generic_Package_Instantiation,
-      Ada_Generic_Subprogram_Instantiation);
+      Ada_Generic_Subprogram_Instantiation,
+      Ada_Package_Renaming);
 
    type Entity_Signature is record
       Image : VSS.Strings.Virtual_String;
