@@ -51,19 +51,19 @@ LAL
         Null node.
 
 
-    .. ada:function::     function Parent (Self : LAL.Ada_Node'Class) return LAL.Ada_Node
+    .. ada:function:: function Parent (Self : LAL.Ada_Node'Class) return LAL.Ada_Node
         :package: LAL.Ada_Node
 
         Parent node
 
 
-    .. ada:function::     function Children (Self : LAL.Ada_Node'Class) return LAL.Ada_Node_Array
+    .. ada:function:: function Children (Self : LAL.Ada_Node'Class) return LAL.Ada_Node_Array
         :package: LAL.Ada_Node
 
         Children nodes
 
 
-    .. ada:function::     function GNATdoc_179 (Source : LAL.Ada_Node'Class) return LAL.Ada_Node'Class
+    .. ada:function:: function GNATdoc_179 (Source : LAL.Ada_Node'Class) return LAL.Ada_Node'Class
         :package: LAL.Ada_Node
 
         eng/ide/gnatdoc#179
