@@ -490,7 +490,7 @@ package body GNATdoc.Backend.RST.PT is
 
          for Object of Constants loop
             Generate_Object_Documentation
-              ("    ", Object.all, Entity.Qualified_Name);
+              ("    ", Object.all, Package_Name);
          end loop;
 
          for Method of Entity.Belong_Subprograms loop
