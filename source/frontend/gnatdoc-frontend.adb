@@ -837,7 +837,8 @@ package body GNATdoc.Frontend is
 
    begin
       Entity.Is_Private := In_Private;
-      Entity.RST_Profile := GNATdoc.RST_Utilities.RST_Profile (Node.F_Subp_Spec);
+      Entity.RST_Profile :=
+        GNATdoc.RST_Utilities.RST_Profile (Node.F_Subp_Spec);
 
       Extract
         (Node          => Node,
