@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                        Copyright (C) 2025, AdaCore                       --
+--                     Copyright (C) 2025-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -296,6 +296,8 @@ package body GNATdoc.Comments.Extractor.Code_Snippets is
 
             elsif Node.As_Object_Decl.F_Type_Expr.Kind
               = Ada_Subtype_Indication
+              and then not Node.As_Object_Decl.F_Type_Expr
+                .P_Designated_Type_Decl.Is_Null
               and then Node.As_Object_Decl.F_Type_Expr.P_Designated_Type_Decl
                 .Kind = Ada_Concrete_Type_Decl
                 and then Node.As_Object_Decl.F_Type_Expr.P_Designated_Type_Decl
