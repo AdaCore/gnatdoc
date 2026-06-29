@@ -1,0 +1,10 @@
+[
+    //  eng/ide/gnatdoc#175
+
+    {"file": "gnatdoc_175.adb", "line": 23, "column": 7},
+    {"file": "gnatdoc_175.adb", "line": 25, "column": 7},
+    {"file": "gnatdoc_175.adb", "line": 25, "column": 14},
+    {"file": "gnatdoc_175.adb", "line": 26, "column": 12},
+    {"file": "gnatdoc_175.adb", "line": 27, "column": 12},
+    //  all references to `XXX` variable
+]

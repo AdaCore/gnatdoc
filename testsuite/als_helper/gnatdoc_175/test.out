@@ -1,0 +1,18 @@
+Defining name: <DefiningName "XXX" gnatdoc_175.adb:23:7-23:10>
+Origin: <Id "XXX" gnatdoc_175.adb:23:7-23:10>
+----- CODE SNIPPET -----
+XXX : Integer := 1;
+----- DOCUMENTATION -----
+----- DONE -----
+Defining name: None
+Origin: <Id "XXX" gnatdoc_175.adb:25:7-25:10>
+>>>>> LAL: name resolve failure <<<<<
+Defining name: None
+Origin: <Id "XXX" gnatdoc_175.adb:25:14-25:17>
+>>>>> LAL: name resolve failure <<<<<
+Defining name: None
+Origin: <Id "XXX" gnatdoc_175.adb:26:12-26:15>
+>>>>> LAL: name resolve failure <<<<<
+Defining name: None
+Origin: <Id "XXX" gnatdoc_175.adb:27:12-27:15>
+>>>>> LAL: name resolve failure <<<<<
