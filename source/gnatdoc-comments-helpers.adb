@@ -370,6 +370,7 @@ package body GNATdoc.Comments.Helpers is
                     | Ada_Package_Body
                     | Ada_Package_Decl
                     | Ada_Package_Renaming_Decl
+                    | Ada_Protected_Body
                     | Ada_Protected_Type_Decl
                     | Ada_Single_Protected_Decl
                     | Ada_Subp_Body
