@@ -2033,6 +2033,11 @@ package body GNATdoc.Frontend is
            Defining_Name => Name);
 
    begin
+      Entity.RSTPT_Renames :=
+        VSS.Strings.To_Virtual_String
+          (Node.F_Renames.F_Renamed_Object.P_Referenced_Defining_Name
+             .P_Fully_Qualified_Name);
+
       Extract
         (Node          => Node,
          Options       => GNATdoc.Options.Extractor_Options,
