@@ -723,6 +723,37 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Private_Type
+----- DONE -----
+Defining name: <DefiningName "Private_Type" generics.ads:11:12-11:24>
+Origin: <Id "Private_Type" generics.ads:38:38-38:50>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Private_Type
@@ -742,6 +773,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Private_Type
@@ -761,6 +798,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Private_Type
@@ -780,6 +823,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Derived_Type
@@ -799,6 +848,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Derived_Type
@@ -818,6 +873,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Derived_Type
@@ -837,6 +898,37 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Discrete_Type
+----- DONE -----
+Defining name: <DefiningName "Discrete_Type" generics.ads:17:12-17:25>
+Origin: <Id "Discrete_Type" generics.ads:35:55-35:68>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Discrete_Type
@@ -856,6 +948,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Discrete_Type
@@ -875,6 +973,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Discrete_Type
@@ -894,6 +998,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Signed_Integer_Type
@@ -913,6 +1023,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Signed_Integer_Type
@@ -932,6 +1048,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Signed_Integer_Type
@@ -951,6 +1073,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Modular_Type
@@ -970,6 +1098,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Modular_Type
@@ -989,6 +1123,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Modular_Type
@@ -1008,6 +1148,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Floating_Point_Type
@@ -1027,6 +1173,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Floating_Point_Type
@@ -1046,6 +1198,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Floating_Point_Type
@@ -1065,6 +1223,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Ordinary_Fixed_Point_Type
@@ -1084,6 +1248,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Ordinary_Fixed_Point_Type
@@ -1103,6 +1273,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Ordinary_Fixed_Point_Type
@@ -1122,6 +1298,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Decimal_Fixed_Point_Type
@@ -1141,6 +1323,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Decimal_Fixed_Point_Type
@@ -1160,6 +1348,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Decimal_Fixed_Point_Type
@@ -1179,6 +1373,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Array_Type
@@ -1198,6 +1398,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Array_Type
@@ -1217,6 +1423,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Array_Type
@@ -1236,6 +1448,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Access_Type
@@ -1255,6 +1473,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Access_Type
@@ -1274,6 +1498,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Access_Type
@@ -1293,6 +1523,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Interface_Type
@@ -1312,6 +1548,37 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Interface_Type
+----- DONE -----
+Defining name: <DefiningName "Interface_Type" generics.ads:41:12-41:26>
+Origin: <Id "Interface_Type" generics.adb:35:47-35:61>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Interface_Type
@@ -1331,6 +1598,12 @@ generic
    type Array_Type is array (Positive range <>) of Discrete_Type;
    type Access_Type is access all Private_Type;
    type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 package Generic_Package
 ----- DOCUMENTATION -----
 @formal Interface_Type
