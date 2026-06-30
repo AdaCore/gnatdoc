@@ -127,6 +127,7 @@ LAL
 
 .. ada:package:: Num
     :package: LAL
+
     :renames: Ada.Numerics
 
     eng/ide/gnatdoc#183
