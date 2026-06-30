@@ -476,6 +476,7 @@ package body GNATdoc.Backend.RST.PT is
          File.Put (Package_Name, Success);
          File.New_Line (Success);
 
+         File.New_Line (Success);
          File.Put (Indent, Success);
          File.Put ("    :renames: ", Success);
          File.Put (Entity.RSTPT_Renames, Success);
