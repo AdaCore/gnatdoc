@@ -1631,6 +1631,86 @@ package Packages_Renaming renames Packages;
 ----- DOCUMENTATION -----
 Description of the package renaming
 ----- DONE -----
+Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
+Origin: <Id "Protected_Object" protecteds.ads:4:14-4:30>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
+Origin: <Id "Protected_Object" protecteds.ads:17:8-17:24>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Object" protecteds.adb:4:19-4:35>
+Origin: <Id "Protected_Object" protecteds.adb:4:19-4:35>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected object (specification).
+
+Description of the protected object (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Object" protecteds.adb:4:19-4:35>
+Origin: <Id "Protected_Object" protecteds.adb:32:8-32:24>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected object (specification).
+
+Description of the protected object (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
+Origin: <Id "Protected_Object" protecteds_package.adb:11:27-11:43>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
+Origin: <Id "Protected_Object" protecteds_package.adb:12:18-12:34>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
+Origin: <Id "Protected_Object" protecteds_package.adb:13:18-13:34>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Type" protecteds.ads:19:19-19:33>
+Origin: <Id "Protected_Type" protecteds.ads:19:19-19:33>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected type (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Type" protecteds.ads:19:19-19:33>
+Origin: <Id "Protected_Type" protecteds.ads:32:8-32:22>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected type (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Type" protecteds.adb:34:19-34:33>
+Origin: <Id "Protected_Type" protecteds.adb:34:19-34:33>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected type (specification).
+
+Description of the protected type (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Type" protecteds.adb:34:19-34:33>
+Origin: <Id "Protected_Type" protecteds.adb:62:8-62:22>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected type (specification).
+
+Description of the protected type (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Type" protecteds.ads:19:19-19:33>
+Origin: <Id "Protected_Type" protecteds_package.adb:6:20-6:34>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected type (specification).
+----- DONE -----
 Defining name: <DefiningName "Result" returns.adb:8:17-8:23>
 Origin: <Id "Result" returns.adb:8:17-8:23>
 ----- CODE SNIPPET -----

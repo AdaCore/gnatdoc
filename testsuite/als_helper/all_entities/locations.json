@@ -355,6 +355,32 @@
     {"file": "packages_package.adb", "line": 2, "column": 6},
     //  reference of the package renaming from code
 
+    {"file": "protecteds.ads", "line": 4, "column": 14},
+    //  declaration of the protected object specification
+    {"file": "protecteds.ads", "line": 17, "column": 8},
+    //  reference of the protected object from "end <>"
+    {"file": "protecteds.adb", "line": 4, "column": 19},
+    //  declaration of the protected object body
+    {"file": "protecteds.adb", "line": 32, "column": 8},
+    //  reference of the protected object from "end <>"
+    {"file": "protecteds_package.adb", "line": 11, "column": 27},
+    //  reference of the protected object from function call
+    {"file": "protecteds_package.adb", "line": 12, "column": 18},
+    //  reference of the protected object from procedure call
+    {"file": "protecteds_package.adb", "line": 13, "column": 18},
+    //  reference of the protected object from entry call
+
+    {"file": "protecteds.ads", "line": 19, "column": 19},
+    //  declaration of the protected type specification
+    {"file": "protecteds.ads", "line": 32, "column": 8},
+    //  reference of the protected type from "end <>"
+    {"file": "protecteds.adb", "line": 34, "column": 19},
+    //  declaration of the protected type body
+    {"file": "protecteds.adb", "line": 62, "column": 8},
+    //  reference of the protected type from "end <>"
+    {"file": "protecteds_package.adb", "line": 6, "column": 20},
+    //  reference of the protected type from object declaration
+
     {"file": "returns.adb", "line": 8, "column": 17},
     //  declaration of return object
     {"file": "returns.adb", "line": 9, "column": 13},
