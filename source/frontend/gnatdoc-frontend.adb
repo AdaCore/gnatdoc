@@ -1869,7 +1869,10 @@ package body GNATdoc.Frontend is
               GNATdoc.Entities.Entity_Information_Access :=
                 Create_Entity
                   (Enclosing     => Enclosing,
-                   Kind          => GNATdoc.Entities.Ada_Object,
+                   Kind          =>
+                     (if Node.F_Has_Constant
+                      then GNATdoc.Entities.Ada_Object_Constant
+                      else GNATdoc.Entities.Ada_Object_Variable),
                    Defining_Name => Name);
             Belongs : GNATdoc.Entities.Entity_Information_Access;
 
