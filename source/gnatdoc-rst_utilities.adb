@@ -154,7 +154,7 @@ package body GNATdoc.RST_Utilities is
                begin
                   for Id of Ids loop
                      if First then
-                         First := False;
+                        First := False;
 
                      else
                         Result.Append ("; ");
