@@ -1857,11 +1857,15 @@ package body GNATdoc.Comments.Extractor is
 
             when Ada_Generic_Formal_Subp_Decl =>
                declare
-                  Subp_Decl        : constant Concrete_Formal_Subp_Decl :=
-                    Item.As_Generic_Formal_Subp_Decl.F_Decl
-                      .As_Concrete_Formal_Subp_Decl;
                   Formal_Subp_Spec : constant Subp_Spec :=
-                    Subp_Decl.F_Subp_Spec;
+                    (case Item.As_Generic_Formal_Subp_Decl.F_Decl.Kind is
+                        when Ada_Concrete_Formal_Subp_Decl =>
+                           Item.As_Generic_Formal_Subp_Decl.F_Decl
+                             .As_Concrete_Formal_Subp_Decl.F_Subp_Spec,
+                        when Ada_Abstract_Formal_Subp_Decl =>
+                           Item.As_Generic_Formal_Subp_Decl.F_Decl
+                             .As_Abstract_Formal_Subp_Decl.F_Subp_Spec,
+                        when others => raise Program_Error);
                   Formal_Name      : constant Defining_Name :=
                     Formal_Subp_Spec.F_Subp_Name;
                   Aux_Belongs_To   : VSS.Strings.Virtual_String;

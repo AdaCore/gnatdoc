@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2022-2023, AdaCore                     --
+--                     Copyright (C) 2022-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -62,10 +62,24 @@ package body GNATdoc.Comments.Builders.Generics is
                end;
 
             when Ada_Generic_Formal_Subp_Decl =>
-               Self.Process_Defining_Name
-                 (Formal,
-                  Item.As_Generic_Formal_Subp_Decl.F_Decl
-                    .As_Concrete_Formal_Subp_Decl.F_Subp_Spec.F_Subp_Name);
+               case Item.As_Generic_Formal_Subp_Decl.F_Decl.Kind is
+                  when Ada_Concrete_Formal_Subp_Decl =>
+                     Self.Process_Defining_Name
+                       (Formal,
+                        Item.As_Generic_Formal_Subp_Decl.F_Decl
+                          .As_Concrete_Formal_Subp_Decl.F_Subp_Spec
+                          .F_Subp_Name);
+
+                  when Ada_Abstract_Formal_Subp_Decl =>
+                     Self.Process_Defining_Name
+                       (Formal,
+                        Item.As_Generic_Formal_Subp_Decl.F_Decl
+                          .As_Abstract_Formal_Subp_Decl.F_Subp_Spec
+                          .F_Subp_Name);
+
+                  when others =>
+                     GNATdoc.Messages.Raise_Not_Implemented (Image (Item));
+               end case;
 
             when Ada_Generic_Formal_Obj_Decl =>
                for Id of

@@ -187,6 +187,8 @@
 
     {"file": "generics.ads", "line": 11, "column": 12},
     //  declaration: `Private_Type`
+    {"file": "generics.ads", "line": 38, "column": 38},
+    //  reference: `Private_Type`
     {"file": "generics.adb", "line": 22, "column": 37},
     //  reference: `Private_Type`
     {"file": "generics-instantiations.ads", "line": 13, "column": 13},
@@ -201,6 +203,8 @@
 
     {"file": "generics.ads", "line": 17, "column": 12},
     //  declaration: `Discrete_Type`
+    {"file": "generics.ads", "line": 35, "column": 55},
+    //  reference: `Discrete_Type`
     {"file": "generics.adb", "line": 24, "column": 37},
     //  reference: `Discrete_Type`
     {"file": "generics-instantiations.ads", "line": 16, "column": 13},
@@ -258,6 +262,8 @@
     {"file": "generics.ads", "line": 41, "column": 12},
     //  declaration: `Interface_Type`
     {"file": "generics.adb", "line": 33, "column": 41},
+    //  reference: `Interface_Type`
+    {"file": "generics.adb", "line": 35, "column": 47},
     //  reference: `Interface_Type`
     {"file": "generics-instantiations.ads", "line": 24, "column": 13},
     //  reference: `Interface_Type`

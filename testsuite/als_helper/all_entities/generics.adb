@@ -32,9 +32,14 @@ package body Generics is
 
       procedure Interface_Dummy (Self : Interface_Type) is null;
 
+      function Interface_Object return access Interface_Type'Class is (null);
+
       procedure Dummy is
       begin
-         null;
+         Signed_Integer_Object := Formal_Concrete_Function;
+         Formal_Concrete_Procedure;
+         Signed_Integer_Object := Interface_Object.Formal_Abstract_Function;
+         Interface_Object.Formal_Abstract_Procedure;
       end Dummy;
 
    end Generic_Package;
@@ -57,7 +62,11 @@ package body Generics is
             Decimal_Fixed_Point_Type  => Decimal_Fixed_Point_Type,
             Array_Type                => Array_Type,
             Access_Type               => Access_Type,
-            Interface_Type            => Interface_Type);
+            Interface_Type            => Interface_Type,
+            Formal_Concrete_Function  => Concrete_Function,
+            Formal_Concrete_Procedure => Concrete_Procedure,
+            Formal_Abstract_Function  => Concrete_Abstract_Function,
+            Formal_Abstract_Procedure => Concrete_Abstract_Procedure);
 
    function Function_Instantiation is new Generic_Function;
 

@@ -41,6 +41,20 @@ package Generics is
       type Interface_Type is interface;
       --  Description of the formal interface type
 
+      with function Formal_Concrete_Function return Signed_Integer_Type;
+      --  Description of the formal function
+
+      with procedure Formal_Concrete_Procedure;
+      --  Description of the formal procedure
+
+      with function Formal_Abstract_Function
+        (Self : Interface_Type) return Signed_Integer_Type is abstract;
+      --  Description of the formal abstract function
+
+      with procedure Formal_Abstract_Procedure
+        (Self : Interface_Type) is abstract;
+      --  Description of the formal abstract procedure
+
    package Generic_Package is
       --  Description of the generic package specification
 
@@ -67,6 +81,16 @@ package Generics is
    type Access_Type is access all Ada.Strings.Unbounded.Unbounded_String;
 
    type Interface_Type is interface;
+
+   function Concrete_Function return Integer is (0);
+
+   procedure Concrete_Procedure is null;
+
+   function Concrete_Abstract_Function
+     (Self : Interface_Type) return Integer is abstract;
+
+   procedure Concrete_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
 
 private
 

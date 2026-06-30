@@ -120,6 +120,19 @@ package body GNATdoc.Comments.Helpers is
          Text.Append ("  " & Line);
       end loop;
 
+      if Section.Kind = Formal then
+         --  For formal parameters, include content of nested description
+         --  section
+
+         for Subsection of Section.Sections loop
+            if Subsection.Kind = Description then
+               for Line of Subsection.Text loop
+                  Text.Append ("  " & Line);
+               end loop;
+            end if;
+         end loop;
+      end if;
+
       return Text;
    end Get_Plain_Text_Description;
 

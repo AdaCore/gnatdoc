@@ -21,7 +21,11 @@ package Generics.Instantiations is
             Decimal_Fixed_Point_Type  => Decimal_Fixed_Point_Type,
             Array_Type                => Array_Type,
             Access_Type               => Access_Type,
-            Interface_Type            => Interface_Type);
+            Interface_Type            => Interface_Type,
+            Formal_Concrete_Function  => Concrete_Function,
+            Formal_Concrete_Procedure => Concrete_Procedure,
+            Formal_Abstract_Function  => Concrete_Abstract_Function,
+            Formal_Abstract_Procedure => Concrete_Abstract_Procedure);
 
    function Function_Instantiation is new Generic_Function;
 
