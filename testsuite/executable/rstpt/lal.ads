@@ -69,7 +69,11 @@ package LAL is
    --  eng/ide/gnatdoc#180
    --  Access to subprogram as type of subprogram's parameter and return value.
 
-   Map_GNATdoc_180 : array (Boolean) of Boolean;
+   VMap_GNATdoc_180 : array (Boolean) of Boolean;
+   --  eng/ide/gnatdoc#180
+   --  Anonymous array type
+
+   CMap_GNATdoc_180 : constant array (Boolean) of Boolean := (True, False);
    --  eng/ide/gnatdoc#180
    --  Anonymous array type
 
