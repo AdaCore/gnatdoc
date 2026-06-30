@@ -268,6 +268,42 @@
     {"file": "generics-instantiations.ads", "line": 24, "column": 13},
     //  reference: `Interface_Type`
 
+    {"file": "generics.ads", "line": 44, "column": 21},
+    //  declaration: `Formal_Concrete_Function`
+    {"file": "generics.adb", "line": 39, "column": 35},
+    //  reference: `Formal_Concrete_Function`
+    {"file": "generics.adb", "line": 66, "column": 13},
+    //  reference: `Formal_Concrete_Function`
+    {"file": "generics-instantiations.ads", "line": 25, "column": 13},
+    //  reference: `Formal_Concrete_Function`
+
+    {"file": "generics.ads", "line": 47, "column": 22},
+    //  declaration: `Formal_Concrete_Procedure`
+    {"file": "generics.adb", "line": 40, "column": 10},
+    //  reference: `Formal_Concrete_Procedure`
+    {"file": "generics.adb", "line": 67, "column": 13},
+    //  reference: `Formal_Concrete_Procedure`
+    {"file": "generics-instantiations.ads", "line": 26, "column": 13},
+    //  reference: `Formal_Concrete_Procedure`
+
+    {"file": "generics.ads", "line": 50, "column": 21},
+    //  declaration: `Formal_Abstract_Function`
+    {"file": "generics.adb", "line": 41, "column": 52},
+    //  reference: `Formal_Abstract_Function`
+    {"file": "generics.adb", "line": 68, "column": 13},
+    //  reference: `Formal_Abstract_Function`
+    {"file": "generics-instantiations.ads", "line": 27, "column": 13},
+    //  reference: `Formal_Abstract_Function`
+
+    {"file": "generics.ads", "line": 54, "column": 22},
+    //  declaration: `Formal_Abstract_Procedure`
+    {"file": "generics.adb", "line": 42, "column": 27},
+    //  reference: `Formal_Abstract_Procedure`
+    {"file": "generics.adb", "line": 69, "column": 13},
+    //  reference: `Formal_Abstract_Procedure`
+    {"file": "generics-instantiations.ads", "line": 28, "column": 13},
+    //  reference: `Formal_Abstract_Procedure`
+
     //  Objects
 
     {"file": "objects.ads", "line": 4, "column": 4},
