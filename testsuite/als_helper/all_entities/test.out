@@ -1644,6 +1644,376 @@ package Generic_Package
 @formal Interface_Type
   Description of the formal interface type
 ----- DONE -----
+Defining name: <DefiningName "Formal_Concrete_Function" generics.ads:44:21-44:45>
+Origin: <Id "Formal_Concrete_Function" generics.ads:44:21-44:45>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Concrete_Function
+  Description of the formal function
+----- DONE -----
+Defining name: <DefiningName "Formal_Concrete_Function" generics.ads:44:21-44:45>
+Origin: <Id "Formal_Concrete_Function" generics.adb:39:35-39:59>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Concrete_Function
+  Description of the formal function
+----- DONE -----
+Defining name: <DefiningName "Formal_Concrete_Function" generics.ads:44:21-44:45>
+Origin: <Id "Formal_Concrete_Function" generics.adb:66:13-66:37>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Concrete_Function
+  Description of the formal function
+----- DONE -----
+Defining name: <DefiningName "Formal_Concrete_Function" generics.ads:44:21-44:45>
+Origin: <Id "Formal_Concrete_Function" generics-instantiations.ads:25:13-25:37>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Concrete_Function
+  Description of the formal function
+----- DONE -----
+Defining name: <DefiningName "Formal_Concrete_Procedure" generics.ads:47:22-47:47>
+Origin: <Id "Formal_Concrete_Procedure" generics.ads:47:22-47:47>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Concrete_Procedure
+  Description of the formal procedure
+----- DONE -----
+Defining name: <DefiningName "Formal_Concrete_Procedure" generics.ads:47:22-47:47>
+Origin: <Id "Formal_Concrete_Procedure" generics.adb:40:10-40:35>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Concrete_Procedure
+  Description of the formal procedure
+----- DONE -----
+Defining name: <DefiningName "Formal_Concrete_Procedure" generics.ads:47:22-47:47>
+Origin: <Id "Formal_Concrete_Procedure" generics.adb:67:13-67:38>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Concrete_Procedure
+  Description of the formal procedure
+----- DONE -----
+Defining name: <DefiningName "Formal_Concrete_Procedure" generics.ads:47:22-47:47>
+Origin: <Id "Formal_Concrete_Procedure" generics-instantiations.ads:26:13-26:38>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Concrete_Procedure
+  Description of the formal procedure
+----- DONE -----
+Defining name: <DefiningName "Formal_Abstract_Function" generics.ads:50:21-50:45>
+Origin: <Id "Formal_Abstract_Function" generics.ads:50:21-50:45>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Abstract_Function
+  Description of the formal abstract function
+----- DONE -----
+Defining name: None
+Origin: <Id "Formal_Abstract_Function" generics.adb:41:52-41:76>
+>>>>> LAL: name resolve failure <<<<<
+Defining name: <DefiningName "Formal_Abstract_Function" generics.ads:50:21-50:45>
+Origin: <Id "Formal_Abstract_Function" generics.adb:68:13-68:37>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Abstract_Function
+  Description of the formal abstract function
+----- DONE -----
+Defining name: <DefiningName "Formal_Abstract_Function" generics.ads:50:21-50:45>
+Origin: <Id "Formal_Abstract_Function" generics-instantiations.ads:27:13-27:37>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Abstract_Function
+  Description of the formal abstract function
+----- DONE -----
+Defining name: <DefiningName "Formal_Abstract_Procedure" generics.ads:54:22-54:47>
+Origin: <Id "Formal_Abstract_Procedure" generics.ads:54:22-54:47>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Abstract_Procedure
+  Description of the formal abstract procedure
+----- DONE -----
+Defining name: None
+Origin: <Id "Formal_Abstract_Procedure" generics.adb:42:27-42:52>
+>>>>> LAL: name resolve failure <<<<<
+Defining name: <DefiningName "Formal_Abstract_Procedure" generics.ads:54:22-54:47>
+Origin: <Id "Formal_Abstract_Procedure" generics.adb:69:13-69:38>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Abstract_Procedure
+  Description of the formal abstract procedure
+----- DONE -----
+Defining name: <DefiningName "Formal_Abstract_Procedure" generics.ads:54:22-54:47>
+Origin: <Id "Formal_Abstract_Procedure" generics-instantiations.ads:28:13-28:38>
+----- CODE SNIPPET -----
+generic
+   type Private_Type is private;
+   type Derived_Type is new Ada.Finalization.Controlled with private;
+   type Discrete_Type is (<>);
+   type Signed_Integer_Type is range <>;
+   type Modular_Type is mod <>;
+   type Floating_Point_Type is digits <>;
+   type Ordinary_Fixed_Point_Type is delta <>;
+   type Decimal_Fixed_Point_Type is delta <> digits <>;
+   type Array_Type is array (Positive range <>) of Discrete_Type;
+   type Access_Type is access all Private_Type;
+   type Interface_Type is interface;
+   with function Formal_Concrete_Function return Signed_Integer_Type;
+   with procedure Formal_Concrete_Procedure;
+   with function Formal_Abstract_Function
+     (Self : Interface_Type) return Signed_Integer_Type is abstract;
+   with procedure Formal_Abstract_Procedure
+     (Self : Interface_Type) is abstract;
+package Generic_Package
+----- DOCUMENTATION -----
+@formal Formal_Abstract_Procedure
+  Description of the formal abstract procedure
+----- DONE -----
 Defining name: <DefiningName "Named_Number" objects.ads:4:4-4:16>
 Origin: <Id "Named_Number" objects.ads:4:4-4:16>
 ----- CODE SNIPPET -----

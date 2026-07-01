@@ -466,8 +466,16 @@ package body GNATdoc.Frontend is
             when Ada_Generic_Formal_Subp_Decl =>
                Create_Formal
                  (Entity,
-                  Item.As_Generic_Formal_Subp_Decl.F_Decl
-                    .As_Concrete_Formal_Subp_Decl.F_Subp_Spec.F_Subp_Name);
+                  (case Item.As_Generic_Formal_Subp_Decl.F_Decl.Kind is
+                      when Ada_Concrete_Formal_Subp_Decl =>
+                         Item.As_Generic_Formal_Subp_Decl.F_Decl
+                           .As_Concrete_Formal_Subp_Decl.F_Subp_Spec
+                           .F_Subp_Name,
+                      when Ada_Abstract_Formal_Subp_Decl =>
+                         Item.As_Generic_Formal_Subp_Decl.F_Decl
+                           .As_Abstract_Formal_Subp_Decl.F_Subp_Spec
+                           .F_Subp_Name,
+                      when others => raise Program_Error));
 
             when Ada_Generic_Formal_Obj_Decl =>
                for Id of

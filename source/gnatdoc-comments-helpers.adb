@@ -333,7 +333,9 @@ package body GNATdoc.Comments.Helpers is
       Messages           : GNATdoc.Messages.Message_Container;
 
    begin
-      if Decl.Kind in Ada_Concrete_Formal_Subp_Decl | Ada_Formal_Type_Decl
+      if Decl.Kind in Ada_Abstract_Formal_Subp_Decl
+                    | Ada_Concrete_Formal_Subp_Decl
+                    | Ada_Formal_Type_Decl
         or else (Decl.Kind = Ada_Object_Decl
                    and then Decl.Parent.Kind = Ada_Generic_Formal_Obj_Decl)
       then
@@ -344,7 +346,9 @@ package body GNATdoc.Comments.Helpers is
 
       elsif Decl.Kind = Ada_Param_Spec
         and then Parent_Basic_Decl.Kind
-              in Ada_Concrete_Formal_Subp_Decl | Ada_Formal_Type_Decl
+           in Ada_Abstract_Formal_Subp_Decl
+            | Ada_Concrete_Formal_Subp_Decl
+            | Ada_Formal_Type_Decl
       then
          --  Parameter of the formal subprogram or formal access to subprogram
          --  type of the generic declaration.
@@ -354,6 +358,11 @@ package body GNATdoc.Comments.Helpers is
          if Parent_Basic_Decl.Kind = Ada_Formal_Type_Decl then
             Name_To_Extract :=
               Parent_Basic_Decl.As_Formal_Type_Decl.F_Name;
+
+         elsif Parent_Basic_Decl.Kind = Ada_Abstract_Formal_Subp_Decl then
+            Name_To_Extract :=
+              Parent_Basic_Decl.As_Abstract_Formal_Subp_Decl.F_Subp_Spec
+                .F_Subp_Name;
 
          elsif Parent_Basic_Decl.Kind = Ada_Concrete_Formal_Subp_Decl then
             Name_To_Extract :=
@@ -489,7 +498,9 @@ package body GNATdoc.Comments.Helpers is
         (Name : Libadalang.Analysis.Defining_Name'Class) return Boolean is
       begin
          case Name.P_Basic_Decl.Kind is
-            when Ada_Abstract_Subp_Decl
+            when Ada_Abstract_Formal_Subp_Decl
+               | Ada_Abstract_Subp_Decl
+               | Ada_Concrete_Formal_Subp_Decl
                | Ada_Entry_Decl
                | Ada_Expr_Function
                | Ada_Null_Subp_Decl
