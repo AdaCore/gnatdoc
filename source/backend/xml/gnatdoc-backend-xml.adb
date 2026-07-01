@@ -93,7 +93,9 @@ package body GNATdoc.Backend.XML is
          when GNATdoc.Entities.Ada_Named_Number =>
             return Named_Number_Tag;
 
-         when GNATdoc.Entities.Ada_Object =>
+         when GNATdoc.Entities.Ada_Object_Constant
+            | GNATdoc.Entities.Ada_Object_Variable
+         =>
             return Object_Tag;
 
          when GNATdoc.Entities.Ada_Exception =>

@@ -64,6 +64,7 @@ package body GNATdoc.Backend.RST.PT is
      (Self   : in out PT_RST_Backend'Class;
       Entity : GNATdoc.Entities.Entity_Information)
    is
+      use all type GNATdoc.Entities.Entity_Kind;
       use type VSS.Strings.Character_Count;
 
       Name    : constant GNATCOLL.VFS.Virtual_File :=
@@ -98,7 +99,10 @@ package body GNATdoc.Backend.RST.PT is
       procedure Generate_Object_Documentation
         (Indent       : VSS.Strings.Virtual_String;
          Entity       : GNATdoc.Entities.Entity_Information;
-         Package_Name : VSS.Strings.Virtual_String);
+         Package_Name : VSS.Strings.Virtual_String)
+        with Pre => Entity.Kind in Ada_Named_Number
+                                 | Ada_Object_Constant
+                                 | Ada_Object_Variable;
       --  Generate documentation for object entity.
 
       procedure Generate_Exception_Documentation
@@ -166,7 +170,8 @@ package body GNATdoc.Backend.RST.PT is
                           (Indent, Item.all, Package_Name);
 
                      when GNATdoc.Entities.Ada_Named_Number
-                        | GNATdoc.Entities.Ada_Object
+                        | GNATdoc.Entities.Ada_Object_Constant
+                        | GNATdoc.Entities.Ada_Object_Variable
                      =>
                         Generate_Object_Documentation
                           (Indent, Item.all, Package_Name);
@@ -368,13 +373,18 @@ package body GNATdoc.Backend.RST.PT is
       is
          use type VSS.Strings.Virtual_String;
 
-         Object_Template  : VSS.Strings.Templates.Virtual_String_Template :=
-           "{}.. ada:object:: {} : constant {}";
-         Package_Template : VSS.Strings.Templates.Virtual_String_Template :=
+         Object_Template : VSS.Strings.Templates.Virtual_String_Template :=
+           (case Entity.Kind is
+               when Ada_Named_Number | Ada_Object_Constant =>
+                 "{}.. ada:object:: {} : constant {}",
+               when Ada_Object_Variable =>
+                 "{}.. ada:object:: {} : {}",
+               when others => raise Program_Error);
+         Package_Template  : VSS.Strings.Templates.Virtual_String_Template :=
            "{}    :package: {}";
-         Objtype_Template : VSS.Strings.Templates.Virtual_String_Template :=
+         Objtype_Template  : VSS.Strings.Templates.Virtual_String_Template :=
            "{}    :objtype: {}";
-         Defval_Template  : VSS.Strings.Templates.Virtual_String_Template :=
+         Defval_Template   : VSS.Strings.Templates.Virtual_String_Template :=
            "{}    :defval: ``{}``";
 
       begin

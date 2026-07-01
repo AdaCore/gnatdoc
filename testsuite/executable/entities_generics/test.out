@@ -4,26 +4,26 @@
   Contains Entities:
     +   Constant_Of_Formal_Types (ADA_GENERIC_PACKAGE_DECLARATION) 'constant_of_formal_types'
       Constants:
-        +   Empty_Array (ADA_OBJECT) 'constant_of_formal_types.empty_array' [of 'constant_of_formal_types.array_type']
-        +   Null_T (ADA_OBJECT) 'constant_of_formal_types.null_t' [of 'constant_of_formal_types.t_access']
+        +   Empty_Array (ADA_OBJECT_CONSTANT) 'constant_of_formal_types.empty_array' [of 'constant_of_formal_types.array_type']
+        +   Null_T (ADA_OBJECT_CONSTANT) 'constant_of_formal_types.null_t' [of 'constant_of_formal_types.t_access']
       Belongs Constants:
-        +   Empty_Array (ADA_OBJECT) 'constant_of_formal_types.empty_array' [of 'constant_of_formal_types.array_type']
-        +   Null_T (ADA_OBJECT) 'constant_of_formal_types.null_t' [of 'constant_of_formal_types.t_access']
+        +   Empty_Array (ADA_OBJECT_CONSTANT) 'constant_of_formal_types.empty_array' [of 'constant_of_formal_types.array_type']
+        +   Null_T (ADA_OBJECT_CONSTANT) 'constant_of_formal_types.null_t' [of 'constant_of_formal_types.t_access']
       Contains Entities:
         +   T (ADA_FORMAL) 'constant_of_formal_types.t'
         +   T_Access (ADA_FORMAL) 'constant_of_formal_types.t_access'
         +   Element_Type (ADA_FORMAL) 'constant_of_formal_types.element_type'
         +   Index_Type (ADA_FORMAL) 'constant_of_formal_types.index_type'
         +   Array_Type (ADA_FORMAL) 'constant_of_formal_types.array_type'
-        +   Null_T (ADA_OBJECT) 'constant_of_formal_types.null_t' [of 'constant_of_formal_types.t_access']
-        +   Empty_Array (ADA_OBJECT) 'constant_of_formal_types.empty_array' [of 'constant_of_formal_types.array_type']
+        +   Null_T (ADA_OBJECT_CONSTANT) 'constant_of_formal_types.null_t' [of 'constant_of_formal_types.t_access']
+        +   Empty_Array (ADA_OBJECT_CONSTANT) 'constant_of_formal_types.empty_array' [of 'constant_of_formal_types.array_type']
       Belongs Entities:
         +   T (ADA_FORMAL) 'constant_of_formal_types.t'
         +   T_Access (ADA_FORMAL) 'constant_of_formal_types.t_access'
         +   Element_Type (ADA_FORMAL) 'constant_of_formal_types.element_type'
         +   Index_Type (ADA_FORMAL) 'constant_of_formal_types.index_type'
         +   Array_Type (ADA_FORMAL) 'constant_of_formal_types.array_type'
-        +   Null_T (ADA_OBJECT) 'constant_of_formal_types.null_t' [of 'constant_of_formal_types.t_access']
-        +   Empty_Array (ADA_OBJECT) 'constant_of_formal_types.empty_array' [of 'constant_of_formal_types.array_type']
+        +   Null_T (ADA_OBJECT_CONSTANT) 'constant_of_formal_types.null_t' [of 'constant_of_formal_types.t_access']
+        +   Empty_Array (ADA_OBJECT_CONSTANT) 'constant_of_formal_types.empty_array' [of 'constant_of_formal_types.array_type']
   Belongs Entities:
     +   Constant_Of_Formal_Types (ADA_GENERIC_PACKAGE_DECLARATION) 'constant_of_formal_types'
