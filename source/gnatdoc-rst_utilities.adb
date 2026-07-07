@@ -70,7 +70,9 @@ package body GNATdoc.RST_Utilities is
                case Type_Def_Node.Kind is
                   when Ada_Type_Access_Def =>
                      return Result : VSS.Strings.Virtual_String :=
-                       "access "
+                       (if Type_Def_Node.As_Type_Access_Def.F_Has_Not_Null
+                        then "not null access "
+                        else "access ")
                      do
                         if Type_Def_Node.As_Type_Access_Def.F_Has_Constant
                         then
