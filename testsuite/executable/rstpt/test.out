@@ -105,6 +105,8 @@ LAL
         Component Y
     :component ``access constant Standard.Integer`` Z:
         Component Z
+    :component ``not null access constant Standard.Integer`` W:
+        Component W
 
     Description of the Record_Type
 
@@ -119,7 +121,7 @@ LAL
 .. ada:object:: VMap_GNATdoc_180 : array (Boolean) of Boolean
     :package: LAL
 
-    :objtype: array (Boolean) of Boolean
+    :objtype: ``array (Boolean) of Boolean``
 
     eng/ide/gnatdoc#180
     Anonymous array type
@@ -128,7 +130,7 @@ LAL
 .. ada:object:: CMap_GNATdoc_180 : constant array (Boolean) of Boolean
     :package: LAL
 
-    :objtype: array (Boolean) of Boolean
+    :objtype: ``array (Boolean) of Boolean``
     :defval: ``(True, False)``
 
     eng/ide/gnatdoc#180

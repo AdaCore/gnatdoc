@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2023-2024, AdaCore                     --
+--                     Copyright (C) 2023-2025, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -37,5 +37,11 @@ package GNATdoc.Comments.RST_Helpers is
    --    components is expected to be present in the description.
    --  @param Code_Snippet
    --    When True code snippet is added to the documentation.
+
+   function RST_Type_Image
+     (Type_Name : VSS.Strings.Virtual_String)
+      return VSS.Strings.Virtual_String;
+   --  Escape type name for RST output. When `Type_Name` has spaces it is
+   --  enclosed in double backticks.
 
 end GNATdoc.Comments.RST_Helpers;

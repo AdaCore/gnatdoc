@@ -59,30 +59,6 @@ package body GNATdoc.Comments.RST_Helpers is
       Code_Snippet  : Boolean)
       return VSS.String_Vectors.Virtual_String_Vector
    is
-      function RST_Type_Image
-        (Type_Name : VSS.Strings.Virtual_String)
-         return VSS.Strings.Virtual_String;
-
-      --------------------
-      -- RST_Type_Image --
-      --------------------
-
-      function RST_Type_Image
-        (Type_Name : VSS.Strings.Virtual_String)
-         return VSS.Strings.Virtual_String
-      is
-         Iterator : Character_Iterator := Type_Name.At_First_Character;
-
-      begin
-         while Iterator.Forward loop
-            if Iterator.Element = Space then
-               return "``" & Type_Name & "``";
-            end if;
-         end loop;
-
-         return Type_Name;
-      end RST_Type_Image;
-
       Text         : VSS.String_Vectors.Virtual_String_Vector;
       Add_New_Line : Boolean := False;
 
@@ -237,5 +213,25 @@ package body GNATdoc.Comments.RST_Helpers is
 
       return Text;
    end Get_RST_Documentation;
+
+   --------------------
+   -- RST_Type_Image --
+   --------------------
+
+   function RST_Type_Image
+     (Type_Name : VSS.Strings.Virtual_String)
+      return VSS.Strings.Virtual_String
+   is
+      Iterator : Character_Iterator := Type_Name.At_First_Character;
+
+   begin
+      while Iterator.Forward loop
+         if Iterator.Element = Space then
+            return "``" & Type_Name & "``";
+         end if;
+      end loop;
+
+      return Type_Name;
+   end RST_Type_Image;
 
 end GNATdoc.Comments.RST_Helpers;

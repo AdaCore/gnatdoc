@@ -407,7 +407,9 @@ package body GNATdoc.Backend.RST.PT is
             File.Put_Line
               (Objtype_Template.Format
                  (VSS.Strings.Formatters.Strings.Image (Indent),
-                  VSS.Strings.Formatters.Strings.Image (Entity.RSTPT_Objtype)),
+                  VSS.Strings.Formatters.Strings.Image
+                   (GNATdoc.Comments.RST_Helpers.RST_Type_Image
+                      (Entity.RSTPT_Objtype))),
             Success);
          end if;
 
