@@ -1,0 +1,5 @@
+gnatdoc_191.ads:21:12: warning: entity `UnBar` is not documented
+gnatdoc_191.ads:21:12: warning: generic formal `UFoo` is not documented
+gnatdoc_191.ads:21:12: warning: parameter `UValue` is not documented
+gnatdoc_191.ads:23:17: warning: entity `UBaz` is not documented
+gnatdoc_191.ads:23:17: warning: parameter `UValue` is not documented
