@@ -32,32 +32,58 @@ package body GNATdoc.Comments.Undocumented_Checker is
      VSS.Strings.Templates.Virtual_String_Template :=
        "{} is not documented";
 
-   ------------------------
-   -- Check_Undocumented --
-   ------------------------
+   procedure Check
+     (Location : GNATdoc.Source_Location;
+      Sections : GNATdoc.Comments.Section_Vectors.Vector;
+      Messages : in out GNATdoc.Messages.Message_Container);
+   --  Check documentation for subsections.
 
-   procedure Check_Undocumented
-     (Location      : GNATdoc.Source_Location;
-      Name          : VSS.Strings.Virtual_String;
-      Documentation : GNATdoc.Comments.Structured_Comment;
-      Messages      : in out GNATdoc.Messages.Message_Container) is
+   -----------
+   -- Check --
+   -----------
+
+   procedure Check
+     (Location : GNATdoc.Source_Location;
+      Sections : GNATdoc.Comments.Section_Vectors.Vector;
+      Messages : in out GNATdoc.Messages.Message_Container) is
    begin
-      for Section of Documentation.Sections loop
-         if Section.Kind in Description then
-            if Section.Text.Is_Empty then
-               Messages.Append_Message
-                 (Location => Location,
-                  Text     =>
-                    Entity_Not_Documented_Template.Format
-                      (VSS.Strings.Formatters.Strings.Image (Name)));
-            end if;
+      for Section of Sections loop
+         if Section.Kind in Formal then
+            pragma Assert (Section.Text.Is_Empty);
+            pragma Assert
+              (for some Subsection of Section.Sections =>
+                 Subsection.Kind = Description);
 
-            exit;
-         end if;
-      end loop;
+            --  Look for documnetation section of generic formal parameter,
+            --  and check that it is not empty.
 
-      for Section of Documentation.Sections loop
-         if Section.Kind in Entity_Component
+            for Subsection of Section.Sections loop
+               if Subsection.Kind in Description
+                 and then Subsection.Text.Is_Empty
+               then
+                  declare
+                     Text : VSS.Strings.Virtual_String;
+
+                  begin
+                     Text :=
+                       Named_Component_Not_Documented_Template.Format
+                         (VSS.Strings.Formatters.Strings.Image
+                            ("generic formal"),
+                          VSS.Strings.Formatters.Strings.Image (Section.Name));
+
+                     Messages.Append_Message
+                       (Location => Location,
+                        Text     => Text);
+                  end;
+               end if;
+            end loop;
+
+            --  Check other subsections of generic formal parameter (parameters
+            --  and return of formal subprograms).
+
+            Check (Location, Section.Sections, Messages);
+
+         elsif Section.Kind in Entity_Component
            and then Section.Text.Is_Empty
          then
             declare
@@ -75,7 +101,6 @@ package body GNATdoc.Comments.Undocumented_Checker is
                       (VSS.Strings.Formatters.Strings.Image
                          (VSS.Strings.Virtual_String'
                             (case Section.Kind is
-                             when Formal              => "generic formal",
                              when Enumeration_Literal => "enumeration literal",
                              when Discriminant        => "discriminant",
                              when Component           => "component",
@@ -91,6 +116,35 @@ package body GNATdoc.Comments.Undocumented_Checker is
             end;
          end if;
       end loop;
+   end Check;
+
+   ------------------------
+   -- Check_Undocumented --
+   ------------------------
+
+   procedure Check_Undocumented
+     (Location      : GNATdoc.Source_Location;
+      Name          : VSS.Strings.Virtual_String;
+      Documentation : GNATdoc.Comments.Structured_Comment;
+      Messages      : in out GNATdoc.Messages.Message_Container) is
+   begin
+      --  Looking for description section and check that it is not empty.
+
+      for Section of Documentation.Sections loop
+         if Section.Kind in Description then
+            if Section.Text.Is_Empty then
+               Messages.Append_Message
+                 (Location => Location,
+                  Text     =>
+                    Entity_Not_Documented_Template.Format
+                      (VSS.Strings.Formatters.Strings.Image (Name)));
+            end if;
+
+            exit;
+         end if;
+      end loop;
+
+      Check (Location, Documentation.Sections, Messages);
    end Check_Undocumented;
 
 end GNATdoc.Comments.Undocumented_Checker;
