@@ -665,6 +665,13 @@ package body GNATdoc.Comments.Extractor.Trailing is
 
                return Libadalang.Common.Over;
 
+            when Ada_Paren_Expr =>
+               --  Parenthesized expression appears in case of expression
+               --  function, and might contains Ada_Defining_Name nodes, and
+               --  processed as elements. So, skip it for now.
+
+               return Libadalang.Common.Over;
+
             when others =>
                null;
          end case;
