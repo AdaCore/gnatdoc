@@ -293,6 +293,25 @@ package Subprograms_GNAT is
    --  Subprogram's description use incorrect alignment for description of the
    --  subprogram.
 
+   -----------------
+   -- GNATdoc#189 --
+   -----------------
+
+   function Safe_Faces (D : States.Display_State) return Boolean
+   is (for all M1 in States.Movement =>
+         (for all M2 in States.Movement =>
+            (if Conflicts (M1, M2)
+             then
+               not (States.Is_Go (States.Face_Of (D, M1))
+                    and then States.Is_Go (States.Face_Of (D, M2))))));
+   --  hlr_0_safety.2 as a property of one Display_State: no two conflicting
+   --  movements are both "go" at once. Holds trivially in FAULT (every face
+   --  FLASHING_RED, none "go") and, in NORMAL_OPERATION, by construction of the
+   --  Moore output rows (each row's non-RED faces are a compatible set).
+   --  NOTE: documented in leading style pending a gnatdoc fix -- a trailing
+   --  comment on this nested-quantifier expression function crashes the
+   --  trailing extractor (gnatdoc-comments-extractor-trailing.adb:843).
+
 private
 
    --  This is description of the package at the beginning of the private
