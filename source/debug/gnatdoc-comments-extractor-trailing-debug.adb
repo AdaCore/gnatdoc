@@ -86,8 +86,12 @@ package body GNATdoc.Comments.Extractor.Trailing.Debug is
                when Cancel =>
                   Put (" | CN");
 
-               when others =>
-                  Put (" |:");
+               when Parameter =>
+                  Put (" |P:");
+                  Count_IO.Put (Line.Component_Group.Sections.Length);
+
+               when Returns =>
+                  Put (" |R:");
                   Count_IO.Put (Line.Component_Group.Sections.Length);
             end case;
 
