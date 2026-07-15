@@ -482,8 +482,15 @@ package body GNATdoc.Projects is
 
    begin
       for View of Project_Tree loop
+         --  Ignored projects:
+         --    * externally built, except root project
+         --    * extended projects
+         --    * explicitly excluded projects (via `Exclude_Project_Files`
+         --      attribute)
+
          if (not View.Is_Externally_Built
                or else Project_Tree.Root_Project = View)
+           and then not View.Is_Extended
            and then not Exclude_Project_Files.Contains
                           (View.Path_Name.Virtual_File)
          then
