@@ -1,0 +1,3 @@
+
+project B extends "a/a.gpr" is
+end B;
