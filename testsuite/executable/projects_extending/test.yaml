@@ -1,0 +1,2 @@
+description: GNATdoc excludes extended projects from processing
+driver: executable
