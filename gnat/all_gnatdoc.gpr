@@ -1,0 +1,6 @@
+
+aggregate project All_GNATdoc is
+
+   for Project_Files use ("gnatdoc.gpr", "tests/test_drivers.gpr");
+
+end All_GNATdoc;
