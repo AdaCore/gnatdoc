@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                     Copyright (C) 2024-2025, AdaCore                     --
+--                     Copyright (C) 2024-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,6 +15,7 @@
 -- of the license.                                                          --
 ------------------------------------------------------------------------------
 
+with GNATdoc.Backend.CM;
 with GNATdoc.Backend.HTML;
 with GNATdoc.Backend.ODF;
 with GNATdoc.Backend.RST.PT;
@@ -33,7 +34,10 @@ package body GNATdoc.Backend.Registry is
       use type VSS.Strings.Virtual_String;
 
    begin
-      if Name = "html" then
+      if Name = "cm" then
+         return new GNATdoc.Backend.CM.CM_Backend;
+
+      elsif Name = "html" then
          return new GNATdoc.Backend.HTML.HTML_Backend;
 
       elsif Name = "odf" then

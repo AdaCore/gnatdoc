@@ -429,12 +429,17 @@ package body GNATdoc.Projects is
      (Backend_Name : VSS.Strings.Virtual_String)
       return GNATCOLL.VFS.Virtual_File
    is
+      use type VSS.Strings.Virtual_String;
+
       Index       : constant GPR2.Project.Attribute_Index.Object :=
         GPR2.Project.Attribute_Index.Create
           (VSS.Strings.Conversions.To_UTF_8_String (Backend_Name));
       Backend_Dir : constant GNATCOLL.VFS.Filesystem_String :=
         GNATCOLL.VFS.Filesystem_String
-          (VSS.Strings.Conversions.To_UTF_8_String (Backend_Name));
+          (VSS.Strings.Conversions.To_UTF_8_String
+             (if Backend_Name = "cm" then "treecm" else Backend_Name));
+      --  Special case for the "cm" backend, which uses "treecm" as output
+      --  directory for compatibility with `gnatdoc3`.
 
    begin
       return Result : GNATCOLL.VFS.Virtual_File do
