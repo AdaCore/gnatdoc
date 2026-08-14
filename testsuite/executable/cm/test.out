@@ -1,0 +1,82 @@
+***** sample.ads:3:9:Kind
+--- Src:
+   type Kind is (Alpha, Beta);
+--- Structured Comment:
+  Kind description
+  @value Alpha
+    Alpha value
+  @value Beta
+    Beta value
+@value Alpha
+@value Beta
+
+***** sample.ads:10:9:Rec
+--- Src:
+   type Rec is record
+      Value : Integer;
+   end record;
+--- Structured Comment:
+  Record description
+
+@field Value
+  Value field
+
+***** sample.ads:16:13:Identity
+--- Src:
+   function Identity (Input : Integer) return Integer
+--- Structured Comment:
+  Identity function
+
+@param Input
+    Input value
+
+@return
+    Same value
+
+***** sample.ads:23:13:Tag_Only
+--- Src:
+   function Tag_Only (Input : Integer) return Integer
+--- Structured Comment:
+@param Input
+    Tag-only input value
+
+@return
+    Tag-only result
+
+***** sample.ads:29:14:Raises_Only
+--- Src:
+   procedure Raises_Only
+--- Structured Comment:
+@exception Constraint_Error
+    Raised when constraints are violated
+
+***** sample.ads:33:13:Mention_Exclude
+--- Src:
+   function Mention_Exclude return Boolean
+--- Structured Comment:
+  ` tag
+
+***** sample.ads:36:9:Legacy_Enum
+--- Src:
+   type Legacy_Enum is
+     (Legacy_A,
+      Legacy_B,
+      Legacy_C);
+--- Structured Comment:
+@value Legacy_A
+    Legacy A description
+
+@value Legacy_B
+    Legacy B description
+
+@value Legacy_C
+    Legacy C description
+
+***** sample.ads:37:7:Legacy_A
+--- Doc.Line: 37
+--- Doc.Text:     Legacy A description
+
+***** sample.ads:38:7:Legacy_B
+--- Doc.Line: 38
+--- Doc.Text:     Legacy B description
+
