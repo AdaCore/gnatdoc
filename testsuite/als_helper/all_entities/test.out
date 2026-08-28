@@ -3117,3 +3117,8 @@ Origin: <OpNeq synthetics_package.adb:256:24-256:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
+Defining name: <SyntheticDefiningName "'X'" in Standard>
+Origin: <Chr "'X'" synthetics_package.adb:265:13-265:16>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+----- DONE -----

@@ -786,6 +786,9 @@
     {"file": "synthetics_package.adb", "line": 256, "column": 24},
     //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Private_Private`
 
+    {"file": "synthetics_package.adb", "line": 265, "column": 13},
+    //  gnatdoc#193: reference of `Character` enumeration literal `'X'`
+
     // {"file": "pkg1.ads", "line": 5, "column": 9},  // package specification name
     // {"file": "pkg1.ads", "line": 9, "column": 5},  // package specification end name
     // {"file": "pkg1.adb", "line": 5, "column": 14},  // package body name
