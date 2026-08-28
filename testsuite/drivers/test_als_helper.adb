@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                    GNAT Documentation Generation Tool                    --
 --                                                                          --
---                       Copyright (C) 2025, AdaCore                        --
+--                     Copyright (C) 2025-2026, AdaCore                     --
 --                                                                          --
 -- This is free software;  you can redistribute it  and/or modify it  under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -88,6 +88,12 @@ procedure Test_ALS_Helper is
               (if Origin.As_Identifier.P_Is_Defining
                  then Origin.As_Identifier.P_Enclosing_Defining_Name
                  else Origin.As_Identifier.P_Referenced_Defining_Name);
+
+         when Libadalang.Common.Ada_Char_Literal =>
+            Name :=
+              (if Origin.As_Char_Literal.P_Is_Defining
+                 then Origin.As_Char_Literal.P_Enclosing_Defining_Name
+                 else Origin.As_Char_Literal.P_Referenced_Defining_Name);
 
          when Libadalang.Common.Ada_Op_Abs
             | Libadalang.Common.Ada_Op_And
