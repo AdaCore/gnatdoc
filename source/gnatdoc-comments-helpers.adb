@@ -567,7 +567,9 @@ package body GNATdoc.Comments.Helpers is
       --  Synthetic declarations doesn't have nor code snippets nor
       --  documentation.
 
-      if Name.P_Basic_Decl.Kind = Ada_Synthetic_Subp_Decl then
+      if Name.P_Basic_Decl.Kind
+           in Ada_Synthetic_Subp_Decl | Ada_Synthetic_Char_Enum_Lit
+      then
          return;
       end if;
 
