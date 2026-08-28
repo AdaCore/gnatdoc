@@ -139,7 +139,7 @@ type.
 
 @field Discriminant
   Public description of the discriminant
-  
+
   Private description of the discriminant
 ----- DONE -----
 Defining name: <DefiningName "Known_Discriminant_Private_Null_Record" discriminant_record_types.ads:57:9-57:47>
@@ -158,7 +158,7 @@ type.
 
 @field Discriminant
   Public description of the discriminant
-  
+
   Private description of the discriminant
 ----- DONE -----
 Defining name: <DefiningName "Known_Discriminant_Private_Null_Record" discriminant_record_types.ads:13:9-13:47>
@@ -192,7 +192,7 @@ type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
 ----- DOCUMENTATION -----
 @field Discriminant
   Public description of the discriminant
-  
+
   Private description of the discriminant
 ----- DONE -----
 Defining name: <DefiningName "Discriminant" discriminant_record_types.ads:57:49-57:61>
@@ -206,7 +206,7 @@ type Known_Discriminant_Private_Null_Record (Discriminant : Integer)
 ----- DOCUMENTATION -----
 @field Discriminant
   Public description of the discriminant
-  
+
   Private description of the discriminant
 ----- DONE -----
 Defining name: <DefiningName "Discriminant" discriminant_record_types.ads:13:49-13:61>
@@ -415,7 +415,7 @@ Private description of the
 
 @field Discriminant
   Public description of the discriminant
-  
+
   Private description of the discriminant
 ----- DONE -----
 Defining name: <DefiningName "Incomplete_Known_Discriminant_Private_Null_Record" discriminant_record_types.ads:71:9-71:58>
@@ -438,7 +438,7 @@ Private description of the
 
 @field Discriminant
   Public description of the discriminant
-  
+
   Private description of the discriminant
 ----- DONE -----
 Defining name: <DefiningName "Incomplete_Known_Discriminant_Private_Null_Record" discriminant_record_types.ads:41:9-41:58>
@@ -476,7 +476,7 @@ type Incomplete_Known_Discriminant_Private_Null_Record
 ----- DOCUMENTATION -----
 @field Discriminant
   Public description of the discriminant
-  
+
   Private description of the discriminant
 ----- DONE -----
 Defining name: <DefiningName "Discriminant" discriminant_record_types.ads:72:12-72:24>
@@ -490,7 +490,7 @@ type Incomplete_Known_Discriminant_Private_Null_Record
 ----- DOCUMENTATION -----
 @field Discriminant
   Public description of the discriminant
-  
+
   Private description of the discriminant
 ----- DONE -----
 Defining name: <DefiningName "Discriminant" discriminant_record_types.ads:42:12-42:24>
@@ -522,7 +522,7 @@ Character enumeration type
   Description of 'C'
 @enum 'D'
   Description of 'D' and 'E'
-  
+
   Additional description of 'D'
 @enum 'E'
   Description of 'D' and 'E'
@@ -553,7 +553,7 @@ Character enumeration type
   Description of 'C'
 @enum 'D'
   Description of 'D' and 'E'
-  
+
   Additional description of 'D'
 @enum 'E'
   Description of 'D' and 'E'
@@ -584,7 +584,7 @@ Character enumeration type
   Description of 'C'
 @enum 'D'
   Description of 'D' and 'E'
-  
+
   Additional description of 'D'
 @enum 'E'
   Description of 'D' and 'E'
@@ -633,7 +633,7 @@ type Character_Enumeration is
 ----- DOCUMENTATION -----
 @enum 'D'
   Description of 'D' and 'E'
-  
+
   Additional description of 'D'
 ----- DONE -----
 Defining name: <DefiningName "'D'" enumerations.ads:8:7-8:10>
@@ -648,7 +648,7 @@ type Character_Enumeration is
 ----- DOCUMENTATION -----
 @enum 'D'
   Description of 'D' and 'E'
-  
+
   Additional description of 'D'
 ----- DONE -----
 Defining name: <DefiningName "'E'" enumerations.ads:8:12-8:15>
@@ -710,7 +710,7 @@ Identifier enumeration type
   Description of C
 @enum D
   Description of D and E
-  
+
   Additional description of D
 @enum E
   Description of D and E
@@ -741,7 +741,7 @@ Identifier enumeration type
   Description of C
 @enum D
   Description of D and E
-  
+
   Additional description of D
 @enum E
   Description of D and E
@@ -772,7 +772,7 @@ Identifier enumeration type
   Description of C
 @enum D
   Description of D and E
-  
+
   Additional description of D
 @enum E
   Description of D and E
@@ -821,7 +821,7 @@ type Identifier_Enumeration is
 ----- DOCUMENTATION -----
 @enum D
   Description of D and E
-  
+
   Additional description of D
 ----- DONE -----
 Defining name: <DefiningName "D" enumerations.ads:21:7-21:8>
@@ -836,7 +836,7 @@ type Identifier_Enumeration is
 ----- DOCUMENTATION -----
 @enum D
   Description of D and E
-  
+
   Additional description of D
 ----- DONE -----
 Defining name: <DefiningName "E" enumerations.ads:21:10-21:11>
