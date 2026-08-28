@@ -9,6 +9,13 @@ package body Enumerations is
       begin
          null;
       end;
+
+      declare
+         Object : Identifier_Enumeration := D;
+
+      begin
+         null;
+      end;
    end Dummy;
 
 end Enumerations;
