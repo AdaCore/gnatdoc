@@ -87,6 +87,30 @@
     {"file": "discriminant_record_types_package.adb", "line": 36, "column": 26},
     //  reference: `Known_Discriminant_Private_Null_Record`
 
+    //  Enumerations
+
+    {"file": "enumerations.ads", "line": 4, "column": 9},
+    //  declaration: `Character_Enumeration`
+    {"file": "enumerations.adb", "line": 7, "column": 19},
+    //  reference: `Character_Enumeration`
+    {"file": "enumerations_package.adb", "line": 9, "column": 32},
+    //  reference: `Character_Enumeration`
+
+    {"file": "enumerations.ads", "line": 7, "column": 7},
+    //  declaration: `Character_Enumeration'('C')`
+    {"file": "enumerations.ads", "line": 18, "column": 49},
+    //  reference: `Character_Enumeration'('C')`
+
+    {"file": "enumerations.ads", "line": 8, "column": 7},
+    //  declaration: `Character_Enumeration'('D')`
+    {"file": "enumerations.adb", "line": 7, "column": 44},
+    //  reference: `Character_Enumeration'('D')`
+
+    {"file": "enumerations.ads", "line": 9, "column": 7},
+    //  declaration: `Character_Enumeration'('F')`
+    {"file": "enumerations_package.adb", "line": 9, "column": 70},
+    //  reference: `Character_Enumeration'('F')`
+
     //  Exceptions (declarations and renamings)
 
     {"file": "exceptions.ads", "line": 4, "column": 4},

@@ -502,6 +502,171 @@ type Incomplete_Known_Discriminant_Private_Null_Record
 @field Discriminant
   Public description of the discriminant
 ----- DONE -----
+Defining name: <DefiningName "Character_Enumeration" enumerations.ads:4:9-4:30>
+Origin: <Id "Character_Enumeration" enumerations.ads:4:9-4:30>
+----- CODE SNIPPET -----
+type Character_Enumeration is
+  ('A',
+   'B',
+   'C',
+   'D', 'E',
+   'F', 'G', 'H');
+----- DOCUMENTATION -----
+Character enumeration type
+
+@enum 'A'
+  Description of 'A'
+@enum 'B'
+  Description of 'B'
+@enum 'C'
+  Description of 'C'
+@enum 'D'
+  Description of 'D' and 'E'
+@enum 'E'
+  Description of 'D' and 'E'
+@enum 'F'
+  Description of 'F'
+@enum 'G'
+  Description of 'G'
+@enum 'H'
+  Description of 'H'
+----- DONE -----
+Defining name: <DefiningName "Character_Enumeration" enumerations.ads:4:9-4:30>
+Origin: <Id "Character_Enumeration" enumerations.adb:7:19-7:40>
+----- CODE SNIPPET -----
+type Character_Enumeration is
+  ('A',
+   'B',
+   'C',
+   'D', 'E',
+   'F', 'G', 'H');
+----- DOCUMENTATION -----
+Character enumeration type
+
+@enum 'A'
+  Description of 'A'
+@enum 'B'
+  Description of 'B'
+@enum 'C'
+  Description of 'C'
+@enum 'D'
+  Description of 'D' and 'E'
+@enum 'E'
+  Description of 'D' and 'E'
+@enum 'F'
+  Description of 'F'
+@enum 'G'
+  Description of 'G'
+@enum 'H'
+  Description of 'H'
+----- DONE -----
+Defining name: <DefiningName "Character_Enumeration" enumerations.ads:4:9-4:30>
+Origin: <Id "Character_Enumeration" enumerations_package.adb:9:32-9:53>
+----- CODE SNIPPET -----
+type Character_Enumeration is
+  ('A',
+   'B',
+   'C',
+   'D', 'E',
+   'F', 'G', 'H');
+----- DOCUMENTATION -----
+Character enumeration type
+
+@enum 'A'
+  Description of 'A'
+@enum 'B'
+  Description of 'B'
+@enum 'C'
+  Description of 'C'
+@enum 'D'
+  Description of 'D' and 'E'
+@enum 'E'
+  Description of 'D' and 'E'
+@enum 'F'
+  Description of 'F'
+@enum 'G'
+  Description of 'G'
+@enum 'H'
+  Description of 'H'
+----- DONE -----
+Defining name: <DefiningName "'C'" enumerations.ads:7:7-7:10>
+Origin: <Chr "'C'" enumerations.ads:7:7-7:10>
+----- CODE SNIPPET -----
+type Character_Enumeration is
+  ('A',
+   'B',
+   'C',
+   'D', 'E',
+   'F', 'G', 'H');
+----- DOCUMENTATION -----
+@enum 'C'
+  Description of 'C'
+----- DONE -----
+Defining name: <DefiningName "'C'" enumerations.ads:7:7-7:10>
+Origin: <Chr "'C'" enumerations.ads:18:49-18:52>
+----- CODE SNIPPET -----
+type Character_Enumeration is
+  ('A',
+   'B',
+   'C',
+   'D', 'E',
+   'F', 'G', 'H');
+----- DOCUMENTATION -----
+@enum 'C'
+  Description of 'C'
+----- DONE -----
+Defining name: <DefiningName "'D'" enumerations.ads:8:7-8:10>
+Origin: <Chr "'D'" enumerations.ads:8:7-8:10>
+----- CODE SNIPPET -----
+type Character_Enumeration is
+  ('A',
+   'B',
+   'C',
+   'D', 'E',
+   'F', 'G', 'H');
+----- DOCUMENTATION -----
+@enum 'D'
+  Description of 'D' and 'E'
+----- DONE -----
+Defining name: <DefiningName "'D'" enumerations.ads:8:7-8:10>
+Origin: <Chr "'D'" enumerations.adb:7:44-7:47>
+----- CODE SNIPPET -----
+type Character_Enumeration is
+  ('A',
+   'B',
+   'C',
+   'D', 'E',
+   'F', 'G', 'H');
+----- DOCUMENTATION -----
+@enum 'D'
+  Description of 'D' and 'E'
+----- DONE -----
+Defining name: <DefiningName "'F'" enumerations.ads:9:7-9:10>
+Origin: <Chr "'F'" enumerations.ads:9:7-9:10>
+----- CODE SNIPPET -----
+type Character_Enumeration is
+  ('A',
+   'B',
+   'C',
+   'D', 'E',
+   'F', 'G', 'H');
+----- DOCUMENTATION -----
+@enum 'F'
+  Description of 'F'
+----- DONE -----
+Defining name: <DefiningName "'F'" enumerations.ads:9:7-9:10>
+Origin: <Chr "'F'" enumerations_package.adb:9:70-9:73>
+----- CODE SNIPPET -----
+type Character_Enumeration is
+  ('A',
+   'B',
+   'C',
+   'D', 'E',
+   'F', 'G', 'H');
+----- DOCUMENTATION -----
+@enum 'F'
+  Description of 'F'
+----- DONE -----
 Defining name: <DefiningName "Test_Exception" exceptions.ads:4:4-4:18>
 Origin: <Id "Test_Exception" exceptions.ads:4:4-4:18>
 ----- CODE SNIPPET -----
