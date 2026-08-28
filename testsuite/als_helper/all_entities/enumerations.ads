@@ -9,6 +9,7 @@ package Enumerations is
       'F', 'G', 'H');
    --  Character enumeration type
    --
+   --  @enum 'D' Additional description of 'D'
    --  @enum 'F' Description of 'F'
    --  @enum 'G' Description of 'G'
    --  @enum 'H' Description of 'H'
@@ -21,9 +22,10 @@ package Enumerations is
       F, G, H);
    --  Identifier enumeration type
    --
-   -- @enum F Description of F
-   -- @enum G Description of G
-   -- @enum H Description of H
+   --  @enum D Additional description of D
+   --  @enum F Description of F
+   --  @enum G Description of G
+   --  @enum H Description of H
 
 private
 

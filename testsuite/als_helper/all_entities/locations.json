@@ -98,7 +98,7 @@
 
     {"file": "enumerations.ads", "line": 7, "column": 7},
     //  declaration: `Character_Enumeration'('C')`
-    {"file": "enumerations.ads", "line": 30, "column": 49},
+    {"file": "enumerations.ads", "line": 32, "column": 49},
     //  reference: `Character_Enumeration'('C')`
 
     {"file": "enumerations.ads", "line": 8, "column": 7},
@@ -106,29 +106,37 @@
     {"file": "enumerations.adb", "line": 7, "column": 44},
     //  reference: `Character_Enumeration'('D')`
 
+    {"file": "enumerations.ads", "line": 8, "column": 12},
+    //  declaration: `Character_Enumeration'('E')`; must not include
+    //  the additional description provided for `'D'`
+
     {"file": "enumerations.ads", "line": 9, "column": 7},
     //  declaration: `Character_Enumeration'('F')`
     {"file": "enumerations_package.adb", "line": 9, "column": 70},
     //  reference: `Character_Enumeration'('F')`
 
-    {"file": "enumerations.ads", "line": 16, "column": 9},
+    {"file": "enumerations.ads", "line": 17, "column": 9},
     //  declaration: `Identifier_Enumeration`
     {"file": "enumerations.adb", "line": 14, "column": 19},
     //  reference: `Identifier_Enumeration`
     {"file": "enumerations_package.adb", "line": 16, "column": 32},
     //  reference: `Identifier_Enumeration`
 
-    {"file": "enumerations.ads", "line": 19, "column": 7},
+    {"file": "enumerations.ads", "line": 20, "column": 7},
     //  declaration: `Identifier_Enumeration.C`
-    {"file": "enumerations.ads", "line": 32, "column": 61},
+    {"file": "enumerations.ads", "line": 34, "column": 61},
     //  reference: `Identifier_Enumeration.C`
 
-    {"file": "enumerations.ads", "line": 20, "column": 7},
+    {"file": "enumerations.ads", "line": 21, "column": 7},
     //  declaration: `Identifier_Enumeration.D`
     {"file": "enumerations.adb", "line": 14, "column": 45},
     //  reference: `Identifier_Enumeration.D`
 
-    {"file": "enumerations.ads", "line": 21, "column": 7},
+    {"file": "enumerations.ads", "line": 21, "column": 10},
+    //  declaration: `Identifier_Enumeration.E`; must not include
+    //  the additional description provided for `D`
+
+    {"file": "enumerations.ads", "line": 22, "column": 7},
     //  declaration: `Identifier_Enumeration.F`
     {"file": "enumerations_package.adb", "line": 16, "column": 71},
     //  reference: `Identifier_Enumeration.F`

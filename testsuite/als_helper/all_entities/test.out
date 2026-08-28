@@ -522,6 +522,8 @@ Character enumeration type
   Description of 'C'
 @enum 'D'
   Description of 'D' and 'E'
+  
+  Additional description of 'D'
 @enum 'E'
   Description of 'D' and 'E'
 @enum 'F'
@@ -551,6 +553,8 @@ Character enumeration type
   Description of 'C'
 @enum 'D'
   Description of 'D' and 'E'
+  
+  Additional description of 'D'
 @enum 'E'
   Description of 'D' and 'E'
 @enum 'F'
@@ -580,6 +584,8 @@ Character enumeration type
   Description of 'C'
 @enum 'D'
   Description of 'D' and 'E'
+  
+  Additional description of 'D'
 @enum 'E'
   Description of 'D' and 'E'
 @enum 'F'
@@ -603,7 +609,7 @@ type Character_Enumeration is
   Description of 'C'
 ----- DONE -----
 Defining name: <DefiningName "'C'" enumerations.ads:7:7-7:10>
-Origin: <Chr "'C'" enumerations.ads:30:49-30:52>
+Origin: <Chr "'C'" enumerations.ads:32:49-32:52>
 ----- CODE SNIPPET -----
 type Character_Enumeration is
   ('A',
@@ -627,6 +633,8 @@ type Character_Enumeration is
 ----- DOCUMENTATION -----
 @enum 'D'
   Description of 'D' and 'E'
+  
+  Additional description of 'D'
 ----- DONE -----
 Defining name: <DefiningName "'D'" enumerations.ads:8:7-8:10>
 Origin: <Chr "'D'" enumerations.adb:7:44-7:47>
@@ -639,6 +647,21 @@ type Character_Enumeration is
    'F', 'G', 'H');
 ----- DOCUMENTATION -----
 @enum 'D'
+  Description of 'D' and 'E'
+  
+  Additional description of 'D'
+----- DONE -----
+Defining name: <DefiningName "'E'" enumerations.ads:8:12-8:15>
+Origin: <Chr "'E'" enumerations.ads:8:12-8:15>
+----- CODE SNIPPET -----
+type Character_Enumeration is
+  ('A',
+   'B',
+   'C',
+   'D', 'E',
+   'F', 'G', 'H');
+----- DOCUMENTATION -----
+@enum 'E'
   Description of 'D' and 'E'
 ----- DONE -----
 Defining name: <DefiningName "'F'" enumerations.ads:9:7-9:10>
@@ -667,8 +690,8 @@ type Character_Enumeration is
 @enum 'F'
   Description of 'F'
 ----- DONE -----
-Defining name: <DefiningName "Identifier_Enumeration" enumerations.ads:16:9-16:31>
-Origin: <Id "Identifier_Enumeration" enumerations.ads:16:9-16:31>
+Defining name: <DefiningName "Identifier_Enumeration" enumerations.ads:17:9-17:31>
+Origin: <Id "Identifier_Enumeration" enumerations.ads:17:9-17:31>
 ----- CODE SNIPPET -----
 type Identifier_Enumeration is
   (A,
@@ -677,7 +700,7 @@ type Identifier_Enumeration is
    D, E,
    F, G, H);
 ----- DOCUMENTATION -----
- Identifier enumeration type
+Identifier enumeration type
 
 @enum A
   Description of A
@@ -687,6 +710,8 @@ type Identifier_Enumeration is
   Description of C
 @enum D
   Description of D and E
+  
+  Additional description of D
 @enum E
   Description of D and E
 @enum F
@@ -696,7 +721,7 @@ type Identifier_Enumeration is
 @enum H
   Description of H
 ----- DONE -----
-Defining name: <DefiningName "Identifier_Enumeration" enumerations.ads:16:9-16:31>
+Defining name: <DefiningName "Identifier_Enumeration" enumerations.ads:17:9-17:31>
 Origin: <Id "Identifier_Enumeration" enumerations.adb:14:19-14:41>
 ----- CODE SNIPPET -----
 type Identifier_Enumeration is
@@ -706,7 +731,7 @@ type Identifier_Enumeration is
    D, E,
    F, G, H);
 ----- DOCUMENTATION -----
- Identifier enumeration type
+Identifier enumeration type
 
 @enum A
   Description of A
@@ -716,6 +741,8 @@ type Identifier_Enumeration is
   Description of C
 @enum D
   Description of D and E
+  
+  Additional description of D
 @enum E
   Description of D and E
 @enum F
@@ -725,7 +752,7 @@ type Identifier_Enumeration is
 @enum H
   Description of H
 ----- DONE -----
-Defining name: <DefiningName "Identifier_Enumeration" enumerations.ads:16:9-16:31>
+Defining name: <DefiningName "Identifier_Enumeration" enumerations.ads:17:9-17:31>
 Origin: <Id "Identifier_Enumeration" enumerations_package.adb:16:32-16:54>
 ----- CODE SNIPPET -----
 type Identifier_Enumeration is
@@ -735,7 +762,7 @@ type Identifier_Enumeration is
    D, E,
    F, G, H);
 ----- DOCUMENTATION -----
- Identifier enumeration type
+Identifier enumeration type
 
 @enum A
   Description of A
@@ -745,6 +772,8 @@ type Identifier_Enumeration is
   Description of C
 @enum D
   Description of D and E
+  
+  Additional description of D
 @enum E
   Description of D and E
 @enum F
@@ -754,8 +783,8 @@ type Identifier_Enumeration is
 @enum H
   Description of H
 ----- DONE -----
-Defining name: <DefiningName "C" enumerations.ads:19:7-19:8>
-Origin: <Id "C" enumerations.ads:19:7-19:8>
+Defining name: <DefiningName "C" enumerations.ads:20:7-20:8>
+Origin: <Id "C" enumerations.ads:20:7-20:8>
 ----- CODE SNIPPET -----
 type Identifier_Enumeration is
   (A,
@@ -767,8 +796,8 @@ type Identifier_Enumeration is
 @enum C
   Description of C
 ----- DONE -----
-Defining name: <DefiningName "C" enumerations.ads:19:7-19:8>
-Origin: <Id "C" enumerations.ads:32:61-32:62>
+Defining name: <DefiningName "C" enumerations.ads:20:7-20:8>
+Origin: <Id "C" enumerations.ads:34:61-34:62>
 ----- CODE SNIPPET -----
 type Identifier_Enumeration is
   (A,
@@ -780,8 +809,8 @@ type Identifier_Enumeration is
 @enum C
   Description of C
 ----- DONE -----
-Defining name: <DefiningName "D" enumerations.ads:20:7-20:8>
-Origin: <Id "D" enumerations.ads:20:7-20:8>
+Defining name: <DefiningName "D" enumerations.ads:21:7-21:8>
+Origin: <Id "D" enumerations.ads:21:7-21:8>
 ----- CODE SNIPPET -----
 type Identifier_Enumeration is
   (A,
@@ -792,8 +821,10 @@ type Identifier_Enumeration is
 ----- DOCUMENTATION -----
 @enum D
   Description of D and E
+  
+  Additional description of D
 ----- DONE -----
-Defining name: <DefiningName "D" enumerations.ads:20:7-20:8>
+Defining name: <DefiningName "D" enumerations.ads:21:7-21:8>
 Origin: <Id "D" enumerations.adb:14:45-14:46>
 ----- CODE SNIPPET -----
 type Identifier_Enumeration is
@@ -805,9 +836,24 @@ type Identifier_Enumeration is
 ----- DOCUMENTATION -----
 @enum D
   Description of D and E
+  
+  Additional description of D
 ----- DONE -----
-Defining name: <DefiningName "F" enumerations.ads:21:7-21:8>
-Origin: <Id "F" enumerations.ads:21:7-21:8>
+Defining name: <DefiningName "E" enumerations.ads:21:10-21:11>
+Origin: <Id "E" enumerations.ads:21:10-21:11>
+----- CODE SNIPPET -----
+type Identifier_Enumeration is
+  (A,
+   B,
+   C,
+   D, E,
+   F, G, H);
+----- DOCUMENTATION -----
+@enum E
+  Description of D and E
+----- DONE -----
+Defining name: <DefiningName "F" enumerations.ads:22:7-22:8>
+Origin: <Id "F" enumerations.ads:22:7-22:8>
 ----- CODE SNIPPET -----
 type Identifier_Enumeration is
   (A,
@@ -819,7 +865,7 @@ type Identifier_Enumeration is
 @enum F
   Description of F
 ----- DONE -----
-Defining name: <DefiningName "F" enumerations.ads:21:7-21:8>
+Defining name: <DefiningName "F" enumerations.ads:22:7-22:8>
 Origin: <Id "F" enumerations_package.adb:16:71-16:72>
 ----- CODE SNIPPET -----
 type Identifier_Enumeration is
