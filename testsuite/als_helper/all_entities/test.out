@@ -2401,31 +2401,31 @@ Origin: <Id "Result" returns.adb:9:13-9:19>
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: None
-Origin: <OpEq "=" synthetics.adb:11:15-11:16>
+Origin: <OpEq synthetics.adb:11:15-11:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNeq "/=" synthetics.adb:15:15-15:17>
+Origin: <OpNeq synthetics.adb:15:15-15:17>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpEq "=" synthetics_package.adb:12:15-12:16>
+Origin: <OpEq synthetics_package.adb:12:15-12:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNeq "/=" synthetics_package.adb:16:15-16:17>
+Origin: <OpNeq synthetics_package.adb:16:15-16:17>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpEq "=" synthetics.adb:25:15-25:16>
+Origin: <OpEq synthetics.adb:25:15-25:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNeq "/=" synthetics.adb:29:15-29:17>
+Origin: <OpNeq synthetics.adb:29:15-29:17>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpEq "=" synthetics_package.adb:26:15-26:16>
+Origin: <OpEq synthetics_package.adb:26:15-26:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNeq "/=" synthetics_package.adb:30:15-30:17>
+Origin: <OpNeq synthetics_package.adb:30:15-30:17>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: <DefiningName ""="" synthetics.ads:123:13-123:16>
-Origin: <OpEq "=" synthetics.adb:39:15-39:16>
+Origin: <OpEq synthetics.adb:39:15-39:16>
 ----- CODE SNIPPET -----
 function "="
   (Left : Explicit_Record; Right : Explicit_Record) return Boolean
@@ -2440,12 +2440,12 @@ Private declaration of the explicit equal check operator
 @return
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:123:4-125:58>
-Origin: <OpNeq "/=" synthetics.adb:43:15-43:17>
+Origin: <OpNeq synthetics.adb:43:15-43:17>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:12:13-12:16>
-Origin: <OpEq "=" synthetics_package.adb:40:15-40:16>
+Origin: <OpEq synthetics_package.adb:40:15-40:16>
 ----- CODE SNIPPET -----
 function "="
   (Left : Explicit_Record; Right : Explicit_Record) return Boolean
@@ -2458,12 +2458,12 @@ Public declaration of the explicit equal check operator
 @return
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:12:4-13:71>
-Origin: <OpNeq "/=" synthetics_package.adb:44:15-44:17>
+Origin: <OpNeq synthetics_package.adb:44:15-44:17>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:12:13-12:16>
-Origin: <OpEq "=" synthetics.adb:53:15-53:16>
+Origin: <OpEq synthetics.adb:53:15-53:16>
 ----- CODE SNIPPET -----
 function "="
   (Left : Explicit_Record; Right : Explicit_Record) return Boolean
@@ -2478,12 +2478,12 @@ Private declaration of the explicit equal check operator
 @return
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:12:4-13:71>
-Origin: <OpNeq "/=" synthetics.adb:57:15-57:17>
+Origin: <OpNeq synthetics.adb:57:15-57:17>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:12:13-12:16>
-Origin: <OpEq "=" synthetics_package.adb:54:15-54:16>
+Origin: <OpEq synthetics_package.adb:54:15-54:16>
 ----- CODE SNIPPET -----
 function "="
   (Left : Explicit_Record; Right : Explicit_Record) return Boolean
@@ -2496,273 +2496,273 @@ Public declaration of the explicit equal check operator
 @return
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:12:4-13:71>
-Origin: <OpNeq "/=" synthetics_package.adb:58:15-58:17>
+Origin: <OpNeq synthetics_package.adb:58:15-58:17>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: None
-Origin: <OpAbs "abs" synthetics.adb:70:15-70:18>
+Origin: <OpAbs synthetics.adb:70:15-70:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpAbs "abs" synthetics_package.adb:71:15-71:18>
+Origin: <OpAbs synthetics_package.adb:71:15-71:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpDiv "/" synthetics.adb:71:17-71:18>
+Origin: <OpDiv synthetics.adb:71:17-71:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpDiv "/" synthetics_package.adb:72:17-72:18>
+Origin: <OpDiv synthetics_package.adb:72:17-72:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpGt ">" synthetics.adb:66:15-66:16>
+Origin: <OpGt synthetics.adb:66:15-66:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpGt ">" synthetics_package.adb:67:15-67:16>
+Origin: <OpGt synthetics_package.adb:67:15-67:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpGte ">=" synthetics.adb:66:24-66:26>
+Origin: <OpGte synthetics.adb:66:24-66:26>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpGte ">=" synthetics_package.adb:67:24-67:26>
+Origin: <OpGte synthetics_package.adb:67:24-67:26>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpLt "<" synthetics.adb:66:34-66:35>
+Origin: <OpLt synthetics.adb:66:34-66:35>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpLt "<" synthetics_package.adb:67:34-67:35>
+Origin: <OpLt synthetics_package.adb:67:34-67:35>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpLte "<=" synthetics.adb:66:43-66:45>
+Origin: <OpLte synthetics.adb:66:43-66:45>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpLte "<=" synthetics_package.adb:67:43-67:45>
+Origin: <OpLte synthetics_package.adb:67:43-67:45>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMinus "-" synthetics.adb:72:17-72:18>
+Origin: <OpMinus synthetics.adb:72:17-72:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMinus "-" synthetics_package.adb:73:17-73:18>
+Origin: <OpMinus synthetics_package.adb:73:17-73:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMinus "-" synthetics.adb:73:15-73:16>
+Origin: <OpMinus synthetics.adb:73:15-73:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMinus "-" synthetics_package.adb:74:15-74:16>
+Origin: <OpMinus synthetics_package.adb:74:15-74:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMod "mod" synthetics.adb:74:17-74:20>
+Origin: <OpMod synthetics.adb:74:17-74:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMod "mod" synthetics_package.adb:75:17-75:20>
+Origin: <OpMod synthetics_package.adb:75:17-75:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMult "*" synthetics.adb:75:17-75:18>
+Origin: <OpMult synthetics.adb:75:17-75:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMult "*" synthetics_package.adb:76:17-76:18>
+Origin: <OpMult synthetics_package.adb:76:17-76:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpPlus "+" synthetics.adb:76:17-76:18>
+Origin: <OpPlus synthetics.adb:76:17-76:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpPlus "+" synthetics_package.adb:77:17-77:18>
+Origin: <OpPlus synthetics_package.adb:77:17-77:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpPlus "+" synthetics.adb:77:15-77:16>
+Origin: <OpPlus synthetics.adb:77:15-77:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpPlus "+" synthetics_package.adb:78:15-78:16>
+Origin: <OpPlus synthetics_package.adb:78:15-78:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpPow "**" synthetics.adb:78:17-78:19>
+Origin: <OpPow synthetics.adb:78:17-78:19>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpPow "**" synthetics_package.adb:79:17-79:19>
+Origin: <OpPow synthetics_package.adb:79:17-79:19>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpRem "rem" synthetics.adb:79:17-79:20>
+Origin: <OpRem synthetics.adb:79:17-79:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpRem "rem" synthetics_package.adb:80:17-80:20>
+Origin: <OpRem synthetics_package.adb:80:17-80:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpAbs "abs" synthetics.adb:90:15-90:18>
+Origin: <OpAbs synthetics.adb:90:15-90:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpAbs "abs" synthetics_package.adb:91:15-91:18>
+Origin: <OpAbs synthetics_package.adb:91:15-91:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpDiv "/" synthetics.adb:91:17-91:18>
+Origin: <OpDiv synthetics.adb:91:17-91:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpDiv "/" synthetics_package.adb:92:17-92:18>
+Origin: <OpDiv synthetics_package.adb:92:17-92:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpGt ">" synthetics.adb:86:15-86:16>
+Origin: <OpGt synthetics.adb:86:15-86:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpGt ">" synthetics_package.adb:87:15-87:16>
+Origin: <OpGt synthetics_package.adb:87:15-87:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpGte ">=" synthetics.adb:86:24-86:26>
+Origin: <OpGte synthetics.adb:86:24-86:26>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpGte ">=" synthetics_package.adb:87:24-87:26>
+Origin: <OpGte synthetics_package.adb:87:24-87:26>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpLt "<" synthetics.adb:86:34-86:35>
+Origin: <OpLt synthetics.adb:86:34-86:35>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpLt "<" synthetics_package.adb:87:34-87:35>
+Origin: <OpLt synthetics_package.adb:87:34-87:35>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpLte "<=" synthetics.adb:86:43-86:45>
+Origin: <OpLte synthetics.adb:86:43-86:45>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpLte "<=" synthetics_package.adb:87:43-87:45>
+Origin: <OpLte synthetics_package.adb:87:43-87:45>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMinus "-" synthetics.adb:92:17-92:18>
+Origin: <OpMinus synthetics.adb:92:17-92:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMinus "-" synthetics_package.adb:93:17-93:18>
+Origin: <OpMinus synthetics_package.adb:93:17-93:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMinus "-" synthetics.adb:93:15-93:16>
+Origin: <OpMinus synthetics.adb:93:15-93:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMinus "-" synthetics_package.adb:94:15-94:16>
+Origin: <OpMinus synthetics_package.adb:94:15-94:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMod "mod" synthetics.adb:94:17-94:20>
+Origin: <OpMod synthetics.adb:94:17-94:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMod "mod" synthetics_package.adb:95:17-95:20>
+Origin: <OpMod synthetics_package.adb:95:17-95:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMult "*" synthetics.adb:95:17-95:18>
+Origin: <OpMult synthetics.adb:95:17-95:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpMult "*" synthetics_package.adb:96:17-96:18>
+Origin: <OpMult synthetics_package.adb:96:17-96:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpPlus "+" synthetics.adb:96:17-96:18>
+Origin: <OpPlus synthetics.adb:96:17-96:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpPlus "+" synthetics_package.adb:97:17-97:18>
+Origin: <OpPlus synthetics_package.adb:97:17-97:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpPlus "+" synthetics.adb:97:15-97:16>
+Origin: <OpPlus synthetics.adb:97:15-97:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpPlus "+" synthetics_package.adb:98:15-98:16>
+Origin: <OpPlus synthetics_package.adb:98:15-98:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpPow "**" synthetics.adb:98:17-98:19>
+Origin: <OpPow synthetics.adb:98:17-98:19>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpPow "**" synthetics_package.adb:99:17-99:19>
+Origin: <OpPow synthetics_package.adb:99:17-99:19>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpRem "rem" synthetics.adb:99:17-99:20>
+Origin: <OpRem synthetics.adb:99:17-99:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpRem "rem" synthetics_package.adb:100:17-100:20>
+Origin: <OpRem synthetics_package.adb:100:17-100:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpAnd "and" synthetics.adb:106:17-106:20>
+Origin: <OpAnd synthetics.adb:106:17-106:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpAnd "and" synthetics_package.adb:107:17-107:20>
+Origin: <OpAnd synthetics_package.adb:107:17-107:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNot "not" synthetics.adb:107:15-107:18>
+Origin: <OpNot synthetics.adb:107:15-107:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNot "not" synthetics_package.adb:108:15-108:18>
+Origin: <OpNot synthetics_package.adb:108:15-108:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpOr "or" synthetics.adb:108:17-108:19>
+Origin: <OpOr synthetics.adb:108:17-108:19>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpOr "or" synthetics_package.adb:109:17-109:19>
+Origin: <OpOr synthetics_package.adb:109:17-109:19>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpXor "xor" synthetics.adb:109:17-109:20>
+Origin: <OpXor synthetics.adb:109:17-109:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpXor "xor" synthetics_package.adb:110:17-110:20>
+Origin: <OpXor synthetics_package.adb:110:17-110:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpAnd "and" synthetics.adb:116:17-116:20>
+Origin: <OpAnd synthetics.adb:116:17-116:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpAnd "and" synthetics_package.adb:117:17-117:20>
+Origin: <OpAnd synthetics_package.adb:117:17-117:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNot "not" synthetics.adb:117:15-117:18>
+Origin: <OpNot synthetics.adb:117:15-117:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNot "not" synthetics_package.adb:118:15-118:18>
+Origin: <OpNot synthetics_package.adb:118:15-118:18>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpOr "or" synthetics.adb:118:17-118:19>
+Origin: <OpOr synthetics.adb:118:17-118:19>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpOr "or" synthetics_package.adb:119:17-119:19>
+Origin: <OpOr synthetics_package.adb:119:17-119:19>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpXor "xor" synthetics.adb:119:17-119:20>
+Origin: <OpXor synthetics.adb:119:17-119:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpXor "xor" synthetics_package.adb:120:17-120:20>
+Origin: <OpXor synthetics_package.adb:120:17-120:20>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpConcat "&" synthetics.adb:125:36-125:37>
+Origin: <OpConcat synthetics.adb:125:36-125:37>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpConcat "&" synthetics_package.adb:126:36-126:37>
+Origin: <OpConcat synthetics_package.adb:126:36-126:37>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpConcat "&" synthetics.adb:134:44-134:45>
+Origin: <OpConcat synthetics.adb:134:44-134:45>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpConcat "&" synthetics_package.adb:135:44-135:45>
+Origin: <OpConcat synthetics_package.adb:135:44-135:45>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpEq "=" synthetics.adb:145:15-145:16>
+Origin: <OpEq synthetics.adb:145:15-145:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpEq "=" synthetics_package.adb:146:15-146:16>
+Origin: <OpEq synthetics_package.adb:146:15-146:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNeq "/=" synthetics_package.adb:146:24-146:26>
+Origin: <OpNeq synthetics_package.adb:146:24-146:26>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpEq "=" synthetics.adb:145:15-145:16>
+Origin: <OpEq synthetics.adb:145:15-145:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpEq "=" synthetics_package.adb:146:15-146:16>
+Origin: <OpEq synthetics_package.adb:146:15-146:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNeq "/=" synthetics.adb:145:24-145:26>
+Origin: <OpNeq synthetics.adb:145:24-145:26>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNeq "/=" synthetics_package.adb:146:24-146:26>
+Origin: <OpNeq synthetics_package.adb:146:24-146:26>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpEq "=" synthetics.adb:155:15-155:16>
+Origin: <OpEq synthetics.adb:155:15-155:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpEq "=" synthetics_package.adb:156:15-156:16>
+Origin: <OpEq synthetics_package.adb:156:15-156:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNeq "/=" synthetics.adb:155:24-155:26>
+Origin: <OpNeq synthetics.adb:155:24-155:26>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: None
-Origin: <OpNeq "/=" synthetics_package.adb:156:24-156:26>
+Origin: <OpNeq synthetics_package.adb:156:24-156:26>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: <DefiningName ""="" synthetics.ads:94:13-94:16>
-Origin: <OpEq "=" synthetics.adb:165:15-165:16>
+Origin: <OpEq synthetics.adb:165:15-165:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Derived_Tagged_Default_Private;
@@ -2776,18 +2776,18 @@ Private description of `"="` of `Derived_Tagged_Default_Private`
 @return
 ----- DONE -----
 Defining name: None
-Origin: <OpEq "=" synthetics_package.adb:166:15-166:16>
+Origin: <OpEq synthetics_package.adb:166:15-166:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:94:4-96:73>
-Origin: <OpNeq "/=" synthetics.adb:165:24-165:26>
+Origin: <OpNeq synthetics.adb:165:24-165:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: None
-Origin: <OpNeq "/=" synthetics_package.adb:166:24-166:26>
+Origin: <OpNeq synthetics_package.adb:166:24-166:26>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: <DefiningName ""="" synthetics.ads:139:13-139:16>
-Origin: <OpEq "=" synthetics.adb:175:15-175:16>
+Origin: <OpEq synthetics.adb:175:15-175:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Derived_Tagged_Default_Public;
@@ -2803,7 +2803,7 @@ Private description of `"="` of `Derived_Tagged_Default_Public`
 @return
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:39:13-39:16>
-Origin: <OpEq "=" synthetics_package.adb:176:15-176:16>
+Origin: <OpEq synthetics_package.adb:176:15-176:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Derived_Tagged_Default_Public;
@@ -2817,17 +2817,17 @@ Public description of `"="` of `Derived_Tagged_Default_Public`
 @return
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:139:4-141:72>
-Origin: <OpNeq "/=" synthetics.adb:175:24-175:26>
+Origin: <OpNeq synthetics.adb:175:24-175:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:39:4-41:61>
-Origin: <OpNeq "/=" synthetics_package.adb:176:24-176:26>
+Origin: <OpNeq synthetics_package.adb:176:24-176:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:144:13-144:16>
-Origin: <OpEq "=" synthetics.adb:185:15-185:16>
+Origin: <OpEq synthetics.adb:185:15-185:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Tagged_Public;
@@ -2843,7 +2843,7 @@ Private description of `"="` of `Tagged_Public`
 @return
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:50:13-50:16>
-Origin: <OpEq "=" synthetics_package.adb:186:15-186:16>
+Origin: <OpEq synthetics_package.adb:186:15-186:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Tagged_Public;
@@ -2857,17 +2857,17 @@ Public description of `"="` of `Tagged_Public`
 @return
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:144:4-146:56>
-Origin: <OpNeq "/=" synthetics.adb:185:24-185:26>
+Origin: <OpNeq synthetics.adb:185:24-185:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:50:4-52:45>
-Origin: <OpNeq "/=" synthetics_package.adb:186:24-186:26>
+Origin: <OpNeq synthetics_package.adb:186:24-186:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:50:13-50:16>
-Origin: <OpEq "=" synthetics.adb:195:15-195:16>
+Origin: <OpEq synthetics.adb:195:15-195:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Tagged_Public;
@@ -2883,7 +2883,7 @@ Private description of `"="` of `Tagged_Public`
 @return
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:50:13-50:16>
-Origin: <OpEq "=" synthetics_package.adb:196:15-196:16>
+Origin: <OpEq synthetics_package.adb:196:15-196:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Tagged_Public;
@@ -2897,17 +2897,17 @@ Public description of `"="` of `Tagged_Public`
 @return
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:50:4-52:45>
-Origin: <OpNeq "/=" synthetics.adb:195:24-195:26>
+Origin: <OpNeq synthetics.adb:195:24-195:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:50:4-52:45>
-Origin: <OpNeq "/=" synthetics_package.adb:196:24-196:26>
+Origin: <OpNeq synthetics_package.adb:196:24-196:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:149:13-149:16>
-Origin: <OpEq "=" synthetics.adb:205:15-205:16>
+Origin: <OpEq synthetics.adb:205:15-205:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Derived_Tagged_Public_Public;
@@ -2923,7 +2923,7 @@ Private description of `"="` of `Derived_Tagged_Public_Public`
 @return
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:61:13-61:16>
-Origin: <OpEq "=" synthetics_package.adb:206:15-206:16>
+Origin: <OpEq synthetics_package.adb:206:15-206:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Derived_Tagged_Public_Public;
@@ -2937,17 +2937,17 @@ Public description of `"="` of `Derived_Tagged_Public_Public`
 @return
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:149:4-151:71>
-Origin: <OpNeq "/=" synthetics.adb:205:24-205:26>
+Origin: <OpNeq synthetics.adb:205:24-205:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:61:4-63:60>
-Origin: <OpNeq "/=" synthetics_package.adb:206:24-206:26>
+Origin: <OpNeq synthetics_package.adb:206:24-206:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:111:13-111:16>
-Origin: <OpEq "=" synthetics.adb:215:15-215:16>
+Origin: <OpEq synthetics.adb:215:15-215:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Derived_Tagged_Public_Private;
@@ -2961,7 +2961,7 @@ Private description of `"="` of `Derived_Tagged_Public_Private`
 @return
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:50:13-50:16>
-Origin: <OpEq "=" synthetics_package.adb:216:15-216:16>
+Origin: <OpEq synthetics_package.adb:216:15-216:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Tagged_Public;
@@ -2975,17 +2975,17 @@ Public description of `"="` of `Tagged_Public`
 @return
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:111:4-113:72>
-Origin: <OpNeq "/=" synthetics.adb:215:24-215:26>
+Origin: <OpNeq synthetics.adb:215:24-215:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:50:4-52:45>
-Origin: <OpNeq "/=" synthetics_package.adb:216:24-216:26>
+Origin: <OpNeq synthetics_package.adb:216:24-216:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:118:13-118:16>
-Origin: <OpEq "=" synthetics.adb:225:15-225:16>
+Origin: <OpEq synthetics.adb:225:15-225:16>
 ----- CODE SNIPPET -----
 function "=" (L, R : Tagged_Private) return Boolean
 ----- DOCUMENTATION -----
@@ -2997,18 +2997,18 @@ Private description of `"="` of `Tagged_Private`
 @return
 ----- DONE -----
 Defining name: None
-Origin: <OpEq "=" synthetics_package.adb:226:15-226:16>
+Origin: <OpEq synthetics_package.adb:226:15-226:16>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:118:4-118:67>
-Origin: <OpNeq "/=" synthetics.adb:225:24-225:26>
+Origin: <OpNeq synthetics.adb:225:24-225:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: None
-Origin: <OpNeq "/=" synthetics_package.adb:226:24-226:26>
+Origin: <OpNeq synthetics_package.adb:226:24-226:26>
 >>>>> LAL: name resolve failure <<<<<
 Defining name: <DefiningName ""="" synthetics.ads:118:13-118:16>
-Origin: <OpEq "=" synthetics.adb:235:15-235:16>
+Origin: <OpEq synthetics.adb:235:15-235:16>
 ----- CODE SNIPPET -----
 function "=" (L, R : Tagged_Private) return Boolean
 ----- DOCUMENTATION -----
@@ -3020,7 +3020,7 @@ Private description of `"="` of `Tagged_Private`
 @return
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:118:13-118:16>
-Origin: <OpEq "=" synthetics_package.adb:236:15-236:16>
+Origin: <OpEq synthetics_package.adb:236:15-236:16>
 ----- CODE SNIPPET -----
 function "=" (L, R : Tagged_Private) return Boolean
 ----- DOCUMENTATION -----
@@ -3032,17 +3032,17 @@ Private description of `"="` of `Tagged_Private`
 @return
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:118:4-118:67>
-Origin: <OpNeq "/=" synthetics.adb:235:24-235:26>
+Origin: <OpNeq synthetics.adb:235:24-235:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:118:4-118:67>
-Origin: <OpNeq "/=" synthetics_package.adb:236:24-236:26>
+Origin: <OpNeq synthetics_package.adb:236:24-236:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:132:13-132:16>
-Origin: <OpEq "=" synthetics.adb:245:15-245:16>
+Origin: <OpEq synthetics.adb:245:15-245:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Derived_Tagged_Private_Private;
@@ -3056,7 +3056,7 @@ Private description of `"="` of `Derived_Tagged_Private_Private`
 @return
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:118:13-118:16>
-Origin: <OpEq "=" synthetics_package.adb:246:15-246:16>
+Origin: <OpEq synthetics_package.adb:246:15-246:16>
 ----- CODE SNIPPET -----
 function "=" (L, R : Tagged_Private) return Boolean
 ----- DOCUMENTATION -----
@@ -3068,17 +3068,17 @@ Private description of `"="` of `Tagged_Private`
 @return
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:132:4-134:73>
-Origin: <OpNeq "/=" synthetics.adb:245:24-245:26>
+Origin: <OpNeq synthetics.adb:245:24-245:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:118:4-118:67>
-Origin: <OpNeq "/=" synthetics_package.adb:246:24-246:26>
+Origin: <OpNeq synthetics_package.adb:246:24-246:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:154:13-154:16>
-Origin: <OpEq "=" synthetics.adb:255:15-255:16>
+Origin: <OpEq synthetics.adb:255:15-255:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Derived_Tagged_Private_Public;
@@ -3094,7 +3094,7 @@ Private description of `"="` of `Derived_Tagged_Private_Public`
 @return
 ----- DONE -----
 Defining name: <DefiningName ""="" synthetics.ads:78:13-78:16>
-Origin: <OpEq "=" synthetics_package.adb:256:15-256:16>
+Origin: <OpEq synthetics_package.adb:256:15-256:16>
 ----- CODE SNIPPET -----
 function "="
   (Left  : Derived_Tagged_Private_Public;
@@ -3108,12 +3108,12 @@ Public description of `"="` of `Derived_Tagged_Private_Public`
 @return
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:154:4-156:72>
-Origin: <OpNeq "/=" synthetics.adb:255:24-255:26>
+Origin: <OpNeq synthetics.adb:255:24-255:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
 Defining name: <SyntheticDefiningName ""/="" synthetics.ads:78:4-80:61>
-Origin: <OpNeq "/=" synthetics_package.adb:256:24-256:26>
+Origin: <OpNeq synthetics_package.adb:256:24-256:26>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
