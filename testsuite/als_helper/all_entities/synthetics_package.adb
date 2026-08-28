@@ -257,6 +257,16 @@ package body Synthetics_Package is
             null;
          end if;
       end;
+
+      --  gnatdoc#193: reference of synthetic character literal
+
+      declare
+         My_Chars : constant array (Positive range <>) of Character :=
+           ('X', 'Y');
+
+      begin
+         null;
+      end;
    end Dummy;
 
 end Synthetics_Package;

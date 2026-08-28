@@ -87,6 +87,60 @@
     {"file": "discriminant_record_types_package.adb", "line": 36, "column": 26},
     //  reference: `Known_Discriminant_Private_Null_Record`
 
+    //  Enumerations
+
+    {"file": "enumerations.ads", "line": 4, "column": 9},
+    //  declaration: `Character_Enumeration`
+    {"file": "enumerations.adb", "line": 7, "column": 19},
+    //  reference: `Character_Enumeration`
+    {"file": "enumerations_package.adb", "line": 9, "column": 32},
+    //  reference: `Character_Enumeration`
+
+    {"file": "enumerations.ads", "line": 7, "column": 7},
+    //  declaration: `Character_Enumeration'('C')`
+    {"file": "enumerations.ads", "line": 32, "column": 49},
+    //  reference: `Character_Enumeration'('C')`
+
+    {"file": "enumerations.ads", "line": 8, "column": 7},
+    //  declaration: `Character_Enumeration'('D')`
+    {"file": "enumerations.adb", "line": 7, "column": 44},
+    //  reference: `Character_Enumeration'('D')`
+
+    {"file": "enumerations.ads", "line": 8, "column": 12},
+    //  declaration: `Character_Enumeration'('E')`; must not include
+    //  the additional description provided for `'D'`
+
+    {"file": "enumerations.ads", "line": 9, "column": 7},
+    //  declaration: `Character_Enumeration'('F')`
+    {"file": "enumerations_package.adb", "line": 9, "column": 70},
+    //  reference: `Character_Enumeration'('F')`
+
+    {"file": "enumerations.ads", "line": 17, "column": 9},
+    //  declaration: `Identifier_Enumeration`
+    {"file": "enumerations.adb", "line": 14, "column": 19},
+    //  reference: `Identifier_Enumeration`
+    {"file": "enumerations_package.adb", "line": 16, "column": 32},
+    //  reference: `Identifier_Enumeration`
+
+    {"file": "enumerations.ads", "line": 20, "column": 7},
+    //  declaration: `Identifier_Enumeration.C`
+    {"file": "enumerations.ads", "line": 34, "column": 61},
+    //  reference: `Identifier_Enumeration.C`
+
+    {"file": "enumerations.ads", "line": 21, "column": 7},
+    //  declaration: `Identifier_Enumeration.D`
+    {"file": "enumerations.adb", "line": 14, "column": 45},
+    //  reference: `Identifier_Enumeration.D`
+
+    {"file": "enumerations.ads", "line": 21, "column": 10},
+    //  declaration: `Identifier_Enumeration.E`; must not include
+    //  the additional description provided for `D`
+
+    {"file": "enumerations.ads", "line": 22, "column": 7},
+    //  declaration: `Identifier_Enumeration.F`
+    {"file": "enumerations_package.adb", "line": 16, "column": 71},
+    //  reference: `Identifier_Enumeration.F`
+
     //  Exceptions (declarations and renamings)
 
     {"file": "exceptions.ads", "line": 4, "column": 4},
@@ -785,6 +839,9 @@
     //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Private_Private`
     {"file": "synthetics_package.adb", "line": 256, "column": 24},
     //  reference of synthetic `"/="` subprogram of `Derived_Tagged_Private_Private`
+
+    {"file": "synthetics_package.adb", "line": 265, "column": 13},
+    //  gnatdoc#193: reference of `Character` enumeration literal `'X'`
 
     // {"file": "pkg1.ads", "line": 5, "column": 9},  // package specification name
     // {"file": "pkg1.ads", "line": 9, "column": 5},  // package specification end name

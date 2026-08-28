@@ -117,7 +117,7 @@ package body GNATdoc.Comments.Helpers is
       end case;
 
       for Line of Section.Text loop
-         Text.Append ("  " & Line);
+         Text.Append (if Line.Is_Empty then Line else "  " & Line);
       end loop;
 
       if Section.Kind = Formal then
@@ -127,7 +127,7 @@ package body GNATdoc.Comments.Helpers is
          for Subsection of Section.Sections loop
             if Subsection.Kind = Description then
                for Line of Subsection.Text loop
-                  Text.Append ("  " & Line);
+                  Text.Append (if Line.Is_Empty then Line else "  " & Line);
                end loop;
             end if;
          end loop;
@@ -567,7 +567,9 @@ package body GNATdoc.Comments.Helpers is
       --  Synthetic declarations doesn't have nor code snippets nor
       --  documentation.
 
-      if Name.P_Basic_Decl.Kind = Ada_Synthetic_Subp_Decl then
+      if Name.P_Basic_Decl.Kind
+           in Ada_Synthetic_Subp_Decl | Ada_Synthetic_Char_Enum_Lit
+      then
          return;
       end if;
 
