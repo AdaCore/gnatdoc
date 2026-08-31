@@ -30,10 +30,12 @@ package body Protecteds_Package is
       Dummy := Protecteds.Protected_Object.Protected_Function;
       Protecteds.Protected_Object.Protected_Procedure;
       Protecteds.Protected_Object.Protected_Entry;
+      Protecteds.Protected_Object.Protected_Entry_Family (1);
 
       Dummy := PO.Protected_Function;
       PO.Protected_Procedure;
       PO.Protected_Entry;
+      PO.Protected_Entry_Family (1);
    end Dummy;
 
 end Protecteds_Package;

@@ -9,6 +9,9 @@ package body Tasks is
       accept Task_Entry;
       --  Description of the task entry (body).
 
+      accept Task_Entry_Family (1);
+      --  Description of the task entry family (body).
+
       accept Task_Requeue_Entry do
       --  Description of the task requeue entry (body).
 
@@ -27,6 +30,12 @@ package body Tasks is
          requeue Task_Requeue_Entry;
       end Task_Entry;
 
+      accept Task_Entry_Family (1) do
+      --  Description of the task entry family (body).
+
+         null;
+      end Task_Entry_Family;
+
       accept Task_Requeue_Entry do
       --  Description of the task requeue entry (body).
 
@@ -38,5 +47,8 @@ package body Tasks is
 
 begin
    Task_Object.Task_Entry;
+   Task_Object.Task_Entry_Family (1);
+
    TO.Task_Entry;
+   TO.Task_Entry_Family (1);
 end Tasks;

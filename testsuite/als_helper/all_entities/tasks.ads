@@ -11,6 +11,9 @@ package Tasks is
       entry Task_Requeue_Entry;
       --  Description of the task requeue entry (specification).
 
+      entry Task_Entry_Family (Positive range 1 .. 10);
+      --  Description of the task entry family (specification).
+
    end Task_Object;
 
    task type Task_Type is
@@ -22,6 +25,9 @@ package Tasks is
 
       entry Task_Requeue_Entry;
       --  Description of the task requeue entry (specification).
+
+      entry Task_Entry_Family (Positive range 1 .. 10);
+      --  Description of the task entry family (specification).
 
    end Task_Type;
 

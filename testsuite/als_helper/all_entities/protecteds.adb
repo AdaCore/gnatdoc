@@ -24,6 +24,15 @@ package body Protecteds is
          null;
       end Protected_Requeue_Entry;
 
+      entry Protected_Entry_Family
+        (for Index in Positive range 1 .. 10) when True is
+      --  Description of the protected entry family (body).
+
+         Dummy : Integer;
+      begin
+         Dummy := Index;
+      end Protected_Entry_Family;
+
       function Protected_Function return Integer is
       --  Description of the protected function (body).
 
@@ -63,6 +72,15 @@ package body Protecteds is
          requeue Protected_Object.Protected_Requeue_Entry;
       end Protected_Requeue_Entry;
 
+      entry Protected_Entry_Family
+        (for Index in Positive range 1 .. 10) when True is
+      --  Description of the protected entry family (body).
+
+         Dummy : Integer;
+      begin
+         Dummy := Index;
+      end Protected_Entry_Family;
+
       function Protected_Function return Integer is
       --  Description of the protected function (body).
 
@@ -87,8 +105,10 @@ begin
    Dummy := Protected_Object.Protected_Function;
    Protected_Object.Protected_Procedure;
    Protected_Object.Protected_Entry;
+   Protected_Object.Protected_Entry_Family (1);
 
    Dummy := PO.Protected_Function;
    PO.Protected_Procedure;
    PO.Protected_Entry;
+   PO.Protected_Entry_Family (1);
 end Protecteds;

@@ -24,7 +24,10 @@ package body Tasks_Package is
    procedure Dummy is
    begin
       Tasks.Task_Object.Task_Entry;
+      Tasks.Task_Object.Task_Entry_Family (1);
+
       TO.Task_Entry;
+      TO.Task_Entry_Family (1);
    end Dummy;
 
 end Tasks_Package;
