@@ -8,6 +8,12 @@ package body Tasks is
    begin
       accept Task_Entry;
       --  Description of the task entry (body).
+
+      accept Task_Requeue_Entry do
+      --  Description of the task requeue entry (body).
+
+         requeue Task_Entry;
+      end Task_Requeue_Entry;
    end Task_Object;
 
    task body Task_Type is
@@ -18,8 +24,14 @@ package body Tasks is
       accept Task_Entry do
       --  Description of the task entry (body).
 
-         null;
+         requeue Task_Requeue_Entry;
       end Task_Entry;
+
+      accept Task_Requeue_Entry do
+      --  Description of the task requeue entry (body).
+
+         requeue Task_Object.Task_Requeue_Entry;
+      end Task_Requeue_Entry;
    end Task_Type;
 
    TO : Task_Type;

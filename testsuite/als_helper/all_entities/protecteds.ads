@@ -14,6 +14,9 @@ package Protecteds is
       entry Protected_Entry;
       -- Description of the protected entry (specification).
 
+      entry Protected_Requeue_Entry;
+      --  Description of the protected requeue entry (specification).
+
    end Protected_Object;
 
    protected type Protected_Type is
@@ -28,6 +31,9 @@ package Protecteds is
 
       entry Protected_Entry;
       -- Description of the protected entry (specification).
+
+      entry Protected_Requeue_Entry;
+      --  Description of the protected requeue entry (specification).
 
    end Protected_Type;
 

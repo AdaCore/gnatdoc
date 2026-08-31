@@ -13,7 +13,16 @@ package body Protecteds is
          Dummy := Protected_Function;
          Protected_Procedure;
          Protected_Entry;
+
+         requeue Protected_Requeue_Entry;
       end Protected_Entry;
+
+      entry Protected_Requeue_Entry when True is
+      --  Description of the protected requeue entry (body).
+
+      begin
+         null;
+      end Protected_Requeue_Entry;
 
       function Protected_Function return Integer is
       --  Description of the protected function (body).
@@ -43,7 +52,16 @@ package body Protecteds is
          Dummy := Protected_Function;
          Protected_Procedure;
          Protected_Entry;
+
+         requeue Protected_Requeue_Entry;
       end Protected_Entry;
+
+      entry Protected_Requeue_Entry when True is
+      --  Description of the protected requeue entry (body).
+
+      begin
+         requeue Protected_Object.Protected_Requeue_Entry;
+      end Protected_Requeue_Entry;
 
       function Protected_Function return Integer is
       --  Description of the protected function (body).

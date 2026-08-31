@@ -453,124 +453,158 @@
 
     {"file": "protecteds.ads", "line": 4, "column": 14},
     //  declaration of the protected object specification
-    {"file": "protecteds.ads", "line": 17, "column": 8},
+    {"file": "protecteds.ads", "line": 20, "column": 8},
     //  reference of the protected object from "end <>"
     {"file": "protecteds.adb", "line": 4, "column": 19},
     //  declaration of the protected object body
-    {"file": "protecteds.adb", "line": 32, "column": 8},
+    {"file": "protecteds.adb", "line": 41, "column": 8},
     //  reference of the protected object from "end <>"
-    {"file": "protecteds.adb", "line": 69, "column": 13},
+    {"file": "protecteds.adb", "line": 63, "column": 18},
+    //  reference of the protected object from requeue statement in the body of
+    //  another protected object of the package
+    {"file": "protecteds.adb", "line": 87, "column": 13},
     //  reference of the protected object from function call in the package
     //  body
-    {"file": "protecteds.adb", "line": 70, "column": 4},
+    {"file": "protecteds.adb", "line": 88, "column": 4},
     //  reference of the protected object from procedure call in the package
     //  body
-    {"file": "protecteds.adb", "line": 71, "column": 4},
+    {"file": "protecteds.adb", "line": 89, "column": 4},
     //  reference of the protected object from entry call in the package body
-    {"file": "protecteds_package.adb", "line": 11, "column": 27},
+    {"file": "protecteds_package.adb", "line": 17, "column": 29},
+    //  reference of the protected object from requeue statement
+    {"file": "protecteds_package.adb", "line": 30, "column": 27},
     //  reference of the protected object from function call
-    {"file": "protecteds_package.adb", "line": 12, "column": 18},
+    {"file": "protecteds_package.adb", "line": 31, "column": 18},
     //  reference of the protected object from procedure call
-    {"file": "protecteds_package.adb", "line": 13, "column": 18},
+    {"file": "protecteds_package.adb", "line": 32, "column": 18},
     //  reference of the protected object from entry call
 
     {"file": "protecteds.ads", "line": 8, "column": 17},
     //  declaration of the procedure of the protected object specification
-    {"file": "protecteds.adb", "line": 25, "column": 17},
+    {"file": "protecteds.adb", "line": 34, "column": 17},
     //  declaration of the procedure of the protected object body
-    {"file": "protecteds.adb", "line": 30, "column": 11},
+    {"file": "protecteds.adb", "line": 39, "column": 11},
     //  reference of the procedure of the protected object from "end <>"
     {"file": "protecteds.adb", "line": 14, "column": 10},
     //  reference of the procedure of the protected object from internal call
-    {"file": "protecteds.adb", "line": 70, "column": 21},
+    {"file": "protecteds.adb", "line": 88, "column": 21},
     //  reference of the procedure of the protected object from procedure call
     //  in the package body
-    {"file": "protecteds_package.adb", "line": 12, "column": 35},
+    {"file": "protecteds_package.adb", "line": 31, "column": 35},
     //  reference of the procedure of the protected object from procedure call
 
     {"file": "protecteds.ads", "line": 11, "column": 16},
     //  declaration of the function of the protected object specification
-    {"file": "protecteds.adb", "line": 18, "column": 16},
+    {"file": "protecteds.adb", "line": 27, "column": 16},
     //  declaration of the function of the protected object body
-    {"file": "protecteds.adb", "line": 23, "column": 11},
+    {"file": "protecteds.adb", "line": 32, "column": 11},
     //  reference of the function of the protected object from "end <>"
     {"file": "protecteds.adb", "line": 13, "column": 19},
     //  reference of the function of the protected object from internal call
-    {"file": "protecteds.adb", "line": 69, "column": 30},
+    {"file": "protecteds.adb", "line": 87, "column": 30},
     //  reference of the function of the protected object from function call in
     //  the package body
-    {"file": "protecteds_package.adb", "line": 11, "column": 44},
+    {"file": "protecteds_package.adb", "line": 30, "column": 44},
     //  reference of the function of the protected object from function call
 
     {"file": "protecteds.ads", "line": 14, "column": 13},
     //  declaration of the entry of the protected object specification
     {"file": "protecteds.adb", "line": 8, "column": 13},
     //  declaration of the entry of the protected object body
-    {"file": "protecteds.adb", "line": 16, "column": 11},
+    {"file": "protecteds.adb", "line": 18, "column": 11},
     //  reference of the entry of the protected object from "end <>"
     {"file": "protecteds.adb", "line": 15, "column": 10},
     //  reference of the entry of the protected object from internal call
-    {"file": "protecteds.adb", "line": 71, "column": 21},
+    {"file": "protecteds.adb", "line": 89, "column": 21},
     //  reference of the entry of the protected object from entry call in the
     //  package body
-    {"file": "protecteds_package.adb", "line": 13, "column": 35},
+    {"file": "protecteds_package.adb", "line": 32, "column": 35},
     //  reference of the entry of the protected object from entry call
 
-    {"file": "protecteds.ads", "line": 19, "column": 19},
+    {"file": "protecteds.ads", "line": 17, "column": 13},
+    //  declaration of the requeue entry of the protected object specification
+    {"file": "protecteds.adb", "line": 20, "column": 13},
+    //  declaration of the requeue entry of the protected object body
+    {"file": "protecteds.adb", "line": 25, "column": 11},
+    //  reference of the requeue entry of the protected object from "end <>"
+    {"file": "protecteds.adb", "line": 17, "column": 18},
+    //  reference of the requeue entry of the protected object from requeue
+    //  statement in the body of the same protected object
+    {"file": "protecteds.adb", "line": 63, "column": 35},
+    //  reference of the requeue entry of the protected object from requeue
+    //  statement in the body of another protected object of the package
+    {"file": "protecteds_package.adb", "line": 17, "column": 46},
+    //  reference of the requeue entry of the protected object from requeue
+    //  statement in another package
+
+    {"file": "protecteds.ads", "line": 22, "column": 19},
     //  declaration of the protected type specification
-    {"file": "protecteds.ads", "line": 32, "column": 8},
+    {"file": "protecteds.ads", "line": 38, "column": 8},
     //  reference of the protected type from "end <>"
-    {"file": "protecteds.adb", "line": 34, "column": 19},
+    {"file": "protecteds.adb", "line": 43, "column": 19},
     //  declaration of the protected type body
-    {"file": "protecteds.adb", "line": 62, "column": 8},
+    {"file": "protecteds.adb", "line": 80, "column": 8},
     //  reference of the protected type from "end <>"
-    {"file": "protecteds.adb", "line": 64, "column": 9},
+    {"file": "protecteds.adb", "line": 82, "column": 9},
     //  reference of the protected type from object declaration in the package
     //  body
     {"file": "protecteds_package.adb", "line": 6, "column": 20},
     //  reference of the protected type from object declaration
 
-    {"file": "protecteds.ads", "line": 23, "column": 17},
+    {"file": "protecteds.ads", "line": 26, "column": 17},
     //  declaration of the procedure of the protected type specification
-    {"file": "protecteds.adb", "line": 55, "column": 17},
+    {"file": "protecteds.adb", "line": 73, "column": 17},
     //  declaration of the procedure of the protected type body
-    {"file": "protecteds.adb", "line": 60, "column": 11},
+    {"file": "protecteds.adb", "line": 78, "column": 11},
     //  reference of the procedure of the protected type from "end <>"
-    {"file": "protecteds.adb", "line": 44, "column": 10},
+    {"file": "protecteds.adb", "line": 53, "column": 10},
     //  reference of the procedure of the protected type from internal call
-    {"file": "protecteds.adb", "line": 74, "column": 7},
+    {"file": "protecteds.adb", "line": 92, "column": 7},
     //  reference of the procedure of the protected type from procedure call in
     //  the package body
-    {"file": "protecteds_package.adb", "line": 16, "column": 10},
+    {"file": "protecteds_package.adb", "line": 35, "column": 10},
     //  reference of the procedure of the protected type from procedure call
 
-    {"file": "protecteds.ads", "line": 26, "column": 16},
+    {"file": "protecteds.ads", "line": 29, "column": 16},
     //  declaration of the function of the protected type specification
-    {"file": "protecteds.adb", "line": 48, "column": 16},
+    {"file": "protecteds.adb", "line": 66, "column": 16},
     //  declaration of the function of the protected type body
-    {"file": "protecteds.adb", "line": 53, "column": 11},
+    {"file": "protecteds.adb", "line": 71, "column": 11},
     //  reference of the function of the protected type from "end <>"
-    {"file": "protecteds.adb", "line": 43, "column": 19},
+    {"file": "protecteds.adb", "line": 52, "column": 19},
     //  reference of the function of the protected type from internal call
-    {"file": "protecteds.adb", "line": 73, "column": 16},
+    {"file": "protecteds.adb", "line": 91, "column": 16},
     //  reference of the function of the protected type from function call in
     //  the package body
-    {"file": "protecteds_package.adb", "line": 15, "column": 19},
+    {"file": "protecteds_package.adb", "line": 34, "column": 19},
     //  reference of the function of the protected type from function call
 
-    {"file": "protecteds.ads", "line": 29, "column": 13},
+    {"file": "protecteds.ads", "line": 32, "column": 13},
     //  declaration of the entry of the protected type specification
-    {"file": "protecteds.adb", "line": 38, "column": 13},
+    {"file": "protecteds.adb", "line": 47, "column": 13},
     //  declaration of the entry of the protected type body
-    {"file": "protecteds.adb", "line": 46, "column": 11},
+    {"file": "protecteds.adb", "line": 57, "column": 11},
     //  reference of the entry of the protected type from "end <>"
-    {"file": "protecteds.adb", "line": 45, "column": 10},
+    {"file": "protecteds.adb", "line": 54, "column": 10},
     //  reference of the entry of the protected type from internal call
-    {"file": "protecteds.adb", "line": 75, "column": 7},
+    {"file": "protecteds.adb", "line": 93, "column": 7},
     //  reference of the entry of the protected type from entry call in the
     //  package body
-    {"file": "protecteds_package.adb", "line": 17, "column": 10},
+    {"file": "protecteds_package.adb", "line": 36, "column": 10},
     //  reference of the entry of the protected type from entry call
+
+    {"file": "protecteds.ads", "line": 35, "column": 13},
+    //  declaration of the requeue entry of the protected type specification
+    {"file": "protecteds.adb", "line": 59, "column": 13},
+    //  declaration of the requeue entry of the protected type body
+    {"file": "protecteds.adb", "line": 64, "column": 11},
+    //  reference of the requeue entry of the protected type from "end <>"
+    {"file": "protecteds.adb", "line": 56, "column": 18},
+    //  reference of the requeue entry of the protected type from requeue
+    //  statement in the body of the same protected object
+    {"file": "protecteds_package.adb", "line": 22, "column": 21},
+    //  reference of the requeue entry of the protected type from requeue
+    //  statement in another package
 
     {"file": "returns.adb", "line": 8, "column": 17},
     //  declaration of return object
@@ -940,53 +974,90 @@
 
     {"file": "tasks.ads", "line": 4, "column": 9},
     //  declaration of the task object specification
-    {"file": "tasks.ads", "line": 11, "column": 8},
+    {"file": "tasks.ads", "line": 14, "column": 8},
     //  reference of the task object from "end <>"
     {"file": "tasks.adb", "line": 4, "column": 14},
     //  declaration of the task object body; documentation of the body is not
     //  extracted, `Ada_Task_Body` is not supported by the extractor
-    {"file": "tasks.adb", "line": 11, "column": 8},
+    {"file": "tasks.adb", "line": 17, "column": 8},
     //  reference of the task object from "end <>"
-    {"file": "tasks.adb", "line": 28, "column": 4},
+    {"file": "tasks.adb", "line": 33, "column": 18},
+    //  reference of the task object from requeue statement in the body of
+    //  another task of the package
+    {"file": "tasks.adb", "line": 40, "column": 4},
     //  reference of the task object from entry call in the package body
-    {"file": "tasks_package.adb", "line": 10, "column": 13},
+    {"file": "tasks_package.adb", "line": 16, "column": 24},
+    //  reference of the task object from requeue statement
+    {"file": "tasks_package.adb", "line": 26, "column": 13},
     //  reference of the task object from entry call
 
     {"file": "tasks.ads", "line": 8, "column": 13},
     //  declaration of the entry of the task object
     {"file": "tasks.adb", "line": 9, "column": 14},
     //  reference of the entry of the task object from accept statement
-    {"file": "tasks.adb", "line": 28, "column": 16},
+    {"file": "tasks.adb", "line": 15, "column": 18},
+    //  reference of the entry of the task object from requeue statement in the
+    //  body of the same task
+    {"file": "tasks.adb", "line": 40, "column": 16},
     //  reference of the entry of the task object from entry call in the
     //  package body
-    {"file": "tasks_package.adb", "line": 10, "column": 25},
+    {"file": "tasks_package.adb", "line": 26, "column": 25},
     //  reference of the entry of the task object from entry call
 
-    {"file": "tasks.ads", "line": 13, "column": 14},
+    {"file": "tasks.ads", "line": 11, "column": 13},
+    //  declaration of the requeue entry of the task object
+    {"file": "tasks.adb", "line": 12, "column": 14},
+    //  reference of the requeue entry of the task object from accept statement
+    {"file": "tasks.adb", "line": 16, "column": 11},
+    //  reference of the requeue entry of the task object from "end <>" of
+    //  accept statement
+    {"file": "tasks.adb", "line": 33, "column": 30},
+    //  reference of the requeue entry of the task object from requeue
+    //  statement in the body of another task of the package
+    {"file": "tasks_package.adb", "line": 16, "column": 36},
+    //  reference of the requeue entry of the task object from requeue
+    //  statement in another package
+
+    {"file": "tasks.ads", "line": 16, "column": 14},
     //  declaration of the task type specification
-    {"file": "tasks.ads", "line": 20, "column": 8},
+    {"file": "tasks.ads", "line": 26, "column": 8},
     //  reference of the task type from "end <>"
-    {"file": "tasks.adb", "line": 13, "column": 14},
+    {"file": "tasks.adb", "line": 19, "column": 14},
     //  declaration of the task type body; documentation of the body is not
     //  extracted, `Ada_Task_Body` is not supported by the extractor
-    {"file": "tasks.adb", "line": 23, "column": 8},
+    {"file": "tasks.adb", "line": 35, "column": 8},
     //  reference of the task type from "end <>"
-    {"file": "tasks.adb", "line": 25, "column": 9},
+    {"file": "tasks.adb", "line": 37, "column": 9},
     //  reference of the task type from object declaration in the package body
     {"file": "tasks_package.adb", "line": 6, "column": 15},
     //  reference of the task type from object declaration
 
-    {"file": "tasks.ads", "line": 17, "column": 13},
+    {"file": "tasks.ads", "line": 20, "column": 13},
     //  declaration of the entry of the task type
-    {"file": "tasks.adb", "line": 18, "column": 14},
+    {"file": "tasks.adb", "line": 24, "column": 14},
     //  reference of the entry of the task type from accept statement
-    {"file": "tasks.adb", "line": 22, "column": 11},
-    //  reference of the entry of the task type from "end <>" of accept statement
-    {"file": "tasks.adb", "line": 29, "column": 7},
-    //  reference of the entry of the task type from entry call in the
-    //  package body
-    {"file": "tasks_package.adb", "line": 11, "column": 10},
+    {"file": "tasks.adb", "line": 28, "column": 11},
+    //  reference of the entry of the task type from "end <>" of accept
+    //  statement
+    {"file": "tasks.adb", "line": 41, "column": 7},
+    //  reference of the entry of the task type from entry call in the package
+    //  body
+    {"file": "tasks_package.adb", "line": 27, "column": 10},
     //  reference of the entry of the task type from entry call
+
+    {"file": "tasks.ads", "line": 23, "column": 13},
+    //  declaration of the requeue entry of the task type
+    {"file": "tasks.adb", "line": 30, "column": 14},
+    //  reference of the requeue entry of the task type from accept statement
+    {"file": "tasks.adb", "line": 34, "column": 11},
+    //  reference of the requeue entry of the task type from "end <>" of accept
+    //  statement
+    {"file": "tasks.adb", "line": 27, "column": 18},
+    //  reference of the requeue entry of the task type from requeue statement
+    //  in the body of the same task
+    {"file": "tasks_package.adb", "line": 20, "column": 21},
+    //  reference of the requeue entry of the task type from requeue statement
+    //  in another package
 
     // {"file": "pkg1.ads", "line": 5, "column": 9},  // package specification name
     // {"file": "pkg1.ads", "line": 9, "column": 5},  // package specification end name

@@ -8,6 +8,9 @@ package Tasks is
       entry Task_Entry;
       --  Description of the task entry (specification).
 
+      entry Task_Requeue_Entry;
+      --  Description of the task requeue entry (specification).
+
    end Task_Object;
 
    task type Task_Type is
@@ -16,6 +19,9 @@ package Tasks is
 
       entry Task_Entry;
       --  Description of the task entry (specification).
+
+      entry Task_Requeue_Entry;
+      --  Description of the task requeue entry (specification).
 
    end Task_Type;
 
