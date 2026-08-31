@@ -2721,55 +2721,55 @@ Origin: <Id "Protected_Object" protecteds.adb:72:18-72:34>
 Description of the protected object (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
-Origin: <Id "Protected_Object" protecteds.adb:105:13-105:29>
+Origin: <Id "Protected_Object" protecteds.adb:113:13-113:29>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the protected object (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
-Origin: <Id "Protected_Object" protecteds.adb:106:4-106:20>
+Origin: <Id "Protected_Object" protecteds.adb:114:4-114:20>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the protected object (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
-Origin: <Id "Protected_Object" protecteds.adb:107:4-107:20>
+Origin: <Id "Protected_Object" protecteds.adb:115:4-115:20>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the protected object (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
-Origin: <Id "Protected_Object" protecteds.adb:108:4-108:20>
+Origin: <Id "Protected_Object" protecteds.adb:116:4-116:20>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the protected object (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
-Origin: <Id "Protected_Object" protecteds_package.adb:17:29-17:45>
+Origin: <Id "Protected_Object" protecteds_package.adb:19:29-19:45>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the protected object (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
-Origin: <Id "Protected_Object" protecteds_package.adb:30:27-30:43>
------ CODE SNIPPET -----
------ DOCUMENTATION -----
-Description of the protected object (specification).
------ DONE -----
-Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
-Origin: <Id "Protected_Object" protecteds_package.adb:31:18-31:34>
------ CODE SNIPPET -----
------ DOCUMENTATION -----
-Description of the protected object (specification).
------ DONE -----
-Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
-Origin: <Id "Protected_Object" protecteds_package.adb:32:18-32:34>
+Origin: <Id "Protected_Object" protecteds_package.adb:32:27-32:43>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the protected object (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
 Origin: <Id "Protected_Object" protecteds_package.adb:33:18-33:34>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
+Origin: <Id "Protected_Object" protecteds_package.adb:34:18-34:34>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
+Origin: <Id "Protected_Object" protecteds_package.adb:35:18-35:34>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the protected object (specification).
@@ -2807,14 +2807,14 @@ procedure Protected_Procedure
 Description of the protected procedure (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Procedure" protecteds.ads:8:17-8:36>
-Origin: <Id "Protected_Procedure" protecteds.adb:106:21-106:40>
+Origin: <Id "Protected_Procedure" protecteds.adb:114:21-114:40>
 ----- CODE SNIPPET -----
 procedure Protected_Procedure
 ----- DOCUMENTATION -----
 Description of the protected procedure (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Procedure" protecteds.ads:8:17-8:36>
-Origin: <Id "Protected_Procedure" protecteds_package.adb:31:35-31:54>
+Origin: <Id "Protected_Procedure" protecteds_package.adb:33:35-33:54>
 ----- CODE SNIPPET -----
 procedure Protected_Procedure
 ----- DOCUMENTATION -----
@@ -2861,7 +2861,7 @@ Description of the protected function (specification).
 @return
 ----- DONE -----
 Defining name: <DefiningName "Protected_Function" protecteds.ads:11:16-11:34>
-Origin: <Id "Protected_Function" protecteds.adb:105:30-105:48>
+Origin: <Id "Protected_Function" protecteds.adb:113:30-113:48>
 ----- CODE SNIPPET -----
 function Protected_Function return Integer
 ----- DOCUMENTATION -----
@@ -2870,7 +2870,7 @@ Description of the protected function (specification).
 @return
 ----- DONE -----
 Defining name: <DefiningName "Protected_Function" protecteds.ads:11:16-11:34>
-Origin: <Id "Protected_Function" protecteds_package.adb:30:44-30:62>
+Origin: <Id "Protected_Function" protecteds_package.adb:32:44-32:62>
 ----- CODE SNIPPET -----
 function Protected_Function return Integer
 ----- DOCUMENTATION -----
@@ -2913,14 +2913,14 @@ Description of the protected entry (specification).
 Description of the protected entry (body).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Entry" protecteds.ads:14:13-14:28>
-Origin: <Id "Protected_Entry" protecteds.adb:107:21-107:36>
+Origin: <Id "Protected_Entry" protecteds.adb:115:21-115:36>
 ----- CODE SNIPPET -----
 entry Protected_Entry
 ----- DOCUMENTATION -----
 Description of the protected entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Entry" protecteds.ads:14:13-14:28>
-Origin: <Id "Protected_Entry" protecteds_package.adb:32:35-32:50>
+Origin: <Id "Protected_Entry" protecteds_package.adb:34:35-34:50>
 ----- CODE SNIPPET -----
 entry Protected_Entry
 ----- DOCUMENTATION -----
@@ -2966,7 +2966,7 @@ entry Protected_Requeue_Entry
 Description of the protected requeue entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Requeue_Entry" protecteds.ads:17:13-17:36>
-Origin: <Id "Protected_Requeue_Entry" protecteds_package.adb:17:46-17:69>
+Origin: <Id "Protected_Requeue_Entry" protecteds_package.adb:19:46-19:69>
 ----- CODE SNIPPET -----
 entry Protected_Requeue_Entry
 ----- DOCUMENTATION -----
@@ -3002,14 +3002,14 @@ Description of the protected entry family (body).
 @param Index
 ----- DONE -----
 Defining name: <DefiningName "Protected_Entry_Family" protecteds.ads:20:13-20:35>
-Origin: <Id "Protected_Entry_Family" protecteds.adb:108:21-108:43>
+Origin: <Id "Protected_Entry_Family" protecteds.adb:116:21-116:43>
 ----- CODE SNIPPET -----
 entry Protected_Entry_Family (Positive range 1 .. 10)
 ----- DOCUMENTATION -----
 Description of the protected entry family (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Entry_Family" protecteds.ads:20:13-20:35>
-Origin: <Id "Protected_Entry_Family" protecteds_package.adb:33:35-33:57>
+Origin: <Id "Protected_Entry_Family" protecteds_package.adb:35:35-35:57>
 ----- CODE SNIPPET -----
 entry Protected_Entry_Family (Positive range 1 .. 10)
 ----- DOCUMENTATION -----
@@ -3060,7 +3060,7 @@ Description of the protected type (specification).
 Description of the protected type (body).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Type" protecteds.ads:25:19-25:33>
-Origin: <Id "Protected_Type" protecteds.adb:100:9-100:23>
+Origin: <Id "Protected_Type" protecteds.adb:106:9-106:23>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the protected type (specification).
@@ -3104,14 +3104,14 @@ procedure Protected_Procedure
 Description of the protected procedure (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Procedure" protecteds.ads:29:17-29:36>
-Origin: <Id "Protected_Procedure" protecteds.adb:111:7-111:26>
+Origin: <Id "Protected_Procedure" protecteds.adb:119:7-119:26>
 ----- CODE SNIPPET -----
 procedure Protected_Procedure
 ----- DOCUMENTATION -----
 Description of the protected procedure (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Procedure" protecteds.ads:29:17-29:36>
-Origin: <Id "Protected_Procedure" protecteds_package.adb:36:10-36:29>
+Origin: <Id "Protected_Procedure" protecteds_package.adb:38:10-38:29>
 ----- CODE SNIPPET -----
 procedure Protected_Procedure
 ----- DOCUMENTATION -----
@@ -3158,7 +3158,7 @@ Description of the protected function (specification).
 @return
 ----- DONE -----
 Defining name: <DefiningName "Protected_Function" protecteds.ads:32:16-32:34>
-Origin: <Id "Protected_Function" protecteds.adb:110:16-110:34>
+Origin: <Id "Protected_Function" protecteds.adb:118:16-118:34>
 ----- CODE SNIPPET -----
 function Protected_Function return Integer
 ----- DOCUMENTATION -----
@@ -3167,7 +3167,7 @@ Description of the protected function (specification).
 @return
 ----- DONE -----
 Defining name: <DefiningName "Protected_Function" protecteds.ads:32:16-32:34>
-Origin: <Id "Protected_Function" protecteds_package.adb:35:19-35:37>
+Origin: <Id "Protected_Function" protecteds_package.adb:37:19-37:37>
 ----- CODE SNIPPET -----
 function Protected_Function return Integer
 ----- DOCUMENTATION -----
@@ -3210,14 +3210,14 @@ Description of the protected entry (specification).
 Description of the protected entry (body).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Entry" protecteds.ads:35:13-35:28>
-Origin: <Id "Protected_Entry" protecteds.adb:112:7-112:22>
+Origin: <Id "Protected_Entry" protecteds.adb:120:7-120:22>
 ----- CODE SNIPPET -----
 entry Protected_Entry
 ----- DOCUMENTATION -----
 Description of the protected entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Entry" protecteds.ads:35:13-35:28>
-Origin: <Id "Protected_Entry" protecteds_package.adb:37:10-37:25>
+Origin: <Id "Protected_Entry" protecteds_package.adb:39:10-39:25>
 ----- CODE SNIPPET -----
 entry Protected_Entry
 ----- DOCUMENTATION -----
@@ -3256,7 +3256,7 @@ entry Protected_Requeue_Entry
 Description of the protected requeue entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Requeue_Entry" protecteds.ads:38:13-38:36>
-Origin: <Id "Protected_Requeue_Entry" protecteds_package.adb:22:21-22:44>
+Origin: <Id "Protected_Requeue_Entry" protecteds_package.adb:24:21-24:44>
 ----- CODE SNIPPET -----
 entry Protected_Requeue_Entry
 ----- DOCUMENTATION -----
@@ -3292,14 +3292,14 @@ Description of the protected entry family (body).
 @param Index
 ----- DONE -----
 Defining name: <DefiningName "Protected_Entry_Family" protecteds.ads:41:13-41:35>
-Origin: <Id "Protected_Entry_Family" protecteds.adb:113:7-113:29>
+Origin: <Id "Protected_Entry_Family" protecteds.adb:121:7-121:29>
 ----- CODE SNIPPET -----
 entry Protected_Entry_Family (Positive range 1 .. 10)
 ----- DOCUMENTATION -----
 Description of the protected entry family (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Entry_Family" protecteds.ads:41:13-41:35>
-Origin: <Id "Protected_Entry_Family" protecteds_package.adb:38:10-38:32>
+Origin: <Id "Protected_Entry_Family" protecteds_package.adb:40:10-40:32>
 ----- CODE SNIPPET -----
 entry Protected_Entry_Family (Positive range 1 .. 10)
 ----- DOCUMENTATION -----
@@ -3320,6 +3320,176 @@ entry Protected_Entry_Family
   (for Index in Positive range 1 .. 10)
 ----- DOCUMENTATION -----
 @param Index
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Object" protecteds.ads:46:14-46:39>
+Origin: <Id "Separate_Protected_Object" protecteds.ads:46:14-46:39>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Object" protecteds.ads:46:14-46:39>
+Origin: <Id "Separate_Protected_Object" protecteds.ads:53:8-53:33>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Object" protecteds.adb:100:19-100:44>
+Origin: <Id "Separate_Protected_Object" protecteds.adb:100:19-100:44>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Object" protecteds-separate_protected_object.adb:3:16-3:41>
+Origin: <Id "Separate_Protected_Object" protecteds-separate_protected_object.adb:3:16-3:41>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected object (specification).
+
+Description of the separate protected object (body).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Object" protecteds-separate_protected_object.adb:3:16-3:41>
+Origin: <Id "Separate_Protected_Object" protecteds-separate_protected_object.adb:14:5-14:30>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected object (specification).
+
+Description of the separate protected object (body).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Object" protecteds.ads:46:14-46:39>
+Origin: <Id "Separate_Protected_Object" protecteds.adb:123:4-123:29>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Object" protecteds.ads:46:14-46:39>
+Origin: <Id "Separate_Protected_Object" protecteds_package.adb:42:18-42:43>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Entry" protecteds.ads:50:13-50:37>
+Origin: <Id "Separate_Protected_Entry" protecteds.ads:50:13-50:37>
+----- CODE SNIPPET -----
+entry Separate_Protected_Entry
+----- DOCUMENTATION -----
+Description of the separate protected entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Entry" protecteds-separate_protected_object.adb:7:10-7:34>
+Origin: <Id "Separate_Protected_Entry" protecteds-separate_protected_object.adb:7:10-7:34>
+----- CODE SNIPPET -----
+entry Separate_Protected_Entry
+----- DOCUMENTATION -----
+Description of the separate protected entry (specification).
+
+Description of the separate protected entry (body).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Entry" protecteds-separate_protected_object.adb:7:10-7:34>
+Origin: <Id "Separate_Protected_Entry" protecteds-separate_protected_object.adb:12:8-12:32>
+----- CODE SNIPPET -----
+entry Separate_Protected_Entry
+----- DOCUMENTATION -----
+Description of the separate protected entry (specification).
+
+Description of the separate protected entry (body).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Entry" protecteds.ads:50:13-50:37>
+Origin: <Id "Separate_Protected_Entry" protecteds.adb:123:30-123:54>
+----- CODE SNIPPET -----
+entry Separate_Protected_Entry
+----- DOCUMENTATION -----
+Description of the separate protected entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Entry" protecteds.ads:50:13-50:37>
+Origin: <Id "Separate_Protected_Entry" protecteds_package.adb:42:44-42:68>
+----- CODE SNIPPET -----
+entry Separate_Protected_Entry
+----- DOCUMENTATION -----
+Description of the separate protected entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Type" protecteds.ads:55:19-55:42>
+Origin: <Id "Separate_Protected_Type" protecteds.ads:55:19-55:42>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected type (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Type" protecteds.ads:55:19-55:42>
+Origin: <Id "Separate_Protected_Type" protecteds.ads:62:8-62:31>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected type (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Type" protecteds.adb:103:19-103:42>
+Origin: <Id "Separate_Protected_Type" protecteds.adb:103:19-103:42>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected type (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Type" protecteds-separate_protected_type.adb:3:16-3:39>
+Origin: <Id "Separate_Protected_Type" protecteds-separate_protected_type.adb:3:16-3:39>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected type (specification).
+
+Description of the separate protected type (body).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Type" protecteds-separate_protected_type.adb:3:16-3:39>
+Origin: <Id "Separate_Protected_Type" protecteds-separate_protected_type.adb:14:5-14:28>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected type (specification).
+
+Description of the separate protected type (body).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Type" protecteds.ads:55:19-55:42>
+Origin: <Id "Separate_Protected_Type" protecteds.adb:108:10-108:33>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected type (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Type" protecteds.ads:55:19-55:42>
+Origin: <Id "Separate_Protected_Type" protecteds_package.adb:8:21-8:44>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate protected type (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Entry" protecteds.ads:59:13-59:37>
+Origin: <Id "Separate_Protected_Entry" protecteds.ads:59:13-59:37>
+----- CODE SNIPPET -----
+entry Separate_Protected_Entry
+----- DOCUMENTATION -----
+Description of the separate protected entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Entry" protecteds-separate_protected_type.adb:7:10-7:34>
+Origin: <Id "Separate_Protected_Entry" protecteds-separate_protected_type.adb:7:10-7:34>
+----- CODE SNIPPET -----
+entry Separate_Protected_Entry
+----- DOCUMENTATION -----
+Description of the separate protected entry (specification).
+
+Description of the separate protected entry (body).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Entry" protecteds-separate_protected_type.adb:7:10-7:34>
+Origin: <Id "Separate_Protected_Entry" protecteds-separate_protected_type.adb:12:8-12:32>
+----- CODE SNIPPET -----
+entry Separate_Protected_Entry
+----- DOCUMENTATION -----
+Description of the separate protected entry (specification).
+
+Description of the separate protected entry (body).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Entry" protecteds.ads:59:13-59:37>
+Origin: <Id "Separate_Protected_Entry" protecteds.adb:124:8-124:32>
+----- CODE SNIPPET -----
+entry Separate_Protected_Entry
+----- DOCUMENTATION -----
+Description of the separate protected entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Protected_Entry" protecteds.ads:59:13-59:37>
+Origin: <Id "Separate_Protected_Entry" protecteds_package.adb:43:11-43:35>
+----- CODE SNIPPET -----
+entry Separate_Protected_Entry
+----- DOCUMENTATION -----
+Description of the separate protected entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Result" returns.adb:8:17-8:23>
 Origin: <Id "Result" returns.adb:8:17-8:23>
@@ -4084,31 +4254,31 @@ Origin: <Id "Task_Object" tasks.adb:42:18-42:29>
 Description of the task object (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Object" tasks.ads:4:9-4:20>
-Origin: <Id "Task_Object" tasks.adb:49:4-49:15>
+Origin: <Id "Task_Object" tasks.adb:57:4-57:15>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the task object (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Object" tasks.ads:4:9-4:20>
-Origin: <Id "Task_Object" tasks.adb:50:4-50:15>
+Origin: <Id "Task_Object" tasks.adb:58:4-58:15>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the task object (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Object" tasks.ads:4:9-4:20>
-Origin: <Id "Task_Object" tasks_package.adb:16:24-16:35>
+Origin: <Id "Task_Object" tasks_package.adb:18:24-18:35>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the task object (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Object" tasks.ads:4:9-4:20>
-Origin: <Id "Task_Object" tasks_package.adb:26:13-26:24>
+Origin: <Id "Task_Object" tasks_package.adb:28:13-28:24>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the task object (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Object" tasks.ads:4:9-4:20>
-Origin: <Id "Task_Object" tasks_package.adb:27:13-27:24>
+Origin: <Id "Task_Object" tasks_package.adb:29:13-29:24>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the task object (specification).
@@ -4135,14 +4305,14 @@ entry Task_Entry
 Description of the task entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Entry" tasks.ads:8:13-8:23>
-Origin: <Id "Task_Entry" tasks.adb:49:16-49:26>
+Origin: <Id "Task_Entry" tasks.adb:57:16-57:26>
 ----- CODE SNIPPET -----
 entry Task_Entry
 ----- DOCUMENTATION -----
 Description of the task entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Entry" tasks.ads:8:13-8:23>
-Origin: <Id "Task_Entry" tasks_package.adb:26:25-26:35>
+Origin: <Id "Task_Entry" tasks_package.adb:28:25-28:35>
 ----- CODE SNIPPET -----
 entry Task_Entry
 ----- DOCUMENTATION -----
@@ -4177,7 +4347,7 @@ entry Task_Requeue_Entry
 Description of the task requeue entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Requeue_Entry" tasks.ads:11:13-11:31>
-Origin: <Id "Task_Requeue_Entry" tasks_package.adb:16:36-16:54>
+Origin: <Id "Task_Requeue_Entry" tasks_package.adb:18:36-18:54>
 ----- CODE SNIPPET -----
 entry Task_Requeue_Entry
 ----- DOCUMENTATION -----
@@ -4198,14 +4368,14 @@ entry Task_Entry_Family (Positive range 1 .. 10)
 Description of the task entry family (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Entry_Family" tasks.ads:14:13-14:30>
-Origin: <Id "Task_Entry_Family" tasks.adb:50:16-50:33>
+Origin: <Id "Task_Entry_Family" tasks.adb:58:16-58:33>
 ----- CODE SNIPPET -----
 entry Task_Entry_Family (Positive range 1 .. 10)
 ----- DOCUMENTATION -----
 Description of the task entry family (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Entry_Family" tasks.ads:14:13-14:30>
-Origin: <Id "Task_Entry_Family" tasks_package.adb:27:25-27:42>
+Origin: <Id "Task_Entry_Family" tasks_package.adb:29:25-29:42>
 ----- CODE SNIPPET -----
 entry Task_Entry_Family (Positive range 1 .. 10)
 ----- DOCUMENTATION -----
@@ -4236,7 +4406,7 @@ Origin: <Id "Task_Type" tasks.adb:44:8-44:17>
 Description of the task type (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Type" tasks.ads:19:14-19:23>
-Origin: <Id "Task_Type" tasks.adb:46:9-46:18>
+Origin: <Id "Task_Type" tasks.adb:52:9-52:18>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the task type (specification).
@@ -4269,14 +4439,14 @@ entry Task_Entry
 Description of the task entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Entry" tasks.ads:23:13-23:23>
-Origin: <Id "Task_Entry" tasks.adb:52:7-52:17>
+Origin: <Id "Task_Entry" tasks.adb:60:7-60:17>
 ----- CODE SNIPPET -----
 entry Task_Entry
 ----- DOCUMENTATION -----
 Description of the task entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Entry" tasks.ads:23:13-23:23>
-Origin: <Id "Task_Entry" tasks_package.adb:29:10-29:20>
+Origin: <Id "Task_Entry" tasks_package.adb:31:10-31:20>
 ----- CODE SNIPPET -----
 entry Task_Entry
 ----- DOCUMENTATION -----
@@ -4311,7 +4481,7 @@ entry Task_Requeue_Entry
 Description of the task requeue entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Requeue_Entry" tasks.ads:26:13-26:31>
-Origin: <Id "Task_Requeue_Entry" tasks_package.adb:20:21-20:39>
+Origin: <Id "Task_Requeue_Entry" tasks_package.adb:22:21-22:39>
 ----- CODE SNIPPET -----
 entry Task_Requeue_Entry
 ----- DOCUMENTATION -----
@@ -4339,16 +4509,163 @@ entry Task_Entry_Family (Positive range 1 .. 10)
 Description of the task entry family (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Entry_Family" tasks.ads:29:13-29:30>
-Origin: <Id "Task_Entry_Family" tasks.adb:53:7-53:24>
+Origin: <Id "Task_Entry_Family" tasks.adb:61:7-61:24>
 ----- CODE SNIPPET -----
 entry Task_Entry_Family (Positive range 1 .. 10)
 ----- DOCUMENTATION -----
 Description of the task entry family (specification).
 ----- DONE -----
 Defining name: <DefiningName "Task_Entry_Family" tasks.ads:29:13-29:30>
-Origin: <Id "Task_Entry_Family" tasks_package.adb:30:10-30:27>
+Origin: <Id "Task_Entry_Family" tasks_package.adb:32:10-32:27>
 ----- CODE SNIPPET -----
 entry Task_Entry_Family (Positive range 1 .. 10)
 ----- DOCUMENTATION -----
 Description of the task entry family (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Object" tasks.ads:34:9-34:29>
+Origin: <Id "Separate_Task_Object" tasks.ads:34:9-34:29>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Object" tasks.ads:34:9-34:29>
+Origin: <Id "Separate_Task_Object" tasks.ads:41:8-41:28>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Object" tasks.adb:46:14-46:34>
+Origin: <Id "Separate_Task_Object" tasks.adb:46:14-46:34>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Object" tasks-separate_task_object.adb:3:11-3:31>
+Origin: <Id "Separate_Task_Object" tasks-separate_task_object.adb:3:11-3:31>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Object" tasks-separate_task_object.adb:3:11-3:31>
+Origin: <Id "Separate_Task_Object" tasks-separate_task_object.adb:10:5-10:25>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Object" tasks.ads:34:9-34:29>
+Origin: <Id "Separate_Task_Object" tasks.adb:63:4-63:24>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Object" tasks.ads:34:9-34:29>
+Origin: <Id "Separate_Task_Object" tasks_package.adb:34:13-34:33>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Entry" tasks.ads:38:13-38:32>
+Origin: <Id "Separate_Task_Entry" tasks.ads:38:13-38:32>
+----- CODE SNIPPET -----
+entry Separate_Task_Entry
+----- DOCUMENTATION -----
+Description of the separate task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Entry" tasks-separate_task_object.adb:8:11-8:30>
+Origin: <Id "Separate_Task_Entry" tasks-separate_task_object.adb:8:11-8:30>
+----- CODE SNIPPET -----
+entry Separate_Task_Entry
+----- DOCUMENTATION -----
+Description of the separate task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Entry" tasks.ads:38:13-38:32>
+Origin: <Id "Separate_Task_Entry" tasks.adb:63:25-63:44>
+----- CODE SNIPPET -----
+entry Separate_Task_Entry
+----- DOCUMENTATION -----
+Description of the separate task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Entry" tasks.ads:38:13-38:32>
+Origin: <Id "Separate_Task_Entry" tasks_package.adb:34:34-34:53>
+----- CODE SNIPPET -----
+entry Separate_Task_Entry
+----- DOCUMENTATION -----
+Description of the separate task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Type" tasks.ads:43:14-43:32>
+Origin: <Id "Separate_Task_Type" tasks.ads:43:14-43:32>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Type" tasks.ads:43:14-43:32>
+Origin: <Id "Separate_Task_Type" tasks.ads:50:8-50:26>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Type" tasks.adb:49:14-49:32>
+Origin: <Id "Separate_Task_Type" tasks.adb:49:14-49:32>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Type" tasks-separate_task_type.adb:3:11-3:29>
+Origin: <Id "Separate_Task_Type" tasks-separate_task_type.adb:3:11-3:29>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Type" tasks-separate_task_type.adb:3:11-3:29>
+Origin: <Id "Separate_Task_Type" tasks-separate_task_type.adb:13:5-13:23>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Type" tasks.ads:43:14-43:32>
+Origin: <Id "Separate_Task_Type" tasks.adb:54:10-54:28>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Type" tasks.ads:43:14-43:32>
+Origin: <Id "Separate_Task_Type" tasks_package.adb:8:16-8:34>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the separate task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Entry" tasks.ads:47:13-47:32>
+Origin: <Id "Separate_Task_Entry" tasks.ads:47:13-47:32>
+----- CODE SNIPPET -----
+entry Separate_Task_Entry
+----- DOCUMENTATION -----
+Description of the separate task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Entry" tasks-separate_task_type.adb:8:11-8:30>
+Origin: <Id "Separate_Task_Entry" tasks-separate_task_type.adb:8:11-8:30>
+----- CODE SNIPPET -----
+entry Separate_Task_Entry
+----- DOCUMENTATION -----
+Description of the separate task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Entry" tasks.ads:47:13-47:32>
+Origin: <Id "Separate_Task_Entry" tasks-separate_task_type.adb:12:8-12:27>
+----- CODE SNIPPET -----
+entry Separate_Task_Entry
+----- DOCUMENTATION -----
+Description of the separate task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Entry" tasks.ads:47:13-47:32>
+Origin: <Id "Separate_Task_Entry" tasks.adb:64:8-64:27>
+----- CODE SNIPPET -----
+entry Separate_Task_Entry
+----- DOCUMENTATION -----
+Description of the separate task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Separate_Task_Entry" tasks.ads:47:13-47:32>
+Origin: <Id "Separate_Task_Entry" tasks_package.adb:35:11-35:30>
+----- CODE SNIPPET -----
+entry Separate_Task_Entry
+----- DOCUMENTATION -----
+Description of the separate task entry (specification).
 ----- DONE -----

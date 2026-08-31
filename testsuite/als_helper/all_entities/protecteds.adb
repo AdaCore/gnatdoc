@@ -97,7 +97,15 @@ package body Protecteds is
 
    end Protected_Type;
 
+   protected body Separate_Protected_Object is separate;
+   --  Description of the separate protected object (body stub).
+
+   protected body Separate_Protected_Type is separate;
+   --  Description of the separate protected type (body stub).
+
    PO : Protected_Type;
+
+   SPO : Separate_Protected_Type;
 
    Dummy : Integer;
 
@@ -111,4 +119,7 @@ begin
    PO.Protected_Procedure;
    PO.Protected_Entry;
    PO.Protected_Entry_Family (1);
+
+   Separate_Protected_Object.Separate_Protected_Entry;
+   SPO.Separate_Protected_Entry;
 end Protecteds;

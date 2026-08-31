@@ -43,4 +43,22 @@ package Protecteds is
 
    end Protected_Type;
 
+   protected Separate_Protected_Object is
+
+      --  Description of the separate protected object (specification).
+
+      entry Separate_Protected_Entry;
+      --  Description of the separate protected entry (specification).
+
+   end Separate_Protected_Object;
+
+   protected type Separate_Protected_Type is
+
+      --  Description of the separate protected type (specification).
+
+      entry Separate_Protected_Entry;
+      --  Description of the separate protected entry (specification).
+
+   end Separate_Protected_Type;
+
 end Protecteds;

@@ -43,7 +43,15 @@ package body Tasks is
       end Task_Requeue_Entry;
    end Task_Type;
 
+   task body Separate_Task_Object is separate;
+   --  Description of the separate task object (body stub).
+
+   task body Separate_Task_Type is separate;
+   --  Description of the separate task type (body stub).
+
    TO : Task_Type;
+
+   STO : Separate_Task_Type;
 
 begin
    Task_Object.Task_Entry;
@@ -51,4 +59,7 @@ begin
 
    TO.Task_Entry;
    TO.Task_Entry_Family (1);
+
+   Separate_Task_Object.Separate_Task_Entry;
+   STO.Separate_Task_Entry;
 end Tasks;

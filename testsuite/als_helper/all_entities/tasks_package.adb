@@ -5,6 +5,8 @@ package body Tasks_Package is
 
    TO : Tasks.Task_Type;
 
+   STO : Tasks.Separate_Task_Type;
+
    task Requeue_Task is
       entry Requeue_To_Object;
       entry Requeue_To_Type;
@@ -28,6 +30,9 @@ package body Tasks_Package is
 
       TO.Task_Entry;
       TO.Task_Entry_Family (1);
+
+      Tasks.Separate_Task_Object.Separate_Task_Entry;
+      STO.Separate_Task_Entry;
    end Dummy;
 
 end Tasks_Package;

@@ -31,4 +31,22 @@ package Tasks is
 
    end Task_Type;
 
+   task Separate_Task_Object is
+
+      --  Description of the separate task object (specification).
+
+      entry Separate_Task_Entry;
+      --  Description of the separate task entry (specification).
+
+   end Separate_Task_Object;
+
+   task type Separate_Task_Type is
+
+      --  Description of the separate task type (specification).
+
+      entry Separate_Task_Entry;
+      --  Description of the separate task entry (specification).
+
+   end Separate_Task_Type;
+
 end Tasks;

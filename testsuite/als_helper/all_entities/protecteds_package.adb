@@ -5,6 +5,8 @@ package body Protecteds_Package is
 
    PO : Protecteds.Protected_Type;
 
+   SPO : Protecteds.Separate_Protected_Type;
+
    protected Requeue_Object is
       entry Requeue_To_Object;
       entry Requeue_To_Type;
@@ -36,6 +38,9 @@ package body Protecteds_Package is
       PO.Protected_Procedure;
       PO.Protected_Entry;
       PO.Protected_Entry_Family (1);
+
+      Protecteds.Separate_Protected_Object.Separate_Protected_Entry;
+      SPO.Separate_Protected_Entry;
    end Dummy;
 
 end Protecteds_Package;
