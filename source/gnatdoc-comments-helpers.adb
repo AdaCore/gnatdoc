@@ -395,6 +395,7 @@ package body GNATdoc.Comments.Helpers is
                     | Ada_Protected_Body
                     | Ada_Protected_Type_Decl
                     | Ada_Single_Protected_Decl
+                    | Ada_Single_Task_Decl
                     | Ada_Subp_Body
                     | Ada_Subp_Decl
                     | Ada_Subp_Renaming_Decl
@@ -537,7 +538,10 @@ package body GNATdoc.Comments.Helpers is
                | Ada_Protected_Body
                | Ada_Protected_Type_Decl
                | Ada_Single_Protected_Decl
+               | Ada_Single_Task_Decl
                | Ada_Subtype_Decl
+               | Ada_Task_Body
+               | Ada_Task_Type_Decl
             =>
                return False;
 
