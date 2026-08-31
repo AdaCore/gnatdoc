@@ -427,11 +427,11 @@
 
     {"file": "packages.ads", "line": 5, "column": 9},
     //  specification of the package "Packages"
-    {"file": "packages.ads", "line": 27, "column": 5},
+    {"file": "packages.ads", "line": 35, "column": 5},
     //  reference of the package "Packages" from "end <>"
     {"file": "packages.adb", "line": 5, "column": 14},
     //  body of the package "Packages"
-    {"file": "packages.adb", "line": 69, "column": 5},
+    {"file": "packages.adb", "line": 71, "column": 5},
     //  reference of the package "Packages" from "end <>"
     {"file": "packages.adb", "line": 64, "column": 10},
     //  reference of the package "Packages" from subprogram call inside the package body
@@ -443,12 +443,49 @@
     //  reference of the package "Packages" in with clause
     {"file": "packages_package.adb", "line": 8, "column": 7},
     //  reference of the package "Packages" in code
+    {"file": "packages-separate_nested.adb", "line": 3, "column": 11},
+    //  reference of the package "Packages" from the `separate` clause of the
+    //  subunit
+
+    {"file": "packages.ads", "line": 15, "column": 12},
+    //  specification of the nested package with the separate body
+    {"file": "packages.ads", "line": 21, "column": 8},
+    //  reference of the nested package with the separate body from "end <>"
+    {"file": "packages.adb", "line": 69, "column": 17},
+    //  body stub of the nested package with the separate body; documentation
+    //  of the body stub is not extracted, `Ada_Package_Body_Stub` is not
+    //  supported by the extractor
+    {"file": "packages-separate_nested.adb", "line": 4, "column": 14},
+    //  body of the nested package with the separate body in the subunit
+    {"file": "packages-separate_nested.adb", "line": 13, "column": 5},
+    //  reference of the nested package with the separate body from "end <>" of
+    //  the subunit
+    {"file": "packages.adb", "line": 21, "column": 7},
+    //  reference of the nested package with the separate body from subprogram
+    //  call inside the package body
+    {"file": "packages_package.adb", "line": 9, "column": 16},
+    //  reference of the nested package with the separate body from subprogram
+    //  call in another package
+
+    {"file": "packages.ads", "line": 19, "column": 17},
+    //  declaration of the subprogram of the nested package with the separate
+    //  body
+    {"file": "packages-separate_nested.adb", "line": 8, "column": 14},
+    //  body of the subprogram of the nested package in the subunit
+    {"file": "packages-separate_nested.adb", "line": 11, "column": 8},
+    //  reference of the subprogram of the nested package from "end <>"
+    {"file": "packages.adb", "line": 21, "column": 23},
+    //  reference of the subprogram of the nested package from subprogram call
+    //  inside the package body
+    {"file": "packages_package.adb", "line": 9, "column": 32},
+    //  reference of the subprogram of the nested package from subprogram call
+    //  in another package
 
     {"file": "packages_renaming.ads", "line": 7, "column": 9},
     //  specification of the package renaming
     {"file": "packages_package.adb", "line": 2, "column": 6},
     //  reference of the package renaming from `with` clause
-    {"file": "packages_package.adb", "line": 2, "column": 6},
+    {"file": "packages_package.adb", "line": 10, "column": 7},
     //  reference of the package renaming from code
 
     {"file": "protecteds.ads", "line": 4, "column": 14},

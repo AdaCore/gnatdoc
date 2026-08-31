@@ -12,6 +12,14 @@ package Packages is
 
    end Public_Nested;
 
+   package Separate_Nested is
+
+      --  Description of the nested package specification with separate body
+
+      procedure Dummy;
+
+   end Separate_Nested;
+
    procedure Dummy;
 
 private

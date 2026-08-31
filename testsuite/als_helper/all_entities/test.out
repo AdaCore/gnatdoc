@@ -2602,7 +2602,7 @@ package Packages
 Description of the package specification
 ----- DONE -----
 Defining name: <DefiningName "Packages" packages.ads:5:9-5:17>
-Origin: <Id "Packages" packages.ads:27:5-27:13>
+Origin: <Id "Packages" packages.ads:35:5-35:13>
 ----- CODE SNIPPET -----
 package Packages
 ----- DOCUMENTATION -----
@@ -2620,7 +2620,7 @@ Description of the package specification
 Description of the package body
 ----- DONE -----
 Defining name: <DefiningName "Packages" packages.adb:5:14-5:22>
-Origin: <Id "Packages" packages.adb:69:5-69:13>
+Origin: <Id "Packages" packages.adb:71:5-71:13>
 ----- CODE SNIPPET -----
 package Packages
 
@@ -2665,6 +2665,104 @@ package Packages
 ----- DOCUMENTATION -----
 Description of the package specification
 ----- DONE -----
+Defining name: <DefiningName "Packages" packages.adb:5:14-5:22>
+Origin: <Id "Packages" packages-separate_nested.adb:3:11-3:19>
+----- CODE SNIPPET -----
+package Packages
+
+package body Packages
+----- DOCUMENTATION -----
+Description of the package specification
+
+Description of the package body
+----- DONE -----
+Defining name: <DefiningName "Separate_Nested" packages.ads:15:12-15:27>
+Origin: <Id "Separate_Nested" packages.ads:15:12-15:27>
+----- CODE SNIPPET -----
+package Separate_Nested
+----- DOCUMENTATION -----
+Description of the nested package specification with separate body
+----- DONE -----
+Defining name: <DefiningName "Separate_Nested" packages.ads:15:12-15:27>
+Origin: <Id "Separate_Nested" packages.ads:21:8-21:23>
+----- CODE SNIPPET -----
+package Separate_Nested
+----- DOCUMENTATION -----
+Description of the nested package specification with separate body
+----- DONE -----
+Defining name: <DefiningName "Separate_Nested" packages.adb:69:17-69:32>
+Origin: <Id "Separate_Nested" packages.adb:69:17-69:32>
+----- CODE SNIPPET -----
+package Separate_Nested
+----- DOCUMENTATION -----
+Description of the nested package specification with separate body
+----- DONE -----
+Defining name: <DefiningName "Separate_Nested" packages-separate_nested.adb:4:14-4:29>
+Origin: <Id "Separate_Nested" packages-separate_nested.adb:4:14-4:29>
+----- CODE SNIPPET -----
+package Separate_Nested
+
+package body Separate_Nested
+----- DOCUMENTATION -----
+Description of the nested package specification with separate body
+
+Description of the nested package body in the subunit
+----- DONE -----
+Defining name: <DefiningName "Separate_Nested" packages-separate_nested.adb:4:14-4:29>
+Origin: <Id "Separate_Nested" packages-separate_nested.adb:13:5-13:20>
+----- CODE SNIPPET -----
+package Separate_Nested
+
+package body Separate_Nested
+----- DOCUMENTATION -----
+Description of the nested package specification with separate body
+
+Description of the nested package body in the subunit
+----- DONE -----
+Defining name: <DefiningName "Separate_Nested" packages.ads:15:12-15:27>
+Origin: <Id "Separate_Nested" packages.adb:21:7-21:22>
+----- CODE SNIPPET -----
+package Separate_Nested
+----- DOCUMENTATION -----
+Description of the nested package specification with separate body
+----- DONE -----
+Defining name: <DefiningName "Separate_Nested" packages.ads:15:12-15:27>
+Origin: <Id "Separate_Nested" packages_package.adb:9:16-9:31>
+----- CODE SNIPPET -----
+package Separate_Nested
+----- DOCUMENTATION -----
+Description of the nested package specification with separate body
+----- DONE -----
+Defining name: <DefiningName "Dummy" packages.ads:19:17-19:22>
+Origin: <Id "Dummy" packages.ads:19:17-19:22>
+----- CODE SNIPPET -----
+procedure Dummy
+----- DOCUMENTATION -----
+----- DONE -----
+Defining name: <DefiningName "Dummy" packages-separate_nested.adb:8:14-8:19>
+Origin: <Id "Dummy" packages-separate_nested.adb:8:14-8:19>
+----- CODE SNIPPET -----
+procedure Dummy
+----- DOCUMENTATION -----
+----- DONE -----
+Defining name: <DefiningName "Dummy" packages-separate_nested.adb:8:14-8:19>
+Origin: <Id "Dummy" packages-separate_nested.adb:11:8-11:13>
+----- CODE SNIPPET -----
+procedure Dummy
+----- DOCUMENTATION -----
+----- DONE -----
+Defining name: <DefiningName "Dummy" packages.ads:19:17-19:22>
+Origin: <Id "Dummy" packages.adb:21:23-21:28>
+----- CODE SNIPPET -----
+procedure Dummy
+----- DOCUMENTATION -----
+----- DONE -----
+Defining name: <DefiningName "Dummy" packages.ads:19:17-19:22>
+Origin: <Id "Dummy" packages_package.adb:9:32-9:37>
+----- CODE SNIPPET -----
+procedure Dummy
+----- DOCUMENTATION -----
+----- DONE -----
 Defining name: <DefiningName "Packages_Renaming" packages_renaming.ads:7:9-7:26>
 Origin: <Id "Packages_Renaming" packages_renaming.ads:7:9-7:26>
 ----- CODE SNIPPET -----
@@ -2680,7 +2778,7 @@ package Packages_Renaming renames Packages;
 Description of the package renaming
 ----- DONE -----
 Defining name: <DefiningName "Packages_Renaming" packages_renaming.ads:7:9-7:26>
-Origin: <Id "Packages_Renaming" packages_package.adb:2:6-2:23>
+Origin: <Id "Packages_Renaming" packages_package.adb:10:7-10:24>
 ----- CODE SNIPPET -----
 package Packages_Renaming renames Packages;
 ----- DOCUMENTATION -----
