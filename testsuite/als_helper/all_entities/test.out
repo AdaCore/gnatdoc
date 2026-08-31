@@ -2715,6 +2715,24 @@ Description of the protected object (specification).
 Description of the protected object (body).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
+Origin: <Id "Protected_Object" protecteds.adb:69:13-69:29>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
+Origin: <Id "Protected_Object" protecteds.adb:70:4-70:20>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
+Origin: <Id "Protected_Object" protecteds.adb:71:4-71:20>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Object" protecteds.ads:4:14-4:30>
 Origin: <Id "Protected_Object" protecteds_package.adb:11:27-11:43>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
@@ -2731,6 +2749,158 @@ Origin: <Id "Protected_Object" protecteds_package.adb:13:18-13:34>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the protected object (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Procedure" protecteds.ads:8:17-8:36>
+Origin: <Id "Protected_Procedure" protecteds.ads:8:17-8:36>
+----- CODE SNIPPET -----
+procedure Protected_Procedure
+----- DOCUMENTATION -----
+Description of the protected procedure (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Procedure" protecteds.adb:25:17-25:36>
+Origin: <Id "Protected_Procedure" protecteds.adb:25:17-25:36>
+----- CODE SNIPPET -----
+procedure Protected_Procedure
+----- DOCUMENTATION -----
+Description of the protected procedure (specification).
+
+Description of the protected procedure (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Procedure" protecteds.adb:25:17-25:36>
+Origin: <Id "Protected_Procedure" protecteds.adb:30:11-30:30>
+----- CODE SNIPPET -----
+procedure Protected_Procedure
+----- DOCUMENTATION -----
+Description of the protected procedure (specification).
+
+Description of the protected procedure (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Procedure" protecteds.ads:8:17-8:36>
+Origin: <Id "Protected_Procedure" protecteds.adb:14:10-14:29>
+----- CODE SNIPPET -----
+procedure Protected_Procedure
+----- DOCUMENTATION -----
+Description of the protected procedure (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Procedure" protecteds.ads:8:17-8:36>
+Origin: <Id "Protected_Procedure" protecteds.adb:70:21-70:40>
+----- CODE SNIPPET -----
+procedure Protected_Procedure
+----- DOCUMENTATION -----
+Description of the protected procedure (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Procedure" protecteds.ads:8:17-8:36>
+Origin: <Id "Protected_Procedure" protecteds_package.adb:12:35-12:54>
+----- CODE SNIPPET -----
+procedure Protected_Procedure
+----- DOCUMENTATION -----
+Description of the protected procedure (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Function" protecteds.ads:11:16-11:34>
+Origin: <Id "Protected_Function" protecteds.ads:11:16-11:34>
+----- CODE SNIPPET -----
+function Protected_Function return Integer
+----- DOCUMENTATION -----
+Description of the protected function (specification).
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Protected_Function" protecteds.adb:18:16-18:34>
+Origin: <Id "Protected_Function" protecteds.adb:18:16-18:34>
+----- CODE SNIPPET -----
+function Protected_Function return Integer
+----- DOCUMENTATION -----
+Description of the protected function (specification).
+
+Description of the protected function (body).
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Protected_Function" protecteds.adb:18:16-18:34>
+Origin: <Id "Protected_Function" protecteds.adb:23:11-23:29>
+----- CODE SNIPPET -----
+function Protected_Function return Integer
+----- DOCUMENTATION -----
+Description of the protected function (specification).
+
+Description of the protected function (body).
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Protected_Function" protecteds.ads:11:16-11:34>
+Origin: <Id "Protected_Function" protecteds.adb:13:19-13:37>
+----- CODE SNIPPET -----
+function Protected_Function return Integer
+----- DOCUMENTATION -----
+Description of the protected function (specification).
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Protected_Function" protecteds.ads:11:16-11:34>
+Origin: <Id "Protected_Function" protecteds.adb:69:30-69:48>
+----- CODE SNIPPET -----
+function Protected_Function return Integer
+----- DOCUMENTATION -----
+Description of the protected function (specification).
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Protected_Function" protecteds.ads:11:16-11:34>
+Origin: <Id "Protected_Function" protecteds_package.adb:11:44-11:62>
+----- CODE SNIPPET -----
+function Protected_Function return Integer
+----- DOCUMENTATION -----
+Description of the protected function (specification).
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Protected_Entry" protecteds.ads:14:13-14:28>
+Origin: <Id "Protected_Entry" protecteds.ads:14:13-14:28>
+----- CODE SNIPPET -----
+entry Protected_Entry
+----- DOCUMENTATION -----
+Description of the protected entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Entry" protecteds.adb:8:13-8:28>
+Origin: <Id "Protected_Entry" protecteds.adb:8:13-8:28>
+----- CODE SNIPPET -----
+entry Protected_Entry
+----- DOCUMENTATION -----
+Description of the protected entry (specification).
+
+Description of the protected entry (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Entry" protecteds.adb:8:13-8:28>
+Origin: <Id "Protected_Entry" protecteds.adb:16:11-16:26>
+----- CODE SNIPPET -----
+entry Protected_Entry
+----- DOCUMENTATION -----
+Description of the protected entry (specification).
+
+Description of the protected entry (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Entry" protecteds.adb:8:13-8:28>
+Origin: <Id "Protected_Entry" protecteds.adb:15:10-15:25>
+----- CODE SNIPPET -----
+entry Protected_Entry
+----- DOCUMENTATION -----
+Description of the protected entry (specification).
+
+Description of the protected entry (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Entry" protecteds.ads:14:13-14:28>
+Origin: <Id "Protected_Entry" protecteds.adb:71:21-71:36>
+----- CODE SNIPPET -----
+entry Protected_Entry
+----- DOCUMENTATION -----
+Description of the protected entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Entry" protecteds.ads:14:13-14:28>
+Origin: <Id "Protected_Entry" protecteds_package.adb:13:35-13:50>
+----- CODE SNIPPET -----
+entry Protected_Entry
+----- DOCUMENTATION -----
+Description of the protected entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Type" protecteds.ads:19:19-19:33>
 Origin: <Id "Protected_Type" protecteds.ads:19:19-19:33>
@@ -2761,10 +2931,168 @@ Description of the protected type (specification).
 Description of the protected type (body).
 ----- DONE -----
 Defining name: <DefiningName "Protected_Type" protecteds.ads:19:19-19:33>
+Origin: <Id "Protected_Type" protecteds.adb:64:9-64:23>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the protected type (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Type" protecteds.ads:19:19-19:33>
 Origin: <Id "Protected_Type" protecteds_package.adb:6:20-6:34>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 Description of the protected type (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Procedure" protecteds.ads:23:17-23:36>
+Origin: <Id "Protected_Procedure" protecteds.ads:23:17-23:36>
+----- CODE SNIPPET -----
+procedure Protected_Procedure
+----- DOCUMENTATION -----
+Description of the protected procedure (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Procedure" protecteds.adb:55:17-55:36>
+Origin: <Id "Protected_Procedure" protecteds.adb:55:17-55:36>
+----- CODE SNIPPET -----
+procedure Protected_Procedure
+----- DOCUMENTATION -----
+Description of the protected procedure (specification).
+
+Description of the protected procedure (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Procedure" protecteds.adb:55:17-55:36>
+Origin: <Id "Protected_Procedure" protecteds.adb:60:11-60:30>
+----- CODE SNIPPET -----
+procedure Protected_Procedure
+----- DOCUMENTATION -----
+Description of the protected procedure (specification).
+
+Description of the protected procedure (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Procedure" protecteds.ads:23:17-23:36>
+Origin: <Id "Protected_Procedure" protecteds.adb:44:10-44:29>
+----- CODE SNIPPET -----
+procedure Protected_Procedure
+----- DOCUMENTATION -----
+Description of the protected procedure (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Procedure" protecteds.ads:23:17-23:36>
+Origin: <Id "Protected_Procedure" protecteds.adb:74:7-74:26>
+----- CODE SNIPPET -----
+procedure Protected_Procedure
+----- DOCUMENTATION -----
+Description of the protected procedure (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Procedure" protecteds.ads:23:17-23:36>
+Origin: <Id "Protected_Procedure" protecteds_package.adb:16:10-16:29>
+----- CODE SNIPPET -----
+procedure Protected_Procedure
+----- DOCUMENTATION -----
+Description of the protected procedure (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Function" protecteds.ads:26:16-26:34>
+Origin: <Id "Protected_Function" protecteds.ads:26:16-26:34>
+----- CODE SNIPPET -----
+function Protected_Function return Integer
+----- DOCUMENTATION -----
+Description of the protected function (specification).
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Protected_Function" protecteds.adb:48:16-48:34>
+Origin: <Id "Protected_Function" protecteds.adb:48:16-48:34>
+----- CODE SNIPPET -----
+function Protected_Function return Integer
+----- DOCUMENTATION -----
+Description of the protected function (specification).
+
+Description of the protected function (body).
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Protected_Function" protecteds.adb:48:16-48:34>
+Origin: <Id "Protected_Function" protecteds.adb:53:11-53:29>
+----- CODE SNIPPET -----
+function Protected_Function return Integer
+----- DOCUMENTATION -----
+Description of the protected function (specification).
+
+Description of the protected function (body).
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Protected_Function" protecteds.ads:26:16-26:34>
+Origin: <Id "Protected_Function" protecteds.adb:43:19-43:37>
+----- CODE SNIPPET -----
+function Protected_Function return Integer
+----- DOCUMENTATION -----
+Description of the protected function (specification).
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Protected_Function" protecteds.ads:26:16-26:34>
+Origin: <Id "Protected_Function" protecteds.adb:73:16-73:34>
+----- CODE SNIPPET -----
+function Protected_Function return Integer
+----- DOCUMENTATION -----
+Description of the protected function (specification).
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Protected_Function" protecteds.ads:26:16-26:34>
+Origin: <Id "Protected_Function" protecteds_package.adb:15:19-15:37>
+----- CODE SNIPPET -----
+function Protected_Function return Integer
+----- DOCUMENTATION -----
+Description of the protected function (specification).
+
+@return
+----- DONE -----
+Defining name: <DefiningName "Protected_Entry" protecteds.ads:29:13-29:28>
+Origin: <Id "Protected_Entry" protecteds.ads:29:13-29:28>
+----- CODE SNIPPET -----
+entry Protected_Entry
+----- DOCUMENTATION -----
+Description of the protected entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Entry" protecteds.adb:38:13-38:28>
+Origin: <Id "Protected_Entry" protecteds.adb:38:13-38:28>
+----- CODE SNIPPET -----
+entry Protected_Entry
+----- DOCUMENTATION -----
+Description of the protected entry (specification).
+
+Description of the protected entry (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Entry" protecteds.adb:38:13-38:28>
+Origin: <Id "Protected_Entry" protecteds.adb:46:11-46:26>
+----- CODE SNIPPET -----
+entry Protected_Entry
+----- DOCUMENTATION -----
+Description of the protected entry (specification).
+
+Description of the protected entry (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Entry" protecteds.adb:38:13-38:28>
+Origin: <Id "Protected_Entry" protecteds.adb:45:10-45:25>
+----- CODE SNIPPET -----
+entry Protected_Entry
+----- DOCUMENTATION -----
+Description of the protected entry (specification).
+
+Description of the protected entry (body).
+----- DONE -----
+Defining name: <DefiningName "Protected_Entry" protecteds.ads:29:13-29:28>
+Origin: <Id "Protected_Entry" protecteds.adb:75:7-75:22>
+----- CODE SNIPPET -----
+entry Protected_Entry
+----- DOCUMENTATION -----
+Description of the protected entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Protected_Entry" protecteds.ads:29:13-29:28>
+Origin: <Id "Protected_Entry" protecteds_package.adb:17:10-17:25>
+----- CODE SNIPPET -----
+entry Protected_Entry
+----- DOCUMENTATION -----
+Description of the protected entry (specification).
 ----- DONE -----
 Defining name: <DefiningName "Result" returns.adb:8:17-8:23>
 Origin: <Id "Result" returns.adb:8:17-8:23>

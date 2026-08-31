@@ -23,7 +23,7 @@ package body Protecteds is
       end Protected_Function;
 
       procedure Protected_Procedure is
-         --  Description of the protected procedure (body).
+      --  Description of the protected procedure (body).
 
       begin
          null;
@@ -53,7 +53,7 @@ package body Protecteds is
       end Protected_Function;
 
       procedure Protected_Procedure is
-         --  Description of the protected procedure (body).
+      --  Description of the protected procedure (body).
 
       begin
          null;
@@ -61,4 +61,16 @@ package body Protecteds is
 
    end Protected_Type;
 
+   PO : Protected_Type;
+
+   Dummy : Integer;
+
+begin
+   Dummy := Protected_Object.Protected_Function;
+   Protected_Object.Protected_Procedure;
+   Protected_Object.Protected_Entry;
+
+   Dummy := PO.Protected_Function;
+   PO.Protected_Procedure;
+   PO.Protected_Entry;
 end Protecteds;

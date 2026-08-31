@@ -459,12 +459,62 @@
     //  declaration of the protected object body
     {"file": "protecteds.adb", "line": 32, "column": 8},
     //  reference of the protected object from "end <>"
+    {"file": "protecteds.adb", "line": 69, "column": 13},
+    //  reference of the protected object from function call in the package
+    //  body
+    {"file": "protecteds.adb", "line": 70, "column": 4},
+    //  reference of the protected object from procedure call in the package
+    //  body
+    {"file": "protecteds.adb", "line": 71, "column": 4},
+    //  reference of the protected object from entry call in the package body
     {"file": "protecteds_package.adb", "line": 11, "column": 27},
     //  reference of the protected object from function call
     {"file": "protecteds_package.adb", "line": 12, "column": 18},
     //  reference of the protected object from procedure call
     {"file": "protecteds_package.adb", "line": 13, "column": 18},
     //  reference of the protected object from entry call
+
+    {"file": "protecteds.ads", "line": 8, "column": 17},
+    //  declaration of the procedure of the protected object specification
+    {"file": "protecteds.adb", "line": 25, "column": 17},
+    //  declaration of the procedure of the protected object body
+    {"file": "protecteds.adb", "line": 30, "column": 11},
+    //  reference of the procedure of the protected object from "end <>"
+    {"file": "protecteds.adb", "line": 14, "column": 10},
+    //  reference of the procedure of the protected object from internal call
+    {"file": "protecteds.adb", "line": 70, "column": 21},
+    //  reference of the procedure of the protected object from procedure call
+    //  in the package body
+    {"file": "protecteds_package.adb", "line": 12, "column": 35},
+    //  reference of the procedure of the protected object from procedure call
+
+    {"file": "protecteds.ads", "line": 11, "column": 16},
+    //  declaration of the function of the protected object specification
+    {"file": "protecteds.adb", "line": 18, "column": 16},
+    //  declaration of the function of the protected object body
+    {"file": "protecteds.adb", "line": 23, "column": 11},
+    //  reference of the function of the protected object from "end <>"
+    {"file": "protecteds.adb", "line": 13, "column": 19},
+    //  reference of the function of the protected object from internal call
+    {"file": "protecteds.adb", "line": 69, "column": 30},
+    //  reference of the function of the protected object from function call in
+    //  the package body
+    {"file": "protecteds_package.adb", "line": 11, "column": 44},
+    //  reference of the function of the protected object from function call
+
+    {"file": "protecteds.ads", "line": 14, "column": 13},
+    //  declaration of the entry of the protected object specification
+    {"file": "protecteds.adb", "line": 8, "column": 13},
+    //  declaration of the entry of the protected object body
+    {"file": "protecteds.adb", "line": 16, "column": 11},
+    //  reference of the entry of the protected object from "end <>"
+    {"file": "protecteds.adb", "line": 15, "column": 10},
+    //  reference of the entry of the protected object from internal call
+    {"file": "protecteds.adb", "line": 71, "column": 21},
+    //  reference of the entry of the protected object from entry call in the
+    //  package body
+    {"file": "protecteds_package.adb", "line": 13, "column": 35},
+    //  reference of the entry of the protected object from entry call
 
     {"file": "protecteds.ads", "line": 19, "column": 19},
     //  declaration of the protected type specification
@@ -474,8 +524,53 @@
     //  declaration of the protected type body
     {"file": "protecteds.adb", "line": 62, "column": 8},
     //  reference of the protected type from "end <>"
+    {"file": "protecteds.adb", "line": 64, "column": 9},
+    //  reference of the protected type from object declaration in the package
+    //  body
     {"file": "protecteds_package.adb", "line": 6, "column": 20},
     //  reference of the protected type from object declaration
+
+    {"file": "protecteds.ads", "line": 23, "column": 17},
+    //  declaration of the procedure of the protected type specification
+    {"file": "protecteds.adb", "line": 55, "column": 17},
+    //  declaration of the procedure of the protected type body
+    {"file": "protecteds.adb", "line": 60, "column": 11},
+    //  reference of the procedure of the protected type from "end <>"
+    {"file": "protecteds.adb", "line": 44, "column": 10},
+    //  reference of the procedure of the protected type from internal call
+    {"file": "protecteds.adb", "line": 74, "column": 7},
+    //  reference of the procedure of the protected type from procedure call in
+    //  the package body
+    {"file": "protecteds_package.adb", "line": 16, "column": 10},
+    //  reference of the procedure of the protected type from procedure call
+
+    {"file": "protecteds.ads", "line": 26, "column": 16},
+    //  declaration of the function of the protected type specification
+    {"file": "protecteds.adb", "line": 48, "column": 16},
+    //  declaration of the function of the protected type body
+    {"file": "protecteds.adb", "line": 53, "column": 11},
+    //  reference of the function of the protected type from "end <>"
+    {"file": "protecteds.adb", "line": 43, "column": 19},
+    //  reference of the function of the protected type from internal call
+    {"file": "protecteds.adb", "line": 73, "column": 16},
+    //  reference of the function of the protected type from function call in
+    //  the package body
+    {"file": "protecteds_package.adb", "line": 15, "column": 19},
+    //  reference of the function of the protected type from function call
+
+    {"file": "protecteds.ads", "line": 29, "column": 13},
+    //  declaration of the entry of the protected type specification
+    {"file": "protecteds.adb", "line": 38, "column": 13},
+    //  declaration of the entry of the protected type body
+    {"file": "protecteds.adb", "line": 46, "column": 11},
+    //  reference of the entry of the protected type from "end <>"
+    {"file": "protecteds.adb", "line": 45, "column": 10},
+    //  reference of the entry of the protected type from internal call
+    {"file": "protecteds.adb", "line": 75, "column": 7},
+    //  reference of the entry of the protected type from entry call in the
+    //  package body
+    {"file": "protecteds_package.adb", "line": 17, "column": 10},
+    //  reference of the entry of the protected type from entry call
 
     {"file": "returns.adb", "line": 8, "column": 17},
     //  declaration of return object
