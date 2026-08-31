@@ -380,6 +380,7 @@ package body GNATdoc.Comments.Helpers is
          Decl_To_Extract := Parent_Basic_Decl;
 
       elsif Decl.Kind in Ada_Abstract_Subp_Decl
+                    | Ada_Entry_Body
                     | Ada_Entry_Decl
                     | Ada_Exception_Decl
                     | Ada_Expr_Function
@@ -502,6 +503,7 @@ package body GNATdoc.Comments.Helpers is
             when Ada_Abstract_Formal_Subp_Decl
                | Ada_Abstract_Subp_Decl
                | Ada_Concrete_Formal_Subp_Decl
+               | Ada_Entry_Body
                | Ada_Entry_Decl
                | Ada_Expr_Function
                | Ada_Null_Subp_Decl
