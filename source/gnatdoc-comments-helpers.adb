@@ -380,6 +380,7 @@ package body GNATdoc.Comments.Helpers is
          Decl_To_Extract := Parent_Basic_Decl;
 
       elsif Decl.Kind in Ada_Abstract_Subp_Decl
+                    | Ada_Entry_Body
                     | Ada_Entry_Decl
                     | Ada_Exception_Decl
                     | Ada_Expr_Function
@@ -395,6 +396,7 @@ package body GNATdoc.Comments.Helpers is
                     | Ada_Protected_Body
                     | Ada_Protected_Type_Decl
                     | Ada_Single_Protected_Decl
+                    | Ada_Single_Task_Decl
                     | Ada_Subp_Body
                     | Ada_Subp_Decl
                     | Ada_Subp_Renaming_Decl
@@ -501,6 +503,7 @@ package body GNATdoc.Comments.Helpers is
             when Ada_Abstract_Formal_Subp_Decl
                | Ada_Abstract_Subp_Decl
                | Ada_Concrete_Formal_Subp_Decl
+               | Ada_Entry_Body
                | Ada_Entry_Decl
                | Ada_Expr_Function
                | Ada_Null_Subp_Decl
@@ -518,6 +521,7 @@ package body GNATdoc.Comments.Helpers is
             when Ada_Component_Decl
                | Ada_Concrete_Type_Decl
                | Ada_Discriminant_Spec
+               | Ada_Entry_Index_Spec
                | Ada_Enum_Literal_Decl
                | Ada_Exception_Decl
                | Ada_Exception_Handler
@@ -531,13 +535,19 @@ package body GNATdoc.Comments.Helpers is
                | Ada_Number_Decl
                | Ada_Object_Decl
                | Ada_Package_Body
+               | Ada_Package_Body_Stub
                | Ada_Package_Decl
                | Ada_Package_Renaming_Decl
                | Ada_Param_Spec
                | Ada_Protected_Body
+               | Ada_Protected_Body_Stub
                | Ada_Protected_Type_Decl
                | Ada_Single_Protected_Decl
+               | Ada_Single_Task_Decl
                | Ada_Subtype_Decl
+               | Ada_Task_Body
+               | Ada_Task_Body_Stub
+               | Ada_Task_Type_Decl
             =>
                return False;
 

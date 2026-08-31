@@ -18,7 +18,7 @@ package body Packages is
 
    procedure Dummy is
    begin
-      null;
+      Separate_Nested.Dummy;
    end Dummy;
 
    -----------------
@@ -65,5 +65,7 @@ package body Packages is
       end Dummy;
 
    end Private_Nested;
+
+   package body Separate_Nested is separate;
 
 end Packages;
