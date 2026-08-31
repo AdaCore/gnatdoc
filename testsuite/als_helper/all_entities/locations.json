@@ -843,6 +843,56 @@
     {"file": "synthetics_package.adb", "line": 265, "column": 13},
     //  gnatdoc#193: reference of `Character` enumeration literal `'X'`
 
+    {"file": "tasks.ads", "line": 4, "column": 9},
+    //  declaration of the task object specification
+    {"file": "tasks.ads", "line": 11, "column": 8},
+    //  reference of the task object from "end <>"
+    {"file": "tasks.adb", "line": 4, "column": 14},
+    //  declaration of the task object body; documentation of the body is not
+    //  extracted, `Ada_Task_Body` is not supported by the extractor
+    {"file": "tasks.adb", "line": 11, "column": 8},
+    //  reference of the task object from "end <>"
+    {"file": "tasks.adb", "line": 28, "column": 4},
+    //  reference of the task object from entry call in the package body
+    {"file": "tasks_package.adb", "line": 10, "column": 13},
+    //  reference of the task object from entry call
+
+    {"file": "tasks.ads", "line": 8, "column": 13},
+    //  declaration of the entry of the task object
+    {"file": "tasks.adb", "line": 9, "column": 14},
+    //  reference of the entry of the task object from accept statement
+    {"file": "tasks.adb", "line": 28, "column": 16},
+    //  reference of the entry of the task object from entry call in the
+    //  package body
+    {"file": "tasks_package.adb", "line": 10, "column": 25},
+    //  reference of the entry of the task object from entry call
+
+    {"file": "tasks.ads", "line": 13, "column": 14},
+    //  declaration of the task type specification
+    {"file": "tasks.ads", "line": 20, "column": 8},
+    //  reference of the task type from "end <>"
+    {"file": "tasks.adb", "line": 13, "column": 14},
+    //  declaration of the task type body; documentation of the body is not
+    //  extracted, `Ada_Task_Body` is not supported by the extractor
+    {"file": "tasks.adb", "line": 23, "column": 8},
+    //  reference of the task type from "end <>"
+    {"file": "tasks.adb", "line": 25, "column": 9},
+    //  reference of the task type from object declaration in the package body
+    {"file": "tasks_package.adb", "line": 6, "column": 15},
+    //  reference of the task type from object declaration
+
+    {"file": "tasks.ads", "line": 17, "column": 13},
+    //  declaration of the entry of the task type
+    {"file": "tasks.adb", "line": 18, "column": 14},
+    //  reference of the entry of the task type from accept statement
+    {"file": "tasks.adb", "line": 22, "column": 11},
+    //  reference of the entry of the task type from "end <>" of accept statement
+    {"file": "tasks.adb", "line": 29, "column": 7},
+    //  reference of the entry of the task type from entry call in the
+    //  package body
+    {"file": "tasks_package.adb", "line": 11, "column": 10},
+    //  reference of the entry of the task type from entry call
+
     // {"file": "pkg1.ads", "line": 5, "column": 9},  // package specification name
     // {"file": "pkg1.ads", "line": 9, "column": 5},  // package specification end name
     // {"file": "pkg1.adb", "line": 5, "column": 14},  // package body name

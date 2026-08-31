@@ -3498,3 +3498,138 @@ Origin: <Chr "'X'" synthetics_package.adb:265:13-265:16>
 ----- CODE SNIPPET -----
 ----- DOCUMENTATION -----
 ----- DONE -----
+Defining name: <DefiningName "Task_Object" tasks.ads:4:9-4:20>
+Origin: <Id "Task_Object" tasks.ads:4:9-4:20>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Object" tasks.ads:4:9-4:20>
+Origin: <Id "Task_Object" tasks.ads:11:8-11:19>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Object" tasks.adb:4:14-4:25>
+Origin: <Id "Task_Object" tasks.adb:4:14-4:25>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Object" tasks.adb:4:14-4:25>
+Origin: <Id "Task_Object" tasks.adb:11:8-11:19>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Object" tasks.ads:4:9-4:20>
+Origin: <Id "Task_Object" tasks.adb:28:4-28:15>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Object" tasks.ads:4:9-4:20>
+Origin: <Id "Task_Object" tasks_package.adb:10:13-10:24>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the task object (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Entry" tasks.ads:8:13-8:23>
+Origin: <Id "Task_Entry" tasks.ads:8:13-8:23>
+----- CODE SNIPPET -----
+entry Task_Entry
+----- DOCUMENTATION -----
+Description of the task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Entry" tasks.adb:9:14-9:24>
+Origin: <Id "Task_Entry" tasks.adb:9:14-9:24>
+----- CODE SNIPPET -----
+entry Task_Entry
+----- DOCUMENTATION -----
+Description of the task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Entry" tasks.ads:8:13-8:23>
+Origin: <Id "Task_Entry" tasks.adb:28:16-28:26>
+----- CODE SNIPPET -----
+entry Task_Entry
+----- DOCUMENTATION -----
+Description of the task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Entry" tasks.ads:8:13-8:23>
+Origin: <Id "Task_Entry" tasks_package.adb:10:25-10:35>
+----- CODE SNIPPET -----
+entry Task_Entry
+----- DOCUMENTATION -----
+Description of the task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Type" tasks.ads:13:14-13:23>
+Origin: <Id "Task_Type" tasks.ads:13:14-13:23>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Type" tasks.ads:13:14-13:23>
+Origin: <Id "Task_Type" tasks.ads:20:8-20:17>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Type" tasks.adb:13:14-13:23>
+Origin: <Id "Task_Type" tasks.adb:13:14-13:23>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Type" tasks.adb:13:14-13:23>
+Origin: <Id "Task_Type" tasks.adb:23:8-23:17>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Type" tasks.ads:13:14-13:23>
+Origin: <Id "Task_Type" tasks.adb:25:9-25:18>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Type" tasks.ads:13:14-13:23>
+Origin: <Id "Task_Type" tasks_package.adb:6:15-6:24>
+----- CODE SNIPPET -----
+----- DOCUMENTATION -----
+Description of the task type (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Entry" tasks.ads:17:13-17:23>
+Origin: <Id "Task_Entry" tasks.ads:17:13-17:23>
+----- CODE SNIPPET -----
+entry Task_Entry
+----- DOCUMENTATION -----
+Description of the task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Entry" tasks.adb:18:14-18:24>
+Origin: <Id "Task_Entry" tasks.adb:18:14-18:24>
+----- CODE SNIPPET -----
+entry Task_Entry
+----- DOCUMENTATION -----
+Description of the task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Entry" tasks.ads:17:13-17:23>
+Origin: <Id "Task_Entry" tasks.adb:22:11-22:21>
+----- CODE SNIPPET -----
+entry Task_Entry
+----- DOCUMENTATION -----
+Description of the task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Entry" tasks.ads:17:13-17:23>
+Origin: <Id "Task_Entry" tasks.adb:29:7-29:17>
+----- CODE SNIPPET -----
+entry Task_Entry
+----- DOCUMENTATION -----
+Description of the task entry (specification).
+----- DONE -----
+Defining name: <DefiningName "Task_Entry" tasks.ads:17:13-17:23>
+Origin: <Id "Task_Entry" tasks_package.adb:11:10-11:20>
+----- CODE SNIPPET -----
+entry Task_Entry
+----- DOCUMENTATION -----
+Description of the task entry (specification).
+----- DONE -----
