@@ -929,6 +929,7 @@ package body GNATdoc.Frontend is
                   | Ada_Concrete_Type_Decl
                   | Ada_Enum_Rep_Clause
                   | Ada_Exception_Decl
+                  | Ada_Generic_Package_Decl
                   | Ada_Generic_Package_Instantiation
                   | Ada_Incomplete_Tagged_Type_Decl
                   | Ada_Incomplete_Type_Decl
