@@ -20,6 +20,7 @@ with VSS.Strings.Templates;
 
 with Markdown.Attribute_Lists;
 with Markdown.Inlines.Visitors;
+with Markdown.Blocks.Fenced_Code;
 with Markdown.Blocks.Indented_Code;
 with Markdown.Blocks.Paragraphs;
 with Markdown.Blocks.Visitors;
@@ -37,6 +38,14 @@ package body GNATdoc.Backend.RST_Markup is
       Image  : Boolean := False;
       Text   : VSS.Strings.Virtual_String;
    end record;
+
+   overriding procedure Enter_Fenced_Code_Block
+     (Self  : in out RST_Markup_Builder;
+      Block : Markdown.Blocks.Fenced_Code.Fenced_Code_Block'Class);
+
+   overriding procedure Leave_Fenced_Code_Block
+     (Self  : in out RST_Markup_Builder;
+      Block : Markdown.Blocks.Fenced_Code.Fenced_Code_Block'Class);
 
    overriding procedure Enter_Indented_Code_Block
      (Self  : in out RST_Markup_Builder;
@@ -151,6 +160,28 @@ package body GNATdoc.Backend.RST_Markup is
       Self.Write ("*");
    end Enter_Emphasis;
 
+   -----------------------------
+   -- Enter_Fenced_Code_Block --
+   -----------------------------
+
+   overriding procedure Enter_Fenced_Code_Block
+     (Self  : in out RST_Markup_Builder;
+      Block : Markdown.Blocks.Fenced_Code.Fenced_Code_Block'Class)
+   is
+      use type VSS.Strings.Virtual_String;
+
+   begin
+      --  Info string of the code fence is ignored, Ada is always used as
+      --  the language of the code block.
+
+      Self.Write_Line ("..  code-block:: ada");
+      Self.Write_New_Line;
+
+      for Line of Block.Text loop
+         Self.Write_Line ("    " & Line);
+      end loop;
+   end Enter_Fenced_Code_Block;
+
    -----------------
    -- Enter_Image --
    -----------------
@@ -254,6 +285,17 @@ package body GNATdoc.Backend.RST_Markup is
 
       Self.Write ("*");
    end Leave_Emphasis;
+
+   -----------------------------
+   -- Leave_Fenced_Code_Block --
+   -----------------------------
+
+   overriding procedure Leave_Fenced_Code_Block
+     (Self  : in out RST_Markup_Builder;
+      Block : Markdown.Blocks.Fenced_Code.Fenced_Code_Block'Class) is
+   begin
+      Self.Write_New_Line;
+   end Leave_Fenced_Code_Block;
 
    -----------------
    -- Leave_Image --

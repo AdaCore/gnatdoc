@@ -4,6 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+with Markdown.Blocks.Fenced_Code;
 with Markdown.Blocks.Indented_Code;
 with Markdown.Blocks.Lists;
 with Markdown.Blocks.Paragraphs;
@@ -50,6 +51,10 @@ package body Markdown.Blocks.Visitors is
          elsif Item.Is_Indented_Code_Block then
             Visitor.Enter_Indented_Code_Block (Item.To_Indented_Code_Block);
             Visitor.Leave_Indented_Code_Block (Item.To_Indented_Code_Block);
+
+         elsif Item.Is_Fenced_Code_Block then
+            Visitor.Enter_Fenced_Code_Block (Item.To_Fenced_Code_Block);
+            Visitor.Leave_Fenced_Code_Block (Item.To_Fenced_Code_Block);
 
          elsif Item.Is_List then
             Self.Visit_List (Item.To_List, Visitor);

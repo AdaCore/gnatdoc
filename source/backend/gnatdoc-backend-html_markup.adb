@@ -22,6 +22,7 @@ with VSS.XML.Namespaces;
 with Markdown.Attribute_Lists;
 with Markdown.Inlines.Visitors;
 with Markdown.Block_Containers;
+with Markdown.Blocks.Fenced_Code;
 with Markdown.Blocks.Indented_Code;
 with Markdown.Blocks.Lists;
 with Markdown.Blocks.Paragraphs;
@@ -91,6 +92,10 @@ package body GNATdoc.Backend.HTML_Markup is
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Item   : Markdown.Blocks.Paragraphs.Paragraph);
 
+   procedure Build_Fenced_Code_Block
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      Item   : Markdown.Blocks.Fenced_Code.Fenced_Code_Block);
+
    procedure Build_Indented_Code_Block
      (Result : in out VSS.XML.Event_Vectors.Vector;
       Item   : Markdown.Blocks.Indented_Code.Indented_Code_Block);
@@ -157,6 +162,9 @@ package body GNATdoc.Backend.HTML_Markup is
       elsif Item.Is_Indented_Code_Block then
          Build_Indented_Code_Block (Result, Item.To_Indented_Code_Block);
 
+      elsif Item.Is_Fenced_Code_Block then
+         Build_Fenced_Code_Block (Result, Item.To_Fenced_Code_Block);
+
       elsif Item.Is_List then
          Build_List (Result, Item.To_List);
 
@@ -177,6 +185,25 @@ package body GNATdoc.Backend.HTML_Markup is
          Build_Block (Result, Item);
       end loop;
    end Build_Block_Container;
+
+   -----------------------------
+   -- Build_Fenced_Code_Block --
+   -----------------------------
+
+   procedure Build_Fenced_Code_Block
+     (Result : in out VSS.XML.Event_Vectors.Vector;
+      Item   : Markdown.Blocks.Fenced_Code.Fenced_Code_Block) is
+   begin
+      --  Info string of the code fence is ignored.
+
+      Write_Start_Element (Result, "pre");
+      Write_Start_Element (Result, "code");
+      Write_Attribute
+        (Result, VSS.XML.Namespaces.XML_Namespace, "space", "preserve");
+      Write_Text (Result, Item.Text);
+      Write_End_Element (Result, "code");
+      Write_End_Element (Result, "pre");
+   end Build_Fenced_Code_Block;
 
    -------------------------------
    -- Build_Indented_Code_Block --
