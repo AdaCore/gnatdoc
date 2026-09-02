@@ -295,6 +295,41 @@ GNATdoc supports the following MarkDown features:
 
   * indented code blocks (code blocks are indented by three or more spaces)
 
+  * fenced code blocks (code blocks are delimited by a pair of code fences
+    indented by no more than two spaces, a code fence is a sequence of at
+    least three backticks or tildes)
+
+    The following restrictions apply:
+
+    * The info string of the opening code fence, which is used by MarkDown
+      to specify the language of the code, is ignored. Code blocks are
+      always processed as Ada code.
+
+    * Indentation rules of the CommonMark are shifted by one space, because
+      an indented code block of GNATdoc starts at three spaces instead of
+      four. Thus, a code fence is indented by no more than two spaces, and
+      a code fence indented by three or more spaces starts an indented code
+      block instead. Both fences and the text between them are the content
+      of that indented code block, which makes it possible to document
+      MarkDown markup itself.
+
+      As a consequence, a code fence indented by three or more spaces
+      doesn't interrupt a paragraph, because an indented code block never
+      does.
+
+      Note, indentation is computed after removal of the common indentation
+      of the description text, and inside a list item it is relative to the
+      content of that item, thus it may differ from the indentation of the
+      comment in the source code.
+
+    * When the closing code fence is absent, the code block is ended by the
+      end of the enclosing section.
+
+    * Tags are extracted before processing of the MarkDown markup, so a
+      line that starts a new section (``@param``, ``@return``, and so on)
+      is processed as a tag even when it is inside a code block. This
+      applies to indented code blocks too.
+
   * emphasis/strong emphasis inlines
 
   * code span inline

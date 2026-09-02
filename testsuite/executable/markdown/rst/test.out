@@ -26,6 +26,11 @@ Paragraph.
     
     procedure Hello_World;
 
+..  code-block:: ada
+
+    Z85_Alphabet : constant BToA.Alphabet_85 :=
+       "}@%$#";
+
 #. Item 1
 
 #. Item 2

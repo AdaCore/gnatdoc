@@ -13,6 +13,14 @@ is
 
    type Block_Visitor is limited interface;
 
+   not overriding procedure Enter_Fenced_Code_Block
+     (Self  : in out Block_Visitor;
+      Block : Markdown.Blocks.Fenced_Code.Fenced_Code_Block'Class) is null;
+
+   not overriding procedure Leave_Fenced_Code_Block
+     (Self  : in out Block_Visitor;
+      Block : Markdown.Blocks.Fenced_Code.Fenced_Code_Block'Class) is null;
+
    not overriding procedure Enter_Indented_Code_Block
      (Self  : in out Block_Visitor;
       Block : Markdown.Blocks.Indented_Code.Indented_Code_Block'Class) is null;
