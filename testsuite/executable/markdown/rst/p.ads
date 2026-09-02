@@ -12,6 +12,11 @@
 --
 --     procedure Hello_World;
 --
+--  ```
+--  Z85_Alphabet : constant BToA.Alphabet_85 :=
+--     "}@%$#";
+--  ```
+--
 --  1. Item 1
 --  2. Item 2
 --
