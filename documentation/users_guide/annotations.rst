@@ -305,10 +305,6 @@ GNATdoc supports the following MarkDown features:
       to specify the language of the code, is ignored. Code blocks are
       always processed as Ada code.
 
-    * A code fence doesn't interrupt a paragraph, thus the opening code
-      fence must be preceded by an empty line. Otherwise, it is processed
-      as an ordinary text of the paragraph.
-
     * Indentation rules of the CommonMark are shifted by one space, because
       an indented code block of GNATdoc starts at three spaces instead of
       four. Thus, a code fence is indented by no more than two spaces, and
@@ -316,6 +312,10 @@ GNATdoc supports the following MarkDown features:
       block instead. Both fences and the text between them are the content
       of that indented code block, which makes it possible to document
       MarkDown markup itself.
+
+      As a consequence, a code fence indented by three or more spaces
+      doesn't interrupt a paragraph, because an indented code block never
+      does.
 
       Note, indentation is computed after removal of the common indentation
       of the description text, and inside a list item it is relative to the
