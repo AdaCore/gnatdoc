@@ -1,11 +1,22 @@
 
-def build_and_test_gnatdoc4():
-    anod_build("gnatdoc4")
-    anod_test("gnatdoc4")
+def build_and_test_gnatdoc4_(qualifier={}):
+    with defaults(qualifier=qualifier):
+        anod_build("gnatdoc4")
+        anod_test("gnatdoc4")
 
-def build_and_test_gnatdoc4_coverage():
-    anod_build("gnatdoc4", qualifier="coverage-report")
+def build_and_test_gnatdoc4_coverage_(qualifier={}):
+    anod_build("gnatdoc4", qualifier=qualifier | {"coverage-report": True})
 
 def build_and_test_als():
     anod_build("als")
     anod_test("als")
+
+# Edge
+
+edge_qualifier = {"edge": True}
+
+def build_and_test_gnatdoc4_edge():
+    build_and_test_gnatdoc4_(edge_qualifier)
+
+def build_and_test_gnatdoc4_coverage_edge():
+    build_and_test_gnatdoc4_coverage_(edge_qualifier)
