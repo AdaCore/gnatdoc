@@ -252,7 +252,8 @@ package body GNATdoc.Projects is
          begin
             return Result : VSS.String_Vectors.Virtual_String_Vector do
                for Message of Project_Tree.Log_Messages.all loop
-                  if Message.Level in GPR2.Message.Error | GPR2.Message.Warning
+                  if Message.Level
+                       in GPR2.Message.Any_Error | GPR2.Message.Warning
                     or GNATdoc.Command_Line.Output_Verbosity
                          in GNATdoc.Command_Line.Verbose
                   then

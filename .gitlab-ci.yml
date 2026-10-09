@@ -12,14 +12,14 @@ include:
     inputs:
       linux: true
       needs: []
-      anod-args: run build_and_test_gnatdoc4 --latest
+      anod-args: run build_and_test_gnatdoc4_$ACI_TRACK --latest
 
   - component: $CI_SERVER_FQDN/eng/gitlab-templates/build@~latest
     inputs:
       stage: coverage
       linux: true
       needs: []
-      anod-args: run build_and_test_gnatdoc4_coverage --latest
+      anod-args: run build_and_test_gnatdoc4_coverage_$ACI_TRACK --latest
       rules:
         - allow_failure: true
 
@@ -30,7 +30,7 @@ include:
       windows: true
       windows-needs: []
       windows-mem: 16
-      anod-args: run build_and_test_gnatdoc4 --latest
+      anod-args: run build_and_test_gnatdoc4_$ACI_TRACK --latest
       generic-anod-ci-args: --add-dep eng/ide/gnatdoc-testsuite
       rules:
         - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -53,7 +53,7 @@ build:linux:
     # Source the env prepared by generic_anod_ci
     - cat /tmp/ci_env.sh
     - . /tmp/ci_env.sh
-    - bs=$(anod info build gnatdoc4 -Qcoverage-report --show working_dir)
+    - bs=$(anod info build gnatdoc4 -Qcoverage-report $ACI_TRACK_QUALIFIER --show working_dir)
     - echo $bs
     # Copy coverage reports
     - cp -r $bs/src/gnatcov_report $CI_PROJECT_DIR/
