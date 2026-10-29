@@ -1,2 +1,2 @@
-description: Detection of `@private` tag for entities
+description: Detection of `@exclude` and `@private` tags for entities
 driver: executable
