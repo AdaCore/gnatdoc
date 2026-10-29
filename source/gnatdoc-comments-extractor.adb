@@ -2863,6 +2863,22 @@ package body GNATdoc.Comments.Extractor is
             end if;
          end if;
 
+         if Options.Fallback
+           and then (Raw_Section = null or else Raw_Section.Text.Is_Empty)
+         then
+            Extract_Leading_Section
+              (Root_Node.Token_Start,
+               Options,
+               False,
+               Sections,
+               Leading_Section,
+               True);
+
+            if not Leading_Section.Text.Is_Empty then
+               Raw_Section := Leading_Section;
+            end if;
+         end if;
+
          Parse_Raw_Section
            (Location     => GNATdoc.Utilities.Location (Spec_Node),
             Raw_Section  => Raw_Section,
@@ -3145,7 +3161,7 @@ package body GNATdoc.Comments.Extractor is
                   Raw_Section := Header_Section;
 
                elsif Options.Fallback then
-                  if Intermediate_Upper_Section.Text.Is_Empty then
+                  if not Intermediate_Upper_Section.Text.Is_Empty then
                      Raw_Section := Intermediate_Upper_Section;
 
                   elsif not Intermediate_Lower_Section.Text.Is_Empty then
