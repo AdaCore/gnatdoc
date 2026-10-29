@@ -145,11 +145,13 @@ package body GNATdoc.Comments.Extractor is
    --  Extract documentation for record type declaration.
 
    procedure Extract_Private_Type_Documentation
-     (Node     : Libadalang.Analysis.Basic_Decl'Class;
-      Decl     : Libadalang.Analysis.Type_Decl'Class;
-      Options  : GNATdoc.Comments.Options.Extractor_Options;
-      Sections : in out Section_Vectors.Vector;
-      Messages : in out GNATdoc.Messages.Message_Container)
+     (Node          : Libadalang.Analysis.Basic_Decl'Class;
+      Decl          : Libadalang.Analysis.Type_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Allow_Private : Boolean;
+      Sections      : in out Section_Vectors.Vector;
+      Has_Exclude   : out Boolean;
+      Messages      : in out GNATdoc.Messages.Message_Container)
      with Pre =>
        (Decl.Kind in Ada_Type_Decl
           and then Decl.As_Type_Decl.F_Type_Def.Kind = Ada_Private_Type_Def)
@@ -609,7 +611,7 @@ package body GNATdoc.Comments.Extractor is
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl,
                      Options,
-                     False,
+                     True,
                      Documentation.Sections,
                      Documentation.Has_Exclude,
                      Messages);
@@ -625,7 +627,7 @@ package body GNATdoc.Comments.Extractor is
                      Extract_Simple_Declaration_Documentation
                        (Node.As_Type_Decl,
                         Options,
-                        False,
+                        True,
                         Documentation.Sections,
                         Documentation.Has_Exclude,
                         Messages);
@@ -639,7 +641,7 @@ package body GNATdoc.Comments.Extractor is
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl,
                      Options,
-                     False,
+                     True,
                      Documentation.Sections,
                      Documentation.Has_Exclude,
                      Messages);
@@ -653,7 +655,7 @@ package body GNATdoc.Comments.Extractor is
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl,
                      Options,
-                     False,
+                     True,
                      Documentation.Sections,
                      Documentation.Has_Exclude,
                      Messages);
@@ -667,22 +669,23 @@ package body GNATdoc.Comments.Extractor is
                     (Node,
                      Node.As_Type_Decl,
                      Options,
+                     True,
                      Documentation.Sections,
+                     Documentation.Has_Exclude,
                      Messages);
 
                when Ada_Type_Access_Def =>
                   Extract_Simple_Declaration_Documentation
                     (Node.As_Type_Decl,
                      Options,
-                     False,
+                     True,
                      Documentation.Sections,
                      Documentation.Has_Exclude,
                      Messages);
 
                when Ada_Access_To_Subp_Def =>
                   declare
-                     Aux_Belongs_To  : VSS.Strings.Virtual_String;
-                     Aux_Has_Exclude : Boolean;
+                     Aux_Belongs_To : VSS.Strings.Virtual_String;
 
                   begin
                      Extract_Subprogram_Documentation
@@ -695,9 +698,9 @@ package body GNATdoc.Comments.Extractor is
                         Options       => Options,
                         Sections      => Documentation.Sections,
                         Messages      => Messages,
-                        Allow_Private => False,
+                        Allow_Private => True,
                         Belongs_To    => Aux_Belongs_To,
-                        Has_Exclude   => Aux_Has_Exclude);
+                        Has_Exclude   => Documentation.Has_Exclude);
                   end;
 
                when others =>
@@ -708,7 +711,7 @@ package body GNATdoc.Comments.Extractor is
             Extract_Simple_Declaration_Documentation
               (Node.As_Incomplete_Type_Decl,
                Options,
-               False,
+               True,
                Documentation.Sections,
                Documentation.Has_Exclude,
                Messages);
@@ -1537,8 +1540,9 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Node),
             Raw_Section,
-            [Enum_Tag => True, others => False],
+            [Enum_Tag | Exclude_Tag => True, others => False],
             Documentation.Sections,
+            Documentation.Has_Exclude,
             Messages);
       end;
    end Extract_Enumeration_Type_Documentation;
@@ -1800,7 +1804,9 @@ package body GNATdoc.Comments.Extractor is
                                 (Item.As_Generic_Formal_Type_Decl,
                                  Type_Decl,
                                  Options,
+                                 False,
                                  Lookup_Formal_Section (Formal_Name).Sections,
+                                 Dummy,
                                  Messages);
 
                            when Ada_Type_Access_Def
@@ -2101,11 +2107,13 @@ package body GNATdoc.Comments.Extractor is
    ----------------------------------------
 
    procedure Extract_Private_Type_Documentation
-     (Node     : Libadalang.Analysis.Basic_Decl'Class;
-      Decl     : Libadalang.Analysis.Type_Decl'Class;
-      Options  : GNATdoc.Comments.Options.Extractor_Options;
-      Sections : in out Section_Vectors.Vector;
-      Messages : in out GNATdoc.Messages.Message_Container)
+     (Node          : Libadalang.Analysis.Basic_Decl'Class;
+      Decl          : Libadalang.Analysis.Type_Decl'Class;
+      Options       : GNATdoc.Comments.Options.Extractor_Options;
+      Allow_Private : Boolean;
+      Sections      : in out Section_Vectors.Vector;
+      Has_Exclude   : out Boolean;
+      Messages      : in out GNATdoc.Messages.Message_Container)
    is
       Last_Section      : Section_Access;
       Leading_Section   : Section_Access;
@@ -2169,9 +2177,11 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Decl),
             Raw_Section,
-            [Member_Tag | Component_Tag | Discriminant_Tag => True,
+            [Exclude_Tag                                  => Allow_Private,
+             Member_Tag | Component_Tag | Discriminant_Tag => True,
              others                                        => False],
             Sections,
+            Has_Exclude,
             Messages);
       end;
    end Extract_Private_Type_Documentation;
@@ -2424,9 +2434,11 @@ package body GNATdoc.Comments.Extractor is
          Parse_Raw_Section
            (GNATdoc.Utilities.Location (Node),
             Raw_Section,
-            [Member_Tag | Component_Tag | Discriminant_Tag => True,
+            [Exclude_Tag                                  => True,
+             Member_Tag | Component_Tag | Discriminant_Tag => True,
              others                                        => False],
             Documentation.Sections,
+            Documentation.Has_Exclude,
             Messages);
       end;
    end Extract_Record_Type_Documentation;
