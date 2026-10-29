@@ -84,11 +84,15 @@ package body GNATdoc.TOCs.Builder is
          end if;
 
          for Item of Entity.Tagged_Types loop
-            Insert_Entity (Parent, Item, OOP);
+            if GNATdoc.Backend.Is_Included (Item) then
+               Insert_Entity (Parent, Item, OOP);
+            end if;
          end loop;
 
          for Item of Entity.Interface_Types loop
-            Insert_Entity (Parent, Item, OOP);
+            if GNATdoc.Backend.Is_Included (Item) then
+               Insert_Entity (Parent, Item, OOP);
+            end if;
          end loop;
 
          for Item of Entity.Packages loop
